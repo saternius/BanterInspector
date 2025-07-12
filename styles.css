@@ -1,0 +1,928 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #121212;
+    color: #e8e8e8;
+    height: 100vh;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.inspector-container {
+    display: flex;
+    height: 100vh;
+    gap: 1px;
+    background: #0a0a0a;
+}
+
+/* Panel Base Styles */
+.panel {
+    background: #1a1a1a;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.panel-header {
+    background: #242424;
+    padding: 10px 15px;
+    border-bottom: 1px solid #2a2a2a;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b8b8b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Hierarchy Panel */
+.hierarchy-panel {
+    width: 320px;
+    flex-shrink: 0;
+}
+
+.search-container {
+    padding: 8px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.search-input {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 6px 10px;
+    color: #e8e8e8;
+    font-size: 13px;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #4a4a4a;
+    background: #161616;
+}
+
+.slot-actions-container {
+    padding: 8px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    gap: 8px;
+}
+
+.action-button {
+    flex: 1;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 6px 12px;
+    color: #e8e8e8;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.action-button:hover {
+    background: #353535;
+    border-color: #444;
+}
+
+.action-button:active {
+    background: #202020;
+}
+
+.action-button.delete-button {
+    background: #3a2020;
+    border-color: #4a2525;
+}
+
+.action-button.delete-button:hover {
+    background: #4a2525;
+    border-color: #5a3030;
+}
+
+.button-icon {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Add Component Button */
+.add-component-container {
+    padding: 12px;
+    border-top: 1px solid #2a2a2a;
+    background: #1a1a1a;
+}
+
+.add-component-button {
+    width: 100%;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 8px 16px;
+    color: #e8e8e8;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.add-component-button:hover {
+    background: #353535;
+    border-color: #444;
+}
+
+.add-component-button:active {
+    background: #202020;
+}
+
+.hierarchy-tree {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 4px 0;
+}
+
+/* Tree Node Styles */
+.tree-node {
+    display: flex;
+    align-items: center;
+    padding: 3px 8px;
+    cursor: pointer;
+    user-select: none;
+    min-height: 24px;
+    position: relative;
+}
+
+.tree-node:hover {
+    background: #252525;
+}
+
+.tree-node.selected {
+    background: #2a2a2a;
+}
+
+.tree-node.selected > .node-content > .node-name {
+    color: #ffd700;
+    font-weight: 500;
+}
+
+.tree-node.non-persistent > .node-content > .node-name {
+    color: #ff9500;
+}
+
+.tree-node.inactive > .node-content > .node-name {
+    color: #666;
+    font-style: italic;
+}
+
+.tree-node.inactive > .node-content > .node-icon {
+    background: #444;
+}
+
+.node-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+}
+
+.tree-toggle {
+    width: 16px;
+    height: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #888;
+    font-size: 10px;
+    flex-shrink: 0;
+}
+
+.tree-toggle:hover {
+    color: #b8b8b8;
+}
+
+.tree-toggle.has-children {
+    cursor: pointer;
+}
+
+.tree-toggle.empty {
+    color: #555;
+}
+
+.node-icon {
+    width: 4px;
+    height: 4px;
+    background: #888;
+    border-radius: 50%;
+    margin: 0 8px;
+    flex-shrink: 0;
+}
+
+.node-name {
+    color: #e8e8e8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tree-children {
+    margin-left: 20px;
+}
+
+/* Properties Panel */
+.properties-panel {
+    flex: 1;
+    min-width: 400px;
+}
+
+/* Space Props Panel */
+.space-props-panel {
+    width: 480px;
+    flex-shrink: 0;
+    border-left: 1px solid #2a2a2a;
+}
+
+.properties-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px;
+}
+
+/* Component Styles */
+.component-section {
+    background: #1f1f1f;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.component-header {
+    background: #242424;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.component-header:hover {
+    background: #2a2a2a;
+}
+
+.component-name {
+    font-weight: 500;
+    font-size: 13px;
+    color: #e8e8e8;
+}
+
+.component-type {
+    font-size: 11px;
+    color: #888;
+    margin-left: 8px;
+}
+
+.component-toggle {
+    font-size: 10px;
+    color: #888;
+}
+
+.component-body {
+    padding: 8px 12px;
+    background: #1a1a1a;
+}
+
+/* Property Styles */
+.property-row {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    min-height: 28px;
+}
+
+.property-row + .property-row {
+    border-top: 1px solid #252525;
+}
+
+.property-button {
+    width: 20px;
+    height: 20px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-right: 8px;
+    font-size: 11px;
+    color: #888;
+    flex-shrink: 0;
+}
+
+.property-button:hover {
+    background: #333;
+    border-color: #444;
+    color: #b8b8b8;
+}
+
+.property-label {
+    flex: 0 0 140px;
+    font-size: 12px;
+    color: #b8b8b8;
+    padding-right: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.property-value {
+    flex: 1;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.property-input {
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    border-radius: 3px;
+    padding: 4px 8px;
+    color: #e8e8e8;
+    font-size: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    flex: 1;
+}
+
+.property-input:focus {
+    outline: none;
+    border-color: #4a4a4a;
+    background: #161616;
+}
+
+.property-input.number {
+    width: 70px;
+    flex: 0 0 70px;
+    text-align: right;
+}
+
+/* Vector Input Styles */
+.vector-group {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    align-items: center;
+}
+
+.vector-label {
+    font-size: 11px;
+    color: #666;
+    font-weight: 600;
+    margin: 0 2px;
+}
+
+/* Color Input Styles */
+.color-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.color-preview {
+    width: 32px;
+    height: 24px;
+    border-radius: 3px;
+    border: 1px solid #3a3a3a;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.color-preview::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(-45deg, #2a2a2a 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #2a2a2a 75%),
+        linear-gradient(-45deg, transparent 75%, #2a2a2a 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+
+.color-swatch {
+    position: absolute;
+    inset: 0;
+}
+
+/* Checkbox Styles */
+.checkbox-input {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #4a90e2;
+}
+
+/* Empty States */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #888;
+}
+
+.empty-state p {
+    font-size: 13px;
+    color: #555;
+}
+
+/* Loading State */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #666;
+}
+
+.loading::before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+    border-top-color: #666;
+    border-radius: 50%;
+    margin-right: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f0f0f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-radius: 5px;
+    border: 1px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3a3a3a;
+}
+
+/* Utility Classes */
+.grabbable {
+    cursor: grab;
+}
+
+.grabbable:active {
+    cursor: grabbing;
+}
+
+.tooltip {
+    position: absolute;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #e8e8e8;
+    pointer-events: none;
+    z-index: 1000;
+    white-space: nowrap;
+}
+
+/* Space Props Specific Styles */
+.props-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px;
+}
+
+.props-section {
+    background: #1f1f1f;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.props-section-header {
+    background: #242424;
+    padding: 10px 15px;
+    border-bottom: 1px solid #2a2a2a;
+    font-weight: 600;
+    font-size: 13px;
+    color: #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.props-section-body {
+    padding: 8px 12px;
+    background: #1a1a1a;
+}
+
+.prop-item {
+    display: flex;
+    align-items: center;
+    padding: 6px 0;
+    min-height: 32px;
+    border-bottom: 1px solid #252525;
+}
+
+.prop-item:last-child {
+    border-bottom: none;
+}
+
+.prop-key {
+    flex: 0 0 120px;
+    font-size: 12px;
+    color: #b8b8b8;
+    padding-right: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.prop-value {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.prop-input {
+    flex: 1;
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    border-radius: 3px;
+    padding: 5px 8px;
+    color: #e8e8e8;
+    font-size: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.prop-input:focus {
+    outline: none;
+    border-color: #4a4a4a;
+    background: #161616;
+}
+
+.prop-input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.prop-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.prop-button {
+    width: 24px;
+    height: 24px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #888;
+    transition: all 0.2s;
+}
+
+.prop-button:hover {
+    background: #333;
+    border-color: #444;
+    color: #b8b8b8;
+}
+
+.prop-button.save {
+    color: #4a90e2;
+}
+
+.prop-button.delete {
+    color: #e24a4a;
+}
+
+.prop-button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.add-prop-container {
+    display: flex;
+    gap: 8px;
+    padding: 8px 0;
+    border-top: 1px solid #2a2a2a;
+    margin-top: 8px;
+}
+
+.add-prop-input {
+    flex: 1;
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    border-radius: 3px;
+    padding: 5px 8px;
+    color: #e8e8e8;
+    font-size: 12px;
+    font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.add-prop-button {
+    padding: 5px 12px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 3px;
+    color: #b8b8b8;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-prop-button:hover {
+    background: #333;
+    border-color: #444;
+    color: #e8e8e8;
+}
+
+.props-empty {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 12px;
+}
+
+.props-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #2a2a2a;
+    color: #888;
+    margin-left: 8px;
+}
+
+/* Component Menu Styles */
+.component-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.component-menu {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    width: 600px;
+    max-width: 90vw;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.component-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.component-menu-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #e8e8e8;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.close-button:hover {
+    background: #2a2a2a;
+    color: #e8e8e8;
+}
+
+.component-menu-search {
+    padding: 12px 20px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.component-search-input {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    border-radius: 4px;
+    padding: 8px 12px;
+    color: #e8e8e8;
+    font-size: 13px;
+}
+
+.component-search-input:focus {
+    outline: none;
+    border-color: #4a4a4a;
+    background: #161616;
+}
+
+.component-menu-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.component-category {
+    margin-bottom: 16px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #242424;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.category-icon {
+    font-size: 16px;
+}
+
+.category-name {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #b8b8b8;
+}
+
+.category-items {
+    display: grid;
+    gap: 4px;
+}
+
+.component-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 16px;
+    background: #202020;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.component-item:hover {
+    background: #252525;
+    border-color: #333;
+}
+
+.component-item.hidden {
+    display: none;
+}
+
+.component-item-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e8e8e8;
+    margin-bottom: 2px;
+}
+
+.component-item-desc {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Additional styles for space props panel */
+.space-props-section {
+    background: #1f1f1f;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.space-props-header {
+    background: #242424;
+    padding: 10px 15px;
+    border-bottom: 1px solid #2a2a2a;
+    font-weight: 600;
+    font-size: 13px;
+    color: #e8e8e8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.space-props-header h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.props-count {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: #2a2a2a;
+    color: #888;
+    margin-left: 8px;
+}
+
+.props-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.empty-props {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 12px;
+}
+
+.loading-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: #666;
+}
+
+.prop-item-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.name-input {
+    background: #0f0f0f;
+    border: 1px solid #4a4a4a;
+    border-radius: 3px;
+    padding: 2px 6px;
+    color: #e8e8e8;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+}

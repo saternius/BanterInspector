@@ -1,0 +1,371 @@
+/**
+ * Mock Data
+ * Provides mock scene data for testing without Unity connection
+ */
+
+export function loadMockSceneData() {
+    return {
+        slots: [
+            {
+                id: 'root_1',
+                name: 'World',
+                parentId: null,
+                active: true,
+                persistent: true,
+                components: [
+                    {
+                        id: 'root_1_transform',
+                        type: 'Transform',
+                        properties: {
+                            position: { x: 0, y: 0, z: 0 },
+                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                            scale: { x: 1, y: 1, z: 1 }
+                        }
+                    }
+                ],
+                children: [
+                    {
+                        id: 'environment_1',
+                        name: 'Environment',
+                        parentId: 'root_1',
+                        active: true,
+                        persistent: true,
+                        components: [
+                            {
+                                id: 'environment_1_transform',
+                                type: 'Transform',
+                                properties: {
+                                    position: { x: 0, y: 0, z: 0 },
+                                    rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                    scale: { x: 1, y: 1, z: 1 }
+                                }
+                            }
+                        ],
+                        children: [
+                            {
+                                id: 'ground_1',
+                                name: 'Ground',
+                                parentId: 'environment_1',
+                                active: true,
+                                persistent: true,
+                                components: [
+                                    {
+                                        id: 'ground_1_transform',
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: 0, y: -0.5, z: 0 },
+                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                            scale: { x: 20, y: 1, z: 20 }
+                                        }
+                                    },
+                                    {
+                                        id: 'ground_1_geometry',
+                                        type: 'BanterGeometry',
+                                        properties: {
+                                            geometryType: 'BoxGeometry',
+                                            width: 1,
+                                            height: 1,
+                                            depth: 1
+                                        }
+                                    },
+                                    {
+                                        id: 'ground_1_material',
+                                        type: 'BanterMaterial',
+                                        properties: {
+                                            shader: 'Standard',
+                                            color: { r: 0.5, g: 0.8, b: 0.3, a: 1 },
+                                            texture: ''
+                                        }
+                                    },
+                                    {
+                                        id: 'ground_1_collider',
+                                        type: 'BoxCollider',
+                                        properties: {
+                                            isTrigger: false,
+                                            center: { x: 0, y: 0, z: 0 },
+                                            size: { x: 1, y: 1, z: 1 }
+                                        }
+                                    }
+                                ],
+                                children: []
+                            },
+                            {
+                                id: 'sky_1',
+                                name: 'Sky',
+                                parentId: 'environment_1',
+                                active: true,
+                                persistent: true,
+                                components: [
+                                    {
+                                        id: 'sky_1_transform',
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: 0, y: 0, z: 0 },
+                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                            scale: { x: 50, y: 50, z: 50 }
+                                        }
+                                    },
+                                    {
+                                        id: 'sky_1_geometry',
+                                        type: 'BanterGeometry',
+                                        properties: {
+                                            geometryType: 'SphereGeometry',
+                                            radius: 1,
+                                            widthSegments: 32,
+                                            heightSegments: 16
+                                        }
+                                    },
+                                    {
+                                        id: 'sky_1_material',
+                                        type: 'BanterMaterial',
+                                        properties: {
+                                            shader: 'Unlit/Diffuse',
+                                            color: { r: 0.53, g: 0.81, b: 0.92, a: 1 },
+                                            texture: ''
+                                        }
+                                    }
+                                ],
+                                children: []
+                            }
+                        ]
+                    },
+                    {
+                        id: 'objects_1',
+                        name: 'Objects',
+                        parentId: 'root_1',
+                        active: true,
+                        persistent: true,
+                        components: [
+                            {
+                                id: 'objects_1_transform',
+                                type: 'Transform',
+                                properties: {
+                                    position: { x: 0, y: 0, z: 0 },
+                                    rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                    scale: { x: 1, y: 1, z: 1 }
+                                }
+                            }
+                        ],
+                        children: [
+                            {
+                                id: 'cube_1',
+                                name: 'Interactive Cube',
+                                parentId: 'objects_1',
+                                active: true,
+                                persistent: false,
+                                components: [
+                                    {
+                                        id: 'cube_1_transform',
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: -2, y: 1, z: 0 },
+                                            rotation: { x: 0, y: 45, z: 0, w: 0.92388 },
+                                            scale: { x: 1, y: 1, z: 1 }
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_geometry',
+                                        type: 'BanterGeometry',
+                                        properties: {
+                                            geometryType: 'BoxGeometry',
+                                            width: 1,
+                                            height: 1,
+                                            depth: 1
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_material',
+                                        type: 'BanterMaterial',
+                                        properties: {
+                                            shader: 'Standard',
+                                            color: { r: 1, g: 0.2, b: 0.2, a: 1 },
+                                            texture: ''
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_rigidbody',
+                                        type: 'BanterRigidbody',
+                                        properties: {
+                                            mass: 1,
+                                            drag: 0,
+                                            angularDrag: 0.05,
+                                            useGravity: true,
+                                            isKinematic: false
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_collider',
+                                        type: 'BoxCollider',
+                                        properties: {
+                                            isTrigger: false,
+                                            center: { x: 0, y: 0, z: 0 },
+                                            size: { x: 1, y: 1, z: 1 }
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_grab',
+                                        type: 'BanterGrabHandle',
+                                        properties: {
+                                            grabType: 'TRIGGER',
+                                            grabRadius: 0.1
+                                        }
+                                    },
+                                    {
+                                        id: 'cube_1_sync',
+                                        type: 'BanterSyncedObject',
+                                        properties: {
+                                            syncPosition: true,
+                                            syncRotation: true,
+                                            takeOwnershipOnGrab: true
+                                        }
+                                    }
+                                ],
+                                children: []
+                            },
+                            {
+                                id: 'sphere_1',
+                                name: 'Bouncy Ball',
+                                parentId: 'objects_1',
+                                active: true,
+                                persistent: false,
+                                components: [
+                                    {
+                                        id: 'sphere_1_transform',
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: 2, y: 3, z: 0 },
+                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                            scale: { x: 0.5, y: 0.5, z: 0.5 }
+                                        }
+                                    },
+                                    {
+                                        id: 'sphere_1_geometry',
+                                        type: 'BanterGeometry',
+                                        properties: {
+                                            geometryType: 'SphereGeometry',
+                                            radius: 1,
+                                            widthSegments: 16,
+                                            heightSegments: 16
+                                        }
+                                    },
+                                    {
+                                        id: 'sphere_1_material',
+                                        type: 'BanterMaterial',
+                                        properties: {
+                                            shader: 'Standard',
+                                            color: { r: 0.2, g: 0.6, b: 1, a: 1 },
+                                            texture: ''
+                                        }
+                                    },
+                                    {
+                                        id: 'sphere_1_rigidbody',
+                                        type: 'BanterRigidbody',
+                                        properties: {
+                                            mass: 0.5,
+                                            drag: 0.1,
+                                            angularDrag: 0.1,
+                                            useGravity: true,
+                                            isKinematic: false
+                                        }
+                                    },
+                                    {
+                                        id: 'sphere_1_collider',
+                                        type: 'SphereCollider',
+                                        properties: {
+                                            isTrigger: false,
+                                            radius: 0.5
+                                        }
+                                    }
+                                ],
+                                children: []
+                            },
+                            {
+                                id: 'text_1',
+                                name: 'Welcome Sign',
+                                parentId: 'objects_1',
+                                active: true,
+                                persistent: true,
+                                components: [
+                                    {
+                                        id: 'text_1_transform',
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: 0, y: 2, z: -5 },
+                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                            scale: { x: 1, y: 1, z: 1 }
+                                        }
+                                    },
+                                    {
+                                        id: 'text_1_text',
+                                        type: 'BanterText',
+                                        properties: {
+                                            text: 'Welcome to the Scene Inspector!',
+                                            fontSize: 24,
+                                            color: { r: 1, g: 1, b: 1, a: 1 },
+                                            alignment: 'Center'
+                                        }
+                                    },
+                                    {
+                                        id: 'text_1_billboard',
+                                        type: 'BanterBillboard',
+                                        properties: {
+                                            smoothing: 0.1,
+                                            enableXAxis: false,
+                                            enableYAxis: true,
+                                            enableZAxis: false
+                                        }
+                                    }
+                                ],
+                                children: []
+                            }
+                        ]
+                    },
+                    {
+                        id: 'ui_1',
+                        name: 'UI',
+                        parentId: 'root_1',
+                        active: false,
+                        persistent: true,
+                        components: [
+                            {
+                                id: 'ui_1_transform',
+                                type: 'Transform',
+                                properties: {
+                                    position: { x: 0, y: 0, z: 0 },
+                                    rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                    scale: { x: 1, y: 1, z: 1 }
+                                }
+                            }
+                        ],
+                        children: []
+                    }
+                ]
+            }
+        ],
+        hierarchyMap: {}
+    };
+}
+
+/**
+ * Load mock space properties
+ */
+export function loadMockSpaceProps() {
+    return {
+        public: {
+            'spaceTitle': 'My Test Space',
+            'maxPlayers': 20,
+            'gameMode': 'sandbox',
+            'debugMode': false,
+            'spawnPoint': { x: 0, y: 1, z: 0 }
+        },
+        protected: {
+            'adminPassword': 'secret123',
+            'apiKey': 'mock-api-key-12345',
+            'serverConfig': {
+                host: 'localhost',
+                port: 3000,
+                secure: false
+            }
+        }
+    };
+}
