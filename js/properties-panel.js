@@ -4,7 +4,7 @@
  */
 
 // (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+    let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
 

@@ -4,7 +4,7 @@
  */
 
 // (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+    let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSceneData } = await import(`${basePath}/mock-data.js`);
 
     export class SceneManager {

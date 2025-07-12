@@ -5,7 +5,7 @@
  * the inspector application.
  */
 (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+    let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 
     const  { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const  { HierarchyPanel } = await import(`${basePath}/hierarchy-panel.js`);
