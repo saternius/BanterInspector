@@ -100,45 +100,66 @@ export class SpacePropsPanel {
         
         const isEditing = this.editingProps.has(`${type}_${key}`);
         
-        if (isEditing) {
-            // Edit mode
-            if (isVector3Object(value)) {
-                // Vector3 editing
-                const vectorGroup = document.createElement('div');
-                vectorGroup.className = 'vector-group';
-                
-                ['x', 'y', 'z'].forEach(axis => {
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.className = 'property-input number';
-                    input.id = `${type}_prop_${key}_${axis}`;
-                    input.value = value[axis] || 0;
-                    input.step = 'any';
-                    input.addEventListener('keypress', (e) => {
-                        this.handlePropKeyPress(e, type, key);
-                    });
-                    
-                    const label = document.createElement('span');
-                    label.className = 'vector-label';
-                    label.textContent = axis.toUpperCase();
-                    
-                    vectorGroup.appendChild(label);
-                    vectorGroup.appendChild(input);
-                });
-                
-                valueContainer.appendChild(vectorGroup);
-            } else {
-                // Regular value editing
+        if (isVector3Object(value)) {
+            // Vector3 always shows input fields
+            const vectorGroup = document.createElement('div');
+            vectorGroup.className = 'vector-group';
+            
+            ['x', 'y', 'z'].forEach(axis => {
                 const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'prop-input';
-                input.id = `${type}_prop_${key}`;
-                input.value = typeof value === 'object' ? JSON.stringify(value) : value;
-                input.addEventListener('keypress', (e) => {
-                    this.handlePropKeyPress(e, type, key);
+                input.type = 'number';
+                input.className = 'property-input number';
+                input.id = `${type}_prop_${key}_${axis}`;
+                input.value = value[axis] || 0;
+                input.step = 'any';
+                
+                // Auto-save on change
+                input.addEventListener('change', () => {
+                    this.saveVector3Prop(type, key);
                 });
-                valueContainer.appendChild(input);
-            }
+                
+                // Handle Enter and Escape keys
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveVector3Prop(type, key);
+                        e.preventDefault();
+                    }
+                });
+                
+                const label = document.createElement('span');
+                label.className = 'vector-label';
+                label.textContent = axis.toUpperCase();
+                
+                vectorGroup.appendChild(label);
+                vectorGroup.appendChild(input);
+            });
+            
+            valueContainer.appendChild(vectorGroup);
+            
+            // Delete button for Vector3
+            const actions = document.createElement('div');
+            actions.className = 'prop-actions';
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'prop-button delete';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete';
+            deleteBtn.onclick = () => this.deleteProp(type, key);
+            
+            actions.appendChild(deleteBtn);
+            valueContainer.appendChild(actions);
+            
+        } else if (isEditing) {
+            // Edit mode for non-Vector3
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'prop-input';
+            input.id = `${type}_prop_${key}`;
+            input.value = typeof value === 'object' ? JSON.stringify(value) : value;
+            input.addEventListener('keypress', (e) => {
+                this.handlePropKeyPress(e, type, key);
+            });
+            valueContainer.appendChild(input);
             
             // Save/Cancel buttons
             const actions = document.createElement('div');
@@ -161,13 +182,11 @@ export class SpacePropsPanel {
             valueContainer.appendChild(actions);
             
         } else {
-            // Display mode
+            // Display mode for non-Vector3
             const valueDisplay = document.createElement('span');
             valueDisplay.className = 'prop-value-display';
             
-            if (isVector3Object(value)) {
-                valueDisplay.textContent = `(${value.x || 0}, ${value.y || 0}, ${value.z || 0})`;
-            } else if (typeof value === 'object') {
+            if (typeof value === 'object') {
                 valueDisplay.textContent = JSON.stringify(value);
             } else {
                 valueDisplay.textContent = value;
@@ -368,6 +387,31 @@ export class SpacePropsPanel {
         
         // Return as string
         return value;
+    }
+
+    /**
+     * Save Vector3 property directly
+     */
+    saveVector3Prop(type, key) {
+        const xInput = document.getElementById(`${type}_prop_${key}_x`);
+        const yInput = document.getElementById(`${type}_prop_${key}_y`);
+        const zInput = document.getElementById(`${type}_prop_${key}_z`);
+        
+        if (xInput && yInput && zInput) {
+            const newValue = {
+                x: parseFloat(xInput.value) || 0,
+                y: parseFloat(yInput.value) || 0,
+                z: parseFloat(zInput.value) || 0
+            };
+            sceneManager.setSpaceProperty(key, newValue, type === 'protected');
+            
+            // Update local state
+            if (type === 'public') {
+                sceneManager.scene.spaceState.public[key] = newValue;
+            } else {
+                sceneManager.scene.spaceState.protected[key] = newValue;
+            }
+        }
     }
 
     /**

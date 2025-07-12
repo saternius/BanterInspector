@@ -30,11 +30,12 @@ Vector3 support in public/protected space properties:
 - Vector3 values are shown as: `(x, y, z)`
 - Example: `(1.5, 2.0, -3.5)`
 
-#### Edit Mode
-- Provides three separate number inputs
+#### Always Editable
+- Vector3 properties always display three separate number inputs
 - Each input is labeled with its axis (X, Y, Z)
-- Enter key saves the values
-- Escape key cancels the edit
+- Auto-saves on Enter key or when input loses focus (change event)
+- No need to toggle edit mode - always ready for input
+- Delete button (×) remains available to remove the property
 
 #### Adding New Vector3 Properties
 Users can create Vector3 properties by entering values in these formats:
@@ -77,15 +78,12 @@ Scale
 X [____1____] Y [____1____] Z [____1____]
 ```
 
-### Space Properties - View Mode
+### Space Properties - Always Editable
 ```
-spawnPoint    (0, 1, 0)    [✏️] [❌]
+spawnPoint    X [0] Y [1] Z [0]    [❌]
 ```
 
-### Space Properties - Edit Mode
-```
-spawnPoint    X [0] Y [1] Z [0]    [✓] [×]
-```
+Vector3 properties in the space properties panel are always editable - no need to click an edit button. Simply change any axis value and it will auto-save when you press Enter or when the input loses focus.
 
 ## API Usage
 

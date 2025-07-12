@@ -398,6 +398,26 @@ body {
     margin: 0 2px;
 }
 
+/* Vector3 in space properties - always editable */
+.prop-value .vector-group .property-input {
+    width: 60px;
+    background: #0f0f0f;
+    border: 1px solid #2a2a2a;
+    padding: 4px 6px;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.prop-value .vector-group .property-input:hover {
+    border-color: #3a3a3a;
+    background: #161616;
+}
+
+.prop-value .vector-group .property-input:focus {
+    border-color: #4a90e2;
+    background: #161616;
+}
+
 /* Color Input Styles */
 .color-group {
     display: flex;
