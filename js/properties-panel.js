@@ -109,17 +109,49 @@ export class PropertiesPanel {
         // Name property with inline editing
         const nameRow = document.createElement('div');
         nameRow.className = 'property-row';
-        nameRow.innerHTML = `
-            <span class="property-label">Name</span>
-            <div class="property-value">
-                <span class="node-name" id="slotNameDisplay">${slot.name}</span>
-            </div>
-        `;
+        const nameLabel = document.createElement('span');
+        nameLabel.className = 'property-label';
+        nameLabel.textContent = 'Name';
+        nameRow.appendChild(nameLabel);
+
+        const inputName = document.createElement('input');
+        inputName.type = 'text';
+        inputName.className = 'name-input';
+        inputName.value = slot.name;
+        inputName.style.width = '100%';
         
-        // Make name editable on click
-        const nameDisplay = nameRow.querySelector('#slotNameDisplay');
-        nameDisplay.style.cursor = 'pointer';
-        nameDisplay.onclick = () => this.startNameEdit(slot, nameDisplay);
+        const handleRename = () => {
+            const newName = inputName.value.trim();
+            if (newName && newName !== slot.name) {
+                slot.name = newName;
+                console.log("TODO: IMPLEMENT PROPER LOGIC FOR RENAMING VIA ONESHOT UNIFICATION")
+                document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
+                    detail: { slotId: slot.id }
+                }));
+                if (this.selectedSlotNameElement) {
+                    this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
+                }
+            }  
+        };
+        
+        inputName.addEventListener('change', (e) => {
+            handleRename();
+        });
+        
+        inputName.addEventListener('blur', handleRename);
+        nameRow.appendChild(inputName);
+
+        // nameRow.innerHTML = `
+        //     <span class="property-label">Name</span>
+        //     <div class="property-value">
+        //         <span class="node-name" id="slotNameDisplay">${slot.name}</span>
+        //     </div>
+        // `;
+        
+        // // Make name editable on click
+        // const nameDisplay = nameRow.querySelector('#slotNameDisplay');
+        // nameDisplay.style.cursor = 'pointer';
+        // nameDisplay.onclick = () => this.startNameEdit(slot, nameDisplay);
         
         // Active property
         const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
@@ -150,50 +182,14 @@ export class PropertiesPanel {
     /**
      * Start inline name editing
      */
-    startNameEdit(slot, displayElement) {
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'name-input';
-        input.value = slot.name;
-        input.style.width = '100%';
+    // startNameEdit(slot, displayElement) {
+       
         
-        const handleRename = () => {
-            const newName = input.value.trim();
-            if (newName && newName !== slot.name) {
-                slot.name = newName;
-                displayElement.textContent = newName;
-                this.queueChange(slot.id, null, 'name', newName, 'slot', null);
-                // Update hierarchy
-                document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
-                    detail: { slotId: slot.id }
-                }));
-                // Update header
-                if (this.selectedSlotNameElement) {
-                    this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
-                }
-            } else {
-                displayElement.textContent = slot.name;
-            }
-            displayElement.style.display = '';
-            input.remove();
-        };
-        
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleRename();
-            } else if (e.key === 'Escape') {
-                displayElement.style.display = '';
-                input.remove();
-            }
-        });
-        
-        input.addEventListener('blur', handleRename);
-        
-        displayElement.style.display = 'none';
-        displayElement.parentElement.appendChild(input);
-        input.focus();
-        input.select();
-    }
+    //     displayElement.style.display = 'none';
+    //     displayElement.parentElement.appendChild(input);
+    //     input.focus();
+    //     input.select();
+    // }
 
     /**
      * Render a component
