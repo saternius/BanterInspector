@@ -99,7 +99,15 @@ The inspector uses ES6 modules for clean separation of concerns:
 - Protected properties (admin only)
 - Add/edit/delete operations
 - JSON value support
-- Vector3 property support
+- **Vector3 property support**:
+  - Automatically detects Vector3 objects with {x, y, z} structure
+  - Displays as "(x, y, z)" format in view mode
+  - Provides three separate number inputs (X, Y, Z) in edit mode
+  - Supports creating Vector3 from string input in multiple formats:
+    - `(1, 2, 3)` - Parentheses with commas
+    - `1 2 3` - Space separated
+    - `1,2,3` - Comma separated
+  - Broadcasts changes appropriately through setSpaceProperty
 
 ## Data Flow
 
@@ -133,6 +141,27 @@ To add a new property type:
 1. Add type check in `utils.js`
 2. Add rendering logic in `properties-panel.js` → `renderProperty()`
 3. Add parsing logic if needed
+
+### Vector3 Implementation Details
+The Vector3 support is implemented across multiple modules:
+
+1. **Detection** (`utils.js`):
+   - `isVector3Object()` checks for objects with numeric x, y, z properties
+
+2. **Properties Panel** (`properties-panel.js`):
+   - Renders Vector3 with three number inputs in component properties
+   - Each axis has a label (X, Y, Z) and separate input
+   - Updates are handled via `handleVector3Change()`
+
+3. **Space Properties Panel** (`space-props-panel.js`):
+   - Display mode: Shows as "(x, y, z)" format
+   - Edit mode: Three number inputs with axis labels
+   - Parse mode: Supports multiple input formats via regex pattern
+   - Save mode: Properly constructs Vector3 object with parsed values
+
+4. **Scene Manager** (`scene-manager.js`):
+   - Handles Vector3 updates to Unity components
+   - Converts to BS.Vector3 for Unity API calls
 
 ### Mock Data
 - Use `mock-data.js` for development without Unity

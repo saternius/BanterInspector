@@ -114,6 +114,9 @@ export class SpacePropsPanel {
                     input.id = `${type}_prop_${key}_${axis}`;
                     input.value = value[axis] || 0;
                     input.step = 'any';
+                    input.addEventListener('keypress', (e) => {
+                        this.handlePropKeyPress(e, type, key);
+                    });
                     
                     const label = document.createElement('span');
                     label.className = 'vector-label';
@@ -208,10 +211,23 @@ export class SpacePropsPanel {
         
         // Focus the input after render
         setTimeout(() => {
-            const input = document.getElementById(`${type}_prop_${key}`);
-            if (input) {
-                input.focus();
-                input.select();
+            const props = type === 'public' ? sceneManager.scene.spaceState.public : sceneManager.scene.spaceState.protected;
+            const value = props[key];
+            
+            if (isVector3Object(value)) {
+                // Focus the first Vector3 input (x)
+                const xInput = document.getElementById(`${type}_prop_${key}_x`);
+                if (xInput) {
+                    xInput.focus();
+                    xInput.select();
+                }
+            } else {
+                // Focus regular input
+                const input = document.getElementById(`${type}_prop_${key}`);
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
             }
         }, 0);
     }
@@ -241,23 +257,8 @@ export class SpacePropsPanel {
             // Save regular value
             const input = document.getElementById(`${type}_prop_${key}`);
             if (input) {
-                let newValue = input.value;
-                
-                // Try to parse as JSON if it looks like JSON
-                if (newValue.startsWith('{') || newValue.startsWith('[')) {
-                    try {
-                        newValue = JSON.parse(newValue);
-                    } catch (e) {
-                        // Keep as string if JSON parse fails
-                    }
-                } else if (!isNaN(newValue) && newValue !== '') {
-                    // Convert to number if it's numeric
-                    newValue = parseFloat(newValue);
-                } else if (newValue === 'true' || newValue === 'false') {
-                    // Convert to boolean
-                    newValue = newValue === 'true';
-                }
-                
+                // Use parseValue method to handle all value types including Vector3
+                const newValue = this.parseValue(input.value);
                 sceneManager.setSpaceProperty(key, newValue, type === 'protected');
             }
         }
@@ -343,6 +344,17 @@ export class SpacePropsPanel {
             } catch (e) {
                 // Keep as string if JSON parse fails
             }
+        }
+        
+        // Check for Vector3 format: "(x, y, z)" or "x y z" or "x,y,z"
+        const vector3Pattern = /^\(?\s*(-?\d*\.?\d+)\s*[,\s]\s*(-?\d*\.?\d+)\s*[,\s]\s*(-?\d*\.?\d+)\s*\)?$/;
+        const match = value.match(vector3Pattern);
+        if (match) {
+            return {
+                x: parseFloat(match[1]),
+                y: parseFloat(match[2]),
+                z: parseFloat(match[3])
+            };
         }
         
         // Check for boolean

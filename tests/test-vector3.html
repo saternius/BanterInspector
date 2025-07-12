@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vector3 Test - Space Props Panel</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #2a2a2a;
+            border-radius: 4px;
+        }
+        .test-result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #333;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        input {
+            margin: 5px;
+            padding: 5px 10px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vector3 Support Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Vector3 Detection</h2>
+        <button onclick="testVector3Detection()">Run Test</button>
+        <div id="test1-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 2: Parse Vector3 from String</h2>
+        <input type="text" id="vector-input" placeholder="Enter Vector3 (e.g., 1 2 3 or (1,2,3))">
+        <button onclick="testParseVector3()">Parse</button>
+        <div id="test2-result" class="test-result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 3: Space Props Panel Integration</h2>
+        <div id="publicPropsPanel">
+            <h3>Public Properties (<span id="publicPropsCount">0</span>)</h3>
+            <div id="publicPropsList"></div>
+            <div class="add-prop-section">
+                <input type="text" id="addPublicKey" placeholder="Key">
+                <input type="text" id="addPublicValue" placeholder="Value">
+                <button onclick="addPublicProp()">Add</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Test 4: Manual Vector3 Test</h2>
+        <button onclick="testManualVector3()">Add Test Vector3 Properties</button>
+        <div id="test4-result" class="test-result"></div>
+    </div>
+
+    <script type="module">
+        import { isVector3Object } from './js/utils.js';
+        import { SpacePropsPanel } from './js/space-props-panel.js';
+        
+        // Mock scene manager for testing
+        window.sceneManager = {
+            scene: {
+                spaceState: {
+                    public: {},
+                    protected: {}
+                }
+            },
+            setSpaceProperty: function(key, value, isProtected) {
+                console.log(`Setting ${isProtected ? 'protected' : 'public'} property:`, key, value);
+                if (isProtected) {
+                    this.scene.spaceState.protected[key] = value;
+                } else {
+                    this.scene.spaceState.public[key] = value;
+                }
+                document.dispatchEvent(new CustomEvent('spaceStateChanged'));
+            }
+        };
+        
+        // Initialize space props panel
+        window.spacePropsPanel = new SpacePropsPanel();
+        
+        // Test functions
+        window.testVector3Detection = function() {
+            const testCases = [
+                { value: { x: 1, y: 2, z: 3 }, expected: true },
+                { value: { x: 0, y: 0, z: 0 }, expected: true },
+                { value: { x: 1.5, y: -2.5, z: 3.7 }, expected: true },
+                { value: { x: 1, y: 2 }, expected: false },
+                { value: { x: 1, y: 2, z: 3, w: 4 }, expected: false },
+                { value: { a: 1, b: 2, c: 3 }, expected: false },
+                { value: "not an object", expected: false },
+                { value: null, expected: false }
+            ];
+            
+            let results = [];
+            testCases.forEach((test, index) => {
+                const result = isVector3Object(test.value);
+                const passed = result === test.expected;
+                results.push(`Test ${index + 1}: ${passed ? '✓' : '✗'} - ${JSON.stringify(test.value)} = ${result}`);
+            });
+            
+            document.getElementById('test1-result').innerHTML = results.join('<br>');
+        };
+        
+        window.testParseVector3 = function() {
+            const input = document.getElementById('vector-input').value;
+            const parsed = window.spacePropsPanel.parseValue(input);
+            document.getElementById('test2-result').innerHTML = 
+                `Input: "${input}"<br>` +
+                `Parsed: ${JSON.stringify(parsed)}<br>` +
+                `Is Vector3: ${isVector3Object(parsed)}`;
+        };
+        
+        window.testManualVector3 = function() {
+            // Add various test properties
+            window.sceneManager.setSpaceProperty('position', { x: 10, y: 20, z: 30 }, false);
+            window.sceneManager.setSpaceProperty('rotation', { x: 0, y: 180, z: 0 }, false);
+            window.sceneManager.setSpaceProperty('scale', { x: 1, y: 1, z: 1 }, false);
+            window.sceneManager.setSpaceProperty('normalProp', 'Hello World', false);
+            window.sceneManager.setSpaceProperty('numberProp', 42, false);
+            window.sceneManager.setSpaceProperty('boolProp', true, false);
+            
+            document.getElementById('test4-result').textContent = 
+                'Added test properties: position, rotation, scale, normalProp, numberProp, boolProp';
+        };
+    </script>
+</body>
+</html>
