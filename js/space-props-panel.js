@@ -4,7 +4,7 @@
  */
 
 import { sceneManager } from './scene-manager.js';
-import { isVector3Object } from './utils.js';
+import { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } from './utils.js';
 
 export class SpacePropsPanel {
     constructor() {
@@ -100,7 +100,30 @@ export class SpacePropsPanel {
         
         const isEditing = this.editingProps.has(`${type}_${key}`);
         
-        if (isVector3Object(value)) {
+        if (isQuaternion(value)) {
+            // Quaternion - display as read-only Euler angles
+            const eulerAngles = quaternionToEuler(value);
+            const valueDisplay = document.createElement('span');
+            valueDisplay.className = 'prop-value-display quaternion-euler';
+            valueDisplay.textContent = `(${formatNumber(eulerAngles.x, 2)}, ${formatNumber(eulerAngles.y, 2)}, ${formatNumber(eulerAngles.z, 2)})`;
+            valueDisplay.title = 'Rotation in Euler angles (read-only)';
+            
+            valueContainer.appendChild(valueDisplay);
+            
+            // Only delete button for quaternions (no edit)
+            const actions = document.createElement('div');
+            actions.className = 'prop-actions';
+            
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'prop-button delete';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete';
+            deleteBtn.onclick = () => this.deleteProp(type, key);
+            
+            actions.appendChild(deleteBtn);
+            valueContainer.appendChild(actions);
+            
+        } else if (isVector3Object(value)) {
             // Vector3 always shows input fields
             const vectorGroup = document.createElement('div');
             vectorGroup.className = 'vector-group';
@@ -182,7 +205,7 @@ export class SpacePropsPanel {
             valueContainer.appendChild(actions);
             
         } else {
-            // Display mode for non-Vector3
+            // Display mode for non-Vector3 and non-Quaternion
             const valueDisplay = document.createElement('span');
             valueDisplay.className = 'prop-value-display';
             

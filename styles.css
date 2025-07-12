@@ -637,6 +637,18 @@ body {
     gap: 8px;
 }
 
+.prop-value-display {
+    color: #e8e8e8;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 12px;
+}
+
+.prop-value-display.quaternion-euler {
+    color: #b8b8b8;
+    font-style: italic;
+    opacity: 0.9;
+}
+
 .prop-input {
     flex: 1;
     background: #0f0f0f;
