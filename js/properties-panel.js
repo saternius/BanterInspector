@@ -203,13 +203,47 @@ export class PropertiesPanel {
         // Header
         const header = document.createElement('div');
         header.className = 'component-header';
-        header.innerHTML = `
-            <div>
-                <span class="component-name">${component.type}</span>
-                <span class="component-type">#${index}</span>
-            </div>
-            <span class="component-toggle">▼</span>
+        
+        const headerContent = document.createElement('div');
+        headerContent.style.display = 'flex';
+        headerContent.style.alignItems = 'center';
+        headerContent.style.width = '100%';
+        headerContent.style.justifyContent = 'space-between';
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.innerHTML = `
+            <span class="component-name">${component.type}</span>
+            <span class="component-type">#${index}</span>
         `;
+        
+        const actionsDiv = document.createElement('div');
+        actionsDiv.style.display = 'flex';
+        actionsDiv.style.alignItems = 'center';
+        actionsDiv.style.gap = '8px';
+        
+        // Delete button (don't allow deleting Transform components)
+        if (component.type !== 'Transform') {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'component-delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete component';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (confirm(`Delete ${component.type} component?`)) {
+                    this.deleteComponent(component.id, component.type);
+                }
+            };
+            actionsDiv.appendChild(deleteBtn);
+        }
+        
+        const toggleSpan = document.createElement('span');
+        toggleSpan.className = 'component-toggle';
+        toggleSpan.textContent = '▼';
+        actionsDiv.appendChild(toggleSpan);
+        
+        headerContent.appendChild(titleDiv);
+        headerContent.appendChild(actionsDiv);
+        header.appendChild(headerContent);
         
         // Body
         const body = document.createElement('div');
@@ -565,6 +599,24 @@ export class PropertiesPanel {
                     sceneManager.setSpaceProperty(propKey, change.newValue, false);
                 }
             });
+        }
+    }
+
+    /**
+     * Delete a component from the selected slot
+     */
+    async deleteComponent(componentId, componentType) {
+        const slotId = sceneManager.selectedSlot;
+        if (!slotId) return;
+        
+        try {
+            await sceneManager.deleteComponent(slotId, componentId, componentType);
+            
+            // Re-render the properties panel
+            this.render(slotId);
+        } catch (error) {
+            console.error('Failed to delete component:', error);
+            alert('Failed to delete component');
         }
     }
 }

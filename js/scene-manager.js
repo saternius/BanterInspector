@@ -748,6 +748,110 @@ export class SceneManager {
     }
 
     /**
+     * Delete component from slot
+     */
+    async deleteComponent(slotId, componentId, componentType) {
+        const slot = this.getSlotById(slotId);
+        if (!slot) {
+            throw new Error('Slot not found');
+        }
+        
+        // Find and remove the component from the slot
+        const componentIndex = slot.components.findIndex(c => c.id === componentId);
+        if (componentIndex === -1) {
+            throw new Error('Component not found');
+        }
+        
+        // Remove from slot's components array
+        slot.components.splice(componentIndex, 1);
+        
+        // Remove component from Unity GameObject
+        if (this.scene && typeof window.BS !== 'undefined') {
+            try {
+                const gameObject = this.scene.objects?.[slotId];
+                if (gameObject) {
+                    // Map component type to BS.ComponentType
+                    const componentTypeMap = {
+                        'BanterRigidbody': BS.ComponentType.BanterRigidbody,
+                        'BoxCollider': BS.ComponentType.BoxCollider,
+                        'SphereCollider': BS.ComponentType.SphereCollider,
+                        'CapsuleCollider': BS.ComponentType.CapsuleCollider,
+                        'MeshCollider': BS.ComponentType.MeshCollider,
+                        'BanterMaterial': BS.ComponentType.BanterMaterial,
+                        'BanterGeometry': BS.ComponentType.BanterGeometry,
+                        'BanterText': BS.ComponentType.BanterText,
+                        'BanterAudioSource': BS.ComponentType.BanterAudioSource,
+                        'BanterVideoPlayer': BS.ComponentType.BanterVideoPlayer,
+                        'BanterBrowser': BS.ComponentType.BanterBrowser,
+                        'BanterGLTF': BS.ComponentType.BanterGLTF,
+                        'BanterAssetBundle': BS.ComponentType.BanterAssetBundle,
+                        'BanterGrabHandle': BS.ComponentType.BanterGrabHandle,
+                        'BanterSyncedObject': BS.ComponentType.BanterSyncedObject,
+                        'BanterBillboard': BS.ComponentType.BanterBillboard,
+                        'BanterPortal': BS.ComponentType.BanterPortal
+                    };
+                    
+                    const bsComponentType = componentTypeMap[componentType];
+                    if (bsComponentType && gameObject.RemoveComponent) {
+                        await gameObject.RemoveComponent(bsComponentType);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to remove Unity component:', error);
+                // Continue even if Unity removal fails
+            }
+        }
+        
+        // Send OneShot event for synchronization
+        if (this.scene && this.scene.OneShot) {
+            const eventData = {
+                action: 'deleteComponent',
+                slotId: slotId,
+                componentId: componentId,
+                componentType: componentType,
+                slotName: slot.name
+            };
+            
+            this.scene.OneShot('inspector:componentDeleted', eventData);
+            console.log('Sent component deletion event:', eventData);
+        }
+        
+        // Remove any space properties associated with this component
+        const propsToRemove = [];
+        const spaceState = this.scene?.spaceState;
+        
+        if (spaceState) {
+            // Check both public and protected properties
+            ['public', 'protected'].forEach(type => {
+                const props = spaceState[type];
+                Object.keys(props).forEach(key => {
+                    // Property keys for components have format: __SlotName/ComponentType/PropertyName:ComponentId
+                    if (key.includes(`:${componentId}`)) {
+                        propsToRemove.push({ key, isProtected: type === 'protected' });
+                    }
+                });
+            });
+            
+            // Remove the properties
+            for (const { key, isProtected } of propsToRemove) {
+                if (isProtected) {
+                    delete spaceState.protected[key];
+                    if (this.scene.SetProtectedSpaceProps) {
+                        this.scene.SetProtectedSpaceProps({ [key]: null });
+                    }
+                } else {
+                    delete spaceState.public[key];
+                    if (this.scene.SetPublicSpaceProps) {
+                        this.scene.SetPublicSpaceProps({ [key]: null });
+                    }
+                }
+            }
+        }
+        
+        console.log(`Deleted component ${componentType} from slot ${slot.name}`);
+    }
+
+    /**
      * Get default component configuration
      */
     getDefaultComponentConfig(componentType) {
