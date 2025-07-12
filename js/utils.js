@@ -63,6 +63,83 @@ export function isVector4Object(value) {
 }
 
 /**
+ * Check if value is a Quaternion (used for rotations)
+ */
+export function isQuaternion(value) {
+    return value && 
+           typeof value === 'object' && 
+           'x' in value && 
+           'y' in value && 
+           'z' in value &&
+           'w' in value &&
+           typeof value.x === 'number' &&
+           typeof value.y === 'number' &&
+           typeof value.z === 'number' &&
+           typeof value.w === 'number';
+}
+
+/**
+ * Convert Quaternion to Euler angles (in degrees)
+ */
+export function quaternionToEuler(q) {
+    // Normalize quaternion
+    const norm = Math.sqrt(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+    const x = q.x / norm;
+    const y = q.y / norm;
+    const z = q.z / norm;
+    const w = q.w / norm;
+    
+    // Convert to Euler angles using ZYX order (Unity's default)
+    const sinr_cosp = 2 * (w * x + y * z);
+    const cosr_cosp = 1 - 2 * (x * x + y * y);
+    const roll = Math.atan2(sinr_cosp, cosr_cosp);
+    
+    const sinp = 2 * (w * y - z * x);
+    let pitch;
+    if (Math.abs(sinp) >= 1) {
+        pitch = Math.sign(sinp) * Math.PI / 2; // Use 90 degrees if out of range
+    } else {
+        pitch = Math.asin(sinp);
+    }
+    
+    const siny_cosp = 2 * (w * z + x * y);
+    const cosy_cosp = 1 - 2 * (y * y + z * z);
+    const yaw = Math.atan2(siny_cosp, cosy_cosp);
+    
+    // Convert radians to degrees
+    return {
+        x: pitch * 180 / Math.PI,
+        y: yaw * 180 / Math.PI,
+        z: roll * 180 / Math.PI
+    };
+}
+
+/**
+ * Convert Euler angles (in degrees) to Quaternion
+ */
+export function eulerToQuaternion(euler) {
+    // Convert degrees to radians
+    const pitch = euler.x * Math.PI / 180;
+    const yaw = euler.y * Math.PI / 180;
+    const roll = euler.z * Math.PI / 180;
+    
+    // Calculate quaternion using ZYX order (Unity's default)
+    const cy = Math.cos(yaw * 0.5);
+    const sy = Math.sin(yaw * 0.5);
+    const cp = Math.cos(pitch * 0.5);
+    const sp = Math.sin(pitch * 0.5);
+    const cr = Math.cos(roll * 0.5);
+    const sr = Math.sin(roll * 0.5);
+    
+    return {
+        w: cr * cp * cy + sr * sp * sy,
+        x: sr * cp * cy - cr * sp * sy,
+        y: cr * sp * cy + sr * cp * sy,
+        z: cr * cp * sy - sr * sp * cy
+    };
+}
+
+/**
  * Check if value is a Color object (RGBA)
  */
 export function isColorObject(value) {

@@ -4,7 +4,7 @@
  */
 
 import { sceneManager } from './scene-manager.js';
-import { formatPropertyName, rgbToHex, hexToRgb, isVector3Object } from './utils.js';
+import { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } from './utils.js';
 
 export class PropertiesPanel {
     constructor() {
@@ -285,6 +285,30 @@ export class PropertiesPanel {
             };
             valueContainer.appendChild(input);
             
+        } else if (componentType === 'Transform' && key === 'rotation' && isQuaternion(value)) {
+            // Transform rotation - convert quaternion to Euler angles
+            const eulerAngles = quaternionToEuler(value);
+            const vectorGroup = document.createElement('div');
+            vectorGroup.className = 'vector-group';
+            
+            ['x', 'y', 'z'].forEach(axis => {
+                const axisLabel = document.createElement('span');
+                axisLabel.className = 'vector-label';
+                axisLabel.textContent = axis.toUpperCase();
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'property-input number';
+                input.value = formatNumber(eulerAngles[axis], 2);
+                input.step = 'any';
+                input.onchange = () => this.handleRotationChange(componentId, axis, input.value, componentIndex);
+                
+                vectorGroup.appendChild(axisLabel);
+                vectorGroup.appendChild(input);
+            });
+            
+            valueContainer.appendChild(vectorGroup);
+            
         } else if (isVector3Object(value)) {
             // Vector3 properties
             const vectorGroup = document.createElement('div');
@@ -433,6 +457,33 @@ export class PropertiesPanel {
         if (!isNaN(numValue)) {
             vector[axis] = numValue;
             this.queueChange(sceneManager.selectedSlot, componentId, key, vector, componentType, componentIndex);
+        }
+    }
+
+    /**
+     * Handle rotation changes (Euler angles to Quaternion)
+     */
+    handleRotationChange(componentId, axis, value, componentIndex) {
+        const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
+        if (!slot) return;
+        
+        const component = slot.components.find(c => c.id === componentId);
+        if (!component || !component.properties.rotation) return;
+        
+        // Get current quaternion and convert to Euler
+        const currentQuaternion = component.properties.rotation;
+        const eulerAngles = quaternionToEuler(currentQuaternion);
+        
+        // Update the changed axis
+        const numValue = parseFloat(value);
+        if (!isNaN(numValue)) {
+            eulerAngles[axis] = numValue;
+            
+            // Convert back to quaternion
+            const newQuaternion = eulerToQuaternion(eulerAngles);
+            
+            // Queue the change
+            this.queueChange(sceneManager.selectedSlot, componentId, 'rotation', newQuaternion, 'Transform', componentIndex);
         }
     }
 

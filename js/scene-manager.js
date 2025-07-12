@@ -360,12 +360,27 @@ export class SceneManager {
             // Handle special cases for different component types
             switch (componentType) {
                 case 'Transform':
-                    if (property === 'position' || property === 'rotation' || property === 'localScale') {
+                    if (property === 'position' || property === 'localScale') {
                         component[property] = new BS.Vector3(
                             parseFloat(newValue.x),
                             parseFloat(newValue.y),
                             parseFloat(newValue.z)
                         );
+                    } else if (property === 'rotation') {
+                        // Rotation is stored as quaternion
+                        if ('w' in newValue) {
+                            // Already a quaternion
+                            component[property] = new BS.Vector4(
+                                parseFloat(newValue.x),
+                                parseFloat(newValue.y),
+                                parseFloat(newValue.z),
+                                parseFloat(newValue.w)
+                            );
+                        } else {
+                            // If somehow we get euler angles, convert to quaternion
+                            console.warn('Received euler angles for rotation, expecting quaternion');
+                            // For safety, just use current rotation
+                        }
                     }
                     break;
                     
