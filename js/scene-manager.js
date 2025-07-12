@@ -598,6 +598,100 @@ export class SceneManager {
     }
 
     /**
+     * Reparent a slot to a new parent
+     */
+    async reparentSlot(slotId, newParentId) {
+        const slot = this.getSlotById(slotId);
+        if (!slot) return;
+        
+        // Cannot parent to itself
+        if (slotId === newParentId) return;
+        
+        // Remove from current parent or root
+        if (slot.parentId) {
+            const oldParent = this.getSlotById(slot.parentId);
+            if (oldParent && oldParent.children) {
+                oldParent.children = oldParent.children.filter(child => child.id !== slotId);
+            }
+        } else {
+            // Remove from root
+            this.sceneData.slots = this.sceneData.slots.filter(s => s.id !== slotId);
+        }
+        
+        // Add to new parent
+        const newParent = this.getSlotById(newParentId);
+        if (!newParent) return;
+        
+        if (!newParent.children) {
+            newParent.children = [];
+        }
+        newParent.children.push(slot);
+        slot.parentId = newParentId;
+        
+        // Update Unity scene if connected
+        if (this.scene && typeof window.BS !== 'undefined') {
+            try {
+                const childGameObject = this.scene.objects?.[slotId];
+                const parentGameObject = this.scene.objects?.[newParentId];
+                
+                if (childGameObject && parentGameObject) {
+                    // Set the parent in Unity
+                    if (childGameObject.SetParent) {
+                        await childGameObject.SetParent(parentGameObject);
+                    } else if (childGameObject.transform && childGameObject.transform.SetParent) {
+                        await childGameObject.transform.SetParent(parentGameObject.transform);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to update Unity parent:', error);
+            }
+        }
+        
+        this.buildHierarchyMap();
+    }
+
+    /**
+     * Move a slot to root level (no parent)
+     */
+    async moveSlotToRoot(slotId) {
+        const slot = this.getSlotById(slotId);
+        if (!slot) return;
+        
+        // Already at root
+        if (!slot.parentId) return;
+        
+        // Remove from current parent
+        const oldParent = this.getSlotById(slot.parentId);
+        if (oldParent && oldParent.children) {
+            oldParent.children = oldParent.children.filter(child => child.id !== slotId);
+        }
+        
+        // Add to root
+        slot.parentId = null;
+        this.sceneData.slots.push(slot);
+        
+        // Update Unity scene if connected
+        if (this.scene && typeof window.BS !== 'undefined') {
+            try {
+                const gameObject = this.scene.objects?.[slotId];
+                
+                if (gameObject) {
+                    // Set parent to null in Unity
+                    if (gameObject.SetParent) {
+                        await gameObject.SetParent(null);
+                    } else if (gameObject.transform && gameObject.transform.SetParent) {
+                        await gameObject.transform.SetParent(null);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to move to root in Unity:', error);
+            }
+        }
+        
+        this.buildHierarchyMap();
+    }
+
+    /**
      * Get next slot index for naming
      */
     getNextSlotIndex() {

@@ -13,6 +13,8 @@ export class HierarchyPanel {
         this.deleteBtn = document.getElementById('deleteSlotBtn');
         
         this.searchTerm = '';
+        this.draggedSlotId = null;
+        this.dropTargetId = null;
         this.setupEventListeners();
     }
 
@@ -24,6 +26,32 @@ export class HierarchyPanel {
         this.searchInput.addEventListener('input', (e) => {
             this.searchTerm = e.target.value.toLowerCase();
             this.render();
+        });
+        
+        // Add drag and drop to the tree container for root level drops
+        this.treeContainer.addEventListener('dragover', (e) => {
+            // Only allow drop at root level if not over a node
+            if (!e.target.closest('.tree-node') && this.draggedSlotId) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                this.treeContainer.classList.add('drag-over-root');
+            }
+        });
+        
+        this.treeContainer.addEventListener('dragleave', (e) => {
+            // Remove visual feedback when leaving the container
+            if (e.target === this.treeContainer) {
+                this.treeContainer.classList.remove('drag-over-root');
+            }
+        });
+        
+        this.treeContainer.addEventListener('drop', (e) => {
+            // Handle drop at root level
+            if (!e.target.closest('.tree-node') && this.draggedSlotId) {
+                e.preventDefault();
+                this.treeContainer.classList.remove('drag-over-root');
+                this.handleDropToRoot();
+            }
         });
 
         // Add child button
@@ -107,6 +135,7 @@ export class HierarchyPanel {
         // Create node container
         const nodeDiv = document.createElement('div');
         nodeDiv.className = 'tree-node-container';
+        nodeDiv.dataset.slotId = slot.id;
         
         // Create node element
         const node = document.createElement('div');
@@ -115,6 +144,18 @@ export class HierarchyPanel {
         if (!slot.active) node.classList.add('inactive');
         if (!slot.persistent) node.classList.add('non-persistent');
         node.style.paddingLeft = `${level * 20 + 8}px`;
+        
+        // Make node draggable
+        node.draggable = true;
+        node.dataset.slotId = slot.id;
+        
+        // Add drag event handlers
+        node.addEventListener('dragstart', (e) => this.handleDragStart(e, slot));
+        node.addEventListener('dragend', (e) => this.handleDragEnd(e));
+        node.addEventListener('dragover', (e) => this.handleDragOver(e));
+        node.addEventListener('drop', (e) => this.handleDrop(e));
+        node.addEventListener('dragenter', (e) => this.handleDragEnter(e));
+        node.addEventListener('dragleave', (e) => this.handleDragLeave(e));
         
         // Toggle button
         const toggle = document.createElement('span');
@@ -236,5 +277,133 @@ export class HierarchyPanel {
                 <p>${message}</p>
             </div>
         `;
+    }
+
+    /**
+     * Handle drag start
+     */
+    handleDragStart(e, slot) {
+        this.draggedSlotId = slot.id;
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', slot.id);
+        
+        // Add dragging class
+        e.target.classList.add('dragging');
+        
+        // Store drag data
+        e.dataTransfer.setDragImage(e.target, 0, 0);
+    }
+
+    /**
+     * Handle drag end
+     */
+    handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+        this.draggedSlotId = null;
+        
+        // Remove all drag-over classes
+        document.querySelectorAll('.drag-over').forEach(el => {
+            el.classList.remove('drag-over');
+        });
+        
+        // Remove root drag-over class
+        this.treeContainer.classList.remove('drag-over-root');
+    }
+
+    /**
+     * Handle drag over
+     */
+    handleDragOver(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+    }
+
+    /**
+     * Handle drag enter
+     */
+    handleDragEnter(e) {
+        if (!this.draggedSlotId) return;
+        
+        const target = e.target.closest('.tree-node');
+        if (!target) return;
+        
+        const targetSlotId = target.dataset.slotId;
+        if (targetSlotId === this.draggedSlotId) return;
+        
+        // Check if we can drop here (not on a descendant)
+        if (this.isDescendant(this.draggedSlotId, targetSlotId)) {
+            return;
+        }
+        
+        target.classList.add('drag-over');
+    }
+
+    /**
+     * Handle drag leave
+     */
+    handleDragLeave(e) {
+        const target = e.target.closest('.tree-node');
+        if (target) {
+            target.classList.remove('drag-over');
+        }
+    }
+
+    /**
+     * Handle drop
+     */
+    async handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const target = e.target.closest('.tree-node');
+        if (!target) return;
+        
+        const targetSlotId = target.dataset.slotId;
+        if (!targetSlotId || targetSlotId === this.draggedSlotId) return;
+        
+        // Check if we can drop here
+        if (this.isDescendant(this.draggedSlotId, targetSlotId)) {
+            alert('Cannot move a slot into one of its descendants');
+            return;
+        }
+        
+        // Perform the reparent operation
+        await sceneManager.reparentSlot(this.draggedSlotId, targetSlotId);
+        
+        // Expand the target node to show the newly added child
+        sceneManager.expandedNodes.add(targetSlotId);
+        
+        // Re-render the hierarchy
+        this.render();
+    }
+
+    /**
+     * Check if targetId is a descendant of slotId
+     */
+    isDescendant(slotId, targetId) {
+        const slot = sceneManager.getSlotById(slotId);
+        if (!slot) return false;
+        
+        const checkChildren = (parent) => {
+            if (!parent.children) return false;
+            
+            for (const child of parent.children) {
+                if (child.id === targetId) return true;
+                if (checkChildren(child)) return true;
+            }
+            return false;
+        };
+        
+        return checkChildren(slot);
+    }
+
+    /**
+     * Handle drop to root level
+     */
+    async handleDropToRoot() {
+        if (!this.draggedSlotId) return;
+        
+        await sceneManager.moveSlotToRoot(this.draggedSlotId);
+        this.render();
     }
 }

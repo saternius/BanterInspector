@@ -194,11 +194,39 @@ body {
     background: #444;
 }
 
+/* Drag and Drop Styles */
+.tree-node.dragging {
+    opacity: 0.5;
+    cursor: move;
+}
+
+.tree-node.drag-over {
+    background: #3a3a3a;
+    border: 1px solid #ffd700;
+    border-radius: 4px;
+}
+
+.tree-node {
+    transition: background-color 0.2s ease, border 0.2s ease;
+    cursor: grab;
+}
+
+.tree-node:active {
+    cursor: grabbing;
+}
+
+#hierarchyTree.drag-over-root {
+    background: #252525;
+    border: 2px dashed #ffd700;
+    border-radius: 4px;
+}
+
 .node-content {
     display: flex;
     align-items: center;
     flex: 1;
     overflow: hidden;
+    pointer-events: none; /* Prevent child elements from interfering with drag */
 }
 
 .tree-toggle {
