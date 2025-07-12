@@ -14,7 +14,7 @@ export function loadMockSceneData() {
                 persistent: true,
                 components: [
                     {
-                        id: 'root_1_transform',
+                        id: 'root_1_Transform',
                         type: 'Transform',
                         properties: {
                             position: { x: 0, y: 0, z: 0 },
@@ -32,7 +32,7 @@ export function loadMockSceneData() {
                         persistent: true,
                         components: [
                             {
-                                id: 'environment_1_transform',
+                                id: 'environment_1_Transform',
                                 type: 'Transform',
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },
@@ -50,7 +50,7 @@ export function loadMockSceneData() {
                                 persistent: true,
                                 components: [
                                     {
-                                        id: 'ground_1_transform',
+                                        id: 'ground_1_Transform',
                                         type: 'Transform',
                                         properties: {
                                             position: { x: 0, y: -0.5, z: 0 },
@@ -59,7 +59,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'ground_1_geometry',
+                                        id: 'ground_1_BanterGeometry',
                                         type: 'BanterGeometry',
                                         properties: {
                                             geometryType: 'BoxGeometry',
@@ -69,7 +69,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'ground_1_material',
+                                        id: 'ground_1_BanterMaterial',
                                         type: 'BanterMaterial',
                                         properties: {
                                             shader: 'Standard',
@@ -78,7 +78,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'ground_1_collider',
+                                        id: 'ground_1_BoxCollider',
                                         type: 'BoxCollider',
                                         properties: {
                                             isTrigger: false,
@@ -97,7 +97,7 @@ export function loadMockSceneData() {
                                 persistent: true,
                                 components: [
                                     {
-                                        id: 'sky_1_transform',
+                                        id: 'sky_1_Transform',
                                         type: 'Transform',
                                         properties: {
                                             position: { x: 0, y: 0, z: 0 },
@@ -106,7 +106,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sky_1_geometry',
+                                        id: 'sky_1_BanterGeometry',
                                         type: 'BanterGeometry',
                                         properties: {
                                             geometryType: 'SphereGeometry',
@@ -116,7 +116,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sky_1_material',
+                                        id: 'sky_1_BanterMaterial',
                                         type: 'BanterMaterial',
                                         properties: {
                                             shader: 'Unlit/Diffuse',
@@ -137,7 +137,7 @@ export function loadMockSceneData() {
                         persistent: true,
                         components: [
                             {
-                                id: 'objects_1_transform',
+                                id: 'objects_1_Transform',
                                 type: 'Transform',
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },
@@ -155,7 +155,7 @@ export function loadMockSceneData() {
                                 persistent: false,
                                 components: [
                                     {
-                                        id: 'cube_1_transform',
+                                        id: 'cube_1_Transform',
                                         type: 'Transform',
                                         properties: {
                                             position: { x: -2, y: 1, z: 0 },
@@ -164,7 +164,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_geometry',
+                                        id: 'cube_1_BanterGeometry',
                                         type: 'BanterGeometry',
                                         properties: {
                                             geometryType: 'BoxGeometry',
@@ -174,7 +174,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_material',
+                                        id: 'cube_1_BanterMaterial',
                                         type: 'BanterMaterial',
                                         properties: {
                                             shader: 'Standard',
@@ -183,7 +183,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_rigidbody',
+                                        id: 'cube_1_BanterRigidbody',
                                         type: 'BanterRigidbody',
                                         properties: {
                                             mass: 1,
@@ -194,7 +194,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_collider',
+                                        id: 'cube_1_BoxCollider',
                                         type: 'BoxCollider',
                                         properties: {
                                             isTrigger: false,
@@ -203,7 +203,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_grab',
+                                        id: 'cube_1_BanterGrabHandle',
                                         type: 'BanterGrabHandle',
                                         properties: {
                                             grabType: 'TRIGGER',
@@ -211,7 +211,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'cube_1_sync',
+                                        id: 'cube_1_BanterSyncedObject',
                                         type: 'BanterSyncedObject',
                                         properties: {
                                             syncPosition: true,
@@ -230,7 +230,7 @@ export function loadMockSceneData() {
                                 persistent: false,
                                 components: [
                                     {
-                                        id: 'sphere_1_transform',
+                                        id: 'sphere_1_Transform',
                                         type: 'Transform',
                                         properties: {
                                             position: { x: 2, y: 3, z: 0 },
@@ -239,7 +239,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sphere_1_geometry',
+                                        id: 'sphere_1_BanterGeometry',
                                         type: 'BanterGeometry',
                                         properties: {
                                             geometryType: 'SphereGeometry',
@@ -249,7 +249,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sphere_1_material',
+                                        id: 'sphere_1_BanterMaterial',
                                         type: 'BanterMaterial',
                                         properties: {
                                             shader: 'Standard',
@@ -258,7 +258,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sphere_1_rigidbody',
+                                        id: 'sphere_1_BanterRigidbody',
                                         type: 'BanterRigidbody',
                                         properties: {
                                             mass: 0.5,
@@ -269,7 +269,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'sphere_1_collider',
+                                        id: 'sphere_1_SphereCollider',
                                         type: 'SphereCollider',
                                         properties: {
                                             isTrigger: false,
@@ -287,7 +287,7 @@ export function loadMockSceneData() {
                                 persistent: true,
                                 components: [
                                     {
-                                        id: 'text_1_transform',
+                                        id: 'text_1_Transform',
                                         type: 'Transform',
                                         properties: {
                                             position: { x: 0, y: 2, z: -5 },
@@ -296,7 +296,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'text_1_text',
+                                        id: 'text_1_BanterText',
                                         type: 'BanterText',
                                         properties: {
                                             text: 'Welcome to the Scene Inspector!',
@@ -306,7 +306,7 @@ export function loadMockSceneData() {
                                         }
                                     },
                                     {
-                                        id: 'text_1_billboard',
+                                        id: 'text_1_BanterBillboard',
                                         type: 'BanterBillboard',
                                         properties: {
                                             smoothing: 0.1,
@@ -328,7 +328,7 @@ export function loadMockSceneData() {
                         persistent: true,
                         components: [
                             {
-                                id: 'ui_1_transform',
+                                id: 'ui_1_Transform',
                                 type: 'Transform',
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },

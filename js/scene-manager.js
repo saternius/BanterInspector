@@ -101,7 +101,7 @@ export class SceneManager {
             // Extract transform data
             if (transform) {
                 slot.components.push({
-                    id: `${id}_transform`,
+                    id: `${id}_Transform`,
                     type: 'Transform',
                     properties: {
                         position: transform.position || { x: 0, y: 0, z: 0 },
@@ -300,6 +300,7 @@ export class SceneManager {
      * Handle space state changes
      */
     handleSpaceStateChange(event) {
+        console.log("TODO: make changes sync across all clients")
         const { changes } = event.detail;
         
         changes.forEach(change => {
@@ -313,21 +314,23 @@ export class SceneManager {
         });
     }
 
-    async updateUnityObject(gameObject, change){
-        if (!gameObject) return;
-        if(change.propertyKey == "active"){
-            await gameObject.SetActive(change.newValue);
+    async updateUnityObject(slotId, property, newValue){
+        let gO = this.scene.objects[slotId]
+        if (!gO) return;
+        if(property == "active"){
+            await gO.SetActive(Boolean(newValue));
             return;
         }
-
-        console.log("UPDATE UNITY OBJECT", gameObject, change)
+        console.log("UPDATE UNITY OBJECT", gameObject, property, newValue)
     }
 
     /**
      * Update Unity component with changes
      */
-    async updateUnityComponent(gameObject, change) {
-        if (!gameObject) return;
+    async updateUnityComponent(slotId, componentType, property, newValue) {
+        let gO = this.scene.objects[slotId]
+        if (!gO) return;
+        
         
         try {
             // Get the component
@@ -343,24 +346,22 @@ export class SceneManager {
                 'BanterText': BS.ComponentType.BanterText
             };
             
-            const bsComponentType = componentTypeMap[change.componentType];
+            const bsComponentType = componentTypeMap[componentType];
             if (bsComponentType) {
-                component = gameObject.GetComponent(bsComponentType);
+                component = gO.GetComponent(bsComponentType);
             }
             
             if (!component) {
-                console.warn(`Component ${change.componentType} not found`);
+                console.warn(`Component ${componentType} not found`);
                 return;
             }
             
-            // Update the property
-            const { propertyKey, newValue } = change;
-            
+
             // Handle special cases for different component types
-            switch (change.componentType) {
+            switch (componentType) {
                 case 'Transform':
-                    if (propertyKey === 'position' || propertyKey === 'rotation' || propertyKey === 'localScale') {
-                        component[propertyKey] = new BS.Vector3(
+                    if (property === 'position' || property === 'rotation' || property === 'localScale') {
+                        component[property] = new BS.Vector3(
                             parseFloat(newValue.x),
                             parseFloat(newValue.y),
                             parseFloat(newValue.z)
@@ -369,7 +370,7 @@ export class SceneManager {
                     break;
                     
                 case 'BanterMaterial':
-                    if (propertyKey === 'color') {
+                    if (property === 'color') {
                         component.color = new BS.Vector4(
                             parseFloat(newValue.r),
                             parseFloat(newValue.g),
@@ -377,13 +378,13 @@ export class SceneManager {
                             parseFloat(newValue.a)
                         );
                     } else {
-                        component[propertyKey] = newValue;
+                        component[property] = newValue;
                     }
                     break;
                     
                 default:
                     // Direct property assignment
-                    component[propertyKey] = newValue;
+                    component[property] = newValue;
                     break;
             }
         } catch (error) {
@@ -391,23 +392,43 @@ export class SceneManager {
         }
     }
 
-    checkAndSyncComponentProperty(key, value){
-        if (key.startsWith('__')) {
-            console.log("CHANGE START WITH __")
+    async checkAndSyncComponentProperty(key, value){
+        if(!key.startsWith("__")) return;
+        let key_parts = key.split(":")
+        if(key_parts.length < 2) return;
+
+        let refs = key_parts[1].split("_")
+        let path = key_parts[0].split("/")
+        let property = path[path.length - 1]
+        let slotId = parseInt(refs[0])
+        let slot = this.getSlotById(slotId)
+        if(refs.length === 1){ //is slot
+            await this.updateUnityObject(slotId, property, value);
+            slot[property] = value;
+        }else{ //is component
+            let componentType = refs[1]
+            let component = slot.components.find(c => c.type === componentType)
+            if(component){
+                await this.updateUnityComponent(slotId, componentType, property, value);
+                component.properties[property] = value;
+            }
         }
 
-        if(key.startsWith("inspector_")){
-            console.log("CHANGE START WITH INSPECTOR")
-        }
+      
     }
 
 
     /**
      * Set space property
      */
-    setSpaceProperty(key, value, isProtected) {
+    async setSpaceProperty(key, value, isProtected) {
         if (!this.scene) return;
-        this.checkAndSyncComponentProperty(key, value)
+        console.log("[setSpaceProperty]", key, value, isProtected)
+        await this.checkAndSyncComponentProperty(key, value)
+
+        if(value.value !== undefined){
+            value = value.value;
+        }
 
         // Check if this prop corresponds to a component property
         // Update the space prop
@@ -419,6 +440,8 @@ export class SceneManager {
             sceneManager.scene.spaceState.public[key] = value;
         }
         window.inspectorApp.spacePropsPanel.render();
+        window.inspectorApp.propertiesPanel.render(this.selectedSlot);
+        
     }
 
 

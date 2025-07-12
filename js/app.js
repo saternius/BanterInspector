@@ -223,36 +223,3 @@ if (document.readyState === 'loading') {
 
 // Export app instance for debugging
 window.inspectorApp = app;
-
-// Global setSpace function for compatibility
-window.setSpace = async (prop, value, isProtected) => {
-    if (!sceneManager.scene) return;
-    
-    console.log("SET SPACE", prop, value, isProtected);
-    
-    // Check if this prop corresponds to a component property
-    if (prop.startsWith('__slot')) {
-        if (value.value !== undefined) {
-            value = value.value;
-        } else {
-            // TODO: Handle slot property sync
-        }
-    } else if (prop.startsWith('__') || prop.startsWith('inspector_')) {
-        if (value.value !== undefined) {
-            // This is being updated via inspector, so components are already updated
-            value = value.value;
-        } else {
-            // This is being updated via space props, so we need to sync the components
-            // TODO: Handle component property sync
-        }
-    }
-    
-    // Update the space prop
-    if (isProtected) {
-        sceneManager.scene.SetProtectedSpaceProps({ [prop]: value });
-        sceneManager.spaceState.protected[prop] = value;
-    } else {
-        sceneManager.scene.SetPublicSpaceProps({ [prop]: value });
-        sceneManager.spaceState.public[prop] = value;
-    }
-};

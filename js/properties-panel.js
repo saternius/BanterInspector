@@ -506,56 +506,16 @@ export class PropertiesPanel {
         // Apply changes
         for (const [slotId, slotChanges] of changesBySlot) {
             console.log("HANDLING CHANGES:", slotId, slotChanges)
-            // If we have Unity access, update the actual components
-            if (sceneManager.scene && typeof window.BS !== 'undefined') {
-                try {
-                    const slot = sceneManager.getSlotById(slotId);
-                    const gameObject = sceneManager.scene.objects?.[slotId];
-                    if (slot && gameObject) {
-                        
-                        for (const change of slotChanges) {
-                            if (change.componentId) {
-                                await sceneManager.updateUnityComponent(gameObject, change);
-                            } else {
-                                // Handle slot-level properties
-                                if (change.propertyKey === 'active') {
-                                    await sceneManager.updateUnityObject(gameObject, change);
-                                }
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.error('Failed to update Unity components:', error);
-                }
-            }
-            
             // Store changes in space state for persistence
             slotChanges.forEach(change => {
+                const slot = sceneManager.getSlotById(slotId);
                 if (change.componentId) {
-                    const slot = sceneManager.getSlotById(slotId);
                     const propKey = `__${slot.name}/${change.componentType}/${change.propertyKey}:${change.componentId}`;
-                    const propValue = {
-                        value: change.newValue,
-                        componentId: change.componentId,
-                        slotId: slotId,
-                        slotName: slot?.name || 'Unknown',
-                        componentType: change.componentType,
-                        componentIndex: change.componentIndex,
-                        propertyKey: change.propertyKey,
-                        timestamp: Date.now()
-                    };
-                    sceneManager.setSpaceProperty(propKey, propValue, false);
+                    sceneManager.setSpaceProperty(propKey, change.newValue, false);
                 } else {
                     // Slot property
-                    const slot = sceneManager.getSlotById(slotId);
                     const propKey = `__${slot.name}/${change.propertyKey}:${slotId}`;
-                    const propValue = {
-                        slotId: slotId,
-                        slotName: slot?.name || 'Unknown',
-                        value: change.newValue,
-                        timestamp: Date.now()
-                    };
-                    sceneManager.setSpaceProperty(propKey, propValue, false);
+                    sceneManager.setSpaceProperty(propKey, change.newValue, false);
                 }
             });
         }
