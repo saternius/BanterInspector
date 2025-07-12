@@ -792,9 +792,10 @@ export class SceneManager {
                     };
                     
                     const bsComponentType = componentTypeMap[componentType];
-                    if (bsComponentType && gameObject.RemoveComponent) {
-                        await gameObject.RemoveComponent(bsComponentType);
-                    }
+                    alert("There is currently no way to remove components in BanterScript..")
+                    // if (bsComponentType && gameObject.RemoveComponent) {
+                    //     await gameObject.RemoveComponent(bsComponentType);
+                    // }
                 }
             } catch (error) {
                 console.error('Failed to remove Unity component:', error);
