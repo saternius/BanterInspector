@@ -55,7 +55,7 @@ export class HierarchyPanel {
             if (!slot) return;
             
             if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
-                sceneManager.deleteSlot(sceneManager.selectedSlot);
+                await sceneManager.deleteSlot(sceneManager.selectedSlot);
                 this.render();
                 
                 // Clear properties panel

@@ -124,7 +124,7 @@ export class PropertiesPanel {
         // Active property
         const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
             slot.active = value;
-            this.queueChange(slot.id, null, 'active', value, 'slot');
+            this.queueChange(slot.id, null, 'active', value, 'slot', null);
             // Update hierarchy display
             document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
                 detail: { slotId: slot.id }
@@ -134,7 +134,7 @@ export class PropertiesPanel {
         // Persistent property
         const persistentRow = this.createPropertyRow('Persistent', slot.persistent, 'checkbox', (value) => {
             slot.persistent = value;
-            this.queueChange(slot.id, null, 'persistent', value, 'slot');
+            this.queueChange(slot.id, null, 'persistent', value, 'slot', null);
         });
         
         body.appendChild(nameRow);
@@ -162,7 +162,7 @@ export class PropertiesPanel {
             if (newName && newName !== slot.name) {
                 slot.name = newName;
                 displayElement.textContent = newName;
-                this.queueChange(slot.id, null, 'name', newName, 'slot');
+                this.queueChange(slot.id, null, 'name', newName, 'slot', null);
                 // Update hierarchy
                 document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
                     detail: { slotId: slot.id }
@@ -202,6 +202,7 @@ export class PropertiesPanel {
         const section = document.createElement('div');
         section.className = 'component-section';
         section.dataset.componentId = component.id;
+        section.dataset.componentIndex = index;
         
         // Header
         const header = document.createElement('div');
@@ -221,7 +222,7 @@ export class PropertiesPanel {
         // Render properties
         if (component.properties) {
             Object.entries(component.properties).forEach(([key, value], propIndex) => {
-                const propertyRow = this.renderProperty(key, value, component.type, component.id, propIndex);
+                const propertyRow = this.renderProperty(key, value, component.type, component.id, index, propIndex);
                 body.appendChild(propertyRow);
             });
         }
@@ -243,7 +244,7 @@ export class PropertiesPanel {
     /**
      * Render a property row
      */
-    renderProperty(key, value, componentType, componentId, propertyIndex) {
+    renderProperty(key, value, componentType, componentId, componentIndex, propertyIndex) {
         const row = document.createElement('div');
         row.className = 'property-row';
         
@@ -270,7 +271,7 @@ export class PropertiesPanel {
             input.className = 'checkbox-input';
             input.checked = value;
             input.onchange = () => {
-                this.queueChange(sceneManager.selectedSlot, componentId, key, input.checked, componentType);
+                this.queueChange(sceneManager.selectedSlot, componentId, key, input.checked, componentType, componentIndex);
             };
             valueContainer.appendChild(input);
             
@@ -283,7 +284,7 @@ export class PropertiesPanel {
             input.onchange = () => {
                 const numValue = parseFloat(input.value);
                 if (!isNaN(numValue)) {
-                    this.queueChange(sceneManager.selectedSlot, componentId, key, numValue, componentType);
+                    this.queueChange(sceneManager.selectedSlot, componentId, key, numValue, componentType, componentIndex);
                 }
             };
             valueContainer.appendChild(input);
@@ -303,7 +304,7 @@ export class PropertiesPanel {
                 input.className = 'property-input number';
                 input.value = value[axis] || 0;
                 input.step = 'any';
-                input.onchange = () => this.handleVector3Change(componentType, componentId, key, axis, input.value);
+                input.onchange = () => this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
                 
                 vectorGroup.appendChild(axisLabel);
                 vectorGroup.appendChild(input);
@@ -338,7 +339,7 @@ export class PropertiesPanel {
                     a: value.a || 1
                 };
                 swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${newColor.a})`;
-                this.queueChange(sceneManager.selectedSlot, componentId, key, newColor, componentType);
+                this.queueChange(sceneManager.selectedSlot, componentId, key, newColor, componentType, componentIndex);
             };
             
             preview.onclick = () => colorInput.click();
@@ -360,7 +361,7 @@ export class PropertiesPanel {
                     if (!isNaN(newValue)) {
                         value[channel] = Math.max(0, Math.min(1, newValue));
                         swatch.style.backgroundColor = `rgba(${value.r * 255}, ${value.g * 255}, ${value.b * 255}, ${value.a})`;
-                        this.queueChange(sceneManager.selectedSlot, componentId, key, value, componentType);
+                        this.queueChange(sceneManager.selectedSlot, componentId, key, value, componentType, componentIndex);
                     }
                 };
                 
@@ -379,7 +380,7 @@ export class PropertiesPanel {
             input.className = 'property-input';
             input.value = value?.toString() || '';
             input.onchange = () => {
-                this.queueChange(sceneManager.selectedSlot, componentId, key, input.value, componentType);
+                this.queueChange(sceneManager.selectedSlot, componentId, key, input.value, componentType, componentIndex);
             };
             valueContainer.appendChild(input);
         }
@@ -424,7 +425,7 @@ export class PropertiesPanel {
     /**
      * Handle Vector3 property changes
      */
-    handleVector3Change(componentType, componentId, key, axis, value) {
+    handleVector3Change(componentType, componentId, key, axis, value, componentIndex) {
         const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
         if (!slot) return;
         
@@ -435,14 +436,14 @@ export class PropertiesPanel {
         const numValue = parseFloat(value);
         if (!isNaN(numValue)) {
             vector[axis] = numValue;
-            this.queueChange(sceneManager.selectedSlot, componentId, key, vector, componentType);
+            this.queueChange(sceneManager.selectedSlot, componentId, key, vector, componentType, componentIndex);
         }
     }
 
     /**
      * Queue a property change
      */
-    queueChange(slotId, componentId, propertyKey, newValue, componentType) {
+    queueChange(slotId, componentId, propertyKey, newValue, componentType, componentIndex) {
         const changeKey = componentId ? 
             `${slotId}_${componentId}_${propertyKey}` : 
             `${slotId}_${propertyKey}`;
@@ -451,6 +452,7 @@ export class PropertiesPanel {
             slotId,
             componentId,
             componentType,
+            componentIndex,
             propertyKey,
             newValue
         });
@@ -503,8 +505,8 @@ export class PropertiesPanel {
             if (sceneManager.scene && typeof window.BS !== 'undefined') {
                 try {
                     const slot = sceneManager.getSlotById(slotId);
-                    if (slot && sceneManager.scene.objects && sceneManager.scene.objects[slotId]) {
-                        const gameObject = sceneManager.scene.objects[slotId];
+                    const gameObject = sceneManager.scene.objects?.[slotId];
+                    if (slot && gameObject) {
                         
                         for (const change of slotChanges) {
                             if (change.componentId) {
@@ -525,20 +527,30 @@ export class PropertiesPanel {
             // Store changes in space state for persistence
             slotChanges.forEach(change => {
                 if (change.componentId) {
+                    const slot = sceneManager.getSlotById(slotId);
                     const propKey = `__${slotId}/${change.componentType}/${change.propertyKey}:${change.componentId}`;
                     const propValue = {
                         value: change.newValue,
                         componentId: change.componentId,
                         slotId: slotId,
+                        slotName: slot?.name || 'Unknown',
                         componentType: change.componentType,
+                        componentIndex: change.componentIndex,
                         propertyKey: change.propertyKey,
                         timestamp: Date.now()
                     };
                     sceneManager.setSpaceProperty(propKey, propValue, false);
                 } else {
                     // Slot property
+                    const slot = sceneManager.getSlotById(slotId);
                     const propKey = `__slot_${change.propertyKey}_${slotId}`;
-                    sceneManager.setSpaceProperty(propKey, change.newValue, false);
+                    const propValue = {
+                        slotId: slotId,
+                        slotName: slot?.name || 'Unknown',
+                        value: change.newValue,
+                        timestamp: Date.now()
+                    };
+                    sceneManager.setSpaceProperty(propKey, propValue, false);
                 }
             });
         }

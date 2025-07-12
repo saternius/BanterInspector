@@ -72,11 +72,19 @@ export class SceneManager {
      * Gather scene hierarchy from Unity
      */
     async gatherSceneHierarchy() {
+        // Initialize scene.objects if it doesn't exist
+        if (!this.scene.objects) {
+            this.scene.objects = {};
+        }
+        
         const rootSlots = [];
         
         // Helper to convert GameObject to slot format
         const gameObjectToSlot = async (gameObject, parentId = null) => {
-            let id = gameObject.name + "_" + Date.now() + "_" + Math.random();
+            let id = gameObject.id || (gameObject.name + "_" + Date.now() + "_" + Math.random());
+            
+            // Store the GameObject reference
+            this.scene.objects[id] = gameObject;
             
             // Get transform component for hierarchy info
             let transform = null;
@@ -133,8 +141,21 @@ export class SceneManager {
                 }
             }
             
-            // Process children
-            if (gameObject.children && gameObject.children.length > 0) {
+            // Process children using Traverse method if available
+            if (gameObject.Traverse) {
+                const childPromises = [];
+                gameObject.Traverse((child) => {
+                    if (child && child.id !== gameObject.id) {
+                        if (child.parent === gameObject.id) {
+                            childPromises.push(gameObjectToSlot(child, slot.id));
+                        }
+                    }
+                });
+                
+                const childSlots = await Promise.all(childPromises);
+                slot.children = childSlots.filter(s => s);
+            } else if (gameObject.children && gameObject.children.length > 0) {
+                // Fallback to children array
                 for (const child of gameObject.children) {
                     const childSlot = await gameObjectToSlot(child, slot.id);
                     slot.children.push(childSlot);
@@ -392,10 +413,18 @@ export class SceneManager {
     setSpaceProperty(key, value, isProtected) {
         if (!this.scene) return;
         
-        if (isProtected) {
-            this.scene.SetProtectedSpaceProps({ [key]: value });
+        // Use global setSpace if available for proper handling
+        if (window.setSpace) {
+            window.setSpace(key, value, isProtected);
         } else {
-            this.scene.SetPublicSpaceProps({ [key]: value });
+            // Fallback to direct update
+            if (isProtected) {
+                this.scene.SetProtectedSpaceProps({ [key]: value });
+                this.spaceState.protected[key] = value;
+            } else {
+                this.scene.SetPublicSpaceProps({ [key]: value });
+                this.spaceState.public[key] = value;
+            }
         }
     }
 
@@ -428,15 +457,48 @@ export class SceneManager {
      * Add new slot
      */
     async addNewSlot(parentId = null) {
+        const newSlotName = `NewSlot_${this.getNextSlotIndex()}`;
+        let newGameObject = null;
+        let newSlotId = `slot_${Date.now()}_${Math.random()}`;
+        
+        // Create Unity GameObject if connected
+        if (this.scene && typeof window.BS !== 'undefined' && parentId) {
+            const parentGameObject = this.scene.objects?.[parentId];
+            if (parentGameObject) {
+                try {
+                    // Create new GameObject
+                    newGameObject = new BS.GameObject(newSlotName);
+                    newSlotId = newGameObject.id;
+                    
+                    // Add Transform component
+                    const transform = await newGameObject.AddComponent(new BS.Transform());
+                    transform.position = new BS.Vector3(0, 0, 0);
+                    transform.rotation = new BS.Quaternion(0, 0, 0, 1);
+                    transform.localScale = new BS.Vector3(1, 1, 1);
+                    
+                    // Set parent
+                    await newGameObject.SetParent(parentGameObject, true);
+                    
+                    // Ensure it's active
+                    await newGameObject.SetActive(true);
+                    
+                    // Store GameObject reference
+                    this.scene.objects[newSlotId] = newGameObject;
+                } catch (error) {
+                    console.error('Failed to create Unity GameObject:', error);
+                }
+            }
+        }
+        
         const newSlot = {
-            id: `slot_${Date.now()}_${Math.random()}`,
-            name: `NewSlot_${this.getNextSlotIndex()}`,
+            id: newSlotId,
+            name: newSlotName,
             parentId: parentId,
             active: true,
             persistent: true,
             components: [
                 {
-                    id: `transform_${Date.now()}`,
+                    id: newGameObject?.GetComponent?.(BS.ComponentType.Transform)?.id || `transform_${Date.now()}`,
                     type: 'Transform',
                     properties: {
                         position: { x: 0, y: 0, z: 0 },
@@ -464,9 +526,40 @@ export class SceneManager {
     /**
      * Delete slot
      */
-    deleteSlot(slotId) {
+    async deleteSlot(slotId) {
         const slot = this.getSlotById(slotId);
         if (!slot) return;
+        
+        // Get all slots to delete (including children)
+        const slotsToDelete = [slotId];
+        const collectChildren = (slot) => {
+            if (slot.children) {
+                slot.children.forEach(child => {
+                    slotsToDelete.push(child.id);
+                    collectChildren(child);
+                });
+            }
+        };
+        collectChildren(slot);
+        
+        // Destroy Unity GameObjects
+        if (this.scene && typeof window.BS !== 'undefined') {
+            // Reverse order to delete children first
+            for (let i = slotsToDelete.length - 1; i >= 0; i--) {
+                const deleteSlot = this.getSlotById(slotsToDelete[i]);
+                if (deleteSlot) {
+                    try {
+                        const gameObject = this.scene.objects?.[deleteSlot.id];
+                        if (gameObject && gameObject.Destroy) {
+                            await gameObject.Destroy();
+                        }
+                        delete this.scene.objects[deleteSlot.id];
+                    } catch (error) {
+                        console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
+                    }
+                }
+            }
+        }
         
         // Remove from parent's children or root
         if (slot.parentId) {
