@@ -2,9 +2,9 @@
  * Properties Panel
  * Handles component display and property editing
  */
-
-import { sceneManager } from './scene-manager.js';
-import { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } from './utils.js';
+const basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+import { sceneManager } from `${basePath}/scene-manager.js`;
+import { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } from `${basePath}/utils.js`;
 
 export class PropertiesPanel {
     constructor() {

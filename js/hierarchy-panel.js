@@ -2,8 +2,8 @@
  * Hierarchy Panel
  * Handles the scene hierarchy tree display and interactions
  */
-
-import { sceneManager } from './scene-manager.js';
+const basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+import { sceneManager } from `${basePath}/scene-manager.js`;
 
 export class HierarchyPanel {
     constructor() {

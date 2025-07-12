@@ -2,8 +2,8 @@
  * Scene Manager
  * Handles Unity scene connection, state management, and data synchronization
  */
-
-import { loadMockSceneData } from './mock-data.js';
+const basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+import { loadMockSceneData } from `${basePath}/mock-data.js`;
 
 export class SceneManager {
     constructor() {

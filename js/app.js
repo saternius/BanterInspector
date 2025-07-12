@@ -4,13 +4,14 @@
  * This is the main entry point that initializes all modules and coordinates
  * the inspector application.
  */
+const basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
 
-import { sceneManager } from './scene-manager.js';
-import { HierarchyPanel } from './hierarchy-panel.js';
-import { PropertiesPanel } from './properties-panel.js';
-import { SpacePropsPanel } from './space-props-panel.js';
-import { ComponentMenu } from './component-menu.js';
-import { loadMockSpaceProps } from './mock-data.js';
+import { sceneManager } from `${basePath}/scene-manager.js`;
+import { HierarchyPanel } from `${basePath}/hierarchy-panel.js`;
+import { PropertiesPanel } from `${basePath}/properties-panel.js`;
+import { SpacePropsPanel } from `${basePath}/space-props-panel.js`;
+import { ComponentMenu } from `${basePath}/component-menu.js`;
+import { loadMockSpaceProps } from `${basePath}/mock-data.js`;
 
 // Global app instance
 class InspectorApp {

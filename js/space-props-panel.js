@@ -2,9 +2,9 @@
  * Space Properties Panel
  * Handles public and protected space properties management
  */
-
-import { sceneManager } from './scene-manager.js';
-import { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } from './utils.js';
+const basePath = window.location.hostname === 'localhost'? '.' : 'https://github.com/saternius/BanterInspector/blob/master/js'; 
+import { sceneManager } from `${basePath}/scene-manager.js`;
+import { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } from `${basePath}/utils.js`;
 
 export class SpacePropsPanel {
     constructor() {
