@@ -490,6 +490,10 @@ export class PropertiesPanel {
         const changes = Array.from(this.pendingChanges.values());
         this.pendingChanges.clear();
         
+
+        console.log("CHANGES:", changes)
+
+
         // Group changes by slot
         const changesBySlot = new Map();
         changes.forEach(change => {
@@ -501,6 +505,7 @@ export class PropertiesPanel {
         
         // Apply changes
         for (const [slotId, slotChanges] of changesBySlot) {
+            console.log("HANDLING CHANGES:", slotId, slotChanges)
             // If we have Unity access, update the actual components
             if (sceneManager.scene && typeof window.BS !== 'undefined') {
                 try {
@@ -514,7 +519,7 @@ export class PropertiesPanel {
                             } else {
                                 // Handle slot-level properties
                                 if (change.propertyKey === 'active') {
-                                    await gameObject.SetActive(change.newValue);
+                                    await sceneManager.updateUnityObject(gameObject, change);
                                 }
                             }
                         }
@@ -528,7 +533,7 @@ export class PropertiesPanel {
             slotChanges.forEach(change => {
                 if (change.componentId) {
                     const slot = sceneManager.getSlotById(slotId);
-                    const propKey = `__${slotId}/${change.componentType}/${change.propertyKey}:${change.componentId}`;
+                    const propKey = `__${slot.name}/${change.componentType}/${change.propertyKey}:${change.componentId}`;
                     const propValue = {
                         value: change.newValue,
                         componentId: change.componentId,
@@ -543,7 +548,7 @@ export class PropertiesPanel {
                 } else {
                     // Slot property
                     const slot = sceneManager.getSlotById(slotId);
-                    const propKey = `__slot_${change.propertyKey}_${slotId}`;
+                    const propKey = `__${slot.name}/${change.propertyKey}:${slotId}`;
                     const propValue = {
                         slotId: slotId,
                         slotName: slot?.name || 'Unknown',

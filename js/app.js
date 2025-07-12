@@ -34,17 +34,6 @@ class InspectorApp {
             // Initialize scene manager
             await sceneManager.initialize();
             
-            // Load mock space props if no Unity connection
-            if (!sceneManager.scene) {
-                const mockProps = loadMockSpaceProps();
-                sceneManager.spaceState = mockProps;
-            } else if (sceneManager.scene.spaceState) {
-                // Initialize space state from Unity scene
-                sceneManager.spaceState = {
-                    public: { ...sceneManager.scene.spaceState.public },
-                    protected: { ...sceneManager.scene.spaceState.protected }
-                };
-            }
             
             // Initialize UI panels
             this.hierarchyPanel = new HierarchyPanel();

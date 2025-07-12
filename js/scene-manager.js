@@ -14,10 +14,6 @@ export class SceneManager {
         };
         this.selectedSlot = null;
         this.expandedNodes = new Set();
-        this.spaceState = {
-            public: {},
-            protected: {}
-        };
         this.pendingChanges = new Map();
         this.updateTimer = null;
     }
@@ -34,6 +30,7 @@ export class SceneManager {
             this.sceneData = loadMockSceneData();
             this.initializeExpandedNodes();
         }
+        window.scene = this.scene
     }
 
     /**
@@ -77,11 +74,10 @@ export class SceneManager {
             this.scene.objects = {};
         }
         
-        const rootSlots = [];
         
         // Helper to convert GameObject to slot format
         const gameObjectToSlot = async (gameObject, parentId = null) => {
-            let id = gameObject.id || (gameObject.name + "_" + Date.now() + "_" + Math.random());
+            let id = gameObject.id
             
             // Store the GameObject reference
             this.scene.objects[id] = gameObject;
@@ -110,7 +106,7 @@ export class SceneManager {
                     properties: {
                         position: transform.position || { x: 0, y: 0, z: 0 },
                         rotation: transform.rotation || { x: 0, y: 0, z: 0, w: 1 },
-                        scale: transform.localScale || { x: 1, y: 1, z: 1 }
+                        localScale: transform.localScale || { x: 1, y: 1, z: 1 }
                     }
                 });
             }
@@ -146,7 +142,7 @@ export class SceneManager {
                 const childPromises = [];
                 gameObject.Traverse((child) => {
                     if (child && child.id !== gameObject.id) {
-                        if (child.parent === gameObject.id) {
+                        if (child.parent == gameObject.id) {
                             childPromises.push(gameObjectToSlot(child, slot.id));
                         }
                     }
@@ -154,39 +150,25 @@ export class SceneManager {
                 
                 const childSlots = await Promise.all(childPromises);
                 slot.children = childSlots.filter(s => s);
-            } else if (gameObject.children && gameObject.children.length > 0) {
-                // Fallback to children array
-                for (const child of gameObject.children) {
-                    const childSlot = await gameObjectToSlot(child, slot.id);
-                    slot.children.push(childSlot);
-                }
-            }
-            
+            } 
             return slot;
         };
         
-        // Try to find root objects in the scene
+        let rootSlot = null;
         try {
             // Common root object names to search for
-            const rootNames = ['Root', 'Scene', 'World', 'Level', 'Environment', 'Main'];
-            
-            for (const name of rootNames) {
-                try {
-                    const obj = await this.scene.Find(name);
-                    if (obj) {
-                        const slot = await gameObjectToSlot(obj);
-                        rootSlots.push(slot);
-                    }
-                } catch (error) {
-                    // Object not found, continue
-                }
+            const rootName = 'Root'
+            const obj = await this.scene.Find(rootName);
+            if (obj) {
+                const slot = await gameObjectToSlot(obj);
+                rootSlot = slot;
             }
         } catch (error) {
             console.error('Error gathering scene hierarchy:', error);
         }
         
         // Set the scene data
-        this.sceneData.slots = rootSlots;
+        this.sceneData.slots = [rootSlot];
         this.buildHierarchyMap();
         this.initializeExpandedNodes();
     }
@@ -208,7 +190,7 @@ export class SceneManager {
                 data.properties = {
                     position: component.position || { x: 0, y: 0, z: 0 },
                     rotation: component.rotation || { x: 0, y: 0, z: 0, w: 1 },
-                    scale: component.localScale || { x: 1, y: 1, z: 1 }
+                    localScale: component.localScale || { x: 1, y: 1, z: 1 }
                 };
                 break;
                 
@@ -312,14 +294,6 @@ export class SceneManager {
         this.scene.addEventListener('space-state-changed', (event) => {
             this.handleSpaceStateChange(event);
         });
-        
-        // Initialize space state
-        if (this.scene.spaceState) {
-            this.spaceState = {
-                public: { ...this.scene.spaceState.public },
-                protected: { ...this.scene.spaceState.protected }
-            };
-        }
     }
 
     /**
@@ -332,11 +306,21 @@ export class SceneManager {
             const { property, newValue, isProtected } = change;
             
             if (isProtected) {
-                this.spaceState.protected[property] = newValue;
+                this.scene.spaceState.protected[property] = newValue;
             } else {
-                this.spaceState.public[property] = newValue;
+                this.scene.spaceState.public[property] = newValue;
             }
         });
+    }
+
+    async updateUnityObject(gameObject, change){
+        if (!gameObject) return;
+        if(change.propertyKey == "active"){
+            await gameObject.SetActive(change.newValue);
+            return;
+        }
+
+        console.log("UPDATE UNITY OBJECT", gameObject, change)
     }
 
     /**
@@ -375,7 +359,7 @@ export class SceneManager {
             // Handle special cases for different component types
             switch (change.componentType) {
                 case 'Transform':
-                    if (propertyKey === 'position' || propertyKey === 'rotation' || propertyKey === 'scale') {
+                    if (propertyKey === 'position' || propertyKey === 'rotation' || propertyKey === 'localScale') {
                         component[propertyKey] = new BS.Vector3(
                             parseFloat(newValue.x),
                             parseFloat(newValue.y),
@@ -407,26 +391,37 @@ export class SceneManager {
         }
     }
 
+    checkAndSyncComponentProperty(key, value){
+        if (key.startsWith('__')) {
+            console.log("CHANGE START WITH __")
+        }
+
+        if(key.startsWith("inspector_")){
+            console.log("CHANGE START WITH INSPECTOR")
+        }
+    }
+
+
     /**
      * Set space property
      */
     setSpaceProperty(key, value, isProtected) {
         if (!this.scene) return;
-        
-        // Use global setSpace if available for proper handling
-        if (window.setSpace) {
-            window.setSpace(key, value, isProtected);
+        this.checkAndSyncComponentProperty(key, value)
+
+        // Check if this prop corresponds to a component property
+        // Update the space prop
+        if (isProtected) {
+            sceneManager.scene.SetProtectedSpaceProps({ [key]: value });
+            sceneManager.scene.spaceState.protected[key] = value;
         } else {
-            // Fallback to direct update
-            if (isProtected) {
-                this.scene.SetProtectedSpaceProps({ [key]: value });
-                this.spaceState.protected[key] = value;
-            } else {
-                this.scene.SetPublicSpaceProps({ [key]: value });
-                this.spaceState.public[key] = value;
-            }
+            sceneManager.scene.SetPublicSpaceProps({ [key]: value });
+            sceneManager.scene.spaceState.public[key] = value;
         }
+        window.inspectorApp.spacePropsPanel.render();
     }
+
+
 
     /**
      * Get slot by ID
@@ -503,7 +498,7 @@ export class SceneManager {
                     properties: {
                         position: { x: 0, y: 0, z: 0 },
                         rotation: { x: 0, y: 0, z: 0, w: 1 },
-                        scale: { x: 1, y: 1, z: 1 }
+                        localScale: { x: 1, y: 1, z: 1 }
                     }
                 }
             ],
@@ -716,3 +711,4 @@ export class SceneManager {
 
 // Create singleton instance
 export const sceneManager = new SceneManager();
+window.SM = sceneManager

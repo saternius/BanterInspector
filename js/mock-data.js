@@ -19,7 +19,7 @@ export function loadMockSceneData() {
                         properties: {
                             position: { x: 0, y: 0, z: 0 },
                             rotation: { x: 0, y: 0, z: 0, w: 1 },
-                            scale: { x: 1, y: 1, z: 1 }
+                            localScale: { x: 1, y: 1, z: 1 }
                         }
                     }
                 ],
@@ -37,7 +37,7 @@ export function loadMockSceneData() {
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },
                                     rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                    scale: { x: 1, y: 1, z: 1 }
+                                    localScale: { x: 1, y: 1, z: 1 }
                                 }
                             }
                         ],
@@ -55,7 +55,7 @@ export function loadMockSceneData() {
                                         properties: {
                                             position: { x: 0, y: -0.5, z: 0 },
                                             rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                            scale: { x: 20, y: 1, z: 20 }
+                                            localScale: { x: 20, y: 1, z: 20 }
                                         }
                                     },
                                     {
@@ -102,7 +102,7 @@ export function loadMockSceneData() {
                                         properties: {
                                             position: { x: 0, y: 0, z: 0 },
                                             rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                            scale: { x: 50, y: 50, z: 50 }
+                                            localScale: { x: 50, y: 50, z: 50 }
                                         }
                                     },
                                     {
@@ -142,7 +142,7 @@ export function loadMockSceneData() {
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },
                                     rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                    scale: { x: 1, y: 1, z: 1 }
+                                    localScale: { x: 1, y: 1, z: 1 }
                                 }
                             }
                         ],
@@ -160,7 +160,7 @@ export function loadMockSceneData() {
                                         properties: {
                                             position: { x: -2, y: 1, z: 0 },
                                             rotation: { x: 0, y: 45, z: 0, w: 0.92388 },
-                                            scale: { x: 1, y: 1, z: 1 }
+                                            localScale: { x: 1, y: 1, z: 1 }
                                         }
                                     },
                                     {
@@ -235,7 +235,7 @@ export function loadMockSceneData() {
                                         properties: {
                                             position: { x: 2, y: 3, z: 0 },
                                             rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                            scale: { x: 0.5, y: 0.5, z: 0.5 }
+                                            localScale: { x: 0.5, y: 0.5, z: 0.5 }
                                         }
                                     },
                                     {
@@ -292,7 +292,7 @@ export function loadMockSceneData() {
                                         properties: {
                                             position: { x: 0, y: 2, z: -5 },
                                             rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                            scale: { x: 1, y: 1, z: 1 }
+                                            localScale: { x: 1, y: 1, z: 1 }
                                         }
                                     },
                                     {
@@ -333,7 +333,7 @@ export function loadMockSceneData() {
                                 properties: {
                                     position: { x: 0, y: 0, z: 0 },
                                     rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                    scale: { x: 1, y: 1, z: 1 }
+                                    localScale: { x: 1, y: 1, z: 1 }
                                 }
                             }
                         ],

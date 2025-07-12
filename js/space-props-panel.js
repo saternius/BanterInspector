@@ -53,8 +53,8 @@ export class SpacePropsPanel {
      * Render space properties
      */
     render() {
-        this.renderPropsList('public', sceneManager.spaceState.public);
-        this.renderPropsList('protected', sceneManager.spaceState.protected);
+        this.renderPropsList('public', sceneManager.scene.spaceState.public);
+        this.renderPropsList('protected', sceneManager.scene.spaceState.protected);
     }
 
     /**
@@ -220,7 +220,7 @@ export class SpacePropsPanel {
      * Save edited property
      */
     saveProp(type, key) {
-        const props = type === 'public' ? sceneManager.spaceState.public : sceneManager.spaceState.protected;
+        const props = type === 'public' ? sceneManager.scene.spaceState.public : sceneManager.scene.spaceState.protected;
         const currentValue = props[key];
         
         if (isVector3Object(currentValue)) {
@@ -280,9 +280,9 @@ export class SpacePropsPanel {
         if (confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
             sceneManager.setSpaceProperty(key, undefined, type === 'protected');
             if (type === 'public') {
-                delete sceneManager.spaceState.public[key];
+                delete sceneManager.scene.spaceState.public[key];
             } else {
-                delete sceneManager.spaceState.protected[key];
+                delete sceneManager.scene.spaceState.protected[key];
             }
             this.render();
         }
@@ -302,7 +302,7 @@ export class SpacePropsPanel {
         
         if (key) {
             sceneManager.setSpaceProperty(key, value, false);
-            sceneManager.spaceState.public[key] = value;
+            sceneManager.scene.spaceState.public[key] = value;
             keyInput.value = '';
             valueInput.value = '';
             this.render();
@@ -323,7 +323,7 @@ export class SpacePropsPanel {
         
         if (key) {
             sceneManager.setSpaceProperty(key, value, true);
-            sceneManager.spaceState.protected[key] = value;
+            sceneManager.scene.spaceState.protected[key] = value;
             keyInput.value = '';
             valueInput.value = '';
             this.render();
