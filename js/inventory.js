@@ -722,6 +722,9 @@ export class Inventory {
             }
             parentSlot.children.push(slotData);
             
+            // Rebuild the hierarchy map so the new slots can be found
+            sceneManager.buildHierarchyMap();
+            
             // Trigger hierarchy update
             document.dispatchEvent(new CustomEvent('sceneUpdated'));
             
@@ -759,6 +762,8 @@ export class Inventory {
         // Add components
         if (slotData.components && slotData.components.length > 0) {
             for (const compData of slotData.components) {
+                // Update component ID to include the new slot ID
+                compData.id = `${slotData.id}_${compData.type}`;
                 await this.createComponent(gameObject, compData);
             }
         }
@@ -782,7 +787,15 @@ export class Inventory {
         let gameObject = new BS.GameObject(slotData.name);
         await gameObject.SetParent(parentGameObject, true);
         await gameObject.SetActive(slotData.active !== false);
+        
+        // Update slot ID to match GameObject ID
         slotData.id = parseInt(gameObject.id);
+        
+        // Store GameObject reference in scene manager's objects map
+        if (sceneManager.scene && sceneManager.scene.objects) {
+            sceneManager.scene.objects[slotData.id] = gameObject;
+        }
+        
         return gameObject;
     }
     
