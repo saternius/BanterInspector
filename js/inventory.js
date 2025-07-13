@@ -65,7 +65,7 @@ export class Inventory {
     /**
      * Add item to inventory
      */
-    async addItem(slot) {
+    async addItem(slot, itemType = 'slot') {
         let itemName = slot.name;
         const existingKeys = Object.keys(this.items);
         
@@ -96,6 +96,7 @@ export class Inventory {
             author: sceneManager.scene?.localUser?.name || 'Unknown',
             name: itemName,
             created: Date.now(),
+            itemType: itemType,
             data: slot
         };
         
@@ -169,14 +170,23 @@ export class Inventory {
         const componentCount = item.data.components ? item.data.components.length : 0;
         const childCount = item.data.children ? item.data.children.length : 0;
         const dateStr = new Date(item.created).toLocaleDateString();
+        const itemType = item.itemType || 'slot'; // Default to 'slot' for backward compatibility
+        const itemIcon = itemType === 'script' ? '📜' : '📦';
         
         return `
             <div class="inventory-item" data-item-name="${key}">
                 <div class="item-header">
-                    <h3 class="item-name">${item.name}</h3>
+                    <div class="item-title">
+                        <span class="item-type-icon" title="${itemType}">${itemIcon}</span>
+                        <h3 class="item-name">${item.name}</h3>
+                    </div>
                     <button class="remove-item-btn" data-item-name="${key}">×</button>
                 </div>
                 <div class="item-info">
+                    <div class="info-row">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value">${itemType}</span>
+                    </div>
                     <div class="info-row">
                         <span class="info-label">Author:</span>
                         <span class="info-value">${item.author}</span>
