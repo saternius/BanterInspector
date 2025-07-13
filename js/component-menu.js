@@ -13,7 +13,29 @@
             this.closeBtn = document.getElementById('closeComponentMenu');
             
             this.selectedSlotId = null;
+            this.categoryStates = new Map(); // Track expanded/collapsed state
             this.setupEventListeners();
+            this.initializeCategories();
+        }
+
+        /**
+         * Initialize categories with default expanded state
+         */
+        initializeCategories() {
+            const categories = document.querySelectorAll('.component-category');
+            categories.forEach((category, index) => {
+                const categoryName = category.querySelector('.category-name')?.textContent || `category-${index}`;
+                this.categoryStates.set(categoryName, true); // All expanded by default
+                
+                // Add expand/collapse indicator
+                const header = category.querySelector('.category-header');
+                if (header && !header.querySelector('.category-toggle')) {
+                    const toggleIcon = document.createElement('span');
+                    toggleIcon.className = 'category-toggle';
+                    toggleIcon.textContent = '▼';
+                    header.insertBefore(toggleIcon, header.firstChild);
+                }
+            });
         }
 
         /**
@@ -43,14 +65,24 @@
                 this.filterComponents(e.target.value);
             });
 
+            // Category header clicks
+            document.addEventListener('click', (e) => {
+                const header = e.target.closest('.category-header');
+                if (header && this.overlay?.contains(header)) {
+                    e.stopPropagation();
+                    this.toggleCategory(header.closest('.component-category'));
+                }
+            });
+
             // Component item clicks
-            document.querySelectorAll('.component-item').forEach(item => {
-                item.addEventListener('click', () => {
+            document.addEventListener('click', (e) => {
+                const item = e.target.closest('.component-item');
+                if (item && this.overlay?.contains(item)) {
                     const componentType = item.dataset.component;
                     if (componentType) {
                         this.addComponent(componentType);
                     }
-                });
+                }
             });
 
             // Keyboard shortcuts
@@ -62,6 +94,31 @@
         }
 
         /**
+         * Toggle category expanded/collapsed state
+         */
+        toggleCategory(categoryElement) {
+            const categoryName = categoryElement.querySelector('.category-name')?.textContent;
+            if (!categoryName) return;
+            
+            const isExpanded = this.categoryStates.get(categoryName) ?? true;
+            this.categoryStates.set(categoryName, !isExpanded);
+            
+            // Update UI
+            const toggleIcon = categoryElement.querySelector('.category-toggle');
+            const itemsContainer = categoryElement.querySelector('.category-items');
+            
+            if (toggleIcon) {
+                toggleIcon.textContent = isExpanded ? '▶' : '▼';
+            }
+            
+            if (itemsContainer) {
+                itemsContainer.classList.toggle('collapsed', isExpanded);
+            }
+            
+            categoryElement.classList.toggle('collapsed', isExpanded);
+        }
+
+        /**
          * Show the component menu
          */
         show() {
@@ -70,6 +127,9 @@
             this.overlay.style.display = 'flex';
             this.searchInput.value = '';
             this.filterComponents('');
+            
+            // Re-initialize categories in case DOM changed
+            this.initializeCategories();
             
             // Focus search input
             setTimeout(() => {
@@ -103,10 +163,31 @@
                 item.classList.toggle('hidden', !matches);
             });
             
-            // Hide empty categories
+            // Handle categories
             categories.forEach(category => {
                 const visibleItems = category.querySelectorAll('.component-item:not(.hidden)');
-                category.style.display = visibleItems.length > 0 ? 'block' : 'none';
+                const hasVisibleItems = visibleItems.length > 0;
+                
+                category.style.display = hasVisibleItems ? 'block' : 'none';
+                
+                // Auto-expand categories with matching items when searching
+                if (term && hasVisibleItems) {
+                    const categoryName = category.querySelector('.category-name')?.textContent;
+                    if (categoryName && !this.categoryStates.get(categoryName)) {
+                        this.categoryStates.set(categoryName, true);
+                        category.classList.remove('collapsed');
+                        
+                        const toggleIcon = category.querySelector('.category-toggle');
+                        if (toggleIcon) {
+                            toggleIcon.textContent = '▼';
+                        }
+                        
+                        const itemsContainer = category.querySelector('.category-items');
+                        if (itemsContainer) {
+                            itemsContainer.classList.remove('collapsed');
+                        }
+                    }
+                }
             });
         }
 

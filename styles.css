@@ -1516,6 +1516,11 @@ body {
 
 .component-category {
     margin-bottom: 16px;
+    transition: margin-bottom 0.3s ease;
+}
+
+.component-category.collapsed {
+    margin-bottom: 8px;
 }
 
 .category-header {
@@ -1526,6 +1531,25 @@ body {
     background: #242424;
     border-radius: 4px;
     margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    user-select: none;
+}
+
+.category-header:hover {
+    background: #2a2a2a;
+}
+
+.category-toggle {
+    font-size: 12px;
+    color: #888;
+    transition: transform 0.2s ease;
+    display: inline-block;
+    width: 12px;
+}
+
+.component-category.collapsed .category-toggle {
+    transform: rotate(-90deg);
 }
 
 .category-icon {
@@ -1543,6 +1567,16 @@ body {
 .category-items {
     display: grid;
     gap: 4px;
+    max-height: 1000px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
+    opacity: 1;
+}
+
+.category-items.collapsed {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
 }
 
 .component-item {
