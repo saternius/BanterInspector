@@ -4,6 +4,7 @@ const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
+        this.previewPane = document.getElementById('previewPane');
         this.items = this.loadItems();
         this.selectedItem = null;
         this.setupDropZone();
@@ -263,25 +264,10 @@ export class Inventory {
                         <span class="info-value">${childCount}</span>
                     </div>
                 </div>
-                <div class="item-actions">
-                    <button class="action-btn view-btn" onclick="inventory.viewItem('${key}')">
-                        View Details
-                    </button>
-                </div>
             </div>
         `;
     }
     
-    /**
-     * View item details
-     */
-    viewItem(itemName) {
-        const item = this.items[itemName];
-        if (!item) return;
-        
-        console.log('Item details:', item);
-        alert(`Item: ${item.name}\n\nFull details logged to console.`);
-    }
     
     /**
      * Show notification
@@ -445,8 +431,10 @@ export class Inventory {
         if (this.selectedItem === itemName) {
             // Deselect if clicking the same item
             this.selectedItem = null;
+            this.hidePreview();
         } else {
             this.selectedItem = itemName;
+            this.showPreview(itemName);
         }
         this.render();
     }
@@ -480,5 +468,242 @@ export class Inventory {
         
         // Show notification
         this.showNotification(`Exported "${item.name}" as JSON`);
+    }
+    
+    /**
+     * Show preview pane with item details
+     */
+    showPreview(itemName) {
+        const item = this.items[itemName];
+        if (!item || !this.previewPane) return;
+        
+        // Generate preview content
+        const previewContent = this.generatePreviewContent(item);
+        this.previewPane.innerHTML = previewContent;
+        this.previewPane.style.display = 'block';
+        
+        // Add close button listener
+        const closeBtn = this.previewPane.querySelector('.preview-close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                this.selectedItem = null;
+                this.hidePreview();
+                this.render();
+            });
+        }
+    }
+    
+    /**
+     * Hide preview pane
+     */
+    hidePreview() {
+        if (this.previewPane) {
+            this.previewPane.style.display = 'none';
+            this.previewPane.innerHTML = '';
+        }
+    }
+    
+    /**
+     * Generate preview content HTML
+     */
+    generatePreviewContent(item) {
+        const dateStr = new Date(item.created).toLocaleString();
+        const itemType = item.itemType || 'slot';
+        
+        if (itemType === 'script') {
+            return `
+                <div class="preview-header">
+                    <h2>${item.name}</h2>
+                    <button class="preview-close-btn">×</button>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Type:</span>
+                        <span class="meta-value">Script</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Author:</span>
+                        <span class="meta-value">${item.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Created:</span>
+                        <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                <div class="preview-content">
+                    <h3>Script Content</h3>
+                    <pre class="script-preview"><code>${this.escapeHtml(item.data)}</code></pre>
+                </div>
+            `;
+        } else {
+            // Slot preview
+            const slot = item.data;
+            const componentCount = slot.components ? slot.components.length : 0;
+            const childCount = slot.children ? slot.children.length : 0;
+            
+            return `
+                <div class="preview-header">
+                    <h2>${item.name}</h2>
+                    <button class="preview-close-btn">×</button>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Type:</span>
+                        <span class="meta-value">Slot</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Author:</span>
+                        <span class="meta-value">${item.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Created:</span>
+                        <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                <div class="preview-content">
+                    <div class="preview-section">
+                        <h3>Slot Properties</h3>
+                        <div class="slot-props">
+                            <div class="prop-item">
+                                <span class="prop-label">Name:</span>
+                                <span class="prop-value">${slot.name}</span>
+                            </div>
+                            <div class="prop-item">
+                                <span class="prop-label">Active:</span>
+                                <span class="prop-value">${slot.active ? 'Yes' : 'No'}</span>
+                            </div>
+                            <div class="prop-item">
+                                <span class="prop-label">Children:</span>
+                                <span class="prop-value">${childCount}</span>
+                            </div>
+                            <div class="prop-item">
+                                <span class="prop-label">Components:</span>
+                                <span class="prop-value">${componentCount}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    ${componentCount > 0 ? `
+                        <div class="preview-section">
+                            <h3>Components</h3>
+                            <div class="components-list">
+                                ${slot.components.map(comp => this.renderComponentPreview(comp)).join('')}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${childCount > 0 ? `
+                        <div class="preview-section">
+                            <h3>Children</h3>
+                            <div class="children-tree">
+                                ${this.renderChildrenTree(slot.children)}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+    }
+    
+    /**
+     * Render component preview
+     */
+    renderComponentPreview(component) {
+        return `
+            <div class="component-preview">
+                <div class="component-header">
+                    <span class="component-icon">${this.getComponentIcon(component.type)}</span>
+                    <span class="component-type">${component.type}</span>
+                </div>
+                ${component.properties && Object.keys(component.properties).length > 0 ? `
+                    <div class="component-props">
+                        ${Object.entries(component.properties).map(([key, value]) => `
+                            <div class="comp-prop">
+                                <span class="comp-prop-key">${key}:</span>
+                                <span class="comp-prop-value">${this.formatValue(value)}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+    
+    /**
+     * Render children tree
+     */
+    renderChildrenTree(children, level = 0) {
+        return children.map(child => `
+            <div class="child-item" style="margin-left: ${level * 20}px">
+                <span class="child-icon">📦</span>
+                <span class="child-name">${child.name}</span>
+                ${child.active === false ? '<span class="child-inactive">(inactive)</span>' : ''}
+                ${child.children && child.children.length > 0 ? this.renderChildrenTree(child.children, level + 1) : ''}
+            </div>
+        `).join('');
+    }
+    
+    /**
+     * Get component icon
+     */
+    getComponentIcon(type) {
+        const icons = {
+            'BoxGeometry': '📦',
+            'SphereGeometry': '🔵',
+            'CylinderGeometry': '🔩',
+            'TorusGeometry': '⭕',
+            'PlaneGeometry': '⬜',
+            'CapsuleGeometry': '💊',
+            'Material': '🎨',
+            'Rigidbody': '⚙️',
+            'BoxCollider': '📦',
+            'SphereCollider': '🔵',
+            'AudioSource': '🔊',
+            'VideoPlayer': '🎬',
+            'GrabInteractable': '✋',
+            'Light': '💡',
+            'SyncTransform': '🔄',
+            'BSBrowserBridge': '🌐',
+            'GLTFLoader': '📁',
+            'AssetBundleLoader': '📦',
+            'TextMesh': '📝',
+            'PortalLoader': '🌀',
+            'AttachToParent': '🔗'
+        };
+        return icons[type] || '🔧';
+    }
+    
+    /**
+     * Format value for display
+     */
+    formatValue(value) {
+        if (value === null || value === undefined) return 'null';
+        if (typeof value === 'boolean') return value ? 'true' : 'false';
+        if (typeof value === 'number') return value.toString();
+        if (typeof value === 'string') return `"${value}"`;
+        if (typeof value === 'object') {
+            if (value.x !== undefined && value.y !== undefined && value.z !== undefined) {
+                return `(${value.x}, ${value.y}, ${value.z})`;
+            }
+            if (value.r !== undefined && value.g !== undefined && value.b !== undefined) {
+                return `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a || 1})`;
+            }
+            return JSON.stringify(value);
+        }
+        return String(value);
+    }
+    
+    /**
+     * Escape HTML for safe display
+     */
+    escapeHtml(text) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, m => map[m]);
     }
 }
