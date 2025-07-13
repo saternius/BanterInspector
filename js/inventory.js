@@ -698,28 +698,23 @@ export class Inventory {
             
             // Get or set the selected slot
             if (!sceneManager.selectedSlot) {
-                // Get the first slot from the scene
-                const rootSlots = sceneManager.sceneData?.slots || [];
-                if (rootSlots.length === 0) {
-                    alert('No slots available in the scene.');
-                    return;
-                }
-                sceneManager.selectedSlot = rootSlots[0];
+                sceneManager.selectedSlot = sceneManager.sceneData.slots[0].id
             }
             
             // Get the parent GameObject
-            const parentSlot = sceneManager.selectedSlot;
-            const parentGameObject = await this.getOrCreateGameObject(parentSlot);
+            const parentSlotId = sceneManager.selectedSlot;
+            const parentGameObject = sceneManager.getSlotGameObject(parentSlotId);
             
             if (!parentGameObject) {
                 alert('Could not find or create parent GameObject.');
                 return;
             }
-            
+            console.log(item)
             // Create the new slot and its hierarchy
             const slotData = item.data;
             await this.createSlotHierarchy(slotData, parentGameObject);
             
+            const parentSlot = sceneManager.getSlotById(parentSlotId);
             // Update the scene data
             if (!parentSlot.children) {
                 parentSlot.children = [];
@@ -744,30 +739,6 @@ export class Inventory {
             console.error('Error loading slot to scene:', error);
             alert(`Failed to add slot to scene: ${error.message}`);
         }
-    }
-    
-    /**
-     * Get or create GameObject for a slot
-     */
-    async getOrCreateGameObject(slot) {
-        // First try to find existing GameObject
-        if (slot.gameObject) {
-            return slot.gameObject;
-        }
-        
-        // Create new GameObject
-        const scene = BS.BanterScene.GetInstance();
-        if (!scene) return null;
-        
-        const gameObject = scene.AddGameObject(slot.name || 'GameObject');
-        slot.gameObject = gameObject;
-        
-        // Set active state
-        if (slot.active === false) {
-            gameObject.SetActive(false);
-        }
-        
-        return gameObject;
     }
     
     /**
@@ -798,20 +769,9 @@ export class Inventory {
     async createGameObjectFromSlot(slotData, parentGameObject) {
         const scene = BS.BanterScene.GetInstance();
         if (!scene) throw new Error('Scene not available');
-        
-        // Create GameObject
-        const gameObject = parentGameObject 
-            ? parentGameObject.AddGameObject(slotData.name || 'GameObject')
-            : scene.AddGameObject(slotData.name || 'GameObject');
-        
-        // Store reference
-        slotData.gameObject = gameObject;
-        
-        // Set active state
-        if (slotData.active === false) {
-            gameObject.SetActive(false);
-        }
-        
+        let gameObject = new BS.GameObject(slotData.name);
+        await gameObject.SetParent(parentGameObject, true);
+        await gameObject.SetActive(slotData.active);
         return gameObject;
     }
     
@@ -826,6 +786,9 @@ export class Inventory {
             
             // Create component based on type
             switch (compData.type) {
+                case 'Transform':
+                    component = gameObject.AddComponent(BS.ComponentType.Transform);
+                    break;
                 // Geometry components
                 case 'BoxGeometry':
                     component = gameObject.AddComponent(BS.ComponentType.BoxGeometry);

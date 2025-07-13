@@ -471,6 +471,15 @@
         }
 
         /**
+         * Get the game object for a slot
+         */
+        getSlotGameObject(slotId){
+            let gO = this.scene.objects[slotId]
+            if(gO) return gO;
+            return null;
+        }
+
+        /**
          * Toggle node expansion
          */
         toggleNodeExpansion(slotId) {
