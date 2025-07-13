@@ -30,6 +30,11 @@
                 this.render();
             });
             
+            // Listen for scene updates
+            document.addEventListener('sceneUpdated', () => {
+                this.render();
+            });
+            
             // Add drag and drop to the tree container for root level drops
             this.treeContainer.addEventListener('dragover', (e) => {
                 // Only allow drop at root level if not over a node

@@ -721,17 +721,21 @@ export class Inventory {
             }
             parentSlot.children.push(slotData);
             
-            // Refresh the scene
-            sceneManager.refreshScene();
+            // Trigger hierarchy update
+            document.dispatchEvent(new CustomEvent('sceneUpdated'));
             
             // Show success message
             this.showNotification(`Added "${item.name}" to scene`);
             
-            // Navigate to world inspector page
+            // Navigate to world inspector page and select the parent slot
             setTimeout(() => {
                 const worldTab = document.querySelector('[data-page="world-inspector"]');
                 if (worldTab) {
                     worldTab.click();
+                    // Trigger selection of the parent slot to show the new child
+                    document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                        detail: { slotId: parentSlotId }
+                    }));
                 }
             }, 500);
             
