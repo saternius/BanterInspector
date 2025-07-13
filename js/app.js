@@ -14,6 +14,7 @@
     const  { ComponentMenu } = await import(`${basePath}/component-menu.js`);
     const  { loadMockSpaceProps } = await import(`${basePath}/mock-data.js`);
     const  { Navigation } = await import(`${basePath}/navigation.js`);
+    const  { Inventory } = await import(`${basePath}/inventory.js`);
 
     // Global app instance
     class InspectorApp {
@@ -23,6 +24,7 @@
             this.propertiesPanel = null;
             this.spacePropsPanel = null;
             this.componentMenu = null;
+            this.inventory = null;
             this.initialized = false;
         }
 
@@ -48,8 +50,12 @@
                 this.spacePropsPanel = new SpacePropsPanel();
                 this.componentMenu = new ComponentMenu();
                 
+                // Initialize inventory
+                this.inventory = new Inventory();
+                
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
+                window.inventory = this.inventory;
                 
                 // Initial render
                 this.hierarchyPanel.render();

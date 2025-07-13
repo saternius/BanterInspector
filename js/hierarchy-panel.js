@@ -290,6 +290,9 @@
             e.dataTransfer.effectAllowed = 'move';
             e.dataTransfer.setData('text/plain', slot.id);
             
+            // Store the full slot data for inventory
+            e.dataTransfer.setData('application/json', JSON.stringify(slot));
+            
             // Add dragging class
             e.target.classList.add('dragging');
             
