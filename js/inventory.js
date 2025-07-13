@@ -170,6 +170,12 @@ export class Inventory {
             <div class="inventory-header">
                 <h2>Saved Items (${Object.keys(this.items).length})</h2>
                 <div class="inventory-actions">
+                    ${this.selectedItem && this.items[this.selectedItem]?.itemType !== 'script' ? `
+                        <button class="add-to-scene-button" id="addToSceneBtn">
+                            <span class="add-icon">➕</span>
+                            Add to Scene
+                        </button>
+                    ` : ''}
                     ${this.selectedItem ? `
                         <button class="export-button" id="exportBtn">
                             <span class="export-icon">⬆️</span>
@@ -219,6 +225,12 @@ export class Inventory {
         const exportBtn = inventoryContainer.querySelector('#exportBtn');
         if (exportBtn) {
             exportBtn.addEventListener('click', () => this.exportSelectedItem());
+        }
+        
+        // Add event listener for add to scene button
+        const addToSceneBtn = inventoryContainer.querySelector('#addToSceneBtn');
+        if (addToSceneBtn) {
+            addToSceneBtn.addEventListener('click', () => this.loadSlotToScene());
         }
     }
     
@@ -666,5 +678,288 @@ export class Inventory {
             "'": '&#039;'
         };
         return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    /**
+     * Load selected slot to scene
+     */
+    async loadSlotToScene() {
+        if (!this.selectedItem) return;
+        
+        const item = this.items[this.selectedItem];
+        if (!item || item.itemType !== 'slot') return;
+        
+        try {
+            // Check if we have BS library available
+            if (typeof BS === 'undefined' || !BS.BanterScene) {
+                alert('Unity connection not available. Cannot add to scene.');
+                return;
+            }
+            
+            // Get or set the selected slot
+            if (!sceneManager.selectedSlot) {
+                // Get the first slot from the scene
+                const rootSlots = sceneManager.sceneData?.slots || [];
+                if (rootSlots.length === 0) {
+                    alert('No slots available in the scene.');
+                    return;
+                }
+                sceneManager.selectedSlot = rootSlots[0];
+            }
+            
+            // Get the parent GameObject
+            const parentSlot = sceneManager.selectedSlot;
+            const parentGameObject = await this.getOrCreateGameObject(parentSlot);
+            
+            if (!parentGameObject) {
+                alert('Could not find or create parent GameObject.');
+                return;
+            }
+            
+            // Create the new slot and its hierarchy
+            const slotData = item.data;
+            await this.createSlotHierarchy(slotData, parentGameObject);
+            
+            // Update the scene data
+            if (!parentSlot.children) {
+                parentSlot.children = [];
+            }
+            parentSlot.children.push(slotData);
+            
+            // Refresh the scene
+            sceneManager.refreshScene();
+            
+            // Show success message
+            this.showNotification(`Added "${item.name}" to scene`);
+            
+            // Navigate to world inspector page
+            setTimeout(() => {
+                const worldTab = document.querySelector('[data-page="world-inspector"]');
+                if (worldTab) {
+                    worldTab.click();
+                }
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error loading slot to scene:', error);
+            alert(`Failed to add slot to scene: ${error.message}`);
+        }
+    }
+    
+    /**
+     * Get or create GameObject for a slot
+     */
+    async getOrCreateGameObject(slot) {
+        // First try to find existing GameObject
+        if (slot.gameObject) {
+            return slot.gameObject;
+        }
+        
+        // Create new GameObject
+        const scene = BS.BanterScene.GetInstance();
+        if (!scene) return null;
+        
+        const gameObject = scene.AddGameObject(slot.name || 'GameObject');
+        slot.gameObject = gameObject;
+        
+        // Set active state
+        if (slot.active === false) {
+            gameObject.SetActive(false);
+        }
+        
+        return gameObject;
+    }
+    
+    /**
+     * Create slot hierarchy with all components
+     */
+    async createSlotHierarchy(slotData, parentGameObject) {
+        // Create GameObject for this slot
+        const gameObject = await this.createGameObjectFromSlot(slotData, parentGameObject);
+        
+        // Add components
+        if (slotData.components && slotData.components.length > 0) {
+            for (const compData of slotData.components) {
+                await this.createComponent(gameObject, compData);
+            }
+        }
+        
+        // Create children recursively
+        if (slotData.children && slotData.children.length > 0) {
+            for (const childData of slotData.children) {
+                await this.createSlotHierarchy(childData, gameObject);
+            }
+        }
+    }
+    
+    /**
+     * Create GameObject from slot data
+     */
+    async createGameObjectFromSlot(slotData, parentGameObject) {
+        const scene = BS.BanterScene.GetInstance();
+        if (!scene) throw new Error('Scene not available');
+        
+        // Create GameObject
+        const gameObject = parentGameObject 
+            ? parentGameObject.AddGameObject(slotData.name || 'GameObject')
+            : scene.AddGameObject(slotData.name || 'GameObject');
+        
+        // Store reference
+        slotData.gameObject = gameObject;
+        
+        // Set active state
+        if (slotData.active === false) {
+            gameObject.SetActive(false);
+        }
+        
+        return gameObject;
+    }
+    
+    /**
+     * Create component on GameObject
+     */
+    async createComponent(gameObject, compData) {
+        if (!gameObject || !compData.type) return;
+        
+        try {
+            let component = null;
+            
+            // Create component based on type
+            switch (compData.type) {
+                // Geometry components
+                case 'BoxGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.BoxGeometry);
+                    break;
+                case 'SphereGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.SphereGeometry);
+                    break;
+                case 'CylinderGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.CylinderGeometry);
+                    break;
+                case 'PlaneGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.PlaneGeometry);
+                    break;
+                case 'TorusGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.TorusGeometry);
+                    break;
+                case 'CapsuleGeometry':
+                    component = gameObject.AddComponent(BS.ComponentType.CapsuleGeometry);
+                    break;
+                    
+                // Material
+                case 'Material':
+                    component = gameObject.AddComponent(BS.ComponentType.Material);
+                    break;
+                    
+                // Physics
+                case 'Rigidbody':
+                    component = gameObject.AddComponent(BS.ComponentType.Rigidbody);
+                    break;
+                case 'BoxCollider':
+                    component = gameObject.AddComponent(BS.ComponentType.BoxCollider);
+                    break;
+                case 'SphereCollider':
+                    component = gameObject.AddComponent(BS.ComponentType.SphereCollider);
+                    break;
+                    
+                // Audio/Video
+                case 'AudioSource':
+                    component = gameObject.AddComponent(BS.ComponentType.AudioSource);
+                    break;
+                case 'VideoPlayer':
+                    component = gameObject.AddComponent(BS.ComponentType.VideoPlayer);
+                    break;
+                    
+                // Interaction
+                case 'GrabInteractable':
+                    component = gameObject.AddComponent(BS.ComponentType.GrabInteractable);
+                    break;
+                case 'AttachToParent':
+                    component = gameObject.AddComponent(BS.ComponentType.AttachToParent);
+                    break;
+                    
+                // Lighting
+                case 'Light':
+                    component = gameObject.AddComponent(BS.ComponentType.Light);
+                    break;
+                    
+                // Sync
+                case 'SyncTransform':
+                    component = gameObject.AddComponent(BS.ComponentType.SyncTransform);
+                    break;
+                    
+                // Browser
+                case 'BSBrowserBridge':
+                    component = gameObject.AddComponent(BS.ComponentType.BSBrowserBridge);
+                    break;
+                    
+                // Loaders
+                case 'GLTFLoader':
+                    component = gameObject.AddComponent(BS.ComponentType.GLTFLoader);
+                    break;
+                case 'AssetBundleLoader':
+                    component = gameObject.AddComponent(BS.ComponentType.AssetBundleLoader);
+                    break;
+                case 'PortalLoader':
+                    component = gameObject.AddComponent(BS.ComponentType.PortalLoader);
+                    break;
+                    
+                // Text
+                case 'TextMesh':
+                    component = gameObject.AddComponent(BS.ComponentType.TextMesh);
+                    break;
+                    
+                default:
+                    console.warn(`Unknown component type: ${compData.type}`);
+            }
+            
+            // Apply properties if component was created
+            if (component && compData.properties) {
+                await this.applyComponentProperties(component, compData.type, compData.properties);
+            }
+            
+        } catch (error) {
+            console.error(`Error creating component ${compData.type}:`, error);
+        }
+    }
+    
+    /**
+     * Apply properties to component
+     */
+    async applyComponentProperties(component, type, properties) {
+        if (!component || !properties) return;
+        
+        for (const [key, value] of Object.entries(properties)) {
+            try {
+                // Handle Vector3 properties
+                if (value && typeof value === 'object' && 'x' in value && 'y' in value && 'z' in value) {
+                    const vector = new BS.Vector3(value.x, value.y, value.z);
+                    if (component[key] && typeof component[key] === 'function') {
+                        component[key](vector);
+                    } else {
+                        component[key] = vector;
+                    }
+                }
+                // Handle Color properties
+                else if (value && typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value) {
+                    const color = new BS.Color(value.r, value.g, value.b, value.a || 1);
+                    if (component[key] && typeof component[key] === 'function') {
+                        component[key](color);
+                    } else {
+                        component[key] = color;
+                    }
+                }
+                // Handle other properties
+                else {
+                    if (component[key] && typeof component[key] === 'function') {
+                        component[key](value);
+                    } else {
+                        component[key] = value;
+                    }
+                }
+            } catch (error) {
+                console.warn(`Failed to set property ${key} on ${type}:`, error);
+            }
+        }
     }
 }
