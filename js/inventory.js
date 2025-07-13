@@ -142,7 +142,7 @@ export class Inventory {
                     <div class="inventory-actions">
                         <button class="upload-button" id="uploadFileBtn">
                             <span class="upload-icon">⬇️</span>
-                            Import File
+                            Import
                         </button>
                         <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                     </div>
@@ -178,7 +178,7 @@ export class Inventory {
                     ` : ''}
                     <button class="upload-button" id="uploadFileBtn">
                         <span class="upload-icon">⬇️</span>
-                        Import File
+                        Import
                     </button>
                     <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                 </div>
