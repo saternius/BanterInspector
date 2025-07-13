@@ -769,6 +769,9 @@ export class Inventory {
                 await this.createSlotHierarchy(childData, gameObject);
             }
         }
+        
+        // Return the created GameObject
+        return gameObject;
     }
     
     /**
@@ -777,9 +780,35 @@ export class Inventory {
     async createGameObjectFromSlot(slotData, parentGameObject) {
         const scene = BS.BanterScene.GetInstance();
         if (!scene) throw new Error('Scene not available');
-        let gameObject = new BS.GameObject(slotData.name);
-        await gameObject.SetParent(parentGameObject);
-        await gameObject.SetActive(slotData.active);
+        
+        // Create GameObject using BS library pattern
+        let gameObject = new BS.GameObject(slotData.name || 'GameObject');
+        
+        // Set parent if provided (first await call - ID will be reassigned after this)
+        if (parentGameObject) {
+            await gameObject.SetParent(parentGameObject, true);
+        } else {
+            // If no parent, we still need an await call to get the proper ID
+            await gameObject.SetActive(slotData.active !== false);
+        }
+        
+        // Now the GameObject has its proper Unity-assigned ID
+        // Update the slot data to use this ID
+        slotData.id = gameObject.id;
+        
+        // Set active state if we haven't already
+        if (parentGameObject) {
+            await gameObject.SetActive(slotData.active !== false);
+        }
+        
+        // Store GameObject reference in scene manager's objects map using the new ID
+        if (sceneManager.scene && sceneManager.scene.objects) {
+            sceneManager.scene.objects[slotData.id] = gameObject;
+        }
+        
+        // Store reference back to slot data
+        slotData.gameObject = gameObject;
+        
         return gameObject;
     }
     
@@ -793,92 +822,176 @@ export class Inventory {
         try {
             let component = null;
             
-            // Create component based on type
+            // Create component based on type with proper instantiation
             switch (compData.type) {
                 case 'Transform':
-                    component = await gameObject.AddComponent(BS.ComponentType.Transform);
+                    component = await gameObject.AddComponent(new BS.Transform());
                     break;
+                    
                 // Geometry components
                 case 'BoxGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.BoxGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.BoxGeometry,
+                        compData.properties?.size?.x || 1,
+                        compData.properties?.size?.y || 1,
+                        compData.properties?.size?.z || 1
+                    ));
                     break;
                 case 'SphereGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.SphereGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.SphereGeometry,
+                        compData.properties?.radius || 0.5
+                    ));
                     break;
                 case 'CylinderGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.CylinderGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.CylinderGeometry,
+                        compData.properties?.radiusTop || 0.5,
+                        compData.properties?.radiusBottom || 0.5,
+                        compData.properties?.height || 1
+                    ));
                     break;
                 case 'PlaneGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.PlaneGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.PlaneGeometry,
+                        compData.properties?.width || 1,
+                        compData.properties?.height || 1
+                    ));
                     break;
                 case 'TorusGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.TorusGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.TorusGeometry,
+                        compData.properties?.radius || 1,
+                        compData.properties?.tube || 0.4
+                    ));
                     break;
                 case 'CapsuleGeometry':
-                    component = await gameObject.AddComponent(BS.ComponentType.CapsuleGeometry);
+                    component = await gameObject.AddComponent(new BS.BanterGeometry(
+                        BS.GeometryType.CapsuleGeometry,
+                        compData.properties?.radius || 0.5,
+                        compData.properties?.height || 1
+                    ));
                     break;
                     
                 // Material
                 case 'Material':
-                    component = await gameObject.AddComponent(BS.ComponentType.Material);
+                    const color = compData.properties?.color || { r: 1, g: 1, b: 1, a: 1 };
+                    component = await gameObject.AddComponent(new BS.BanterMaterial(
+                        compData.properties?.shader || 'Standard',
+                        compData.properties?.texture || '',
+                        new BS.BanterColor(color.r, color.g, color.b, color.a),
+                        compData.properties?.emission || 0,
+                        compData.properties?.metallic || 0,
+                        compData.properties?.roughness || 0.5
+                    ));
                     break;
                     
                 // Physics
                 case 'Rigidbody':
-                    component = await gameObject.AddComponent(BS.ComponentType.Rigidbody);
+                    component = await gameObject.AddComponent(new BS.BanterRigidbody(
+                        compData.properties?.mass || 1,
+                        compData.properties?.drag || 0,
+                        compData.properties?.angularDrag || 0.05,
+                        compData.properties?.useGravity !== false
+                    ));
                     break;
                 case 'BoxCollider':
-                    component = await gameObject.AddComponent(BS.ComponentType.BoxCollider);
+                    const boxSize = compData.properties?.size || { x: 1, y: 1, z: 1 };
+                    component = await gameObject.AddComponent(new BS.BanterCollider(
+                        BS.ColliderType.BoxCollider,
+                        boxSize.x,
+                        boxSize.y,
+                        boxSize.z
+                    ));
                     break;
                 case 'SphereCollider':
-                    component = await gameObject.AddComponent(BS.ComponentType.SphereCollider);
+                    component = await gameObject.AddComponent(new BS.BanterCollider(
+                        BS.ColliderType.SphereCollider,
+                        compData.properties?.radius || 0.5
+                    ));
                     break;
                     
                 // Audio/Video
                 case 'AudioSource':
-                    component = await gameObject.AddComponent(BS.ComponentType.AudioSource);
+                    component = await gameObject.AddComponent(new BS.BanterAudioSource(
+                        compData.properties?.url || '',
+                        compData.properties?.volume || 1,
+                        compData.properties?.loop || false,
+                        compData.properties?.spatial || true,
+                        compData.properties?.minDistance || 1,
+                        compData.properties?.maxDistance || 500
+                    ));
                     break;
                 case 'VideoPlayer':
-                    component = await gameObject.AddComponent(BS.ComponentType.VideoPlayer);
+                    component = await gameObject.AddComponent(new BS.BanterVideoPlayer(
+                        compData.properties?.url || '',
+                        compData.properties?.volume || 1,
+                        compData.properties?.loop || false
+                    ));
                     break;
                     
                 // Interaction
                 case 'GrabInteractable':
-                    component = await gameObject.AddComponent(BS.ComponentType.GrabInteractable);
+                    component = await gameObject.AddComponent(new BS.BanterGrabInteractable());
                     break;
                 case 'AttachToParent':
-                    component = await gameObject.AddComponent(BS.ComponentType.AttachToParent);
+                    component = await gameObject.AddComponent(new BS.BanterAttachToParent(
+                        compData.properties?.keepWorldPosition || false
+                    ));
                     break;
                     
                 // Lighting
                 case 'Light':
-                    component = await gameObject.AddComponent(BS.ComponentType.Light);
+                    const lightColor = compData.properties?.color || { r: 1, g: 1, b: 1, a: 1 };
+                    component = await gameObject.AddComponent(new BS.BanterLight(
+                        compData.properties?.type || BS.LightType.PointLight,
+                        new BS.BanterColor(lightColor.r, lightColor.g, lightColor.b, lightColor.a),
+                        compData.properties?.intensity || 1,
+                        compData.properties?.range || 10,
+                        compData.properties?.spotAngle || 30
+                    ));
                     break;
                     
                 // Sync
                 case 'SyncTransform':
-                    component = await gameObject.AddComponent(BS.ComponentType.SyncTransform);
+                    component = await gameObject.AddComponent(new BS.BanterSyncTransform(
+                        compData.properties?.position !== false,
+                        compData.properties?.rotation !== false,
+                        compData.properties?.scale !== false
+                    ));
                     break;
                     
                 // Browser
                 case 'BSBrowserBridge':
-                    component = await gameObject.AddComponent(BS.ComponentType.BSBrowserBridge);
+                    component = await gameObject.AddComponent(new BS.BanterBrowserBridge());
                     break;
                     
                 // Loaders
                 case 'GLTFLoader':
-                    component = await gameObject.AddComponent(BS.ComponentType.GLTFLoader);
+                    component = await gameObject.AddComponent(new BS.BanterGLTFLoader(
+                        compData.properties?.url || ''
+                    ));
                     break;
                 case 'AssetBundleLoader':
-                    component = await gameObject.AddComponent(BS.ComponentType.AssetBundleLoader);
+                    component = await gameObject.AddComponent(new BS.BanterAssetBundleLoader(
+                        compData.properties?.bundleUrl || '',
+                        compData.properties?.assetPath || ''
+                    ));
                     break;
                 case 'PortalLoader':
-                    component = await gameObject.AddComponent(BS.ComponentType.PortalLoader);
+                    component = await gameObject.AddComponent(new BS.BanterPortalLoader(
+                        compData.properties?.spaceId || '',
+                        compData.properties?.title || 'Portal'
+                    ));
                     break;
                     
                 // Text
                 case 'TextMesh':
-                    component = await gameObject.AddComponent(BS.ComponentType.TextMesh);
+                    component = await gameObject.AddComponent(new BS.BanterTextMesh(
+                        compData.properties?.text || 'Text',
+                        compData.properties?.fontSize || 1,
+                        compData.properties?.color || { r: 1, g: 1, b: 1, a: 1 }
+                    ));
                     break;
                     
                 default:
@@ -902,38 +1015,33 @@ export class Inventory {
      * Apply properties to component
      */
     async applyComponentProperties(component, type, properties) {
+        // Most properties are already set during component creation
+        // This method can handle any additional runtime property updates if needed
         if (!component || !properties) return;
         
-        for (const [key, value] of Object.entries(properties)) {
-            try {
-                // Handle Vector3 properties
-                if (value && typeof value === 'object' && 'x' in value && 'y' in value && 'z' in value) {
-                    const vector = new BS.Vector3(value.x, value.y, value.z);
-                    if (component[key] && typeof component[key] === 'function') {
-                        component[key](vector);
-                    } else {
-                        component[key] = vector;
-                    }
-                }
-                // Handle Color properties
-                else if (value && typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value) {
-                    const color = new BS.Color(value.r, value.g, value.b, value.a || 1);
-                    if (component[key] && typeof component[key] === 'function') {
-                        component[key](color);
-                    } else {
-                        component[key] = color;
-                    }
-                }
-                // Handle other properties
-                else {
-                    if (component[key] && typeof component[key] === 'function') {
-                        component[key](value);
-                    } else {
-                        component[key] = value;
-                    }
-                }
-            } catch (error) {
-                console.warn(`Failed to set property ${key} on ${type}:`, error);
+        // Transform component special handling
+        if (type === 'Transform' && component.transform) {
+            if (properties.position) {
+                await component.transform.SetPosition(new BS.Vector3(
+                    properties.position.x || 0,
+                    properties.position.y || 0,
+                    properties.position.z || 0
+                ));
+            }
+            if (properties.rotation) {
+                await component.transform.SetRotation(new BS.Quaternion(
+                    properties.rotation.x || 0,
+                    properties.rotation.y || 0,
+                    properties.rotation.z || 0,
+                    properties.rotation.w || 1
+                ));
+            }
+            if (properties.scale) {
+                await component.transform.SetScale(new BS.Vector3(
+                    properties.scale.x || 1,
+                    properties.scale.y || 1,
+                    properties.scale.z || 1
+                ));
             }
         }
     }
