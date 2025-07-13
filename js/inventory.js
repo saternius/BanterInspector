@@ -703,6 +703,7 @@ export class Inventory {
             
             // Get the parent GameObject
             const parentSlotId = sceneManager.selectedSlot;
+            const parentSlot = sceneManager.getSlotById(parentSlotId);
             const parentGameObject = sceneManager.getSlotGameObject(parentSlotId);
             
             if (!parentGameObject) {
@@ -714,7 +715,7 @@ export class Inventory {
             const slotData = item.data;
             await this.createSlotHierarchy(slotData, parentGameObject);
             
-            const parentSlot = sceneManager.getSlotById(parentSlotId);
+            
             // Update the scene data
             if (!parentSlot.children) {
                 parentSlot.children = [];
@@ -749,6 +750,9 @@ export class Inventory {
      * Create slot hierarchy with all components
      */
     async createSlotHierarchy(slotData, parentGameObject) {
+        console.log("slotData", slotData)
+        console.log("parentGameObject", parentGameObject)
+
         // Create GameObject for this slot
         const gameObject = await this.createGameObjectFromSlot(slotData, parentGameObject);
         
@@ -774,7 +778,7 @@ export class Inventory {
         const scene = BS.BanterScene.GetInstance();
         if (!scene) throw new Error('Scene not available');
         let gameObject = new BS.GameObject(slotData.name);
-        await gameObject.SetParent(parentGameObject, true);
+        await gameObject.SetParent(parentGameObject);
         await gameObject.SetActive(slotData.active);
         return gameObject;
     }
@@ -784,101 +788,105 @@ export class Inventory {
      */
     async createComponent(gameObject, compData) {
         if (!gameObject || !compData.type) return;
-        
+        console.log("compData", compData)
+        console.log("gameObject", gameObject)
         try {
             let component = null;
             
             // Create component based on type
             switch (compData.type) {
                 case 'Transform':
-                    component = gameObject.AddComponent(BS.ComponentType.Transform);
+                    component = await gameObject.AddComponent(BS.ComponentType.Transform);
                     break;
                 // Geometry components
                 case 'BoxGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.BoxGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.BoxGeometry);
                     break;
                 case 'SphereGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.SphereGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.SphereGeometry);
                     break;
                 case 'CylinderGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.CylinderGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.CylinderGeometry);
                     break;
                 case 'PlaneGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.PlaneGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.PlaneGeometry);
                     break;
                 case 'TorusGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.TorusGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.TorusGeometry);
                     break;
                 case 'CapsuleGeometry':
-                    component = gameObject.AddComponent(BS.ComponentType.CapsuleGeometry);
+                    component = await gameObject.AddComponent(BS.ComponentType.CapsuleGeometry);
                     break;
                     
                 // Material
                 case 'Material':
-                    component = gameObject.AddComponent(BS.ComponentType.Material);
+                    component = await gameObject.AddComponent(BS.ComponentType.Material);
                     break;
                     
                 // Physics
                 case 'Rigidbody':
-                    component = gameObject.AddComponent(BS.ComponentType.Rigidbody);
+                    component = await gameObject.AddComponent(BS.ComponentType.Rigidbody);
                     break;
                 case 'BoxCollider':
-                    component = gameObject.AddComponent(BS.ComponentType.BoxCollider);
+                    component = await gameObject.AddComponent(BS.ComponentType.BoxCollider);
                     break;
                 case 'SphereCollider':
-                    component = gameObject.AddComponent(BS.ComponentType.SphereCollider);
+                    component = await gameObject.AddComponent(BS.ComponentType.SphereCollider);
                     break;
                     
                 // Audio/Video
                 case 'AudioSource':
-                    component = gameObject.AddComponent(BS.ComponentType.AudioSource);
+                    component = await gameObject.AddComponent(BS.ComponentType.AudioSource);
                     break;
                 case 'VideoPlayer':
-                    component = gameObject.AddComponent(BS.ComponentType.VideoPlayer);
+                    component = await gameObject.AddComponent(BS.ComponentType.VideoPlayer);
                     break;
                     
                 // Interaction
                 case 'GrabInteractable':
-                    component = gameObject.AddComponent(BS.ComponentType.GrabInteractable);
+                    component = await gameObject.AddComponent(BS.ComponentType.GrabInteractable);
                     break;
                 case 'AttachToParent':
-                    component = gameObject.AddComponent(BS.ComponentType.AttachToParent);
+                    component = await gameObject.AddComponent(BS.ComponentType.AttachToParent);
                     break;
                     
                 // Lighting
                 case 'Light':
-                    component = gameObject.AddComponent(BS.ComponentType.Light);
+                    component = await gameObject.AddComponent(BS.ComponentType.Light);
                     break;
                     
                 // Sync
                 case 'SyncTransform':
-                    component = gameObject.AddComponent(BS.ComponentType.SyncTransform);
+                    component = await gameObject.AddComponent(BS.ComponentType.SyncTransform);
                     break;
                     
                 // Browser
                 case 'BSBrowserBridge':
-                    component = gameObject.AddComponent(BS.ComponentType.BSBrowserBridge);
+                    component = await gameObject.AddComponent(BS.ComponentType.BSBrowserBridge);
                     break;
                     
                 // Loaders
                 case 'GLTFLoader':
-                    component = gameObject.AddComponent(BS.ComponentType.GLTFLoader);
+                    component = await gameObject.AddComponent(BS.ComponentType.GLTFLoader);
                     break;
                 case 'AssetBundleLoader':
-                    component = gameObject.AddComponent(BS.ComponentType.AssetBundleLoader);
+                    component = await gameObject.AddComponent(BS.ComponentType.AssetBundleLoader);
                     break;
                 case 'PortalLoader':
-                    component = gameObject.AddComponent(BS.ComponentType.PortalLoader);
+                    component = await gameObject.AddComponent(BS.ComponentType.PortalLoader);
                     break;
                     
                 // Text
                 case 'TextMesh':
-                    component = gameObject.AddComponent(BS.ComponentType.TextMesh);
+                    component = await gameObject.AddComponent(BS.ComponentType.TextMesh);
                     break;
                     
                 default:
                     console.warn(`Unknown component type: ${compData.type}`);
             }
+
+            console.log("component", component)
+            console.log("compData.properties", compData.properties)
             
             // Apply properties if component was created
             if (component && compData.properties) {
