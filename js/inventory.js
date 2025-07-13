@@ -139,8 +139,8 @@ export class Inventory {
                     <h2>Saved Items (0)</h2>
                     <div class="inventory-actions">
                         <button class="upload-button" id="uploadFileBtn">
-                            <span class="upload-icon">⬆️</span>
-                            Upload File
+                            <span class="upload-icon">⬇️</span>
+                            Import File
                         </button>
                         <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                     </div>
@@ -169,8 +169,8 @@ export class Inventory {
                 <h2>Saved Items (${Object.keys(this.items).length})</h2>
                 <div class="inventory-actions">
                     <button class="upload-button" id="uploadFileBtn">
-                        <span class="upload-icon">⬆️</span>
-                        Upload File
+                        <span class="upload-icon">⬇️</span>
+                        Import File
                     </button>
                     <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                 </div>
