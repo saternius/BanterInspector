@@ -488,74 +488,82 @@
             this.selectedSlot = slotId;
         }
 
+
         /**
          * Add new slot
          */
         async addNewSlot(parentId = null) {
-            const newSlotName = `NewSlot_${this.getNextSlotIndex()}`;
-            let newGameObject = null;
-            let newSlotId = `slot_${Date.now()}_${Math.random()}`;
-            
+            if(!this.scene || !parentId || !window.BS){
+                console.log("NO SCENE AVAILABLE")
+                return null;
+            }
+
             // Create Unity GameObject if connected
-            if (this.scene && typeof window.BS !== 'undefined' && parentId) {
-                const parentGameObject = this.scene.objects?.[parentId];
-                if (parentGameObject) {
-                    try {
-                        // Create new GameObject
-                        newGameObject = new BS.GameObject(newSlotName);
-                        newSlotId = newGameObject.id;
-                        
-                        // Add Transform component
-                        const transform = await newGameObject.AddComponent(new BS.Transform());
-                        transform.position = new BS.Vector3(0, 0, 0);
-                        transform.rotation = new BS.Quaternion(0, 0, 0, 1);
-                        transform.localScale = new BS.Vector3(1, 1, 1);
-                        
-                        // Set parent
-                        await newGameObject.SetParent(parentGameObject, true);
-                        
-                        // Ensure it's active
-                        await newGameObject.SetActive(true);
-                        
-                        // Store GameObject reference
-                        this.scene.objects[newSlotId] = newGameObject;
-                    } catch (error) {
-                        console.error('Failed to create Unity GameObject:', error);
-                    }
-                }
+            const parentGameObject = this.scene.objects?.[parentId];
+            if(!parentGameObject){
+                console.log("NO PARENT AVAILABLE")
+                return null;
             }
-            
-            const newSlot = {
-                id: newSlotId,
-                name: newSlotName,
-                parentId: parentId,
-                active: true,
-                persistent: true,
-                components: [
-                    {
-                        id: newGameObject?.GetComponent?.(BS.ComponentType.Transform)?.id || `transform_${Date.now()}`,
-                        type: 'Transform',
-                        properties: {
-                            position: { x: 0, y: 0, z: 0 },
-                            rotation: { x: 0, y: 0, z: 0, w: 1 },
-                            localScale: { x: 1, y: 1, z: 1 }
-                        }
-                    }
-                ],
-                children: []
-            };
-            
-            if (parentId) {
-                const parent = this.getSlotById(parentId);
-                if (parent) {
-                    parent.children.push(newSlot);
+
+            try {
+                // Create new GameObject
+                let newSlotName = `NewSlot_${Math.floor(Math.random() * 100000)}`
+                let newGameObject = new BS.GameObject(newSlotName);
+                
+                let makeNewSlot = ()=>{
+                    return new Promise(async (resolve, reject)=>{
+                        setTimeout(async ()=>{
+                            let newSlotId = newGameObject.id;
+                            const transform = await newGameObject.AddComponent(new BS.Transform());
+                            transform.position = new BS.Vector3(0, 0, 0);
+                            transform.rotation = new BS.Quaternion(0, 0, 0, 1);
+                            transform.localScale = new BS.Vector3(1, 1, 1);
+                            
+                            // Set parent
+                            await newGameObject.SetParent(parentGameObject, true);
+                            
+                            // Ensure it's active
+                            await newGameObject.SetActive(true);
+                            
+                            // Store GameObject reference
+                            //this.scene.objects[newSlotId] = newGameObject;
+
+                            const newSlot = {
+                                id: newSlotId,
+                                name: newSlotName,
+                                parentId: parentId,
+                                active: true,
+                                persistent: true,
+                                components: [
+                                    {
+                                        id: `${newSlotId}_Transform`,
+                                        type: 'Transform',
+                                        properties: {
+                                            position: { x: 0, y: 0, z: 0 },
+                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                            localScale: { x: 1, y: 1, z: 1 }
+                                        }
+                                    }
+                                ],
+                                children: []
+                            };
+                            
+                            const parent = this.getSlotById(parentId);
+                            if (parent) {
+                                parent.children.push(newSlot);
+                            }
+                            
+                            this.buildHierarchyMap();
+                            resolve(newSlot);
+                        }, 100)
+                    })
                 }
-            } else {
-                this.sceneData.slots.push(newSlot);
+                return await makeNewSlot()
+        
+            } catch (error) {
+                console.error('Failed to create Unity GameObject:', error);
+                return null
             }
-            
-            this.buildHierarchyMap();
-            return newSlot;
         }
 
         /**
@@ -706,27 +714,6 @@
             }
             
             this.buildHierarchyMap();
-        }
-
-        /**
-         * Get next slot index for naming
-         */
-        getNextSlotIndex() {
-            let maxIndex = 0;
-            const regex = /NewSlot_(\d+)/;
-            
-            const checkSlot = (slot) => {
-                const match = slot.name.match(regex);
-                if (match) {
-                    maxIndex = Math.max(maxIndex, parseInt(match[1]));
-                }
-                if (slot.children) {
-                    slot.children.forEach(checkSlot);
-                }
-            };
-            
-            this.sceneData.slots.forEach(checkSlot);
-            return maxIndex + 1;
         }
 
         /**

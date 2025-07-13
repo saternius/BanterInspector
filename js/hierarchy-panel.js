@@ -64,6 +64,7 @@
                 if (parentId) {
                     sceneManager.expandedNodes.add(parentId);
                 }
+                if(!newSlot) return;
                 
                 sceneManager.selectSlot(newSlot.id);
                 this.render();
