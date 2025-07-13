@@ -135,18 +135,45 @@ export class Inventory {
         
         if (Object.keys(this.items).length === 0) {
             inventoryContainer.innerHTML = `
+                <div class="inventory-header">
+                    <h2>Saved Items (0)</h2>
+                    <div class="inventory-actions">
+                        <button class="upload-button" id="uploadFileBtn">
+                            <span class="upload-icon">⬆️</span>
+                            Upload File
+                        </button>
+                        <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
+                    </div>
+                </div>
                 <div class="inventory-empty">
                     <div class="empty-icon">📦</div>
                     <h3>Your inventory is empty</h3>
-                    <p>Drag slots from the World Inspector to save them here</p>
+                    <p>Drag slots from the World Inspector or upload files to save them here</p>
                 </div>
             `;
+            
+            // Add event listeners for file upload even in empty state
+            const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
+            const fileInput = inventoryContainer.querySelector('#fileInput');
+            
+            if (uploadBtn && fileInput) {
+                uploadBtn.addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+            }
+            
             return;
         }
         
         inventoryContainer.innerHTML = `
             <div class="inventory-header">
                 <h2>Saved Items (${Object.keys(this.items).length})</h2>
+                <div class="inventory-actions">
+                    <button class="upload-button" id="uploadFileBtn">
+                        <span class="upload-icon">⬆️</span>
+                        Upload File
+                    </button>
+                    <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
+                </div>
             </div>
             <div class="inventory-grid">
                 ${Object.entries(this.items).map(([key, item]) => this.renderItem(key, item)).join('')}
@@ -161,6 +188,15 @@ export class Inventory {
                 this.removeItem(itemName);
             });
         });
+        
+        // Add event listeners for file upload
+        const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
+        const fileInput = inventoryContainer.querySelector('#fileInput');
+        
+        if (uploadBtn && fileInput) {
+            uploadBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+        }
     }
     
     /**
@@ -243,5 +279,139 @@ export class Inventory {
                 notification.remove();
             }, 300);
         }, 3000);
+    }
+    
+    /**
+     * Handle file upload
+     */
+    async handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const fileName = file.name;
+        const fileExt = fileName.split('.').pop().toLowerCase();
+        
+        try {
+            const fileContent = await this.readFile(file);
+            
+            if (fileExt === 'js') {
+                // Handle JavaScript files
+                await this.handleScriptUpload(fileName, fileContent);
+            } else if (fileExt === 'json') {
+                // Handle JSON files
+                await this.handleJsonUpload(fileName, fileContent);
+            } else {
+                alert('Please upload a .js or .json file');
+            }
+        } catch (error) {
+            console.error('File upload error:', error);
+            alert(`Error uploading file: ${error.message}`);
+        }
+        
+        // Clear the input for next upload
+        event.target.value = '';
+    }
+    
+    /**
+     * Read file content as text
+     */
+    readFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsText(file);
+        });
+    }
+    
+    /**
+     * Handle script file upload
+     */
+    async handleScriptUpload(fileName, content) {
+        const nameWithoutExt = fileName.replace(/\.js$/, '');
+        const existingKeys = Object.keys(this.items);
+        
+        // Check for existing item
+        if (existingKeys.includes(nameWithoutExt)) {
+            const confirmed = confirm(
+                `An item named "${nameWithoutExt}" already exists. Do you want to overwrite it?`
+            );
+            if (!confirmed) return;
+        }
+        
+        // Create script item
+        const scriptItem = {
+            author: sceneManager.scene?.localUser?.name || 'Unknown',
+            name: nameWithoutExt,
+            created: Date.now(),
+            itemType: 'script',
+            data: content
+        };
+        
+        // Save to localStorage
+        const storageKey = `inventory_${nameWithoutExt}`;
+        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
+        
+        // Update local items
+        this.items[nameWithoutExt] = scriptItem;
+        
+        // Re-render
+        this.render();
+        
+        // Show success message
+        this.showNotification(`Added script "${nameWithoutExt}" to inventory`);
+    }
+    
+    /**
+     * Handle JSON file upload
+     */
+    async handleJsonUpload(fileName, content) {
+        try {
+            const jsonData = JSON.parse(content);
+            
+            // Check if it's a slot inventory item format
+            if (this.isInventorySlotFormat(jsonData)) {
+                const itemName = jsonData.name;
+                const existingKeys = Object.keys(this.items);
+                
+                // Check for existing item
+                if (existingKeys.includes(itemName)) {
+                    const confirmed = confirm(
+                        `An item named "${itemName}" already exists. Do you want to overwrite it?`
+                    );
+                    if (!confirmed) return;
+                }
+                
+                // Save directly as it's already in the correct format
+                const storageKey = `inventory_${itemName}`;
+                localStorage.setItem(storageKey, JSON.stringify(jsonData));
+                
+                // Update local items
+                this.items[itemName] = jsonData;
+                
+                // Re-render
+                this.render();
+                
+                // Show success message
+                this.showNotification(`Imported "${itemName}" to inventory`);
+            } else {
+                alert('The JSON file is not in the correct inventory slot format');
+            }
+        } catch (error) {
+            alert('Invalid JSON file');
+        }
+    }
+    
+    /**
+     * Check if JSON data is in inventory slot format
+     */
+    isInventorySlotFormat(data) {
+        return data && 
+               typeof data === 'object' &&
+               'author' in data &&
+               'name' in data &&
+               'created' in data &&
+               'itemType' in data &&
+               'data' in data;
     }
 }
