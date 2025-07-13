@@ -287,7 +287,7 @@
          */
         handleDragStart(e, slot) {
             this.draggedSlotId = slot.id;
-            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', slot.id);
             
             // Store the full slot data for inventory
