@@ -779,37 +779,10 @@ export class Inventory {
      * Create GameObject from slot data
      */
     async createGameObjectFromSlot(slotData, parentGameObject) {
-        const scene = BS.BanterScene.GetInstance();
-        if (!scene) throw new Error('Scene not available');
-        
-        // Create GameObject using BS library pattern
-        let gameObject = new BS.GameObject(slotData.name || 'GameObject');
-        
-        // Set parent if provided (first await call - ID will be reassigned after this)
-        if (parentGameObject) {
-            await gameObject.SetParent(parentGameObject, true);
-        } else {
-            // If no parent, we still need an await call to get the proper ID
-            await gameObject.SetActive(slotData.active !== false);
-        }
-        
-        // Now the GameObject has its proper Unity-assigned ID
-        // Update the slot data to use this ID
-        slotData.id = gameObject.id;
-        
-        // Set active state if we haven't already
-        if (parentGameObject) {
-            await gameObject.SetActive(slotData.active !== false);
-        }
-        
-        // Store GameObject reference in scene manager's objects map using the new ID
-        if (sceneManager.scene && sceneManager.scene.objects) {
-            sceneManager.scene.objects[slotData.id] = gameObject;
-        }
-        
-        // Store reference back to slot data
-        slotData.gameObject = gameObject;
-        
+        let gameObject = new BS.GameObject(slotData.name);
+        await gameObject.SetParent(parentGameObject, true);
+        await gameObject.SetActive(slotData.active !== false);
+        slotData.id = parseInt(gameObject.id);
         return gameObject;
     }
     
@@ -830,7 +803,7 @@ export class Inventory {
                     break;
                     
                 // Geometry components
-                case 'BoxGeometry':
+                case 'BanterGeometry':
                     component = await gameObject.AddComponent(new BS.BanterGeometry(
                         BS.GeometryType.BoxGeometry,
                         compData.properties?.size?.x || 1,
@@ -875,20 +848,20 @@ export class Inventory {
                     break;
                     
                 // Material
-                case 'Material':
+                case 'BanterMaterial':
                     const color = compData.properties?.color || { r: 1, g: 1, b: 1, a: 1 };
                     component = await gameObject.AddComponent(new BS.BanterMaterial(
                         compData.properties?.shader || 'Standard',
                         compData.properties?.texture || '',
-                        new BS.BanterColor(color.r, color.g, color.b, color.a),
-                        compData.properties?.emission || 0,
-                        compData.properties?.metallic || 0,
-                        compData.properties?.roughness || 0.5
+                        new BS.Vector4(color.r, color.g, color.b, color.a),
+                        // compData.properties?.side || 0,
+                        // compData.properties?.generateMipMaps || 0,
+                        // compData.properties?.roughness || 0.5
                     ));
                     break;
                     
                 // Physics
-                case 'Rigidbody':
+                case 'BanterRigidbody':
                     component = await gameObject.AddComponent(new BS.BanterRigidbody(
                         compData.properties?.mass || 1,
                         compData.properties?.drag || 0,
@@ -968,7 +941,7 @@ export class Inventory {
                     break;
                     
                 // Loaders
-                case 'GLTFLoader':
+                case 'BanterGLTF':
                     component = await gameObject.AddComponent(new BS.BanterGLTFLoader(
                         compData.properties?.url || ''
                     ));

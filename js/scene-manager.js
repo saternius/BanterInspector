@@ -736,7 +736,7 @@
             if (!componentConfig) return;
             
             const newComponent = {
-                id: `${slotId}_${componentType}_${Date.now()}`,
+                id: `${slotId}_${componentType}`,
                 type: componentType,
                 properties: componentConfig.properties
             };
