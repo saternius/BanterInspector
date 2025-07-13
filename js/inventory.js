@@ -536,10 +536,8 @@ export class Inventory {
                 </div>
             `;
         } else {
-            // Slot preview
+            // Slot preview - show full JSON
             const slot = item.data;
-            const componentCount = slot.components ? slot.components.length : 0;
-            const childCount = slot.children ? slot.children.length : 0;
             
             return `
                 <div class="preview-header">
@@ -561,137 +559,100 @@ export class Inventory {
                     </div>
                 </div>
                 <div class="preview-content">
-                    <div class="preview-section">
-                        <h3>Slot Properties</h3>
-                        <div class="slot-props">
-                            <div class="prop-item">
-                                <span class="prop-label">Name:</span>
-                                <span class="prop-value">${slot.name}</span>
-                            </div>
-                            <div class="prop-item">
-                                <span class="prop-label">Active:</span>
-                                <span class="prop-value">${slot.active ? 'Yes' : 'No'}</span>
-                            </div>
-                            <div class="prop-item">
-                                <span class="prop-label">Children:</span>
-                                <span class="prop-value">${childCount}</span>
-                            </div>
-                            <div class="prop-item">
-                                <span class="prop-label">Components:</span>
-                                <span class="prop-value">${componentCount}</span>
-                            </div>
-                        </div>
+                    <h3>Slot Data</h3>
+                    <div class="json-viewer">
+                        ${this.renderJsonTree(slot, 'slot-data')}
                     </div>
-                    
-                    ${componentCount > 0 ? `
-                        <div class="preview-section">
-                            <h3>Components</h3>
-                            <div class="components-list">
-                                ${slot.components.map(comp => this.renderComponentPreview(comp)).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    ${childCount > 0 ? `
-                        <div class="preview-section">
-                            <h3>Children</h3>
-                            <div class="children-tree">
-                                ${this.renderChildrenTree(slot.children)}
-                            </div>
-                        </div>
-                    ` : ''}
                 </div>
             `;
         }
     }
     
     /**
-     * Render component preview
+     * Render JSON tree with collapsible nodes
      */
-    renderComponentPreview(component) {
-        return `
-            <div class="component-preview">
-                <div class="component-header">
-                    <span class="component-icon">${this.getComponentIcon(component.type)}</span>
-                    <span class="component-type">${component.type}</span>
-                </div>
-                ${component.properties && Object.keys(component.properties).length > 0 ? `
-                    <div class="component-props">
-                        ${Object.entries(component.properties).map(([key, value]) => `
-                            <div class="comp-prop">
-                                <span class="comp-prop-key">${key}:</span>
-                                <span class="comp-prop-value">${this.formatValue(value)}</span>
+    renderJsonTree(obj, path = '', level = 0) {
+        if (obj === null || obj === undefined) {
+            return `<span class="json-null">null</span>`;
+        }
+        
+        if (typeof obj !== 'object') {
+            return `<span class="json-value">${this.formatJsonValue(obj)}</span>`;
+        }
+        
+        if (Array.isArray(obj)) {
+            if (obj.length === 0) {
+                return `<span class="json-bracket">[]</span>`;
+            }
+            
+            const id = `json-${path}-array`.replace(/[.\[\]]/g, '-');
+            return `
+                <span class="json-array">
+                    <input type="checkbox" id="${id}" class="json-toggle" checked>
+                    <label for="${id}" class="json-label">
+                        <span class="json-arrow">▼</span>
+                        <span class="json-bracket">[</span>
+                        <span class="json-preview">${obj.length} items</span>
+                    </label>
+                    <div class="json-content">
+                        ${obj.map((item, index) => `
+                            <div class="json-item">
+                                <span class="json-key">${index}:</span>
+                                ${this.renderJsonTree(item, `${path}[${index}]`, level + 1)}
                             </div>
                         `).join('')}
                     </div>
-                ` : ''}
-            </div>
+                    <span class="json-bracket">]</span>
+                </span>
+            `;
+        }
+        
+        // Object
+        const keys = Object.keys(obj);
+        if (keys.length === 0) {
+            return `<span class="json-bracket">{}</span>`;
+        }
+        
+        const id = `json-${path}-object`.replace(/[.\[\]]/g, '-');
+        const isExpanded = level < 2; // Expand first two levels by default
+        
+        return `
+            <span class="json-object">
+                <input type="checkbox" id="${id}" class="json-toggle" ${isExpanded ? 'checked' : ''}>
+                <label for="${id}" class="json-label">
+                    <span class="json-arrow">▼</span>
+                    <span class="json-bracket">{</span>
+                    <span class="json-preview">${keys.length} ${keys.length === 1 ? 'property' : 'properties'}</span>
+                </label>
+                <div class="json-content">
+                    ${keys.map(key => `
+                        <div class="json-item">
+                            <span class="json-key">"${key}":</span>
+                            ${this.renderJsonTree(obj[key], `${path}.${key}`, level + 1)}
+                        </div>
+                    `).join('')}
+                </div>
+                <span class="json-bracket">}</span>
+            </span>
         `;
     }
     
     /**
-     * Render children tree
+     * Format JSON value for display
      */
-    renderChildrenTree(children, level = 0) {
-        return children.map(child => `
-            <div class="child-item" style="margin-left: ${level * 20}px">
-                <span class="child-icon">📦</span>
-                <span class="child-name">${child.name}</span>
-                ${child.active === false ? '<span class="child-inactive">(inactive)</span>' : ''}
-                ${child.children && child.children.length > 0 ? this.renderChildrenTree(child.children, level + 1) : ''}
-            </div>
-        `).join('');
-    }
-    
-    /**
-     * Get component icon
-     */
-    getComponentIcon(type) {
-        const icons = {
-            'BoxGeometry': '📦',
-            'SphereGeometry': '🔵',
-            'CylinderGeometry': '🔩',
-            'TorusGeometry': '⭕',
-            'PlaneGeometry': '⬜',
-            'CapsuleGeometry': '💊',
-            'Material': '🎨',
-            'Rigidbody': '⚙️',
-            'BoxCollider': '📦',
-            'SphereCollider': '🔵',
-            'AudioSource': '🔊',
-            'VideoPlayer': '🎬',
-            'GrabInteractable': '✋',
-            'Light': '💡',
-            'SyncTransform': '🔄',
-            'BSBrowserBridge': '🌐',
-            'GLTFLoader': '📁',
-            'AssetBundleLoader': '📦',
-            'TextMesh': '📝',
-            'PortalLoader': '🌀',
-            'AttachToParent': '🔗'
-        };
-        return icons[type] || '🔧';
-    }
-    
-    /**
-     * Format value for display
-     */
-    formatValue(value) {
-        if (value === null || value === undefined) return 'null';
-        if (typeof value === 'boolean') return value ? 'true' : 'false';
-        if (typeof value === 'number') return value.toString();
-        if (typeof value === 'string') return `"${value}"`;
-        if (typeof value === 'object') {
-            if (value.x !== undefined && value.y !== undefined && value.z !== undefined) {
-                return `(${value.x}, ${value.y}, ${value.z})`;
-            }
-            if (value.r !== undefined && value.g !== undefined && value.b !== undefined) {
-                return `rgba(${value.r}, ${value.g}, ${value.b}, ${value.a || 1})`;
-            }
-            return JSON.stringify(value);
+    formatJsonValue(value) {
+        if (typeof value === 'string') {
+            return `<span class="json-string">"${this.escapeHtml(value)}"</span>`;
+        }
+        if (typeof value === 'boolean') {
+            return `<span class="json-boolean">${value}</span>`;
+        }
+        if (typeof value === 'number') {
+            return `<span class="json-number">${value}</span>`;
         }
         return String(value);
     }
+    
     
     /**
      * Escape HTML for safe display
