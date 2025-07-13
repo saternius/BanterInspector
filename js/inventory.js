@@ -755,14 +755,15 @@ export class Inventory {
 
         // Create GameObject for this slot
         const gameObject = await this.createGameObjectFromSlot(slotData, parentGameObject);
-        
+        console.log("gameObject.id", gameObject.id)
         // Add components
         if (slotData.components && slotData.components.length > 0) {
             for (const compData of slotData.components) {
                 await this.createComponent(gameObject, compData);
             }
         }
-        
+        console.log("gameObject.id", gameObject.id)
+
         // Create children recursively
         if (slotData.children && slotData.children.length > 0) {
             for (const childData of slotData.children) {
