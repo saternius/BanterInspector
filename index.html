@@ -55,7 +55,25 @@ The inspector will fall back to mock data if it cannot connect to Unity.
       </script>
 </head>
 <body>
-    <div class="inspector-container">
+    <!-- Navigation Header -->
+    <nav class="navigation-header">
+        <div class="nav-items">
+            <button class="nav-item active" data-page="world-inspector">
+                <span class="nav-icon">🌍</span>
+                World Inspector
+            </button>
+            <button class="nav-item" data-page="inventory">
+                <span class="nav-icon">📦</span>
+                Inventory
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- World Inspector Page -->
+        <div class="page active" id="world-inspector-page">
+            <div class="inspector-container">
         <!-- Hierarchy Panel -->
         <div class="panel hierarchy-panel">
             <div class="panel-header">
@@ -290,6 +308,15 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </div>
         </div>
     </div>
+        </div> <!-- End World Inspector Page -->
+
+        <!-- Inventory Page -->
+        <div class="page" id="inventory-page">
+            <div class="inventory-container">
+                <!-- Inventory content will go here -->
+            </div>
+        </div>
+    </div> <!-- End Page Container -->
 
     <!-- Load JavaScript modules -->
     <script>

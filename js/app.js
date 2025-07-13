@@ -13,10 +13,12 @@
     const  { SpacePropsPanel } = await import(`${basePath}/space-props-panel.js`);
     const  { ComponentMenu } = await import(`${basePath}/component-menu.js`);
     const  { loadMockSpaceProps } = await import(`${basePath}/mock-data.js`);
+    const  { Navigation } = await import(`${basePath}/navigation.js`);
 
     // Global app instance
     class InspectorApp {
         constructor() {
+            this.navigation = null;
             this.hierarchyPanel = null;
             this.propertiesPanel = null;
             this.spacePropsPanel = null;
@@ -33,6 +35,9 @@
             console.log('Initializing Unity Scene Inspector...');
             
             try {
+                // Initialize navigation
+                this.navigation = new Navigation();
+                
                 // Initialize scene manager
                 await sceneManager.initialize();
                 

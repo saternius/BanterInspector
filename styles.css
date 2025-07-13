@@ -11,11 +11,77 @@ body {
     height: 100vh;
     overflow: hidden;
     font-size: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation Header */
+.navigation-header {
+    background: #1a1a1a;
+    border-bottom: 1px solid #2a2a2a;
+    padding: 0 10px;
+    flex-shrink: 0;
+}
+
+.nav-items {
+    display: flex;
+    gap: 2px;
+}
+
+.nav-item {
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent;
+    position: relative;
+}
+
+.nav-item:hover {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+    color: #00d4ff;
+    border-bottom-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.nav-icon {
+    font-size: 16px;
+}
+
+/* Page Container */
+.page-container {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+}
+
+.page {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.page.active {
+    display: block;
 }
 
 .inspector-container {
     display: flex;
-    height: 100vh;
+    height: 100%;
     gap: 1px;
     background: #0a0a0a;
 }
