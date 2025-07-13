@@ -5,6 +5,7 @@ export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
         this.items = this.loadItems();
+        this.selectedItem = null;
         this.setupDropZone();
         this.render();
     }
@@ -168,6 +169,12 @@ export class Inventory {
             <div class="inventory-header">
                 <h2>Saved Items (${Object.keys(this.items).length})</h2>
                 <div class="inventory-actions">
+                    ${this.selectedItem ? `
+                        <button class="export-button" id="exportBtn">
+                            <span class="export-icon">⬆️</span>
+                            Export
+                        </button>
+                    ` : ''}
                     <button class="upload-button" id="uploadFileBtn">
                         <span class="upload-icon">⬇️</span>
                         Import File
@@ -179,6 +186,15 @@ export class Inventory {
                 ${Object.entries(this.items).map(([key, item]) => this.renderItem(key, item)).join('')}
             </div>
         `;
+        
+        // Add event listeners for inventory items
+        inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!e.target.closest('.remove-item-btn') && !e.target.closest('.action-btn')) {
+                    this.selectItem(item.dataset.itemName);
+                }
+            });
+        });
         
         // Add event listeners for remove buttons
         inventoryContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
@@ -197,6 +213,12 @@ export class Inventory {
             uploadBtn.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
         }
+        
+        // Add event listener for export button
+        const exportBtn = inventoryContainer.querySelector('#exportBtn');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => this.exportSelectedItem());
+        }
     }
     
     /**
@@ -208,9 +230,10 @@ export class Inventory {
         const dateStr = new Date(item.created).toLocaleDateString();
         const itemType = item.itemType || 'slot'; // Default to 'slot' for backward compatibility
         const itemIcon = itemType === 'script' ? '📜' : '📦';
+        const isSelected = this.selectedItem === key;
         
         return `
-            <div class="inventory-item" data-item-name="${key}">
+            <div class="inventory-item ${isSelected ? 'selected' : ''}" data-item-name="${key}">
                 <div class="item-header">
                     <div class="item-title">
                         <span class="item-type-icon" title="${itemType}">${itemIcon}</span>
@@ -413,5 +436,49 @@ export class Inventory {
                'created' in data &&
                'itemType' in data &&
                'data' in data;
+    }
+    
+    /**
+     * Select an inventory item
+     */
+    selectItem(itemName) {
+        if (this.selectedItem === itemName) {
+            // Deselect if clicking the same item
+            this.selectedItem = null;
+        } else {
+            this.selectedItem = itemName;
+        }
+        this.render();
+    }
+    
+    /**
+     * Export the selected item as JSON
+     */
+    exportSelectedItem() {
+        if (!this.selectedItem) return;
+        
+        const item = this.items[this.selectedItem];
+        if (!item) return;
+        
+        // Create a blob with the JSON data
+        const jsonStr = JSON.stringify(item, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        
+        // Create download link
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${item.name}.json`;
+        
+        // Trigger download
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Cleanup
+        URL.revokeObjectURL(url);
+        
+        // Show notification
+        this.showNotification(`Exported "${item.name}" as JSON`);
     }
 }
