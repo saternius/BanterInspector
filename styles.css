@@ -156,10 +156,24 @@ body {
     margin-bottom: 12px;
 }
 
+.item-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.item-type-icon {
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .item-name {
     font-size: 16px;
     font-weight: 600;
     color: #e8e8e8;
+    margin: 0;
 }
 
 .remove-item-btn {
