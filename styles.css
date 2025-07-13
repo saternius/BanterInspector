@@ -55,6 +55,12 @@ body {
     background: rgba(0, 212, 255, 0.1);
 }
 
+.nav-item.drag-over {
+    background: rgba(0, 212, 255, 0.2);
+    border-bottom-color: #00d4ff;
+    color: #00d4ff;
+}
+
 .nav-icon {
     font-size: 16px;
 }
