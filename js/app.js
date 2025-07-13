@@ -231,4 +231,35 @@
     // Export app instance for debugging
     window.inspectorApp = app;
 
+    var loadLocalUserSceneFromLocalStorage = (scene)=>{
+        var luser = JSON.parse(localStorage.getItem("localUser"));
+        if(luser){
+            scene.localUser = luser
+            scene.users = {
+                [luser.uid]: luser
+            }
+        }
+    }
+    
+    var saveLocalUserSceneToLocalStorage = (luser)=>{
+        localStorage.setItem("localUser", JSON.stringify({
+            "name": luser.name,
+            "uid": luser.uid,
+            "isLocal": luser.isLocal,
+            "color": luser.color
+        }));
+    }
+
+    setTimeout(()=>{
+        if(sceneManager.scene){
+            if(sceneManager.scene.localUser === undefined){
+                loadLocalUserSceneFromLocalStorage(sceneManager.scene);
+            }else{
+                saveLocalUserSceneToLocalStorage(sceneManager.scene.localUser);
+            }
+        }
+    })
+    
+    
+
 })()
