@@ -7,6 +7,7 @@
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 const { sceneManager } = await import( `${basePath}/scene-manager.js`);
+const { changeManager } = await import(`${basePath}/change-manager.js`);
 
 export class ComponentMenu {
     constructor() {
@@ -223,6 +224,8 @@ export class ComponentMenu {
                 type: 'MonoBehavior',
                 properties: componentConfig.properties
             });
+            // Register with change manager
+            changeManager.registerComponent(slotComponent);
         }else{
             let unityComponent = await this.createUnityComponent(this.selectedSlotId, componentType);
             console.log("unityComponent", unityComponent)
@@ -234,6 +237,20 @@ export class ComponentMenu {
                     _bs: unityComponent
                 };
                 
+                // Queue initial properties through change manager
+                for (const [prop, value] of Object.entries(componentConfig.properties)) {
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: unityComponent.id,
+                        property: prop,
+                        value: value,
+                        metadata: {
+                            slotId: this.selectedSlotId,
+                            componentType: componentType,
+                            componentIndex: slot.components.length
+                        }
+                    });
+                }
             }
         }
 

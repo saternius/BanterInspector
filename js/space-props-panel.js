@@ -7,6 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
+    const { changeManager } = await import(`${basePath}/change-manager.js`);
 
     export class SpacePropsPanel {
         constructor() {
@@ -295,7 +296,11 @@
                         y: parseFloat(yInput.value) || 0,
                         z: parseFloat(zInput.value) || 0
                     };
-                    sceneManager.setSpaceProperty(key, newValue, type === 'protected');
+                    changeManager.queueSpacePropertyChange({
+                    key: key,
+                    value: newValue,
+                    isProtected: type === 'protected'
+                });
                 }
             } else {
                 // Save regular value
@@ -303,7 +308,11 @@
                 if (input) {
                     // Use parseValue method to handle all value types including Vector3
                     const newValue = this.parseValue(input.value);
-                    sceneManager.setSpaceProperty(key, newValue, type === 'protected');
+                    changeManager.queueSpacePropertyChange({
+                    key: key,
+                    value: newValue,
+                    isProtected: type === 'protected'
+                });
                 }
             }
             
@@ -323,7 +332,11 @@
          */
         deleteProp(type, key) {
             if (confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
-                sceneManager.setSpaceProperty(key, undefined, type === 'protected');
+                changeManager.queueSpacePropertyChange({
+                key: key,
+                value: undefined,
+                isProtected: type === 'protected'
+            });
                 if (type === 'public') {
                     delete sceneManager.scene.spaceState.public[key];
                 } else {
@@ -346,7 +359,11 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                sceneManager.setSpaceProperty(key, value, false);
+                changeManager.queueSpacePropertyChange({
+                    key: key,
+                    value: value,
+                    isProtected: false
+                });
                 sceneManager.scene.spaceState.public[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
@@ -367,7 +384,11 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                sceneManager.setSpaceProperty(key, value, true);
+                changeManager.queueSpacePropertyChange({
+                    key: key,
+                    value: value,
+                    isProtected: true
+                });
                 sceneManager.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
@@ -428,7 +449,11 @@
                     y: parseFloat(yInput.value) || 0,
                     z: parseFloat(zInput.value) || 0
                 };
-                sceneManager.setSpaceProperty(key, newValue, type === 'protected');
+                changeManager.queueSpacePropertyChange({
+                    key: key,
+                    value: newValue,
+                    isProtected: type === 'protected'
+                });
                 
                 // Update local state
                 if (type === 'public') {

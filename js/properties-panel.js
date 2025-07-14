@@ -8,15 +8,13 @@
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
+    const { changeManager } = await import(`${basePath}/change-manager.js`);
     export class PropertiesPanel {
         constructor() {
             this.propertiesContent = document.getElementById('propertiesContent');
             this.addComponentContainer = document.getElementById('addComponentContainer');
             this.addComponentBtn = document.getElementById('addComponentBtn');
             this.selectedSlotNameElement = document.getElementById('selectedSlotName');
-            
-            this.pendingChanges = new Map();
-            this.updateTimer = null;
             
             this.setupEventListeners();
         }
@@ -125,11 +123,15 @@
             const handleRename = () => {
                 const newName = inputName.value.trim();
                 if (newName && newName !== slot.name) {
-                    slot.name = newName;
-                    console.log("TODO: IMPLEMENT PROPER LOGIC FOR RENAMING VIA ONESHOT UNIFICATION")
-                    document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
-                        detail: { slotId: slot.id }
-                    }));
+                    changeManager.queueChange({
+                        type: 'slot',
+                        targetId: slot.id,
+                        property: 'name',
+                        value: newName,
+                        metadata: {
+                            slotId: slot.id
+                        }
+                    });
                     if (this.selectedSlotNameElement) {
                         this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
                     }
@@ -157,18 +159,28 @@
             
             // Active property
             const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
-                slot.active = value;
-                this.queueChange(slot.id, null, 'active', value, 'slot', null);
-                // Update hierarchy display
-                document.dispatchEvent(new CustomEvent('slotPropertiesChanged', {
-                    detail: { slotId: slot.id }
-                }));
+                changeManager.queueChange({
+                    type: 'slot',
+                    targetId: slot.id,
+                    property: 'active',
+                    value: value,
+                    metadata: {
+                        slotId: slot.id
+                    }
+                });
             });
             
             // Persistent property
             const persistentRow = this.createPropertyRow('Persistent', slot.persistent, 'checkbox', (value) => {
-                slot.persistent = value;
-                this.queueChange(slot.id, null, 'persistent', value, 'slot', null);
+                changeManager.queueChange({
+                    type: 'slot',
+                    targetId: slot.id,
+                    property: 'persistent',
+                    value: value,
+                    metadata: {
+                        slotId: slot.id
+                    }
+                });
             });
             
             body.appendChild(nameRow);
@@ -297,7 +309,17 @@
                 input.className = 'checkbox-input';
                 input.checked = value;
                 input.onchange = () => {
-                    this.queueChange(sceneManager.selectedSlot, componentId, key, input.checked, componentType, componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: componentId,
+                        property: key,
+                        value: input.checked,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: componentType,
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 valueContainer.appendChild(input);
                 
@@ -310,7 +332,17 @@
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
                     if (!isNaN(numValue)) {
-                        this.queueChange(sceneManager.selectedSlot, componentId, key, numValue, componentType, componentIndex);
+                        changeManager.queueChange({
+                            type: 'component',
+                            targetId: componentId,
+                            property: key,
+                            value: numValue,
+                            metadata: {
+                                slotId: sceneManager.selectedSlot,
+                                componentType: componentType,
+                                componentIndex: componentIndex
+                            }
+                        });
                     }
                 };
                 valueContainer.appendChild(input);
@@ -389,7 +421,17 @@
                         a: value.a || 1
                     };
                     swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${newColor.a})`;
-                    this.queueChange(sceneManager.selectedSlot, componentId, key, newColor, componentType, componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: componentId,
+                        property: key,
+                        value: newColor,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: componentType,
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 
                 preview.onclick = () => colorInput.click();
@@ -411,7 +453,17 @@
                         if (!isNaN(newValue)) {
                             value[channel] = Math.max(0, Math.min(1, newValue));
                             swatch.style.backgroundColor = `rgba(${value.r * 255}, ${value.g * 255}, ${value.b * 255}, ${value.a})`;
-                            this.queueChange(sceneManager.selectedSlot, componentId, key, value, componentType, componentIndex);
+                            changeManager.queueChange({
+                                type: 'component',
+                                targetId: componentId,
+                                property: key,
+                                value: value,
+                                metadata: {
+                                    slotId: sceneManager.selectedSlot,
+                                    componentType: componentType,
+                                    componentIndex: componentIndex
+                                }
+                            });
                         }
                     };
                     
@@ -430,7 +482,17 @@
                 input.className = 'property-input';
                 input.value = value?.toString() || '';
                 input.onchange = () => {
-                    this.queueChange(sceneManager.selectedSlot, componentId, key, input.value, componentType, componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: componentId,
+                        property: key,
+                        value: input.value,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: componentType,
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 valueContainer.appendChild(input);
             }
@@ -501,7 +563,17 @@
             // Name property
             const nameRow = this.createPropertyRow('Name', component.properties.name || 'myScript', 'text', (value) => {
                 component.properties.name = value;
-                this.queueChange(sceneManager.selectedSlot, component.id, 'name', value, 'MonoBehavior', index);
+                changeManager.queueChange({
+                    type: 'component',
+                    targetId: component.id,
+                    property: 'name',
+                    value: value,
+                    metadata: {
+                        slotId: sceneManager.selectedSlot,
+                        componentType: 'MonoBehavior',
+                        componentIndex: index
+                    }
+                });
             });
             body.appendChild(nameRow);
             
@@ -552,7 +624,17 @@
                     }
                 }
                 
-                this.queueChange(sceneManager.selectedSlot, component.id, 'file', fileSelect.value, 'MonoBehavior', index);
+                changeManager.queueChange({
+                    type: 'component',
+                    targetId: component.id,
+                    property: 'file',
+                    value: fileSelect.value,
+                    metadata: {
+                        slotId: sceneManager.selectedSlot,
+                        componentType: 'MonoBehavior',
+                        componentIndex: index
+                    }
+                });
                 
                 // Re-render to show vars
                 this.render(sceneManager.selectedSlot);
@@ -620,7 +702,17 @@
                         component.updateVar(varName, input.checked);
                     }
                     component.properties.vars[varName] = input.checked;
-                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: component.id,
+                        property: 'vars',
+                        value: component.properties.vars,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: 'MonoBehavior',
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 valueContainer.appendChild(input);
                 
@@ -637,7 +729,17 @@
                             component.updateVar(varName, numValue);
                         }
                         component.properties.vars[varName] = numValue;
-                        this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                        changeManager.queueChange({
+                            type: 'component',
+                            targetId: component.id,
+                            property: 'vars',
+                            value: component.properties.vars,
+                            metadata: {
+                                slotId: sceneManager.selectedSlot,
+                                componentType: 'MonoBehavior',
+                                componentIndex: componentIndex
+                            }
+                        });
                     }
                 };
                 valueContainer.appendChild(input);
@@ -665,7 +767,17 @@
                                 component.updateVar(varName, varValue);
                             }
                             component.properties.vars[varName] = varValue;
-                            this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                            changeManager.queueChange({
+                                type: 'component',
+                                targetId: component.id,
+                                property: 'vars',
+                                value: component.properties.vars,
+                                metadata: {
+                                    slotId: sceneManager.selectedSlot,
+                                    componentType: 'MonoBehavior',
+                                    componentIndex: componentIndex
+                                }
+                            });
                         }
                     };
                     
@@ -701,7 +813,17 @@
                         component.updateVar(varName, varValue);
                     }
                     component.properties.vars[varName] = varValue;
-                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: component.id,
+                        property: 'vars',
+                        value: component.properties.vars,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: 'MonoBehavior',
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 
                 preview.onclick = () => colorInput.click();
@@ -721,7 +843,17 @@
                         component.updateVar(varName, input.value);
                     }
                     component.properties.vars[varName] = input.value;
-                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                    changeManager.queueChange({
+                        type: 'component',
+                        targetId: component.id,
+                        property: 'vars',
+                        value: component.properties.vars,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            componentType: 'MonoBehavior',
+                            componentIndex: componentIndex
+                        }
+                    });
                 };
                 valueContainer.appendChild(input);
             }
@@ -784,7 +916,17 @@
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
                 vector[axis] = numValue;
-                this.queueChange(sceneManager.selectedSlot, componentId, key, vector, componentType, componentIndex);
+                changeManager.queueChange({
+                    type: 'component',
+                    targetId: componentId,
+                    property: key,
+                    value: vector,
+                    metadata: {
+                        slotId: sceneManager.selectedSlot,
+                        componentType: componentType,
+                        componentIndex: componentIndex
+                    }
+                });
             }
         }
 
@@ -811,90 +953,20 @@
                 const newQuaternion = eulerToQuaternion(eulerAngles);
                 
                 // Queue the change
-                this.queueChange(sceneManager.selectedSlot, componentId, 'rotation', newQuaternion, 'Transform', componentIndex);
-            }
-        }
-
-        /**
-         * Queue a property change
-         */
-        queueChange(slotId, componentId, propertyKey, newValue, componentType, componentIndex) {
-            const changeKey = componentId ? 
-                `${slotId}_${componentId}_${propertyKey}` : 
-                `${slotId}_${propertyKey}`;
-            
-            this.pendingChanges.set(changeKey, {
-                slotId,
-                componentId,
-                componentType,
-                componentIndex,
-                propertyKey,
-                newValue
-            });
-            
-            // Update local state immediately
-            const slot = sceneManager.getSlotById(slotId);
-            if (slot) {
-                if (componentId) {
-                    const component = slot.components.find(c => c.id === componentId);
-                    if (component && component.properties) {
-                        component.properties[propertyKey] = newValue;
-                    }
-                } else {
-                    // Slot property
-                    slot[propertyKey] = newValue;
-                }
-            }
-            
-            // Debounce Unity updates
-            if (this.updateTimer) {
-                clearTimeout(this.updateTimer);
-            }
-            
-            this.updateTimer = setTimeout(() => {
-                this.flushPendingChanges();
-            }, 100);
-        }
-
-        /**
-         * Flush pending changes to Unity/storage
-         */
-        async flushPendingChanges() {
-            if (this.pendingChanges.size === 0) return;
-            
-            const changes = Array.from(this.pendingChanges.values());
-            this.pendingChanges.clear();
-            
-
-            console.log("CHANGES:", changes)
-
-
-            // Group changes by slot
-            const changesBySlot = new Map();
-            changes.forEach(change => {
-                if (!changesBySlot.has(change.slotId)) {
-                    changesBySlot.set(change.slotId, []);
-                }
-                changesBySlot.get(change.slotId).push(change);
-            });
-            
-            // Apply changes
-            for (const [slotId, slotChanges] of changesBySlot) {
-                console.log("HANDLING CHANGES:", slotId, slotChanges)
-                // Store changes in space state for persistence
-                slotChanges.forEach(change => {
-                    const slot = sceneManager.getSlotById(slotId);
-                    if (change.componentId) {
-                        const propKey = `__${slot.name}/${change.componentType}/${change.propertyKey}:component_${change.componentId}`;
-                        sceneManager.setSpaceProperty(propKey, change.newValue, false);
-                    } else {
-                        // Slot property
-                        const propKey = `__${slot.name}/${change.propertyKey}:slot_${slotId}`;
-                        sceneManager.setSpaceProperty(propKey, change.newValue, false);
+                changeManager.queueChange({
+                    type: 'component',
+                    targetId: componentId,
+                    property: 'rotation',
+                    value: newQuaternion,
+                    metadata: {
+                        slotId: sceneManager.selectedSlot,
+                        componentType: 'Transform',
+                        componentIndex: componentIndex
                     }
                 });
             }
         }
+
 
         /**
          * Delete a component from the selected slot

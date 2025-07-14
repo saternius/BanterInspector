@@ -29,8 +29,6 @@
             };
             this.selectedSlot = null;
             this.expandedNodes = new Set();
-            this.pendingChanges = new Map();
-            this.updateTimer = null;
         }
 
         /**
@@ -416,19 +414,19 @@
             console.log("[setSpaceProperty]", key, value, isProtected)
             await this.checkAndSyncComponentProperty(key, value)
 
-            if(value.value !== undefined){
+            if(value && value.value !== undefined){
                 value = value.value;
             }
 
             if (isProtected) {
-                sceneManager.scene.SetProtectedSpaceProps({ [key]: value });
-                sceneManager.scene.spaceState.protected[key] = value;
+                this.scene.SetProtectedSpaceProps({ [key]: value });
+                this.scene.spaceState.protected[key] = value;
             } else {
-                sceneManager.scene.SetPublicSpaceProps({ [key]: value });
-                sceneManager.scene.spaceState.public[key] = value;
+                this.scene.SetPublicSpaceProps({ [key]: value });
+                this.scene.spaceState.public[key] = value;
             }
-            window.inspectorApp.spacePropsPanel.render();
-            window.inspectorApp.propertiesPanel.render(this.selectedSlot);
+            
+            // UI updates should be handled by change manager listeners
         }
 
 
