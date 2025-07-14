@@ -1,5 +1,6 @@
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
 
 export class Inventory {
     constructor() {
@@ -764,7 +765,20 @@ export class Inventory {
             for (const compData of slotData.components) {
                 // Update component ID to include the new slot ID
                 compData.id = `${slotData.id}_${compData.type}`;
-                await this.createComponent(gameObject, compData);
+                
+                // For MonoBehavior components, create the class instance
+                if (compData.type === 'MonoBehavior') {
+                    const slot = sceneManager.getSlotById(slotData.id);
+                    if (slot) {
+                        const monoBehavior = new MonoBehavior(slot, compData);
+                        // Replace the component data with the instance
+                        const compIndex = slotData.components.indexOf(compData);
+                        slotData.components[compIndex] = monoBehavior;
+                        await this.createComponent(gameObject, monoBehavior);
+                    }
+                } else {
+                    await this.createComponent(gameObject, compData);
+                }
             }
         }
         console.log("gameObject.id", gameObject.id)
@@ -980,6 +994,12 @@ export class Inventory {
                         compData.properties?.color || { r: 1, g: 1, b: 1, a: 1 }
                     ));
                     break;
+                    
+                case 'MonoBehavior':
+                    // MonoBehavior doesn't create a Unity component
+                    // It's a pure JavaScript component
+                    console.log('MonoBehavior component added to slot');
+                    return;
                     
                 default:
                     console.warn(`Unknown component type: ${compData.type}`);

@@ -596,6 +596,25 @@
             };
             collectChildren(slot);
             
+            // Clean up MonoBehavior components before destroying
+            for (const delSlotId of slotsToDelete) {
+                const delSlot = this.getSlotById(delSlotId);
+                if (delSlot && delSlot.components) {
+                    delSlot.components.forEach(comp => {
+                        if (comp.type === 'MonoBehavior' && comp.destroy) {
+                            comp.destroy();
+                        }
+                    });
+                }
+            }
+            
+            // Notify lifecycle manager of slot destruction
+            if (window.lifecycleManager) {
+                slotsToDelete.forEach(id => {
+                    window.lifecycleManager.triggerDestroyForSlot(id);
+                });
+            }
+            
             // Destroy Unity GameObjects
             if (this.scene && typeof window.BS !== 'undefined') {
                 // Reverse order to delete children first
@@ -769,6 +788,14 @@
             const componentIndex = slot.components.findIndex(c => c.id === componentId);
             if (componentIndex === -1) {
                 throw new Error('Component not found');
+            }
+            
+            // Get the component before removing
+            const component = slot.components[componentIndex];
+            
+            // Clean up MonoBehavior component
+            if (componentType === 'MonoBehavior' && component.destroy) {
+                component.destroy();
             }
             
             // Remove from slot's components array

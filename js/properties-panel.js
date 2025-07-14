@@ -197,6 +197,11 @@
          * Render a component
          */
         renderComponent(component, index) {
+            // Special handling for MonoBehavior components
+            if (component.type === 'MonoBehavior' || component instanceof MonoBehavior) {
+                return this.renderMonoBehaviorComponent(component, index);
+            }
+            
             const section = document.createElement('div');
             section.className = 'component-section';
             section.dataset.componentId = component.id;
@@ -449,6 +454,297 @@
         }
 
         /**
+         * Render MonoBehavior component with special handling
+         */
+        renderMonoBehaviorComponent(component, index) {
+            const section = document.createElement('div');
+            section.className = 'component-section';
+            section.dataset.componentId = component.id;
+            section.dataset.componentIndex = index;
+            
+            // Header
+            const header = document.createElement('div');
+            header.className = 'component-header';
+            
+            const headerContent = document.createElement('div');
+            headerContent.style.display = 'flex';
+            headerContent.style.alignItems = 'center';
+            headerContent.style.width = '100%';
+            headerContent.style.justifyContent = 'space-between';
+            
+            const titleDiv = document.createElement('div');
+            titleDiv.innerHTML = `
+                <span class="component-name">MonoBehavior</span>
+                <span class="component-type">${component.properties.name || 'Script'}</span>
+            `;
+            
+            const actionsDiv = document.createElement('div');
+            actionsDiv.style.display = 'flex';
+            actionsDiv.style.alignItems = 'center';
+            actionsDiv.style.gap = '8px';
+            
+            // Delete button
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'component-delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete component';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                if (confirm(`Delete MonoBehavior component?`)) {
+                    this.deleteComponent(component.id, component.type);
+                }
+            };
+            actionsDiv.appendChild(deleteBtn);
+            
+            const toggleSpan = document.createElement('span');
+            toggleSpan.className = 'component-toggle';
+            toggleSpan.textContent = '▼';
+            actionsDiv.appendChild(toggleSpan);
+            
+            headerContent.appendChild(titleDiv);
+            headerContent.appendChild(actionsDiv);
+            header.appendChild(headerContent);
+            
+            // Body
+            const body = document.createElement('div');
+            body.className = 'component-body';
+            
+            // Name property
+            const nameRow = this.createPropertyRow('Name', component.properties.name || 'myScript', 'text', (value) => {
+                component.properties.name = value;
+                this.queueChange(sceneManager.selectedSlot, component.id, 'name', value, 'MonoBehavior', index);
+            });
+            body.appendChild(nameRow);
+            
+            // File property with dropdown
+            const fileRow = document.createElement('div');
+            fileRow.className = 'property-row';
+            
+            const fileLabel = document.createElement('span');
+            fileLabel.className = 'property-label';
+            fileLabel.textContent = 'Script File';
+            
+            const fileContainer = document.createElement('div');
+            fileContainer.className = 'property-value';
+            
+            const fileSelect = document.createElement('select');
+            fileSelect.className = 'property-input';
+            fileSelect.style.width = '100%';
+            
+            // Add empty option
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = '-- Select Script --';
+            fileSelect.appendChild(emptyOption);
+            
+            // Get available scripts from inventory
+            const scripts = MonoBehavior.getAvailableScripts();
+            scripts.forEach(script => {
+                const option = document.createElement('option');
+                option.value = script.fileName;
+                option.textContent = `${script.name} (by ${script.author})`;
+                if (component.properties.file === script.fileName) {
+                    option.selected = true;
+                }
+                fileSelect.appendChild(option);
+            });
+            
+            fileSelect.onchange = async () => {
+                const oldFile = component.properties.file;
+                component.properties.file = fileSelect.value;
+                
+                // Load the new script
+                if (component instanceof MonoBehavior) {
+                    if (oldFile) {
+                        component.unloadScript();
+                    }
+                    if (fileSelect.value) {
+                        await component.loadScript(fileSelect.value);
+                    }
+                }
+                
+                this.queueChange(sceneManager.selectedSlot, component.id, 'file', fileSelect.value, 'MonoBehavior', index);
+                
+                // Re-render to show vars
+                this.render(sceneManager.selectedSlot);
+            };
+            
+            fileContainer.appendChild(fileSelect);
+            fileRow.appendChild(document.createElement('span')); // Empty space for button
+            fileRow.appendChild(fileLabel);
+            fileRow.appendChild(fileContainer);
+            body.appendChild(fileRow);
+            
+            // Render vars if any
+            if (component.properties.vars && Object.keys(component.properties.vars).length > 0) {
+                const varsHeader = document.createElement('div');
+                varsHeader.className = 'property-row';
+                varsHeader.style.marginTop = '12px';
+                varsHeader.style.fontWeight = 'bold';
+                varsHeader.innerHTML = '<span></span><span>Script Variables</span><span></span>';
+                body.appendChild(varsHeader);
+                
+                // Render each variable
+                Object.entries(component.properties.vars).forEach(([varName, varValue]) => {
+                    const varRow = this.renderMonoBehaviorVar(varName, varValue, component, index);
+                    body.appendChild(varRow);
+                });
+            }
+            
+            section.appendChild(header);
+            section.appendChild(body);
+            
+            // Toggle functionality
+            let isExpanded = true;
+            header.onclick = () => {
+                isExpanded = !isExpanded;
+                body.style.display = isExpanded ? 'block' : 'none';
+                header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
+            };
+            
+            return section;
+        }
+        
+        /**
+         * Render a MonoBehavior variable
+         */
+        renderMonoBehaviorVar(varName, varValue, component, componentIndex) {
+            const row = document.createElement('div');
+            row.className = 'property-row';
+            
+            const label = document.createElement('span');
+            label.className = 'property-label';
+            label.textContent = formatPropertyName(varName);
+            label.title = varName;
+            
+            const valueContainer = document.createElement('div');
+            valueContainer.className = 'property-value';
+            
+            // Determine type and render appropriate input
+            if (typeof varValue === 'boolean') {
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.className = 'checkbox-input';
+                input.checked = varValue;
+                input.onchange = () => {
+                    if (component instanceof MonoBehavior) {
+                        component.updateVar(varName, input.checked);
+                    }
+                    component.properties.vars[varName] = input.checked;
+                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                };
+                valueContainer.appendChild(input);
+                
+            } else if (typeof varValue === 'number') {
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.className = 'property-input number';
+                input.value = varValue;
+                input.step = 'any';
+                input.onchange = () => {
+                    const numValue = parseFloat(input.value);
+                    if (!isNaN(numValue)) {
+                        if (component instanceof MonoBehavior) {
+                            component.updateVar(varName, numValue);
+                        }
+                        component.properties.vars[varName] = numValue;
+                        this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                    }
+                };
+                valueContainer.appendChild(input);
+                
+            } else if (isVector3Object(varValue)) {
+                // Vector3 variable
+                const vectorGroup = document.createElement('div');
+                vectorGroup.className = 'vector-group';
+                
+                ['x', 'y', 'z'].forEach(axis => {
+                    const axisLabel = document.createElement('span');
+                    axisLabel.className = 'vector-label';
+                    axisLabel.textContent = axis.toUpperCase();
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'property-input number';
+                    input.value = varValue[axis] || 0;
+                    input.step = 'any';
+                    input.onchange = () => {
+                        const numValue = parseFloat(input.value);
+                        if (!isNaN(numValue)) {
+                            varValue[axis] = numValue;
+                            if (component instanceof MonoBehavior) {
+                                component.updateVar(varName, varValue);
+                            }
+                            component.properties.vars[varName] = varValue;
+                            this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                        }
+                    };
+                    
+                    vectorGroup.appendChild(axisLabel);
+                    vectorGroup.appendChild(input);
+                });
+                
+                valueContainer.appendChild(vectorGroup);
+                
+            } else if (typeof varValue === 'object' && varValue !== null && 'r' in varValue) {
+                // Color variable
+                const colorGroup = document.createElement('div');
+                colorGroup.className = 'color-group';
+                
+                const preview = document.createElement('div');
+                preview.className = 'color-preview';
+                const swatch = document.createElement('div');
+                swatch.className = 'color-swatch';
+                swatch.style.backgroundColor = `rgba(${varValue.r * 255}, ${varValue.g * 255}, ${varValue.b * 255}, ${varValue.a || 1})`;
+                preview.appendChild(swatch);
+                
+                const colorInput = document.createElement('input');
+                colorInput.type = 'color';
+                colorInput.style.display = 'none';
+                colorInput.value = rgbToHex(varValue.r * 255, varValue.g * 255, varValue.b * 255);
+                colorInput.onchange = () => {
+                    const rgb = hexToRgb(colorInput.value);
+                    varValue.r = rgb.r / 255;
+                    varValue.g = rgb.g / 255;
+                    varValue.b = rgb.b / 255;
+                    swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${varValue.a || 1})`;
+                    if (component instanceof MonoBehavior) {
+                        component.updateVar(varName, varValue);
+                    }
+                    component.properties.vars[varName] = varValue;
+                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                };
+                
+                preview.onclick = () => colorInput.click();
+                
+                colorGroup.appendChild(preview);
+                colorGroup.appendChild(colorInput);
+                valueContainer.appendChild(colorGroup);
+                
+            } else {
+                // String or other types
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'property-input';
+                input.value = varValue?.toString() || '';
+                input.onchange = () => {
+                    if (component instanceof MonoBehavior) {
+                        component.updateVar(varName, input.value);
+                    }
+                    component.properties.vars[varName] = input.value;
+                    this.queueChange(sceneManager.selectedSlot, component.id, 'vars', component.properties.vars, 'MonoBehavior', componentIndex);
+                };
+                valueContainer.appendChild(input);
+            }
+            
+            row.appendChild(document.createElement('span')); // Empty space for button
+            row.appendChild(label);
+            row.appendChild(valueContainer);
+            
+            return row;
+        }
+
+        /**
          * Create a simple property row
          */
         createPropertyRow(label, value, type, onChange) {
@@ -468,6 +764,13 @@
                 input.className = 'checkbox-input';
                 input.checked = value;
                 input.onchange = () => onChange(input.checked);
+                valueContainer.appendChild(input);
+            } else if (type === 'text') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'property-input';
+                input.value = value || '';
+                input.onchange = () => onChange(input.value);
                 valueContainer.appendChild(input);
             }
             

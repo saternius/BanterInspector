@@ -15,6 +15,7 @@
     const  { loadMockSpaceProps } = await import(`${basePath}/mock-data.js`);
     const  { Navigation } = await import(`${basePath}/navigation.js`);
     const  { Inventory } = await import(`${basePath}/inventory.js`);
+    const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
 
     // Global app instance
     class InspectorApp {
