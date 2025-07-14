@@ -13,12 +13,121 @@ class ChangeManager {
         this.componentHandlers = new Map();
         this.registeredComponents = new Map();
         this.updateInterval = 100; // ms
+        this.historyManager = null;
+        this.beforeFlush = null; // Hook for history manager
     }
 
     async initialize() {
         // Register default component handlers
         this.registerDefaultHandlers();
-        console.log('Change Manager initialized');
+        
+        // Initialize history manager (lazy load to avoid circular dependency)
+        const { HistoryManager } = await import(`${basePath}/history-manager.js`);
+        this.historyManager = new HistoryManager();
+        this.setupHistoryIntegration();
+        
+        console.log('Change Manager initialized with history support');
+    }
+    
+    setupHistoryIntegration() {
+        // Set up the beforeFlush hook for history manager
+        this.beforeFlush = (changes) => {
+            console.log("changes", changes)
+            if (!this.historyManager.isApplyingHistory) {
+                // Filter for inspector UI changes only
+                const uiChanges = changes.filter(c => 
+                    c.metadata?.source === 'inspector-ui'
+                );
+                
+                if (uiChanges.length > 0) {
+                    // Record each change with its old value
+                    uiChanges.forEach(change => {
+                        
+                        const oldValue = this.getOldValue(change);
+                        console.log("change", change, oldValue)
+                        this.historyManager.prepareChangeRecord(change, oldValue);
+                    });
+                }
+            }
+        };
+        
+        // Listen for history apply events
+        document.addEventListener('historyApplyChange', async (event) => {
+            const change = event.detail;
+            await this.applyHistoryChange(change);
+        });
+    }
+    
+    getOldValue(change) {
+        if (change.type === 'spaceProperty') {
+            const spaceState = window.SM?.scene?.spaceState;
+            if (spaceState) {
+                const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
+                return props[change.metadata.key];
+            }
+        } else if (change.type === 'slot') {
+            const slot = window.SM?.getSlotById(change.targetId);
+            return slot ? slot[change.property] : undefined;
+        } else if (change.type === 'component') {
+            const slot = window.SM?.getSlotById(change.metadata.slotId);
+            if (slot) {
+                const component = slot.components.find(c => c.id === change.targetId);
+                return component?.properties?.[change.property];
+            }
+        }
+        return undefined;
+    }
+    
+    async applyHistoryChange(change) {
+        const { target, property, oldValue } = change;
+        
+        // Create a change object that matches our normal format
+        const changeObj = {
+            type: target.type,
+            targetId: target.id,
+            property: property,
+            value: oldValue !== undefined ? oldValue : change.newValue,
+            metadata: {
+                source: 'history-apply' // Mark as history change
+            }
+        };
+        
+        // Apply the change based on type
+        if (target.type === 'spaceProperty') {
+            changeObj.metadata.key = property;
+            changeObj.metadata.isProtected = change.isProtected || false;
+            await this.processSpacePropertyChange(changeObj);
+        } else if (target.type === 'slot') {
+            changeObj.metadata.slotId = target.id;
+            await this.processSlotChange(changeObj);
+        } else if (target.type === 'component') {
+            // Need to find the slot for component changes
+            const slot = this.findSlotByComponentId(target.id);
+            if (slot) {
+                changeObj.metadata.slotId = slot.id;
+                changeObj.metadata.componentType = change.componentType || 'Unknown';
+                await this.processComponentChange(changeObj);
+            }
+        }
+        
+        // Trigger UI refresh
+        document.dispatchEvent(new CustomEvent('historyChangeApplied', {
+            detail: { change: changeObj }
+        }));
+    }
+    
+    findSlotByComponentId(componentId) {
+        const slots = window.SM?.getAllSlots() || [];
+        for (const slot of slots) {
+            if (slot.components?.some(c => c.id === componentId)) {
+                return slot;
+            }
+        }
+        return null;
+    }
+    
+    getHistoryManager() {
+        return this.historyManager;
     }
 
     registerDefaultHandlers() {
@@ -101,7 +210,9 @@ class ChangeManager {
             value: spaceChange.value,
             metadata: {
                 isProtected: spaceChange.isProtected,
-                key: spaceChange.key
+                key: spaceChange.key,
+                source: spaceChange.source,
+                uiContext: spaceChange.uiContext
             }
         };
         this.queueChange(change);
@@ -141,12 +252,22 @@ class ChangeManager {
         
         console.log(`Flushing ${changes.length} changes`);
         
+        // Call beforeFlush hook if set (for history manager)
+        if (this.beforeFlush && typeof this.beforeFlush === 'function') {
+            this.beforeFlush(changes);
+        }
+        
         // Process changes
         await this.processChanges(changes);
         
         // Notify listeners
         this.notifyListeners(changes);
         window.inspectorApp.spacePropsPanel.render()
+        
+        // Commit any pending history batch
+        if (this.historyManager && !this.historyManager.isApplyingHistory) {
+            this.historyManager.commitCurrentBatch();
+        }
     }
 
     async processChanges(changes) {
