@@ -6,6 +6,7 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+    const { deepClone } = await import(`${basePath}/utils.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -295,25 +296,8 @@
             e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', slot.id);
             
-            let copy = JSON.parse(JSON.stringify(slot))
-            //Remove the component bs refs
-            let removeRef = (obj)=>{
-                if(obj._bs){
-                    delete obj._bs
-                }
-                if(obj.components){
-                    obj.components.forEach(comp=>{
-                        if(comp._bs){
-                            delete comp._bs
-                        }
-                    })
-                }
-                if(obj.children){
-                    obj.children.forEach(child=>removeRef(child))
-                }
-            }
-            removeRef(copy)
-
+            console.log("slot", slot)
+            let copy = deepClone(slot, ['_bs'])
 
             // Store the full slot data for inventory
             e.dataTransfer.setData('application/json', JSON.stringify(copy));

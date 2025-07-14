@@ -762,21 +762,21 @@ export class Inventory {
         // Add components
         if (slotData.components && slotData.components.length > 0) {
             for (const compData of slotData.components) {
-                // Update component ID to include the new slot ID
-                compData.id = `${slotData.id}_${compData.type}`;
-                
                 // For MonoBehavior components, create the class instance
+                let component = null;
                 if (compData.type === 'MonoBehavior') {
-                    const slot = sceneManager.getSlotById(slotData.id);
-                    if (slot) {
-                        const monoBehavior = new MonoBehavior(slot, compData);
-                        // Replace the component data with the instance
-                        const compIndex = slotData.components.indexOf(compData);
-                        slotData.components[compIndex] = monoBehavior;
-                        await this.createComponent(gameObject, monoBehavior);
-                    }
+                    const monoBehavior = new MonoBehavior(slotData, compData);
+                    // Replace the component data with the instance
+                    const compIndex = slotData.components.indexOf(compData);
+                    slotData.components[compIndex] = monoBehavior;
+                    component = await this.createComponent(gameObject, monoBehavior);
                 } else {
-                    await this.createComponent(gameObject, compData);
+                    component = await this.createComponent(gameObject, compData);
+                }
+                if(component){
+                    compData.id = component.id;
+                    compData._bs = component;
+                    sceneManager.sceneData.componentMap[component.id] = compData;
                 }
             }
         }
@@ -803,6 +803,7 @@ export class Inventory {
         
         // Update slot ID to match GameObject ID
         slotData.id = parseInt(gameObject.id);
+        slotData._bs = gameObject;
         
         // Store GameObject reference in scene manager's objects map
         if (sceneManager.scene && sceneManager.scene.objects) {
@@ -1011,10 +1012,11 @@ export class Inventory {
             if (component && compData.properties) {
                 await this.applyComponentProperties(component, compData.type, compData.properties);
             }
-            
+            return component;
         } catch (error) {
             console.error(`Error creating component ${compData.type}:`, error);
         }
+        return null;
     }
     
     /**

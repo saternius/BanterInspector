@@ -32,8 +32,9 @@ export class MonoBehavior {
      * Load a script from inventory
      */
     async loadScript(fileName) {
+        console.log("Loading script: ", fileName)
         if (!fileName) return;
-        console.log("FILENAME: ", fileName)
+        
         // Get the script from inventory
         const inventoryItem = window.inventory?.items?.[fileName];
         
