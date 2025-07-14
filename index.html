@@ -352,6 +352,15 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         script.type = 'module';
         script.src = isLocal ? './js/app.js' : repoUrl + 'js/app.js';
         document.body.appendChild(script);
+        
+        // Add debug script for testing (only in local development)
+        if (isLocal) {
+            setTimeout(() => {
+                const debugScript = document.createElement('script');
+                debugScript.src = './debug-history.js';
+                document.body.appendChild(debugScript);
+            }, 1000);
+        }
     </script>
     
 </body>

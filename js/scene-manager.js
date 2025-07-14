@@ -437,6 +437,13 @@
         getSlotById(slotId) {
             return this.sceneData.hierarchyMap[slotId];
         }
+        
+        /**
+         * Get all slots as a flat array
+         */
+        getAllSlots() {
+            return Object.values(this.sceneData.hierarchyMap || {});
+        }
 
         /**
          * Get the game object for a slot

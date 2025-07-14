@@ -18,6 +18,9 @@ export class HistoryManager {
         ]);
         
         this.setupKeyboardShortcuts();
+        
+        // Initial UI state update
+        setTimeout(() => this.updateUIState(), 100);
     }
     
     setupKeyboardShortcuts() {
@@ -63,7 +66,7 @@ export class HistoryManager {
             forward: {
                 target: { 
                     type: change.type, 
-                    id: change.targetId || change.slotId 
+                    id: change.targetId || change.slotId || change.metadata?.key
                 },
                 property: change.property,
                 newValue: this.cloneValue(change.value)
@@ -71,12 +74,12 @@ export class HistoryManager {
             reverse: {
                 target: { 
                     type: change.type, 
-                    id: change.targetId || change.slotId 
+                    id: change.targetId || change.slotId || change.metadata?.key
                 },
                 property: change.property,
                 oldValue: this.cloneValue(oldValue)
             },
-            metadata: change.metadata
+            metadata: this.cloneValue(change.metadata)
         };
         
         this.currentBatch.changes.push(changeRecord);
@@ -112,6 +115,13 @@ export class HistoryManager {
         if (this.undoStack.length > this.maxHistorySize) {
             this.undoStack.shift();
         }
+        
+        console.log('History batch committed:', {
+            description: this.currentBatch.description,
+            changes: this.currentBatch.changes.length,
+            undoStackSize: this.undoStack.length,
+            redoStackSize: this.redoStack.length
+        });
         
         // Reset current batch
         this.currentBatch = null;

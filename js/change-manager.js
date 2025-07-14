@@ -4,6 +4,7 @@
  */
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
+import { sceneManager } from './scene-manager.js';
 
 class ChangeManager {
     constructor() {
@@ -60,16 +61,16 @@ class ChangeManager {
     
     getOldValue(change) {
         if (change.type === 'spaceProperty') {
-            const spaceState = window.SM?.scene?.spaceState;
+            const spaceState = window.SM?.scene?.spaceState || sceneManager?.scene?.spaceState;
             if (spaceState) {
                 const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
                 return props[change.metadata.key];
             }
         } else if (change.type === 'slot') {
-            const slot = window.SM?.getSlotById(change.targetId);
+            const slot = window.SM?.getSlotById(change.targetId) || sceneManager?.getSlotById(change.targetId);
             return slot ? slot[change.property] : undefined;
         } else if (change.type === 'component') {
-            const slot = window.SM?.getSlotById(change.metadata.slotId);
+            const slot = window.SM?.getSlotById(change.metadata.slotId) || sceneManager?.getSlotById(change.metadata.slotId);
             if (slot) {
                 const component = slot.components.find(c => c.id === change.targetId);
                 return component?.properties?.[change.property];
@@ -79,14 +80,16 @@ class ChangeManager {
     }
     
     async applyHistoryChange(change) {
-        const { target, property, oldValue } = change;
+        const { target, property, oldValue, newValue } = change;
+        
+        console.log('Applying history change:', { target, property, oldValue, newValue });
         
         // Create a change object that matches our normal format
         const changeObj = {
             type: target.type,
             targetId: target.id,
             property: property,
-            value: oldValue !== undefined ? oldValue : change.newValue,
+            value: oldValue !== undefined ? oldValue : newValue,
             metadata: {
                 source: 'history-apply' // Mark as history change
             }
@@ -94,19 +97,26 @@ class ChangeManager {
         
         // Apply the change based on type
         if (target.type === 'spaceProperty') {
-            changeObj.metadata.key = property;
-            changeObj.metadata.isProtected = change.isProtected || false;
+            // For space properties, the targetId is the key
+            changeObj.metadata.key = target.id;
+            changeObj.metadata.isProtected = change.metadata?.isProtected || false;
+            changeObj.targetId = target.id;
+            changeObj.property = 'value';
             await this.processSpacePropertyChange(changeObj);
         } else if (target.type === 'slot') {
             changeObj.metadata.slotId = target.id;
             await this.processSlotChange(changeObj);
         } else if (target.type === 'component') {
             // Need to find the slot for component changes
-            const slot = this.findSlotByComponentId(target.id);
+            const slot = this.findSlotByComponentId(target.id) || 
+                        (change.metadata?.slotId && sceneManager.getSlotById(change.metadata.slotId));
             if (slot) {
                 changeObj.metadata.slotId = slot.id;
-                changeObj.metadata.componentType = change.componentType || 'Unknown';
+                changeObj.metadata.componentType = change.metadata?.componentType || 'Unknown';
+                changeObj.metadata.componentIndex = change.metadata?.componentIndex || 0;
                 await this.processComponentChange(changeObj);
+            } else {
+                console.error('Could not find slot for component:', target.id);
             }
         }
         
@@ -117,7 +127,18 @@ class ChangeManager {
     }
     
     findSlotByComponentId(componentId) {
-        const slots = window.SM?.getAllSlots() || [];
+        // Try using sceneManager's method first
+        if (sceneManager && sceneManager.getAllSlots) {
+            const slots = sceneManager.getAllSlots();
+            for (const slot of slots) {
+                if (slot.components?.some(c => c.id === componentId)) {
+                    return slot;
+                }
+            }
+        }
+        
+        // Fallback to window.SM if available
+        const slots = window.SM?.getAllSlots?.() || [];
         for (const slot of slots) {
             if (slot.components?.some(c => c.id === componentId)) {
                 return slot;

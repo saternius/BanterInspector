@@ -111,6 +111,28 @@
                 document.body.appendChild(notificationContainer);
             }
             
+            // Wire up undo/redo buttons
+            const undoBtn = document.getElementById('undoBtn');
+            const redoBtn = document.getElementById('redoBtn');
+            
+            if (undoBtn) {
+                undoBtn.addEventListener('click', () => {
+                    const historyManager = changeManager.getHistoryManager();
+                    if (historyManager) {
+                        historyManager.undo();
+                    }
+                });
+            }
+            
+            if (redoBtn) {
+                redoBtn.addEventListener('click', () => {
+                    const historyManager = changeManager.getHistoryManager();
+                    if (historyManager) {
+                        historyManager.redo();
+                    }
+                });
+            }
+            
             // Listen for history notifications
             document.addEventListener('historyNotification', (event) => {
                 const { message, type } = event.detail;
