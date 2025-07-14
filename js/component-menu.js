@@ -36,6 +36,9 @@
                     header.insertBefore(toggleIcon, header.firstChild);
                 }
             });
+            categories.forEach((category, index) => {
+                this.toggleCategory(category);
+            });
         }
 
         /**
@@ -210,6 +213,8 @@
                 }
             }
             
+
+          
             // Add the component
             const newComponent = sceneManager.addComponentToSlot(this.selectedSlotId, componentType);
             

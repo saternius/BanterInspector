@@ -6,6 +6,8 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSceneData } = await import(`${basePath}/mock-data.js`);
+    const { BehaviorScript } = await import( `${basePath}/behavior-script.js`);
+
 
     export class SceneManager {
         constructor() {
@@ -732,14 +734,23 @@
             const slot = this.getSlotById(slotId);
             if (!slot) return;
             
+           
+
             const componentConfig = this.getDefaultComponentConfig(componentType);
             if (!componentConfig) return;
             
-            const newComponent = {
+            
+
+            let newComponent = {
                 id: `${slotId}_${componentType}`,
                 type: componentType,
                 properties: componentConfig.properties
             };
+
+            const scriptComponents = ['MonoBehavior'];
+            if(scriptComponents.includes(componentType)){
+                newComponent = new BehaviorScript(newComponent);
+            }
             
             slot.components.push(newComponent);
             return newComponent;
@@ -855,6 +866,13 @@
          */
         getDefaultComponentConfig(componentType) {
             const configs = {
+                'MonoBehavior':{
+                    properties: {
+                        name: 'myScript',
+                        file: null,
+                        vars: {}
+                    }
+                },
                 'BanterRigidbody': {
                     properties: {
                         mass: 1,
