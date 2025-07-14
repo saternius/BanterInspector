@@ -25,6 +25,7 @@ export class MonoBehavior {
         if (this.properties.file) {
             this.loadScript(this.properties.file);
         }
+        this.transform = slot.components.find(c=>c.type === 'Transform')
     }
     
     /**
@@ -32,10 +33,9 @@ export class MonoBehavior {
      */
     async loadScript(fileName) {
         if (!fileName) return;
-        
+        console.log("FILENAME: ", fileName)
         // Get the script from inventory
-        const inventoryKey = fileName.replace(/\.js$/, '');
-        const inventoryItem = window.inventory?.items?.[inventoryKey];
+        const inventoryItem = window.inventory?.items?.[fileName];
         
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
             console.error(`Script "${fileName}" not found in inventory`);
@@ -54,9 +54,10 @@ export class MonoBehavior {
                 keyDown: null,
                 keyUp: null,
                 keyPress: null,
-                gameObject: this.slot, // Reference to the slot/gameObject
+                slot: this.slot, // Reference to the slot
                 scene: window.scene, // Reference to the scene
-                BS: window.BS // Reference to BanterScript library
+                BS: window.BS, // Reference to BanterScript library
+                transform: this.transform
             };
             
             // Execute the script in the context
@@ -158,7 +159,7 @@ export class MonoBehavior {
             .filter(([key, item]) => item.itemType === 'script')
             .map(([key, item]) => ({
                 name: item.name,
-                fileName: `${item.name}.js`,
+                fileName: item.name,
                 author: item.author,
                 created: item.created
             }));

@@ -1,32 +1,27 @@
-(function(){
-    this.vars = {
-        "rotationSpeed": {
-            "type": "number",
-            "default": 1
-        }
-    }
-    
-    this.onStart = ()=>{
-        console.log("onStart")
-    }
 
-    this.onUpdate = ()=>{
-        console.log("onUpdate")
+this.vars = {
+    "rotationSpeed": {
+        "type": "number",
+        "default": 1
     }
+}
 
-    this.onDestroy = ()=>{
-        console.log("onDestroy")
-    }
+this.onStart = ()=>{
+    console.log("onStart")
+}
 
-    this.keyDown = (key)=>{
-        console.log("keyDown", key)
-    }
+this.onUpdate = ()=>{
+    console.log(this.transform)
+}
 
-    this.keyUp = (key)=>{
-        console.log("keyUp", key)
-    }
+this.onDestroy = ()=>{
+    console.log("onDestroy")
+}
 
-    this.keyPress = (key)=>{
-        console.log("keyPress", key)
-    }
-})
+this.keyDown = (key)=>{
+    console.log("keyDown", key)
+}
+
+this.keyUp = (key)=>{
+    console.log("keyUp", key)
+}

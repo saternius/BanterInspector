@@ -295,8 +295,28 @@
             e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', slot.id);
             
+            let copy = JSON.parse(JSON.stringify(slot))
+            //Remove the component bs refs
+            let removeRef = (obj)=>{
+                if(obj._bs){
+                    delete obj._bs
+                }
+                if(obj.components){
+                    obj.components.forEach(comp=>{
+                        if(comp._bs){
+                            delete comp._bs
+                        }
+                    })
+                }
+                if(obj.children){
+                    obj.children.forEach(child=>removeRef(child))
+                }
+            }
+            removeRef(copy)
+
+
             // Store the full slot data for inventory
-            e.dataTransfer.setData('application/json', JSON.stringify(slot));
+            e.dataTransfer.setData('application/json', JSON.stringify(copy));
             
             // Add dragging class
             e.target.classList.add('dragging');

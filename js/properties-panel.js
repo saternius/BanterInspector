@@ -7,7 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
-
+    const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     export class PropertiesPanel {
         constructor() {
             this.propertiesContent = document.getElementById('propertiesContent');
@@ -181,17 +181,6 @@
             return section;
         }
 
-        /**
-         * Start inline name editing
-         */
-        // startNameEdit(slot, displayElement) {
-        
-            
-        //     displayElement.style.display = 'none';
-        //     displayElement.parentElement.appendChild(input);
-        //     input.focus();
-        //     input.select();
-        // }
 
         /**
          * Render a component
@@ -896,11 +885,11 @@
                 slotChanges.forEach(change => {
                     const slot = sceneManager.getSlotById(slotId);
                     if (change.componentId) {
-                        const propKey = `__${slot.name}/${change.componentType}/${change.propertyKey}:${change.componentId}`;
+                        const propKey = `__${slot.name}/${change.componentType}/${change.propertyKey}:component_${change.componentId}`;
                         sceneManager.setSpaceProperty(propKey, change.newValue, false);
                     } else {
                         // Slot property
-                        const propKey = `__${slot.name}/${change.propertyKey}:${slotId}`;
+                        const propKey = `__${slot.name}/${change.propertyKey}:slot_${slotId}`;
                         sceneManager.setSpaceProperty(propKey, change.newValue, false);
                     }
                 });

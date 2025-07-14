@@ -8,13 +8,24 @@
     const { loadMockSceneData } = await import(`${basePath}/mock-data.js`);
     const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 
+    const SUPPORTED_COMPONENTS = new Set([
+        BS.ComponentType.Transform,
+        BS.ComponentType.BanterRigidbody,
+        BS.ComponentType.BanterMaterial,
+        BS.ComponentType.BanterText,
+        BS.ComponentType.BanterAudioSource,
+        BS.ComponentType.BoxCollider,
+        BS.ComponentType.SphereCollider,
+        BS.ComponentType.BanterGeometry
+    ]);
 
     export class SceneManager {
         constructor() {
             this.scene = null;
             this.sceneData = {
                 slots: [],
-                hierarchyMap: {}
+                hierarchyMap: {},
+                componentMap: {}
             };
             this.selectedSlot = null;
             this.expandedNodes = new Set();
@@ -86,12 +97,6 @@
                 // Store the GameObject reference
                 this.scene.objects[id] = gameObject;
                 
-                // Get transform component for hierarchy info
-                let transform = null;
-                if (gameObject.GetComponent) {
-                    transform = gameObject.GetComponent(BS.ComponentType.Transform);
-                }
-                
                 const slot = {
                     id: id,
                     name: gameObject.name || 'GameObject',
@@ -99,45 +104,29 @@
                     active: gameObject.active !== false,
                     persistent: true,
                     components: [],
-                    children: []
+                    children: [],
+                    _bs: gameObject
                 };
-                
-                // Extract transform data
-                if (transform) {
-                    slot.components.push({
-                        id: `${id}_Transform`,
-                        type: 'Transform',
-                        properties: {
-                            position: transform.position || { x: 0, y: 0, z: 0 },
-                            rotation: transform.rotation || { x: 0, y: 0, z: 0, w: 1 },
-                            localScale: transform.localScale || { x: 1, y: 1, z: 1 }
-                        }
-                    });
+
+                //Make tranform the top component
+                let transform = gameObject.GetComponent(BS.ComponentType.Transform)
+                if(transform){
+                    let transformData = await this.extractComponentData(transform);
+                    if(transformData){
+                        slot.components.push(transformData);
+                        this.sceneData.componentMap[transform.id] = transformData
+                    }
                 }
-                
-                // Extract other components
-                const componentTypes = [
-                    BS.ComponentType.BanterRigidbody,
-                    BS.ComponentType.BanterMaterial,
-                    BS.ComponentType.BanterText,
-                    BS.ComponentType.BanterAudioSource,
-                    BS.ComponentType.BoxCollider,
-                    BS.ComponentType.SphereCollider
-                ];
-                
-                for (const type of componentTypes) {
-                    try {
-                        if (gameObject.GetComponent) {
-                            const component = gameObject.GetComponent(type);
-                            if (component) {
-                                const componentData = await this.extractComponentData(component, type);
-                                if (componentData) {
-                                    slot.components.push(componentData);
-                                }
-                            }
+
+                for(let componentID in gameObject.components){
+                    if(componentID == transform.id) continue;
+                    let component = gameObject.components[componentID]
+                    if(SUPPORTED_COMPONENTS.has(component.type)){
+                        let componentData = await this.extractComponentData(component);
+                        if(componentData){
+                            slot.components.push(componentData);
+                            this.sceneData.componentMap[component.id] = componentData
                         }
-                    } catch (error) {
-                        // Component might not exist
                     }
                 }
                 
@@ -180,12 +169,14 @@
         /**
          * Extract component data from a Unity component
          */
-        async extractComponentData(component, type) {
+        async extractComponentData(component) {
+            const type = component.type
             const componentTypeName = this.getComponentTypeName(type);
             const data = {
-                id: `${Math.random()}_${componentTypeName}`,
+                id: component.id,
                 type: componentTypeName,
-                properties: {}
+                properties: {},
+                _bs: component
             };
             
             // Extract properties based on component type
@@ -326,43 +317,29 @@
                 return;
             }
             console.log("UPDATE UNITY OBJECT", gameObject, property, newValue)
+            slot[property] = newValue;
         }
 
         /**
          * Update Unity component with changes
          */
-        async updateUnityComponent(slotId, componentType, property, newValue) {
-            let gO = this.scene.objects[slotId]
-            if (!gO) return;
-            
+        async updateUnityComponent(componentId, property, newValue) {
+            let slot_component = this.sceneData.componentMap[componentId]
+            let type = slot_component.type
+            if(type === 'MonoBehavior'){
+                console.log("TODO: Make it so that if this was a manual change, then update the script value")
+                return
+            }
             
             try {
-                // Get the component
-                let component = null;
-                
-                // Map component type string to BS.ComponentType
-                const componentTypeMap = {
-                    'Transform': BS.ComponentType.Transform,
-                    'BanterRigidbody': BS.ComponentType.BanterRigidbody,
-                    'BoxCollider': BS.ComponentType.BoxCollider,
-                    'SphereCollider': BS.ComponentType.SphereCollider,
-                    'BanterMaterial': BS.ComponentType.BanterMaterial,
-                    'BanterText': BS.ComponentType.BanterText
-                };
-                
-                const bsComponentType = componentTypeMap[componentType];
-                if (bsComponentType) {
-                    component = gO.GetComponent(bsComponentType);
-                }
-                
+                let component = slot_component._bs
                 if (!component) {
-                    console.warn(`Component ${componentType} not found`);
+                    console.warn(`Component not found [scene-manager]`);
                     return;
                 }
                 
-
                 // Handle special cases for different component types
-                switch (componentType) {
+                switch (type) {
                     case 'Transform':
                         if (property === 'position' || property === 'localScale') {
                             component[property] = new BS.Vector3(
@@ -409,31 +386,25 @@
             } catch (error) {
                 console.error('Failed to update Unity component:', error);
             }
+
+            slot_component.properties[property] = newValue;
         }
 
         async checkAndSyncComponentProperty(key, value){
             if(!key.startsWith("__")) return;
             let key_parts = key.split(":")
             if(key_parts.length < 2) return;
-
-            let refs = key_parts[1].split("_")
             let path = key_parts[0].split("/")
             let property = path[path.length - 1]
-            let slotId = parseInt(refs[0])
-            let slot = this.getSlotById(slotId)
-            if(refs.length === 1){ //is slot
-                await this.updateUnityObject(slotId, property, value);
-                slot[property] = value;
-            }else{ //is component
-                let componentType = refs[1]
-                let component = slot.components.find(c => c.type === componentType)
-                if(component){
-                    await this.updateUnityComponent(slotId, componentType, property, value);
-                    component.properties[property] = value;
-                }
+            let refs = key_parts[1].split("_")
+            if(refs[0] === "slot"){
+                await this.updateUnityObject(refs[1], property, value);
+                
             }
-
-        
+            if(refs[0] === "component"){
+                await this.updateUnityComponent(refs[1], property, value);
+                
+            }        
         }
 
 
@@ -449,8 +420,6 @@
                 value = value.value;
             }
 
-            // Check if this prop corresponds to a component property
-            // Update the space prop
             if (isProtected) {
                 sceneManager.scene.SetProtectedSpaceProps({ [key]: value });
                 sceneManager.scene.spaceState.protected[key] = value;
@@ -460,7 +429,6 @@
             }
             window.inspectorApp.spacePropsPanel.render();
             window.inspectorApp.propertiesPanel.render(this.selectedSlot);
-            
         }
 
 
@@ -547,7 +515,7 @@
                                 persistent: true,
                                 components: [
                                     {
-                                        id: `${newSlotId}_Transform`,
+                                        id: transform.id,
                                         type: 'Transform',
                                         properties: {
                                             position: { x: 0, y: 0, z: 0 },
@@ -747,35 +715,6 @@
         }
 
         /**
-         * Add component to slot
-         */
-        addComponentToSlot(slotId, componentType) {
-            const slot = this.getSlotById(slotId);
-            if (!slot) return;
-            
-           
-
-            const componentConfig = this.getDefaultComponentConfig(componentType);
-            if (!componentConfig) return;
-            
-            
-
-            let newComponent = {
-                id: `${slotId}_${componentType}`,
-                type: componentType,
-                properties: componentConfig.properties
-            };
-
-          
-            if(componentType === 'MonoBehavior'){
-                newComponent = new MonoBehavior(slot, newComponent);
-            }
-            
-            slot.components.push(newComponent);
-            return newComponent;
-        }
-
-        /**
          * Delete component from slot
          */
         async deleteComponent(slotId, componentId, componentType) {
@@ -888,108 +827,26 @@
             console.log(`Deleted component ${componentType} from slot ${slot.name}`);
         }
 
-        /**
-         * Get default component configuration
-         */
-        getDefaultComponentConfig(componentType) {
-            const configs = {
-                'MonoBehavior':{
-                    properties: {
-                        name: 'myScript',
-                        file: null,
-                        vars: {}
-                    }
-                },
-                'BanterRigidbody': {
-                    properties: {
-                        mass: 1,
-                        drag: 0,
-                        angularDrag: 0.05,
-                        useGravity: true,
-                        isKinematic: false
-                    }
-                },
-                'BoxCollider': {
-                    properties: {
-                        isTrigger: false,
-                        center: { x: 0, y: 0, z: 0 },
-                        size: { x: 1, y: 1, z: 1 }
-                    }
-                },
-                'SphereCollider': {
-                    properties: {
-                        isTrigger: false,
-                        radius: 0.5
-                    }
-                },
-                'BanterMaterial': {
-                    properties: {
-                        shader: 'Standard',
-                        color: { r: 1, g: 1, b: 1, a: 1 },
-                        texture: ''
-                    }
-                },
-                'BanterText': {
-                    properties: {
-                        text: 'New Text',
-                        fontSize: 14,
-                        color: { r: 1, g: 1, b: 1, a: 1 },
-                        alignment: 'Center'
-                    }
-                },
-                'BanterGeometry': {
-                    properties: {
-                        geometryType: 'BoxGeometry',
-                        width: 1,
-                        height: 1,
-                        depth: 1
-                    }
-                },
-                'BanterAudioSource': {
-                    properties: {
-                        volume: 0.8,
-                        pitch: 1,
-                        loop: false,
-                        playOnAwake: false,
-                        spatialBlend: 1
-                    }
-                },
-                'BanterVideoPlayer': {
-                    properties: {
-                        url: '',
-                        volume: 1,
-                        loop: true,
-                        playOnAwake: true
-                    }
-                },
-                'BanterBrowser': {
-                    properties: {
-                        url: 'https://example.com',
-                        pixelsPerUnit: 100,
-                        pageWidth: 1920,
-                        pageHeight: 1080
-                    }
-                },
-                'BanterGrabHandle': {
-                    properties: {
-                        grabType: 'TRIGGER',
-                        grabRadius: 0.1
-                    }
-                },
-                'BanterSyncedObject': {
-                    properties: {
-                        syncPosition: true,
-                        syncRotation: true,
-                        takeOwnershipOnGrab: true
-                    }
-                }
-            };
-            
-            return configs[componentType];
-        }
+        
     }
 
     // Create singleton instance
     export const sceneManager = new SceneManager();
     window.SM = sceneManager
+    window.slots = ()=>{ return window.SM.sceneData.slots }
+    window.crawl = ()=>{
+        let dig = (slot)=>{
+            let map = {
+                slot: slot,
+                name: slot.name,
+                '.': slot.components,
+                '_': slot.components.map(c=>c.type)
+            }
+            for(let i=0; i<slot.children.length; i++){
+                map[i] = dig(slot.children[i])
+            }
+            return map
+        }
+        return dig(window.slots()[0])
+    }
 //})()

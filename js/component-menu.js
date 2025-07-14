@@ -197,7 +197,7 @@
         /**
          * Add component to selected slot
          */
-        addComponent(componentType) {
+        async addComponent(componentType) {
             if (!this.selectedSlotId) return;
             
             const slot = sceneManager.getSlotById(this.selectedSlotId);
@@ -213,25 +213,137 @@
                 }
             }
             
-
-          
-            // Add the component
-            const newComponent = sceneManager.addComponentToSlot(this.selectedSlotId, componentType);
-            
-            if (newComponent) {
-                // If we have Unity access, create the actual component
-                if (sceneManager.scene && typeof window.BS !== 'undefined') {
-                    this.createUnityComponent(this.selectedSlotId, componentType);
+            const componentConfig = this.getDefaultComponentConfig(componentType);
+            let slotComponent = null;
+            if(componentType === 'MonoBehavior'){
+                slotComponent = {
+                    id: Math.floor(Math.random()*10000),
+                    type: 'MonoBehavior',
+                    properties: componentConfig.properties
+                };
+            }else{
+                let unityComponent = await this.createUnityComponent(this.selectedSlotId, componentType);
+                console.log("unityComponent", unityComponent)
+                if(unityComponent){
+                    slotComponent = {
+                        id: unityComponent.id,
+                        type: componentType,
+                        properties: componentConfig.properties,
+                        _bs: unityComponent
+                    };
+                   
                 }
-                
-                // Hide menu
-                this.hide();
-                
-                // Refresh properties panel
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: this.selectedSlotId }
-                }));
             }
+
+            slot.components.push(slotComponent);
+            sceneManager.sceneData.componentMap[slotComponent.id] = slotComponent
+            console.log(this.selectedSlotId)
+            let prevSel = this.selectedSlotId;
+            this.hide();
+            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: prevSel }
+            }));
+            
+        }
+
+        /**
+         * Get default component configuration
+         */
+        getDefaultComponentConfig(componentType) {
+            const configs = {
+                'MonoBehavior':{
+                    properties: {
+                        name: 'myScript',
+                        file: null,
+                        vars: {}
+                    }
+                },
+                'BanterRigidbody': {
+                    properties: {
+                        mass: 1,
+                        drag: 0,
+                        angularDrag: 0.05,
+                        useGravity: true,
+                        isKinematic: false
+                    }
+                },
+                'BoxCollider': {
+                    properties: {
+                        isTrigger: false,
+                        center: { x: 0, y: 0, z: 0 },
+                        size: { x: 1, y: 1, z: 1 }
+                    }
+                },
+                'SphereCollider': {
+                    properties: {
+                        isTrigger: false,
+                        radius: 0.5
+                    }
+                },
+                'BanterMaterial': {
+                    properties: {
+                        shader: 'Standard',
+                        color: { r: 1, g: 1, b: 1, a: 1 },
+                        texture: ''
+                    }
+                },
+                'BanterText': {
+                    properties: {
+                        text: 'New Text',
+                        fontSize: 14,
+                        color: { r: 1, g: 1, b: 1, a: 1 },
+                        alignment: 'Center'
+                    }
+                },
+                'BanterGeometry': {
+                    properties: {
+                        geometryType: 'BoxGeometry',
+                        width: 1,
+                        height: 1,
+                        depth: 1
+                    }
+                },
+                'BanterAudioSource': {
+                    properties: {
+                        volume: 0.8,
+                        pitch: 1,
+                        loop: false,
+                        playOnAwake: false,
+                        spatialBlend: 1
+                    }
+                },
+                'BanterVideoPlayer': {
+                    properties: {
+                        url: '',
+                        volume: 1,
+                        loop: true,
+                        playOnAwake: true
+                    }
+                },
+                'BanterBrowser': {
+                    properties: {
+                        url: 'https://example.com',
+                        pixelsPerUnit: 100,
+                        pageWidth: 1920,
+                        pageHeight: 1080
+                    }
+                },
+                'BanterGrabHandle': {
+                    properties: {
+                        grabType: 'TRIGGER',
+                        grabRadius: 0.1
+                    }
+                },
+                'BanterSyncedObject': {
+                    properties: {
+                        syncPosition: true,
+                        syncRotation: true,
+                        takeOwnershipOnGrab: true
+                    }
+                }
+            };
+            
+            return configs[componentType];
         }
 
         /**
@@ -352,9 +464,12 @@
                 if (component && gameObject.AddComponent) {
                     await gameObject.AddComponent(component);
                 }
+                return component;
             } catch (error) {
                 console.error(`Failed to create Unity component ${componentType}:`, error);
             }
+
+            return null;
         }
     }
 // })()

@@ -350,13 +350,12 @@ export class Inventory {
      * Handle script file upload
      */
     async handleScriptUpload(fileName, content) {
-        const nameWithoutExt = fileName.replace(/\.js$/, '');
         const existingKeys = Object.keys(this.items);
         
         // Check for existing item
-        if (existingKeys.includes(nameWithoutExt)) {
+        if (existingKeys.includes(fileName)) {
             const confirmed = confirm(
-                `An item named "${nameWithoutExt}" already exists. Do you want to overwrite it?`
+                `An item named "${fileName}" already exists. Do you want to overwrite it?`
             );
             if (!confirmed) return;
         }
@@ -364,24 +363,24 @@ export class Inventory {
         // Create script item
         const scriptItem = {
             author: sceneManager.scene?.localUser?.name || 'Unknown',
-            name: nameWithoutExt,
+            name: fileName,
             created: Date.now(),
             itemType: 'script',
             data: content
         };
         
         // Save to localStorage
-        const storageKey = `inventory_${nameWithoutExt}`;
+        const storageKey = `inventory_${fileName}`;
         localStorage.setItem(storageKey, JSON.stringify(scriptItem));
         
         // Update local items
-        this.items[nameWithoutExt] = scriptItem;
+        this.items[fileName] = scriptItem;
         
         // Re-render
         this.render();
         
         // Show success message
-        this.showNotification(`Added script "${nameWithoutExt}" to inventory`);
+        this.showNotification(`Added script "${fileName}" to inventory`);
     }
     
     /**
