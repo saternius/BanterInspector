@@ -146,6 +146,7 @@ class ChangeManager {
         
         // Notify listeners
         this.notifyListeners(changes);
+        window.inspectorApp.spacePropsPanel.render()
     }
 
     async processChanges(changes) {
