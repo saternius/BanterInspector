@@ -299,7 +299,13 @@
                     changeManager.queueSpacePropertyChange({
                     key: key,
                     value: newValue,
-                    isProtected: type === 'protected'
+                    isProtected: type === 'protected',
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'space-props',
+                        inputElement: 'vector3-' + key,
+                        eventType: 'save'
+                    }
                 });
                 }
             } else {
@@ -311,7 +317,13 @@
                     changeManager.queueSpacePropertyChange({
                     key: key,
                     value: newValue,
-                    isProtected: type === 'protected'
+                    isProtected: type === 'protected',
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'space-props',
+                        inputElement: type + '_prop_' + key,
+                        eventType: 'save'
+                    }
                 });
                 }
             }
@@ -335,7 +347,13 @@
                 changeManager.queueSpacePropertyChange({
                 key: key,
                 value: undefined,
-                isProtected: type === 'protected'
+                isProtected: type === 'protected',
+                source: 'inspector-ui',
+                uiContext: {
+                    panelType: 'space-props',
+                    inputElement: 'delete-button-' + key,
+                    eventType: 'click'
+                }
             });
                 if (type === 'public') {
                     delete sceneManager.scene.spaceState.public[key];
@@ -362,7 +380,13 @@
                 changeManager.queueSpacePropertyChange({
                     key: key,
                     value: value,
-                    isProtected: false
+                    isProtected: false,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'space-props',
+                        inputElement: 'add-public-input',
+                        eventType: 'add'
+                    }
                 });
                 sceneManager.scene.spaceState.public[key] = value;
                 keyInput.value = '';
@@ -387,7 +411,13 @@
                 changeManager.queueSpacePropertyChange({
                     key: key,
                     value: value,
-                    isProtected: true
+                    isProtected: true,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'space-props',
+                        inputElement: 'add-protected-input',
+                        eventType: 'add'
+                    }
                 });
                 sceneManager.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
@@ -452,7 +482,13 @@
                 changeManager.queueSpacePropertyChange({
                     key: key,
                     value: newValue,
-                    isProtected: type === 'protected'
+                    isProtected: type === 'protected',
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'space-props',
+                        inputElement: 'vector3-' + key + '-' + axis,
+                        eventType: 'change'
+                    }
                 });
                 
                 // Update local state

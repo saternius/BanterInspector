@@ -429,7 +429,13 @@
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             componentType: componentType,
-                            componentIndex: componentIndex
+                            componentIndex: componentIndex,
+                            source: 'inspector-ui',
+                            uiContext: {
+                                panelType: 'properties',
+                                inputElement: 'color-picker-' + key,
+                                eventType: 'change'
+                            }
                         }
                     });
                 };
@@ -461,7 +467,13 @@
                                 metadata: {
                                     slotId: sceneManager.selectedSlot,
                                     componentType: componentType,
-                                    componentIndex: componentIndex
+                                    componentIndex: componentIndex,
+                                    source: 'inspector-ui',
+                                    uiContext: {
+                                        panelType: 'properties',
+                                        inputElement: 'color-rgba-' + key + '-' + channel,
+                                        eventType: 'change'
+                                    }
                                 }
                             });
                         }
@@ -490,7 +502,13 @@
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             componentType: componentType,
-                            componentIndex: componentIndex
+                            componentIndex: componentIndex,
+                            source: 'inspector-ui',
+                            uiContext: {
+                                panelType: 'properties',
+                                inputElement: 'text-' + key,
+                                eventType: 'change'
+                            }
                         }
                     });
                 };

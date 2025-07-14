@@ -84,6 +84,9 @@
                 // Set up global event handlers
                 this.setupGlobalEventHandlers();
                 
+                // Set up history notifications
+                this.setupHistoryNotifications();
+                
                 // Handle window resize
                 this.setupResizeHandlers();
                 
@@ -94,6 +97,57 @@
                 console.error('Failed to initialize inspector:', error);
                 this.showInitError(error);
             }
+        }
+
+        /**
+         * Setup history notification handling
+         */
+        setupHistoryNotifications() {
+            // Create notification container
+            let notificationContainer = document.getElementById('historyNotifications');
+            if (!notificationContainer) {
+                notificationContainer = document.createElement('div');
+                notificationContainer.id = 'historyNotifications';
+                document.body.appendChild(notificationContainer);
+            }
+            
+            // Listen for history notifications
+            document.addEventListener('historyNotification', (event) => {
+                const { message, type } = event.detail;
+                this.showNotification(message, type);
+            });
+            
+            // Listen for history changes to update UI
+            document.addEventListener('historyChangeApplied', (event) => {
+                // Refresh relevant panels
+                const change = event.detail.change;
+                if (change.type === 'spaceProperty') {
+                    this.spacePropsPanel.render();
+                } else if (change.type === 'component' || change.type === 'slot') {
+                    this.hierarchyPanel.render();
+                    this.propertiesPanel.render(sceneManager.selectedSlot);
+                }
+            });
+        }
+        
+        /**
+         * Show notification to user
+         */
+        showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `history-notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Trigger animation
+            setTimeout(() => notification.classList.add('show'), 10);
+            
+            // Remove after delay
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
         /**
