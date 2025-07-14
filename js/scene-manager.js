@@ -6,7 +6,7 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSceneData } = await import(`${basePath}/mock-data.js`);
-    const { BehaviorScript } = await import( `${basePath}/behavior-script.js`);
+    const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 
 
     export class SceneManager {
@@ -747,9 +747,9 @@
                 properties: componentConfig.properties
             };
 
-            const scriptComponents = ['MonoBehavior'];
-            if(scriptComponents.includes(componentType)){
-                newComponent = new BehaviorScript(newComponent);
+          
+            if(componentType === 'MonoBehavior'){
+                newComponent = new MonoBehavior(slot, newComponent);
             }
             
             slot.components.push(newComponent);
