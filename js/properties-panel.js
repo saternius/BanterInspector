@@ -128,9 +128,9 @@
                         targetId: slot.id,
                         property: 'name',
                         value: newName,
+                        source: 'inspector-ui',
                         metadata: {
-                            slotId: slot.id,
-                            source: 'inspector-ui'
+                            slotId: slot.id
                         }
                     });
                     if (this.selectedSlotNameElement) {
@@ -165,9 +165,9 @@
                     targetId: slot.id,
                     property: 'active',
                     value: value,
+                    source: 'inspector-ui',
                     metadata: {
-                        slotId: slot.id,
-                        source: 'inspector-ui'
+                        slotId: slot.id
                     }
                 });
             });
@@ -179,9 +179,9 @@
                     targetId: slot.id,
                     property: 'persistent',
                     value: value,
+                    source: 'inspector-ui',
                     metadata: {
-                        slotId: slot.id,
-                        source: 'inspector-ui'
+                        slotId: slot.id
                     }
                 });
             });
@@ -317,11 +317,11 @@
                         targetId: componentId,
                         property: key,
                         value: input.checked,
+                        source: 'inspector-ui',
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             componentType: componentType,
                             componentIndex: componentIndex,
-                            source: 'inspector-ui'
                         }
                     });
                 };
@@ -341,12 +341,12 @@
                             targetId: componentId,
                             property: key,
                             value: numValue,
+                            source: 'inspector-ui',
                             metadata: {
                                 slotId: sceneManager.selectedSlot,
                                 componentType: componentType,
                                 componentIndex: componentIndex,
-                                source: 'inspector-ui'
-                            }
+                                }
                         });
                     }
                 };
@@ -431,17 +431,16 @@
                         targetId: componentId,
                         property: key,
                         value: newColor,
+                        source: 'inspector-ui',
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             componentType: componentType,
                             componentIndex: componentIndex,
-                            source: 'inspector-ui',
                             uiContext: {
                                 panelType: 'properties',
                                 inputElement: 'color-picker-' + key,
                                 eventType: 'change',
-                                source: 'inspector-ui'
-                            }
+                                }
                         }
                     });
                 };
@@ -470,17 +469,16 @@
                                 targetId: componentId,
                                 property: key,
                                 value: value,
+                                source: 'inspector-ui',
                                 metadata: {
                                     slotId: sceneManager.selectedSlot,
                                     componentType: componentType,
                                     componentIndex: componentIndex,
-                                    source: 'inspector-ui',
                                     uiContext: {
                                         panelType: 'properties',
                                         inputElement: 'color-rgba-' + key + '-' + channel,
                                         eventType: 'change',
-                                        source: 'inspector-ui'
-                                    }
+                                                }
                                 }
                             });
                         }
@@ -506,17 +504,16 @@
                         targetId: componentId,
                         property: key,
                         value: input.value,
+                        source: 'inspector-ui',
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             componentType: componentType,
                             componentIndex: componentIndex,
-                            source: 'inspector-ui',
                             uiContext: {
                                 panelType: 'properties',
                                 inputElement: 'text-' + key,
                                 eventType: 'change',
-                                source: 'inspector-ui'
-                            }
+                                }
                         }
                     });
                 };
@@ -594,11 +591,11 @@
                     targetId: component.id,
                     property: 'name',
                     value: value,
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: sceneManager.selectedSlot,
                         componentType: 'MonoBehavior',
-                        componentIndex: index,
-                        source: 'inspector-ui'
+                        componentIndex: index
                     }
                 });
             });
@@ -656,11 +653,11 @@
                     targetId: component.id,
                     property: 'file',
                     value: fileSelect.value,
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: sceneManager.selectedSlot,
                         componentType: 'MonoBehavior',
-                        componentIndex: index,
-                        source: 'inspector-ui'
+                        componentIndex: index
                     }
                 });
                 
@@ -739,7 +736,6 @@
                             slotId: sceneManager.selectedSlot,
                             componentType: 'MonoBehavior',
                             componentIndex: componentIndex,
-                            source: 'inspector-ui'
                         }
                     });
                 };
@@ -767,8 +763,7 @@
                                 slotId: sceneManager.selectedSlot,
                                 componentType: 'MonoBehavior',
                                 componentIndex: componentIndex,
-                                source: 'inspector-ui'
-                            }
+                                }
                         });
                     }
                 };
@@ -806,8 +801,7 @@
                                     slotId: sceneManager.selectedSlot,
                                     componentType: 'MonoBehavior',
                                     componentIndex: componentIndex,
-                                    source: 'inspector-ui'
-                                }
+                                        }
                             });
                         }
                     };
@@ -853,7 +847,6 @@
                             slotId: sceneManager.selectedSlot,
                             componentType: 'MonoBehavior',
                             componentIndex: componentIndex,
-                            source: 'inspector-ui'
                         }
                     });
                 };
@@ -884,7 +877,6 @@
                             slotId: sceneManager.selectedSlot,
                             componentType: 'MonoBehavior',
                             componentIndex: componentIndex,
-                            source: 'inspector-ui'
                         }
                     });
                 };
@@ -954,11 +946,11 @@
                     targetId: componentId,
                     property: key,
                     value: vector,
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: sceneManager.selectedSlot,
                         componentType: componentType,
-                        componentIndex: componentIndex,
-                        source: 'inspector-ui'
+                        componentIndex: componentIndex
                     }
                 });
             }
@@ -992,11 +984,11 @@
                     targetId: componentId,
                     property: 'rotation',
                     value: newQuaternion,
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: sceneManager.selectedSlot,
                         componentType: 'Transform',
-                        componentIndex: componentIndex,
-                        source: 'inspector-ui'
+                        componentIndex: componentIndex
                     }
                 });
             }
@@ -1016,10 +1008,10 @@
                 targetId: componentId,
                 property: 'component',
                 value: null,
+                source: 'inspector-ui',
                 metadata: {
                     slotId: slotId,
                     componentType: componentType,
-                    source: 'inspector-ui',
                     uiContext: {
                         panelType: 'properties',
                         inputElement: 'delete-component-' + componentType,

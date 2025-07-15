@@ -158,13 +158,29 @@
     
     <script type="module">
         // Import necessary modules
-        import { HistoryManager } from './js/history-manager.js';
+        import { SimpleHistoryManager, ChangeTypes } from './js/simple-history-manager.js';
         import { changeManager } from './js/change-manager.js';
         
         // Initialize components
-        const historyManager = new HistoryManager();
+        const historyManager = new SimpleHistoryManager();
         const log = document.getElementById('testLog');
         const status = document.getElementById('status');
+        
+        // Mock change manager if not available
+        if (!window.changeManager) {
+            window.changeManager = {
+                queueChange: (change) => {
+                    console.log('Queued change:', change);
+                    // Simulate the change flow
+                    if (change.source === 'inspector-ui' && !historyManager.isApplying) {
+                        const oldValue = getMockOldValue(change);
+                        historyManager.recordChange(change, oldValue);
+                        addLog(`Recorded change: ${change.property} = ${JSON.stringify(change.value)}`, 'change');
+                        updateStatus();
+                    }
+                }
+            };
+        }
         
         // Mock scene manager
         window.SM = {
@@ -208,24 +224,17 @@
             document.getElementById('redoBtn').disabled = !historyStatus.canRedo;
         }
         
-        // Set up change tracking
-        changeManager.beforeFlush = (changes) => {
-            if (!historyManager.isApplyingHistory) {
-                const uiChanges = changes.filter(c => c.metadata?.source === 'inspector-ui');
-                
-                if (uiChanges.length > 0) {
-                    uiChanges.forEach(change => {
-                        // Mock old value
-                        const oldValue = change.property === 'position' 
-                            ? { x: 0, y: 0, z: 0 }
-                            : change.property === 'active' ? true : 'OldValue';
-                            
-                        historyManager.prepareChangeRecord(change, oldValue);
-                        addLog(`Recorded change: ${change.property} = ${JSON.stringify(change.value)}`, 'change');
-                    });
-                }
+        // Helper function to get mock old values
+        function getMockOldValue(change) {
+            if (change.property === 'position') {
+                return { x: 0, y: 0, z: 0 };
+            } else if (change.property === 'active') {
+                return true;
+            } else if (change.property === 'name') {
+                return 'TestComponent';
             }
-        };
+            return 'OldValue';
+        }
         
         // Handle history events
         document.addEventListener('historyNotification', (event) => {
@@ -278,11 +287,12 @@
                 targetId: 'comp-1',
                 property: 'name',
                 value: e.target.value,
+                source: 'inspector-ui',
+                targetType: 'component',
                 metadata: {
                     slotId: 'slot-1',
                     componentType: 'Transform',
                     componentIndex: 0,
-                    source: 'inspector-ui',
                     uiContext: {
                         panelType: 'properties',
                         inputElement: 'name-input',
@@ -304,11 +314,12 @@
                         y: parseFloat(document.getElementById('posY').value) || 0,
                         z: parseFloat(document.getElementById('posZ').value) || 0
                     },
+                    source: 'inspector-ui',
+                    targetType: 'component',
                     metadata: {
                         slotId: 'slot-1',
                         componentType: 'Transform',
                         componentIndex: 0,
-                        source: 'inspector-ui',
                         uiContext: {
                             panelType: 'properties',
                             inputElement: 'position-' + axis,
@@ -325,11 +336,12 @@
                 targetId: 'comp-1',
                 property: 'active',
                 value: e.target.checked,
+                source: 'inspector-ui',
+                targetType: 'component',
                 metadata: {
                     slotId: 'slot-1',
                     componentType: 'Transform',
                     componentIndex: 0,
-                    source: 'inspector-ui',
                     uiContext: {
                         panelType: 'properties',
                         inputElement: 'active-checkbox',

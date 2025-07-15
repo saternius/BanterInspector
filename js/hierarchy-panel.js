@@ -77,9 +77,9 @@
                         parentId: parentId, // null means add to root
                         name: `New Slot ${timestamp}`
                     },
+                    source: 'inspector-ui',
                     metadata: {
                         parentId: parentId,
-                        source: 'inspector-ui',
                         uiContext: {
                             panelType: 'hierarchy',
                             inputElement: 'add-child-slot-btn',
@@ -107,10 +107,10 @@
                         targetId: sceneManager.selectedSlot,
                         property: 'slot',
                         value: null,
+                        source: 'inspector-ui',
                         metadata: {
                             slotId: sceneManager.selectedSlot,
                             slotName: slot.name,
-                            source: 'inspector-ui',
                             uiContext: {
                                 panelType: 'hierarchy',
                                 inputElement: 'delete-slot-btn',
@@ -408,11 +408,11 @@
                 targetId: this.draggedSlotId,
                 property: 'parent',
                 value: targetSlotId,
+                source: 'inspector-ui',
                 metadata: {
                     slotId: this.draggedSlotId,
                     oldParentId: draggedSlot?.parentId || null,
                     newParentId: targetSlotId,
-                    source: 'inspector-ui',
                     uiContext: {
                         panelType: 'hierarchy',
                         inputElement: 'drag-drop',
@@ -458,11 +458,11 @@
                 targetId: this.draggedSlotId,
                 property: 'parent',
                 value: null, // null parent means root
+                source: 'inspector-ui',
                 metadata: {
                     slotId: this.draggedSlotId,
                     oldParentId: draggedSlot?.parentId || null,
                     newParentId: null,
-                    source: 'inspector-ui',
                     uiContext: {
                         panelType: 'hierarchy',
                         inputElement: 'drag-drop-root',

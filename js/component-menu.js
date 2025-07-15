@@ -246,11 +246,11 @@ export class ComponentMenu {
                         componentType: componentType,
                         properties: componentConfig.properties
                     },
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: this.selectedSlotId,
                         componentType: componentType,
                         componentIndex: slot.components.length,
-                        source: 'inspector-ui',
                         uiContext: {
                             panelType: 'component-menu',
                             inputElement: 'add-component-' + componentType,
@@ -276,11 +276,11 @@ export class ComponentMenu {
                         componentType: componentType,
                         properties: componentConfig.properties
                     },
+                    source: 'inspector-ui',
                     metadata: {
                         slotId: this.selectedSlotId,
                         componentType: componentType,
                         componentIndex: slot.components.length - 1,
-                        source: 'inspector-ui',
                         uiContext: {
                             panelType: 'component-menu',
                             inputElement: 'add-component-' + componentType,

@@ -5,6 +5,7 @@
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 import { sceneManager } from './scene-manager.js';
+import { SimpleHistoryManager, ChangeTypes } from './simple-history-manager.js';
 
 class ChangeManager {
     constructor() {
@@ -15,48 +16,69 @@ class ChangeManager {
         this.registeredComponents = new Map();
         this.updateInterval = 100; // ms
         this.historyManager = null;
-        this.beforeFlush = null; // Hook for history manager
     }
 
     async initialize() {
         // Register default component handlers
         this.registerDefaultHandlers();
         
-        // Initialize history manager (lazy load to avoid circular dependency)
-        const { HistoryManager } = await import(`${basePath}/history-manager.js`);
-        this.historyManager = new HistoryManager();
-        this.setupHistoryIntegration();
+        // Initialize simple history manager
+        this.historyManager = new SimpleHistoryManager();
         
-        console.log('Change Manager initialized with history support');
+        console.log('Change Manager initialized with simplified history support');
     }
     
-    setupHistoryIntegration() {
-        // Set up the beforeFlush hook for history manager
-        this.beforeFlush = (changes) => {
-            console.log("changes", changes)
-            if (!this.historyManager.isApplyingHistory) {
-                // Filter for inspector UI changes only
-                const uiChanges = changes.filter(c => 
-                    c.metadata?.source === 'inspector-ui'
-                );
-                
-                if (uiChanges.length > 0) {
-                    // Record each change with its old value
-                    uiChanges.forEach(change => {
-                        
-                        const oldValue = this.getOldValue(change);
-                        console.log("change", change, oldValue)
-                        this.historyManager.prepareChangeRecord(change, oldValue);
-                    });
-                }
-            }
+    
+    convertToHistoryFormat(change) {
+        let historyChange = {
+            type: ChangeTypes.PROPERTY,
+            targetId: change.targetId,
+            targetType: change.type,
+            property: change.property,
+            newValue: change.value,
+            source: change.source,
+            metadata: { ...change.metadata }
         };
         
-        // Listen for history apply events
-        document.addEventListener('historyApplyChange', async (event) => {
-            const change = event.detail;
-            await this.applyHistoryChange(change);
-        });
+        // Map change types to history format
+        switch (change.type) {
+            case 'component':
+                historyChange.targetType = 'component';
+                break;
+            case 'slot':
+                historyChange.targetType = 'slot';
+                if (change.property === 'name') {
+                    historyChange.type = ChangeTypes.SLOT_RENAME;
+                }
+                break;
+            case 'spaceProperty':
+                historyChange.type = ChangeTypes.SPACE_PROPERTY;
+                historyChange.targetType = 'space';
+                break;
+            case 'componentAdd':
+                historyChange.type = ChangeTypes.COMPONENT_ADD;
+                historyChange.targetType = 'component';
+                break;
+            case 'componentRemove':
+                historyChange.type = ChangeTypes.COMPONENT_REMOVE;
+                historyChange.targetType = 'component';
+                break;
+            case 'slotAdd':
+                historyChange.type = ChangeTypes.SLOT_ADD;
+                historyChange.targetType = 'slot';
+                break;
+            case 'slotRemove':
+                historyChange.type = ChangeTypes.SLOT_REMOVE;
+                historyChange.targetType = 'slot';
+                break;
+            case 'slotMove':
+                historyChange.type = ChangeTypes.SLOT_MOVE;
+                historyChange.targetType = 'slot';
+                historyChange.newParentId = change.value;
+                break;
+        }
+        
+        return historyChange;
     }
     
     getOldValue(change) {
@@ -126,109 +148,6 @@ class ChangeManager {
         return state;
     }
     
-    async applyHistoryChange(change) {
-        const { target, property, oldValue, newValue } = change;
-        
-        console.log('Applying history change:', { target, property, oldValue, newValue });
-        
-        // Create a change object that matches our normal format
-        const changeObj = {
-            type: target.type,
-            targetId: target.id,
-            property: property,
-            value: oldValue !== undefined ? oldValue : newValue,
-            metadata: {
-                source: 'history-apply' // Mark as history change
-            }
-        };
-        
-        // Apply the change based on type
-        if (target.type === 'spaceProperty') {
-            // For space properties, the targetId is the key
-            changeObj.metadata.key = target.id;
-            changeObj.metadata.isProtected = change.metadata?.isProtected || false;
-            changeObj.targetId = target.id;
-            changeObj.property = 'value';
-            await this.processSpacePropertyChange(changeObj);
-        } else if (target.type === 'slot') {
-            changeObj.metadata.slotId = target.id;
-            await this.processSlotChange(changeObj);
-        } else if (target.type === 'component') {
-            // Need to find the slot for component changes
-            const slot = this.findSlotByComponentId(target.id) || 
-                        (change.metadata?.slotId && sceneManager.getSlotById(change.metadata.slotId));
-            if (slot) {
-                changeObj.metadata.slotId = slot.id;
-                changeObj.metadata.componentType = change.metadata?.componentType || 'Unknown';
-                changeObj.metadata.componentIndex = change.metadata?.componentIndex || 0;
-                await this.processComponentChange(changeObj);
-            } else {
-                console.error('Could not find slot for component:', target.id);
-            }
-        } else if (target.type === 'componentAdd') {
-            // Handle undo of component add (remove the component)
-            if (oldValue === null) {
-                // This was originally an add, so we need to remove it
-                changeObj.type = 'componentRemove';
-                changeObj.metadata = change.metadata;
-                await this.processComponentRemove(changeObj);
-            } else {
-                // This was originally a remove, so we need to add it back
-                // TODO: Implement re-adding component with saved state
-                console.log('Re-adding component not yet implemented:', oldValue);
-            }
-        } else if (target.type === 'componentRemove') {
-            // Handle undo of component remove (re-add the component)
-            if (oldValue) {
-                // TODO: Implement re-adding component with saved state
-                console.log('Re-adding component not yet implemented:', oldValue);
-            }
-        } else if (target.type === 'slotAdd') {
-            // Handle undo of slot add (remove the slot)
-            if (oldValue === null) {
-                // This was originally an add, so we need to find the created slot and remove it
-                // Look up the slot ID that was created using the history map
-                const historyKey = `${change.metadata?.parentId || 'root'}_${change.timestamp || ''}`;
-                const createdSlotId = this.slotAddHistory?.get(historyKey);
-                
-                if (createdSlotId) {
-                    changeObj.type = 'slotRemove';
-                    changeObj.targetId = createdSlotId;
-                    changeObj.metadata = change.metadata;
-                    await this.processSlotRemove(changeObj);
-                    
-                    // Clean up the history map
-                    this.slotAddHistory.delete(historyKey);
-                    this.slotAddHistory.delete(createdSlotId);
-                } else {
-                    console.error('Could not find created slot ID for undo');
-                }
-            } else {
-                // This was originally a remove, so we need to add it back
-                // TODO: Implement re-adding slot with saved state
-                console.log('Re-adding slot not yet implemented:', oldValue);
-            }
-        } else if (target.type === 'slotRemove') {
-            // Handle undo of slot remove (re-add the slot)
-            if (oldValue) {
-                // TODO: Implement re-adding slot with saved state
-                console.log('Re-adding slot not yet implemented:', oldValue);
-            }
-        } else if (target.type === 'slotMove') {
-            // Handle undo of slot move (move back to old parent)
-            changeObj.type = 'slotMove';
-            changeObj.value = oldValue; // oldValue is the previous parent ID
-            changeObj.metadata = change.metadata;
-            changeObj.metadata.newParentId = oldValue;
-            changeObj.metadata.oldParentId = change.metadata.newParentId;
-            await this.processSlotMove(changeObj);
-        }
-        
-        // Trigger UI refresh
-        document.dispatchEvent(new CustomEvent('historyChangeApplied', {
-            detail: { change: changeObj }
-        }));
-    }
     
     findSlotByComponentId(componentId) {
         // Try using sceneManager's method first
@@ -318,6 +237,27 @@ class ChangeManager {
     }
 
     queueChange(change) {
+        // Only process if not from history
+        if (change.source === 'history-apply') {
+            // Skip history recording for history-applied changes
+            const key = this.generateChangeKey(change);
+            this.pendingChanges.set(key, {
+                ...change,
+                timestamp: change.timestamp || Date.now()
+            });
+            this.scheduleFlush();
+            return;
+        }
+        
+        // Record in history if from UI
+        if (change.source === 'inspector-ui' && this.historyManager && !this.historyManager.isApplying) {
+            const oldValue = this.getOldValue(change);
+            
+            // Convert to standard format for history
+            const historyChange = this.convertToHistoryFormat(change);
+            this.historyManager.recordChange(historyChange, oldValue);
+        }
+        
         const key = this.generateChangeKey(change);
         this.pendingChanges.set(key, {
             ...change,
@@ -333,10 +273,10 @@ class ChangeManager {
             targetId: spaceChange.key,
             property: 'value',
             value: spaceChange.value,
+            source: spaceChange.source,
             metadata: {
                 isProtected: spaceChange.isProtected,
                 key: spaceChange.key,
-                source: spaceChange.source,
                 uiContext: spaceChange.uiContext
             }
         };
@@ -377,22 +317,12 @@ class ChangeManager {
         
         console.log(`Flushing ${changes.length} changes`);
         
-        // Call beforeFlush hook if set (for history manager)
-        if (this.beforeFlush && typeof this.beforeFlush === 'function') {
-            this.beforeFlush(changes);
-        }
-        
         // Process changes
         await this.processChanges(changes);
         
         // Notify listeners
         this.notifyListeners(changes);
         window.inspectorApp.spacePropsPanel.render()
-        
-        // Commit any pending history batch
-        if (this.historyManager && !this.historyManager.isApplyingHistory) {
-            this.historyManager.commitCurrentBatch();
-        }
     }
 
     async processChanges(changes) {
