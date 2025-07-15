@@ -60,6 +60,9 @@ export class ComponentPropertyChange {
         const component = sceneManager.getSlotComponentById(this.componentId);
         return component[this.property];
     }
+
+    apply(){}
+    undo(){}
 }
 
 export class SpacePropertyChange {
@@ -70,6 +73,10 @@ export class SpacePropertyChange {
         this.oldValue = protect ? sceneManager.scene.spaceState.protected[property] : sceneManager.scene.spaceState.public[property];
         this.options = options;
     }
+
+
+    apply(){}
+    undo(){}
 }
 
 export class ComponentAddChange {
@@ -78,6 +85,9 @@ export class ComponentAddChange {
         this.componentType = componentType;
         this.options = options;
     }
+
+    apply(){}
+    undo(){}
 }
 
 export class ComponentRemoveChange {
@@ -85,6 +95,9 @@ export class ComponentRemoveChange {
         this.componentId = componentId;
         this.options = options;
     }
+
+    apply(){}
+    undo(){}
 }
 
 export class SlotAddChange {
@@ -92,6 +105,9 @@ export class SlotAddChange {
         this.slotId = slotId;
         this.options = options;
     }
+
+    apply(){}
+    undo(){}
 }
 
 export class SlotRemoveChange {
@@ -99,6 +115,9 @@ export class SlotRemoveChange {
         this.slotId = slotId;
         this.options = options;
     }
+
+    apply(){}
+    undo(){}
 }
 
 export class SlotMoveChange {
@@ -108,4 +127,7 @@ export class SlotMoveChange {
         this.oldParent = sceneManager.getSlotById(slotId).parentId;
         this.options = options;
     }
+
+    apply(){}
+    undo(){}
 }
