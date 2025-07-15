@@ -322,6 +322,7 @@
          * Update Unity component with changes
          */
         async updateUnityComponent(componentId, property, newValue) {
+            console.log("Update Unity Component", componentId, property, newValue)
             let slot_component = this.sceneData.componentMap[componentId]
             let type = slot_component.type
             if(type === 'MonoBehavior'){
@@ -452,6 +453,13 @@
             let gO = this.scene.objects[slotId]
             if(gO) return gO;
             return null;
+        }
+
+        /**
+         * Get the component for a slot
+         */
+        getSlotComponentById(componentId){
+            return this.sceneData.componentMap[componentId];
         }
 
         /**

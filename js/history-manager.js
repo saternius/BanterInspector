@@ -2,12 +2,12 @@
  * History Manager for Undo/Redo functionality
  * 
  * Design principles:
- * - No batching - each user action creates one history entry
  * - Clear data flow - unidirectional from UI → Change Manager → History Manager
  * - Simple and maintainable - easy to understand and extend
  */
-import { ChangeTypes } from './types.js';
-
+let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
+const { ChangeTypes } = await import(`${basePath}/types.js`);
+const { deepClone } = await import(`${basePath}/utils.js`);
 export class HistoryManager {
     constructor() {
         this.undoStack = [];
@@ -35,8 +35,8 @@ export class HistoryManager {
             id: Date.now(),
             timestamp: Date.now(),
             description: this.describeChange(change),
-            forward: { ...change },
-            reverse: this.createReverseChange(change, oldValue)
+            forward: deepClone(change),
+            reverse: deepClone(this.createReverseChange(change, oldValue))
         };
         
         this.undoStack.push(entry);
@@ -60,8 +60,8 @@ export class HistoryManager {
             targetId: change.targetId,
             targetType: change.targetType,
             property: change.property,
-            newValue: oldValue,
-            oldValue: change.newValue,
+            value: oldValue,
+            oldValue: change.value,
             metadata: { ...change.metadata }
         };
         
@@ -129,7 +129,7 @@ export class HistoryManager {
         this.isApplying = true;
         
         try {
-            await this.applyChange(entry.reverse);
+            await changeManager.applyChange(entry.reverse);
             this.redoStack.push(entry);
             this.updateUI();
             this.showNotification(`Undone: ${entry.description}`);

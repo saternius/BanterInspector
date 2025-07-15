@@ -9,6 +9,8 @@
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
+    const { SlotPropertyChange } = await import(`${basePath}/types.js`);
+    
     export class PropertiesPanel {
         constructor() {
             this.propertiesContent = document.getElementById('propertiesContent');
@@ -123,16 +125,7 @@
             const handleRename = () => {
                 const newName = inputName.value.trim();
                 if (newName && newName !== slot.name) {
-                    changeManager.applyChange({
-                        type: 'slot',
-                        targetId: slot.id,
-                        property: 'name',
-                        value: newName,
-                        source: 'inspector-ui',
-                        metadata: {
-                            slotId: slot.id
-                        }
-                    });
+                    changeManager.applyChange(new SlotPropertyChange(slot.id, 'name', newName, {source: 'ui'}));
                     if (this.selectedSlotNameElement) {
                         this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
                     }
@@ -145,18 +138,6 @@
             
             inputName.addEventListener('blur', handleRename);
             nameRow.appendChild(inputName);
-
-            // nameRow.innerHTML = `
-            //     <span class="property-label">Name</span>
-            //     <div class="property-value">
-            //         <span class="node-name" id="slotNameDisplay">${slot.name}</span>
-            //     </div>
-            // `;
-            
-            // // Make name editable on click
-            // const nameDisplay = nameRow.querySelector('#slotNameDisplay');
-            // nameDisplay.style.cursor = 'pointer';
-            // nameDisplay.onclick = () => this.startNameEdit(slot, nameDisplay);
             
             // Active property
             const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {

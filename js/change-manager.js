@@ -4,14 +4,13 @@
  */
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
-import { sceneManager } from './scene-manager.js';
-import { HistoryManager } from './history-manager.js';
-import { ChangeTypes } from './types.js';
+const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+const { HistoryManager } = await import(`${basePath}/history-manager.js`);
+const { ChangeTypes } = await import(`${basePath}/types.js`);
 
 class ChangeManager {
     constructor() {
         this.componentHandlers = new Map();
-        this.registeredComponents = new Map();
         this.historyManager = null;
         this.slotAddHistory = new Map(); // Track newly created slots for undo
         this.changeListeners = [];
@@ -37,6 +36,7 @@ class ChangeManager {
     async applyChange(change) {
         // Skip if from history (to prevent loops)
         if (change.source === 'history-apply') {
+            console.log("history change", change)
             return this.processChange(change);
         }
         
@@ -148,6 +148,7 @@ class ChangeManager {
      * Process component property change
      */
     async processComponentChange(change) {
+        console.log("processComponentChange", change)
         // Update local state
         const slot = sceneManager?.getSlotById(change.metadata.slotId);
         if (slot) {
@@ -166,7 +167,7 @@ class ChangeManager {
         // Apply component-specific handler if available
         const handler = this.componentHandlers.get(change.metadata.componentType);
         if (handler && handler.apply) {
-            const component = this.getComponentById(change.targetId);
+            const component = sceneManager.getSlotComponentById(change.targetId);
             if (component && component._bs) {
                 let transformedValue = change.value;
                 if (handler.transform) {
@@ -430,19 +431,6 @@ class ChangeManager {
 
     registerComponentHandler(componentType, handler) {
         this.componentHandlers.set(componentType, handler);
-    }
-
-    registerComponent(component) {
-        this.registeredComponents.set(component.id, component);
-    }
-
-    unregisterComponent(componentId) {
-        this.registeredComponents.delete(componentId);
-    }
-
-    getComponentById(componentId) {
-        return this.registeredComponents.get(componentId) || 
-               window.SM?.sceneData?.componentMap?.[componentId];
     }
 
     getHistoryManager() {
