@@ -51,16 +51,11 @@
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
                     // Process changes that need UI updates
-                    const spacePropsChanged = change.type === 'spaceProperty';
-                    const componentPropsChanged = change.type === 'component';
+                    console.log(change)
+                    // if (change instanceof SpacePropertyChange || change instanceof ComponentPropertyChange || change instanceof SlotPropertyChange) {
                     
-                    if (spacePropsChanged) {
-                        this.spacePropsPanel.render();
-                    }
-                    
-                    if (componentPropsChanged || change.type === 'slot') {
-                        this.propertiesPanel.render(sceneManager.selectedSlot);
-                    }
+                    this.spacePropsPanel.render();
+                    this.propertiesPanel.render(sceneManager.selectedSlot);
                 });
                 
                 

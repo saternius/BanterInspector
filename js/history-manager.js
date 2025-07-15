@@ -1,3 +1,4 @@
+
 /**
  * History Manager for Undo/Redo functionality
  * Works with the new change class system
@@ -79,6 +80,7 @@ export class HistoryManager {
         } finally {
             this.isApplying = false;
         }
+        changeManager.notifyListeners(entry);
     }
     
     /**
@@ -108,6 +110,7 @@ export class HistoryManager {
         } finally {
             this.isApplying = false;
         }
+        changeManager.notifyListeners(entry);
     }
     
     /**
