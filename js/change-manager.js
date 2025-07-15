@@ -75,6 +75,23 @@ class ChangeManager {
                 const component = slot.components.find(c => c.id === change.targetId);
                 return component?.properties?.[change.property];
             }
+        } else if (change.type === 'componentAdd') {
+            // For component add, the old value is null (component didn't exist)
+            return null;
+        } else if (change.type === 'componentRemove') {
+            // For component remove, we need to capture the entire component state
+            const slot = window.SM?.getSlotById(change.metadata.slotId) || sceneManager?.getSlotById(change.metadata.slotId);
+            if (slot) {
+                const component = slot.components.find(c => c.id === change.targetId);
+                if (component) {
+                    return {
+                        id: component.id,
+                        type: component.type,
+                        properties: JSON.parse(JSON.stringify(component.properties)),
+                        index: slot.components.indexOf(component)
+                    };
+                }
+            }
         }
         return undefined;
     }
@@ -117,6 +134,24 @@ class ChangeManager {
                 await this.processComponentChange(changeObj);
             } else {
                 console.error('Could not find slot for component:', target.id);
+            }
+        } else if (target.type === 'componentAdd') {
+            // Handle undo of component add (remove the component)
+            if (oldValue === null) {
+                // This was originally an add, so we need to remove it
+                changeObj.type = 'componentRemove';
+                changeObj.metadata = change.metadata;
+                await this.processComponentRemove(changeObj);
+            } else {
+                // This was originally a remove, so we need to add it back
+                // TODO: Implement re-adding component with saved state
+                console.log('Re-adding component not yet implemented:', oldValue);
+            }
+        } else if (target.type === 'componentRemove') {
+            // Handle undo of component remove (re-add the component)
+            if (oldValue) {
+                // TODO: Implement re-adding component with saved state
+                console.log('Re-adding component not yet implemented:', oldValue);
             }
         }
         
@@ -309,6 +344,16 @@ class ChangeManager {
         for (const change of grouped.components || []) {
             await this.processComponentChange(change);
         }
+        
+        // Process component additions
+        for (const change of grouped.componentAdds || []) {
+            await this.processComponentAdd(change);
+        }
+        
+        // Process component removals
+        for (const change of grouped.componentRemoves || []) {
+            await this.processComponentRemove(change);
+        }
     }
 
     async processSpacePropertyChange(change) {
@@ -379,6 +424,32 @@ class ChangeManager {
             groups[type].push(change);
             return groups;
         }, {});
+    }
+    
+    async processComponentAdd(change) {
+        // Component addition is already handled in component-menu.js
+        // This is just for history tracking
+        console.log('Component added:', change.value.componentType, 'to slot:', change.metadata.slotId);
+    }
+    
+    async processComponentRemove(change) {
+        console.log('Component removal requested:', change);
+        
+        try {
+            // Use scene manager's deleteComponent method which handles all the cleanup
+            await sceneManager.deleteComponent(
+                change.metadata.slotId,
+                change.targetId,
+                change.metadata.componentType
+            );
+            
+            // Unregister from change manager if it was registered
+            this.unregisterComponent(change.targetId);
+            
+            console.log('Component removed successfully');
+        } catch (error) {
+            console.error('Failed to remove component:', error);
+        }
     }
 
     registerComponent(component) {

@@ -1010,15 +1010,27 @@
             const slotId = sceneManager.selectedSlot;
             if (!slotId) return;
             
-            try {
-                await sceneManager.deleteComponent(slotId, componentId, componentType);
-                
-                // Re-render the properties panel
-                this.render(slotId);
-            } catch (error) {
-                console.error('Failed to delete component:', error);
-                alert('Failed to delete component');
-            }
+            // Queue the component removal through change manager
+            changeManager.queueChange({
+                type: 'componentRemove',
+                targetId: componentId,
+                property: 'component',
+                value: null,
+                metadata: {
+                    slotId: slotId,
+                    componentType: componentType,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'properties',
+                        inputElement: 'delete-component-' + componentType,
+                        eventType: 'delete'
+                    }
+                }
+            });
+            
+            // The actual deletion will be handled by the change manager
+            // Re-render will happen after the change is processed
+            setTimeout(() => this.render(slotId), 100);
         }
     }
 // })()

@@ -37,13 +37,6 @@ export class HistoryManager {
         });
     }
     
-    // Check if a change should be tracked in history
-    shouldTrackChange(change) {
-        // Only track inspector UI changes
-        return change.metadata?.source === 'inspector-ui' && 
-               !this.isApplyingHistory;
-    }
-    
     // Prepare to record a change
     prepareChangeRecord(change, oldValue) {
         if (!this.shouldTrackChange(change)) {
@@ -135,6 +128,7 @@ export class HistoryManager {
     generateBatchDescription(changes) {
         const panels = new Set();
         const components = new Set();
+        const operations = new Set();
         
         changes.forEach(change => {
             if (change.metadata?.uiContext?.panelType) {
@@ -143,7 +137,31 @@ export class HistoryManager {
             if (change.metadata?.componentType) {
                 components.add(change.metadata.componentType);
             }
+            if (change.type === 'componentAdd' || change.type === 'componentRemove') {
+                operations.add(change.type);
+            }
         });
+        
+        // Check for component operations first
+        if (operations.has('componentAdd')) {
+            const addedComponents = changes
+                .filter(c => c.type === 'componentAdd')
+                .map(c => c.value.componentType);
+            if (addedComponents.length === 1) {
+                return `Added ${addedComponents[0]} component`;
+            }
+            return `Added ${addedComponents.length} components`;
+        }
+        
+        if (operations.has('componentRemove')) {
+            const removedComponents = changes
+                .filter(c => c.type === 'componentRemove')
+                .map(c => c.metadata.componentType);
+            if (removedComponents.length === 1) {
+                return `Removed ${removedComponents[0]} component`;
+            }
+            return `Removed ${removedComponents.length} components`;
+        }
         
         if (panels.has('properties')) {
             if (components.size === 1) {
@@ -238,6 +256,18 @@ export class HistoryManager {
             detail: change
         });
         document.dispatchEvent(event);
+    }
+    
+    // Check if a change should be tracked in history
+    shouldTrackChange(change) {
+        // Always track component add/remove operations from UI
+        if ((change.type === 'componentAdd' || change.type === 'componentRemove') && 
+            change.metadata?.source === 'inspector-ui') {
+            return true;
+        }
+        
+        // For other changes, only track inspector UI changes
+        return change.metadata?.source === 'inspector-ui' && !this.isApplyingHistory;
     }
     
     // Deep clone a value

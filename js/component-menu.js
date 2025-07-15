@@ -237,31 +237,66 @@ export class ComponentMenu {
                     _bs: unityComponent
                 };
                 
-                // Queue initial properties through change manager
-                for (const [prop, value] of Object.entries(componentConfig.properties)) {
-                    changeManager.queueChange({
-                        type: 'component',
-                        targetId: unityComponent.id,
-                        property: prop,
-                        value: value,
-                        metadata: {
-                            slotId: this.selectedSlotId,
-                            componentType: componentType,
-                            componentIndex: slot.components.length
+                // Queue component addition as a single action
+                changeManager.queueChange({
+                    type: 'componentAdd',
+                    targetId: unityComponent.id,
+                    property: 'component',
+                    value: {
+                        componentType: componentType,
+                        properties: componentConfig.properties
+                    },
+                    metadata: {
+                        slotId: this.selectedSlotId,
+                        componentType: componentType,
+                        componentIndex: slot.components.length,
+                        source: 'inspector-ui',
+                        uiContext: {
+                            panelType: 'component-menu',
+                            inputElement: 'add-component-' + componentType,
+                            eventType: 'add'
                         }
-                    });
-                }
+                    }
+                });
             }
         }
 
-        slot.components.push(slotComponent);
-        sceneManager.sceneData.componentMap[slotComponent.id] = slotComponent
-        console.log(this.selectedSlotId)
-        let prevSel = this.selectedSlotId;
-        this.hide();
-        document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-            detail: { slotId: prevSel }
-        }));
+        // Only add the component if it was successfully created
+        if (slotComponent) {
+            slot.components.push(slotComponent);
+            sceneManager.sceneData.componentMap[slotComponent.id] = slotComponent;
+            
+            // For MonoBehavior, also queue the add action
+            if (componentType === 'MonoBehavior') {
+                changeManager.queueChange({
+                    type: 'componentAdd',
+                    targetId: slotComponent.id,
+                    property: 'component',
+                    value: {
+                        componentType: componentType,
+                        properties: componentConfig.properties
+                    },
+                    metadata: {
+                        slotId: this.selectedSlotId,
+                        componentType: componentType,
+                        componentIndex: slot.components.length - 1,
+                        source: 'inspector-ui',
+                        uiContext: {
+                            panelType: 'component-menu',
+                            inputElement: 'add-component-' + componentType,
+                            eventType: 'add'
+                        }
+                    }
+                });
+            }
+            
+            console.log(this.selectedSlotId);
+            let prevSel = this.selectedSlotId;
+            this.hide();
+            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: prevSel }
+            }));
+        }
         
     }
 
