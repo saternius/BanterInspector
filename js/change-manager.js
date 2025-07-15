@@ -98,19 +98,6 @@ class ChangeManager {
     getHistoryManager() {
         return this.historyManager;
     }
-
-    /**
-     * Component lifecycle management (for compatibility)
-     */
-    registerComponent(component) {
-        // Components now manage their own lifecycle
-        console.log('Component registered:', component.id);
-    }
-
-    unregisterComponent(componentId) {
-        // Components now manage their own lifecycle
-        console.log('Component unregistered:', componentId);
-    }
 }
 
 // Export singleton instance

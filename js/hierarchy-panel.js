@@ -285,7 +285,7 @@
             e.dataTransfer.setData('text/plain', slot.id);
             
             console.log("slot", slot)
-            let copy = deepClone(slot, ['_bs'])
+            let copy = deepClone(slot, ['_bs', '_slot'])
 
             // Store the full slot data for inventory
             e.dataTransfer.setData('application/json', JSON.stringify(copy));

@@ -776,6 +776,7 @@ export class Inventory {
                 if(component){
                     compData.id = component.id;
                     compData._bs = component;
+                    compData._slot = slotData;
                     sceneManager.sceneData.componentMap[component.id] = compData;
                 }
             }

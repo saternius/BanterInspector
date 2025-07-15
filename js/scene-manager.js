@@ -109,7 +109,7 @@
                 //Make tranform the top component
                 let transform = gameObject.GetComponent(BS.ComponentType.Transform)
                 if(transform){
-                    let transformData = await this.extractComponentData(transform);
+                    let transformData = await this.extractComponentData(transform, slot);
                     if(transformData){
                         slot.components.push(transformData);
                         this.sceneData.componentMap[transform.id] = transformData
@@ -120,7 +120,7 @@
                     if(componentID == transform.id) continue;
                     let component = gameObject.components[componentID]
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        let componentData = await this.extractComponentData(component);
+                        let componentData = await this.extractComponentData(component, slot);
                         if(componentData){
                             slot.components.push(componentData);
                             this.sceneData.componentMap[component.id] = componentData
@@ -167,14 +167,15 @@
         /**
          * Extract component data from a Unity component
          */
-        async extractComponentData(component) {
+        async extractComponentData(component, slot) {
             const type = component.type
             const componentTypeName = this.getComponentTypeName(type);
             const data = {
                 id: component.id,
                 type: componentTypeName,
                 properties: {},
-                _bs: component
+                _bs: component,
+                _slot: slot
             };
             
             // Extract properties based on component type
@@ -311,7 +312,6 @@
          * Update Unity component with changes
          */
         async updateUnityComponent(componentId, property, newValue) {
-            console.log("Update Unity Component", componentId, property, newValue)
             let slot_component = this.sceneData.componentMap[componentId]
             let type = slot_component.type
             if(type === 'MonoBehavior'){
@@ -434,6 +434,7 @@
             return this.sceneData.componentMap[componentId];
         }
 
+        
         /**
          * Toggle node expansion
          */

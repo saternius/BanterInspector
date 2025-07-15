@@ -2,6 +2,7 @@
 // Import required dependencies
 let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+const { deepClone } = await import(`${basePath}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -10,8 +11,8 @@ export class SlotPropertyChange {
         this.slotId = slotId;
         this.property = property;
         this.newValue = newValue;
-        this.oldValue = this.getOldValue();
         this.options = options;
+        this.oldValue = options.oldValue || this.getOldValue();
     }
 
     getOldValue() {
@@ -41,8 +42,12 @@ export class SlotPropertyChange {
 
         
         slot[this.property] = value;
-        if(this.property == "active"){
+        if(this.property === "active"){
             await gO.SetActive(Boolean(value));
+        }
+        if(this.property === "name"){
+            slot.name = value;
+            inspectorApp.hierarchyPanel.render()
         }
 
         const spaceKey = '__' + slot.name + '/' + this.property + ':slot_' + this.slotId;
@@ -62,30 +67,15 @@ export class ComponentPropertyChange {
     constructor(componentId, property, newValue, options) {
         this.componentId = componentId;
         this.property = property;
-        this.newValue = newValue;
-        this.componentType = null;
-        this.slotId = null;
-        this.oldValue = this.getOldValue();
+        this.newValue = deepClone(newValue);
         this.options = options || {};
+        this.oldValue = options.oldValue || this.getOldValue();
+        this.component = sceneManager.getSlotComponentById(componentId);
+        console.log(`ComponentPropertyChange: ${this.componentId} ${this.property} [${JSON.stringify(this.oldValue)}] => [${JSON.stringify(this.newValue)}]`)
     }
 
-    getOldValue() {
-        const component = sceneManager.getSlotComponentById(this.componentId);
-        if (!component) return undefined;
-        
-        // Store component type and slotId for later use
-        this.componentType = component.type;
-        
-        // Find the slot that contains this component
-        const slots = sceneManager.getAllSlots();
-        for (const slot of slots) {
-            if (slot.components?.find(c => c.id === this.componentId)) {
-                this.slotId = slot.id;
-                break;
-            }
-        }
-        
-        return component.properties?.[this.property];
+    getOldValue() {        
+        return deepClone(component.properties?.[this.property]);
     }
 
     async apply() {
@@ -97,25 +87,15 @@ export class ComponentPropertyChange {
     }
 
     async change(value) {
-        const slot = sceneManager?.getSlotById(this.slotId);
-        if (!slot) {
-            console.error(`Slot not found for component ${this.componentId}`);
-            return;
-        }
-
-        const component = slot.components.find(c => c.id === this.componentId);
-        if (!component) {
-            console.error(`Component ${this.componentId} not found`);
-            return;
-        }
+        if(!this.component) return;
 
         // Update local state
-        if (component.properties) {
-            component.properties[this.property] = value;
+        if (this.component.properties) {
+            this.component.properties[this.property] = value;
         }
 
         // Generate space key for persistence
-        const spaceKey = `__${slot.name}/${this.componentType}/${this.property}:component_${this.componentId}`;
+        const spaceKey = `__${this.component._slot.name}/${this.component.type}/${this.property}:component_${this.componentId}`;
         if (window.SM) {
             await window.SM.setSpaceProperty(spaceKey, value, false);
         }
@@ -132,10 +112,10 @@ export class ComponentPropertyChange {
     }
 
     getDescription() {
-        return `Changed ${this.componentType} ${this.property} to ${this.newValue}`;
+        return `Changed ${this.component.type} ${this.property} to ${JSON.stringify(this.newValue)}`;
     }
     getUndoDescription() {
-        return `Changed ${this.componentType} ${this.property} to ${this.oldValue}`;
+        return `Changed ${this.component.type} ${this.property} to ${JSON.stringify(this.oldValue)}`;
     }
 }
 
@@ -144,8 +124,8 @@ export class SpacePropertyChange {
         this.property = property;
         this.newValue = newValue;
         this.protected = protect;
-        this.oldValue = this.getOldValue();
         this.options = options || {};
+        this.oldValue = options.oldValue || this.getOldValue();
     }
 
     getOldValue() {
@@ -284,10 +264,6 @@ export class ComponentAddChange {
                 properties: this.componentConfig.properties
             });
             
-            // Register with change manager if available
-            if (window.changeManager?.registerComponent) {
-                window.changeManager.registerComponent(slotComponent);
-            }
         } else {
             // Create Unity component
             const unityComponent = await this.createUnityComponent();
@@ -458,11 +434,6 @@ export class ComponentRemoveChange {
 
         await sceneManager.deleteComponent(this.slotId, this.componentId, this.componentData.type);
 
-        // Unregister from change manager if it's a MonoBehavior
-        if (this.componentData._wasMonoBehavior && window.changeManager?.unregisterComponent) {
-            window.changeManager.unregisterComponent(this.componentId);
-        }
-
         // Refresh properties panel
         if (window.inspectorApp?.propertiesPanel) {
             window.inspectorApp.propertiesPanel.render(this.slotId);
@@ -493,10 +464,6 @@ export class ComponentRemoveChange {
             
             sceneManager.sceneData.componentMap[component.id] = component;
             
-            // Re-register with change manager
-            if (window.changeManager?.registerComponent) {
-                window.changeManager.registerComponent(component);
-            }
         } else {
             // Recreate Unity component
             const addChange = new ComponentAddChange(this.slotId, this.componentData.type, { properties: this.componentData.properties });

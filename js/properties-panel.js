@@ -10,6 +10,7 @@
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/types.js`);
+    const { deepClone } = await import(`${basePath}/utils.js`);
     
     export class PropertiesPanel {
         constructor() {
@@ -776,8 +777,9 @@
             const vector = component.properties[key];
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
+                let oldValue = deepClone(vector)
                 vector[axis] = numValue;
-                const change = new ComponentPropertyChange(componentId, key, vector, { source: 'ui' });
+                const change = new ComponentPropertyChange(componentId, key, vector, { source: 'ui', oldValue: oldValue });
                 changeManager.applyChange(change);
             }
         }

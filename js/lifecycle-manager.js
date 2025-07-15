@@ -37,15 +37,6 @@ export class LifecycleManager {
     async registerMonoBehavior(componentId, monoBehavior) {
         this.monoBehaviors.set(componentId, monoBehavior);
         
-        // Register with change manager if available
-        if (window.changeManager) {
-            window.changeManager.registerComponent({
-                id: componentId,
-                type: 'MonoBehavior',
-                context: monoBehavior
-            });
-        }
-        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
             this.start();
@@ -74,11 +65,6 @@ export class LifecycleManager {
                 } catch (error) {
                     console.error(`Error in onDestroy for ${componentId}:`, error);
                 }
-            }
-            
-            // Unregister from change manager if available
-            if (window.changeManager) {
-                window.changeManager.unregisterComponent(componentId);
             }
             
             this.monoBehaviors.delete(componentId);
