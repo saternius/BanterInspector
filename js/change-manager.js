@@ -528,6 +528,7 @@ class ChangeManager {
         
         try {
             const newSlot = await sceneManager.addNewSlot(change.value.parentId);
+            console.log("newSlot", newSlot)
             if (newSlot) {
                 // Update the change targetId for history
                 change.targetId = newSlot.id;
@@ -546,6 +547,7 @@ class ChangeManager {
                 }));
                 
                 console.log('Slot added successfully:', newSlot.id);
+                console.log("change", change)
             }
         } catch (error) {
             console.error('Failed to add slot:', error);

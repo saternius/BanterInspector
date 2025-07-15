@@ -494,55 +494,44 @@
                 let newSlotName = `NewSlot_${Math.floor(Math.random() * 100000)}`
                 let newGameObject = new BS.GameObject(newSlotName);
                 
-                let makeNewSlot = ()=>{
-                    return new Promise(async (resolve, reject)=>{
-                        setTimeout(async ()=>{
-                            let newSlotId = newGameObject.id;
-                            const transform = await newGameObject.AddComponent(new BS.Transform());
-                            transform.position = new BS.Vector3(0, 0, 0);
-                            transform.rotation = new BS.Quaternion(0, 0, 0, 1);
-                            transform.localScale = new BS.Vector3(1, 1, 1);
-                            
-                            // Set parent
-                            await newGameObject.SetParent(parentGameObject, true);
-                            
-                            // Ensure it's active
-                            await newGameObject.SetActive(true);
-                            
-                            // Store GameObject reference
-                            //this.scene.objects[newSlotId] = newGameObject;
+                const transform = await newGameObject.AddComponent(new BS.Transform());
 
-                            const newSlot = {
-                                id: newSlotId,
-                                name: newSlotName,
-                                parentId: parentId,
-                                active: true,
-                                persistent: true,
-                                components: [
-                                    {
-                                        id: transform.id,
-                                        type: 'Transform',
-                                        properties: {
-                                            position: { x: 0, y: 0, z: 0 },
-                                            rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                            localScale: { x: 1, y: 1, z: 1 }
-                                        }
-                                    }
-                                ],
-                                children: []
-                            };
-                            
-                            const parent = this.getSlotById(parentId);
-                            if (parent) {
-                                parent.children.push(newSlot);
+                transform.position = new BS.Vector3(0, 0, 0);
+                transform.rotation = new BS.Quaternion(0, 0, 0, 1);
+                transform.localScale = new BS.Vector3(1, 1, 1);
+                
+                await newGameObject.SetParent(parentGameObject, true);
+                await newGameObject.SetActive(true);
+                let newSlotId = newGameObject.id;
+                
+
+                const newSlot = {
+                    id: newSlotId,
+                    name: newSlotName,
+                    parentId: parentId,
+                    active: true,
+                    persistent: true,
+                    components: [
+                        {
+                            id: transform.id,
+                            type: 'Transform',
+                            properties: {
+                                position: { x: 0, y: 0, z: 0 },
+                                rotation: { x: 0, y: 0, z: 0, w: 1 },
+                                localScale: { x: 1, y: 1, z: 1 }
                             }
-                            
-                            this.buildHierarchyMap();
-                            resolve(newSlot);
-                        }, 100)
-                    })
+                        }
+                    ],
+                    children: []
+                };
+                
+                const parent = this.getSlotById(parentId);
+                if (parent) {
+                    parent.children.push(newSlot);
                 }
-                return await makeNewSlot()
+                
+                this.buildHierarchyMap();
+                return newSlot;
         
             } catch (error) {
                 console.error('Failed to create Unity GameObject:', error);

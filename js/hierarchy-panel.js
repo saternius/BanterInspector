@@ -66,6 +66,10 @@
             // Add child button
             this.addChildBtn.addEventListener('click', async () => {
                 const parentId = sceneManager.selectedSlot;
+                if(!parentId){
+                    alert("No parent selected")
+                    return;
+                }
                 
                 // Queue slot addition through change manager
                 changeManager.queueChange({
