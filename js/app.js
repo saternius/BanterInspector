@@ -145,7 +145,11 @@
                 const change = event.detail.change;
                 if (change.type === 'spaceProperty') {
                     this.spacePropsPanel.render();
-                } else if (change.type === 'component' || change.type === 'slot') {
+                } else if (change.type === 'component' || change.type === 'slot' ||
+                          change.type === 'componentAdd' || change.type === 'componentRemove') {
+                    this.propertiesPanel.render(sceneManager.selectedSlot);
+                } else if (change.type === 'slotAdd' || change.type === 'slotRemove' || 
+                          change.type === 'slotMove') {
                     this.hierarchyPanel.render();
                     this.propertiesPanel.render(sceneManager.selectedSlot);
                 }

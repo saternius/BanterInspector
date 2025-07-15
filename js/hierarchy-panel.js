@@ -7,6 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
+    const { changeManager } = await import(`${basePath}/change-manager.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -65,20 +66,26 @@
             // Add child button
             this.addChildBtn.addEventListener('click', async () => {
                 const parentId = sceneManager.selectedSlot;
-                const newSlot = await sceneManager.addNewSlot(parentId);
                 
-                if (parentId) {
-                    sceneManager.expandedNodes.add(parentId);
-                }
-                if(!newSlot) return;
-                
-                sceneManager.selectSlot(newSlot.id);
-                this.render();
-                
-                // Trigger properties panel update
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: newSlot.id }
-                }));
+                // Queue slot addition through change manager
+                changeManager.queueChange({
+                    type: 'slotAdd',
+                    targetId: null, // Will be assigned when created
+                    property: 'slot',
+                    value: {
+                        parentId: parentId,
+                        name: `New Slot ${Date.now()}`
+                    },
+                    metadata: {
+                        parentId: parentId,
+                        source: 'inspector-ui',
+                        uiContext: {
+                            panelType: 'hierarchy',
+                            inputElement: 'add-child-slot-btn',
+                            eventType: 'add'
+                        }
+                    }
+                });
             });
 
             // Delete button
@@ -92,13 +99,23 @@
                 if (!slot) return;
                 
                 if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
-                    await sceneManager.deleteSlot(sceneManager.selectedSlot);
-                    this.render();
-                    
-                    // Clear properties panel
-                    document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                        detail: { slotId: null }
-                    }));
+                    // Queue slot deletion through change manager
+                    changeManager.queueChange({
+                        type: 'slotRemove',
+                        targetId: sceneManager.selectedSlot,
+                        property: 'slot',
+                        value: null,
+                        metadata: {
+                            slotId: sceneManager.selectedSlot,
+                            slotName: slot.name,
+                            source: 'inspector-ui',
+                            uiContext: {
+                                panelType: 'hierarchy',
+                                inputElement: 'delete-slot-btn',
+                                eventType: 'delete'
+                            }
+                        }
+                    });
                 }
             });
         }
@@ -382,14 +399,28 @@
                 return;
             }
             
-            // Perform the reparent operation
-            await sceneManager.reparentSlot(this.draggedSlotId, targetSlotId);
+            // Queue slot move through change manager
+            const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
+            changeManager.queueChange({
+                type: 'slotMove',
+                targetId: this.draggedSlotId,
+                property: 'parent',
+                value: targetSlotId,
+                metadata: {
+                    slotId: this.draggedSlotId,
+                    oldParentId: draggedSlot?.parentId || null,
+                    newParentId: targetSlotId,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'hierarchy',
+                        inputElement: 'drag-drop',
+                        eventType: 'move'
+                    }
+                }
+            });
             
             // Expand the target node to show the newly added child
             sceneManager.expandedNodes.add(targetSlotId);
-            
-            // Re-render the hierarchy
-            this.render();
         }
 
         /**
@@ -418,8 +449,25 @@
         async handleDropToRoot() {
             if (!this.draggedSlotId) return;
             
-            await sceneManager.moveSlotToRoot(this.draggedSlotId);
-            this.render();
+            // Queue slot move to root through change manager
+            const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
+            changeManager.queueChange({
+                type: 'slotMove',
+                targetId: this.draggedSlotId,
+                property: 'parent',
+                value: null, // null parent means root
+                metadata: {
+                    slotId: this.draggedSlotId,
+                    oldParentId: draggedSlot?.parentId || null,
+                    newParentId: null,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'hierarchy',
+                        inputElement: 'drag-drop-root',
+                        eventType: 'move'
+                    }
+                }
+            });
         }
     }
 // })()

@@ -137,12 +137,36 @@ export class HistoryManager {
             if (change.metadata?.componentType) {
                 components.add(change.metadata.componentType);
             }
-            if (change.type === 'componentAdd' || change.type === 'componentRemove') {
-                operations.add(change.type);
-            }
+            operations.add(change.type);
         });
         
-        // Check for component operations first
+        // Check for slot operations first
+        if (operations.has('slotAdd')) {
+            const addedSlots = changes.filter(c => c.type === 'slotAdd');
+            if (addedSlots.length === 1) {
+                return `Added new slot`;
+            }
+            return `Added ${addedSlots.length} slots`;
+        }
+        
+        if (operations.has('slotRemove')) {
+            const removedSlots = changes.filter(c => c.type === 'slotRemove');
+            if (removedSlots.length === 1) {
+                const slotName = removedSlots[0].metadata?.slotName || 'slot';
+                return `Removed ${slotName}`;
+            }
+            return `Removed ${removedSlots.length} slots`;
+        }
+        
+        if (operations.has('slotMove')) {
+            const movedSlots = changes.filter(c => c.type === 'slotMove');
+            if (movedSlots.length === 1) {
+                return `Moved slot`;
+            }
+            return `Moved ${movedSlots.length} slots`;
+        }
+        
+        // Check for component operations
         if (operations.has('componentAdd')) {
             const addedComponents = changes
                 .filter(c => c.type === 'componentAdd')

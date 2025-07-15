@@ -92,8 +92,38 @@ class ChangeManager {
                     };
                 }
             }
+        } else if (change.type === 'slotAdd') {
+            // For slot add, the old value is null (slot didn't exist)
+            return null;
+        } else if (change.type === 'slotRemove') {
+            // For slot remove, capture the entire slot state including children
+            const slot = window.SM?.getSlotById(change.targetId) || sceneManager?.getSlotById(change.targetId);
+            if (slot) {
+                return this.captureSlotState(slot);
+            }
+        } else if (change.type === 'slotMove') {
+            // For slot move, the old value is the previous parent ID
+            return change.metadata.oldParentId;
         }
         return undefined;
+    }
+    
+    // Helper to capture complete slot state for undo
+    captureSlotState(slot) {
+        const state = {
+            id: slot.id,
+            name: slot.name,
+            active: slot.active,
+            persistent: slot.persistent,
+            parentId: slot.parentId,
+            components: slot.components?.map(c => ({
+                id: c.id,
+                type: c.type,
+                properties: JSON.parse(JSON.stringify(c.properties))
+            })) || [],
+            children: slot.children?.map(child => this.captureSlotState(child)) || []
+        };
+        return state;
     }
     
     async applyHistoryChange(change) {
@@ -153,6 +183,32 @@ class ChangeManager {
                 // TODO: Implement re-adding component with saved state
                 console.log('Re-adding component not yet implemented:', oldValue);
             }
+        } else if (target.type === 'slotAdd') {
+            // Handle undo of slot add (remove the slot)
+            if (oldValue === null) {
+                // This was originally an add, so we need to remove it
+                changeObj.type = 'slotRemove';
+                changeObj.metadata = change.metadata;
+                await this.processSlotRemove(changeObj);
+            } else {
+                // This was originally a remove, so we need to add it back
+                // TODO: Implement re-adding slot with saved state
+                console.log('Re-adding slot not yet implemented:', oldValue);
+            }
+        } else if (target.type === 'slotRemove') {
+            // Handle undo of slot remove (re-add the slot)
+            if (oldValue) {
+                // TODO: Implement re-adding slot with saved state
+                console.log('Re-adding slot not yet implemented:', oldValue);
+            }
+        } else if (target.type === 'slotMove') {
+            // Handle undo of slot move (move back to old parent)
+            changeObj.type = 'slotMove';
+            changeObj.value = oldValue; // oldValue is the previous parent ID
+            changeObj.metadata = change.metadata;
+            changeObj.metadata.newParentId = oldValue;
+            changeObj.metadata.oldParentId = change.metadata.newParentId;
+            await this.processSlotMove(changeObj);
         }
         
         // Trigger UI refresh
@@ -354,6 +410,21 @@ class ChangeManager {
         for (const change of grouped.componentRemoves || []) {
             await this.processComponentRemove(change);
         }
+        
+        // Process slot additions
+        for (const change of grouped.slotAdds || []) {
+            await this.processSlotAdd(change);
+        }
+        
+        // Process slot removals
+        for (const change of grouped.slotRemoves || []) {
+            await this.processSlotRemove(change);
+        }
+        
+        // Process slot moves
+        for (const change of grouped.slotMoves || []) {
+            await this.processSlotMove(change);
+        }
     }
 
     async processSpacePropertyChange(change) {
@@ -451,6 +522,76 @@ class ChangeManager {
             console.error('Failed to remove component:', error);
         }
     }
+    
+    async processSlotAdd(change) {
+        console.log('Slot addition requested:', change);
+        
+        try {
+            const newSlot = await sceneManager.addNewSlot(change.value.parentId);
+            if (newSlot) {
+                // Update the change targetId for history
+                change.targetId = newSlot.id;
+                
+                // If there's a parent, expand it
+                if (change.value.parentId) {
+                    sceneManager.expandedNodes.add(change.value.parentId);
+                }
+                
+                // Select the new slot
+                sceneManager.selectSlot(newSlot.id);
+                
+                // Trigger UI updates
+                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                    detail: { slotId: newSlot.id }
+                }));
+                
+                console.log('Slot added successfully:', newSlot.id);
+            }
+        } catch (error) {
+            console.error('Failed to add slot:', error);
+        }
+    }
+    
+    async processSlotRemove(change) {
+        console.log('Slot removal requested:', change);
+        
+        try {
+            await sceneManager.deleteSlot(change.targetId);
+            
+            // Clear selection if the deleted slot was selected
+            if (sceneManager.selectedSlot === change.targetId) {
+                sceneManager.selectedSlot = null;
+                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                    detail: { slotId: null }
+                }));
+            }
+            
+            console.log('Slot removed successfully');
+        } catch (error) {
+            console.error('Failed to remove slot:', error);
+        }
+    }
+    
+    async processSlotMove(change) {
+        console.log('Slot move requested:', change);
+        
+        try {
+            if (change.value === null) {
+                // Move to root
+                await sceneManager.moveSlotToRoot(change.targetId);
+            } else {
+                // Move to new parent
+                await sceneManager.reparentSlot(change.targetId, change.value);
+                
+                // Expand the new parent
+                sceneManager.expandedNodes.add(change.value);
+            }
+            
+            console.log('Slot moved successfully');
+        } catch (error) {
+            console.error('Failed to move slot:', error);
+        }
+    }
 
     registerComponent(component) {
         this.registeredComponents.set(component.id, component);
@@ -490,6 +631,15 @@ class ChangeManager {
                 console.error('Error in change listener:', error);
             }
         });
+        
+        // Check if we need to update hierarchy
+        const hierarchyChanges = changes.some(c => 
+            c.type === 'slotAdd' || c.type === 'slotRemove' || c.type === 'slotMove'
+        );
+        
+        if (hierarchyChanges && window.inspectorApp?.hierarchyPanel) {
+            window.inspectorApp.hierarchyPanel.render();
+        }
     }
 
     registerComponentHandler(componentType, handler) {
