@@ -7,7 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
-    const { changeManager } = await import(`${basePath}/change-manager.js`);
+    const { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
 
     export class SpacePropsPanel {
         constructor() {
@@ -296,17 +296,22 @@
                         y: parseFloat(yInput.value) || 0,
                         z: parseFloat(zInput.value) || 0
                     };
-                    changeManager.queueSpacePropertyChange({
-                    key: key,
-                    value: newValue,
-                    isProtected: type === 'protected',
-                    source: 'inspector-ui',
-                    uiContext: {
+                    simpleChangeManager.applyChange({
+                        type: 'spaceProperty',
+                        targetId: key,
+                        property: 'value',
+                        value: newValue,
+                        source: 'inspector-ui',
+                        metadata: {
+                            key: key,
+                            isProtected: type === 'protected',
+                            uiContext: {
                         panelType: 'space-props',
                         inputElement: 'vector3-' + key,
                         eventType: 'save'
-                    }
-                });
+                            }
+                        }
+                    });
                 }
             } else {
                 // Save regular value
@@ -314,17 +319,22 @@
                 if (input) {
                     // Use parseValue method to handle all value types including Vector3
                     const newValue = this.parseValue(input.value);
-                    changeManager.queueSpacePropertyChange({
-                    key: key,
-                    value: newValue,
-                    isProtected: type === 'protected',
-                    source: 'inspector-ui',
-                    uiContext: {
+                    simpleChangeManager.applyChange({
+                        type: 'spaceProperty',
+                        targetId: key,
+                        property: 'value',
+                        value: newValue,
+                        source: 'inspector-ui',
+                        metadata: {
+                            key: key,
+                            isProtected: type === 'protected',
+                            uiContext: {
                         panelType: 'space-props',
                         inputElement: type + '_prop_' + key,
                         eventType: 'save'
-                    }
-                });
+                            }
+                        }
+                    });
                 }
             }
             
@@ -344,12 +354,16 @@
          */
         deleteProp(type, key) {
             if (confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
-                changeManager.queueSpacePropertyChange({
-                key: key,
-                value: undefined,
-                isProtected: type === 'protected',
-                source: 'inspector-ui',
-                uiContext: {
+                simpleChangeManager.applyChange({
+                    type: 'spaceProperty',
+                    targetId: key,
+                    property: 'value',
+                    value: undefined,
+                    source: 'inspector-ui',
+                    metadata: {
+                        key: key,
+                        isProtected: type === 'protected',
+                        uiContext: {
                     panelType: 'space-props',
                     inputElement: 'delete-button-' + key,
                     eventType: 'click'
@@ -377,17 +391,22 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                changeManager.queueSpacePropertyChange({
-                    key: key,
+                simpleChangeManager.applyChange({
+                    type: 'spaceProperty',
+                    targetId: key,
+                    property: 'value',
                     value: value,
-                    isProtected: false,
                     source: 'inspector-ui',
-                    uiContext: {
+                    metadata: {
+                        key: key,
+                        isProtected: false,
+                        uiContext: {
                         panelType: 'space-props',
                         inputElement: 'add-public-input',
                         eventType: 'add'
-                    }
-                });
+                            }
+                        }
+                    });
                 sceneManager.scene.spaceState.public[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
@@ -408,17 +427,22 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                changeManager.queueSpacePropertyChange({
-                    key: key,
+                simpleChangeManager.applyChange({
+                    type: 'spaceProperty',
+                    targetId: key,
+                    property: 'value',
                     value: value,
-                    isProtected: true,
                     source: 'inspector-ui',
-                    uiContext: {
+                    metadata: {
+                        key: key,
+                        isProtected: true,
+                        uiContext: {
                         panelType: 'space-props',
                         inputElement: 'add-protected-input',
                         eventType: 'add'
-                    }
-                });
+                            }
+                        }
+                    });
                 sceneManager.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
@@ -479,7 +503,7 @@
                     y: parseFloat(yInput.value) || 0,
                     z: parseFloat(zInput.value) || 0
                 };
-                changeManager.queueSpacePropertyChange({
+                simpleChangeManager.applyChange({
                     key: key,
                     value: newValue,
                     isProtected: type === 'protected',
@@ -488,8 +512,9 @@
                         panelType: 'space-props',
                         inputElement: 'vector3-' + key + '-' + axis,
                         eventType: 'change'
-                    }
-                });
+                            }
+                        }
+                    });
                 
                 // Update local state
                 if (type === 'public') {

@@ -16,7 +16,7 @@
     const  { Navigation } = await import(`${basePath}/navigation.js`);
     const  { Inventory } = await import(`${basePath}/inventory.js`);
     const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
-    const  { changeManager } = await import(`${basePath}/change-manager.js`);
+    const  { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
 
     // Global app instance
     class InspectorApp {
@@ -45,8 +45,8 @@
                 // Initialize scene manager
                 await sceneManager.initialize();
                 
-                // Initialize change manager
-                await changeManager.initialize();
+                // Initialize simple change manager
+                await simpleChangeManager.initialize();
                 
                 // Set up change manager to scene manager integration
                 changeManager.onChangeFlushed(async (changes) => {

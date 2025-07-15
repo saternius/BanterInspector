@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplified Undo/Redo System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #e8e8e8;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        button {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #e8e8e8;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover:not(:disabled) {
+            background: #3a3a3a;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .section {
+            background: #252525;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        #log {
+            background: #0a0a0a;
+            padding: 10px;
+            height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .log-entry {
+            padding: 2px 0;
+            border-bottom: 1px solid #222;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        .warning { color: #FF9800; }
+        #status {
+            background: #0a0a0a;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        input {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            color: #e8e8e8;
+            padding: 6px 10px;
+            border-radius: 4px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simplified Undo/Redo System Test</h1>
+        
+        <div class="section">
+            <h2>History Controls</h2>
+            <button id="undoBtn" disabled>↶ Undo (Ctrl+Z)</button>
+            <button id="redoBtn" disabled>↷ Redo (Ctrl+Shift+Z)</button>
+            <button id="clearBtn">Clear History</button>
+            
+            <div id="status">
+                <strong>Status:</strong> 
+                Undo Stack: <span id="undoCount">0</span> | 
+                Redo Stack: <span id="redoCount">0</span> | 
+                Is Applying: <span id="isApplying">false</span>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Test Property Changes</h2>
+            <div>
+                <label>Component Property:</label>
+                <input type="text" id="propValue" value="Initial Value">
+                <button onclick="changeProperty()">Change Property</button>
+            </div>
+            <div>
+                <label>Space Property:</label>
+                <input type="text" id="spacePropValue" value="Space Value">
+                <button onclick="changeSpaceProperty()">Change Space Property</button>
+            </div>
+            <div>
+                <label>Slot Name:</label>
+                <input type="text" id="slotName" value="Test Slot">
+                <button onclick="changeSlotName()">Change Slot Name</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Test Structural Changes</h2>
+            <button onclick="addComponent()">Add Component</button>
+            <button onclick="removeComponent()">Remove Component</button>
+            <button onclick="addSlot()">Add Slot</button>
+            <button onclick="removeSlot()">Remove Slot</button>
+        </div>
+        
+        <div class="section">
+            <h2>Event Log</h2>
+            <div id="log"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { simpleChangeManager } from './js/simple-change-manager.js';
+        
+        // Mock scene manager
+        window.sceneManager = {
+            scene: {
+                spaceState: {
+                    public: { testProp: 'initial' },
+                    protected: {}
+                }
+            },
+            getSlotById: (id) => ({
+                id: id,
+                name: 'Test Slot',
+                active: true,
+                persistent: false,
+                components: [
+                    {
+                        id: 'comp-1',
+                        type: 'Transform',
+                        properties: {
+                            enabled: true,
+                            position: { x: 0, y: 0, z: 0 }
+                        }
+                    }
+                ]
+            }),
+            addNewSlot: async (parentId) => {
+                log('Mock: Added new slot', 'success');
+                return { id: 'new-slot-' + Date.now(), name: 'New Slot' };
+            },
+            deleteSlot: async (slotId) => {
+                log(`Mock: Deleted slot ${slotId}`, 'success');
+            },
+            deleteComponent: async (slotId, componentId, componentType) => {
+                log(`Mock: Deleted ${componentType} component`, 'success');
+            },
+            selectedSlot: 'slot-1',
+            expandedNodes: new Set()
+        };
+        
+        // Mock Unity interface
+        window.SM = {
+            setSpaceProperty: async (key, value, isProtected) => {
+                log(`Mock: Set space property ${key} = ${JSON.stringify(value)}`, 'info');
+            },
+            updateUnityComponent: async (id, prop, value) => {
+                log(`Mock: Updated Unity component ${id}.${prop} = ${JSON.stringify(value)}`, 'info');
+            },
+            updateUnityObject: async (id, prop, value) => {
+                log(`Mock: Updated Unity object ${id}.${prop} = ${value}`, 'info');
+            }
+        };
+        
+        // Initialize
+        await simpleChangeManager.initialize();
+        const historyManager = simpleChangeManager.getHistoryManager();
+        
+        // Logging
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        // Update UI
+        function updateStatus() {
+            const status = historyManager.getStatus();
+            document.getElementById('undoCount').textContent = status.undoCount;
+            document.getElementById('redoCount').textContent = status.redoCount;
+            document.getElementById('isApplying').textContent = status.isApplying;
+            document.getElementById('undoBtn').disabled = !status.canUndo;
+            document.getElementById('redoBtn').disabled = !status.canRedo;
+        }
+        
+        // Listen for notifications
+        document.addEventListener('historyNotification', (event) => {
+            const { message, type } = event.detail;
+            log(message, type);
+            updateStatus();
+        });
+        
+        // Listen for applied changes
+        document.addEventListener('historyChangeApplied', () => {
+            updateStatus();
+        });
+        
+        // Button handlers
+        document.getElementById('undoBtn').onclick = () => historyManager.undo();
+        document.getElementById('redoBtn').onclick = () => historyManager.redo();
+        document.getElementById('clearBtn').onclick = () => {
+            historyManager.clear();
+            updateStatus();
+        };
+        
+        // Test functions
+        window.changeProperty = async function() {
+            const value = document.getElementById('propValue').value;
+            await simpleChangeManager.applyChange({
+                type: 'component',
+                targetId: 'comp-1',
+                property: 'enabled',
+                value: value,
+                source: 'inspector-ui',
+                metadata: {
+                    slotId: 'slot-1',
+                    componentType: 'Transform',
+                    componentIndex: 0
+                }
+            });
+            log(`Changed component property to: ${value}`, 'success');
+            updateStatus();
+        };
+        
+        window.changeSpaceProperty = async function() {
+            const value = document.getElementById('spacePropValue').value;
+            await simpleChangeManager.applyChange({
+                type: 'spaceProperty',
+                targetId: 'testProp',
+                property: 'value',
+                value: value,
+                source: 'inspector-ui',
+                metadata: {
+                    key: 'testProp',
+                    isProtected: false
+                }
+            });
+            log(`Changed space property to: ${value}`, 'success');
+            updateStatus();
+        };
+        
+        window.changeSlotName = async function() {
+            const value = document.getElementById('slotName').value;
+            await simpleChangeManager.applyChange({
+                type: 'slot',
+                targetId: 'slot-1',
+                property: 'name',
+                value: value,
+                source: 'inspector-ui',
+                metadata: {
+                    slotId: 'slot-1'
+                }
+            });
+            log(`Changed slot name to: ${value}`, 'success');
+            updateStatus();
+        };
+        
+        window.addComponent = async function() {
+            await simpleChangeManager.applyChange({
+                type: 'componentAdd',
+                targetId: 'new-comp-' + Date.now(),
+                property: 'component',
+                value: {
+                    componentType: 'Transform',
+                    properties: {}
+                },
+                source: 'inspector-ui',
+                metadata: {
+                    slotId: 'slot-1',
+                    componentType: 'Transform',
+                    componentIndex: 1
+                }
+            });
+            log('Added Transform component', 'success');
+            updateStatus();
+        };
+        
+        window.removeComponent = async function() {
+            await simpleChangeManager.applyChange({
+                type: 'componentRemove',
+                targetId: 'comp-1',
+                property: 'component',
+                value: null,
+                source: 'inspector-ui',
+                metadata: {
+                    slotId: 'slot-1',
+                    componentType: 'Transform'
+                }
+            });
+            log('Removed component', 'success');
+            updateStatus();
+        };
+        
+        window.addSlot = async function() {
+            await simpleChangeManager.applyChange({
+                type: 'slotAdd',
+                targetId: null,
+                property: 'slot',
+                value: {
+                    parentId: null
+                },
+                source: 'inspector-ui',
+                metadata: {
+                    parentId: null
+                }
+            });
+            log('Added new slot', 'success');
+            updateStatus();
+        };
+        
+        window.removeSlot = async function() {
+            await simpleChangeManager.applyChange({
+                type: 'slotRemove',
+                targetId: 'slot-1',
+                property: 'slot',
+                value: null,
+                source: 'inspector-ui',
+                metadata: {
+                    slotId: 'slot-1',
+                    slotName: 'Test Slot'
+                }
+            });
+            log('Removed slot', 'success');
+            updateStatus();
+        };
+        
+        // Initial update
+        updateStatus();
+        log('Simplified system initialized', 'info');
+    </script>
+</body>
+</html>

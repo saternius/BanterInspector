@@ -8,7 +8,7 @@
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
-    const { changeManager } = await import(`${basePath}/change-manager.js`);
+    const { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
     export class PropertiesPanel {
         constructor() {
             this.propertiesContent = document.getElementById('propertiesContent');
@@ -123,7 +123,7 @@
             const handleRename = () => {
                 const newName = inputName.value.trim();
                 if (newName && newName !== slot.name) {
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'slot',
                         targetId: slot.id,
                         property: 'name',
@@ -160,7 +160,7 @@
             
             // Active property
             const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'slot',
                     targetId: slot.id,
                     property: 'active',
@@ -174,7 +174,7 @@
             
             // Persistent property
             const persistentRow = this.createPropertyRow('Persistent', slot.persistent, 'checkbox', (value) => {
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'slot',
                     targetId: slot.id,
                     property: 'persistent',
@@ -312,7 +312,7 @@
                 input.className = 'checkbox-input';
                 input.checked = value;
                 input.onchange = () => {
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: componentId,
                         property: key,
@@ -336,7 +336,7 @@
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
                     if (!isNaN(numValue)) {
-                        changeManager.queueChange({
+                        simpleChangeManager.applyChange({
                             type: 'component',
                             targetId: componentId,
                             property: key,
@@ -426,7 +426,7 @@
                         a: value.a || 1
                     };
                     swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${newColor.a})`;
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: componentId,
                         property: key,
@@ -464,7 +464,7 @@
                         if (!isNaN(newValue)) {
                             value[channel] = Math.max(0, Math.min(1, newValue));
                             swatch.style.backgroundColor = `rgba(${value.r * 255}, ${value.g * 255}, ${value.b * 255}, ${value.a})`;
-                            changeManager.queueChange({
+                            simpleChangeManager.applyChange({
                                 type: 'component',
                                 targetId: componentId,
                                 property: key,
@@ -499,7 +499,7 @@
                 input.className = 'property-input';
                 input.value = value?.toString() || '';
                 input.onchange = () => {
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: componentId,
                         property: key,
@@ -586,7 +586,7 @@
             // Name property
             const nameRow = this.createPropertyRow('Name', component.properties.name || 'myScript', 'text', (value) => {
                 component.properties.name = value;
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'component',
                     targetId: component.id,
                     property: 'name',
@@ -648,7 +648,7 @@
                     }
                 }
                 
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'component',
                     targetId: component.id,
                     property: 'file',
@@ -727,7 +727,7 @@
                         component.updateVar(varName, input.checked);
                     }
                     component.properties.vars[varName] = input.checked;
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: component.id,
                         property: 'vars',
@@ -754,7 +754,7 @@
                             component.updateVar(varName, numValue);
                         }
                         component.properties.vars[varName] = numValue;
-                        changeManager.queueChange({
+                        simpleChangeManager.applyChange({
                             type: 'component',
                             targetId: component.id,
                             property: 'vars',
@@ -792,7 +792,7 @@
                                 component.updateVar(varName, varValue);
                             }
                             component.properties.vars[varName] = varValue;
-                            changeManager.queueChange({
+                            simpleChangeManager.applyChange({
                                 type: 'component',
                                 targetId: component.id,
                                 property: 'vars',
@@ -838,7 +838,7 @@
                         component.updateVar(varName, varValue);
                     }
                     component.properties.vars[varName] = varValue;
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: component.id,
                         property: 'vars',
@@ -868,7 +868,7 @@
                         component.updateVar(varName, input.value);
                     }
                     component.properties.vars[varName] = input.value;
-                    changeManager.queueChange({
+                    simpleChangeManager.applyChange({
                         type: 'component',
                         targetId: component.id,
                         property: 'vars',
@@ -941,7 +941,7 @@
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
                 vector[axis] = numValue;
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'component',
                     targetId: componentId,
                     property: key,
@@ -979,7 +979,7 @@
                 const newQuaternion = eulerToQuaternion(eulerAngles);
                 
                 // Queue the change
-                changeManager.queueChange({
+                simpleChangeManager.applyChange({
                     type: 'component',
                     targetId: componentId,
                     property: 'rotation',
@@ -1003,7 +1003,7 @@
             if (!slotId) return;
             
             // Queue the component removal through change manager
-            changeManager.queueChange({
+            simpleChangeManager.applyChange({
                 type: 'componentRemove',
                 targetId: componentId,
                 property: 'component',
