@@ -5,7 +5,8 @@
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 import { sceneManager } from './scene-manager.js';
-import { SimpleHistoryManager, ChangeTypes } from './simple-history-manager.js';
+import { HistoryManager } from './history-manager.js';
+import { ChangeTypes } from './types.js';
 
 class ChangeManager {
     constructor() {
@@ -21,9 +22,9 @@ class ChangeManager {
         this.registerDefaultHandlers();
         
         // Initialize history manager
-        this.historyManager = new SimpleHistoryManager();
+        this.historyManager = new HistoryManager();
         
-        console.log('Simple Change Manager initialized');
+        console.log('Change Manager initialized');
     }
 
     addChangeListener(listener) {
@@ -42,8 +43,7 @@ class ChangeManager {
         // Record in history if from UI
         if (change.source === 'inspector-ui' && this.historyManager && !this.historyManager.isApplying) {
             const oldValue = this.getOldValue(change);
-            const historyChange = this.convertToHistoryFormat(change);
-            this.historyManager.recordChange(historyChange, oldValue);
+            this.historyManager.recordChange(change, oldValue);
         }
         
         // Apply the change
@@ -57,26 +57,26 @@ class ChangeManager {
         console.log(`Processing ${change.type} change:`, change);
         
         switch (change.type) {
-            case 'component':
+            case ChangeTypes.COMPONENT:
                 return this.processComponentChange(change);
-            case 'slot':
+            case ChangeTypes.SLOT:
                 return this.processSlotChange(change);
-            case 'spaceProperty':
+            case ChangeTypes.SPACE_PROPERTY:
                 return this.processSpacePropertyChange(change);
-            case 'componentAdd':
+            case ChangeTypes.COMPONENT_ADD:
                 return this.processComponentAdd(change);
-            case 'componentRemove':
+            case ChangeTypes.COMPONENT_REMOVE:
                 return this.processComponentRemove(change);
-            case 'slotAdd':
+            case ChangeTypes.SLOT_ADD:
                 return this.processSlotAdd(change);
-            case 'slotRemove':
+            case ChangeTypes.SLOT_REMOVE:
                 return this.processSlotRemove(change);
-            case 'slotMove':
+            case ChangeTypes.SLOT_MOVE:
                 return this.processSlotMove(change);
             default:
                 console.warn('Unknown change type:', change.type);
         }
-        
+
         this.changeListeners.forEach(listener => listener(change));
     }
 
@@ -84,24 +84,24 @@ class ChangeManager {
      * Get the old value before a change
      */
     getOldValue(change) {
-        if (change.type === 'spaceProperty') {
+        if (change.type === ChangeTypes.SPACE_PROPERTY) {
             const spaceState = sceneManager?.scene?.spaceState;
             if (spaceState) {
                 const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
                 return props[change.metadata.key];
             }
-        } else if (change.type === 'slot') {
+        } else if (change.type === ChangeTypes.SLOT) {
             const slot = sceneManager?.getSlotById(change.targetId);
             return slot ? slot[change.property] : undefined;
-        } else if (change.type === 'component') {
+        } else if (change.type === ChangeTypes.COMPONENT) {
             const slot = sceneManager?.getSlotById(change.metadata.slotId);
             if (slot) {
                 const component = slot.components.find(c => c.id === change.targetId);
                 return component?.properties?.[change.property];
             }
-        } else if (change.type === 'componentAdd' || change.type === 'slotAdd') {
+        } else if (change.type === ChangeTypes.COMPONENT_ADD || change.type === ChangeTypes.SLOT_ADD) {
             return null; // Nothing existed before
-        } else if (change.type === 'componentRemove') {
+        } else if (change.type === ChangeTypes.COMPONENT_REMOVE) {
             const slot = sceneManager?.getSlotById(change.metadata.slotId);
             if (slot) {
                 const component = slot.components.find(c => c.id === change.targetId);
@@ -114,10 +114,10 @@ class ChangeManager {
                     };
                 }
             }
-        } else if (change.type === 'slotRemove') {
+        } else if (change.type === ChangeTypes.SLOT_REMOVE) {
             const slot = sceneManager?.getSlotById(change.targetId);
             return slot ? this.captureSlotState(slot) : null;
-        } else if (change.type === 'slotMove') {
+        } else if (change.type === ChangeTypes.SLOT_MOVE) {
             const slot = sceneManager?.getSlotById(change.targetId);
             return slot?.parentId;
         }
@@ -143,60 +143,6 @@ class ChangeManager {
         };
     }
 
-    /**
-     * Convert change to history format
-     */
-    convertToHistoryFormat(change) {
-        let historyChange = {
-            type: ChangeTypes.PROPERTY,
-            targetId: change.targetId,
-            targetType: change.type,
-            property: change.property,
-            newValue: change.value,
-            source: change.source,
-            metadata: { ...change.metadata }
-        };
-        
-        // Map change types to history format
-        switch (change.type) {
-            case 'component':
-                historyChange.targetType = 'component';
-                break;
-            case 'slot':
-                historyChange.targetType = 'slot';
-                if (change.property === 'name') {
-                    historyChange.type = ChangeTypes.SLOT_RENAME;
-                }
-                break;
-            case 'spaceProperty':
-                historyChange.type = ChangeTypes.SPACE_PROPERTY;
-                historyChange.targetType = 'space';
-                break;
-            case 'componentAdd':
-                historyChange.type = ChangeTypes.COMPONENT_ADD;
-                historyChange.targetType = 'component';
-                break;
-            case 'componentRemove':
-                historyChange.type = ChangeTypes.COMPONENT_REMOVE;
-                historyChange.targetType = 'component';
-                break;
-            case 'slotAdd':
-                historyChange.type = ChangeTypes.SLOT_ADD;
-                historyChange.targetType = 'slot';
-                break;
-            case 'slotRemove':
-                historyChange.type = ChangeTypes.SLOT_REMOVE;
-                historyChange.targetType = 'slot';
-                break;
-            case 'slotMove':
-                historyChange.type = ChangeTypes.SLOT_MOVE;
-                historyChange.targetType = 'slot';
-                historyChange.newParentId = change.value;
-                break;
-        }
-        
-        return historyChange;
-    }
 
     /**
      * Process component property change
@@ -411,9 +357,9 @@ class ChangeManager {
         
         const prefix = '__' + slot.name;
         
-        if (change.type === 'component') {
+        if (change.type === ChangeTypes.COMPONENT) {
             return `${prefix}/${change.metadata.componentType}/${change.property}:component_${change.targetId}`;
-        } else if (change.type === 'slot') {
+        } else if (change.type === ChangeTypes.SLOT) {
             return `${prefix}/${change.property}:slot_${change.targetId}`;
         }
         return null;

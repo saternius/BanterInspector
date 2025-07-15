@@ -1,24 +1,14 @@
 /**
- * Simplified History Manager for Undo/Redo functionality
+ * History Manager for Undo/Redo functionality
  * 
  * Design principles:
  * - No batching - each user action creates one history entry
  * - Clear data flow - unidirectional from UI → Change Manager → History Manager
  * - Simple and maintainable - easy to understand and extend
  */
+import { ChangeTypes } from './types.js';
 
-export const ChangeTypes = {
-    PROPERTY: 'property',              // Component or slot property change
-    COMPONENT_ADD: 'component_add',
-    COMPONENT_REMOVE: 'component_remove',
-    SLOT_ADD: 'slot_add',
-    SLOT_REMOVE: 'slot_remove',
-    SLOT_RENAME: 'slot_rename',
-    SLOT_MOVE: 'slot_move',
-    SPACE_PROPERTY: 'space_property'
-};
-
-export class SimpleHistoryManager {
+export class HistoryManager {
     constructor() {
         this.undoStack = [];
         this.redoStack = [];
@@ -105,13 +95,10 @@ export class SimpleHistoryManager {
      */
     describeChange(change) {
         switch (change.type) {
-            case ChangeTypes.PROPERTY:
-                if (change.targetType === 'component') {
-                    return `Changed ${change.metadata.componentType} ${change.property}`;
-                } else if (change.targetType === 'slot') {
-                    return `Changed slot ${change.property}`;
-                }
-                break;
+            case ChangeTypes.COMPONENT:
+                return `Changed ${change.metadata.componentType} ${change.property}`;
+            case ChangeTypes.SLOT:
+                return `Changed slot ${change.property}`;
             case ChangeTypes.COMPONENT_ADD:
                 return `Added ${change.metadata.componentType} component`;
             case ChangeTypes.COMPONENT_REMOVE:
@@ -120,8 +107,6 @@ export class SimpleHistoryManager {
                 return `Added new slot`;
             case ChangeTypes.SLOT_REMOVE:
                 return `Removed slot ${change.metadata.slotName || ''}`;
-            case ChangeTypes.SLOT_RENAME:
-                return `Renamed slot to ${change.newValue}`;
             case ChangeTypes.SLOT_MOVE:
                 return `Moved slot`;
             case ChangeTypes.SPACE_PROPERTY:
@@ -171,7 +156,7 @@ export class SimpleHistoryManager {
         this.isApplying = true;
         
         try {
-            await this.applyChange(entry.forward);
+            await changeManager.applyChange(entry.forward);
             this.undoStack.push(entry);
             this.updateUI();
             this.showNotification(`Redone: ${entry.description}`);
@@ -185,113 +170,7 @@ export class SimpleHistoryManager {
         }
     }
     
-    /**
-     * Apply a change (for undo/redo)
-     */
-    async applyChange(change) {
-        // Get change manager instance
-        const changeManager = window.changeManager;
-        if (!changeManager) {
-            throw new Error('Change manager not available');
-        }
-        
-        // Create a change object that matches the expected format
-        const changeToApply = {
-            type: change.targetType,
-            targetId: change.targetId,
-            property: change.property,
-            value: change.newValue,
-            source: 'history-apply', // Mark as history change
-            metadata: { ...change.metadata }
-        };
-        
-        // Handle different change types
-        switch (change.type) {
-            case ChangeTypes.PROPERTY:
-                if (change.targetType === 'component') {
-                    changeToApply.type = 'component';
-                } else if (change.targetType === 'slot') {
-                    changeToApply.type = 'slot';
-                }
-                changeManager.queueChange(changeToApply);
-                break;
-                
-            case ChangeTypes.SPACE_PROPERTY:
-                changeManager.queueSpacePropertyChange({
-                    key: change.metadata.key,
-                    value: change.newValue,
-                    isProtected: change.metadata.isProtected,
-                    source: 'history-apply'
-                });
-                break;
-                
-            case ChangeTypes.COMPONENT_ADD:
-                // Re-add component with saved data
-                if (change.componentData) {
-                    await this.readdComponent(change);
-                }
-                break;
-                
-            case ChangeTypes.COMPONENT_REMOVE:
-                changeToApply.type = 'componentRemove';
-                changeManager.queueChange(changeToApply);
-                break;
-                
-            case ChangeTypes.SLOT_ADD:
-                // Re-add slot with saved data
-                if (change.slotData) {
-                    await this.readdSlot(change);
-                }
-                break;
-                
-            case ChangeTypes.SLOT_REMOVE:
-                changeToApply.type = 'slotRemove';
-                changeManager.queueChange(changeToApply);
-                break;
-                
-            case ChangeTypes.SLOT_MOVE:
-                changeToApply.type = 'slotMove';
-                changeToApply.value = change.newParentId;
-                changeToApply.metadata.newParentId = change.newParentId;
-                changeToApply.metadata.oldParentId = change.oldParentId;
-                changeManager.queueChange(changeToApply);
-                break;
-                
-            case ChangeTypes.SLOT_RENAME:
-                changeToApply.type = 'slot';
-                changeToApply.property = 'name';
-                changeManager.queueChange(changeToApply);
-                break;
-        }
-        
-        // Wait for changes to flush
-        await new Promise(resolve => setTimeout(resolve, 150));
-        
-        // Trigger UI refresh
-        document.dispatchEvent(new CustomEvent('historyChangeApplied', {
-            detail: { change: changeToApply }
-        }));
-    }
-    
-    /**
-     * Re-add a component that was removed
-     */
-    async readdComponent(change) {
-        // TODO: Implement component re-addition
-        console.log('Re-adding component not yet implemented:', change.componentData);
-        this.showNotification('Component re-addition not yet implemented', 'warning');
-    }
-    
-    /**
-     * Re-add a slot that was removed
-     */
-    async readdSlot(change) {
-        // TODO: Implement slot re-addition
-        console.log('Re-adding slot not yet implemented:', change.slotData);
-        this.showNotification('Slot re-addition not yet implemented', 'warning');
-    }
-    
-    /**
+    /*
      * Setup keyboard shortcuts
      */
     setupKeyboardShortcuts() {
