@@ -72,7 +72,8 @@ export class HistoryManager {
                 property: change.property,
                 oldValue: this.cloneValue(oldValue)
             },
-            metadata: this.cloneValue(change.metadata)
+            metadata: this.cloneValue(change.metadata),
+            timestamp: change.timestamp || Date.now()
         };
         
         this.currentBatch.changes.push(changeRecord);

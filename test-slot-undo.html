@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Undo/Redo Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #e8e8e8;
+        }
+        
+        .test-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        button {
+            background: #4a4a4a;
+            color: #e8e8e8;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #5a5a5a;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        #log {
+            background: #0a0a0a;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        
+        .log-entry {
+            padding: 2px 0;
+        }
+        
+        .log-info { color: #88ff88; }
+        .log-error { color: #ff8888; }
+        .log-debug { color: #8888ff; }
+    </style>
+</head>
+<body>
+    <h1>Slot Undo/Redo Test</h1>
+    
+    <div class="test-section">
+        <h2>Controls</h2>
+        <button id="addRootSlotBtn">Add Root Slot</button>
+        <button id="addChildSlotBtn">Add Child Slot</button>
+        <button id="deleteSlotBtn">Delete Selected Slot</button>
+        <button id="undoBtn">Undo (Ctrl+Z)</button>
+        <button id="redoBtn">Redo (Ctrl+Shift+Z)</button>
+        <button id="clearBtn">Clear History</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Current State</h2>
+        <div id="currentState">
+            <p>Selected Slot: <span id="selectedSlot">None</span></p>
+            <p>Total Slots: <span id="totalSlots">0</span></p>
+            <p>History: Undo Stack: <span id="undoCount">0</span> | Redo Stack: <span id="redoCount">0</span></p>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Log</h2>
+        <div id="log"></div>
+    </div>
+    
+    <script type="module">
+        // Import required modules
+        const basePath = './js';
+        const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+        const { changeManager } = await import(`${basePath}/change-manager.js`);
+        
+        // Initialize
+        await changeManager.initialize();
+        
+        // Mock BS library if not available
+        if (!window.BS) {
+            window.BS = {
+                GameObject: class {
+                    constructor(name) {
+                        this.name = name;
+                        this.id = 'mock-' + Math.random().toString(36).substr(2, 9);
+                        this.transform = null;
+                    }
+                    async AddComponent(component) {
+                        this.transform = component;
+                        return component;
+                    }
+                    async SetParent(parent, worldPositionStays) {
+                        // Mock implementation
+                    }
+                    async SetActive(active) {
+                        this.active = active;
+                    }
+                    async Destroy() {
+                        // Mock implementation
+                    }
+                },
+                Transform: class {
+                    constructor() {
+                        this.id = 'transform-' + Math.random().toString(36).substr(2, 9);
+                        this.position = { x: 0, y: 0, z: 0 };
+                        this.rotation = { x: 0, y: 0, z: 0, w: 1 };
+                        this.localScale = { x: 1, y: 1, z: 1 };
+                    }
+                },
+                Vector3: class {
+                    constructor(x, y, z) {
+                        this.x = x;
+                        this.y = y;
+                        this.z = z;
+                    }
+                },
+                Quaternion: class {
+                    constructor(x, y, z, w) {
+                        this.x = x;
+                        this.y = y;
+                        this.z = z;
+                        this.w = w;
+                    }
+                }
+            };
+        }
+        
+        // Initialize scene manager with mock scene
+        sceneManager.scene = {
+            objects: {},
+            spaceState: { public: {}, protected: {} }
+        };
+        sceneManager.sceneData = {
+            slots: [],
+            hierarchyMap: {},
+            componentMap: {}
+        };
+        sceneManager.buildHierarchyMap = function() {
+            this.sceneData.hierarchyMap = {};
+            const buildMap = (slots) => {
+                slots.forEach(slot => {
+                    this.sceneData.hierarchyMap[slot.id] = slot;
+                    if (slot.children) {
+                        buildMap(slot.children);
+                    }
+                });
+            };
+            buildMap(this.sceneData.slots);
+        };
+        
+        // Helper functions
+        const log = document.getElementById('log');
+        
+        function addLog(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function updateState() {
+            const historyManager = changeManager.getHistoryManager();
+            const status = historyManager ? historyManager.getStatus() : { undoCount: 0, redoCount: 0 };
+            
+            document.getElementById('selectedSlot').textContent = sceneManager.selectedSlot || 'None';
+            document.getElementById('totalSlots').textContent = Object.keys(sceneManager.sceneData.hierarchyMap).length;
+            document.getElementById('undoCount').textContent = status.undoCount;
+            document.getElementById('redoCount').textContent = status.redoCount;
+            
+            document.getElementById('undoBtn').disabled = !status.canUndo;
+            document.getElementById('redoBtn').disabled = !status.canRedo;
+            document.getElementById('deleteSlotBtn').disabled = !sceneManager.selectedSlot;
+            document.getElementById('addChildSlotBtn').disabled = !sceneManager.selectedSlot;
+        }
+        
+        // Button handlers
+        document.getElementById('addRootSlotBtn').onclick = () => {
+            addLog('Adding root slot...');
+            const timestamp = Date.now();
+            changeManager.queueChange({
+                type: 'slotAdd',
+                targetId: null,
+                property: 'slot',
+                value: {
+                    parentId: null,
+                    name: `Root Slot ${timestamp}`
+                },
+                metadata: {
+                    parentId: null,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'test',
+                        inputElement: 'add-root-slot-btn',
+                        eventType: 'add'
+                    }
+                },
+                timestamp: timestamp
+            });
+        };
+        
+        document.getElementById('addChildSlotBtn').onclick = () => {
+            if (!sceneManager.selectedSlot) return;
+            addLog(`Adding child slot to ${sceneManager.selectedSlot}...`);
+            const timestamp = Date.now();
+            changeManager.queueChange({
+                type: 'slotAdd',
+                targetId: null,
+                property: 'slot',
+                value: {
+                    parentId: sceneManager.selectedSlot,
+                    name: `Child Slot ${timestamp}`
+                },
+                metadata: {
+                    parentId: sceneManager.selectedSlot,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'test',
+                        inputElement: 'add-child-slot-btn',
+                        eventType: 'add'
+                    }
+                },
+                timestamp: timestamp
+            });
+        };
+        
+        document.getElementById('deleteSlotBtn').onclick = () => {
+            if (!sceneManager.selectedSlot) return;
+            const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
+            if (!slot) return;
+            
+            addLog(`Deleting slot ${slot.name}...`);
+            changeManager.queueChange({
+                type: 'slotRemove',
+                targetId: sceneManager.selectedSlot,
+                property: 'slot',
+                value: null,
+                metadata: {
+                    slotId: sceneManager.selectedSlot,
+                    slotName: slot.name,
+                    source: 'inspector-ui',
+                    uiContext: {
+                        panelType: 'test',
+                        inputElement: 'delete-slot-btn',
+                        eventType: 'delete'
+                    }
+                }
+            });
+        };
+        
+        document.getElementById('undoBtn').onclick = () => {
+            const historyManager = changeManager.getHistoryManager();
+            if (historyManager) {
+                addLog('Performing undo...', 'debug');
+                historyManager.undo();
+            }
+        };
+        
+        document.getElementById('redoBtn').onclick = () => {
+            const historyManager = changeManager.getHistoryManager();
+            if (historyManager) {
+                addLog('Performing redo...', 'debug');
+                historyManager.redo();
+            }
+        };
+        
+        document.getElementById('clearBtn').onclick = () => {
+            const historyManager = changeManager.getHistoryManager();
+            if (historyManager) {
+                historyManager.clear();
+                addLog('History cleared', 'error');
+                updateState();
+            }
+        };
+        
+        // Listen for changes
+        changeManager.onChangeFlushed((changes) => {
+            changes.forEach(change => {
+                if (change.type === 'slotAdd') {
+                    addLog(`Slot added: ${change.value?.name || 'Unknown'}`, 'info');
+                } else if (change.type === 'slotRemove') {
+                    addLog(`Slot removed: ${change.metadata?.slotName || 'Unknown'}`, 'info');
+                }
+            });
+            updateState();
+        });
+        
+        // Listen for history notifications
+        document.addEventListener('historyNotification', (event) => {
+            const { message, type } = event.detail;
+            addLog(message, type === 'error' ? 'error' : 'debug');
+            updateState();
+        });
+        
+        // Listen for selection changes
+        document.addEventListener('slotSelectionChanged', (event) => {
+            updateState();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+                if (e.key === 'z' && !e.shiftKey) {
+                    e.preventDefault();
+                    document.getElementById('undoBtn').click();
+                } else if ((e.key === 'z' && e.shiftKey) || e.key === 'y') {
+                    e.preventDefault();
+                    document.getElementById('redoBtn').click();
+                }
+            }
+        });
+        
+        // Initial state
+        updateState();
+        addLog('Test page initialized', 'info');
+    </script>
+</body>
+</html>

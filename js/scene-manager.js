@@ -477,16 +477,19 @@
          * Add new slot
          */
         async addNewSlot(parentId = null) {
-            if(!this.scene || !parentId || !window.BS){
+            if(!this.scene || !window.BS){
                 console.log("NO SCENE AVAILABLE")
                 return null;
             }
 
-            // Create Unity GameObject if connected
-            const parentGameObject = this.scene.objects?.[parentId];
-            if(!parentGameObject){
-                console.log("NO PARENT AVAILABLE")
-                return null;
+            // Get parent GameObject if parentId is provided, otherwise add to root
+            let parentGameObject = null;
+            if (parentId) {
+                parentGameObject = this.scene.objects?.[parentId];
+                if(!parentGameObject){
+                    console.log("NO PARENT AVAILABLE")
+                    return null;
+                }
             }
 
             try {
@@ -500,9 +503,17 @@
                 transform.rotation = new BS.Quaternion(0, 0, 0, 1);
                 transform.localScale = new BS.Vector3(1, 1, 1);
                 
-                await newGameObject.SetParent(parentGameObject, true);
+                if (parentGameObject) {
+                    await newGameObject.SetParent(parentGameObject, true);
+                }
                 await newGameObject.SetActive(true);
                 let newSlotId = newGameObject.id;
+                
+                // Register the GameObject in the scene
+                if (!this.scene.objects) {
+                    this.scene.objects = {};
+                }
+                this.scene.objects[newSlotId] = newGameObject;
                 
 
                 const newSlot = {
@@ -525,9 +536,20 @@
                     children: []
                 };
                 
-                const parent = this.getSlotById(parentId);
-                if (parent) {
-                    parent.children.push(newSlot);
+                if (parentId) {
+                    const parent = this.getSlotById(parentId);
+                    if (parent) {
+                        if (!parent.children) {
+                            parent.children = [];
+                        }
+                        parent.children.push(newSlot);
+                    }
+                } else {
+                    // Add to root slots
+                    if (!this.sceneData.slots) {
+                        this.sceneData.slots = [];
+                    }
+                    this.sceneData.slots.push(newSlot);
                 }
                 
                 this.buildHierarchyMap();

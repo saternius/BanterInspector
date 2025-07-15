@@ -66,19 +66,16 @@
             // Add child button
             this.addChildBtn.addEventListener('click', async () => {
                 const parentId = sceneManager.selectedSlot;
-                if(!parentId){
-                    alert("No parent selected")
-                    return;
-                }
                 
                 // Queue slot addition through change manager
+                const timestamp = Date.now();
                 changeManager.queueChange({
                     type: 'slotAdd',
                     targetId: null, // Will be assigned when created
                     property: 'slot',
                     value: {
-                        parentId: parentId,
-                        name: `New Slot ${Date.now()}`
+                        parentId: parentId, // null means add to root
+                        name: `New Slot ${timestamp}`
                     },
                     metadata: {
                         parentId: parentId,
@@ -88,7 +85,8 @@
                             inputElement: 'add-child-slot-btn',
                             eventType: 'add'
                         }
-                    }
+                    },
+                    timestamp: timestamp
                 });
             });
 

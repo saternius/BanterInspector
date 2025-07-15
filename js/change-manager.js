@@ -186,10 +186,23 @@ class ChangeManager {
         } else if (target.type === 'slotAdd') {
             // Handle undo of slot add (remove the slot)
             if (oldValue === null) {
-                // This was originally an add, so we need to remove it
-                changeObj.type = 'slotRemove';
-                changeObj.metadata = change.metadata;
-                await this.processSlotRemove(changeObj);
+                // This was originally an add, so we need to find the created slot and remove it
+                // Look up the slot ID that was created using the history map
+                const historyKey = `${change.metadata?.parentId || 'root'}_${change.timestamp || ''}`;
+                const createdSlotId = this.slotAddHistory?.get(historyKey);
+                
+                if (createdSlotId) {
+                    changeObj.type = 'slotRemove';
+                    changeObj.targetId = createdSlotId;
+                    changeObj.metadata = change.metadata;
+                    await this.processSlotRemove(changeObj);
+                    
+                    // Clean up the history map
+                    this.slotAddHistory.delete(historyKey);
+                    this.slotAddHistory.delete(createdSlotId);
+                } else {
+                    console.error('Could not find created slot ID for undo');
+                }
             } else {
                 // This was originally a remove, so we need to add it back
                 // TODO: Implement re-adding slot with saved state
@@ -308,7 +321,7 @@ class ChangeManager {
         const key = this.generateChangeKey(change);
         this.pendingChanges.set(key, {
             ...change,
-            timestamp: Date.now()
+            timestamp: change.timestamp || Date.now()
         });
         this.scheduleFlush();
     }
@@ -530,8 +543,16 @@ class ChangeManager {
             const newSlot = await sceneManager.addNewSlot(change.value.parentId);
             console.log("newSlot", newSlot)
             if (newSlot) {
-                // Update the change targetId for history
-                change.targetId = newSlot.id;
+                // Store the new slot ID in a map for history tracking
+                if (!this.slotAddHistory) {
+                    this.slotAddHistory = new Map();
+                }
+                // Use a composite key based on parent and timestamp to handle multiple adds
+                const historyKey = `${change.value.parentId || 'root'}_${change.timestamp || Date.now()}`;
+                this.slotAddHistory.set(historyKey, newSlot.id);
+                
+                // Also store by slot ID for reverse lookup
+                this.slotAddHistory.set(newSlot.id, historyKey);
                 
                 // If there's a parent, expand it
                 if (change.value.parentId) {
@@ -547,7 +568,6 @@ class ChangeManager {
                 }));
                 
                 console.log('Slot added successfully:', newSlot.id);
-                console.log("change", change)
             }
         } catch (error) {
             console.error('Failed to add slot:', error);
