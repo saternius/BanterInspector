@@ -307,17 +307,6 @@
             });
         }
 
-        async updateUnityObject(slotId, property, newValue){
-            let gO = this.scene.objects[slotId]
-            if (!gO) return;
-            if(property == "active"){
-                await gO.SetActive(Boolean(newValue));
-                return;
-            }
-            console.log("UPDATE UNITY OBJECT", gameObject, property, newValue)
-            slot[property] = newValue;
-        }
-
         /**
          * Update Unity component with changes
          */
@@ -389,22 +378,6 @@
             slot_component.properties[property] = newValue;
         }
 
-        async checkAndSyncComponentProperty(key, value){
-            if(!key.startsWith("__")) return;
-            let key_parts = key.split(":")
-            if(key_parts.length < 2) return;
-            let path = key_parts[0].split("/")
-            let property = path[path.length - 1]
-            let refs = key_parts[1].split("_")
-            if(refs[0] === "slot"){
-                await this.updateUnityObject(refs[1], property, value);
-                
-            }
-            if(refs[0] === "component"){
-                await this.updateUnityComponent(refs[1], property, value);
-                
-            }        
-        }
 
 
         /**
@@ -413,7 +386,6 @@
         async setSpaceProperty(key, value, isProtected) {
             if (!this.scene) return;
             console.log("[setSpaceProperty]", key, value, isProtected)
-            await this.checkAndSyncComponentProperty(key, value)
 
             if(value && value.value !== undefined){
                 value = value.value;

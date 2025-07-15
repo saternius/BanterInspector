@@ -3,20 +3,7 @@
 let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 
-// options: { source: 'ui' | 'history' | 'script' }
-
-// Change type constants for compatibility
-export const ChangeTypes = {
-    SLOT: 'slot',
-    COMPONENT: 'component',
-    SPACE_PROPERTY: 'spaceProperty',
-    COMPONENT_ADD: 'componentAdd',
-    COMPONENT_REMOVE: 'componentRemove',
-    SLOT_ADD: 'slotAdd',
-    SLOT_REMOVE: 'slotRemove',
-    SLOT_MOVE: 'slotMove'
-};
-
+// options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
 export class SlotPropertyChange {
     constructor(slotId, property, newValue, options) {
@@ -60,6 +47,14 @@ export class SlotPropertyChange {
 
         const spaceKey = '__' + slot.name + '/' + this.property + ':slot_' + this.slotId;
         await window.SM.setSpaceProperty(spaceKey, value, false);
+    }
+
+    getDescription() {
+        return `Changed slot ${this.slotId} ${this.property} to ${this.newValue}`;
+    }
+
+    getUndoDescription() {
+        return `Changed slot ${this.slotId} ${this.property} to ${this.oldValue}`;
     }
 }
 
@@ -137,7 +132,10 @@ export class ComponentPropertyChange {
     }
 
     getDescription() {
-        return `Changed ${this.componentType} ${this.property}`;
+        return `Changed ${this.componentType} ${this.property} to ${this.newValue}`;
+    }
+    getUndoDescription() {
+        return `Changed ${this.componentType} ${this.property} to ${this.oldValue}`;
     }
 }
 
@@ -179,7 +177,12 @@ export class SpacePropertyChange {
 
     getDescription() {
         const propType = this.protected ? 'protected' : 'public';
-        return `Changed ${propType} property ${this.property}`;
+        return `Change ${propType} property ${this.property} to ${this.newValue}`;
+    }
+
+    getUndoDescription(){
+        const propType = this.protected ? 'protected' : 'public';
+        return `Change ${propType} property ${this.property} to ${this.oldValue}`;
     }
 }
 
@@ -407,7 +410,11 @@ export class ComponentAddChange {
     }
 
     getDescription() {
-        return `Added ${this.componentType} component`;
+        return `Add ${this.componentType} component`;
+    }
+
+    getUndoDescription(){
+        return `Remove ${this.componentType} component`;
     }
 }
 
@@ -511,7 +518,11 @@ export class ComponentRemoveChange {
     }
 
     getDescription() {
-        return `Removed ${this.componentData?.type || 'unknown'} component`;
+        return `Remove ${this.componentData?.type || 'unknown'} component`;
+    }
+
+    getUndoDescription(){
+        return `Add ${this.componentData?.type || 'unknown'} component`;
     }
 }
 
@@ -577,6 +588,10 @@ export class SlotAddChange {
 
     getDescription() {
         return `Added new slot${this.parentId ? ' as child' : ' at root'}`;
+    }
+
+    getUndoDescription(){
+        return `Remove slot ${this.slotName}`;
     }
 }
 
@@ -718,7 +733,11 @@ export class SlotRemoveChange {
     }
 
     getDescription() {
-        return `Removed slot ${this.slotData?.name || ''}`;
+        return `Remove slot ${this.slotData?.name || ''}`;
+    }
+
+    getUndoDescription(){
+        return `Add slot ${this.slotData?.name || ''}`;
     }
 }
 
@@ -790,6 +809,10 @@ export class SlotMoveChange {
     }
 
     getDescription() {
-        return `Moved slot`;
+        return `Move slot`;
+    }
+
+    getUndoDescription(){
+        return `Move slot`;
     }
 }
