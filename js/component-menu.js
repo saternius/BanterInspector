@@ -7,7 +7,7 @@
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 const { sceneManager } = await import( `${basePath}/scene-manager.js`);
-const { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
+const { changeManager } = await import(`${basePath}/change-manager.js`);
 
 export class ComponentMenu {
     constructor() {
@@ -225,7 +225,7 @@ export class ComponentMenu {
                 properties: componentConfig.properties
             });
             // Register with change manager
-            simpleChangeManager.registerComponent(slotComponent);
+            changeManager.registerComponent(slotComponent);
         }else{
             let unityComponent = await this.createUnityComponent(this.selectedSlotId, componentType);
             console.log("unityComponent", unityComponent)
@@ -238,7 +238,7 @@ export class ComponentMenu {
                 };
                 
                 // Queue component addition as a single action
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'componentAdd',
                     targetId: unityComponent.id,
                     property: 'component',
@@ -268,7 +268,7 @@ export class ComponentMenu {
             
             // For MonoBehavior, also queue the add action
             if (componentType === 'MonoBehavior') {
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'componentAdd',
                     targetId: slotComponent.id,
                     property: 'component',

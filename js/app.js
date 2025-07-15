@@ -16,7 +16,7 @@
     const  { Navigation } = await import(`${basePath}/navigation.js`);
     const  { Inventory } = await import(`${basePath}/inventory.js`);
     const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
-    const  { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
+    const  { changeManager } = await import(`${basePath}/change-manager.js`);
 
     // Global app instance
     class InspectorApp {
@@ -46,19 +46,19 @@
                 await sceneManager.initialize();
                 
                 // Initialize simple change manager
-                await simpleChangeManager.initialize();
+                await changeManager.initialize();
                 
                 // Set up change manager to scene manager integration
-                changeManager.onChangeFlushed(async (changes) => {
+                changeManager.addChangeListener(async (change) => {
                     // Process changes that need UI updates
-                    const spacePropsChanged = changes.some(c => c.type === 'spaceProperty');
-                    const componentPropsChanged = changes.some(c => c.type === 'component');
+                    const spacePropsChanged = change.type === 'spaceProperty';
+                    const componentPropsChanged = change.type === 'component';
                     
                     if (spacePropsChanged) {
                         this.spacePropsPanel.render();
                     }
                     
-                    if (componentPropsChanged || changes.some(c => c.type === 'slot')) {
+                    if (componentPropsChanged || change.type === 'slot') {
                         this.propertiesPanel.render(sceneManager.selectedSlot);
                     }
                 });
@@ -181,11 +181,9 @@
          */
         setupGlobalEventHandlers() {
             // Handle hierarchy changes from change manager
-            changeManager.onChangeFlushed((changes) => {
+            changeManager.addChangeListener((change) => {
                 // Update hierarchy panel if slot names or active state changed
-                const hierarchyChanges = changes.filter(c => 
-                    (c.type === 'slot' && (c.property === 'name' || c.property === 'active'))
-                );
+                const hierarchyChanges = change.type === 'slot' && (change.property === 'name' || change.property === 'active');
                 if (hierarchyChanges.length > 0) {
                     this.hierarchyPanel.render();
                 }

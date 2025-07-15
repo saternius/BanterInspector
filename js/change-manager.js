@@ -1,6 +1,6 @@
 /**
- * Centralized Change Manager
- * Handles all property changes for slots and components
+ * Simplified Change Manager
+ * Applies changes immediately without batching
  */
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
@@ -9,26 +9,143 @@ import { SimpleHistoryManager, ChangeTypes } from './simple-history-manager.js';
 
 class ChangeManager {
     constructor() {
-        this.pendingChanges = new Map();
-        this.updateTimer = null;
-        this.changeListeners = new Set();
         this.componentHandlers = new Map();
         this.registeredComponents = new Map();
-        this.updateInterval = 100; // ms
         this.historyManager = null;
+        this.slotAddHistory = new Map(); // Track newly created slots for undo
+        this.changeListeners = [];
     }
 
     async initialize() {
         // Register default component handlers
         this.registerDefaultHandlers();
         
-        // Initialize simple history manager
+        // Initialize history manager
         this.historyManager = new SimpleHistoryManager();
         
-        console.log('Change Manager initialized with simplified history support');
+        console.log('Simple Change Manager initialized');
     }
-    
-    
+
+    addChangeListener(listener) {
+        this.changeListeners.push(listener);
+    }
+
+    /**
+     * Apply a change immediately
+     */
+    async applyChange(change) {
+        // Skip if from history (to prevent loops)
+        if (change.source === 'history-apply') {
+            return this.processChange(change);
+        }
+        
+        // Record in history if from UI
+        if (change.source === 'inspector-ui' && this.historyManager && !this.historyManager.isApplying) {
+            const oldValue = this.getOldValue(change);
+            const historyChange = this.convertToHistoryFormat(change);
+            this.historyManager.recordChange(historyChange, oldValue);
+        }
+        
+        // Apply the change
+        return this.processChange(change);
+    }
+
+    /**
+     * Process a change based on its type
+     */
+    async processChange(change) {
+        console.log(`Processing ${change.type} change:`, change);
+        
+        switch (change.type) {
+            case 'component':
+                return this.processComponentChange(change);
+            case 'slot':
+                return this.processSlotChange(change);
+            case 'spaceProperty':
+                return this.processSpacePropertyChange(change);
+            case 'componentAdd':
+                return this.processComponentAdd(change);
+            case 'componentRemove':
+                return this.processComponentRemove(change);
+            case 'slotAdd':
+                return this.processSlotAdd(change);
+            case 'slotRemove':
+                return this.processSlotRemove(change);
+            case 'slotMove':
+                return this.processSlotMove(change);
+            default:
+                console.warn('Unknown change type:', change.type);
+        }
+        
+        this.changeListeners.forEach(listener => listener(change));
+    }
+
+    /**
+     * Get the old value before a change
+     */
+    getOldValue(change) {
+        if (change.type === 'spaceProperty') {
+            const spaceState = sceneManager?.scene?.spaceState;
+            if (spaceState) {
+                const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
+                return props[change.metadata.key];
+            }
+        } else if (change.type === 'slot') {
+            const slot = sceneManager?.getSlotById(change.targetId);
+            return slot ? slot[change.property] : undefined;
+        } else if (change.type === 'component') {
+            const slot = sceneManager?.getSlotById(change.metadata.slotId);
+            if (slot) {
+                const component = slot.components.find(c => c.id === change.targetId);
+                return component?.properties?.[change.property];
+            }
+        } else if (change.type === 'componentAdd' || change.type === 'slotAdd') {
+            return null; // Nothing existed before
+        } else if (change.type === 'componentRemove') {
+            const slot = sceneManager?.getSlotById(change.metadata.slotId);
+            if (slot) {
+                const component = slot.components.find(c => c.id === change.targetId);
+                if (component) {
+                    return {
+                        id: component.id,
+                        type: component.type,
+                        properties: JSON.parse(JSON.stringify(component.properties)),
+                        index: slot.components.indexOf(component)
+                    };
+                }
+            }
+        } else if (change.type === 'slotRemove') {
+            const slot = sceneManager?.getSlotById(change.targetId);
+            return slot ? this.captureSlotState(slot) : null;
+        } else if (change.type === 'slotMove') {
+            const slot = sceneManager?.getSlotById(change.targetId);
+            return slot?.parentId;
+        }
+        return undefined;
+    }
+
+    /**
+     * Capture complete slot state for undo
+     */
+    captureSlotState(slot) {
+        return {
+            id: slot.id,
+            name: slot.name,
+            active: slot.active,
+            persistent: slot.persistent,
+            parentId: slot.parentId,
+            components: slot.components?.map(c => ({
+                id: c.id,
+                type: c.type,
+                properties: JSON.parse(JSON.stringify(c.properties))
+            })) || [],
+            children: slot.children?.map(child => this.captureSlotState(child)) || []
+        };
+    }
+
+    /**
+     * Convert change to history format
+     */
     convertToHistoryFormat(change) {
         let historyChange = {
             type: ChangeTypes.PROPERTY,
@@ -80,100 +197,231 @@ class ChangeManager {
         
         return historyChange;
     }
-    
-    getOldValue(change) {
-        if (change.type === 'spaceProperty') {
-            const spaceState = window.SM?.scene?.spaceState || sceneManager?.scene?.spaceState;
-            if (spaceState) {
-                const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
-                return props[change.metadata.key];
-            }
-        } else if (change.type === 'slot') {
-            const slot = window.SM?.getSlotById(change.targetId) || sceneManager?.getSlotById(change.targetId);
-            return slot ? slot[change.property] : undefined;
-        } else if (change.type === 'component') {
-            const slot = window.SM?.getSlotById(change.metadata.slotId) || sceneManager?.getSlotById(change.metadata.slotId);
-            if (slot) {
-                const component = slot.components.find(c => c.id === change.targetId);
-                return component?.properties?.[change.property];
-            }
-        } else if (change.type === 'componentAdd') {
-            // For component add, the old value is null (component didn't exist)
-            return null;
-        } else if (change.type === 'componentRemove') {
-            // For component remove, we need to capture the entire component state
-            const slot = window.SM?.getSlotById(change.metadata.slotId) || sceneManager?.getSlotById(change.metadata.slotId);
-            if (slot) {
-                const component = slot.components.find(c => c.id === change.targetId);
-                if (component) {
-                    return {
-                        id: component.id,
-                        type: component.type,
-                        properties: JSON.parse(JSON.stringify(component.properties)),
-                        index: slot.components.indexOf(component)
-                    };
-                }
-            }
-        } else if (change.type === 'slotAdd') {
-            // For slot add, the old value is null (slot didn't exist)
-            return null;
-        } else if (change.type === 'slotRemove') {
-            // For slot remove, capture the entire slot state including children
-            const slot = window.SM?.getSlotById(change.targetId) || sceneManager?.getSlotById(change.targetId);
-            if (slot) {
-                return this.captureSlotState(slot);
-            }
-        } else if (change.type === 'slotMove') {
-            // For slot move, the old value is the previous parent ID
-            return change.metadata.oldParentId;
-        }
-        return undefined;
-    }
-    
-    // Helper to capture complete slot state for undo
-    captureSlotState(slot) {
-        const state = {
-            id: slot.id,
-            name: slot.name,
-            active: slot.active,
-            persistent: slot.persistent,
-            parentId: slot.parentId,
-            components: slot.components?.map(c => ({
-                id: c.id,
-                type: c.type,
-                properties: JSON.parse(JSON.stringify(c.properties))
-            })) || [],
-            children: slot.children?.map(child => this.captureSlotState(child)) || []
-        };
-        return state;
-    }
-    
-    
-    findSlotByComponentId(componentId) {
-        // Try using sceneManager's method first
-        if (sceneManager && sceneManager.getAllSlots) {
-            const slots = sceneManager.getAllSlots();
-            for (const slot of slots) {
-                if (slot.components?.some(c => c.id === componentId)) {
-                    return slot;
-                }
+
+    /**
+     * Process component property change
+     */
+    async processComponentChange(change) {
+        // Update local state
+        const slot = sceneManager?.getSlotById(change.metadata.slotId);
+        if (slot) {
+            const component = slot.components.find(c => c.id === change.targetId);
+            if (component && component.properties) {
+                component.properties[change.property] = change.value;
             }
         }
         
-        // Fallback to window.SM if available
-        const slots = window.SM?.getAllSlots?.() || [];
-        for (const slot of slots) {
-            if (slot.components?.some(c => c.id === componentId)) {
-                return slot;
+        // Generate space key for persistence
+        const spaceKey = this.generateSpaceKey(change);
+        if (spaceKey && window.SM) {
+            await window.SM.setSpaceProperty(spaceKey, change.value, false);
+        }
+        
+        // Apply component-specific handler if available
+        const handler = this.componentHandlers.get(change.metadata.componentType);
+        if (handler && handler.apply) {
+            const component = this.getComponentById(change.targetId);
+            if (component && component._bs) {
+                let transformedValue = change.value;
+                if (handler.transform) {
+                    transformedValue = handler.transform(change.property, change.value);
+                }
+                await handler.apply(component._bs, change.property, transformedValue);
             }
+        } else if (window.SM) {
+            // Default Unity update
+            await window.SM.updateUnityComponent(change.targetId, change.property, change.value);
+        }
+        
+        // Refresh UI
+        if (window.inspectorApp?.spacePropsPanel) {
+            window.inspectorApp.spacePropsPanel.render();
+        }
+    }
+
+    /**
+     * Process slot property change
+     */
+    async processSlotChange(change) {
+        // Update local state
+        const slot = sceneManager?.getSlotById(change.targetId);
+        if (slot) {
+            slot[change.property] = change.value;
+        }
+        
+        // Generate space key for persistence
+        const spaceKey = this.generateSpaceKey(change);
+        if (spaceKey && window.SM) {
+            await window.SM.setSpaceProperty(spaceKey, change.value, false);
+        }
+        
+        // Update Unity if needed
+        if (change.property === 'active' && window.SM) {
+            await window.SM.updateUnityObject(change.targetId, change.property, change.value);
+        }
+        
+        // Update hierarchy if name changed
+        if (change.property === 'name' && window.inspectorApp?.hierarchyPanel) {
+            window.inspectorApp.hierarchyPanel.render();
+        }
+    }
+
+    /**
+     * Process space property change
+     */
+    async processSpacePropertyChange(change) {
+        if (window.SM) {
+            await window.SM.setSpaceProperty(
+                change.metadata.key,
+                change.value,
+                change.metadata.isProtected
+            );
+        }
+        
+        // Update space props panel
+        if (window.inspectorApp?.spacePropsPanel) {
+            window.inspectorApp.spacePropsPanel.render();
+        }
+    }
+
+    /**
+     * Process component addition
+     */
+    async processComponentAdd(change) {
+        console.log('Component added:', change.value.componentType, 'to slot:', change.metadata.slotId);
+        // Component creation is handled by component-menu.js
+        // This is just for history tracking
+    }
+
+    /**
+     * Process component removal
+     */
+    async processComponentRemove(change) {
+        console.log('Removing component:', change);
+        
+        try {
+            await sceneManager.deleteComponent(
+                change.metadata.slotId,
+                change.targetId,
+                change.metadata.componentType
+            );
+            
+            this.unregisterComponent(change.targetId);
+            
+            // Refresh properties panel
+            if (window.inspectorApp?.propertiesPanel) {
+                window.inspectorApp.propertiesPanel.render(change.metadata.slotId);
+            }
+        } catch (error) {
+            console.error('Failed to remove component:', error);
+        }
+    }
+
+    /**
+     * Process slot addition
+     */
+    async processSlotAdd(change) {
+        console.log('Adding slot:', change);
+        
+        try {
+            const newSlot = await sceneManager.addNewSlot(change.value.parentId);
+            if (newSlot) {
+                // Store for undo tracking
+                const historyKey = `${change.value.parentId || 'root'}_${change.timestamp || Date.now()}`;
+                this.slotAddHistory.set(historyKey, newSlot.id);
+                this.slotAddHistory.set(newSlot.id, historyKey);
+                
+                // Expand parent
+                if (change.value.parentId) {
+                    sceneManager.expandedNodes.add(change.value.parentId);
+                }
+                
+                // Select new slot
+                sceneManager.selectSlot(newSlot.id);
+                
+                // Update UI
+                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                    detail: { slotId: newSlot.id }
+                }));
+                
+                if (window.inspectorApp?.hierarchyPanel) {
+                    window.inspectorApp.hierarchyPanel.render();
+                }
+            }
+        } catch (error) {
+            console.error('Failed to add slot:', error);
+        }
+    }
+
+    /**
+     * Process slot removal
+     */
+    async processSlotRemove(change) {
+        console.log('Removing slot:', change);
+        
+        try {
+            await sceneManager.deleteSlot(change.targetId);
+            
+            // Clear selection if needed
+            if (sceneManager.selectedSlot === change.targetId) {
+                sceneManager.selectedSlot = null;
+                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                    detail: { slotId: null }
+                }));
+            }
+            
+            // Update hierarchy
+            if (window.inspectorApp?.hierarchyPanel) {
+                window.inspectorApp.hierarchyPanel.render();
+            }
+        } catch (error) {
+            console.error('Failed to remove slot:', error);
+        }
+    }
+
+    /**
+     * Process slot move
+     */
+    async processSlotMove(change) {
+        console.log('Moving slot:', change);
+        
+        try {
+            if (change.value === null) {
+                await sceneManager.moveSlotToRoot(change.targetId);
+            } else {
+                await sceneManager.reparentSlot(change.targetId, change.value);
+                sceneManager.expandedNodes.add(change.value);
+            }
+            
+            // Update hierarchy
+            if (window.inspectorApp?.hierarchyPanel) {
+                window.inspectorApp.hierarchyPanel.render();
+            }
+        } catch (error) {
+            console.error('Failed to move slot:', error);
+        }
+    }
+
+    /**
+     * Generate space key for persistence
+     */
+    generateSpaceKey(change) {
+        const slot = sceneManager?.getSlotById(change.metadata.slotId);
+        if (!slot) return null;
+        
+        const prefix = '__' + slot.name;
+        
+        if (change.type === 'component') {
+            return `${prefix}/${change.metadata.componentType}/${change.property}:component_${change.targetId}`;
+        } else if (change.type === 'slot') {
+            return `${prefix}/${change.property}:slot_${change.targetId}`;
         }
         return null;
     }
-    
-    getHistoryManager() {
-        return this.historyManager;
-    }
 
+    /**
+     * Register default component handlers
+     */
     registerDefaultHandlers() {
         // Transform handler
         this.registerComponentHandler('Transform', {
@@ -232,317 +480,10 @@ class ChangeManager {
                 component[property] = value;
             }
         });
-        
-        // Add other component handlers as needed
     }
 
-    queueChange(change) {
-        // Only process if not from history
-        if (change.source === 'history-apply') {
-            // Skip history recording for history-applied changes
-            const key = this.generateChangeKey(change);
-            this.pendingChanges.set(key, {
-                ...change,
-                timestamp: change.timestamp || Date.now()
-            });
-            this.scheduleFlush();
-            return;
-        }
-        
-        // Record in history if from UI
-        if (change.source === 'inspector-ui' && this.historyManager && !this.historyManager.isApplying) {
-            const oldValue = this.getOldValue(change);
-            
-            // Convert to standard format for history
-            const historyChange = this.convertToHistoryFormat(change);
-            this.historyManager.recordChange(historyChange, oldValue);
-        }
-        
-        const key = this.generateChangeKey(change);
-        this.pendingChanges.set(key, {
-            ...change,
-            timestamp: change.timestamp || Date.now()
-        });
-        this.scheduleFlush();
-    }
-
-    queueSpacePropertyChange(spaceChange) {
-        // Special handling for space properties
-        const change = {
-            type: 'spaceProperty',
-            targetId: spaceChange.key,
-            property: 'value',
-            value: spaceChange.value,
-            source: spaceChange.source,
-            metadata: {
-                isProtected: spaceChange.isProtected,
-                key: spaceChange.key,
-                uiContext: spaceChange.uiContext
-            }
-        };
-        this.queueChange(change);
-    }
-
-    generateChangeKey(change) {
-        if (change.type === 'spaceProperty') {
-            return `space_${change.metadata.key}`;
-        }
-        return `${change.type}_${change.targetId}_${change.property}`;
-    }
-
-    generateSpaceKey(change) {
-        const slot = window.SM?.getSlotById(change.metadata.slotId);
-        if (!slot) return null;
-        
-        const prefix = '__' + slot.name;
-        
-        if (change.type === 'component') {
-            return `${prefix}/${change.metadata.componentType}/${change.property}:component_${change.targetId}`;
-        } else if (change.type === 'slot') {
-            return `${prefix}/${change.property}:slot_${change.targetId}`;
-        }
-        return null;
-    }
-
-    scheduleFlush() {
-        if (this.updateTimer) clearTimeout(this.updateTimer);
-        this.updateTimer = setTimeout(() => this.flushChanges(), this.updateInterval);
-    }
-
-    async flushChanges() {
-        if (this.pendingChanges.size === 0) return;
-        
-        const changes = Array.from(this.pendingChanges.values());
-        this.pendingChanges.clear();
-        
-        console.log(`Flushing ${changes.length} changes`);
-        
-        // Process changes
-        await this.processChanges(changes);
-        
-        // Notify listeners
-        this.notifyListeners(changes);
-        window.inspectorApp.spacePropsPanel.render()
-    }
-
-    async processChanges(changes) {
-        // Group changes by type
-        const grouped = this.groupChangesByType(changes);
-        
-        // Process space property changes first
-        for (const change of grouped.spacePropertys || []) {
-            await this.processSpacePropertyChange(change);
-        }
-        
-        // Process slot changes
-        for (const change of grouped.slots || []) {
-            await this.processSlotChange(change);
-        }
-        
-        // Process component changes
-        for (const change of grouped.components || []) {
-            await this.processComponentChange(change);
-        }
-        
-        // Process component additions
-        for (const change of grouped.componentAdds || []) {
-            await this.processComponentAdd(change);
-        }
-        
-        // Process component removals
-        for (const change of grouped.componentRemoves || []) {
-            await this.processComponentRemove(change);
-        }
-        
-        // Process slot additions
-        for (const change of grouped.slotAdds || []) {
-            await this.processSlotAdd(change);
-        }
-        
-        // Process slot removals
-        for (const change of grouped.slotRemoves || []) {
-            await this.processSlotRemove(change);
-        }
-        
-        // Process slot moves
-        for (const change of grouped.slotMoves || []) {
-            await this.processSlotMove(change);
-        }
-    }
-
-    async processSpacePropertyChange(change) {
-        await window.SM?.setSpaceProperty(
-            change.metadata.key,
-            change.value,
-            change.metadata.isProtected
-        );
-    }
-
-    async processSlotChange(change) {
-        // Update local state
-        const slot = window.SM?.getSlotById(change.targetId);
-        if (slot) {
-            slot[change.property] = change.value;
-        }
-        
-        // Generate space key
-        const spaceKey = this.generateSpaceKey(change);
-        if (spaceKey) {
-            await window.SM?.setSpaceProperty(spaceKey, change.value, false);
-        }
-        
-        // Update Unity if needed
-        if (change.property === 'active') {
-            await window.SM?.updateUnityObject(change.targetId, change.property, change.value);
-        }
-    }
-
-    async processComponentChange(change) {
-        // Update local state
-        const slot = window.SM?.getSlotById(change.metadata.slotId);
-        if (slot) {
-            const component = slot.components.find(c => c.id === change.targetId);
-            if (component && component.properties) {
-                component.properties[change.property] = change.value;
-            }
-        }
-        
-        // Generate space key
-        const spaceKey = this.generateSpaceKey(change);
-        if (spaceKey) {
-            await window.SM?.setSpaceProperty(spaceKey, change.value, false);
-        }
-        
-        // Apply component-specific handler if available
-        const handler = this.componentHandlers.get(change.metadata.componentType);
-        if (handler && handler.apply) {
-            const component = this.getComponentById(change.targetId);
-            if (component && component._bs) {
-                // Transform value if needed
-                let transformedValue = change.value;
-                if (handler.transform) {
-                    transformedValue = handler.transform(change.property, change.value);
-                }
-                await handler.apply(component._bs, change.property, transformedValue);
-            }
-        } else {
-            // Default Unity update
-            await window.SM?.updateUnityComponent(change.targetId, change.property, change.value);
-        }
-    }
-
-    groupChangesByType(changes) {
-        return changes.reduce((groups, change) => {
-            const type = change.type + 's'; // pluralize
-            if (!groups[type]) groups[type] = [];
-            groups[type].push(change);
-            return groups;
-        }, {});
-    }
-    
-    async processComponentAdd(change) {
-        // Component addition is already handled in component-menu.js
-        // This is just for history tracking
-        console.log('Component added:', change.value.componentType, 'to slot:', change.metadata.slotId);
-    }
-    
-    async processComponentRemove(change) {
-        console.log('Component removal requested:', change);
-        
-        try {
-            // Use scene manager's deleteComponent method which handles all the cleanup
-            await sceneManager.deleteComponent(
-                change.metadata.slotId,
-                change.targetId,
-                change.metadata.componentType
-            );
-            
-            // Unregister from change manager if it was registered
-            this.unregisterComponent(change.targetId);
-            
-            console.log('Component removed successfully');
-        } catch (error) {
-            console.error('Failed to remove component:', error);
-        }
-    }
-    
-    async processSlotAdd(change) {
-        console.log('Slot addition requested:', change);
-        
-        try {
-            const newSlot = await sceneManager.addNewSlot(change.value.parentId);
-            console.log("newSlot", newSlot)
-            if (newSlot) {
-                // Store the new slot ID in a map for history tracking
-                if (!this.slotAddHistory) {
-                    this.slotAddHistory = new Map();
-                }
-                // Use a composite key based on parent and timestamp to handle multiple adds
-                const historyKey = `${change.value.parentId || 'root'}_${change.timestamp || Date.now()}`;
-                this.slotAddHistory.set(historyKey, newSlot.id);
-                
-                // Also store by slot ID for reverse lookup
-                this.slotAddHistory.set(newSlot.id, historyKey);
-                
-                // If there's a parent, expand it
-                if (change.value.parentId) {
-                    sceneManager.expandedNodes.add(change.value.parentId);
-                }
-                
-                // Select the new slot
-                sceneManager.selectSlot(newSlot.id);
-                
-                // Trigger UI updates
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: newSlot.id }
-                }));
-                
-                console.log('Slot added successfully:', newSlot.id);
-            }
-        } catch (error) {
-            console.error('Failed to add slot:', error);
-        }
-    }
-    
-    async processSlotRemove(change) {
-        console.log('Slot removal requested:', change);
-        
-        try {
-            await sceneManager.deleteSlot(change.targetId);
-            
-            // Clear selection if the deleted slot was selected
-            if (sceneManager.selectedSlot === change.targetId) {
-                sceneManager.selectedSlot = null;
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: null }
-                }));
-            }
-            
-            console.log('Slot removed successfully');
-        } catch (error) {
-            console.error('Failed to remove slot:', error);
-        }
-    }
-    
-    async processSlotMove(change) {
-        console.log('Slot move requested:', change);
-        
-        try {
-            if (change.value === null) {
-                // Move to root
-                await sceneManager.moveSlotToRoot(change.targetId);
-            } else {
-                // Move to new parent
-                await sceneManager.reparentSlot(change.targetId, change.value);
-                
-                // Expand the new parent
-                sceneManager.expandedNodes.add(change.value);
-            }
-            
-            console.log('Slot moved successfully');
-        } catch (error) {
-            console.error('Failed to move slot:', error);
-        }
+    registerComponentHandler(componentType, handler) {
+        this.componentHandlers.set(componentType, handler);
     }
 
     registerComponent(component) {
@@ -555,57 +496,11 @@ class ChangeManager {
 
     getComponentById(componentId) {
         return this.registeredComponents.get(componentId) || 
-               window.SM?.sceneData.componentMap[componentId];
+               window.SM?.sceneData?.componentMap?.[componentId];
     }
 
-    clearPendingChangesForSlot(slotId) {
-        // Remove any pending changes for this slot
-        for (const [key, change] of this.pendingChanges) {
-            if (change.metadata && change.metadata.slotId === slotId) {
-                this.pendingChanges.delete(key);
-            }
-        }
-    }
-
-    onChangeFlushed(callback) {
-        this.changeListeners.add(callback);
-    }
-
-    offChangeFlushed(callback) {
-        this.changeListeners.delete(callback);
-    }
-
-    notifyListeners(changes) {
-        this.changeListeners.forEach(callback => {
-            try {
-                callback(changes);
-            } catch (error) {
-                console.error('Error in change listener:', error);
-            }
-        });
-        
-        // Check if we need to update hierarchy
-        const hierarchyChanges = changes.some(c => 
-            c.type === 'slotAdd' || c.type === 'slotRemove' || c.type === 'slotMove'
-        );
-        
-        if (hierarchyChanges && window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
-    }
-
-    registerComponentHandler(componentType, handler) {
-        this.componentHandlers.set(componentType, handler);
-    }
-
-    handleExternalChanges(externalChanges) {
-        // Handle changes from external sources (e.g., other clients)
-        // This prevents feedback loops when syncing
-        console.log('Handling external changes:', externalChanges);
-        
-        // TODO: Implement logic to apply external changes without triggering local updates
-        // This would involve updating the local state directly without going through
-        // the queueChange mechanism
+    getHistoryManager() {
+        return this.historyManager;
     }
 }
 

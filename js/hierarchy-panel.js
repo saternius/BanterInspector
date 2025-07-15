@@ -7,7 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
-    const { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
+    const { changeManager } = await import(`${basePath}/change-manager.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -69,7 +69,7 @@
                 
                 // Queue slot addition through change manager
                 const timestamp = Date.now();
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'slotAdd',
                     targetId: null, // Will be assigned when created
                     property: 'slot',
@@ -102,7 +102,7 @@
                 
                 if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
                     // Queue slot deletion through change manager
-                    simpleChangeManager.applyChange({
+                    changeManager.applyChange({
                         type: 'slotRemove',
                         targetId: sceneManager.selectedSlot,
                         property: 'slot',
@@ -403,7 +403,7 @@
             
             // Queue slot move through change manager
             const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
-            simpleChangeManager.applyChange({
+            changeManager.applyChange({
                 type: 'slotMove',
                 targetId: this.draggedSlotId,
                 property: 'parent',
@@ -453,7 +453,7 @@
             
             // Queue slot move to root through change manager
             const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
-            simpleChangeManager.applyChange({
+            changeManager.applyChange({
                 type: 'slotMove',
                 targetId: this.draggedSlotId,
                 property: 'parent',

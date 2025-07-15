@@ -507,7 +507,7 @@
                     await newGameObject.SetParent(parentGameObject, true);
                 }
                 await newGameObject.SetActive(true);
-                let newSlotId = newGameObject.id;
+                let newSlotId = parseInt(newGameObject.id);
                 
                 // Register the GameObject in the scene
                 if (!this.scene.objects) {

@@ -7,7 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
-    const { simpleChangeManager } = await import(`${basePath}/simple-change-manager.js`);
+    const { changeManager } = await import(`${basePath}/change-manager.js`);
 
     export class SpacePropsPanel {
         constructor() {
@@ -296,7 +296,7 @@
                         y: parseFloat(yInput.value) || 0,
                         z: parseFloat(zInput.value) || 0
                     };
-                    simpleChangeManager.applyChange({
+                    changeManager.applyChange({
                         type: 'spaceProperty',
                         targetId: key,
                         property: 'value',
@@ -319,7 +319,7 @@
                 if (input) {
                     // Use parseValue method to handle all value types including Vector3
                     const newValue = this.parseValue(input.value);
-                    simpleChangeManager.applyChange({
+                    changeManager.applyChange({
                         type: 'spaceProperty',
                         targetId: key,
                         property: 'value',
@@ -354,7 +354,7 @@
          */
         deleteProp(type, key) {
             if (confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'spaceProperty',
                     targetId: key,
                     property: 'value',
@@ -364,10 +364,11 @@
                         key: key,
                         isProtected: type === 'protected',
                         uiContext: {
-                    panelType: 'space-props',
-                    inputElement: 'delete-button-' + key,
-                    eventType: 'click'
-                }
+                            panelType: 'space-props',
+                            inputElement: 'delete-button-' + key,
+                            eventType: 'click'
+                        }
+                    }
             });
                 if (type === 'public') {
                     delete sceneManager.scene.spaceState.public[key];
@@ -391,7 +392,7 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'spaceProperty',
                     targetId: key,
                     property: 'value',
@@ -427,7 +428,7 @@
             const value = this.parseValue(valueInput.value);
             
             if (key) {
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     type: 'spaceProperty',
                     targetId: key,
                     property: 'value',
@@ -503,7 +504,7 @@
                     y: parseFloat(yInput.value) || 0,
                     z: parseFloat(zInput.value) || 0
                 };
-                simpleChangeManager.applyChange({
+                changeManager.applyChange({
                     key: key,
                     value: newValue,
                     isProtected: type === 'protected',
@@ -512,7 +513,6 @@
                         panelType: 'space-props',
                         inputElement: 'vector3-' + key + '-' + axis,
                         eventType: 'change'
-                            }
                         }
                     });
                 
