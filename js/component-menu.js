@@ -8,6 +8,7 @@ let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsde
 const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 const { sceneManager } = await import( `${basePath}/scene-manager.js`);
 const { changeManager } = await import(`${basePath}/change-manager.js`);
+const { ComponentAddChange } = await import(`${basePath}/types.js`);
 
 export class ComponentMenu {
     constructor() {
@@ -216,87 +217,22 @@ export class ComponentMenu {
             }
         }
         
+        // Create and apply the component add change
         const componentConfig = this.getDefaultComponentConfig(componentType);
-        let slotComponent = null;
-        if(componentType === 'MonoBehavior'){
-            slotComponent = new MonoBehavior(slot, {
-                id: Math.floor(Math.random()*10000),
-                type: 'MonoBehavior',
-                properties: componentConfig.properties
-            });
-            // Register with change manager
-            changeManager.registerComponent(slotComponent);
-        }else{
-            let unityComponent = await this.createUnityComponent(this.selectedSlotId, componentType);
-            console.log("unityComponent", unityComponent)
-            if(unityComponent){
-                slotComponent = {
-                    id: unityComponent.id,
-                    type: componentType,
-                    properties: componentConfig.properties,
-                    _bs: unityComponent
-                };
-                
-                // Queue component addition as a single action
-                changeManager.applyChange({
-                    type: 'componentAdd',
-                    targetId: unityComponent.id,
-                    property: 'component',
-                    value: {
-                        componentType: componentType,
-                        properties: componentConfig.properties
-                    },
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: this.selectedSlotId,
-                        componentType: componentType,
-                        componentIndex: slot.components.length,
-                        uiContext: {
-                            panelType: 'component-menu',
-                            inputElement: 'add-component-' + componentType,
-                            eventType: 'add'
-                        }
-                    }
-                });
-            }
-        }
-
-        // Only add the component if it was successfully created
-        if (slotComponent) {
-            slot.components.push(slotComponent);
-            sceneManager.sceneData.componentMap[slotComponent.id] = slotComponent;
-            
-            // For MonoBehavior, also queue the add action
-            if (componentType === 'MonoBehavior') {
-                changeManager.applyChange({
-                    type: 'componentAdd',
-                    targetId: slotComponent.id,
-                    property: 'component',
-                    value: {
-                        componentType: componentType,
-                        properties: componentConfig.properties
-                    },
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: this.selectedSlotId,
-                        componentType: componentType,
-                        componentIndex: slot.components.length - 1,
-                        uiContext: {
-                            panelType: 'component-menu',
-                            inputElement: 'add-component-' + componentType,
-                            eventType: 'add'
-                        }
-                    }
-                });
-            }
-            
-            console.log(this.selectedSlotId);
-            let prevSel = this.selectedSlotId;
-            this.hide();
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: prevSel }
-            }));
-        }
+        const change = new ComponentAddChange(
+            this.selectedSlotId, 
+            componentType, 
+            componentConfig,
+            { source: 'ui' }
+        );
+        
+        await changeManager.applyChange(change);
+        
+        // Hide menu and refresh UI
+        this.hide();
+        document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+            detail: { slotId: this.selectedSlotId }
+        }));
         
     }
 

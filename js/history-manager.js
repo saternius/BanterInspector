@@ -1,13 +1,10 @@
 /**
  * History Manager for Undo/Redo functionality
- * 
- * Design principles:
- * - Clear data flow - unidirectional from UI → Change Manager → History Manager
- * - Simple and maintainable - easy to understand and extend
+ * Works with the new change class system
  */
-let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
-const { ChangeTypes } = await import(`${basePath}/types.js`);
+let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { deepClone } = await import(`${basePath}/utils.js`);
+
 export class HistoryManager {
     constructor() {
         this.undoStack = [];
@@ -21,22 +18,26 @@ export class HistoryManager {
     
     /**
      * Record a change in history
-     * @param {Object} change - The change object
-     * @param {*} oldValue - The value before the change
+     * @param {Object} change - The change object with apply() and undo() methods
      */
-    recordChange(change, oldValue) {
+    recordChange(change) {
         // Don't record if we're applying history
         if (this.isApplying) return;
         
         // Don't record if not from UI
-        if (change.source !== 'inspector-ui') return;
+        if (change.options?.source !== 'ui') return;
+        
+        // Validate change object
+        if (!change || typeof change.apply !== 'function' || typeof change.undo !== 'function') {
+            console.error('Invalid change object for history - must have apply() and undo() methods');
+            return;
+        }
         
         const entry = {
             id: Date.now(),
             timestamp: Date.now(),
-            description: this.describeChange(change),
-            forward: deepClone(change),
-            reverse: deepClone(this.createReverseChange(change, oldValue))
+            description: change.getDescription ? change.getDescription() : 'Unknown change',
+            change: change // Store the actual change object
         };
         
         this.undoStack.push(entry);
@@ -52,71 +53,6 @@ export class HistoryManager {
     }
     
     /**
-     * Create a reverse change for undo
-     */
-    createReverseChange(change, oldValue) {
-        const reverse = {
-            type: change.type,
-            targetId: change.targetId,
-            targetType: change.targetType,
-            property: change.property,
-            value: oldValue,
-            oldValue: change.value,
-            metadata: { ...change.metadata }
-        };
-        
-        // Handle special cases
-        switch (change.type) {
-            case ChangeTypes.COMPONENT_ADD:
-                reverse.type = ChangeTypes.COMPONENT_REMOVE;
-                break;
-            case ChangeTypes.COMPONENT_REMOVE:
-                reverse.type = ChangeTypes.COMPONENT_ADD;
-                reverse.componentData = oldValue; // Full component state
-                break;
-            case ChangeTypes.SLOT_ADD:
-                reverse.type = ChangeTypes.SLOT_REMOVE;
-                break;
-            case ChangeTypes.SLOT_REMOVE:
-                reverse.type = ChangeTypes.SLOT_ADD;
-                reverse.slotData = oldValue; // Full slot state
-                break;
-            case ChangeTypes.SLOT_MOVE:
-                reverse.newParentId = oldValue; // Old parent
-                reverse.oldParentId = change.newParentId;
-                break;
-        }
-        
-        return reverse;
-    }
-    
-    /**
-     * Generate human-readable description
-     */
-    describeChange(change) {
-        switch (change.type) {
-            case ChangeTypes.COMPONENT:
-                return `Changed ${change.metadata.componentType} ${change.property}`;
-            case ChangeTypes.SLOT:
-                return `Changed slot ${change.property}`;
-            case ChangeTypes.COMPONENT_ADD:
-                return `Added ${change.metadata.componentType} component`;
-            case ChangeTypes.COMPONENT_REMOVE:
-                return `Removed ${change.metadata.componentType} component`;
-            case ChangeTypes.SLOT_ADD:
-                return `Added new slot`;
-            case ChangeTypes.SLOT_REMOVE:
-                return `Removed slot ${change.metadata.slotName || ''}`;
-            case ChangeTypes.SLOT_MOVE:
-                return `Moved slot`;
-            case ChangeTypes.SPACE_PROPERTY:
-                const propType = change.metadata.isProtected ? 'protected' : 'public';
-                return `Changed ${propType} property ${change.metadata.key}`;
-        }
-        return 'Made changes';
-    }
-    
-    /**
      * Undo the last change
      */
     async undo() {
@@ -129,7 +65,9 @@ export class HistoryManager {
         this.isApplying = true;
         
         try {
-            await changeManager.applyChange(entry.reverse);
+            // Call the change object's undo method
+            await entry.change.undo();
+            
             this.redoStack.push(entry);
             this.updateUI();
             this.showNotification(`Undone: ${entry.description}`);
@@ -156,7 +94,9 @@ export class HistoryManager {
         this.isApplying = true;
         
         try {
-            await changeManager.applyChange(entry.forward);
+            // Call the change object's apply method
+            await entry.change.apply();
+            
             this.undoStack.push(entry);
             this.updateUI();
             this.showNotification(`Redone: ${entry.description}`);
@@ -170,7 +110,7 @@ export class HistoryManager {
         }
     }
     
-    /*
+    /**
      * Setup keyboard shortcuts
      */
     setupKeyboardShortcuts() {

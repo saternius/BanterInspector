@@ -9,7 +9,7 @@
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotPropertyChange } = await import(`${basePath}/types.js`);
+    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/types.js`);
     
     export class PropertiesPanel {
         constructor() {
@@ -125,7 +125,8 @@
             const handleRename = () => {
                 const newName = inputName.value.trim();
                 if (newName && newName !== slot.name) {
-                    changeManager.applyChange(new SlotPropertyChange(slot.id, 'name', newName, {source: 'ui'}));
+                    const change = new SlotPropertyChange(slot.id, 'name', newName, { source: 'ui' });
+                    changeManager.applyChange(change);
                     if (this.selectedSlotNameElement) {
                         this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
                     }
@@ -141,30 +142,14 @@
             
             // Active property
             const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
-                changeManager.applyChange({
-                    type: 'slot',
-                    targetId: slot.id,
-                    property: 'active',
-                    value: value,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: slot.id
-                    }
-                });
+                const change = new SlotPropertyChange(slot.id, 'active', value, { source: 'ui' });
+                changeManager.applyChange(change);
             });
             
             // Persistent property
             const persistentRow = this.createPropertyRow('Persistent', slot.persistent, 'checkbox', (value) => {
-                changeManager.applyChange({
-                    type: 'slot',
-                    targetId: slot.id,
-                    property: 'persistent',
-                    value: value,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: slot.id
-                    }
-                });
+                const change = new SlotPropertyChange(slot.id, 'persistent', value, { source: 'ui' });
+                changeManager.applyChange(change);
             });
             
             body.appendChild(nameRow);
@@ -293,18 +278,8 @@
                 input.className = 'checkbox-input';
                 input.checked = value;
                 input.onchange = () => {
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: componentId,
-                        property: key,
-                        value: input.checked,
-                        source: 'inspector-ui',
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: componentType,
-                            componentIndex: componentIndex,
-                        }
-                    });
+                    const change = new ComponentPropertyChange(componentId, key, input.checked, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
                 
@@ -317,18 +292,8 @@
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
                     if (!isNaN(numValue)) {
-                        changeManager.applyChange({
-                            type: 'component',
-                            targetId: componentId,
-                            property: key,
-                            value: numValue,
-                            source: 'inspector-ui',
-                            metadata: {
-                                slotId: sceneManager.selectedSlot,
-                                componentType: componentType,
-                                componentIndex: componentIndex,
-                                }
-                        });
+                        const change = new ComponentPropertyChange(componentId, key, numValue, { source: 'ui' });
+                        changeManager.applyChange(change);
                     }
                 };
                 valueContainer.appendChild(input);
@@ -407,23 +372,8 @@
                         a: value.a || 1
                     };
                     swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${newColor.a})`;
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: componentId,
-                        property: key,
-                        value: newColor,
-                        source: 'inspector-ui',
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: componentType,
-                            componentIndex: componentIndex,
-                            uiContext: {
-                                panelType: 'properties',
-                                inputElement: 'color-picker-' + key,
-                                eventType: 'change',
-                                }
-                        }
-                    });
+                    const change = new ComponentPropertyChange(componentId, key, newColor, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 
                 preview.onclick = () => colorInput.click();
@@ -445,23 +395,8 @@
                         if (!isNaN(newValue)) {
                             value[channel] = Math.max(0, Math.min(1, newValue));
                             swatch.style.backgroundColor = `rgba(${value.r * 255}, ${value.g * 255}, ${value.b * 255}, ${value.a})`;
-                            changeManager.applyChange({
-                                type: 'component',
-                                targetId: componentId,
-                                property: key,
-                                value: value,
-                                source: 'inspector-ui',
-                                metadata: {
-                                    slotId: sceneManager.selectedSlot,
-                                    componentType: componentType,
-                                    componentIndex: componentIndex,
-                                    uiContext: {
-                                        panelType: 'properties',
-                                        inputElement: 'color-rgba-' + key + '-' + channel,
-                                        eventType: 'change',
-                                                }
-                                }
-                            });
+                            const change = new ComponentPropertyChange(componentId, key, value, { source: 'ui' });
+                            changeManager.applyChange(change);
                         }
                     };
                     
@@ -480,23 +415,8 @@
                 input.className = 'property-input';
                 input.value = value?.toString() || '';
                 input.onchange = () => {
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: componentId,
-                        property: key,
-                        value: input.value,
-                        source: 'inspector-ui',
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: componentType,
-                            componentIndex: componentIndex,
-                            uiContext: {
-                                panelType: 'properties',
-                                inputElement: 'text-' + key,
-                                eventType: 'change',
-                                }
-                        }
-                    });
+                    const change = new ComponentPropertyChange(componentId, key, input.value, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
             }
@@ -567,18 +487,8 @@
             // Name property
             const nameRow = this.createPropertyRow('Name', component.properties.name || 'myScript', 'text', (value) => {
                 component.properties.name = value;
-                changeManager.applyChange({
-                    type: 'component',
-                    targetId: component.id,
-                    property: 'name',
-                    value: value,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: sceneManager.selectedSlot,
-                        componentType: 'MonoBehavior',
-                        componentIndex: index
-                    }
-                });
+                const change = new ComponentPropertyChange(component.id, 'name', value, { source: 'ui' });
+                changeManager.applyChange(change);
             });
             body.appendChild(nameRow);
             
@@ -629,18 +539,8 @@
                     }
                 }
                 
-                changeManager.applyChange({
-                    type: 'component',
-                    targetId: component.id,
-                    property: 'file',
-                    value: fileSelect.value,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: sceneManager.selectedSlot,
-                        componentType: 'MonoBehavior',
-                        componentIndex: index
-                    }
-                });
+                const change = new ComponentPropertyChange(component.id, 'file', fileSelect.value, { source: 'ui' });
+                changeManager.applyChange(change);
                 
                 // Re-render to show vars
                 this.render(sceneManager.selectedSlot);
@@ -708,17 +608,8 @@
                         component.updateVar(varName, input.checked);
                     }
                     component.properties.vars[varName] = input.checked;
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: component.id,
-                        property: 'vars',
-                        value: component.properties.vars,
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: 'MonoBehavior',
-                            componentIndex: componentIndex,
-                        }
-                    });
+                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
                 
@@ -735,17 +626,8 @@
                             component.updateVar(varName, numValue);
                         }
                         component.properties.vars[varName] = numValue;
-                        changeManager.applyChange({
-                            type: 'component',
-                            targetId: component.id,
-                            property: 'vars',
-                            value: component.properties.vars,
-                            metadata: {
-                                slotId: sceneManager.selectedSlot,
-                                componentType: 'MonoBehavior',
-                                componentIndex: componentIndex,
-                                }
-                        });
+                        const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                        changeManager.applyChange(change);
                     }
                 };
                 valueContainer.appendChild(input);
@@ -773,17 +655,8 @@
                                 component.updateVar(varName, varValue);
                             }
                             component.properties.vars[varName] = varValue;
-                            changeManager.applyChange({
-                                type: 'component',
-                                targetId: component.id,
-                                property: 'vars',
-                                value: component.properties.vars,
-                                metadata: {
-                                    slotId: sceneManager.selectedSlot,
-                                    componentType: 'MonoBehavior',
-                                    componentIndex: componentIndex,
-                                        }
-                            });
+                            const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                            changeManager.applyChange(change);
                         }
                     };
                     
@@ -819,17 +692,8 @@
                         component.updateVar(varName, varValue);
                     }
                     component.properties.vars[varName] = varValue;
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: component.id,
-                        property: 'vars',
-                        value: component.properties.vars,
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: 'MonoBehavior',
-                            componentIndex: componentIndex,
-                        }
-                    });
+                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 
                 preview.onclick = () => colorInput.click();
@@ -849,17 +713,8 @@
                         component.updateVar(varName, input.value);
                     }
                     component.properties.vars[varName] = input.value;
-                    changeManager.applyChange({
-                        type: 'component',
-                        targetId: component.id,
-                        property: 'vars',
-                        value: component.properties.vars,
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            componentType: 'MonoBehavior',
-                            componentIndex: componentIndex,
-                        }
-                    });
+                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
             }
@@ -922,18 +777,8 @@
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
                 vector[axis] = numValue;
-                changeManager.applyChange({
-                    type: 'component',
-                    targetId: componentId,
-                    property: key,
-                    value: vector,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: sceneManager.selectedSlot,
-                        componentType: componentType,
-                        componentIndex: componentIndex
-                    }
-                });
+                const change = new ComponentPropertyChange(componentId, key, vector, { source: 'ui' });
+                changeManager.applyChange(change);
             }
         }
 
@@ -960,18 +805,8 @@
                 const newQuaternion = eulerToQuaternion(eulerAngles);
                 
                 // Queue the change
-                changeManager.applyChange({
-                    type: 'component',
-                    targetId: componentId,
-                    property: 'rotation',
-                    value: newQuaternion,
-                    source: 'inspector-ui',
-                    metadata: {
-                        slotId: sceneManager.selectedSlot,
-                        componentType: 'Transform',
-                        componentIndex: componentIndex
-                    }
-                });
+                const change = new ComponentPropertyChange(componentId, 'rotation', newQuaternion, { source: 'ui' });
+                changeManager.applyChange(change);
             }
         }
 
@@ -984,22 +819,8 @@
             if (!slotId) return;
             
             // Queue the component removal through change manager
-            changeManager.applyChange({
-                type: 'componentRemove',
-                targetId: componentId,
-                property: 'component',
-                value: null,
-                source: 'inspector-ui',
-                metadata: {
-                    slotId: slotId,
-                    componentType: componentType,
-                    uiContext: {
-                        panelType: 'properties',
-                        inputElement: 'delete-component-' + componentType,
-                        eventType: 'delete'
-                    }
-                }
-            });
+            const change = new ComponentRemoveChange(componentId, { source: 'ui' });
+            changeManager.applyChange(change);
             
             // The actual deletion will be handled by the change manager
             // Re-render will happen after the change is processed

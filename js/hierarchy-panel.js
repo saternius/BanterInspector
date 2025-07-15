@@ -8,6 +8,7 @@
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
+    const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/types.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -68,26 +69,8 @@
                 const parentId = sceneManager.selectedSlot;
                 
                 // Queue slot addition through change manager
-                const timestamp = Date.now();
-                changeManager.applyChange({
-                    type: 'slotAdd',
-                    targetId: null, // Will be assigned when created
-                    property: 'slot',
-                    value: {
-                        parentId: parentId, // null means add to root
-                        name: `New Slot ${timestamp}`
-                    },
-                    source: 'inspector-ui',
-                    metadata: {
-                        parentId: parentId,
-                        uiContext: {
-                            panelType: 'hierarchy',
-                            inputElement: 'add-child-slot-btn',
-                            eventType: 'add'
-                        }
-                    },
-                    timestamp: timestamp
-                });
+                const change = new SlotAddChange(parentId, null, { source: 'ui' });
+                changeManager.applyChange(change);
             });
 
             // Delete button
@@ -102,22 +85,8 @@
                 
                 if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
                     // Queue slot deletion through change manager
-                    changeManager.applyChange({
-                        type: 'slotRemove',
-                        targetId: sceneManager.selectedSlot,
-                        property: 'slot',
-                        value: null,
-                        source: 'inspector-ui',
-                        metadata: {
-                            slotId: sceneManager.selectedSlot,
-                            slotName: slot.name,
-                            uiContext: {
-                                panelType: 'hierarchy',
-                                inputElement: 'delete-slot-btn',
-                                eventType: 'delete'
-                            }
-                        }
-                    });
+                    const change = new SlotRemoveChange(sceneManager.selectedSlot, { source: 'ui' });
+                    changeManager.applyChange(change);
                 }
             });
         }
@@ -402,24 +371,8 @@
             }
             
             // Queue slot move through change manager
-            const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
-            changeManager.applyChange({
-                type: 'slotMove',
-                targetId: this.draggedSlotId,
-                property: 'parent',
-                value: targetSlotId,
-                source: 'inspector-ui',
-                metadata: {
-                    slotId: this.draggedSlotId,
-                    oldParentId: draggedSlot?.parentId || null,
-                    newParentId: targetSlotId,
-                    uiContext: {
-                        panelType: 'hierarchy',
-                        inputElement: 'drag-drop',
-                        eventType: 'move'
-                    }
-                }
-            });
+            const change = new SlotMoveChange(this.draggedSlotId, targetSlotId, { source: 'ui' });
+            changeManager.applyChange(change);
             
             // Expand the target node to show the newly added child
             sceneManager.expandedNodes.add(targetSlotId);
@@ -452,24 +405,8 @@
             if (!this.draggedSlotId) return;
             
             // Queue slot move to root through change manager
-            const draggedSlot = sceneManager.getSlotById(this.draggedSlotId);
-            changeManager.applyChange({
-                type: 'slotMove',
-                targetId: this.draggedSlotId,
-                property: 'parent',
-                value: null, // null parent means root
-                source: 'inspector-ui',
-                metadata: {
-                    slotId: this.draggedSlotId,
-                    oldParentId: draggedSlot?.parentId || null,
-                    newParentId: null,
-                    uiContext: {
-                        panelType: 'hierarchy',
-                        inputElement: 'drag-drop-root',
-                        eventType: 'move'
-                    }
-                }
-            });
+            const change = new SlotMoveChange(this.draggedSlotId, null, { source: 'ui' });
+            changeManager.applyChange(change);
         }
     }
 // })()

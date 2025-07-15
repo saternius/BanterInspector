@@ -1,440 +1,115 @@
 /**
- * Simplified Change Manager
- * Applies changes immediately without batching
+ * Refactored Change Manager
+ * Uses specialized change classes for cleaner separation of concerns
  */
 
-let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
-const { sceneManager } = await import(`${basePath}/scene-manager.js`);
+let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { HistoryManager } = await import(`${basePath}/history-manager.js`);
-const { ChangeTypes } = await import(`${basePath}/types.js`);
 
 class ChangeManager {
     constructor() {
-        this.componentHandlers = new Map();
         this.historyManager = null;
-        this.slotAddHistory = new Map(); // Track newly created slots for undo
         this.changeListeners = [];
+        this.isProcessing = false;
     }
 
     async initialize() {
-        // Register default component handlers
-        this.registerDefaultHandlers();
-        
         // Initialize history manager
         this.historyManager = new HistoryManager();
-        
-        console.log('Change Manager initialized');
+        console.log('Refactored Change Manager initialized');
     }
 
+    /**
+     * Add a change listener
+     */
     addChangeListener(listener) {
         this.changeListeners.push(listener);
     }
 
     /**
-     * Apply a change immediately
+     * Remove a change listener
+     */
+    removeChangeListener(listener) {
+        const index = this.changeListeners.indexOf(listener);
+        if (index > -1) {
+            this.changeListeners.splice(index, 1);
+        }
+    }
+
+    /**
+     * Apply a change - now accepts change objects with apply() and undo() methods
      */
     async applyChange(change) {
-        // Skip if from history (to prevent loops)
-        if (change.source === 'history-apply') {
-            console.log("history change", change)
-            return this.processChange(change);
-        }
-        
-        // Record in history if from UI
-        if (change.source === 'inspector-ui' && this.historyManager && !this.historyManager.isApplying) {
-            const oldValue = this.getOldValue(change);
-            this.historyManager.recordChange(change, oldValue);
-        }
-        
-        // Apply the change
-        return this.processChange(change);
-    }
-
-    /**
-     * Process a change based on its type
-     */
-    async processChange(change) {
-        console.log(`Processing ${change.type} change:`, change);
-        
-        switch (change.type) {
-            case ChangeTypes.COMPONENT:
-                return this.processComponentChange(change);
-            case ChangeTypes.SLOT:
-                return this.processSlotChange(change);
-            case ChangeTypes.SPACE_PROPERTY:
-                return this.processSpacePropertyChange(change);
-            case ChangeTypes.COMPONENT_ADD:
-                return this.processComponentAdd(change);
-            case ChangeTypes.COMPONENT_REMOVE:
-                return this.processComponentRemove(change);
-            case ChangeTypes.SLOT_ADD:
-                return this.processSlotAdd(change);
-            case ChangeTypes.SLOT_REMOVE:
-                return this.processSlotRemove(change);
-            case ChangeTypes.SLOT_MOVE:
-                return this.processSlotMove(change);
-            default:
-                console.warn('Unknown change type:', change.type);
+        if (this.isProcessing) {
+            console.warn('Change already in progress');
+            return;
         }
 
-        this.changeListeners.forEach(listener => listener(change));
-    }
+        this.isProcessing = true;
 
-    /**
-     * Get the old value before a change
-     */
-    getOldValue(change) {
-        if (change.type === ChangeTypes.SPACE_PROPERTY) {
-            const spaceState = sceneManager?.scene?.spaceState;
-            if (spaceState) {
-                const props = change.metadata.isProtected ? spaceState.protected : spaceState.public;
-                return props[change.metadata.key];
-            }
-        } else if (change.type === ChangeTypes.SLOT) {
-            const slot = sceneManager?.getSlotById(change.targetId);
-            return slot ? slot[change.property] : undefined;
-        } else if (change.type === ChangeTypes.COMPONENT) {
-            const slot = sceneManager?.getSlotById(change.metadata.slotId);
-            if (slot) {
-                const component = slot.components.find(c => c.id === change.targetId);
-                return component?.properties?.[change.property];
-            }
-        } else if (change.type === ChangeTypes.COMPONENT_ADD || change.type === ChangeTypes.SLOT_ADD) {
-            return null; // Nothing existed before
-        } else if (change.type === ChangeTypes.COMPONENT_REMOVE) {
-            const slot = sceneManager?.getSlotById(change.metadata.slotId);
-            if (slot) {
-                const component = slot.components.find(c => c.id === change.targetId);
-                if (component) {
-                    return {
-                        id: component.id,
-                        type: component.type,
-                        properties: JSON.parse(JSON.stringify(component.properties)),
-                        index: slot.components.indexOf(component)
-                    };
-                }
-            }
-        } else if (change.type === ChangeTypes.SLOT_REMOVE) {
-            const slot = sceneManager?.getSlotById(change.targetId);
-            return slot ? this.captureSlotState(slot) : null;
-        } else if (change.type === ChangeTypes.SLOT_MOVE) {
-            const slot = sceneManager?.getSlotById(change.targetId);
-            return slot?.parentId;
-        }
-        return undefined;
-    }
-
-    /**
-     * Capture complete slot state for undo
-     */
-    captureSlotState(slot) {
-        return {
-            id: slot.id,
-            name: slot.name,
-            active: slot.active,
-            persistent: slot.persistent,
-            parentId: slot.parentId,
-            components: slot.components?.map(c => ({
-                id: c.id,
-                type: c.type,
-                properties: JSON.parse(JSON.stringify(c.properties))
-            })) || [],
-            children: slot.children?.map(child => this.captureSlotState(child)) || []
-        };
-    }
-
-
-    /**
-     * Process component property change
-     */
-    async processComponentChange(change) {
-        console.log("processComponentChange", change)
-        // Update local state
-        const slot = sceneManager?.getSlotById(change.metadata.slotId);
-        if (slot) {
-            const component = slot.components.find(c => c.id === change.targetId);
-            if (component && component.properties) {
-                component.properties[change.property] = change.value;
-            }
-        }
-        
-        // Generate space key for persistence
-        const spaceKey = this.generateSpaceKey(change);
-        if (spaceKey && window.SM) {
-            await window.SM.setSpaceProperty(spaceKey, change.value, false);
-        }
-        
-        // Apply component-specific handler if available
-        const handler = this.componentHandlers.get(change.metadata.componentType);
-        if (handler && handler.apply) {
-            const component = sceneManager.getSlotComponentById(change.targetId);
-            if (component && component._bs) {
-                let transformedValue = change.value;
-                if (handler.transform) {
-                    transformedValue = handler.transform(change.property, change.value);
-                }
-                await handler.apply(component._bs, change.property, transformedValue);
-            }
-        } else if (window.SM) {
-            // Default Unity update
-            await window.SM.updateUnityComponent(change.targetId, change.property, change.value);
-        }
-        
-        // Refresh UI
-        if (window.inspectorApp?.spacePropsPanel) {
-            window.inspectorApp.spacePropsPanel.render();
-        }
-    }
-
-    /**
-     * Process slot property change
-     */
-    async processSlotChange(change) {
-        // Update local state
-        const slot = sceneManager?.getSlotById(change.targetId);
-        if (slot) {
-            slot[change.property] = change.value;
-        }
-        
-        // Generate space key for persistence
-        const spaceKey = this.generateSpaceKey(change);
-        if (spaceKey && window.SM) {
-            await window.SM.setSpaceProperty(spaceKey, change.value, false);
-        }
-        
-        // Update Unity if needed
-        if (change.property === 'active' && window.SM) {
-            await window.SM.updateUnityObject(change.targetId, change.property, change.value);
-        }
-        
-        // Update hierarchy if name changed
-        if (change.property === 'name' && window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
-    }
-
-    /**
-     * Process space property change
-     */
-    async processSpacePropertyChange(change) {
-        if (window.SM) {
-            await window.SM.setSpaceProperty(
-                change.metadata.key,
-                change.value,
-                change.metadata.isProtected
-            );
-        }
-        
-        // Update space props panel
-        if (window.inspectorApp?.spacePropsPanel) {
-            window.inspectorApp.spacePropsPanel.render();
-        }
-    }
-
-    /**
-     * Process component addition
-     */
-    async processComponentAdd(change) {
-        console.log('Component added:', change.value.componentType, 'to slot:', change.metadata.slotId);
-        // Component creation is handled by component-menu.js
-        // This is just for history tracking
-    }
-
-    /**
-     * Process component removal
-     */
-    async processComponentRemove(change) {
-        console.log('Removing component:', change);
-        
         try {
-            await sceneManager.deleteComponent(
-                change.metadata.slotId,
-                change.targetId,
-                change.metadata.componentType
-            );
-            
-            this.unregisterComponent(change.targetId);
-            
-            // Refresh properties panel
-            if (window.inspectorApp?.propertiesPanel) {
-                window.inspectorApp.propertiesPanel.render(change.metadata.slotId);
+            // Validate change object
+            if (!change || typeof change.apply !== 'function') {
+                console.error('Invalid change object - must have apply() method');
+                return;
             }
+
+            console.log(`Applying change: ${change.getDescription ? change.getDescription() : 'Unknown'}`);
+
+            // Skip history recording if from history or not from UI
+            const isFromHistory = change.options?.source === 'history' || this.historyManager?.isApplying;
+            const shouldRecord = !isFromHistory && change.options?.source === 'ui' && this.historyManager;
+
+            // Apply the change
+            await change.apply();
+
+            // Record in history if applicable
+            if (shouldRecord) {
+                this.historyManager.recordChange(change);
+            }
+
+            // Notify listeners
+            this.notifyListeners(change);
+
         } catch (error) {
-            console.error('Failed to remove component:', error);
+            console.error('Failed to apply change:', error);
+            throw error;
+        } finally {
+            this.isProcessing = false;
         }
     }
 
     /**
-     * Process slot addition
+     * Notify all change listeners
      */
-    async processSlotAdd(change) {
-        console.log('Adding slot:', change);
-        
-        try {
-            const newSlot = await sceneManager.addNewSlot(change.value.parentId);
-            if (newSlot) {
-                // Store for undo tracking
-                const historyKey = `${change.value.parentId || 'root'}_${change.timestamp || Date.now()}`;
-                this.slotAddHistory.set(historyKey, newSlot.id);
-                this.slotAddHistory.set(newSlot.id, historyKey);
-                
-                // Expand parent
-                if (change.value.parentId) {
-                    sceneManager.expandedNodes.add(change.value.parentId);
-                }
-                
-                // Select new slot
-                sceneManager.selectSlot(newSlot.id);
-                
-                // Update UI
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: newSlot.id }
-                }));
-                
-                if (window.inspectorApp?.hierarchyPanel) {
-                    window.inspectorApp.hierarchyPanel.render();
-                }
-            }
-        } catch (error) {
-            console.error('Failed to add slot:', error);
-        }
-    }
-
-    /**
-     * Process slot removal
-     */
-    async processSlotRemove(change) {
-        console.log('Removing slot:', change);
-        
-        try {
-            await sceneManager.deleteSlot(change.targetId);
-            
-            // Clear selection if needed
-            if (sceneManager.selectedSlot === change.targetId) {
-                sceneManager.selectedSlot = null;
-                document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                    detail: { slotId: null }
-                }));
-            }
-            
-            // Update hierarchy
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
-            }
-        } catch (error) {
-            console.error('Failed to remove slot:', error);
-        }
-    }
-
-    /**
-     * Process slot move
-     */
-    async processSlotMove(change) {
-        console.log('Moving slot:', change);
-        
-        try {
-            if (change.value === null) {
-                await sceneManager.moveSlotToRoot(change.targetId);
-            } else {
-                await sceneManager.reparentSlot(change.targetId, change.value);
-                sceneManager.expandedNodes.add(change.value);
-            }
-            
-            // Update hierarchy
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
-            }
-        } catch (error) {
-            console.error('Failed to move slot:', error);
-        }
-    }
-
-    /**
-     * Generate space key for persistence
-     */
-    generateSpaceKey(change) {
-        const slot = sceneManager?.getSlotById(change.metadata.slotId);
-        if (!slot) return null;
-        
-        const prefix = '__' + slot.name;
-        
-        if (change.type === ChangeTypes.COMPONENT) {
-            return `${prefix}/${change.metadata.componentType}/${change.property}:component_${change.targetId}`;
-        } else if (change.type === ChangeTypes.SLOT) {
-            return `${prefix}/${change.property}:slot_${change.targetId}`;
-        }
-        return null;
-    }
-
-    /**
-     * Register default component handlers
-     */
-    registerDefaultHandlers() {
-        // Transform handler
-        this.registerComponentHandler('Transform', {
-            validate: (property, value) => {
-                if (property === 'position' || property === 'localScale') {
-                    return typeof value === 'object' && 'x' in value && 'y' in value && 'z' in value;
-                }
-                if (property === 'rotation') {
-                    return typeof value === 'object' && 'x' in value && 'y' in value && 'z' in value && 'w' in value;
-                }
-                return false;
-            },
-            transform: (property, value) => {
-                if (property === 'position' || property === 'localScale') {
-                    return new BS.Vector3(
-                        parseFloat(value.x),
-                        parseFloat(value.y),
-                        parseFloat(value.z)
-                    );
-                }
-                if (property === 'rotation') {
-                    return new BS.Vector4(
-                        parseFloat(value.x),
-                        parseFloat(value.y),
-                        parseFloat(value.z),
-                        parseFloat(value.w)
-                    );
-                }
-                return value;
-            },
-            apply: async (component, property, value) => {
-                component[property] = value;
-            }
-        });
-        
-        // BanterMaterial handler
-        this.registerComponentHandler('BanterMaterial', {
-            validate: (property, value) => {
-                if (property === 'color') {
-                    return typeof value === 'object' && 'r' in value && 'g' in value && 'b' in value;
-                }
-                return true;
-            },
-            transform: (property, value) => {
-                if (property === 'color') {
-                    return new BS.Vector4(
-                        parseFloat(value.r),
-                        parseFloat(value.g),
-                        parseFloat(value.b),
-                        parseFloat(value.a || 1)
-                    );
-                }
-                return value;
-            },
-            apply: async (component, property, value) => {
-                component[property] = value;
+    notifyListeners(change) {
+        this.changeListeners.forEach(listener => {
+            try {
+                listener(change);
+            } catch (error) {
+                console.error('Change listener error:', error);
             }
         });
     }
 
-    registerComponentHandler(componentType, handler) {
-        this.componentHandlers.set(componentType, handler);
-    }
-
+    /**
+     * Get the history manager instance
+     */
     getHistoryManager() {
         return this.historyManager;
+    }
+
+    /**
+     * Component lifecycle management (for compatibility)
+     */
+    registerComponent(component) {
+        // Components now manage their own lifecycle
+        console.log('Component registered:', component.id);
+    }
+
+    unregisterComponent(componentId) {
+        // Components now manage their own lifecycle
+        console.log('Component unregistered:', componentId);
     }
 }
 
