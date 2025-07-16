@@ -56,7 +56,7 @@ export class HistoryManager {
         }
         
         this.updateUI();
-        console.log(`History recorded: ${entry.description}`);
+        //console.log(`History recorded: ${entry.description}`);
     }
     
     /**
@@ -68,9 +68,7 @@ export class HistoryManager {
             return;
         }
         
-        console.log('Before undo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
         const entry = this.undoStack.pop();
-        console.log('Undoing entry:', entry.id, entry.description);
         this.isApplying = true;
         
         try {
@@ -78,7 +76,6 @@ export class HistoryManager {
             await entry.change.undo();
             
             this.redoStack.push(entry);
-            console.log('After undo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
             this.updateUI();
             this.showNotification(`Undone: ${entry.description}`);
         } catch (error) {
@@ -101,9 +98,7 @@ export class HistoryManager {
             return;
         }
         
-        console.log('Before redo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
         const entry = this.redoStack.pop();
-        console.log('Redoing entry:', entry.id, entry.description);
         this.isApplying = true;
         
         try {
@@ -111,7 +106,6 @@ export class HistoryManager {
             await entry.change.apply();
             
             this.undoStack.push(entry);
-            console.log('After redo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
             this.updateUI();
             this.showNotification(`Redone: ${entry.description}`);
         } catch (error) {
@@ -172,8 +166,6 @@ export class HistoryManager {
         document.dispatchEvent(new CustomEvent('historyNotification', {
             detail: { message, type }
         }));
-        
-        console.log(`[History ${type}] ${message}`);
     }
     
     /**

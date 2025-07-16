@@ -69,13 +69,13 @@ export class ComponentPropertyChange {
         this.property = property;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.oldValue = options.oldValue || this.getOldValue();
+        this.oldValue = deepClone(options.oldValue || this.getOldValue());
         this.component = sceneManager.getSlotComponentById(componentId);
-        console.log(`ComponentPropertyChange: ${this.componentId} ${this.property} [${JSON.stringify(this.oldValue)}] => [${JSON.stringify(this.newValue)}]`)
+        Object.freeze(this)
     }
 
     getOldValue() {        
-        return deepClone(component.properties?.[this.property]);
+        return deepClone(this.component.properties?.[this.property]);
     }
 
     async apply() {

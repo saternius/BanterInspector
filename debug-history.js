@@ -1,13 +1,9 @@
 // Debug helper for testing undo/redo functionality
 window.debugHistory = {
-    // Get history manager instance
-    getHistoryManager() {
-        return window.changeManager?.getHistoryManager?.();
-    },
-    
+
     // Show current history status
     status() {
-        const hm = this.getHistoryManager();
+        const hm = window.changeManager;
         if (!hm) {
             console.log('History manager not available');
             return;
@@ -31,7 +27,7 @@ window.debugHistory = {
     
     // Perform undo
     undo() {
-        const hm = this.getHistoryManager();
+        const hm = window.changeManager;
         if (!hm) {
             console.log('History manager not available');
             return;
@@ -43,7 +39,7 @@ window.debugHistory = {
     
     // Perform redo
     redo() {
-        const hm = this.getHistoryManager();
+        const hm = window.changeManager;
         if (!hm) {
             console.log('History manager not available');
             return;
@@ -98,7 +94,7 @@ window.debugHistory = {
     
     // Force update button states
     updateButtons() {
-        const hm = this.getHistoryManager();
+        const hm = window.changeManager;
         if (hm) {
             hm.updateUIState();
             console.log('Button states updated');

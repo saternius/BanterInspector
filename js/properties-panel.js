@@ -801,13 +801,15 @@
             // Update the changed axis
             const numValue = parseFloat(value);
             if (!isNaN(numValue)) {
+                let oldValue = deepClone(currentQuaternion)
+
                 eulerAngles[axis] = numValue;
                 
                 // Convert back to quaternion
                 const newQuaternion = eulerToQuaternion(eulerAngles);
                 
                 // Queue the change
-                const change = new ComponentPropertyChange(componentId, 'rotation', newQuaternion, { source: 'ui' });
+                const change = new ComponentPropertyChange(componentId, 'rotation', newQuaternion, { source: 'ui', oldValue: oldValue });
                 changeManager.applyChange(change);
             }
         }

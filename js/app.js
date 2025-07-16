@@ -45,13 +45,9 @@
                 // Initialize scene manager
                 await sceneManager.initialize();
                 
-                // Initialize simple change manager
-                await changeManager.initialize();
-                
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
                     // Process changes that need UI updates
-                    console.log(change)
                     // if (change instanceof SpacePropertyChange || change instanceof ComponentPropertyChange || change instanceof SlotPropertyChange) {
                     
                     this.spacePropsPanel.render();
@@ -112,18 +108,16 @@
             
             if (undoBtn) {
                 undoBtn.addEventListener('click', () => {
-                    const historyManager = changeManager.getHistoryManager();
-                    if (historyManager) {
-                        historyManager.undo();
+                    if (changeManager) {
+                        changeManager.undo();
                     }
                 });
             }
             
             if (redoBtn) {
                 redoBtn.addEventListener('click', () => {
-                    const historyManager = changeManager.getHistoryManager();
-                    if (historyManager) {
-                        historyManager.redo();
+                    if (changeManager) {
+                        changeManager.redo();
                     }
                 });
             }
