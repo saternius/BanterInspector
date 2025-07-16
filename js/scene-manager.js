@@ -5,7 +5,7 @@
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
-    const { loadMockSceneData } = await import(`${basePath}/mock-data.js`);
+    const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
     const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 
     const SUPPORTED_COMPONENTS = new Set([
@@ -22,7 +22,7 @@
     export class SceneManager {
         constructor() {
             this.scene = null;
-            this.sceneData = {
+            this.slotData = {
                 slots: [],
                 hierarchyMap: {},
                 componentMap: {}
@@ -40,7 +40,7 @@
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
                 console.log('Loading mock data for development...');
-                this.sceneData = loadMockSceneData();
+                this.slotData = loadMockSlotData();
                 this.initializeExpandedNodes();
             }
             window.scene = this.scene
@@ -112,7 +112,7 @@
                     let transformData = await this.extractComponentData(transform, slot);
                     if(transformData){
                         slot.components.push(transformData);
-                        this.sceneData.componentMap[transform.id] = transformData
+                        this.slotData.componentMap[transform.id] = transformData
                     }
                 }
 
@@ -123,7 +123,7 @@
                         let componentData = await this.extractComponentData(component, slot);
                         if(componentData){
                             slot.components.push(componentData);
-                            this.sceneData.componentMap[component.id] = componentData
+                            this.slotData.componentMap[component.id] = componentData
                         }
                     }
                 }
@@ -159,7 +159,7 @@
             }
             
             // Set the scene data
-            this.sceneData.slots = [rootSlot];
+            this.slotData.slots = [rootSlot];
             this.buildHierarchyMap();
             this.initializeExpandedNodes();
         }
@@ -256,16 +256,16 @@
          * Build hierarchy map for quick lookups
          */
         buildHierarchyMap() {
-            this.sceneData.hierarchyMap = {};
+            this.slotData.hierarchyMap = {};
             
             const processSlot = (slot) => {
-                this.sceneData.hierarchyMap[slot.id] = slot;
+                this.slotData.hierarchyMap[slot.id] = slot;
                 if (slot.children) {
                     slot.children.forEach(processSlot);
                 }
             };
             
-            this.sceneData.slots.forEach(processSlot);
+            this.slotData.slots.forEach(processSlot);
         }
 
         /**
@@ -273,7 +273,7 @@
          */
         initializeExpandedNodes() {
             // Expand root nodes by default
-            this.sceneData.slots.forEach(slot => {
+            this.slotData.slots.forEach(slot => {
                 this.expandedNodes.add(slot.id);
             });
         }
@@ -312,7 +312,7 @@
          * Update Unity component with changes
          */
         async updateUnityComponent(componentId, property, newValue) {
-            let slot_component = this.sceneData.componentMap[componentId]
+            let slot_component = this.slotData.componentMap[componentId]
             let type = slot_component.type
             if(type === 'MonoBehavior'){
                 console.log("TODO: Make it so that if this was a manual change, then update the script value")
@@ -408,14 +408,14 @@
          * Get slot by ID
          */
         getSlotById(slotId) {
-            return this.sceneData.hierarchyMap[slotId];
+            return this.slotData.hierarchyMap[slotId];
         }
         
         /**
          * Get all slots as a flat array
          */
         getAllSlots() {
-            return Object.values(this.sceneData.hierarchyMap || {});
+            return Object.values(this.slotData.hierarchyMap || {});
         }
 
         /**
@@ -431,7 +431,7 @@
          * Get the component for a slot
          */
         getSlotComponentById(componentId){
-            return this.sceneData.componentMap[componentId];
+            return this.slotData.componentMap[componentId];
         }
 
         
@@ -475,8 +475,8 @@
 
             try {
                 // Create new GameObject
-                let newSlotName = `NewSlot_${Math.floor(Math.random() * 100000)}`
-                let newGameObject = new BS.GameObject(newSlotName);
+                
+                let newGameObject = new BS.GameObject("UnNamedObject");
                 
                 const transform = await newGameObject.AddComponent(new BS.Transform());
 
@@ -495,7 +495,7 @@
                     this.scene.objects = {};
                 }
                 this.scene.objects[newSlotId] = newGameObject;
-                
+                let newSlotName = `NewSlot_${newSlotId}`
 
                 const newSlot = {
                     id: newSlotId,
@@ -503,19 +503,24 @@
                     parentId: parentId,
                     active: true,
                     persistent: true,
-                    components: [
-                        {
-                            id: transform.id,
-                            type: 'Transform',
-                            properties: {
-                                position: { x: 0, y: 0, z: 0 },
-                                rotation: { x: 0, y: 0, z: 0, w: 1 },
-                                localScale: { x: 1, y: 1, z: 1 }
-                            }
-                        }
-                    ],
-                    children: []
+                    components: [],
+                    children: [],
+                    _bs: newGameObject
                 };
+                let transfromComponent = {
+                    id: parseInt(transform.id),
+                    type: 'Transform',
+                    properties: {
+                        position: { x: 0, y: 0, z: 0 },
+                        rotation: { x: 0, y: 0, z: 0, w: 1 },
+                        localScale: { x: 1, y: 1, z: 1 }
+                    },
+                    _bs: transform,
+                    _slot: newSlot
+                }
+                newSlot.components.push(transfromComponent)
+                this.slotData.componentMap[transform.id] = transfromComponent
+              
                 
                 if (parentId) {
                     const parent = this.getSlotById(parentId);
@@ -527,10 +532,10 @@
                     }
                 } else {
                     // Add to root slots
-                    if (!this.sceneData.slots) {
-                        this.sceneData.slots = [];
+                    if (!this.slotData.slots) {
+                        this.slotData.slots = [];
                     }
-                    this.sceneData.slots.push(newSlot);
+                    this.slotData.slots.push(newSlot);
                 }
                 
                 this.buildHierarchyMap();
@@ -606,7 +611,7 @@
                     parent.children = parent.children.filter(child => child.id !== slotId);
                 }
             } else {
-                this.sceneData.slots = this.sceneData.slots.filter(s => s.id !== slotId);
+                this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
             }
             
             // Clear selection if this slot was selected
@@ -635,7 +640,7 @@
                 }
             } else {
                 // Remove from root
-                this.sceneData.slots = this.sceneData.slots.filter(s => s.id !== slotId);
+                this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
             }
             
             // Add to new parent
@@ -688,7 +693,7 @@
             
             // Add to root
             slot.parentId = null;
-            this.sceneData.slots.push(slot);
+            this.slotData.slots.push(slot);
             
             // Update Unity scene if connected
             if (this.scene && typeof window.BS !== 'undefined') {
@@ -830,7 +835,7 @@
     // Create singleton instance
     export const sceneManager = new SceneManager();
     window.SM = sceneManager
-    window.slots = ()=>{ return window.SM.sceneData.slots }
+    window.slots = ()=>{ return window.SM.slotData.slots }
     window.crawl = ()=>{
         let dig = (slot)=>{
             let map = {

@@ -204,11 +204,6 @@ export class LifecycleManager {
      * Trigger onDestroy for a specific slot and its children
      */
     triggerDestroyForSlot(slotId) {
-        // Clean up any pending changes for this slot in change manager
-        if (window.changeManager) {
-            window.changeManager.clearPendingChangesForSlot(slotId);
-        }
-        
         // Find all MonoBehaviors attached to this slot
         this.monoBehaviors.forEach((monoBehavior, componentId) => {
             if (monoBehavior.slot && monoBehavior.slot.id === slotId) {

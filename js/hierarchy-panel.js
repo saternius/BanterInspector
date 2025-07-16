@@ -99,13 +99,13 @@
             
             this.treeContainer.innerHTML = '';
             
-            if (sceneManager.sceneData.slots.length === 0) {
+            if (sceneManager.slotData.slots.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;
             }
             
             // Get root slots
-            const rootSlots = sceneManager.sceneData.slots;
+            const rootSlots = sceneManager.slotData.slots;
             
             // Render each root slot
             rootSlots.forEach(slot => {

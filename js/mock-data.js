@@ -3,7 +3,7 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-export function loadMockSceneData() {
+export function loadMockSlotData() {
     return {
         slots: [
             {

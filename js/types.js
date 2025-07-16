@@ -71,7 +71,7 @@ export class ComponentPropertyChange {
         this.options = options || {};
         this.oldValue = deepClone(options.oldValue || this.getOldValue());
         this.component = sceneManager.getSlotComponentById(componentId);
-        Object.freeze(this)
+        console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
 
     getOldValue() {        
@@ -280,7 +280,7 @@ export class ComponentAddChange {
         if (slotComponent) {
             this.componentId = slotComponent.id;
             slot.components.push(slotComponent);
-            sceneManager.sceneData.componentMap[slotComponent.id] = slotComponent;
+            sceneManager.slotData.componentMap[slotComponent.id] = slotComponent;
 
             // Refresh properties panel
             if (window.inspectorApp?.propertiesPanel) {
@@ -307,7 +307,7 @@ export class ComponentAddChange {
 
             // Remove from slot
             slot.components.splice(componentIndex, 1);
-            delete sceneManager.sceneData.componentMap[this.componentId];
+            delete sceneManager.slotData.componentMap[this.componentId];
 
             // Remove from Unity
             if (this.componentType !== 'MonoBehavior' && window.SM) {
@@ -462,7 +462,7 @@ export class ComponentRemoveChange {
                 slot.components.push(component);
             }
             
-            sceneManager.sceneData.componentMap[component.id] = component;
+            sceneManager.slotData.componentMap[component.id] = component;
             
         } else {
             // Recreate Unity component
@@ -585,7 +585,7 @@ export class SlotRemoveChange {
             }
         } else {
             // Root level slot
-            this.siblingIndex = sceneManager.sceneData.slots.findIndex(s => s.id === this.slotId);
+            this.siblingIndex = sceneManager.slotData.slots.findIndex(s => s.id === this.slotId);
         }
 
         return this.captureSlotStateRecursive(slot);
@@ -662,7 +662,7 @@ export class SlotRemoveChange {
                     properties: compData.properties
                 });
                 newSlot.components.push(component);
-                sceneManager.sceneData.componentMap[component.id] = component;
+                sceneManager.slotData.componentMap[component.id] = component;
             } else {
                 // For Unity components, we need to recreate them
                 const addChange = new ComponentAddChange(newSlot.id, compData.type, { properties: compData.properties });
@@ -688,10 +688,10 @@ export class SlotRemoveChange {
                 }
             } else {
                 // Root level reordering
-                const currentIndex = sceneManager.sceneData.slots.findIndex(s => s.id === newSlot.id);
+                const currentIndex = sceneManager.slotData.slots.findIndex(s => s.id === newSlot.id);
                 if (currentIndex !== -1 && currentIndex !== siblingIndex) {
-                    sceneManager.sceneData.slots.splice(currentIndex, 1);
-                    sceneManager.sceneData.slots.splice(siblingIndex, 0, newSlot);
+                    sceneManager.slotData.slots.splice(currentIndex, 1);
+                    sceneManager.slotData.slots.splice(siblingIndex, 0, newSlot);
                 }
             }
         }
@@ -723,7 +723,7 @@ export class SlotMoveChange {
             const parent = sceneManager.getSlotById(parentId);
             return parent?.children?.findIndex(child => child.id === slotId) ?? -1;
         } else {
-            return sceneManager.sceneData.slots.findIndex(s => s.id === slotId);
+            return sceneManager.slotData.slots.findIndex(s => s.id === slotId);
         }
     }
 
@@ -761,10 +761,10 @@ export class SlotMoveChange {
                     }
                 }
             } else {
-                const currentIndex = sceneManager.sceneData.slots.findIndex(s => s.id === this.slotId);
+                const currentIndex = sceneManager.slotData.slots.findIndex(s => s.id === this.slotId);
                 if (currentIndex !== -1 && currentIndex !== this.oldSiblingIndex) {
-                    sceneManager.sceneData.slots.splice(currentIndex, 1);
-                    sceneManager.sceneData.slots.splice(this.oldSiblingIndex, 0, slot);
+                    sceneManager.slotData.slots.splice(currentIndex, 1);
+                    sceneManager.slotData.slots.splice(this.oldSiblingIndex, 0, slot);
                 }
             }
         }
