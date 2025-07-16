@@ -3,8 +3,69 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-export function loadMockSlotData() {
-    return {
+let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
+const { Slot, componentTypeMap } = await import(`${basePath}/slot-components.js`);
+
+export async function loadMockSlotData() {
+    // Create mock slot data using the new Slot classes
+    const slotMap = {};
+    const componentMap = {};
+    
+    // Helper function to create components
+    async function createComponents(slot, componentsData) {
+        const components = [];
+        for (const compData of componentsData) {
+            const ComponentClass = componentTypeMap[compData.type];
+            if (ComponentClass) {
+                const component = await new ComponentClass().init(slot, null, compData.properties);
+                component.id = compData.id; // Use mock IDs
+                components.push(component);
+                componentMap[component.id] = component;
+            } else {
+                // For components not yet implemented, create a basic object
+                const component = {
+                    id: compData.id,
+                    type: compData.type,
+                    properties: compData.properties,
+                    _slot: slot,
+                    update: async function(property, value) {
+                        this.properties[property] = value;
+                    }
+                };
+                components.push(component);
+                componentMap[component.id] = component;
+            }
+        }
+        return components;
+    }
+    
+    // Helper function to create slot hierarchy
+    async function createSlot(slotData, parent = null) {
+        // Create the slot instance
+        const slot = new Slot(slotData.id, slotData.name, parent?.id || null);
+        slot.active = slotData.active;
+        slot.persistent = slotData.persistent;
+        
+        // Add to slotMap
+        slotMap[slot.id] = slot;
+        
+        // Create components
+        slot.components = await createComponents(slot, slotData.components || []);
+        
+        // Create children recursively
+        if (slotData.children && slotData.children.length > 0) {
+            slot.children = [];
+            for (const childData of slotData.children) {
+                const childSlot = await createSlot(childData, slot);
+                slot.children.push(childSlot);
+            }
+        }
+        
+        return slot;
+    }
+    
+    // Mock data structure
+    const mockData = {
         slots: [
             {
                 id: 'root_1',
@@ -341,8 +402,20 @@ export function loadMockSlotData() {
                     }
                 ]
             }
-        ],
-        slotMap: {}
+        ]
+    };
+    
+    // Create root slots
+    const slots = [];
+    for (const rootData of mockData.slots) {
+        const rootSlot = await createSlot(rootData);
+        slots.push(rootSlot);
+    }
+    
+    return {
+        slots,
+        slotMap,
+        componentMap
     };
 }
 

@@ -1,6 +1,7 @@
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
+const { Slot, componentTypeMap } = await import(`${basePath}/slot-components.js`);
 
 export class Inventory {
     constructor() {
@@ -713,14 +714,13 @@ export class Inventory {
             console.log(item)
             // Create the new slot and its hierarchy
             const slotData = item.data;
-            await this.createSlotHierarchy(slotData, parentGameObject);
-            
+            const newSlot = await this.createSlotHierarchy(slotData, parentSlot);
             
             // Update the scene data
             if (!parentSlot.children) {
                 parentSlot.children = [];
             }
-            parentSlot.children.push(slotData);
+            parentSlot.children.push(newSlot);
             
             // Trigger hierarchy update
             document.dispatchEvent(new CustomEvent('sceneUpdated'));
@@ -749,68 +749,69 @@ export class Inventory {
     /**
      * Create slot hierarchy with all components
      */
-    async createSlotHierarchy(slotData, parentGameObject) {
-        console.log("slotData", slotData)
-        console.log("parentGameObject", parentGameObject)
-
-        // Create GameObject for this slot
-        const gameObject = await this.createGameObjectFromSlot(slotData, parentGameObject);
-        console.log("gameObject.id", gameObject.id)
-        // Add components
+    async createSlotHierarchy(slotData, parentSlot) {
+        // Create new Slot instance - it will create its own GameObject
+        const newSlot = new Slot();
+        await newSlot.init(slotData.name, parentSlot);
+        
+        // Set slot properties
+        newSlot.active = slotData.active !== false;
+        newSlot.persistent = slotData.persistent !== false;
+        
+        // Create components
         if (slotData.components && slotData.components.length > 0) {
             for (const compData of slotData.components) {
-                // For MonoBehavior components, create the class instance
-                let component = null;
-                if (compData.type === 'MonoBehavior') {
-                    const monoBehavior = new MonoBehavior(slotData, compData);
-                    // Replace the component data with the instance
-                    const compIndex = slotData.components.indexOf(compData);
-                    slotData.components[compIndex] = monoBehavior;
-                    component = await this.createComponent(gameObject, monoBehavior);
+                const ComponentClass = componentTypeMap[compData.type];
+                
+                if (ComponentClass) {
+                    // Use SlotComponent class
+                    const component = await new ComponentClass().init(newSlot, null, compData.properties);
+                    if (component) {
+                        newSlot.components.push(component);
+                        sceneManager.slotData.componentMap[component.id] = component;
+                    }
+                } else if (compData.type === 'MonoBehavior') {
+                    // Special handling for MonoBehavior
+                    const monoBehavior = new MonoBehavior(newSlot, compData);
+                    newSlot.components.push(monoBehavior);
+                    sceneManager.slotData.componentMap[monoBehavior.id] = monoBehavior;
                 } else {
-                    component = await this.createComponent(gameObject, compData);
-                }
-                if(component){
-                    compData.id = component.id;
-                    compData._bs = component;
-                    compData._slot = slotData;
-                    sceneManager.slotData.componentMap[component.id] = compData;
+                    // Fallback for components not yet implemented
+                    const unityComponent = await this.createComponent(newSlot._bs, compData);
+                    if (unityComponent) {
+                        const componentId = `component_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                        const component = {
+                            id: componentId,
+                            type: compData.type,
+                            properties: compData.properties,
+                            _bs: unityComponent,
+                            _slot: newSlot,
+                            update: async function(property, value) {
+                                this.properties[property] = value;
+                                if (this._bs && typeof this._bs[`Set${property.charAt(0).toUpperCase() + property.slice(1)}`] === 'function') {
+                                    await this._bs[`Set${property.charAt(0).toUpperCase() + property.slice(1)}`](value);
+                                }
+                            }
+                        };
+                        newSlot.components.push(component);
+                        sceneManager.slotData.componentMap[component.id] = component;
+                    }
                 }
             }
         }
-        console.log("gameObject.id", gameObject.id)
-
+        
         // Create children recursively
         if (slotData.children && slotData.children.length > 0) {
+            newSlot.children = [];
             for (const childData of slotData.children) {
-                await this.createSlotHierarchy(childData, gameObject);
+                const childSlot = await this.createSlotHierarchy(childData, newSlot);
+                newSlot.children.push(childSlot);
             }
         }
         
-        // Return the created GameObject
-        return gameObject;
+        return newSlot;
     }
     
-    /**
-     * Create GameObject from slot data
-     */
-    async createGameObjectFromSlot(slotData, parentGameObject) {
-        let gameObject = new BS.GameObject(slotData.name);
-        await gameObject.SetParent(parentGameObject, true);
-        await gameObject.SetActive(slotData.active !== false);
-        
-        // Update slot ID to match GameObject ID
-        slotData.id = parseInt(gameObject.id);
-        slotData._bs = gameObject;
-
-        
-        // Store GameObject reference in scene manager's objects map
-        if (sceneManager.scene && sceneManager.scene.objects) {
-            sceneManager.scene.objects[slotData.id] = gameObject;
-        }
-        
-        return gameObject;
-    }
     
     /**
      * Create component on GameObject

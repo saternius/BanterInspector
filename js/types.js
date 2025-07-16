@@ -3,6 +3,7 @@
 let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 const { deepClone } = await import(`${basePath}/utils.js`);
+const { componentTypeMap } = await import(`${basePath}/slot-components.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -170,10 +171,6 @@ export class ComponentAddChange {
         this.componentProperties = options.componentProperties;
         this.componentId = null; 
         this.options = options || {};
-
-        this.componentMap = {
-            "Transform": TransformComponent,
-        }
     }
 
     async apply() {
@@ -194,7 +191,14 @@ export class ComponentAddChange {
         }
 
         // Create the component
-        let slotComponent = await new this.componentMap[this.componentType]().init(slot, null, this.componentProperties);
+        const ComponentClass = componentTypeMap[this.componentType];
+        
+        if (!ComponentClass) {
+            console.error(`Component class not found for type: ${this.componentType}`);
+            return;
+        }
+        
+        let slotComponent = await new ComponentClass().init(slot, null, this.componentProperties);
         if (slotComponent) {
             this.componentId = slotComponent.id;
             slot.components.push(slotComponent);
