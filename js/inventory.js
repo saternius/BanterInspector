@@ -698,7 +698,7 @@ export class Inventory {
             
             // Get or set the selected slot
             if (!sceneManager.selectedSlot) {
-                sceneManager.selectedSlot = sceneManager.sceneData.slots[0].id
+                sceneManager.selectedSlot = sceneManager.slotData.slots[0].id
             }
             
             // Get the parent GameObject
@@ -777,7 +777,7 @@ export class Inventory {
                     compData.id = component.id;
                     compData._bs = component;
                     compData._slot = slotData;
-                    sceneManager.sceneData.componentMap[component.id] = compData;
+                    sceneManager.slotData.componentMap[component.id] = compData;
                 }
             }
         }
@@ -805,6 +805,7 @@ export class Inventory {
         // Update slot ID to match GameObject ID
         slotData.id = parseInt(gameObject.id);
         slotData._bs = gameObject;
+
         
         // Store GameObject reference in scene manager's objects map
         if (sceneManager.scene && sceneManager.scene.objects) {
