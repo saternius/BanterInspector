@@ -6,7 +6,6 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
-    const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
     const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap } = await import( `${basePath}/slot-components.js`);
 
     export class SceneManager {
