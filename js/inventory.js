@@ -722,9 +722,6 @@ export class Inventory {
             }
             parentSlot.children.push(slotData);
             
-            // Rebuild the hierarchy map so the new slots can be found
-            sceneManager.buildHierarchyMap();
-            
             // Trigger hierarchy update
             document.dispatchEvent(new CustomEvent('sceneUpdated'));
             

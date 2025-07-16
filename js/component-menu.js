@@ -206,23 +206,11 @@ export class ComponentMenu {
         
         const slot = sceneManager.getSlotById(this.selectedSlotId);
         if (!slot) return;
-        
-        // Check if component already exists (some components should be unique)
-        const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
-        if (uniqueComponents.includes(componentType)) {
-            const exists = slot.components.some(c => c.type === componentType);
-            if (exists) {
-                alert(`A ${componentType} component already exists on this slot.`);
-                return;
-            }
-        }
-        
+          
         // Create and apply the component add change
-        const componentConfig = this.getDefaultComponentConfig(componentType);
         const change = new ComponentAddChange(
             this.selectedSlotId, 
-            componentType, 
-            componentConfig,
+            componentType,
             { source: 'ui' }
         );
         

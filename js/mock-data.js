@@ -342,7 +342,7 @@ export function loadMockSlotData() {
                 ]
             }
         ],
-        hierarchyMap: {}
+        slotMap: {}
     };
 }
 

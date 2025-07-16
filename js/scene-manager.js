@@ -7,24 +7,14 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
     const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
-
-    const SUPPORTED_COMPONENTS = new Set([
-        BS.ComponentType.Transform,
-        BS.ComponentType.BanterRigidbody,
-        BS.ComponentType.BanterMaterial,
-        BS.ComponentType.BanterText,
-        BS.ComponentType.BanterAudioSource,
-        BS.ComponentType.BoxCollider,
-        BS.ComponentType.SphereCollider,
-        BS.ComponentType.BanterGeometry
-    ]);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap } = await import( `${basePath}/slot-components.js`);
 
     export class SceneManager {
         constructor() {
             this.scene = null;
             this.slotData = {
                 slots: [],
-                hierarchyMap: {},
+                slotMap:{},
                 componentMap: {}
             };
             this.selectedSlot = null;
@@ -82,6 +72,7 @@
          * Gather scene hierarchy from Unity
          */
         async gatherSceneHierarchy() {
+            console.log("gathering SceneHierarchy")
             // Initialize scene.objects if it doesn't exist
             if (!this.scene.objects) {
                 this.scene.objects = {};
@@ -91,11 +82,11 @@
             // Helper to convert GameObject to slot format
             const gameObjectToSlot = async (gameObject, parentId = null) => {
                 let id = gameObject.id
-                
+                console.log("gameobject =>", gameObject)
                 // Store the GameObject reference
                 this.scene.objects[id] = gameObject;
                 
-                const slot = {
+                const slot = await new Slot().init({
                     id: id,
                     name: gameObject.name || 'GameObject',
                     parentId: parentId,
@@ -104,27 +95,23 @@
                     components: [],
                     children: [],
                     _bs: gameObject
-                };
+                });
 
                 //Make tranform the top component
                 let transform = gameObject.GetComponent(BS.ComponentType.Transform)
                 if(transform){
-                    let transformData = await this.extractComponentData(transform, slot);
-                    if(transformData){
-                        slot.components.push(transformData);
-                        this.slotData.componentMap[transform.id] = transformData
-                    }
+                    let transformSlotComponent = await new TransformComponent().init(slot, transform);
+                    slot.components.push(transformSlotComponent);
+                    this.slotData.componentMap[transformSlotComponent.id] = transformSlotComponent
                 }
 
                 for(let componentID in gameObject.components){
                     if(componentID == transform.id) continue;
                     let component = gameObject.components[componentID]
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        let componentData = await this.extractComponentData(component, slot);
-                        if(componentData){
-                            slot.components.push(componentData);
-                            this.slotData.componentMap[component.id] = componentData
-                        }
+                        let slotComponent = await new componentBSTypeMap[component.type]().init(slot, component);
+                        slot.components.push(slotComponent);
+                        this.slotData.componentMap[slotComponent.id] = slotComponent
                     }
                 }
                 
@@ -153,6 +140,9 @@
                 if (obj) {
                     const slot = await gameObjectToSlot(obj);
                     rootSlot = slot;
+                    console.log("rootSlot =>", rootSlot)
+                }else{
+                    console.log("no root found")
                 }
             } catch (error) {
                 console.error('Error gathering scene hierarchy:', error);
@@ -160,114 +150,11 @@
             
             // Set the scene data
             this.slotData.slots = [rootSlot];
-            this.buildHierarchyMap();
+            console.log("slotData.slots =>", this.slotData.slots)
             this.initializeExpandedNodes();
         }
 
-        /**
-         * Extract component data from a Unity component
-         */
-        async extractComponentData(component, slot) {
-            const type = component.type
-            const componentTypeName = this.getComponentTypeName(type);
-            const data = {
-                id: component.id,
-                type: componentTypeName,
-                properties: {},
-                _bs: component,
-                _slot: slot
-            };
-            
-            // Extract properties based on component type
-            switch (type) {
-                case BS.ComponentType.Transform:
-                    data.properties = {
-                        position: component.position || { x: 0, y: 0, z: 0 },
-                        rotation: component.rotation || { x: 0, y: 0, z: 0, w: 1 },
-                        localScale: component.localScale || { x: 1, y: 1, z: 1 }
-                    };
-                    break;
-                    
-                case BS.ComponentType.BanterRigidbody:
-                    data.properties = {
-                        mass: component.mass || 1,
-                        drag: component.drag || 0,
-                        angularDrag: component.angularDrag || 0.05,
-                        useGravity: component.useGravity !== false,
-                        isKinematic: component.isKinematic || false
-                    };
-                    break;
-                    
-                case BS.ComponentType.BanterMaterial:
-                    data.properties = {
-                        shader: component.shaderName || 'Standard',
-                        color: component.color || { r: 1, g: 1, b: 1, a: 1 },
-                        texture: component.textureUrl || ''
-                    };
-                    break;
-                    
-                case BS.ComponentType.BanterText:
-                    data.properties = {
-                        text: component.text || '',
-                        fontSize: component.fontSize || 14,
-                        color: component.color || { r: 1, g: 1, b: 1, a: 1 },
-                        alignment: component.alignment || 'Center'
-                    };
-                    break;
-                    
-                case BS.ComponentType.BoxCollider:
-                    data.properties = {
-                        isTrigger: component.isTrigger || false,
-                        center: component.center || { x: 0, y: 0, z: 0 },
-                        size: component.size || { x: 1, y: 1, z: 1 }
-                    };
-                    break;
-                    
-                case BS.ComponentType.SphereCollider:
-                    data.properties = {
-                        isTrigger: component.isTrigger || false,
-                        radius: component.radius || 0.5
-                    };
-                    break;
-            }
-            
-            return data;
-        }
-
-        /**
-         * Get component type name from BS ComponentType
-         */
-        getComponentTypeName(type) {
-            const typeMap = {
-                [BS.ComponentType.Transform]: 'Transform',
-                [BS.ComponentType.BanterRigidbody]: 'BanterRigidbody',
-                [BS.ComponentType.BanterMaterial]: 'BanterMaterial',
-                [BS.ComponentType.BanterText]: 'BanterText',
-                [BS.ComponentType.BanterAudioSource]: 'BanterAudioSource',
-                [BS.ComponentType.BoxCollider]: 'BoxCollider',
-                [BS.ComponentType.SphereCollider]: 'SphereCollider',
-                [BS.ComponentType.CapsuleCollider]: 'CapsuleCollider',
-                [BS.ComponentType.MeshCollider]: 'MeshCollider'
-            };
-            return typeMap[type] || 'Unknown';
-        }
-
-        /**
-         * Build hierarchy map for quick lookups
-         */
-        buildHierarchyMap() {
-            this.slotData.hierarchyMap = {};
-            
-            const processSlot = (slot) => {
-                this.slotData.hierarchyMap[slot.id] = slot;
-                if (slot.children) {
-                    slot.children.forEach(processSlot);
-                }
-            };
-            
-            this.slotData.slots.forEach(processSlot);
-        }
-
+    
         /**
          * Initialize expanded nodes
          */
@@ -308,77 +195,6 @@
             });
         }
 
-        /**
-         * Update Unity component with changes
-         */
-        async updateUnityComponent(componentId, property, newValue) {
-            let slot_component = this.slotData.componentMap[componentId]
-            let type = slot_component.type
-            if(type === 'MonoBehavior'){
-                console.log("TODO: Make it so that if this was a manual change, then update the script value")
-                return
-            }
-            
-            try {
-                let component = slot_component._bs
-                if (!component) {
-                    console.warn(`Component not found [scene-manager]`);
-                    return;
-                }
-                
-                // Handle special cases for different component types
-                switch (type) {
-                    case 'Transform':
-                        if (property === 'position' || property === 'localScale') {
-                            component[property] = new BS.Vector3(
-                                parseFloat(newValue.x),
-                                parseFloat(newValue.y),
-                                parseFloat(newValue.z)
-                            );
-                        } else if (property === 'rotation') {
-                            // Rotation is stored as quaternion
-                            if ('w' in newValue) {
-                                // Already a quaternion
-                                component[property] = new BS.Vector4(
-                                    parseFloat(newValue.x),
-                                    parseFloat(newValue.y),
-                                    parseFloat(newValue.z),
-                                    parseFloat(newValue.w)
-                                );
-                            } else {
-                                // If somehow we get euler angles, convert to quaternion
-                                console.warn('Received euler angles for rotation, expecting quaternion');
-                                // For safety, just use current rotation
-                            }
-                        }
-                        break;
-                        
-                    case 'BanterMaterial':
-                        if (property === 'color') {
-                            component.color = new BS.Vector4(
-                                parseFloat(newValue.r),
-                                parseFloat(newValue.g),
-                                parseFloat(newValue.b),
-                                parseFloat(newValue.a)
-                            );
-                        } else {
-                            component[property] = newValue;
-                        }
-                        break;
-                        
-                    default:
-                        // Direct property assignment
-                        component[property] = newValue;
-                        break;
-                }
-            } catch (error) {
-                console.error('Failed to update Unity component:', error);
-            }
-
-            slot_component.properties[property] = newValue;
-        }
-
-
 
         /**
          * Set space property
@@ -403,19 +219,18 @@
         }
 
 
-
         /**
          * Get slot by ID
          */
         getSlotById(slotId) {
-            return this.slotData.hierarchyMap[slotId];
+            return this.slotData.slotMap[slotId];
         }
         
         /**
          * Get all slots as a flat array
          */
         getAllSlots() {
-            return Object.values(this.slotData.hierarchyMap || {});
+            return Object.values(this.slotData.slotMap || {});
         }
 
         /**
@@ -463,84 +278,21 @@
                 return null;
             }
 
-            // Get parent GameObject if parentId is provided, otherwise add to root
-            let parentGameObject = null;
-            if (parentId) {
-                parentGameObject = this.scene.objects?.[parentId];
-                if(!parentGameObject){
-                    console.log("NO PARENT AVAILABLE")
-                    return null;
-                }
+            if(!parentId){
+                parentId = this.slotData.slots[0].id;
             }
 
             try {
                 // Create new GameObject
-                
-                let newGameObject = new BS.GameObject("UnNamedObject");
-                
-                const transform = await newGameObject.AddComponent(new BS.Transform());
-
-                transform.position = new BS.Vector3(0, 0, 0);
-                transform.rotation = new BS.Quaternion(0, 0, 0, 1);
-                transform.localScale = new BS.Vector3(1, 1, 1);
-                
-                if (parentGameObject) {
-                    await newGameObject.SetParent(parentGameObject, true);
-                }
-                await newGameObject.SetActive(true);
-                let newSlotId = parseInt(newGameObject.id);
-                
-                // Register the GameObject in the scene
-                if (!this.scene.objects) {
-                    this.scene.objects = {};
-                }
-                this.scene.objects[newSlotId] = newGameObject;
-                let newSlotName = `NewSlot_${newSlotId}`
-
-                const newSlot = {
-                    id: newSlotId,
-                    name: newSlotName,
-                    parentId: parentId,
-                    active: true,
-                    persistent: true,
-                    components: [],
-                    children: [],
-                    _bs: newGameObject
-                };
-                let transfromComponent = {
-                    id: parseInt(transform.id),
-                    type: 'Transform',
-                    properties: {
-                        position: { x: 0, y: 0, z: 0 },
-                        rotation: { x: 0, y: 0, z: 0, w: 1 },
-                        localScale: { x: 1, y: 1, z: 1 }
-                    },
-                    _bs: transform,
-                    _slot: newSlot
-                }
-                newSlot.components.push(transfromComponent)
-                this.slotData.componentMap[transform.id] = transfromComponent
+                let newSlot = await new Slot().init({
+                    name: "UnNamedObject",
+                    parentId: parentId
+                });
               
-                
-                if (parentId) {
-                    const parent = this.getSlotById(parentId);
-                    if (parent) {
-                        if (!parent.children) {
-                            parent.children = [];
-                        }
-                        parent.children.push(newSlot);
-                    }
-                } else {
-                    // Add to root slots
-                    if (!this.slotData.slots) {
-                        this.slotData.slots = [];
-                    }
-                    this.slotData.slots.push(newSlot);
-                }
-                
-                this.buildHierarchyMap();
+                const parent = this.getSlotById(parentId);
+                parent.children.push(newSlot);
+                this.scene.OneShot('+slot_added', {slotId: newSlot.id});
                 return newSlot;
-        
             } catch (error) {
                 console.error('Failed to create Unity GameObject:', error);
                 return null
@@ -566,14 +318,12 @@
             };
             collectChildren(slot);
             
-            // Clean up MonoBehavior components before destroying
+            // Clean up components before destroying
             for (const delSlotId of slotsToDelete) {
                 const delSlot = this.getSlotById(delSlotId);
                 if (delSlot && delSlot.components) {
                     delSlot.components.forEach(comp => {
-                        if (comp.type === 'MonoBehavior' && comp.destroy) {
-                            comp.destroy();
-                        }
+                        this.deleteComponent(comp);
                     });
                 }
             }
@@ -585,24 +335,23 @@
                 });
             }
             
-            // Destroy Unity GameObjects
-            if (this.scene && typeof window.BS !== 'undefined') {
-                // Reverse order to delete children first
-                for (let i = slotsToDelete.length - 1; i >= 0; i--) {
-                    const deleteSlot = this.getSlotById(slotsToDelete[i]);
-                    if (deleteSlot) {
-                        try {
-                            const gameObject = this.scene.objects?.[deleteSlot.id];
-                            if (gameObject && gameObject.Destroy) {
-                                await gameObject.Destroy();
-                            }
-                            delete this.scene.objects[deleteSlot.id];
-                        } catch (error) {
-                            console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
-                        }
+            // Reverse order to delete children first
+            for (let i = slotsToDelete.length - 1; i >= 0; i--) {
+                const deleteSlot = this.getSlotById(slotsToDelete[i]);
+                if (deleteSlot) {
+                    try {
+                        await deleteSlot._bs.Destroy();
+                        deleteSlot.destroyed = true;
+                        sceneManager.scene.OneShot('+slot_deleted', {slotId: this.id});
+                        delete sceneManager.scene.objects[this.id];
+                        delete sceneManager.slotData.slotMap[this.id];
+
+                    } catch (error) {
+                        console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
                     }
                 }
             }
+            
             
             // Remove from parent's children or root
             if (slot.parentId) {
@@ -619,7 +368,6 @@
                 this.selectedSlot = null;
             }
             
-            this.buildHierarchyMap();
         }
 
         /**
@@ -654,145 +402,32 @@
             slot.parentId = newParentId;
             
             // Update Unity scene if connected
-            if (this.scene && typeof window.BS !== 'undefined') {
-                try {
-                    const childGameObject = this.scene.objects?.[slotId];
-                    const parentGameObject = this.scene.objects?.[newParentId];
-                    
-                    if (childGameObject && parentGameObject) {
-                        // Set the parent in Unity
-                        if (childGameObject.SetParent) {
-                            await childGameObject.SetParent(parentGameObject);
-                        } else if (childGameObject.transform && childGameObject.transform.SetParent) {
-                            await childGameObject.transform.SetParent(parentGameObject.transform);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Failed to update Unity parent:', error);
-                }
-            }
-            
-            this.buildHierarchyMap();
-        }
-
-        /**
-         * Move a slot to root level (no parent)
-         */
-        async moveSlotToRoot(slotId) {
-            const slot = this.getSlotById(slotId);
-            if (!slot) return;
-            
-            // Already at root
-            if (!slot.parentId) return;
-            
-            // Remove from current parent
-            const oldParent = this.getSlotById(slot.parentId);
-            if (oldParent && oldParent.children) {
-                oldParent.children = oldParent.children.filter(child => child.id !== slotId);
-            }
-            
-            // Add to root
-            slot.parentId = null;
-            this.slotData.slots.push(slot);
-            
-            // Update Unity scene if connected
-            if (this.scene && typeof window.BS !== 'undefined') {
-                try {
-                    const gameObject = this.scene.objects?.[slotId];
-                    
-                    if (gameObject) {
-                        // Set parent to null in Unity
-                        if (gameObject.SetParent) {
-                            await gameObject.SetParent(null);
-                        } else if (gameObject.transform && gameObject.transform.SetParent) {
-                            await gameObject.transform.SetParent(null);
-                        }
-                    }
-                } catch (error) {
-                    console.error('Failed to move to root in Unity:', error);
-                }
-            }
-            
-            this.buildHierarchyMap();
-        }
-
-        /**
-         * Delete component from slot
-         */
-        async deleteComponent(slotId, componentId, componentType) {
-            const slot = this.getSlotById(slotId);
-            if (!slot) {
-                throw new Error('Slot not found');
-            }
-            
-            // Find and remove the component from the slot
-            const componentIndex = slot.components.findIndex(c => c.id === componentId);
-            if (componentIndex === -1) {
-                throw new Error('Component not found');
-            }
-            
-            // Get the component before removing
-            const component = slot.components[componentIndex];
-            
-            // Clean up MonoBehavior component
-            if (componentType === 'MonoBehavior' && component.destroy) {
-                component.destroy();
-            }
-            
-            // Remove from slot's components array
-            slot.components.splice(componentIndex, 1);
-            
-            // Remove component from Unity GameObject
-            if (this.scene && typeof window.BS !== 'undefined') {
-                try {
-                    const gameObject = this.scene.objects?.[slotId];
-                    if (gameObject) {
-                        // Map component type to BS.ComponentType
-                        const componentTypeMap = {
-                            'BanterRigidbody': BS.ComponentType.BanterRigidbody,
-                            'BoxCollider': BS.ComponentType.BoxCollider,
-                            'SphereCollider': BS.ComponentType.SphereCollider,
-                            'CapsuleCollider': BS.ComponentType.CapsuleCollider,
-                            'MeshCollider': BS.ComponentType.MeshCollider,
-                            'BanterMaterial': BS.ComponentType.BanterMaterial,
-                            'BanterGeometry': BS.ComponentType.BanterGeometry,
-                            'BanterText': BS.ComponentType.BanterText,
-                            'BanterAudioSource': BS.ComponentType.BanterAudioSource,
-                            'BanterVideoPlayer': BS.ComponentType.BanterVideoPlayer,
-                            'BanterBrowser': BS.ComponentType.BanterBrowser,
-                            'BanterGLTF': BS.ComponentType.BanterGLTF,
-                            'BanterAssetBundle': BS.ComponentType.BanterAssetBundle,
-                            'BanterGrabHandle': BS.ComponentType.BanterGrabHandle,
-                            'BanterSyncedObject': BS.ComponentType.BanterSyncedObject,
-                            'BanterBillboard': BS.ComponentType.BanterBillboard,
-                            'BanterPortal': BS.ComponentType.BanterPortal
-                        };
-                        
-                        const bsComponentType = componentTypeMap[componentType];
-                        alert("There is currently no way to remove components in BanterScript..")
-                        // if (bsComponentType && gameObject.RemoveComponent) {
-                        //     await gameObject.RemoveComponent(bsComponentType);
-                        // }
-                    }
-                } catch (error) {
-                    console.error('Failed to remove Unity component:', error);
-                    // Continue even if Unity removal fails
-                }
-            }
-            
-            // Send OneShot event for synchronization
-            if (this.scene && this.scene.OneShot) {
-                const eventData = {
-                    action: 'deleteComponent',
-                    slotId: slotId,
-                    componentId: componentId,
-                    componentType: componentType,
-                    slotName: slot.name
-                };
+            try {
+                const childGameObject = this.scene.objects?.[slotId];
+                const parentGameObject = this.scene.objects?.[newParentId];
                 
-                this.scene.OneShot('inspector:componentDeleted', eventData);
-                console.log('Sent component deletion event:', eventData);
+                if (childGameObject && parentGameObject) {
+                    // Set the parent in Unity
+                    if (childGameObject.SetParent) {
+                        await childGameObject.SetParent(parentGameObject);
+                    } else if (childGameObject.transform && childGameObject.transform.SetParent) {
+                        await childGameObject.transform.SetParent(parentGameObject.transform);
+                    }
+                }
+                this.scene.OneShot('+slot_reparented', {slotId: slot.id, newParentId: newParentId});
+            } catch (error) {
+                console.error('Failed to update Unity parent:', error);
             }
+        }
+
+        async deleteComponent(slotComponent){
+            if(slotComponent._bs){
+                slotComponent._bs.Destroy();
+            }
+            slotComponent.destroyed = true;
+            slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(this), 1);
+            this.scene.OneShot('+component_deleted', {componentId: slotComponent.id});            
+            delete this.slotData.componentMap[slotComponent.id];
             
             // Remove any space properties associated with this component
             const propsToRemove = [];
@@ -825,11 +460,12 @@
                     }
                 }
             }
-            
-            console.log(`Deleted component ${componentType} from slot ${slot.name}`);
-        }
 
-        
+            if (window.inspectorApp?.propertiesPanel) {
+                window.inspectorApp.propertiesPanel.render(this.slotId);
+            }
+        }
+ 
     }
 
     // Create singleton instance

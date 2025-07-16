@@ -100,10 +100,7 @@ export class ComponentPropertyChange {
             await window.SM.setSpaceProperty(spaceKey, value, false);
         }
 
-        // Apply to Unity component
-        if (window.SM) {
-            await window.SM.updateUnityComponent(this.componentId, this.property, value);
-        }
+        await this.component.update(this.property, value);
 
         // Refresh UI if needed
         if (window.inspectorApp?.spacePropsPanel) {
@@ -167,72 +164,16 @@ export class SpacePropertyChange {
 }
 
 export class ComponentAddChange {
-    constructor(slotId, componentType, componentConfig, options) {
+    constructor(slotId, componentType, options) {
         this.slotId = slotId;
         this.componentType = componentType;
-        this.componentConfig = componentConfig || this.getDefaultConfig();
-        this.componentId = null; // Will be set after creation
+        this.componentProperties = options.componentProperties;
+        this.componentId = null; 
         this.options = options || {};
-    }
 
-    getDefaultConfig() {
-        // Import default configs from component-menu
-        const configs = {
-            'MonoBehavior': {
-                properties: {
-                    name: 'myScript',
-                    file: null,
-                    vars: {}
-                }
-            },
-            'BanterRigidbody': {
-                properties: {
-                    mass: 1,
-                    drag: 0,
-                    angularDrag: 0.05,
-                    useGravity: true,
-                    isKinematic: false
-                }
-            },
-            'BoxCollider': {
-                properties: {
-                    isTrigger: false,
-                    center: { x: 0, y: 0, z: 0 },
-                    size: { x: 1, y: 1, z: 1 }
-                }
-            },
-            'SphereCollider': {
-                properties: {
-                    isTrigger: false,
-                    radius: 0.5
-                }
-            },
-            'BanterMaterial': {
-                properties: {
-                    shader: 'Standard',
-                    color: { r: 1, g: 1, b: 1, a: 1 },
-                    texture: ''
-                }
-            },
-            'BanterText': {
-                properties: {
-                    text: 'New Text',
-                    fontSize: 14,
-                    color: { r: 1, g: 1, b: 1, a: 1 },
-                    alignment: 'Center'
-                }
-            },
-            'BanterGeometry': {
-                properties: {
-                    geometryType: 'BoxGeometry',
-                    width: 1,
-                    height: 1,
-                    depth: 1
-                }
-            }
-        };
-        
-        return configs[this.componentType] || { properties: {} };
+        this.componentMap = {
+            "Transform": TransformComponent,
+        }
     }
 
     async apply() {
@@ -241,7 +182,7 @@ export class ComponentAddChange {
             console.error(`Slot ${this.slotId} not found`);
             return;
         }
-
+        
         // Check if component already exists (for unique components)
         const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
         if (uniqueComponents.includes(this.componentType)) {
@@ -253,30 +194,7 @@ export class ComponentAddChange {
         }
 
         // Create the component
-        let slotComponent = null;
-        
-        if (this.componentType === 'MonoBehavior') {
-            // Dynamic import to avoid circular dependency
-            const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
-            slotComponent = new MonoBehavior(slot, {
-                id: Math.floor(Math.random() * 10000),
-                type: 'MonoBehavior',
-                properties: this.componentConfig.properties
-            });
-            
-        } else {
-            // Create Unity component
-            const unityComponent = await this.createUnityComponent();
-            if (unityComponent) {
-                slotComponent = {
-                    id: unityComponent.id,
-                    type: this.componentType,
-                    properties: this.componentConfig.properties,
-                    _bs: unityComponent
-                };
-            }
-        }
-
+        let slotComponent = await new this.componentMap[this.componentType]().init(slot, null, this.componentProperties);
         if (slotComponent) {
             this.componentId = slotComponent.id;
             slot.components.push(slotComponent);
@@ -299,91 +217,10 @@ export class ComponentAddChange {
         const componentIndex = slot.components.findIndex(c => c.id === this.componentId);
         if (componentIndex !== -1) {
             const component = slot.components[componentIndex];
-            
-            // Clean up MonoBehavior
-            if (this.componentType === 'MonoBehavior' && component.destroy) {
-                component.destroy();
-            }
-
-            // Remove from slot
-            slot.components.splice(componentIndex, 1);
-            delete sceneManager.slotData.componentMap[this.componentId];
-
-            // Remove from Unity
-            if (this.componentType !== 'MonoBehavior' && window.SM) {
-                try {
-                    // Note: BanterScript doesn't support component removal yet
-                    console.warn('Unity component removal not yet supported by BanterScript');
-                } catch (error) {
-                    console.error('Failed to remove Unity component:', error);
-                }
-            }
-
-            // Remove space properties
-            await this.removeSpaceProperties(slot);
-
-            // Refresh UI
-            if (window.inspectorApp?.propertiesPanel) {
-                window.inspectorApp.propertiesPanel.render(this.slotId);
-            }
+            sceneManager.deleteComponent(component);
         }
     }
 
-    async createUnityComponent() {
-        const gameObject = sceneManager.scene?.objects?.[this.slotId];
-        if (!gameObject || !window.BS) return null;
-
-        let component = null;
-        
-        switch (this.componentType) {
-            case 'BanterRigidbody':
-                component = new BS.BanterRigidbody();
-                break;
-            case 'BoxCollider':
-                component = new BS.BoxCollider(false, new BS.Vector3(0, 0, 0), new BS.Vector3(1, 1, 1));
-                break;
-            case 'SphereCollider':
-                component = new BS.SphereCollider(false, 0.5);
-                break;
-            case 'BanterGeometry':
-                component = new BS.BanterGeometry(BS.GeometryType.BoxGeometry, null, 1, 1, 1, 1, 1, 1);
-                break;
-            case 'BanterMaterial':
-                component = new BS.BanterMaterial("Standard", null, new BS.Vector4(1, 1, 1, 1), BS.MaterialSide.Front, true);
-                break;
-            case 'BanterText':
-                component = new BS.BanterText("New Text", new BS.Vector4(1, 1, 1, 1), BS.HorizontalAlignment.Center, BS.VerticalAlignment.Middle, 14, true, true, new BS.Vector2(100, 50));
-                break;
-            // Add more component types as needed
-        }
-
-        if (component && gameObject.AddComponent) {
-            await gameObject.AddComponent(component);
-        }
-        
-        return component;
-    }
-
-    async removeSpaceProperties(slot) {
-        const spaceState = sceneManager.scene?.spaceState;
-        if (!spaceState) return;
-
-        const propsToRemove = [];
-        ['public', 'protected'].forEach(type => {
-            const props = spaceState[type];
-            Object.keys(props).forEach(key => {
-                if (key.includes(`:component_${this.componentId}`)) {
-                    propsToRemove.push({ key, isProtected: type === 'protected' });
-                }
-            });
-        });
-
-        for (const { key, isProtected } of propsToRemove) {
-            if (window.SM) {
-                await window.SM.setSpaceProperty(key, null, isProtected);
-            }
-        }
-    }
 
     getDescription() {
         return `Add ${this.componentType} component`;
@@ -633,9 +470,6 @@ export class SlotRemoveChange {
         // Recreate the slot hierarchy
         await this.recreateSlotHierarchy(this.slotData, this.parentId, this.siblingIndex);
 
-        // Rebuild hierarchy map
-        sceneManager.buildHierarchyMap();
-
         // Update UI
         if (window.inspectorApp?.hierarchyPanel) {
             window.inspectorApp.hierarchyPanel.render();
@@ -729,7 +563,7 @@ export class SlotMoveChange {
 
     async apply() {
         if (this.newParentId === null) {
-            await sceneManager.moveSlotToRoot(this.slotId);
+            await sceneManager.reparentSlot(this.slotId, sceneManager.slotData.slots[0].id);
         } else {
             await sceneManager.reparentSlot(this.slotId, this.newParentId);
             sceneManager.expandedNodes.add(this.newParentId);
@@ -743,7 +577,7 @@ export class SlotMoveChange {
 
     async undo() {
         if (this.oldParentId === null) {
-            await sceneManager.moveSlotToRoot(this.slotId);
+            await sceneManager.reparentSlot(this.slotId, sceneManager.slotData.slots[0].id);
         } else {
             await sceneManager.reparentSlot(this.slotId, this.oldParentId);
         }
