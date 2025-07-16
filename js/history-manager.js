@@ -23,10 +23,16 @@ export class HistoryManager {
      */
     recordChange(change) {
         // Don't record if we're applying history
-        if (this.isApplying) return;
+        if (this.isApplying) {
+            console.log('Skipping record - isApplying is true');
+            return;
+        }
         
         // Don't record if not from UI
-        if (change.options?.source !== 'ui') return;
+        if (change.options?.source !== 'ui') {
+            console.log('Skipping record - source is not ui:', change.options?.source);
+            return;
+        }
         
         // Validate change object
         if (!change || typeof change.apply !== 'function' || typeof change.undo !== 'function') {
@@ -62,7 +68,9 @@ export class HistoryManager {
             return;
         }
         
+        console.log('Before undo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
         const entry = this.undoStack.pop();
+        console.log('Undoing entry:', entry.id, entry.description);
         this.isApplying = true;
         
         try {
@@ -70,6 +78,7 @@ export class HistoryManager {
             await entry.change.undo();
             
             this.redoStack.push(entry);
+            console.log('After undo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
             this.updateUI();
             this.showNotification(`Undone: ${entry.description}`);
         } catch (error) {
@@ -92,7 +101,9 @@ export class HistoryManager {
             return;
         }
         
+        console.log('Before redo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
         const entry = this.redoStack.pop();
+        console.log('Redoing entry:', entry.id, entry.description);
         this.isApplying = true;
         
         try {
@@ -100,6 +111,7 @@ export class HistoryManager {
             await entry.change.apply();
             
             this.undoStack.push(entry);
+            console.log('After redo - undoStack:', this.undoStack.length, 'redoStack:', this.redoStack.length);
             this.updateUI();
             this.showNotification(`Redone: ${entry.description}`);
         } catch (error) {
