@@ -4,7 +4,7 @@
  */
 
 let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
-const { Slot, componentTypeMap } = await import(`${basePath}/slot-components.js`);
+const { Slot, componentTypeMap } = await import(`${basePath}/components/index.js`);
 
 export async function loadMockSlotData() {
     // Create mock slot data using the new Slot classes

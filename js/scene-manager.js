@@ -6,8 +6,7 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap } = await import( `${basePath}/slot-components.js`);
-    const { componentTypeMap } = await import(`${basePath}/slot-components.js`);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap } = await import( `${basePath}/components/index.js`);
 
     export class SceneManager {
         constructor() {
@@ -418,7 +417,7 @@
                     const props = spaceState[type];
                     Object.keys(props).forEach(key => {
                         // Property keys for components have format: __SlotName/ComponentType/PropertyName:ComponentId
-                        if (key.includes(`:${componentId}`)) {
+                        if (key.includes(`:${slotComponent.id}`)) {
                             propsToRemove.push({ key, isProtected: type === 'protected' });
                         }
                     });

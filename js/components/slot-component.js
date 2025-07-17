@@ -1,0 +1,40 @@
+export class SlotComponent{
+    constructor(){
+        this.bsRef = BS.Transform
+    }
+
+    async init(slot, sceneComponent, properties){
+        this.id = `component_${Math.floor(Math.random()*10000)}`;
+        this._slot = slot;
+        this.properties = (properties) ? properties : this.defaultProperties();
+        if(sceneComponent){
+            this.properties = this.extractProperties(sceneComponent);
+            this._bs = sceneComponent;
+        }else{
+            let newComponent = await slot._bs.AddComponent(new this.bsRef());
+            this._bs = newComponent;
+            this.updateMany(this.properties)
+        }
+        window.SM.slotData.componentMap[this.id] = this;
+    }
+
+    async defaultProperties(){
+        return {};
+    }
+
+    async extractProperties(sceneComponent){
+        return {};
+    }
+
+    async updateMany(properties){
+        console.log(`(${this._slot.name})[${this.type}] updateMany`, properties)
+        for(let property in properties){
+            await this.update(property, properties[property]);
+        }
+    }
+
+    async update(property, value){
+        this.properties[property] = value;
+        this._bs[property] = value;
+    }
+}

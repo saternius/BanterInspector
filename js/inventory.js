@@ -1,8 +1,5 @@
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
-const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
-const { Slot, componentTypeMap } = await import(`${basePath}/slot-components.js`);
-
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
