@@ -12,7 +12,7 @@ export class BanterMaterialComponent extends SlotComponent {
         return {
             shaderName: 'Standard',
             texture: '',
-            color: { x: 1, y: 1, z: 1, w: 1 },
+            color: { r: 1, g: 1, b: 1, a: 1 },
             side: 0,
             generateMipMaps: true
         };
@@ -30,11 +30,12 @@ export class BanterMaterialComponent extends SlotComponent {
         }
         
         if (sceneComponent.color !== undefined) {
+            // Convert from Vector4 {x,y,z,w} to color {r,g,b,a} format
             properties.color = {
-                x: sceneComponent.color.x || 1,
-                y: sceneComponent.color.y || 1,
-                z: sceneComponent.color.z || 1,
-                w: sceneComponent.color.w || 1
+                r: sceneComponent.color.x || 1,
+                g: sceneComponent.color.y || 1,
+                b: sceneComponent.color.z || 1,
+                a: sceneComponent.color.w || 1
             };
         }
         
@@ -56,7 +57,8 @@ export class BanterMaterialComponent extends SlotComponent {
 
         try {
             if (property === 'color' && typeof value === 'object') {
-                this._bs.color = new BS.Vector4(value.x || 0, value.y || 0, value.z || 0, value.w || 1);
+                // Convert from color {r,g,b,a} format to Vector4 {x,y,z,w}
+                this._bs.color = new BS.Vector4(value.r || 0, value.g || 0, value.b || 0, value.a || 1);
             } else if (this._bs[property] !== undefined) {
                 this._bs[property] = value;
             }
