@@ -37,7 +37,7 @@ export class MonoBehavior {
         
         // Get the script from inventory
         const inventoryItem = window.inventory?.items?.[fileName];
-        
+        console.log("inventoryItem =>", inventoryItem)
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
             console.error(`Script "${fileName}" not found in inventory`);
             return;
@@ -65,6 +65,8 @@ export class MonoBehavior {
             const scriptFunction = new Function(`
                 ${inventoryItem.data}
             `);
+
+            console.log("scriptFunction =>", scriptFunction)
             
             // Bind the function to our context and execute
             scriptFunction.call(this.scriptContext);

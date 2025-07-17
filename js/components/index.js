@@ -2,6 +2,7 @@ let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsd
 const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
 const { Slot } = await import(`${basePath}/components/slot.js`);
 const { TransformComponent } = await import(`${basePath}/components/transform.js`);
+const { MonoBehaviorComponent } = await import(`${basePath}/components/monobehavior.js`);
 const { BanterGeometryComponent } = await import(`${basePath}/components/geometry.js`);
 const { BanterMaterialComponent } = await import(`${basePath}/components/material.js`);
 const { BanterRigidbodyComponent } = await import(`${basePath}/components/rigidbody.js`);
@@ -33,7 +34,8 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterBillboard,
     BS.ComponentType.BanterGrabHandle,
     BS.ComponentType.BanterSyncedObject,
-    BS.ComponentType.BanterPhysicMaterial
+    BS.ComponentType.BanterPhysicMaterial,
+    MonoBehaviorComponent
 ]);
 
 export const componentTypeMap = {
@@ -51,7 +53,8 @@ export const componentTypeMap = {
     "BanterBillboard": BanterBillboardComponent,
     "BanterGrabHandle": BanterGrabHandleComponent,
     "BanterSyncedObject": BanterSyncedObjectComponent,
-    "BanterPhysicMaterial": BanterPhysicMaterialComponent
+    "BanterPhysicMaterial": BanterPhysicMaterialComponent,
+    "MonoBehavior": MonoBehaviorComponent
 }
 
 export const componentBSTypeMap = {
@@ -69,7 +72,8 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterBillboard]: BanterBillboardComponent,
     [BS.ComponentType.BanterGrabHandle]: BanterGrabHandleComponent,
     [BS.ComponentType.BanterSyncedObject]: BanterSyncedObjectComponent,
-    [BS.ComponentType.BanterPhysicMaterial]: BanterPhysicMaterialComponent
+    [BS.ComponentType.BanterPhysicMaterial]: BanterPhysicMaterialComponent,
+    [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 window.componentBSTypeMap = componentBSTypeMap;
 
@@ -90,5 +94,6 @@ export {
     BanterBillboardComponent,
     BanterGrabHandleComponent,
     BanterSyncedObjectComponent,
-    BanterPhysicMaterialComponent
+    BanterPhysicMaterialComponent,
+    MonoBehaviorComponent
 };

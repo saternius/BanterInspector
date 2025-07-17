@@ -402,9 +402,7 @@
         }
 
         async deleteComponent(slotComponent){
-            if(slotComponent._bs){
-                slotComponent._bs.Destroy();
-            }
+            await slotComponent.destroy();
             slotComponent.destroyed = true;
             slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(this), 1);
             this.scene.OneShot('+component_deleted', {componentId: slotComponent.id});            

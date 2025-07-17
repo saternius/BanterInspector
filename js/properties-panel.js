@@ -7,7 +7,6 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
-    const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/change-types.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
@@ -169,7 +168,7 @@
          */
         renderComponent(component, index) {
             // Special handling for MonoBehavior components
-            if (component.type === 'MonoBehavior' || component instanceof MonoBehavior) {
+            if (component.type === 'MonoBehavior') {
                 return this.renderMonoBehaviorComponent(component, index);
             }
             
@@ -515,26 +514,23 @@
             fileSelect.appendChild(emptyOption);
             
             // Get available scripts from inventory
-            const scripts = MonoBehavior.getAvailableScripts();
+            
+            const scripts = window.inventory.getAvailableScripts();
             scripts.forEach(script => {
                 const option = document.createElement('option');
-                option.value = script.fileName;
+                option.value = script.name;
                 option.textContent = `${script.name} (by ${script.author})`;
-                if (component.properties.file === script.fileName) {
+                if (component.properties.file === script.name) {
                     option.selected = true;
                 }
                 fileSelect.appendChild(option);
             });
             
             fileSelect.onchange = async () => {
-                const oldFile = component.properties.file;
-                component.properties.file = fileSelect.value;
+                if(component.properties.file === fileSelect.value) return;
                 
                 // Load the new script
-                if (component instanceof MonoBehavior) {
-                    if (oldFile) {
-                        component.unloadScript();
-                    }
+                if (component.type === 'MonoBehavior') {
                     if (fileSelect.value) {
                         await component.loadScript(fileSelect.value);
                     }

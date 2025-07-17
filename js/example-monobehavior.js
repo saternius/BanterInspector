@@ -11,7 +11,7 @@ this.onStart = ()=>{
 }
 
 this.onUpdate = ()=>{
-    console.log(this.transform)
+    console.log(this)
 }
 
 this.onDestroy = ()=>{

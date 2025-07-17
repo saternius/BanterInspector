@@ -127,6 +127,10 @@ export class Inventory {
             this.showNotification(`Removed "${itemName}" from inventory`);
         }
     }
+
+    getAvailableScripts(){
+        return Object.values(this.items).filter(item => item.itemType === 'script');
+    }
     
     /**
      * Render inventory items

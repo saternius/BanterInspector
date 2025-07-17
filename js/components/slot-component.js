@@ -1,6 +1,6 @@
 export class SlotComponent{
     constructor(){
-        this.bsRef = BS.Transform
+        this.bsRef = null;
     }
 
     async init(slot, sceneComponent, properties){
@@ -11,9 +11,11 @@ export class SlotComponent{
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
         }else{
-            let newComponent = await slot._bs.AddComponent(new this.bsRef());
-            this._bs = newComponent;
-            this.updateMany(this.properties)
+            if(this.bsRef){
+                let newComponent = await slot._bs.AddComponent(new this.bsRef());
+                this._bs = newComponent;
+                this.updateMany(this.properties)
+            }
         }
         window.SM.slotData.componentMap[this.id] = this;
         return this;
@@ -37,5 +39,11 @@ export class SlotComponent{
     async update(property, value){
         this.properties[property] = value;
         this._bs[property] = value;
+    }
+
+    async destroy(){
+        if(this._bs){
+            this._bs.Destroy();
+        }
     }
 }

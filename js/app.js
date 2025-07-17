@@ -336,6 +336,7 @@
 
     // Export app instance for debugging
     window.inspectorApp = app;
+    window.lifecycleManager = lifecycleManager;
 
     var loadLocalUserSceneFromLocalStorage = (scene)=>{
         var luser = JSON.parse(localStorage.getItem("localUser"));

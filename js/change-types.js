@@ -262,22 +262,7 @@ export class ComponentRemoveChange {
 
         // Recreate the component
         if (this.componentData.type === 'MonoBehavior') {
-            const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
-            const component = new MonoBehavior(slot, {
-                id: this.componentData.id,
-                type: 'MonoBehavior',
-                properties: this.componentData.properties
-            });
-            
-            // Insert at original position if possible
-            if (this.componentIndex !== null && this.componentIndex < slot.components.length) {
-                slot.components.splice(this.componentIndex, 0, component);
-            } else {
-                slot.components.push(component);
-            }
-            
-            sceneManager.slotData.componentMap[component.id] = component;
-            
+            alert("Can't undo MonoBehavior component deletion")
         } else {
             // Recreate Unity component
             const addChange = new ComponentAddChange(this.slotId, this.componentData.type, { properties: this.componentData.properties });
@@ -466,14 +451,7 @@ export class SlotRemoveChange {
         // Restore components
         for (const compData of slotData.components) {
             if (compData.type === 'MonoBehavior') {
-                const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
-                const component = new MonoBehavior(newSlot, {
-                    id: compData.id,
-                    type: 'MonoBehavior',
-                    properties: compData.properties
-                });
-                newSlot.components.push(component);
-                sceneManager.slotData.componentMap[component.id] = component;
+                alert("Can't undo MonoBehavior component deletion")
             } else {
                 // For Unity components, we need to recreate them
                 const addChange = new ComponentAddChange(newSlot.id, compData.type, { properties: compData.properties });

@@ -5,7 +5,6 @@
 
 
 let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
-const { MonoBehavior } = await import( `${basePath}/monobehavior.js`);
 const { sceneManager } = await import( `${basePath}/scene-manager.js`);
 const { changeManager } = await import(`${basePath}/change-manager.js`);
 const { ComponentAddChange } = await import(`${basePath}/change-types.js`);
