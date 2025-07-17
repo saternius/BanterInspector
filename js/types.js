@@ -3,7 +3,6 @@
 let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 const { deepClone } = await import(`${basePath}/utils.js`);
-const { componentTypeMap } = await import(`${basePath}/slot-components.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -179,36 +178,9 @@ export class ComponentAddChange {
             console.error(`Slot ${this.slotId} not found`);
             return;
         }
-        
-        // Check if component already exists (for unique components)
-        const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
-        if (uniqueComponents.includes(this.componentType)) {
-            const exists = slot.components.some(c => c.type === this.componentType);
-            if (exists) {
-                console.warn(`A ${this.componentType} component already exists on this slot`);
-                return;
-            }
-        }
 
-        // Create the component
-        const ComponentClass = componentTypeMap[this.componentType];
-        
-        if (!ComponentClass) {
-            console.error(`Component class not found for type: ${this.componentType}`);
-            return;
-        }
-        
-        let slotComponent = await new ComponentClass().init(slot, null, this.componentProperties);
-        if (slotComponent) {
-            this.componentId = slotComponent.id;
-            slot.components.push(slotComponent);
-            sceneManager.slotData.componentMap[slotComponent.id] = slotComponent;
-
-            // Refresh properties panel
-            if (window.inspectorApp?.propertiesPanel) {
-                window.inspectorApp.propertiesPanel.render(this.slotId);
-            }
-        }
+        let slotComponent = await sceneManager.addComponent(slot, this.componentType, this.componentProperties);
+        this.componentId = slotComponent.id;
     }
 
     async undo() {

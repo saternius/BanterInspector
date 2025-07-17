@@ -3,7 +3,7 @@
 export class Slot{
     async init(slotData){
         this.id = slotData.id;
-        this.name = slotData.name;
+        this.name = slotData.name || `Unnamed Slot`;
         this.parentId = slotData.parentId;
         this.components = slotData.components || [];
         this.children = slotData.children || [];
@@ -27,9 +27,10 @@ export class Slot{
             this.id = newSlotId;
             
             
-            
-            let newSlotName = `NewSlot_${newSlotId}`
-            this.name = newSlotName;
+            if(!this.name){
+                let newSlotName = `NewSlot_${newSlotId}`
+                this.name = newSlotName;
+            }
             
             let transform = await new TransformComponent().init(this);
             this.components.push(transform);
@@ -39,6 +40,27 @@ export class Slot{
         window.SM.slotData.slotMap[this.id] = this;
         return this;
     }
+
+    getTransform(){
+        return this.components.find(component => component.type === "Transform");
+    }
+
+    async setParent(newParent){
+        // Cannot parent to itself
+        if (newParent === this) return;
+        
+        // Remove from current parent or root
+        if (this.parentId) {
+            const oldParent = window.SM.getSlotById(this.parentId);
+            oldParent.children = oldParent.children.filter(child => child.id !== this.id);
+        }
+      
+        newParent.children.push(this);
+        this.parentId = newParent.id;
+        this._bs.SetParent(newParent._bs);
+
+    }
+
 }
 
 export class SlotComponent{
@@ -55,9 +77,11 @@ export class SlotComponent{
             this._bs = sceneComponent;
         }else{
             let newComponent = await slot._bs.AddComponent(new this.bsRef());
-            this.updateMany(this.properties)
             this._bs = newComponent;
             this.id = parseInt(newComponent.id);
+            this.updateMany(this.properties)
+            
+            
         }
         window.SM.slotData.componentMap[this.id] = this;
     }
@@ -71,6 +95,7 @@ export class SlotComponent{
     }
 
     async updateMany(properties){
+        console.log(`(${this._slot.name})[${this.type}] updateMany`, properties)
         for(let property in properties){
             await this.update(property, properties[property]);
         }
@@ -91,10 +116,12 @@ export class TransformComponent extends SlotComponent {
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
         this.type = "Transform";
+        console.log("TRANSFORM COMPONENT INIT", this._bs, this._slot, properties)
         return this;
     }
 
     async update(property, value){
+        console.log("this ._bs", this.type, this._bs, this._slot, property, value)
         this.properties[property] = value;
         if (property === 'position' || property === 'localScale') {
             this._bs[property] = new BS.Vector3(

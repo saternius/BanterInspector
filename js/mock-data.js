@@ -43,8 +43,8 @@ export async function loadMockSlotData() {
     async function createSlot(slotData, parent = null) {
         // Create the slot instance
         const slot = new Slot(slotData.id, slotData.name, parent?.id || null);
-        slot.active = slotData.active;
-        slot.persistent = slotData.persistent;
+        await new SlotPropertyChange(slot.id, 'active', slotData.active).apply();
+        await new SlotPropertyChange(slot.id, 'persistent', slotData.persistent).apply();
         
         // Add to slotMap
         slotMap[slot.id] = slot;

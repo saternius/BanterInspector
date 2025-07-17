@@ -7,6 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
     const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap } = await import( `${basePath}/slot-components.js`);
+    const { componentTypeMap } = await import(`${basePath}/slot-components.js`);
 
     export class SceneManager {
         constructor() {
@@ -81,7 +82,6 @@
             // Helper to convert GameObject to slot format
             const gameObjectToSlot = async (gameObject, parentId = null) => {
                 let id = gameObject.id
-                console.log("gameobject =>", gameObject)
                 // Store the GameObject reference
                 this.scene.objects[id] = gameObject;
                 
@@ -375,48 +375,45 @@
         async reparentSlot(slotId, newParentId) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
-            
-            // Cannot parent to itself
-            if (slotId === newParentId) return;
-            
-            // Remove from current parent or root
-            if (slot.parentId) {
-                const oldParent = this.getSlotById(slot.parentId);
-                if (oldParent && oldParent.children) {
-                    oldParent.children = oldParent.children.filter(child => child.id !== slotId);
+
+            if(!newParentId){
+                newParentId = this.slotData.slots[0].id;
+            }
+            await slot.setParent(this.getSlotById(newParentId));
+
+            this.scene.OneShot('+slot_reparented', {slotId: slot.id, newParentId: newParentId});
+        }
+
+        async addComponent(slot, componentType, componentProperties){
+            // Check if component already exists (for unique components)
+            const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
+            if (uniqueComponents.includes(componentType)) {
+                const exists = slot.components.some(c => c.type === componentType);
+                if (exists) {
+                    console.warn(`A ${componentType} component already exists on this slot`);
+                    return;
                 }
-            } else {
-                // Remove from root
-                this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
+            }
+
+            // Create the component
+            const ComponentClass = componentTypeMap[componentType];
+            
+            if (!ComponentClass) {
+                console.error(`Component class not found for type: ${componentType}`);
+                return;
             }
             
-            // Add to new parent
-            const newParent = this.getSlotById(newParentId);
-            if (!newParent) return;
-            
-            if (!newParent.children) {
-                newParent.children = [];
+            let slotComponent = await new ComponentClass().init(slot, null, componentProperties);
+            slot.components.push(slotComponent);
+            sceneManager.slotData.componentMap[slotComponent.id] = slotComponent;
+
+            // Refresh properties panel
+            if (window.inspectorApp?.propertiesPanel) {
+                window.inspectorApp.propertiesPanel.render(slot.id);
             }
-            newParent.children.push(slot);
-            slot.parentId = newParentId;
             
-            // Update Unity scene if connected
-            try {
-                const childGameObject = this.scene.objects?.[slotId];
-                const parentGameObject = this.scene.objects?.[newParentId];
-                
-                if (childGameObject && parentGameObject) {
-                    // Set the parent in Unity
-                    if (childGameObject.SetParent) {
-                        await childGameObject.SetParent(parentGameObject);
-                    } else if (childGameObject.transform && childGameObject.transform.SetParent) {
-                        await childGameObject.transform.SetParent(parentGameObject.transform);
-                    }
-                }
-                this.scene.OneShot('+slot_reparented', {slotId: slot.id, newParentId: newParentId});
-            } catch (error) {
-                console.error('Failed to update Unity parent:', error);
-            }
+            this.scene.OneShot('+component_added', {componentType: componentType, componentProperties: componentProperties, componentId: slotComponent.id, slotId: slot.id});  
+            return slotComponent;
         }
 
         async deleteComponent(slotComponent){
@@ -463,6 +460,60 @@
             if (window.inspectorApp?.propertiesPanel) {
                 window.inspectorApp.propertiesPanel.render(this.slotId);
             }
+        }
+
+        async createSlotHierarchy(item, parentId){
+            //create a new slot
+            const newSlot = await new Slot().init({
+                name: item.name,
+                parentId: parentId
+            });
+
+
+            //create new components
+            for(let component of item.components){
+                if(component.type === "Transform"){
+                    let transform = newSlot.getTransform();
+                    transform.updateMany(component.properties);
+                }else{
+                    await this.addComponent(newSlot, component.type, component.properties);
+                }
+            }
+
+            item.children.forEach(async (child) => {
+                let childSlot = await this.createSlotHierarchy(child, newSlot.id);
+                await childSlot.setParent(newSlot);
+            });
+
+            return newSlot;
+        }
+
+        async loadSlotFromInventory(item){
+            if (!sceneManager.selectedSlot) {
+                sceneManager.selectedSlot = sceneManager.slotData.slots[0].id
+            }
+            const parentSlot = this.getSlotById(this.selectedSlot);
+            const newSlot = await this.createSlotHierarchy(item.data, parentSlot.id);
+            
+            await newSlot.setParent(parentSlot);
+            
+            sceneManager.scene.OneShot('+item_added', {item: item, slotId: parentSlot.id});
+
+            // Trigger hierarchy update
+            document.dispatchEvent(new CustomEvent('sceneUpdated'));
+            
+            
+            // Navigate to world inspector page and select the parent slot
+            setTimeout(() => {
+                const worldTab = document.querySelector('[data-page="world-inspector"]');
+                if (worldTab) {
+                    worldTab.click();
+                    // Trigger selection of the parent slot to show the new child
+                    document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                        detail: { slotId: newSlot.id }
+                    }));
+                }
+            }, 500);
         }
  
     }
