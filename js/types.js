@@ -34,7 +34,7 @@ export class SlotPropertyChange {
             console.log(`ERROR: Slot not found ${this.slotId}`)
             return;
         }
-        let gO = window.SM.scene.objects[this.slotId]
+        let gO = window.SM.slotData.slotMap[this.slotId]._bs;
         if (!gO){
             console.log(`ERROR: Slot not found ${this.slotId}`)
             return;

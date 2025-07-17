@@ -2,7 +2,7 @@
 
 export class Slot{
     async init(slotData){
-        this.id = slotData.id;
+        this.id = `slot_${Math.floor(Math.random()*10000)}`;
         this.name = slotData.name || `Unnamed Slot`;
         this.parentId = slotData.parentId;
         this.components = slotData.components || [];
@@ -16,27 +16,21 @@ export class Slot{
         if(!slotData._bs){
             let newGameObject = new BS.GameObject(this.name);
             this._bs = newGameObject;
-            let parentGameObject = window.SM.scene.objects?.[this.parentId];
+            let parentGameObject = window.SM.slotData.slotMap[this.parentId]._bs;
             if(parentGameObject){
                 await newGameObject.SetParent(parentGameObject, true);
             }
             
             await newGameObject.SetActive(true);
             
-            let newSlotId = parseInt(newGameObject.id);
-            this.id = newSlotId;
-            
-            
             if(!this.name){
-                let newSlotName = `NewSlot_${newSlotId}`
+                let newSlotName = this.id;
                 this.name = newSlotName;
             }
             
             let transform = await new TransformComponent().init(this);
             this.components.push(transform);
         }
-
-        window.SM.scene.objects[this.id] = this._bs;
         window.SM.slotData.slotMap[this.id] = this;
         return this;
     }
@@ -69,19 +63,16 @@ export class SlotComponent{
     }
 
     async init(slot, sceneComponent, properties){
+        this.id = `component_${Math.floor(Math.random()*10000)}`;
         this._slot = slot;
         this.properties = (properties) ? properties : this.defaultProperties();
         if(sceneComponent){
-            this.id = parseInt(sceneComponent.id);
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
         }else{
             let newComponent = await slot._bs.AddComponent(new this.bsRef());
             this._bs = newComponent;
-            this.id = parseInt(newComponent.id);
             this.updateMany(this.properties)
-            
-            
         }
         window.SM.slotData.componentMap[this.id] = this;
     }

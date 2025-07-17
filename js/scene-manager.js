@@ -73,20 +73,12 @@
          */
         async gatherSceneHierarchy() {
             console.log("gathering SceneHierarchy")
-            // Initialize scene.objects if it doesn't exist
-            if (!this.scene.objects) {
-                this.scene.objects = {};
-            }
-            
+
             
             // Helper to convert GameObject to slot format
             const gameObjectToSlot = async (gameObject, parentId = null) => {
-                let id = gameObject.id
-                // Store the GameObject reference
-                this.scene.objects[id] = gameObject;
-                
                 const slot = await new Slot().init({
-                    id: id,
+                    // id: id,
                     name: gameObject.name || 'GameObject',
                     parentId: parentId,
                     active: gameObject.active !== false,
@@ -232,15 +224,7 @@
             return Object.values(this.slotData.slotMap || {});
         }
 
-        /**
-         * Get the game object for a slot
-         */
-        getSlotGameObject(slotId){
-            let gO = this.scene.objects[slotId]
-            if(gO) return gO;
-            return null;
-        }
-
+    
         /**
          * Get the component for a slot
          */
@@ -342,7 +326,6 @@
                         await deleteSlot._bs.Destroy();
                         deleteSlot.destroyed = true;
                         sceneManager.scene.OneShot('+slot_deleted', {slotId: this.id});
-                        delete sceneManager.scene.objects[this.id];
                         delete sceneManager.slotData.slotMap[this.id];
 
                     } catch (error) {
