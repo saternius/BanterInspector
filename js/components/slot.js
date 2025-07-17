@@ -1,5 +1,5 @@
 let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
-const { TransformComponent } = await import(`${basePath}/components/transform-component.js`);
+const { TransformComponent } = await import(`${basePath}/components/transform.js`);
 
 
 export class Slot{

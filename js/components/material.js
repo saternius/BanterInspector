@@ -1,4 +1,7 @@
-class BanterMaterialComponent extends SlotComponent {
+let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
+const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
+
+export class BanterMaterialComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterMaterial;

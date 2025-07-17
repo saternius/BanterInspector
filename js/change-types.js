@@ -65,12 +65,13 @@ export class SlotPropertyChange {
 
 export class ComponentPropertyChange {
     constructor(componentId, property, newValue, options) {
+        console.log("ComponentPropertyChange: ", componentId, property, newValue, options)
         this.componentId = componentId;
         this.property = property;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.oldValue = deepClone(options.oldValue || this.getOldValue());
         this.component = sceneManager.getSlotComponentById(componentId);
+        this.oldValue = deepClone(options.oldValue || this.getOldValue());
         console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
 

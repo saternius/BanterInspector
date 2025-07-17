@@ -77,7 +77,6 @@
             // Helper to convert GameObject to slot format
             const gameObjectToSlot = async (gameObject, parentId = null) => {
                 const slot = await new Slot().init({
-                    // id: id,
                     name: gameObject.name || 'GameObject',
                     parentId: parentId,
                     active: gameObject.active !== false,
@@ -99,7 +98,11 @@
                     if(componentID == transform.id) continue;
                     let component = gameObject.components[componentID]
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        let slotComponent = await new componentBSTypeMap[component.type]().init(slot, component);
+                        console.log("component =>", component)
+                        let componentClass = componentBSTypeMap[component.type]
+                        console.log("componentClass =>", componentClass)
+                        let slotComponent = await new componentClass().init(slot, component);
+                        console.log("slotComponent =>", slotComponent)
                         slot.components.push(slotComponent);
                         this.slotData.componentMap[slotComponent.id] = slotComponent
                     }

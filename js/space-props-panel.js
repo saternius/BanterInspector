@@ -8,7 +8,7 @@
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SpacePropertyChange } = await import(`${basePath}/types.js`);
+    const { SpacePropertyChange } = await import(`${basePath}/change-types.js`);
 
     export class SpacePropsPanel {
         constructor() {

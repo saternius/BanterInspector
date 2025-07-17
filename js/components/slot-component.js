@@ -16,6 +16,7 @@ export class SlotComponent{
             this.updateMany(this.properties)
         }
         window.SM.slotData.componentMap[this.id] = this;
+        return this;
     }
 
     async defaultProperties(){

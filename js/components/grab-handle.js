@@ -1,4 +1,7 @@
-class BanterGrabHandleComponent extends SlotComponent {
+let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
+const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
+
+export class BanterGrabHandleComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterGrabHandle;

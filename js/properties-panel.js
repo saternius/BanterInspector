@@ -9,7 +9,7 @@
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { MonoBehavior } = await import(`${basePath}/monobehavior.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/types.js`);
+    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/change-types.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
     
     export class PropertiesPanel {

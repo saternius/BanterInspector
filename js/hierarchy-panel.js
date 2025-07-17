@@ -8,7 +8,7 @@
     const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/types.js`);
+    const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/change-types.js`);
 
     export class HierarchyPanel {
         constructor() {

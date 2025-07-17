@@ -1,7 +1,7 @@
 let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
 const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
-const { TransformComponent } = await import(`${basePath}/components/transform-component.js`);
 const { Slot } = await import(`${basePath}/components/slot.js`);
+const { TransformComponent } = await import(`${basePath}/components/transform.js`);
 const { BanterGeometryComponent } = await import(`${basePath}/components/geometry.js`);
 const { BanterMaterialComponent } = await import(`${basePath}/components/material.js`);
 const { BanterRigidbodyComponent } = await import(`${basePath}/components/rigidbody.js`);
