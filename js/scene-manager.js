@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:32")
+console.log("It is 6:46")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -169,14 +169,12 @@ console.log("It is 6:32")
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
                     if(type[0] == "component"){
-                        let componentId = parseInt(type[1]);
-                        let component = this.getSlotComponentById(componentId);
+                        let component = this.getSlotComponentById(items[1]);
                         if(component){
                             await component.update(prop, newValue);
                         }
                     }else if(type[0] == "slot"){
-                        let slotId = parseInt(type[1]);
-                        let slot = this.getSlotById(slotId);
+                        let slot = this.getSlotById(items[1]);
                         if(slot){
                             await slot.update(prop, newValue);
                         }
