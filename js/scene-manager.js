@@ -19,6 +19,7 @@ console.log("It is 4:50")
             };
             this.selectedSlot = null;
             this.expandedNodes = new Set();
+            this.loaded = false;
         }
 
         /**
@@ -31,15 +32,9 @@ console.log("It is 4:50")
                     return;
                 }
 
-                this.scene = window.BS.BanterScene.GetInstance();
-                console.log("scene =>", this.scene)
-                console.log("set up load listener")
-                this.scene.On("unity-loaded", async () => {
-                    console.log("unity-loaded fired")
-                })
-                console.log("set up loaded listener")
-                this.scene.On("loaded", async () => {
-                    console.log('Loaded fired');
+                let setup = async ()=>{
+                    if(this.loaded) return;
+                    console.log("setting up inspector")
                     try {
                         console.log('Gathering scene hierarchy...');
                         await this.gatherSceneHierarchy();
@@ -48,7 +43,26 @@ console.log("It is 4:50")
                     } catch (error) {
                         console.error('Error gathering scene hierarchy:', error);
                     }
+                    this.loaded = true;
+                }
+
+                this.scene = window.BS.BanterScene.GetInstance();
+                console.log("scene =>", this.scene)
+                console.log("setting up load listeners")
+                this.scene.On("unity-loaded", async () => {
+                    console.log("unity-loaded fired")
+                    setup();
+                })
+                this.scene.On("loaded", async () => {
+                    console.log('Loaded fired');
+                    setup();
                 });
+
+                setTimeout(()=>{
+                    setup();
+                }, 10000)
+
+
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
             }
