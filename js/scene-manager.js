@@ -48,9 +48,11 @@ console.log("It is 4:23")
 
                 this.scene = window.BS.BanterScene.GetInstance();
                 this.scene.addEventListener("unity-loaded", async () => {
-                    console.log('Unity loaded, gathering scene hierarchy...');
+                    console.log('Unity loaded');
                     try {
+                        console.log('Gathering scene hierarchy...');
                         await this.gatherSceneHierarchy();
+                        console.log('Setting up space state handlers...');
                         this.setupSpaceStateHandlers();
                         resolve();
                     } catch (error) {
