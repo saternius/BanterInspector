@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 5:29")
+console.log("It is 5:39")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -31,8 +31,9 @@ console.log("It is 5:29")
                     console.error('BS library not available');
                     return;
                 }
+                this.scene = window.BS.BanterScene.GetInstance();
 
-                let setup = async ()=>{
+                this.setup = async ()=>{
                     if(this.loaded) return;
                     console.log("setting up inspector")
                     try {
@@ -47,21 +48,21 @@ console.log("It is 5:29")
                     inspectorApp.hierarchyPanel.render()
                 }
 
-                this.scene = window.BS.BanterScene.GetInstance();
-                console.log("scene =>", this.scene)
-                console.log("setting up load listeners")
-                this.scene.On("unity-loaded", async () => {
-                    console.log("unity-loaded fired")
-                    setup();
-                })
-                this.scene.On("loaded", async () => {
-                    console.log('Loaded fired');
-                    setup();
-                });
+                
+                // console.log("scene =>", this.scene)
+                // console.log("setting up load listeners")
+                // this.scene.On("unity-loaded", async () => {
+                //     console.log("unity-loaded fired")
+                //     setup();
+                // })
+                // this.scene.On("loaded", async () => {
+                //     console.log('Loaded fired');
+                //     setup();
+                // });
 
-                setTimeout(()=>{
-                    setup();
-                }, 5000)
+                // setTimeout(()=>{
+                //     setup();
+                // }, 5000)
 
 
             } catch (error) {

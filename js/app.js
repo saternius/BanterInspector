@@ -169,6 +169,7 @@
          * Setup global event handlers
          */
         setupGlobalEventHandlers() {
+            console.log("setting up global event handlers")
             // Handle hierarchy changes from change manager
             changeManager.addChangeListener((change) => {
                 // Update hierarchy panel if slot names or active state changed
@@ -184,13 +185,28 @@
             });
             
             // // Handle space state changes from Unity
-            // if (SM.scene) {
-            //     SM.scene.addEventListener('space-state-changed', (event) => {
-            //         // Sync external changes through change manager
-            //         changeManager.handleExternalChanges(event.detail.changes);
-            //         document.dispatchEvent(new CustomEvent('spaceStateChanged'));
-            //     });
-            // }
+            if (SM.scene) {
+                SM.scene.addEventListener('space-state-changed', (event) => {
+                    // Sync external changes through change manager
+                    console.log("space-state-changed fired", event)
+                    // changeManager.handleExternalChanges(event.detail.changes);
+                    document.dispatchEvent(new CustomEvent('spaceStateChanged'));
+                    SM.handleSpaceStateChange(event);
+                });
+                SM.scene.On("unity-loaded", async () => {
+                    console.log("unity-loaded fired")
+                    SM.setup();
+                })
+                SM.scene.On("loaded", async () => {
+                    console.log('Loaded fired');
+                    SM.setup();
+                });
+
+                setTimeout(()=>{
+                    SM.setup();
+                }, 5000)
+
+            }
             
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {
