@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 4:40")
+console.log("It is 4:50")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -32,8 +32,14 @@ console.log("It is 4:40")
                 }
 
                 this.scene = window.BS.BanterScene.GetInstance();
+                console.log("scene =>", this.scene)
+                console.log("set up load listener")
+                this.scene.On("unity-loaded", async () => {
+                    console.log("unity-loaded fired")
+                })
+                console.log("set up loaded listener")
                 this.scene.On("loaded", async () => {
-                    console.log('Unity loaded');
+                    console.log('Loaded fired');
                     try {
                         console.log('Gathering scene hierarchy...');
                         await this.gatherSceneHierarchy();
