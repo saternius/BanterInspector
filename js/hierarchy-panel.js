@@ -97,7 +97,7 @@
             if (!this.treeContainer) return;
             
             this.treeContainer.innerHTML = '';
-            
+            console.log("SM.slotData.slots =>", SM.slotData.slots)
             if (SM.slotData.slots.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;
@@ -119,6 +119,7 @@
          * Render a single slot node
          */
         renderSlotNode(slot, searchTerm, level) {
+            console.log("rendering slot node", slot)
             // Check if this node or any children match the search
             if (searchTerm && !this.matchesSearch(slot, searchTerm)) {
                 return null;
