@@ -44,10 +44,13 @@ The inspector will fall back to mock data if it cannot connect to Unity.
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='cache-control' content='no-cache'> 
+    <meta http-equiv='expires' content='0'> 
+    <meta http-equiv='pragma' content='no-cache'>
     <title>Unity Scene Inspector - Resonite Style</title>
     <script>
         const isLocal = window.location.hostname === 'localhost';
-        window.repoUrl = 'https://raw.githack.com/saternius/BanterInspector/master'
+        window.repoUrl = 'https://saternius.github.io/BanterInspector'
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = isLocal ? './styles.css' : window.repoUrl + '/styles.css';
