@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 5:39")
+console.log("It is 6:21")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -39,32 +39,14 @@ console.log("It is 5:39")
                     try {
                         console.log('Gathering scene hierarchy...');
                         await this.gatherSceneHierarchy();
-                        console.log('Setting up space state handlers...');
-                        this.setupSpaceStateHandlers();
+                        // console.log('Setting up space state handlers...');
+                        // this.setupSpaceStateHandlers();
                     } catch (error) {
                         console.error('Error gathering scene hierarchy:', error);
                     }
                     this.loaded = true;
                     inspectorApp.hierarchyPanel.render()
                 }
-
-                
-                // console.log("scene =>", this.scene)
-                // console.log("setting up load listeners")
-                // this.scene.On("unity-loaded", async () => {
-                //     console.log("unity-loaded fired")
-                //     setup();
-                // })
-                // this.scene.On("loaded", async () => {
-                //     console.log('Loaded fired');
-                //     setup();
-                // });
-
-                // setTimeout(()=>{
-                //     setup();
-                // }, 5000)
-
-
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
             }
@@ -163,33 +145,40 @@ console.log("It is 5:39")
             });
         }
 
-        /**
-         * Setup space state event handlers
-         */
-        setupSpaceStateHandlers() {
-            if (!this.scene) return;
-            
-            // Listen for space state changes
-            this.scene.addEventListener('space-state-changed', (event) => {
-                console.log("space-state-changed fired", event)
-                this.handleSpaceStateChange(event);
-            });
-        }
-
+    
         /**
          * Handle space state changes
          */
         handleSpaceStateChange(event) {
             console.log("TODO: make changes sync across all clients")
             const { changes } = event.detail;
-            
-            changes.forEach(change => {
+            changes.forEach(async (change) => {
                 const { property, newValue, isProtected } = change;
                 
                 if (isProtected) {
                     this.scene.spaceState.protected[property] = newValue;
                 } else {
                     this.scene.spaceState.public[property] = newValue;
+                }
+
+                
+                if(property.slice(0,2) == "__"){
+                    newValue = JSON.parse(newValue);
+                    let items = property.split(":");
+                    let path = items[0].split("/");
+                    let prop = path[path.length-1];
+                    let type = items[1].split("_")
+                    if(type[0] == "component"){
+                        let component = this.getSlotComponentById(type[1]);
+                        if(component){
+                            await component.update(prop, newValue);
+                        }
+                    }else if(type[0] == "slot"){
+                        let slot = this.getSlotById(type[1]);
+                        if(slot){
+                            await slot.update(prop, newValue);
+                        }
+                    }
                 }
             });
         }
@@ -205,6 +194,8 @@ console.log("It is 5:39")
             if(value && value.value !== undefined){
                 value = value.value;
             }
+
+            value = JSON.stringify(value);
 
             if (isProtected) {
                 this.scene.SetProtectedSpaceProps({ [key]: value });

@@ -57,4 +57,17 @@ export class Slot{
 
     }
 
+    update(prop, newValue){
+        if(prop == "name"){
+            this.name = newValue;
+        }
+        if(prop == "active"){
+            this.active = newValue;
+            this._bs.SetActive(newValue);
+        }
+        if(prop == "persistent"){
+            this.persistent = newValue;
+        }
+    }
+
 }

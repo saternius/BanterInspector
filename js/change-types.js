@@ -49,7 +49,7 @@ export class SlotPropertyChange {
             inspectorApp.hierarchyPanel.render()
         }
 
-        const spaceKey = '__' + slot.name + '/' + this.property + ':slot_' + this.slotId;
+        const spaceKey = '__' + slot.name + '/' + this.property + ':' + this.slotId;
         await window.SM.setSpaceProperty(spaceKey, value, false);
     }
 
@@ -90,12 +90,12 @@ export class ComponentPropertyChange {
         if(!this.component) return;
 
         // Generate space key for persistence
-        const spaceKey = `__${this.component._slot.name}/${this.component.type}/${this.property}:component_${this.componentId}`;
+        const spaceKey = `__${this.component._slot.name}/${this.component.type}/${this.property}:${this.componentId}`;
         if (window.SM) {
             await window.SM.setSpaceProperty(spaceKey, value, false);
         }
 
-        await this.component.update(this.property, value);
+        //await this.component.update(this.property, value);
 
         // Refresh UI if needed
         if (window.inspectorApp?.spacePropsPanel) {
@@ -302,7 +302,7 @@ export class SlotAddChange {
             // Set the name if different from default
             if (newSlot.name !== this.slotName) {
                 newSlot.name = this.slotName;
-                const spaceKey = `__${newSlot.name}/name:slot_${newSlot.id}`;
+                const spaceKey = `__${newSlot.name}/name:${newSlot.id}`;
                 if (window.SM) {
                     await window.SM.setSpaceProperty(spaceKey, this.slotName, false);
                 }
