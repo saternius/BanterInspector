@@ -3,6 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
+console.log("It is 3:55")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
