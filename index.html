@@ -47,7 +47,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <title>Unity Scene Inspector - Resonite Style</title>
     <script>
         const isLocal = window.location.hostname === 'localhost';
-        window.repoUrl = 'https://cdn.statically.io/gh/saternius/BanterInspector/master/'
+        window.repoUrl = 'https://raw.githack.com/saternius/BanterInspector/master'
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = isLocal ? './styles.css' : window.repoUrl + 'styles.css';
@@ -350,7 +350,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script>
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = isLocal ? './js/app.js' : window.repoUrl + 'js/app.js';
+        script.src = isLocal ? './js/app.js' : window.repoUrl + '/js/app.js';
         document.body.appendChild(script);
         
         // Add debug script for testing (only in local development)

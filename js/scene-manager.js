@@ -29,9 +29,9 @@ console.log("It is 3:55")
                 await this.connectToUnityScene();
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
-                console.log('Loading mock data for development...');
-                this.slotData = loadMockSlotData();
-                this.initializeExpandedNodes();
+                // console.log('Loading mock data for development...');
+                // this.slotData = loadMockSlotData();
+                // this.initializeExpandedNodes();
             }
             window.scene = this.scene
         }
