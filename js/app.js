@@ -6,8 +6,8 @@
  */
 (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-
     const  { sceneManager } = await import(`${basePath}/scene-manager.js`);
+    
     const  { HierarchyPanel } = await import(`${basePath}/hierarchy-panel.js`);
     const  { PropertiesPanel } = await import(`${basePath}/properties-panel.js`);
     const  { SpacePropsPanel } = await import(`${basePath}/space-props-panel.js`);
