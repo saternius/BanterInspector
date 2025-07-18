@@ -5,7 +5,6 @@
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
-    const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/change-types.js`);
@@ -66,7 +65,7 @@
 
             // Add child button
             this.addChildBtn.addEventListener('click', async () => {
-                const parentId = sceneManager.selectedSlot;
+                const parentId = SM.selectedSlot;
                 
                 // Queue slot addition through change manager
                 const change = new SlotAddChange(parentId, null, { source: 'ui' });
@@ -75,17 +74,17 @@
 
             // Delete button
             this.deleteBtn.addEventListener('click', async () => {
-                if (!sceneManager.selectedSlot) {
+                if (!SM.selectedSlot) {
                     alert('Please select a slot to delete');
                     return;
                 }
                 
-                const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
+                const slot = SM.getSlotById(SM.selectedSlot);
                 if (!slot) return;
                 
                 if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
                     // Queue slot deletion through change manager
-                    const change = new SlotRemoveChange(sceneManager.selectedSlot, { source: 'ui' });
+                    const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
                     changeManager.applyChange(change);
                 }
             });
@@ -99,13 +98,13 @@
             
             this.treeContainer.innerHTML = '';
             
-            if (sceneManager.slotData.slots.length === 0) {
+            if (SM.slotData.slots.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;
             }
             
             // Get root slots
-            const rootSlots = sceneManager.slotData.slots;
+            const rootSlots = SM.slotData.slots;
             
             // Render each root slot
             rootSlots.forEach(slot => {
@@ -125,9 +124,9 @@
                 return null;
             }
             
-            const isExpanded = sceneManager.expandedNodes.has(slot.id);
+            const isExpanded = SM.expandedNodes.has(slot.id);
             const hasChildren = slot.children && slot.children.length > 0;
-            const isSelected = sceneManager.selectedSlot === slot.id;
+            const isSelected = SM.selectedSlot === slot.id;
             
             // Create node container
             const nodeDiv = document.createElement('div');
@@ -247,7 +246,7 @@
          * Toggle node expansion
          */
         toggleNode(slotId) {
-            sceneManager.toggleNodeExpansion(slotId);
+            SM.toggleNodeExpansion(slotId);
             this.render();
         }
 
@@ -255,7 +254,7 @@
          * Select a slot
          */
         selectSlot(slotId) {
-            sceneManager.selectSlot(slotId);
+            SM.selectSlot(slotId);
             this.render();
             
             // Notify properties panel
@@ -375,14 +374,14 @@
             changeManager.applyChange(change);
             
             // Expand the target node to show the newly added child
-            sceneManager.expandedNodes.add(targetSlotId);
+            SM.expandedNodes.add(targetSlotId);
         }
 
         /**
          * Check if targetId is a descendant of slotId
          */
         isDescendant(slotId, targetId) {
-            const slot = sceneManager.getSlotById(slotId);
+            const slot = SM.getSlotById(slotId);
             if (!slot) return false;
             
             const checkChildren = (parent) => {

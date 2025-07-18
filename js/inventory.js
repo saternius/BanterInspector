@@ -1,5 +1,4 @@
 let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
@@ -94,7 +93,7 @@ export class Inventory {
         
         // Create inventory item
         const inventoryItem = {
-            author: sceneManager.scene?.localUser?.name || 'Unknown',
+            author: SM.scene?.localUser?.name || 'Unknown',
             name: itemName,
             created: Date.now(),
             itemType: itemType,
@@ -364,7 +363,7 @@ export class Inventory {
         
         // Create script item
         const scriptItem = {
-            author: sceneManager.scene?.localUser?.name || 'Unknown',
+            author: SM.scene?.localUser?.name || 'Unknown',
             name: fileName,
             created: Date.now(),
             itemType: 'script',
@@ -691,7 +690,7 @@ export class Inventory {
         
         const item = this.items[this.selectedItem];
         if (!item || item.itemType !== 'slot') return;
-        await sceneManager.loadSlotFromInventory(item)
+        await SM.loadSlotFromInventory(item)
         // Show success message
         this.showNotification(`Added "${item.name}" to scene`);
     }

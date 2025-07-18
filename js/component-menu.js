@@ -5,7 +5,6 @@
 
 
 let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-const { sceneManager } = await import( `${basePath}/scene-manager.js`);
 const { changeManager } = await import(`${basePath}/change-manager.js`);
 const { ComponentAddChange } = await import(`${basePath}/change-types.js`);
 
@@ -203,7 +202,7 @@ export class ComponentMenu {
     async addComponent(componentType) {
         if (!this.selectedSlotId) return;
         
-        const slot = sceneManager.getSlotById(this.selectedSlotId);
+        const slot = SM.getSlotById(this.selectedSlotId);
         if (!slot) return;
           
         // Create and apply the component add change

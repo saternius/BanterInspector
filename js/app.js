@@ -43,7 +43,7 @@
                 this.navigation = new Navigation();
                 
                 // Initialize scene manager
-                await sceneManager.initialize();
+                await SM.initialize();
                 
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
@@ -51,7 +51,7 @@
                     // if (change instanceof SpacePropertyChange || change instanceof ComponentPropertyChange || change instanceof SlotPropertyChange) {
                     
                     this.spacePropsPanel.render();
-                    this.propertiesPanel.render(sceneManager.selectedSlot);
+                    this.propertiesPanel.render(SM.selectedSlot);
                 });
                 
                 
@@ -136,11 +136,11 @@
                     this.spacePropsPanel.render();
                 } else if (change.type === 'component' || change.type === 'slot' ||
                           change.type === 'componentAdd' || change.type === 'componentRemove') {
-                    this.propertiesPanel.render(sceneManager.selectedSlot);
+                    this.propertiesPanel.render(SM.selectedSlot);
                 } else if (change.type === 'slotAdd' || change.type === 'slotRemove' || 
                           change.type === 'slotMove') {
                     this.hierarchyPanel.render();
-                    this.propertiesPanel.render(sceneManager.selectedSlot);
+                    this.propertiesPanel.render(SM.selectedSlot);
                 }
             });
         }
@@ -184,8 +184,8 @@
             });
             
             // Handle space state changes from Unity
-            if (sceneManager.scene) {
-                sceneManager.scene.addEventListener('space-state-changed', (event) => {
+            if (SM.scene) {
+                SM.scene.addEventListener('space-state-changed', (event) => {
                     // Sync external changes through change manager
                     changeManager.handleExternalChanges(event.detail.changes);
                     document.dispatchEvent(new CustomEvent('spaceStateChanged'));
@@ -205,7 +205,7 @@
                 }
                 
                 // Delete key: Delete selected slot
-                if (e.key === 'Delete' && sceneManager.selectedSlot) {
+                if (e.key === 'Delete' && SM.selectedSlot) {
                     const deleteBtn = document.getElementById('deleteSlotBtn');
                     if (deleteBtn && !e.target.matches('input, textarea')) {
                         deleteBtn.click();
@@ -358,11 +358,11 @@
     }
 
     setTimeout(()=>{
-        if(sceneManager.scene){
-            if(sceneManager.scene.localUser === undefined){
-                loadLocalUserSceneFromLocalStorage(sceneManager.scene);
+        if(SM.scene){
+            if(SM.scene.localUser === undefined){
+                loadLocalUserSceneFromLocalStorage(SM.scene);
             }else{
-                saveLocalUserSceneToLocalStorage(sceneManager.scene.localUser);
+                saveLocalUserSceneToLocalStorage(SM.scene.localUser);
             }
         }
     })

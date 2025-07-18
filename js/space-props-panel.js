@@ -5,7 +5,6 @@
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
-    const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SpacePropertyChange } = await import(`${basePath}/change-types.js`);
@@ -57,8 +56,8 @@
          * Render space properties
          */
         render() {
-            this.renderPropsList('public', sceneManager.scene.spaceState.public);
-            this.renderPropsList('protected', sceneManager.scene.spaceState.protected);
+            this.renderPropsList('public', SM.scene.spaceState.public);
+            this.renderPropsList('protected', SM.scene.spaceState.protected);
         }
 
         /**
@@ -257,7 +256,7 @@
             
             // Focus the input after render
             setTimeout(() => {
-                const props = type === 'public' ? sceneManager.scene.spaceState.public : sceneManager.scene.spaceState.protected;
+                const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
                 const value = props[key];
                 
                 if (isVector3Object(value)) {
@@ -282,7 +281,7 @@
          * Save edited property
          */
         saveProp(type, key) {
-            const props = type === 'public' ? sceneManager.scene.spaceState.public : sceneManager.scene.spaceState.protected;
+            const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
             const currentValue = props[key];
             
             if (isVector3Object(currentValue)) {
@@ -330,9 +329,9 @@
                 const change = new SpacePropertyChange(key, undefined, type === 'protected', { source: 'ui' });
                 changeManager.applyChange(change);
                 if (type === 'public') {
-                    delete sceneManager.scene.spaceState.public[key];
+                    delete SM.scene.spaceState.public[key];
                 } else {
-                    delete sceneManager.scene.spaceState.protected[key];
+                    delete SM.scene.spaceState.protected[key];
                 }
                 this.render();
             }
@@ -353,7 +352,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
                 changeManager.applyChange(change);
-                sceneManager.scene.spaceState.public[key] = value;
+                SM.scene.spaceState.public[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 this.render();
@@ -375,7 +374,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
                 changeManager.applyChange(change);
-                sceneManager.scene.spaceState.protected[key] = value;
+                SM.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 this.render();
@@ -440,9 +439,9 @@
                 
                 // Update local state
                 if (type === 'public') {
-                    sceneManager.scene.spaceState.public[key] = newValue;
+                    SM.scene.spaceState.public[key] = newValue;
                 } else {
-                    sceneManager.scene.spaceState.protected[key] = newValue;
+                    SM.scene.spaceState.protected[key] = newValue;
                 }
             }
         }

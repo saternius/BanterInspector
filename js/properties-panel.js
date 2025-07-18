@@ -5,7 +5,6 @@
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
-    const { sceneManager } = await import(`${basePath}/scene-manager.js`);
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/change-types.js`);
@@ -34,7 +33,7 @@
             // Add component button
             this.addComponentBtn?.addEventListener('click', () => {
                 document.dispatchEvent(new CustomEvent('showComponentMenu', {
-                    detail: { slotId: sceneManager.selectedSlot }
+                    detail: { slotId: SM.selectedSlot }
                 }));
             });
         }
@@ -45,7 +44,7 @@
         render(slotId = null) {
             if (!this.propertiesContent) return;
             
-            const slot = slotId ? sceneManager.getSlotById(slotId) : null;
+            const slot = slotId ? SM.getSlotById(slotId) : null;
             
             if (!slot) {
                 this.propertiesContent.innerHTML = `
@@ -540,7 +539,7 @@
                 changeManager.applyChange(change);
                 
                 // Re-render to show vars
-                this.render(sceneManager.selectedSlot);
+                this.render(SM.selectedSlot);
             };
             
             fileContainer.appendChild(fileSelect);
@@ -764,7 +763,7 @@
          * Handle Vector3 property changes
          */
         handleVector3Change(componentType, componentId, key, axis, value, componentIndex) {
-            const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
+            const slot = SM.getSlotById(SM.selectedSlot);
             if (!slot) return;
             
             const component = slot.components.find(c => c.id === componentId);
@@ -784,7 +783,7 @@
          * Handle rotation changes (Euler angles to Quaternion)
          */
         handleRotationChange(componentId, axis, value, componentIndex) {
-            const slot = sceneManager.getSlotById(sceneManager.selectedSlot);
+            const slot = SM.getSlotById(SM.selectedSlot);
             if (!slot) return;
             
             const component = slot.components.find(c => c.id === componentId);
@@ -815,7 +814,7 @@
          * Delete a component from the selected slot
          */
         async deleteComponent(componentId, componentType) {
-            const slotId = sceneManager.selectedSlot;
+            const slotId = SM.selectedSlot;
             if (!slotId) return;
             
             // Queue the component removal through change manager

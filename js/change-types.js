@@ -1,7 +1,6 @@
 
 // Import required dependencies
 let basePath = window.location.hostname === 'localhost' ? '.' : `${window.repoUrl}/js`;
-const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 const { deepClone } = await import(`${basePath}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
@@ -16,7 +15,7 @@ export class SlotPropertyChange {
     }
 
     getOldValue() {
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         return slot[this.property];
     }
 
@@ -29,7 +28,7 @@ export class SlotPropertyChange {
     }
 
     async change(value){
-        const slot = sceneManager?.getSlotById(this.slotId);
+        const slot = SM?.getSlotById(this.slotId);
         if(!slot){
             console.log(`ERROR: Slot not found ${this.slotId}`)
             return;
@@ -70,7 +69,7 @@ export class ComponentPropertyChange {
         this.property = property;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.component = sceneManager.getSlotComponentById(componentId);
+        this.component = SM.getSlotComponentById(componentId);
         this.oldValue = deepClone(options.oldValue || this.getOldValue());
         console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
@@ -127,7 +126,7 @@ export class SpacePropertyChange {
     }
 
     getOldValue() {
-        const spaceState = sceneManager?.scene?.spaceState;
+        const spaceState = SM?.scene?.spaceState;
         if (!spaceState) return undefined;
         
         const props = this.protected ? spaceState.protected : spaceState.public;
@@ -174,27 +173,27 @@ export class ComponentAddChange {
     }
 
     async apply() {
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) {
             console.error(`Slot ${this.slotId} not found`);
             return;
         }
 
-        let slotComponent = await sceneManager.addComponent(slot, this.componentType, this.componentProperties);
+        let slotComponent = await SM.addComponent(slot, this.componentType, this.componentProperties);
         this.componentId = slotComponent.id;
     }
 
     async undo() {
         if (!this.componentId) return;
 
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
 
         // Remove component
         const componentIndex = slot.components.findIndex(c => c.id === this.componentId);
         if (componentIndex !== -1) {
             const component = slot.components[componentIndex];
-            sceneManager.deleteComponent(component);
+            SM.deleteComponent(component);
         }
     }
 
@@ -219,7 +218,7 @@ export class ComponentRemoveChange {
 
     captureComponentData() {
         // Find the component and its slot
-        const slots = sceneManager.getAllSlots();
+        const slots = SM.getAllSlots();
         for (const slot of slots) {
             const componentIndex = slot.components?.findIndex(c => c.id === this.componentId);
             if (componentIndex !== -1) {
@@ -246,7 +245,7 @@ export class ComponentRemoveChange {
             return;
         }
 
-        await sceneManager.deleteComponent(this.slotId, this.componentId, this.componentData.type);
+        await SM.deleteComponent(this.slotId, this.componentId, this.componentData.type);
 
         // Refresh properties panel
         if (window.inspectorApp?.propertiesPanel) {
@@ -257,7 +256,7 @@ export class ComponentRemoveChange {
     async undo() {
         if (!this.componentData || !this.slotId) return;
 
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
 
         // Recreate the component
@@ -301,7 +300,7 @@ export class SlotAddChange {
     }
 
     async apply() {
-        const newSlot = await sceneManager.addNewSlot(this.parentId);
+        const newSlot = await SM.addNewSlot(this.parentId);
         if (newSlot) {
             this.newSlotId = newSlot.id;
             
@@ -316,11 +315,11 @@ export class SlotAddChange {
 
             // Expand parent
             if (this.parentId) {
-                sceneManager.expandedNodes.add(this.parentId);
+                SM.expandedNodes.add(this.parentId);
             }
 
             // Select new slot
-            sceneManager.selectSlot(newSlot.id);
+            SM.selectSlot(newSlot.id);
 
             // Update UI
             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
@@ -336,11 +335,11 @@ export class SlotAddChange {
     async undo() {
         if (!this.newSlotId) return;
 
-        await sceneManager.deleteSlot(this.newSlotId);
+        await SM.deleteSlot(this.newSlotId);
 
         // Clear selection if this slot was selected
-        if (sceneManager.selectedSlot === this.newSlotId) {
-            sceneManager.selectedSlot = null;
+        if (SM.selectedSlot === this.newSlotId) {
+            SM.selectedSlot = null;
             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
                 detail: { slotId: null }
             }));
@@ -371,20 +370,20 @@ export class SlotRemoveChange {
     }
 
     captureSlotState() {
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) return null;
 
         this.parentId = slot.parentId;
 
         // Find sibling index
         if (this.parentId) {
-            const parent = sceneManager.getSlotById(this.parentId);
+            const parent = SM.getSlotById(this.parentId);
             if (parent?.children) {
                 this.siblingIndex = parent.children.findIndex(child => child.id === this.slotId);
             }
         } else {
             // Root level slot
-            this.siblingIndex = sceneManager.slotData.slots.findIndex(s => s.id === this.slotId);
+            this.siblingIndex = SM.slotData.slots.findIndex(s => s.id === this.slotId);
         }
 
         return this.captureSlotStateRecursive(slot);
@@ -410,11 +409,11 @@ export class SlotRemoveChange {
     async apply() {
         if (!this.slotData) return;
 
-        await sceneManager.deleteSlot(this.slotId);
+        await SM.deleteSlot(this.slotId);
 
         // Clear selection if needed
-        if (sceneManager.selectedSlot === this.slotId) {
-            sceneManager.selectedSlot = null;
+        if (SM.selectedSlot === this.slotId) {
+            SM.selectedSlot = null;
             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
                 detail: { slotId: null }
             }));
@@ -440,7 +439,7 @@ export class SlotRemoveChange {
 
     async recreateSlotHierarchy(slotData, parentId, siblingIndex) {
         // Create the slot
-        const newSlot = await sceneManager.addNewSlot(parentId);
+        const newSlot = await SM.addNewSlot(parentId);
         if (!newSlot) return null;
 
         // Restore slot properties
@@ -467,7 +466,7 @@ export class SlotRemoveChange {
         // Move to correct position if needed
         if (siblingIndex !== null && siblingIndex >= 0) {
             if (parentId) {
-                const parent = sceneManager.getSlotById(parentId);
+                const parent = SM.getSlotById(parentId);
                 if (parent?.children) {
                     const currentIndex = parent.children.findIndex(child => child.id === newSlot.id);
                     if (currentIndex !== -1 && currentIndex !== siblingIndex) {
@@ -477,10 +476,10 @@ export class SlotRemoveChange {
                 }
             } else {
                 // Root level reordering
-                const currentIndex = sceneManager.slotData.slots.findIndex(s => s.id === newSlot.id);
+                const currentIndex = SM.slotData.slots.findIndex(s => s.id === newSlot.id);
                 if (currentIndex !== -1 && currentIndex !== siblingIndex) {
-                    sceneManager.slotData.slots.splice(currentIndex, 1);
-                    sceneManager.slotData.slots.splice(siblingIndex, 0, newSlot);
+                    SM.slotData.slots.splice(currentIndex, 1);
+                    SM.slotData.slots.splice(siblingIndex, 0, newSlot);
                 }
             }
         }
@@ -501,7 +500,7 @@ export class SlotMoveChange {
     constructor(slotId, newParentId, options) {
         this.slotId = slotId;
         this.newParentId = newParentId;
-        const slot = sceneManager.getSlotById(slotId);
+        const slot = SM.getSlotById(slotId);
         this.oldParentId = slot?.parentId || null;
         this.oldSiblingIndex = this.getSiblingIndex(slotId, this.oldParentId);
         this.options = options || {};
@@ -509,19 +508,19 @@ export class SlotMoveChange {
 
     getSiblingIndex(slotId, parentId) {
         if (parentId) {
-            const parent = sceneManager.getSlotById(parentId);
+            const parent = SM.getSlotById(parentId);
             return parent?.children?.findIndex(child => child.id === slotId) ?? -1;
         } else {
-            return sceneManager.slotData.slots.findIndex(s => s.id === slotId);
+            return SM.slotData.slots.findIndex(s => s.id === slotId);
         }
     }
 
     async apply() {
         if (this.newParentId === null) {
-            await sceneManager.reparentSlot(this.slotId, sceneManager.slotData.slots[0].id);
+            await SM.reparentSlot(this.slotId, SM.slotData.slots[0].id);
         } else {
-            await sceneManager.reparentSlot(this.slotId, this.newParentId);
-            sceneManager.expandedNodes.add(this.newParentId);
+            await SM.reparentSlot(this.slotId, this.newParentId);
+            SM.expandedNodes.add(this.newParentId);
         }
 
         // Update hierarchy
@@ -532,16 +531,16 @@ export class SlotMoveChange {
 
     async undo() {
         if (this.oldParentId === null) {
-            await sceneManager.reparentSlot(this.slotId, sceneManager.slotData.slots[0].id);
+            await SM.reparentSlot(this.slotId, SM.slotData.slots[0].id);
         } else {
-            await sceneManager.reparentSlot(this.slotId, this.oldParentId);
+            await SM.reparentSlot(this.slotId, this.oldParentId);
         }
 
         // Restore sibling position if possible
-        const slot = sceneManager.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (slot && this.oldSiblingIndex >= 0) {
             if (this.oldParentId) {
-                const parent = sceneManager.getSlotById(this.oldParentId);
+                const parent = SM.getSlotById(this.oldParentId);
                 if (parent?.children) {
                     const currentIndex = parent.children.findIndex(child => child.id === this.slotId);
                     if (currentIndex !== -1 && currentIndex !== this.oldSiblingIndex) {
@@ -550,10 +549,10 @@ export class SlotMoveChange {
                     }
                 }
             } else {
-                const currentIndex = sceneManager.slotData.slots.findIndex(s => s.id === this.slotId);
+                const currentIndex = SM.slotData.slots.findIndex(s => s.id === this.slotId);
                 if (currentIndex !== -1 && currentIndex !== this.oldSiblingIndex) {
-                    sceneManager.slotData.slots.splice(currentIndex, 1);
-                    sceneManager.slotData.slots.splice(this.oldSiblingIndex, 0, slot);
+                    SM.slotData.slots.splice(currentIndex, 1);
+                    SM.slotData.slots.splice(this.oldSiblingIndex, 0, slot);
                 }
             }
         }

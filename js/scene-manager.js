@@ -330,8 +330,8 @@ console.log("It is 4:50")
                     try {
                         await deleteSlot._bs.Destroy();
                         deleteSlot.destroyed = true;
-                        sceneManager.scene.OneShot('+slot_deleted', {slotId: this.id});
-                        delete sceneManager.slotData.slotMap[this.id];
+                        this.scene.OneShot('+slot_deleted', {slotId: this.id});
+                        delete this.slotData.slotMap[this.id];
 
                     } catch (error) {
                         console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
@@ -393,7 +393,7 @@ console.log("It is 4:50")
             
             let slotComponent = await new ComponentClass().init(slot, null, componentProperties);
             slot.components.push(slotComponent);
-            sceneManager.slotData.componentMap[slotComponent.id] = slotComponent;
+            this.slotData.componentMap[slotComponent.id] = slotComponent;
 
             // Refresh properties panel
             if (window.inspectorApp?.propertiesPanel) {
@@ -475,15 +475,15 @@ console.log("It is 4:50")
         }
 
         async loadSlotFromInventory(item){
-            if (!sceneManager.selectedSlot) {
-                sceneManager.selectedSlot = sceneManager.slotData.slots[0].id
+            if (!this.selectedSlot) {
+                this.selectedSlot = this.slotData.slots[0].id
             }
             const parentSlot = this.getSlotById(this.selectedSlot);
             const newSlot = await this.createSlotHierarchy(item.data, parentSlot.id);
             
             await newSlot.setParent(parentSlot);
             
-            sceneManager.scene.OneShot('+item_added', {item: item, slotId: parentSlot.id});
+            this.scene.OneShot('+item_added', {item: item, slotId: parentSlot.id});
 
             // Trigger hierarchy update
             document.dispatchEvent(new CustomEvent('sceneUpdated'));
