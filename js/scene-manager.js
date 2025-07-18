@@ -164,7 +164,6 @@ console.log("It is 6:32")
 
                 
                 if(property.slice(0,2) == "__"){
-                    newValue = JSON.parse(newValue);
                     let items = property.split(":");
                     let path = items[0].split("/");
                     let prop = path[path.length-1];
