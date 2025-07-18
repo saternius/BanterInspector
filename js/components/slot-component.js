@@ -37,6 +37,7 @@ export class SlotComponent{
     }
 
     async update(property, value){
+        console.log(`(${this._slot.name})[${this.type}] update ${property} =>`, value)
         this.properties[property] = value;
         this._bs[property] = value;
     }

@@ -58,6 +58,7 @@ export class Slot{
     }
 
     update(prop, newValue){
+        console.log(`(${this.name}) update ${prop} =>`, newValue)
         if(prop == "name"){
             this.name = newValue;
         }

@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:26")
+console.log("It is 6:32")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -150,16 +150,17 @@ console.log("It is 6:26")
          * Handle space state changes
          */
         handleSpaceStateChange(event) {
-            console.log("TODO: make changes sync across all clients")
             const { changes } = event.detail;
             changes.forEach(async (change) => {
                 let { property, newValue, isProtected } = change;
+                newValue = JSON.parse(newValue);
                 
                 if (isProtected) {
                     this.scene.spaceState.protected[property] = newValue;
                 } else {
                     this.scene.spaceState.public[property] = newValue;
                 }
+                console.log("change =>", change)
 
                 
                 if(property.slice(0,2) == "__"){
@@ -169,12 +170,14 @@ console.log("It is 6:26")
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
                     if(type[0] == "component"){
-                        let component = this.getSlotComponentById(type[1]);
+                        let componentId = parseInt(type[1]);
+                        let component = this.getSlotComponentById(componentId);
                         if(component){
                             await component.update(prop, newValue);
                         }
                     }else if(type[0] == "slot"){
-                        let slot = this.getSlotById(type[1]);
+                        let slotId = parseInt(type[1]);
+                        let slot = this.getSlotById(slotId);
                         if(slot){
                             await slot.update(prop, newValue);
                         }
