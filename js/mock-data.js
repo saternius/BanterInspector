@@ -3,7 +3,7 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
+let basePath = window.location.hostname === 'localhost' ? '.' : `${window.repoUrl}/js`;
 const { Slot, componentTypeMap } = await import(`${basePath}/components/index.js`);
 
 export async function loadMockSlotData() {

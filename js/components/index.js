@@ -1,4 +1,4 @@
-let basePath = window.location.hostname === 'localhost'? '..' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js'; 
+let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
 const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
 const { Slot } = await import(`${basePath}/components/slot.js`);
 const { TransformComponent } = await import(`${basePath}/components/transform.js`);

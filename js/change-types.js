@@ -1,6 +1,6 @@
 
 // Import required dependencies
-let basePath = window.location.hostname === 'localhost' ? '.' : 'https://cdn.jsdelivr.net/gh/saternius/BanterInspector/js';
+let basePath = window.location.hostname === 'localhost' ? '.' : `${window.repoUrl}/js`;
 const { sceneManager } = await import(`${basePath}/scene-manager.js`);
 const { deepClone } = await import(`${basePath}/utils.js`);
 
