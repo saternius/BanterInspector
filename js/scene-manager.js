@@ -46,10 +46,6 @@
                 }
 
                 this.scene = window.BS.BanterScene.GetInstance();
-                this.scene.SetLoadPromise(new Promise((unityResolve) => {
-                    this.scene.addEventListener("unity-loaded", unityResolve, { once: true });
-                }));
-
                 this.scene.addEventListener("unity-loaded", async () => {
                     console.log('Unity loaded, gathering scene hierarchy...');
                     try {
