@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:21")
+console.log("It is 6:26")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -153,7 +153,7 @@ console.log("It is 6:21")
             console.log("TODO: make changes sync across all clients")
             const { changes } = event.detail;
             changes.forEach(async (change) => {
-                const { property, newValue, isProtected } = change;
+                let { property, newValue, isProtected } = change;
                 
                 if (isProtected) {
                     this.scene.spaceState.protected[property] = newValue;
