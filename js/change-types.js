@@ -89,11 +89,6 @@ export class ComponentPropertyChange {
     async change(value) {
         if(!this.component) return;
 
-        // Update local state
-        if (this.component.properties) {
-            this.component.properties[this.property] = value;
-        }
-
         // Generate space key for persistence
         const spaceKey = `__${this.component._slot.name}/${this.component.type}/${this.property}:component_${this.componentId}`;
         if (window.SM) {

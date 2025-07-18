@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 5:16")
+console.log("It is 5:29")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -169,6 +169,7 @@ console.log("It is 5:16")
             
             // Listen for space state changes
             this.scene.addEventListener('space-state-changed', (event) => {
+                console.log("space-state-changed fired", event)
                 this.handleSpaceStateChange(event);
             });
         }
