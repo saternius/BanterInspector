@@ -7,7 +7,7 @@
 (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
     const  { sceneManager } = await import(`${basePath}/scene-manager.js`);
-    
+
     const  { HierarchyPanel } = await import(`${basePath}/hierarchy-panel.js`);
     const  { PropertiesPanel } = await import(`${basePath}/properties-panel.js`);
     const  { SpacePropsPanel } = await import(`${basePath}/space-props-panel.js`);
@@ -183,14 +183,14 @@
                 this.hierarchyPanel.render();
             });
             
-            // Handle space state changes from Unity
-            if (SM.scene) {
-                SM.scene.addEventListener('space-state-changed', (event) => {
-                    // Sync external changes through change manager
-                    changeManager.handleExternalChanges(event.detail.changes);
-                    document.dispatchEvent(new CustomEvent('spaceStateChanged'));
-                });
-            }
+            // // Handle space state changes from Unity
+            // if (SM.scene) {
+            //     SM.scene.addEventListener('space-state-changed', (event) => {
+            //         // Sync external changes through change manager
+            //         changeManager.handleExternalChanges(event.detail.changes);
+            //         document.dispatchEvent(new CustomEvent('spaceStateChanged'));
+            //     });
+            // }
             
             // Keyboard shortcuts
             document.addEventListener('keydown', (e) => {

@@ -44,6 +44,7 @@ console.log("It is 5:29")
                         console.error('Error gathering scene hierarchy:', error);
                     }
                     this.loaded = true;
+                    inspectorApp.hierarchyPanel.render()
                 }
 
                 this.scene = window.BS.BanterScene.GetInstance();
@@ -60,7 +61,7 @@ console.log("It is 5:29")
 
                 setTimeout(()=>{
                     setup();
-                }, 10000)
+                }, 5000)
 
 
             } catch (error) {
