@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 3:55")
+console.log("It is 4:23")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -60,7 +60,7 @@ console.log("It is 3:55")
 
                 setTimeout(() => {
                     reject(new Error('Unity connection timeout'));
-                }, 5000);
+                }, 20000);
             });
         }
 
