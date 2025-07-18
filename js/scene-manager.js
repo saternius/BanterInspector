@@ -26,23 +26,8 @@ console.log("It is 4:23")
          */
         async initialize() {
             try {
-                await this.connectToUnityScene();
-            } catch (error) {
-                console.error('Failed to connect to Unity:', error);
-                // console.log('Loading mock data for development...');
-                // this.slotData = loadMockSlotData();
-                // this.initializeExpandedNodes();
-            }
-            window.scene = this.scene
-        }
-
-        /**
-         * Connect to Unity scene via BS library
-         */
-        async connectToUnityScene() {
-            return new Promise((resolve, reject) => {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
-                    reject(new Error('BS library not available'));
+                    console.error('BS library not available');
                     return;
                 }
 
@@ -54,17 +39,20 @@ console.log("It is 4:23")
                         await this.gatherSceneHierarchy();
                         console.log('Setting up space state handlers...');
                         this.setupSpaceStateHandlers();
-                        resolve();
                     } catch (error) {
-                        reject(error);
+                        console.error('Error gathering scene hierarchy:', error);
                     }
                 });
 
                 setTimeout(() => {
                     reject(new Error('Unity connection timeout'));
                 }, 20000);
-            });
+            } catch (error) {
+                console.error('Failed to connect to Unity:', error);
+            }
+            window.scene = this.scene
         }
+
 
         /**
          * Gather scene hierarchy from Unity
