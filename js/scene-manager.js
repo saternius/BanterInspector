@@ -43,10 +43,6 @@ console.log("It is 4:35")
                         console.error('Error gathering scene hierarchy:', error);
                     }
                 });
-
-                setTimeout(() => {
-                    reject(new Error('Unity connection timeout'));
-                }, 20000);
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
             }
