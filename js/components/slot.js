@@ -4,15 +4,14 @@ const { TransformComponent } = await import(`${basePath}/components/transform.js
 
 export class Slot{
     async init(slotData){
-        this.id = `slot_${Math.floor(Math.random()*10000)}`;
         this.name = slotData.name || `Unnamed Slot`;
         this.parentId = slotData.parentId;
         this.components = slotData.components || [];
         this.children = slotData.children || [];
         this._bs = slotData._bs;
-
         this.active = true;
         this.persistent = true;
+        
 
 
         if(!slotData._bs){
@@ -25,14 +24,11 @@ export class Slot{
             
             await newGameObject.SetActive(true);
             
-            if(!this.name){
-                let newSlotName = this.id;
-                this.name = newSlotName;
-            }
-            
             let transform = await new TransformComponent().init(this);
             this.components.push(transform);
         }
+        
+        this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         window.SM.slotData.slotMap[this.id] = this;
         return this;
     }
@@ -70,5 +66,4 @@ export class Slot{
             this.persistent = newValue;
         }
     }
-
 }

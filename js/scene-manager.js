@@ -7,7 +7,7 @@ console.log("It is 9:05")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap } = await import( `${basePath}/components/index.js`);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap } = await import( `${basePath}/components/index.js`);
 
     export class SceneManager {
         constructor() {
@@ -38,7 +38,15 @@ console.log("It is 9:05")
                     console.log("setting up inspector")
                     try {
                         console.log('Gathering scene hierarchy...');
-                        await this.gatherSceneHierarchy();
+                        let hierarchy = null;
+                        if(!this.scene.spaceState.public.hierarchy){
+                            hierarchy = await this.gatherSceneHierarchy();
+                            this.setSpaceProperty("hierarchy", hierarchy, false);
+                        }else{
+                            hierarchy = this.scene.spaceState.public.hierarchy;
+                        }
+                        console.log("hierarchy =>", hierarchy)
+                        this.loadHierarchy(hierarchy);
                         // console.log('Setting up space state handlers...');
                         // this.setupSpaceStateHandlers();
                     } catch (error) {
@@ -53,56 +61,41 @@ console.log("It is 9:05")
             window.scene = this.scene
         }
 
-
-        /**
-         * Gather scene hierarchy from Unity
-         */
-        async gatherSceneHierarchy() {
+        async gatherSceneHierarchy(){
             console.log("gathering SceneHierarchy")
-            console.log(this.scene.spaceState.public)
+            let rootObj = await this.scene.Find("Root");
+            if(!rootObj){
+                console.log("no root object found")
+                return null;
+            }
 
-            
-            // Helper to convert GameObject to slot format
-            const gameObjectToSlot = async (gameObject, parentId = null) => {
-                const slot = await new Slot().init({
-                    name: gameObject.name || 'GameObject',
-                    parentId: parentId,
-                    active: gameObject.active !== false,
-                    persistent: true,
-                    components: [],
-                    children: [],
-                    _bs: gameObject
-                });
+            let createSlotHierarchy = async (obj)=>{
+                let component_refs = []
+                let slot = {}
 
-                //Make tranform the top component
-                let transform = gameObject.GetComponent(BS.ComponentType.Transform)
+                // Make transform the top component
+                let transform = obj.GetComponent(BS.ComponentType.Transform)
                 if(transform){
-                    let transformSlotComponent = await new TransformComponent().init(slot, transform);
-                    slot.components.push(transformSlotComponent);
-                    this.slotData.componentMap[transformSlotComponent.id] = transformSlotComponent
+                    let component_ref = `Transform_${Math.floor(Math.random()*99999)}`
+                    component_refs.push(component_ref);
                 }
 
-                for(let componentID in gameObject.components){
-                    if(componentID == transform.id) continue;
-                    let component = gameObject.components[componentID]
-                    if(SUPPORTED_COMPONENTS.has(component.type)){
-                        console.log("component =>", component)
-                        let componentClass = componentBSTypeMap[component.type]
-                        console.log("componentClass =>", componentClass)
-                        let slotComponent = await new componentClass().init(slot, component);
-                        console.log("slotComponent =>", slotComponent)
-                        slot.components.push(slotComponent);
-                        this.slotData.componentMap[slotComponent.id] = slotComponent
-                    }
+                for(let c in obj.components){
+                    let component = obj.components[c]
+                    if(component.type == "Transform") continue;
+                    let component_ref = `${componentTextMap[component.type]}_${Math.floor(Math.random()*99999)}`
+                    component_refs.push(component_ref)
                 }
-                
-                // Process children using Traverse method if available
-                if (gameObject.Traverse) {
+
+
+                slot.name = obj.name;
+                slot.components = component_refs;
+                if (obj.Traverse) {
                     const childPromises = [];
-                    gameObject.Traverse((child) => {
-                        if (child && child.id !== gameObject.id) {
-                            if (child.parent == gameObject.id) {
-                                childPromises.push(gameObjectToSlot(child, slot.id));
+                    obj.Traverse((child) => {
+                        if (child && child.id !== obj.id) {
+                            if (child.parent == obj.id) {
+                                childPromises.push(createSlotHierarchy(child));
                             }
                         }
                     });
@@ -111,28 +104,62 @@ console.log("It is 9:05")
                     slot.children = childSlots.filter(s => s);
                 } 
                 return slot;
-            };
-            
-            let rootSlot = null;
-            try {
-                // Common root object names to search for
-                const rootName = 'Root'
-                const obj = await this.scene.Find(rootName);
-                if (obj) {
-                    const slot = await gameObjectToSlot(obj);
-                    rootSlot = slot;
-                    console.log("rootSlot =>", rootSlot)
-                }else{
-                    console.log("no root found")
-                }
-            } catch (error) {
-                console.error('Error gathering scene hierarchy:', error);
             }
+
+            let rootSlot = await createSlotHierarchy(rootObj, null);
+            console.log("rootSlot =>", rootSlot)
+            return rootSlot;
+        }
+
+        async loadHierarchy(hierarchy){
+            console.log("loading hierarchy =>", hierarchy)
+            if(!hierarchy){ return null}
             
-            // Set the scene data
-            this.slotData.slots = [rootSlot];
-            console.log("slotData.slots =>", this.slotData.slots)
+            let hierarchyToSlot = async (h, parent_path = null)=>{
+                let path = parent_path ? parent_path + "/" + h.name : h.name;
+                let gO = await this.scene.FindByPath(path);
+                if(!gO){
+                    console.log("no game object found at path =>", path)
+                    return null;
+                }
+
+                const slot = await new Slot().init({
+                    name: h.name || 'GameObject',
+                    parentId: parent_path,
+                    _bs: gO
+                });
+
+                let ref_idx = 0;
+                // Add other components
+                for(let componentID in gO.components){
+                    let component = gO.components[componentID]
+                    let component_ref = h.components[ref_idx]
+                    ref_idx++;
+
+                    if(SUPPORTED_COMPONENTS.has(component.type)){
+                        console.log("component =>", component)
+                        let componentClass = componentBSTypeMap[component.type]
+                        console.log("componentClass =>", componentClass)
+                        let slotComponent = await new componentClass().init(slot, component);
+                        console.log("slotComponent =>", slotComponent)
+                        slotComponent.setId(component_ref);
+                        slot.components.push(slotComponent);
+                    }
+                }
+
+                for(let child of h.children){
+                    let childSlot = await hierarchyToSlot(child, slot.id);
+                    await childSlot.setParent(slot);
+                }
+                slot.children = slot.children.filter(c => c);
+                return slot;
+            }
+
+            const slot = await hierarchyToSlot(hierarchy, null);
+
+            this.slotData.slots = [slot];
             this.initializeExpandedNodes();
+            inspectorApp.hierarchyPanel.render()
         }
 
     

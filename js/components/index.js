@@ -75,6 +75,26 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterPhysicMaterial]: BanterPhysicMaterialComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
+
+export const componentTextMap = {
+    [BS.ComponentType.Transform]: "Transform",
+    [BS.ComponentType.BanterGeometry]: "BanterGeometry",
+    [BS.ComponentType.BanterMaterial]: "BanterMaterial",
+    [BS.ComponentType.BanterRigidbody]: "BanterRigidbody",
+    [BS.ComponentType.BanterAudioSource]: "BanterAudioSource",
+    [BS.ComponentType.BanterVideoPlayer]: "BanterVideoPlayer",
+    [BS.ComponentType.BanterText]: "BanterText",
+    [BS.ComponentType.BoxCollider]: "BoxCollider",
+    [BS.ComponentType.SphereCollider]: "SphereCollider",
+    [BS.ComponentType.CapsuleCollider]: "CapsuleCollider",
+    [BS.ComponentType.MeshCollider]: "MeshCollider",
+    [BS.ComponentType.BanterBillboard]: "BanterBillboard",
+    [BS.ComponentType.BanterGrabHandle]: "BanterGrabHandle",
+    [BS.ComponentType.BanterSyncedObject]: "BanterSyncedObject",
+    [BS.ComponentType.BanterPhysicMaterial]: "BanterPhysicMaterial",
+    [MonoBehaviorComponent]: "MonoBehavior"
+}
+
 window.componentBSTypeMap = componentBSTypeMap;
 
 export { 

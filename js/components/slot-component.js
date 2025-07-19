@@ -4,7 +4,7 @@ export class SlotComponent{
     }
 
     async init(slot, sceneComponent, properties){
-        this.id = `component_${Math.floor(Math.random()*10000)}`;
+        this.id = `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
         this.properties = (properties) ? properties : this.defaultProperties();
         if(sceneComponent){
@@ -17,8 +17,15 @@ export class SlotComponent{
                 this.updateMany(this.properties)
             }
         }
+        
         window.SM.slotData.componentMap[this.id] = this;
         return this;
+    }
+
+    setId(id){
+        delete window.SM.slotData.componentMap[this.id];
+        this.id = id;
+        window.SM.slotData.componentMap[this.id] = this;
     }
 
     async defaultProperties(){
