@@ -200,15 +200,15 @@ console.log("It is 9:05")
                     let path = items[0].split("/");
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
-                    if(type[0] == "component"){
-                        let component = this.getSlotComponentById(items[1]);
-                        if(component){
-                            await component.update(prop, newValue);
-                        }
-                    }else if(type[0] == "slot"){
+                    if(type[0] == "slot"){
                         let slot = this.getSlotById(items[1]);
                         if(slot){
                             await slot.update(prop, newValue);
+                        }
+                    }else{
+                        let component = this.getSlotComponentById(items[1]);
+                        if(component){
+                            await component.update(prop, newValue);
                         }
                     }
                 }
