@@ -40,16 +40,9 @@ export class SlotPropertyChange {
         }
 
         
-        slot[this.property] = value;
-        if(this.property === "active"){
-            await gO.SetActive(Boolean(value));
-        }
-        if(this.property === "name"){
-            slot.name = value;
-            inspectorApp.hierarchyPanel.render()
-        }
+       
 
-        const spaceKey = '__' + slot.name + '/' + this.property + ':' + this.slotId;
+        const spaceKey = '__' + slot.id + '/' + this.property + ':slot';
         await window.SM.setSpaceProperty(spaceKey, value, false);
     }
 

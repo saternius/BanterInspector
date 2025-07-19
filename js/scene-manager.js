@@ -205,6 +205,7 @@ console.log("It is 9:05")
                         if(slot){
                             await slot.update(prop, newValue);
                         }
+                        inspectorApp.hierarchyPanel.render()
                     }else{
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
