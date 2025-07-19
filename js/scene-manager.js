@@ -213,6 +213,7 @@ console.log("It is 9:05")
                             await component.update(prop, newValue);
                         }
                     }
+                    inspectorApp.propertiesPanel.render(this.selectedSlot)
                 }
             });
         }
