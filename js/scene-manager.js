@@ -201,7 +201,8 @@ console.log("It is 9:05")
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
                     if(type[0] == "slot"){
-                        let slot = this.getSlotById(items[1]);
+                        let ref = ['Root'].concat(path.slice(1,-1)).join("/")
+                        let slot = this.getSlotById(ref);
                         if(slot){
                             await slot.update(prop, newValue);
                         }
