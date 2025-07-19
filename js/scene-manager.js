@@ -227,7 +227,7 @@ console.log("It is 9:05")
                 value = value.value;
             }
 
-            value = JSON.stringify(value);
+            //value = JSON.stringify(value);
 
             if (isProtected) {
                 this.scene.SetProtectedSpaceProps({ [key]: value });
