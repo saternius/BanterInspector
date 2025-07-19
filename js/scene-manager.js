@@ -43,7 +43,11 @@ console.log("It is 9:05")
                             hierarchy = await this.gatherSceneHierarchy();
                             this.setSpaceProperty("hierarchy", hierarchy, false);
                         }else{
-                            hierarchy = this.scene.spaceState.public.hierarchy;
+                            let h = this.scene.spaceState.public.hierarchy;
+                            if(typeof h == "string"){
+                                h = JSON.parse(h);
+                            }
+                            hierarchy = h;
                         }
                         console.log("hierarchy =>", hierarchy)
                         this.loadHierarchy(hierarchy);
