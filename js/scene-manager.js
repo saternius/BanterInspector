@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:46")
+console.log("It is 9:05")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -59,6 +59,7 @@ console.log("It is 6:46")
          */
         async gatherSceneHierarchy() {
             console.log("gathering SceneHierarchy")
+            console.log(this.scene.spaceState.public)
 
             
             // Helper to convert GameObject to slot format
