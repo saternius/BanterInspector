@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 9:05")
+console.log("It is 7:58")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -392,7 +392,11 @@ console.log("It is 9:05")
             if (this.selectedSlot === slotId) {
                 this.selectedSlot = null;
             }
-            
+
+            // Update hierarchy
+            if (window.inspectorApp?.hierarchyPanel) {
+                window.inspectorApp.hierarchyPanel.render();
+            }
         }
 
         /**

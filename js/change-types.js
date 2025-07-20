@@ -289,54 +289,11 @@ export class SlotAddChange {
 
     async apply() {
         await SM.addNewSlot(this.parentId);
-        // if (newSlot) {
-        //     this.newSlotId = newSlot.id;
-            
-        //     // Set the name if different from default
-        //     if (newSlot.name !== this.slotName) {
-        //         newSlot.name = this.slotName;
-        //         const spaceKey = `__${newSlot.name}/name:${newSlot.id}`;
-        //         if (window.SM) {
-        //             await window.SM.setSpaceProperty(spaceKey, this.slotName, false);
-        //         }
-        //     }
-
-        //     // Expand parent
-        //     if (this.parentId) {
-        //         SM.expandedNodes.add(this.parentId);
-        //     }
-
-        //     // Select new slot
-        //     SM.selectSlot(newSlot.id);
-
-        //     // Update UI
-        //     document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-        //         detail: { slotId: newSlot.id }
-        //     }));
-
-        //     if (window.inspectorApp?.hierarchyPanel) {
-        //         window.inspectorApp.hierarchyPanel.render();
-        //     }
-        // }
     }
 
     async undo() {
         if (!this.newSlotId) return;
-
         await SM.deleteSlot(this.newSlotId);
-
-        // Clear selection if this slot was selected
-        if (SM.selectedSlot === this.newSlotId) {
-            SM.selectedSlot = null;
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: null }
-            }));
-        }
-
-        // Update hierarchy
-        if (window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
     }
 
     getDescription() {
