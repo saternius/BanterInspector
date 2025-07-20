@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 7:58")
+console.log("It is 8:22")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -337,6 +337,13 @@ console.log("It is 7:58")
             if (window.inspectorApp?.hierarchyPanel) {
                 window.inspectorApp.hierarchyPanel.render();
             }
+
+            let h = await this.gatherSceneHierarchy();
+            this.setSpaceProperty("hierarchy", h, false);
+
+
+
+
         }
 
         /**

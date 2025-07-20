@@ -122,14 +122,15 @@
             inputName.style.width = '100%';
             
             const handleRename = () => {
-                const newName = inputName.value.trim();
-                if (newName && newName !== slot.name) {
-                    const change = new SlotPropertyChange(slot.id, 'name', newName, { source: 'ui' });
-                    changeManager.applyChange(change);
-                    if (this.selectedSlotNameElement) {
-                        this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
-                    }
-                }  
+                alert("Renaming is not supported yet")
+                // const newName = inputName.value.trim();
+                // if (newName && newName !== slot.name) {
+                //     const change = new SlotPropertyChange(slot.id, 'name', newName, { source: 'ui' });
+                //     changeManager.applyChange(change);
+                //     if (this.selectedSlotNameElement) {
+                //         this.selectedSlotNameElement.textContent = `Properties - ${newName}`;
+                //     }
+                // }  
             };
             
             inputName.addEventListener('change', (e) => {
