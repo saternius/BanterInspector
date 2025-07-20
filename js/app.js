@@ -202,6 +202,12 @@
                     SM.setup();
                 });
 
+                SM.scene.On("oneshot", async (event) => {
+                    console.log("oneshot fired", event)
+                    SM.handleOneShot(event);
+                    document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
+                });
+
                 setTimeout(()=>{
                     SM.setup();
                 }, 5000)

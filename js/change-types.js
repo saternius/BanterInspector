@@ -288,36 +288,36 @@ export class SlotAddChange {
     }
 
     async apply() {
-        const newSlot = await SM.addNewSlot(this.parentId);
-        if (newSlot) {
-            this.newSlotId = newSlot.id;
+        await SM.addNewSlot(this.parentId);
+        // if (newSlot) {
+        //     this.newSlotId = newSlot.id;
             
-            // Set the name if different from default
-            if (newSlot.name !== this.slotName) {
-                newSlot.name = this.slotName;
-                const spaceKey = `__${newSlot.name}/name:${newSlot.id}`;
-                if (window.SM) {
-                    await window.SM.setSpaceProperty(spaceKey, this.slotName, false);
-                }
-            }
+        //     // Set the name if different from default
+        //     if (newSlot.name !== this.slotName) {
+        //         newSlot.name = this.slotName;
+        //         const spaceKey = `__${newSlot.name}/name:${newSlot.id}`;
+        //         if (window.SM) {
+        //             await window.SM.setSpaceProperty(spaceKey, this.slotName, false);
+        //         }
+        //     }
 
-            // Expand parent
-            if (this.parentId) {
-                SM.expandedNodes.add(this.parentId);
-            }
+        //     // Expand parent
+        //     if (this.parentId) {
+        //         SM.expandedNodes.add(this.parentId);
+        //     }
 
-            // Select new slot
-            SM.selectSlot(newSlot.id);
+        //     // Select new slot
+        //     SM.selectSlot(newSlot.id);
 
-            // Update UI
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: newSlot.id }
-            }));
+        //     // Update UI
+        //     document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+        //         detail: { slotId: newSlot.id }
+        //     }));
 
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
-            }
-        }
+        //     if (window.inspectorApp?.hierarchyPanel) {
+        //         window.inspectorApp.hierarchyPanel.render();
+        //     }
+        // }
     }
 
     async undo() {
@@ -559,3 +559,6 @@ export class SlotMoveChange {
         return `Move slot`;
     }
 }
+
+// Load Inventory
+// Duplicate Slot

@@ -219,6 +219,11 @@ console.log("It is 9:05")
         }
 
 
+        handleOneShot(event){
+            console.log("handleOneShot =>", event)
+        }
+
+
         /**
          * Set space property
          */
@@ -298,21 +303,25 @@ console.log("It is 9:05")
             if(!parentId){
                 parentId = this.slotData.slots[0].id;
             }
+          
+            // Create new GameObject
+            let newSlot = await new Slot().init({
+                parentId: parentId
+            });
 
-            try {
-                // Create new GameObject
-                let newSlot = await new Slot().init({
-                    name: "UnNamedObject",
-                    parentId: parentId
-                });
-              
-                const parent = this.getSlotById(parentId);
-                parent.children.push(newSlot);
-                this.scene.OneShot('+slot_added', {slotId: newSlot.id});
-                return newSlot;
-            } catch (error) {
-                console.error('Failed to create Unity GameObject:', error);
-                return null
+            let parentSlot = this.getSlotById(parentId);
+            await newSlot.setParent(parentSlot);
+            this.scene.OneShot('+slot_added', {slotName: newSlot.name, slotParent: parentId});
+
+            this.expandedNodes.add(parentId);
+            this.selectSlot(newSlot.id);
+            // Update UI
+            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: newSlot.id }
+            }));
+
+            if (window.inspectorApp?.hierarchyPanel) {
+                window.inspectorApp.hierarchyPanel.render();
             }
         }
 

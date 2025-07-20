@@ -4,7 +4,7 @@ const { TransformComponent } = await import(`${basePath}/components/transform.js
 
 export class Slot{
     async init(slotData){
-        this.name = slotData.name || `Unnamed Slot`;
+        this.name = slotData.name || `New_Slot_${Math.floor(Math.random()*99999)}`;
         this.parentId = slotData.parentId;
         this.components = slotData.components || [];
         this.children = slotData.children || [];
