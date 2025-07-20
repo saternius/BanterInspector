@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 8:22")
+console.log("It is 8:40")
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
@@ -324,6 +324,9 @@ console.log("It is 8:22")
                 parentId: parentId,
                 name: slotName
             });
+
+            let transform = await new TransformComponent().init(newSlot);
+            newSlot.components.push(transform);
 
             
             await newSlot.setParent(parentSlot);

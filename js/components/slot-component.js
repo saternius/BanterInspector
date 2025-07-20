@@ -4,7 +4,7 @@ export class SlotComponent{
     }
 
     async init(slot, sceneComponent, properties){
-        this.id = `${this.type}_${Math.floor(Math.random()*99999)}`;
+        this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
         this.properties = (properties) ? properties : this.defaultProperties();
         if(sceneComponent){

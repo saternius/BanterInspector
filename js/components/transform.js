@@ -11,6 +11,7 @@ export class TransformComponent extends SlotComponent {
         await super.init(slot, sceneComponent, properties);
         this.type = "Transform";
         console.log("TRANSFORM COMPONENT INIT", this._bs, this._slot, properties)
+        this.setId(`Transform_${slot.id}`);
         return this;
     }
 
