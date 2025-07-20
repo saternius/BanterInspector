@@ -86,7 +86,7 @@ console.log("It is 7:58")
 
                 for(let c in obj.components){
                     let component = obj.components[c]
-                    if(component.type == "Transform") continue;
+                    if(component.type == BS.ComponentType.Transform) continue;
                     let component_ref = `${componentTextMap[component.type]}_${Math.floor(Math.random()*99999)}`
                     component_refs.push(component_ref)
                 }
@@ -228,6 +228,7 @@ console.log("It is 7:58")
                 let slotName = items[1];
                 let parentId = items[2];
                 await this.addNewSlot(slotName, parentId);
+
             }
         }
 
