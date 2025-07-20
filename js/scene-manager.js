@@ -219,8 +219,16 @@ console.log("It is 7:58")
         }
 
 
-        handleOneShot(event){
+        async handleOneShot(event){
             console.log("handleOneShot =>", event)
+            let data = event.detail.data;
+            let items = data.split(":");
+            let type = items[0];
+            if(type === "slot_added"){
+                let slotName = items[1];
+                let parentId = items[2];
+                await this.addNewSlot(slotName, parentId);
+            }
         }
 
 
@@ -294,7 +302,7 @@ console.log("It is 7:58")
         /**
          * Add new slot
          */
-        async addNewSlot(parentId = null) {
+        async addNewSlot(slotName, parentId = null) {
             if(!this.scene || !window.BS){
                 console.log("NO SCENE AVAILABLE")
                 return null;
@@ -303,16 +311,21 @@ console.log("It is 7:58")
             if(!parentId){
                 parentId = this.slotData.slots[0].id;
             }
+
+            let parentSlot = this.getSlotById(parentId);
+            if(!parentSlot){
+                console.log("no parent slot found")
+                return null;
+            }
           
             // Create new GameObject
             let newSlot = await new Slot().init({
-                parentId: parentId
+                parentId: parentId,
+                name: slotName
             });
 
-            let parentSlot = this.getSlotById(parentId);
+            
             await newSlot.setParent(parentSlot);
-            this.scene.OneShot('+slot_added', {slotName: newSlot.name, slotParent: parentId});
-
             this.expandedNodes.add(parentId);
             this.selectSlot(newSlot.id);
             // Update UI

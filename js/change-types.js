@@ -288,12 +288,16 @@ export class SlotAddChange {
     }
 
     async apply() {
-        await SM.addNewSlot(this.parentId);
+        let data = `slot_added:${this.slotName}:${this.parentId}`
+        SM.scene.OneShot(data);
+        //await SM.addNewSlot(this.parentId);
     }
 
     async undo() {
         if (!this.newSlotId) return;
-        await SM.deleteSlot(this.newSlotId);
+        let data = `slot_removed:${this.slotName}:${this.parentId}`
+        SM.scene.OneShot(data);
+        // await SM.deleteSlot(this.newSlotId);
     }
 
     getDescription() {
