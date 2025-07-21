@@ -95,6 +95,12 @@ export const componentTextMap = {
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
+
+export const componentBundleMap = {
+    "BanterGeometry": ['BanterMaterial'],
+}
+
+
 window.componentBSTypeMap = componentBSTypeMap;
 
 export { 

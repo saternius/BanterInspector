@@ -188,8 +188,6 @@
             if (SM.scene) {
                 SM.scene.addEventListener('space-state-changed', (event) => {
                     // Sync external changes through change manager
-                    console.log("space-state-changed fired", event)
-                    // changeManager.handleExternalChanges(event.detail.changes);
                     document.dispatchEvent(new CustomEvent('spaceStateChanged'));
                     SM.handleSpaceStateChange(event);
                 });

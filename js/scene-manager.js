@@ -8,7 +8,7 @@ console.log("It is 8:40")
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap } = await import( `${basePath}/components/index.js`);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap } = await import( `${basePath}/components/index.js`);
 
     export class SceneManager {
         constructor() {
@@ -198,6 +198,7 @@ console.log("It is 8:40")
         handleSpaceStateChange(event) {
             const { changes } = event.detail;
             changes.forEach(async (change) => {
+                console.log("[SPACE CHANGE] =>", change)
                 let { property, newValue, isProtected } = change;
                 newValue = JSON.parse(newValue);
                 
@@ -206,7 +207,7 @@ console.log("It is 8:40")
                 } else {
                     this.scene.spaceState.public[property] = newValue;
                 }
-                console.log("change =>", change)
+                
 
                 
                 if(property.slice(0,2) == "__"){
@@ -388,15 +389,16 @@ console.log("It is 8:40")
 
 
         async updateHierarchy(slot = null){
-            slot = slot || this.getRootSlot();
-            
-            this.selectSlot(slot.id);
-            if(slot.parentId){
-                this.expandedNodes.add(slot.parentId);
-            }
-           
             let h = await this.gatherSceneHierarchy();
             this.setSpaceProperty("hierarchy", h, false);
+
+            slot = slot || this.getRootSlot();
+            if(slot){
+                this.selectSlot(slot.id);
+                if(slot.parentId){
+                    this.expandedNodes.add(slot.parentId);
+                }
+            }
         }
 
 
@@ -540,12 +542,28 @@ console.log("It is 8:40")
             slot.components.push(slotComponent);
             this.slotData.componentMap[slotComponent.id] = slotComponent;
 
+            await this.handleComponentBundles(slot, slotComponent);
+
             // Refresh properties panel
             if (window.inspectorApp?.propertiesPanel) {
                 window.inspectorApp.propertiesPanel.render(slot.id);
             }
             
             return slotComponent;
+        }
+
+        async handleComponentBundles(slot, slotComponent){
+            let bundles = componentBundleMap[slotComponent.type];
+            let idx = parseInt(slotComponent.id.split("_")[1]);
+            if(bundles){
+                for(let bundle of bundles){
+                    let properties = {
+                        id: `${bundle}_${idx}`,
+                    }
+                    await this.addComponent(slot, bundle, properties);
+                    idx += 1;
+                }
+            }
         }
 
         async deleteComponent(slotComponent){
