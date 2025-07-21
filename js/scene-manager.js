@@ -549,9 +549,10 @@ console.log("It is 8:40")
         }
 
         async deleteComponent(slotComponent){
+            console.log("deleting component =>", slotComponent)
             await slotComponent.destroy();
             slotComponent.destroyed = true;
-            slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(this), 1);
+            slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(slotComponent), 1);
             delete this.slotData.componentMap[slotComponent.id];
             
             // Remove any space properties associated with this component
@@ -589,6 +590,8 @@ console.log("It is 8:40")
             if (window.inspectorApp?.propertiesPanel) {
                 window.inspectorApp.propertiesPanel.render(this.slotId);
             }
+
+            this.updateHierarchy(slotComponent._slot);
         }
 
         async createSlotHierarchy(item, parentId){
