@@ -1,6 +1,7 @@
 
 // Import required dependencies
-let basePath = window.location.hostname === 'localhost' ? '.' : `${window.repoUrl}/js`;
+let localhost = window.location.hostname === 'localhost'
+let basePath = localhost ? '.' : `${window.repoUrl}/js`;
 const { deepClone } = await import(`${basePath}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
@@ -88,8 +89,6 @@ export class ComponentPropertyChange {
             await window.SM.setSpaceProperty(spaceKey, value, false);
         }
 
-        //await this.component.update(this.property, value);
-
         // Refresh UI if needed
         if (window.inspectorApp?.spacePropsPanel) {
             window.inspectorApp.spacePropsPanel.render();
@@ -155,34 +154,27 @@ export class ComponentAddChange {
     constructor(slotId, componentType, options) {
         this.slotId = slotId;
         this.componentType = componentType;
-        this.componentProperties = options.componentProperties;
-        this.componentId = null; 
         this.options = options || {};
+        this.componentProperties = options.componentProperties || {};
     }
 
     async apply() {
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) {
-            console.error(`Slot ${this.slotId} not found`);
-            return;
+        this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
+        let event = {
+            slotId: this.slotId,
+            componentType: this.componentType,
+            componentProperties: this.componentProperties
         }
+        let event_str = JSON.stringify(event);
+        let data = `component_added:${event_str}`
+        SM.sendOneShot(data);
 
-        let slotComponent = await SM.addComponent(slot, this.componentType, this.componentProperties);
-        this.componentId = slotComponent.id;
     }
 
     async undo() {
-        if (!this.componentId) return;
-
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) return;
-
-        // Remove component
-        const componentIndex = slot.components.findIndex(c => c.id === this.componentId);
-        if (componentIndex !== -1) {
-            const component = slot.components[componentIndex];
-            SM.deleteComponent(component);
-        }
+        if (!this.componentProperties.id) return;
+        let data = `component_removed:${this.componentProperties.id}`
+        SM.sendOneShot(data);
     }
 
 
@@ -206,68 +198,40 @@ export class ComponentRemoveChange {
 
     captureComponentData() {
         // Find the component and its slot
-        const slots = SM.getAllSlots();
-        for (const slot of slots) {
-            const componentIndex = slot.components?.findIndex(c => c.id === this.componentId);
-            if (componentIndex !== -1) {
-                this.slotId = slot.id;
-                this.componentIndex = componentIndex;
-                const component = slot.components[componentIndex];
-                
-                // Deep clone the component data
-                return {
-                    id: component.id,
-                    type: component.type,
-                    properties: JSON.parse(JSON.stringify(component.properties || {})),
-                    // Store additional metadata if needed
-                    _wasMonoBehavior: component.constructor?.name === 'MonoBehavior'
-                };
-            }
+        let component = SM.getSlotComponentById(this.componentId);
+        if(!component){
+            console.error(`Component ${this.componentId} not found`);
+            return null;
         }
-        return null;
+        return {
+            slotId: component._slot.id,
+            id: component.id,
+            type: component.type,
+            properties: JSON.parse(JSON.stringify(component.properties || {}))
+        }
     }
 
     async apply() {
-        if (!this.componentData || !this.slotId) {
+        if (!this.componentData) {
             console.error('No component data to remove');
             return;
         }
 
-        await SM.deleteComponent(this.slotId, this.componentId, this.componentData.type);
-
-        // Refresh properties panel
-        if (window.inspectorApp?.propertiesPanel) {
-            window.inspectorApp.propertiesPanel.render(this.slotId);
-        }
+        let data = `component_removed:${this.componentId}`
+        SM.sendOneShot(data);
     }
 
     async undo() {
-        if (!this.componentData || !this.slotId) return;
-
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) return;
-
-        // Recreate the component
-        if (this.componentData.type === 'MonoBehavior') {
-            alert("Can't undo MonoBehavior component deletion")
-        } else {
-            // Recreate Unity component
-            const addChange = new ComponentAddChange(this.slotId, this.componentData.type, { properties: this.componentData.properties });
-            await addChange.apply();
-            
-            // Update the ID to match the original
-            const newComponent = slot.components[slot.components.length - 1];
-            if (newComponent && this.componentIndex !== null) {
-                // Move to original position
-                slot.components.pop();
-                slot.components.splice(this.componentIndex, 0, newComponent);
-            }
+        if (!this.componentData) return;
+        this.componentData.properties.id = this.componentData.id;
+        let event = {
+            slotId: this.componentData.slotId,
+            componentType: this.componentData.type,
+            componentProperties: this.componentData.properties
         }
-
-        // Refresh UI
-        if (window.inspectorApp?.propertiesPanel) {
-            window.inspectorApp.propertiesPanel.render(this.slotId);
-        }
+        let event_str = JSON.stringify(event);
+        let data = `component_added:${event_str}`
+        SM.sendOneShot(data);
     }
 
     getDescription() {
@@ -288,16 +252,14 @@ export class SlotAddChange {
     }
 
     async apply() {
-        let data = `slot_added:${this.slotName}:${this.parentId}`
-        SM.scene.OneShot(data);
-        //await SM.addNewSlot(this.parentId);
+        let data = `slot_added:${this.parentId}:${this.slotName}`
+        SM.sendOneShot(data);
     }
 
     async undo() {
         if (!this.newSlotId) return;
-        let data = `slot_removed:${this.slotName}:${this.parentId}`
-        SM.scene.OneShot(data);
-        // await SM.deleteSlot(this.newSlotId);
+        let data = `slot_removed:${this.parentId}/${this.slotName}`
+        SM.sendOneShot(data);
     }
 
     getDescription() {
@@ -311,129 +273,44 @@ export class SlotAddChange {
 
 export class SlotRemoveChange {
     constructor(slotId, options) {
-        this.slotId = slotId;
-        this.slotData = this.captureSlotState();
-        this.parentId = null;
+        console.log("SlotRemoveChange: ", slotId)
+        this.slot = SM.getSlotById(slotId);
+        this.slotExport = this.slot.export();
         this.siblingIndex = null;
         this.options = options || {};
     }
 
     captureSlotState() {
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) return null;
+        if (!this.slot) return null;
 
-        this.parentId = slot.parentId;
+        let parentId = this.slot.parentId;
 
         // Find sibling index
-        if (this.parentId) {
-            const parent = SM.getSlotById(this.parentId);
+        if (parentId) {
+            const parent = SM.getSlotById(parentId);
             if (parent?.children) {
-                this.siblingIndex = parent.children.findIndex(child => child.id === this.slotId);
+                this.siblingIndex = parent.children.findIndex(child => child.id === this.slot.id);
             }
         } else {
             // Root level slot
-            this.siblingIndex = SM.slotData.slots.findIndex(s => s.id === this.slotId);
+            this.siblingIndex = SM.slotData.slots.findIndex(s => s.id === this.slot.id);
         }
 
-        return this.captureSlotStateRecursive(slot);
+        return this.slot.export();
     }
 
-    captureSlotStateRecursive(slot) {
-        return {
-            id: slot.id,
-            name: slot.name,
-            active: slot.active,
-            persistent: slot.persistent,
-            parentId: slot.parentId,
-            components: slot.components?.map(c => ({
-                id: c.id,
-                type: c.type,
-                properties: JSON.parse(JSON.stringify(c.properties || {})),
-                _wasMonoBehavior: c.constructor?.name === 'MonoBehavior'
-            })) || [],
-            children: slot.children?.map(child => this.captureSlotStateRecursive(child)) || []
-        };
-    }
 
     async apply() {
-        if (!this.slotData) return;
-
-        await SM.deleteSlot(this.slotId);
-
-        // Clear selection if needed
-        if (SM.selectedSlot === this.slotId) {
-            SM.selectedSlot = null;
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: null }
-            }));
-        }
-
-        // Update hierarchy
-        if (window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
+        let data = `slot_removed:${this.slot.id}`
+        SM.sendOneShot(data);
     }
 
     async undo() {
-        if (!this.slotData) return;
+        if (!this.slotExport) return;
 
         // Recreate the slot hierarchy
-        await this.recreateSlotHierarchy(this.slotData, this.parentId, this.siblingIndex);
-
-        // Update UI
-        if (window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
-    }
-
-    async recreateSlotHierarchy(slotData, parentId, siblingIndex) {
-        // Create the slot
-        const newSlot = await SM.addNewSlot(parentId);
-        if (!newSlot) return null;
-
-        // Restore slot properties
-        newSlot.name = slotData.name;
-        newSlot.active = slotData.active;
-        newSlot.persistent = slotData.persistent;
-
-        // Restore components
-        for (const compData of slotData.components) {
-            if (compData.type === 'MonoBehavior') {
-                alert("Can't undo MonoBehavior component deletion")
-            } else {
-                // For Unity components, we need to recreate them
-                const addChange = new ComponentAddChange(newSlot.id, compData.type, { properties: compData.properties });
-                await addChange.apply();
-            }
-        }
-
-        // Recreate children recursively
-        for (const childData of slotData.children) {
-            await this.recreateSlotHierarchy(childData, newSlot.id);
-        }
-
-        // Move to correct position if needed
-        if (siblingIndex !== null && siblingIndex >= 0) {
-            if (parentId) {
-                const parent = SM.getSlotById(parentId);
-                if (parent?.children) {
-                    const currentIndex = parent.children.findIndex(child => child.id === newSlot.id);
-                    if (currentIndex !== -1 && currentIndex !== siblingIndex) {
-                        parent.children.splice(currentIndex, 1);
-                        parent.children.splice(siblingIndex, 0, newSlot);
-                    }
-                }
-            } else {
-                // Root level reordering
-                const currentIndex = SM.slotData.slots.findIndex(s => s.id === newSlot.id);
-                if (currentIndex !== -1 && currentIndex !== siblingIndex) {
-                    SM.slotData.slots.splice(currentIndex, 1);
-                    SM.slotData.slots.splice(siblingIndex, 0, newSlot);
-                }
-            }
-        }
-
-        return newSlot;
+        let data = `load_slot:${JSON.stringify(this.slotExport)}`
+        SM.sendOneShot(data);
     }
 
     getDescription() {
@@ -465,51 +342,13 @@ export class SlotMoveChange {
     }
 
     async apply() {
-        if (this.newParentId === null) {
-            await SM.reparentSlot(this.slotId, SM.slotData.slots[0].id);
-        } else {
-            await SM.reparentSlot(this.slotId, this.newParentId);
-            SM.expandedNodes.add(this.newParentId);
-        }
-
-        // Update hierarchy
-        if (window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
+        let data = `slot_moved:${this.slotId}:${this.newParentId}`
+        SM.sendOneShot(data);
     }
 
     async undo() {
-        if (this.oldParentId === null) {
-            await SM.reparentSlot(this.slotId, SM.slotData.slots[0].id);
-        } else {
-            await SM.reparentSlot(this.slotId, this.oldParentId);
-        }
-
-        // Restore sibling position if possible
-        const slot = SM.getSlotById(this.slotId);
-        if (slot && this.oldSiblingIndex >= 0) {
-            if (this.oldParentId) {
-                const parent = SM.getSlotById(this.oldParentId);
-                if (parent?.children) {
-                    const currentIndex = parent.children.findIndex(child => child.id === this.slotId);
-                    if (currentIndex !== -1 && currentIndex !== this.oldSiblingIndex) {
-                        parent.children.splice(currentIndex, 1);
-                        parent.children.splice(this.oldSiblingIndex, 0, slot);
-                    }
-                }
-            } else {
-                const currentIndex = SM.slotData.slots.findIndex(s => s.id === this.slotId);
-                if (currentIndex !== -1 && currentIndex !== this.oldSiblingIndex) {
-                    SM.slotData.slots.splice(currentIndex, 1);
-                    SM.slotData.slots.splice(this.oldSiblingIndex, 0, slot);
-                }
-            }
-        }
-
-        // Update hierarchy
-        if (window.inspectorApp?.hierarchyPanel) {
-            window.inspectorApp.hierarchyPanel.render();
-        }
+        let data = `slot_moved:${this.slotId}:${this.oldParentId}:${this.oldSiblingIndex}`
+        SM.sendOneShot(data);
     }
 
     getDescription() {

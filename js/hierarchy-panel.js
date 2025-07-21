@@ -84,6 +84,7 @@
                 
                 if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
                     // Queue slot deletion through change manager
+                    console.log("deleting slot =>", SM.selectedSlot)
                     const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
                     changeManager.applyChange(change);
                 }
@@ -119,7 +120,7 @@
          * Render a single slot node
          */
         renderSlotNode(slot, searchTerm, level) {
-            console.log("rendering slot node", slot)
+            //console.log("rendering slot node", slot)
             // Check if this node or any children match the search
             if (searchTerm && !this.matchesSearch(slot, searchTerm)) {
                 return null;
@@ -285,7 +286,7 @@
             e.dataTransfer.setData('text/plain', slot.id);
             
             console.log("slot", slot)
-            let copy = deepClone(slot, ['_bs', '_slot'])
+            let copy = slot.export()
 
             // Store the full slot data for inventory
             e.dataTransfer.setData('application/json', JSON.stringify(copy));

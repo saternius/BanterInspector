@@ -11,19 +11,21 @@ export class TransformComponent extends SlotComponent {
         await super.init(slot, sceneComponent, properties);
         this.type = "Transform";
         console.log("TRANSFORM COMPONENT INIT", this._bs, this._slot, properties)
+        console.log("COMP SLOT:", slot)
         this.setId(`Transform_${slot.id}`);
+        console.log("TRANSFORM COMPONENT ID:", this.id)
         return this;
     }
 
     async update(property, value){
         this.properties[property] = value;
-        if (property === 'position' || property === 'localScale') {
+        if (property === 'localPosition' || property === 'localScale') {
             this._bs[property] = new BS.Vector3(
                 parseFloat(value.x),
                 parseFloat(value.y),
                 parseFloat(value.z)
             );
-        } else if (property === 'rotation') {
+        } else if (property === 'localRotation') {
             // Rotation is stored as quaternion
             if ('w' in value) {
                 // Already a quaternion
@@ -43,16 +45,16 @@ export class TransformComponent extends SlotComponent {
 
     extractProperties(sceneComponent) {
         return {
-            position: sceneComponent.position || { x: 0, y: 0, z: 0 },
-            rotation: sceneComponent.rotation || { x: 0, y: 0, z: 0, w: 1 },
+            localPosition: sceneComponent.localPosition || { x: 0, y: 0, z: 0 },
+            localRotation: sceneComponent.localRotation || { x: 0, y: 0, z: 0, w: 1 },
             localScale: sceneComponent.localScale || { x: 1, y: 1, z: 1 }
         };
     }
 
     defaultProperties(){
         return {
-            position: { x: 0, y: 0, z: 0 },
-            rotation: { x: 0, y: 0, z: 0, w: 1 },
+            localPosition: { x: 0, y: 0, z: 0 },
+            localRotation: { x: 0, y: 0, z: 0, w: 1 },
             localScale: { x: 1, y: 1, z: 1 }
         }
     }

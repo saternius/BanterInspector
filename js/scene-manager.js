@@ -5,7 +5,8 @@
 
 console.log("It is 8:40")
 // (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
+    let localhost = window.location.hostname === 'localhost'
+    let basePath = localhost ? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
     const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap } = await import( `${basePath}/components/index.js`);
 
@@ -133,19 +134,32 @@ console.log("It is 8:40")
                     _bs: gO
                 });
 
+                //Make transform the top component
                 let ref_idx = 0;
+                let transform = gO.GetComponent(BS.ComponentType.Transform)
+                if(transform){
+                    let component_ref = h.components[ref_idx]
+                    let componentClass = componentBSTypeMap[transform.type]
+                    let slotComponent = await new componentClass().init(slot, transform);
+                    slotComponent.setId(component_ref);
+                    slot.components.push(slotComponent);
+                    ref_idx++;
+                }
+
+                
                 // Add other components
                 for(let componentID in gO.components){
                     let component = gO.components[componentID]
+                    if(component.type == BS.ComponentType.Transform) continue;
                     let component_ref = h.components[ref_idx]
                     ref_idx++;
 
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        console.log("component =>", component)
+                        //console.log("component =>", component)
                         let componentClass = componentBSTypeMap[component.type]
-                        console.log("componentClass =>", componentClass)
+                        //console.log("componentClass =>", componentClass)
                         let slotComponent = await new componentClass().init(slot, component);
-                        console.log("slotComponent =>", slotComponent)
+                        //console.log("slotComponent =>", slotComponent)
                         slotComponent.setId(component_ref);
                         slot.components.push(slotComponent);
                     }
@@ -222,14 +236,46 @@ console.log("It is 8:40")
         async handleOneShot(event){
             console.log("handleOneShot =>", event)
             let data = event.detail.data;
-            let items = data.split(":");
-            let type = items[0];
-            if(type === "slot_added"){
-                let slotName = items[1];
-                let parentId = items[2];
-                await this.addNewSlot(slotName, parentId);
-
+           
+            if(data.startsWith("load_slot")){
+                let slot_data = JSON.parse(data.slice(10));
+                await this.loadSlot(slot_data, this.getSelectedSlot().id);
             }
+
+            if(data.startsWith("component_added")){
+                let event = JSON.parse(data.slice(16));
+                let slot = this.getSlotById(event.slotId);
+                if(slot){
+                    await this.addComponent(slot, event.componentType, event.componentProperties);
+                }
+            }
+
+            if(data.startsWith("component_removed")){
+                let componentId = data.slice(18);
+                let component = this.getSlotComponentById(componentId);
+                if(component){
+                    await this.deleteComponent(component);
+                }
+            }
+
+
+            if(data.startsWith("slot_added")){
+                let [parentId, slotName] = data.slice(11).split(":");
+                await this.addNewSlot(slotName, parentId);
+            }
+
+            if(data.startsWith("slot_removed")){
+                let slotId = data.slice(13);
+                await this.deleteSlot(slotId);
+            }
+
+            if(data.startsWith("slot_moved")){
+                let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
+                newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
+                await this.moveSlot(slotId, newParentId, newSiblingIndex);
+            }
+
+            
         }
 
 
@@ -254,23 +300,22 @@ console.log("It is 8:40")
                 this.scene.spaceState.public[key] = value;
             }
             
-            // UI updates should be handled by change manager listeners
+            if(localhost){
+                this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
+            }
         }
 
 
-        /**
-         * Get slot by ID
-         */
-        getSlotById(slotId) {
-            return this.slotData.slotMap[slotId];
+        async sendOneShot(data){
+            console.log("sending one shot =>", data)
+            this.scene.OneShot(data);
+            if(localhost){
+                this.handleOneShot({detail: {data: data}})
+            }
         }
+
+
         
-        /**
-         * Get all slots as a flat array
-         */
-        getAllSlots() {
-            return Object.values(this.slotData.slotMap || {});
-        }
 
     
         /**
@@ -297,6 +342,61 @@ console.log("It is 8:40")
          */
         selectSlot(slotId) {
             this.selectedSlot = slotId;
+
+             // Update UI
+             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: slotId }
+            }));
+
+            if (window.inspectorApp?.hierarchyPanel) {
+                window.inspectorApp.hierarchyPanel.render();
+            }
+        }
+
+
+        /**
+         * Get slot by ID
+         */
+        getSlotById(slotId) {
+            return this.slotData.slotMap[slotId];
+        }
+        
+        /**
+         * Get all slots as a flat array
+         */
+        getAllSlots() {
+            return Object.values(this.slotData.slotMap || {});
+        }
+
+        getRootSlot(){
+            return this.slotData.slots[0];
+        }
+
+        getSlotOrRoot(slotId){
+            let slot = this.getSlotById(slotId);
+            if(!slot){
+                slot = this.getRootSlot();
+            }
+            return slot;
+        }
+
+        getSelectedSlot(){
+            return this.getSlotOrRoot(this.selectedSlot);
+        }
+
+        
+
+
+        async updateHierarchy(slot = null){
+            slot = slot || this.getRootSlot();
+            
+            this.selectSlot(slot.id);
+            if(slot.parentId){
+                this.expandedNodes.add(slot.parentId);
+            }
+           
+            let h = await this.gatherSceneHierarchy();
+            this.setSpaceProperty("hierarchy", h, false);
         }
 
 
@@ -325,28 +425,14 @@ console.log("It is 8:40")
                 name: slotName
             });
 
+            console.log("NEW SLOT:", newSlot)
+
             let transform = await new TransformComponent().init(newSlot);
             newSlot.components.push(transform);
 
             
             await newSlot.setParent(parentSlot);
-            this.expandedNodes.add(parentId);
-            this.selectSlot(newSlot.id);
-            // Update UI
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: newSlot.id }
-            }));
-
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
-            }
-
-            let h = await this.gatherSceneHierarchy();
-            this.setSpaceProperty("hierarchy", h, false);
-
-
-
-
+            await this.updateHierarchy(newSlot);
         }
 
         /**
@@ -392,7 +478,6 @@ console.log("It is 8:40")
                     try {
                         await deleteSlot._bs.Destroy();
                         deleteSlot.destroyed = true;
-                        this.scene.OneShot('+slot_deleted', {slotId: this.id});
                         delete this.slotData.slotMap[this.id];
 
                     } catch (error) {
@@ -411,22 +496,14 @@ console.log("It is 8:40")
             } else {
                 this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
             }
-            
-            // Clear selection if this slot was selected
-            if (this.selectedSlot === slotId) {
-                this.selectedSlot = null;
-            }
 
-            // Update hierarchy
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
-            }
+            await this.updateHierarchy(null);
         }
 
         /**
          * Reparent a slot to a new parent
          */
-        async reparentSlot(slotId, newParentId) {
+        async moveSlot(slotId, newParentId, newSiblingIndex) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
 
@@ -434,8 +511,10 @@ console.log("It is 8:40")
                 newParentId = this.slotData.slots[0].id;
             }
             await slot.setParent(this.getSlotById(newParentId));
-
-            this.scene.OneShot('+slot_reparented', {slotId: slot.id, newParentId: newParentId});
+            if(newSiblingIndex){
+                //slot.setSiblingIndex(newSiblingIndex); TODO: implement this
+            }
+            await this.updateHierarchy(slot);
         }
 
         async addComponent(slot, componentType, componentProperties){
@@ -466,7 +545,6 @@ console.log("It is 8:40")
                 window.inspectorApp.propertiesPanel.render(slot.id);
             }
             
-            this.scene.OneShot('+component_added', {componentType: componentType, componentProperties: componentProperties, componentId: slotComponent.id, slotId: slot.id});  
             return slotComponent;
         }
 
@@ -474,7 +552,6 @@ console.log("It is 8:40")
             await slotComponent.destroy();
             slotComponent.destroyed = true;
             slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(this), 1);
-            this.scene.OneShot('+component_deleted', {componentId: slotComponent.id});            
             delete this.slotData.componentMap[slotComponent.id];
             
             // Remove any space properties associated with this component
@@ -524,12 +601,7 @@ console.log("It is 8:40")
 
             //create new components
             for(let component of item.components){
-                if(component.type === "Transform"){
-                    let transform = newSlot.getTransform();
-                    transform.updateMany(component.properties);
-                }else{
-                    await this.addComponent(newSlot, component.type, component.properties);
-                }
+                await this.addComponent(newSlot, component.type, component.properties);
             }
 
             item.children.forEach(async (child) => {
@@ -540,32 +612,17 @@ console.log("It is 8:40")
             return newSlot;
         }
 
-        async loadSlotFromInventory(item){
-            if (!this.selectedSlot) {
-                this.selectedSlot = this.slotData.slots[0].id
-            }
-            const parentSlot = this.getSlotById(this.selectedSlot);
-            const newSlot = await this.createSlotHierarchy(item.data, parentSlot.id);
-            
-            await newSlot.setParent(parentSlot);
-            
-            this.scene.OneShot('+item_added', {item: item, slotId: parentSlot.id});
 
-            // Trigger hierarchy update
-            document.dispatchEvent(new CustomEvent('sceneUpdated'));
-            
-            
-            // Navigate to world inspector page and select the parent slot
-            setTimeout(() => {
-                const worldTab = document.querySelector('[data-page="world-inspector"]');
-                if (worldTab) {
-                    worldTab.click();
-                    // Trigger selection of the parent slot to show the new child
-                    document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                        detail: { slotId: newSlot.id }
-                    }));
-                }
-            }, 500);
+        async loadSlot(slotData, parentId){
+            let parentSlot = (parentId)? this.getSlotOrRoot(parentId) : this.getSlotOrRoot(slotData.parentId);
+            let slot = await this.createSlotHierarchy(slotData, parentId);
+            await slot.setParent(parentSlot);
+
+            this.expandedNodes.add(parentId);
+            this.selectSlot(slot.id);
+            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: slot.id }
+            }));
         }
  
     }

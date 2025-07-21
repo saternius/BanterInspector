@@ -690,7 +690,7 @@ export class Inventory {
         
         const item = this.items[this.selectedItem];
         if (!item || item.itemType !== 'slot') return;
-        await SM.loadSlotFromInventory(item)
+        await SM.loadSlot(item.data, SM.selectedSlot)
         // Show success message
         this.showNotification(`Added "${item.name}" to scene`);
     }

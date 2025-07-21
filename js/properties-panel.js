@@ -298,7 +298,7 @@
                 };
                 valueContainer.appendChild(input);
                 
-            } else if (componentType === 'Transform' && key === 'rotation' && isQuaternion(value)) {
+            } else if (componentType === 'Transform' && key === 'localRotation' && isQuaternion(value)) {
                 // Transform rotation - convert quaternion to Euler angles
                 const eulerAngles = quaternionToEuler(value);
                 const vectorGroup = document.createElement('div');
@@ -788,10 +788,10 @@
             if (!slot) return;
             
             const component = slot.components.find(c => c.id === componentId);
-            if (!component || !component.properties.rotation) return;
+            if (!component || !component.properties.localRotation) return;
             
             // Get current quaternion and convert to Euler
-            const currentQuaternion = component.properties.rotation;
+            const currentQuaternion = component.properties.localRotation;
             const eulerAngles = quaternionToEuler(currentQuaternion);
             
             // Update the changed axis
@@ -805,7 +805,7 @@
                 const newQuaternion = eulerToQuaternion(eulerAngles);
                 
                 // Queue the change
-                const change = new ComponentPropertyChange(componentId, 'rotation', newQuaternion, { source: 'ui', oldValue: oldValue });
+                const change = new ComponentPropertyChange(componentId, 'localRotation', newQuaternion, { source: 'ui', oldValue: oldValue });
                 changeManager.applyChange(change);
             }
         }

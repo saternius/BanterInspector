@@ -1,6 +1,6 @@
 let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
 const { TransformComponent } = await import(`${basePath}/components/transform.js`);
-
+const { deepClone } = await import(`${basePath}/utils.js`);
 
 export class Slot{
     async init(slotData){
@@ -23,9 +23,6 @@ export class Slot{
             }
             
             await newGameObject.SetActive(true);
-            
-            let transform = await new TransformComponent().init(this);
-            this.components.push(transform);
         }
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
@@ -65,5 +62,9 @@ export class Slot{
         if(prop == "persistent"){
             this.persistent = newValue;
         }
+    }
+
+    export(){
+        return deepClone(this, ['_bs', '_slot', 'bsRef']);
     }
 }

@@ -6,7 +6,7 @@ export class SlotComponent{
     async init(slot, sceneComponent, properties){
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
-        this.properties = (properties) ? properties : this.defaultProperties();
+        this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
@@ -30,6 +30,16 @@ export class SlotComponent{
 
     async defaultProperties(){
         return {};
+    }
+
+    fillProperties(properties){
+        let defaultProps = this.defaultProperties();
+        for(let property in defaultProps){
+            if(properties[property] === undefined){
+                properties[property] = defaultProps[property];
+            }
+        }
+        return properties;
     }
 
     async extractProperties(sceneComponent){
