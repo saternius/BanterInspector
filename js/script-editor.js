@@ -84,7 +84,7 @@ export class ScriptEditor {
         this.navElement.setAttribute('data-page', 'script-editor');
         this.navElement.innerHTML = `
             <span class="nav-icon">📜</span>
-            Script Editor
+            ${this.currentScript.name}
             <span class="close-tab-btn" id="closeScriptEditor">×</span>
         `;
         
