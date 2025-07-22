@@ -18,6 +18,14 @@ this.onDestroy = ()=>{
     console.log("onDestroy")
 }
 
+this.onPause = ()=>{
+
+}
+
+this.onResume = ()=>{
+
+}
+
 this.keyDown = (key)=>{
     console.log("keyDown", key)
 }

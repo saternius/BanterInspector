@@ -117,6 +117,8 @@ export class MonoBehaviorComponent extends SlotComponent {
             vars: {},
             onStart: null,
             onUpdate: null,
+            onPause: null,
+            onResume: null,
             onDestroy: null,
             onKeyDown: null,
             onKeyUp: null,

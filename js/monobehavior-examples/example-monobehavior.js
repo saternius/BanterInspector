@@ -14,6 +14,13 @@ this.onUpdate = ()=>{
     console.log(this)
 }
 
+this.onPause = ()=>{
+}
+
+this.onResume = ()=>{
+
+}
+
 this.onDestroy = ()=>{
     console.log("onDestroy")
 }
