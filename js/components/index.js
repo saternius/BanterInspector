@@ -17,6 +17,13 @@ const { BanterBillboardComponent } = await import(`${basePath}/components/billbo
 const { BanterGrabHandleComponent } = await import(`${basePath}/components/grab-handle.js`);
 const { BanterSyncedObjectComponent } = await import(`${basePath}/components/synced-object.js`);
 const { BanterPhysicMaterialComponent } = await import(`${basePath}/components/physic-material.js`);
+const { BanterMirrorComponent } = await import(`${basePath}/components/mirror.js`);
+const { BanterBrowserComponent } = await import(`${basePath}/components/browser.js`);
+const { BanterHeldEventsComponent } = await import(`${basePath}/components/held-events.js`);
+const { BanterAttachedObjectComponent } = await import(`${basePath}/components/attached-object.js`);
+const { BanterGLTFComponent } = await import(`${basePath}/components/gltf.js`);
+const { BanterAssetBundleComponent } = await import(`${basePath}/components/asset-bundle.js`);
+const { BanterPortalComponent } = await import(`${basePath}/components/portal.js`);
 
 
 export const SUPPORTED_COMPONENTS = new Set([
@@ -35,6 +42,13 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterGrabHandle,
     BS.ComponentType.BanterSyncedObject,
     BS.ComponentType.BanterPhysicMaterial,
+    BS.ComponentType.BanterMirror,
+    BS.ComponentType.BanterBrowser,
+    BS.ComponentType.BanterHeldEvents,
+    BS.ComponentType.BanterAttachedObject,
+    BS.ComponentType.BanterGLTF,
+    BS.ComponentType.BanterAssetBundle,
+    BS.ComponentType.BanterPortal,
     MonoBehaviorComponent
 ]);
 
@@ -54,6 +68,13 @@ export const componentTypeMap = {
     "BanterGrabHandle": BanterGrabHandleComponent,
     "BanterSyncedObject": BanterSyncedObjectComponent,
     "BanterPhysicMaterial": BanterPhysicMaterialComponent,
+    "BanterMirror": BanterMirrorComponent,
+    "BanterBrowser": BanterBrowserComponent,
+    "BanterHeldEvents": BanterHeldEventsComponent,
+    "BanterAttachedObject": BanterAttachedObjectComponent,
+    "BanterGLTF": BanterGLTFComponent,
+    "BanterAssetBundle": BanterAssetBundleComponent,
+    "BanterPortal": BanterPortalComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
@@ -73,6 +94,13 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterGrabHandle]: BanterGrabHandleComponent,
     [BS.ComponentType.BanterSyncedObject]: BanterSyncedObjectComponent,
     [BS.ComponentType.BanterPhysicMaterial]: BanterPhysicMaterialComponent,
+    [BS.ComponentType.BanterMirror]: BanterMirrorComponent,
+    [BS.ComponentType.BanterBrowser]: BanterBrowserComponent,
+    [BS.ComponentType.BanterHeldEvents]: BanterHeldEventsComponent,
+    [BS.ComponentType.BanterAttachedObject]: BanterAttachedObjectComponent,
+    [BS.ComponentType.BanterGLTF]: BanterGLTFComponent,
+    [BS.ComponentType.BanterAssetBundle]: BanterAssetBundleComponent,
+    [BS.ComponentType.BanterPortal]: BanterPortalComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
@@ -92,6 +120,13 @@ export const componentTextMap = {
     [BS.ComponentType.BanterGrabHandle]: "BanterGrabHandle",
     [BS.ComponentType.BanterSyncedObject]: "BanterSyncedObject",
     [BS.ComponentType.BanterPhysicMaterial]: "BanterPhysicMaterial",
+    [BS.ComponentType.BanterMirror]: "BanterMirror",
+    [BS.ComponentType.BanterBrowser]: "BanterBrowser",
+    [BS.ComponentType.BanterHeldEvents]: "BanterHeldEvents",
+    [BS.ComponentType.BanterAttachedObject]: "BanterAttachedObject",
+    [BS.ComponentType.BanterGLTF]: "BanterGLTF",
+    [BS.ComponentType.BanterAssetBundle]: "BanterAssetBundle",
+    [BS.ComponentType.BanterPortal]: "BanterPortal",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
@@ -115,5 +150,12 @@ export {
     BanterGrabHandleComponent,
     BanterSyncedObjectComponent,
     BanterPhysicMaterialComponent,
+    BanterMirrorComponent,
+    BanterBrowserComponent,
+    BanterHeldEventsComponent,
+    BanterAttachedObjectComponent,
+    BanterGLTFComponent,
+    BanterAssetBundleComponent,
+    BanterPortalComponent,
     MonoBehaviorComponent
 };

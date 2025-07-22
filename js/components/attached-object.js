@@ -1,0 +1,71 @@
+class BanterAttachedObjectComponent extends SlotComponent {
+    constructor() {
+        super();
+        this.bsRef = BS.BanterAttachedObject;
+        this.type = 'BanterAttachedObject';
+    }
+
+    defaultProperties() {
+        return {
+            uid: '',
+            attachmentPosition: { x: 0, y: 0, z: 0 },
+            attachmentRotation: { x: 0, y: 0, z: 0, w: 1 },
+            attachmentType: 0,
+            avatarAttachmentType: 0,
+            avatarAttachmentPoint: 0,
+            attachmentPoint: 0
+        };
+    }
+
+    extractProperties(sceneComponent) {
+        const properties = {};
+        
+        if (sceneComponent.uid !== undefined) {
+            properties.uid = sceneComponent.uid;
+        }
+        
+        if (sceneComponent.attachmentPosition !== undefined) {
+            properties.attachmentPosition = {
+                x: sceneComponent.attachmentPosition.x || 0,
+                y: sceneComponent.attachmentPosition.y || 0,
+                z: sceneComponent.attachmentPosition.z || 0
+            };
+        }
+        
+        if (sceneComponent.attachmentRotation !== undefined) {
+            properties.attachmentRotation = {
+                x: sceneComponent.attachmentRotation.x || 0,
+                y: sceneComponent.attachmentRotation.y || 0,
+                z: sceneComponent.attachmentRotation.z || 0,
+                w: sceneComponent.attachmentRotation.w || 1
+            };
+        }
+        
+        const enumProps = ['attachmentType', 'avatarAttachmentType', 'avatarAttachmentPoint', 'attachmentPoint'];
+        enumProps.forEach(prop => {
+            if (sceneComponent[prop] !== undefined) {
+                properties[prop] = sceneComponent[prop];
+            }
+        });
+        
+        return properties;
+    }
+
+    update(property, value) {
+        if (!this._bs) return;
+
+        this.properties[property] = value;
+
+        try {
+            if (property === 'attachmentPosition' && typeof value === 'object') {
+                this._bs.attachmentPosition = new BS.Vector3(value.x || 0, value.y || 0, value.z || 0);
+            } else if (property === 'attachmentRotation' && typeof value === 'object') {
+                this._bs.attachmentRotation = new BS.Quaternion(value.x || 0, value.y || 0, value.z || 0, value.w || 1);
+            } else if (this._bs[property] !== undefined) {
+                this._bs[property] = value;
+            }
+        } catch (e) {
+            console.error(`Failed to update ${property} on BanterAttachedObject:`, e);
+        }
+    }
+}
