@@ -1,4 +1,7 @@
-class BanterPortalComponent extends SlotComponent {
+let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
+const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
+
+export class BanterPortalComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterPortal;
