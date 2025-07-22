@@ -15,6 +15,7 @@
     const  { loadMockSpaceProps } = await import(`${basePath}/mock-data.js`);
     const  { Navigation } = await import(`${basePath}/navigation.js`);
     const  { Inventory } = await import(`${basePath}/inventory.js`);
+    const  { ScriptEditor } = await import(`${basePath}/script-editor.js`);
     const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
     const  { changeManager } = await import(`${basePath}/change-manager.js`);
 
@@ -27,6 +28,7 @@
             this.spacePropsPanel = null;
             this.componentMenu = null;
             this.inventory = null;
+            this.scriptEditor = null;
             this.initialized = false;
         }
 
@@ -64,9 +66,13 @@
                 // Initialize inventory
                 this.inventory = new Inventory();
                 
+                // Initialize script editor
+                this.scriptEditor = new ScriptEditor();
+                
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
                 window.inventory = this.inventory;
+                window.navigation = this.navigation;
                 
                 // Initial render
                 this.hierarchyPanel.render();
@@ -182,6 +188,30 @@
             // Handle hierarchy changes (legacy - for compatibility)
             document.addEventListener('slotPropertiesChanged', () => {
                 this.hierarchyPanel.render();
+            });
+            
+            // Handle script editor events
+            window.addEventListener('open-script-editor', (event) => {
+                this.scriptEditor.open(event.detail);
+            });
+            
+            window.addEventListener('save-script', (event) => {
+                if (this.inventory) {
+                    const { name, content } = event.detail;
+                    const item = this.inventory.items[name];
+                    if (item && item.itemType === 'script') {
+                        item.data = content;
+                        const storageKey = `inventory_${name}`;
+                        localStorage.setItem(storageKey, JSON.stringify(item));
+                        
+                        // Refresh preview if selected
+                        if (this.inventory.selectedItem === name) {
+                            this.inventory.showPreview(name);
+                        }
+                        
+                        this.inventory.showNotification(`Saved changes to "${name}"`);
+                    }
+                }
             });
             
             // // Handle space state changes from Unity

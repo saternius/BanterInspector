@@ -3,6 +3,7 @@ export class Navigation {
         this.currentPage = 'world-inspector';
         this.pages = new Map();
         this.navItems = new Map();
+        this.dynamicPages = new Map();
         
         this.init();
     }
@@ -95,5 +96,45 @@ export class Navigation {
                 }
             }
         });
+    }
+    
+    addDynamicPage(pageId, pageElement, navElement) {
+        // Remove existing if any
+        this.removeDynamicPage(pageId);
+        
+        // Add page element
+        this.pages.set(pageId, pageElement);
+        this.dynamicPages.set(pageId, { pageElement, navElement });
+        
+        // Add nav element
+        const navItems = document.querySelector('.nav-items');
+        navItems.appendChild(navElement);
+        this.navItems.set(pageId, navElement);
+        
+        // Setup click handler
+        navElement.addEventListener('click', (e) => {
+            if (!e.target.closest('.close-tab-btn')) {
+                this.switchPage(pageId);
+            }
+        });
+    }
+    
+    removeDynamicPage(pageId) {
+        const dynamicPage = this.dynamicPages.get(pageId);
+        if (!dynamicPage) return;
+        
+        // Remove elements
+        dynamicPage.pageElement.remove();
+        dynamicPage.navElement.remove();
+        
+        // Clean up maps
+        this.pages.delete(pageId);
+        this.navItems.delete(pageId);
+        this.dynamicPages.delete(pageId);
+        
+        // Switch to default page if current page was removed
+        if (this.currentPage === pageId) {
+            this.switchPage('world-inspector');
+        }
     }
 }

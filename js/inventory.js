@@ -214,6 +214,15 @@ export class Inventory {
             });
         });
         
+        // Add event listeners for edit script buttons
+        inventoryContainer.querySelectorAll('.edit-script-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                this.openScriptEditor(itemName);
+            });
+        });
+        
         // Add event listeners for file upload
         const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
         const fileInput = inventoryContainer.querySelector('#fileInput');
@@ -278,6 +287,13 @@ export class Inventory {
                         <span class="info-value">${childCount}</span>
                     </div>
                 </div>
+                ${itemType === 'script' ? `
+                    <div class="item-actions">
+                        <button class="action-btn edit-script-btn" data-item-name="${key}">
+                            ✏️ Edit
+                        </button>
+                    </div>
+                ` : ''}
             </div>
         `;
     }
@@ -504,6 +520,14 @@ export class Inventory {
                 this.render();
             });
         }
+        
+        // Add edit button listener for scripts
+        const editBtn = this.previewPane.querySelector('.preview-edit-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', () => {
+                this.openScriptEditor(itemName);
+            });
+        }
     }
     
     /**
@@ -542,6 +566,11 @@ export class Inventory {
                         <span class="meta-label">Created:</span>
                         <span class="meta-value">${dateStr}</span>
                     </div>
+                </div>
+                <div class="preview-actions">
+                    <button class="preview-edit-btn" data-item-name="${item.name}">
+                        ✏️ Edit Script
+                    </button>
                 </div>
                 <div class="preview-content">
                     <h3>Script Content</h3>
@@ -693,6 +722,25 @@ export class Inventory {
         await SM.loadSlot(item.data, SM.selectedSlot)
         // Show success message
         this.showNotification(`Added "${item.name}" to scene`);
+    }
+    
+    /**
+     * Open script editor for a script item
+     */
+    openScriptEditor(itemName) {
+        const item = this.items[itemName];
+        if (!item || item.itemType !== 'script') return;
+        
+        // Create a custom event to open the script editor
+        const event = new CustomEvent('open-script-editor', {
+            detail: {
+                name: itemName,
+                content: item.data,
+                author: item.author,
+                created: item.created
+            }
+        });
+        window.dispatchEvent(event);
     }
     
 }
