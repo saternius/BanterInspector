@@ -130,6 +130,14 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
     }
 
+    updateVar(varName, value) {
+        if (!this.scriptContext || !this.scriptContext.vars) return;
+        
+        this.scriptContext.vars[varName] = value;
+        
+        console.log(`[MONO] Updated var ${varName} to`, value);
+    }
+
     async destroy(){
         await super.destroy();
         await lifecycle.unregisterMonoBehavior(this);

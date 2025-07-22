@@ -7,7 +7,7 @@
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange } = await import(`${basePath}/change-types.js`);
+    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange } = await import(`${basePath}/change-types.js`);
     const { deepClone } = await import(`${basePath}/utils.js`);
     
     export class PropertiesPanel {
@@ -619,11 +619,7 @@
                 input.className = 'checkbox-input';
                 input.checked = varValue;
                 input.onchange = () => {
-                    if (component instanceof MonoBehavior) {
-                        component.updateVar(varName, input.checked);
-                    }
-                    component.properties.vars[varName] = input.checked;
-                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    const change = new MonoBehaviorVarChange(component.id, varName, input.checked, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
@@ -637,11 +633,7 @@
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
                     if (!isNaN(numValue)) {
-                        if (component instanceof MonoBehavior) {
-                            component.updateVar(varName, numValue);
-                        }
-                        component.properties.vars[varName] = numValue;
-                        const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                        const change = new MonoBehaviorVarChange(component.id, varName, numValue, { source: 'ui' });
                         changeManager.applyChange(change);
                     }
                 };
@@ -666,11 +658,7 @@
                         const numValue = parseFloat(input.value);
                         if (!isNaN(numValue)) {
                             varValue[axis] = numValue;
-                            if (component instanceof MonoBehavior) {
-                                component.updateVar(varName, varValue);
-                            }
-                            component.properties.vars[varName] = varValue;
-                            const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                            const change = new MonoBehaviorVarChange(component.id, varName, varValue, { source: 'ui' });
                             changeManager.applyChange(change);
                         }
                     };
@@ -703,11 +691,7 @@
                     varValue.g = rgb.g / 255;
                     varValue.b = rgb.b / 255;
                     swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${varValue.a || 1})`;
-                    if (component instanceof MonoBehavior) {
-                        component.updateVar(varName, varValue);
-                    }
-                    component.properties.vars[varName] = varValue;
-                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    const change = new MonoBehaviorVarChange(component.id, varName, varValue, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 
@@ -724,11 +708,7 @@
                 input.className = 'property-input';
                 input.value = varValue?.toString() || '';
                 input.onchange = () => {
-                    if (component instanceof MonoBehavior) {
-                        component.updateVar(varName, input.value);
-                    }
-                    component.properties.vars[varName] = input.value;
-                    const change = new ComponentPropertyChange(component.id, 'vars', component.properties.vars, { source: 'ui' });
+                    const change = new MonoBehaviorVarChange(component.id, varName, input.value, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);

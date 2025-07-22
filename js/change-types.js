@@ -360,5 +360,64 @@ export class SlotMoveChange {
     }
 }
 
+export class MonoBehaviorVarChange {
+    constructor(componentId, varName, newValue, options) {
+        this.componentId = componentId;
+        this.varName = varName;
+        this.newValue = deepClone(newValue);
+        this.options = options || {};
+        this.component = SM.slotData.componentMap[componentId];
+        this.oldValue = deepClone(options.oldValue || this.getOldValue());
+    }
+
+    getOldValue() {
+        if (!this.component || !this.component.properties?.vars) return undefined;
+        return deepClone(this.component.properties.vars[this.varName]);
+    }
+
+    async apply() {
+        await this.change(this.newValue);
+    }
+
+    async undo() {
+        await this.change(this.oldValue);
+    }
+
+    async change(value) {
+        if (!this.component) return;
+
+        // Update the properties.vars for persistence
+        if (!this.component.properties.vars) {
+            this.component.properties.vars = {};
+        }
+        this.component.properties.vars[this.varName] = value;
+
+        // Update the scriptContext.vars for runtime
+        if (this.component.updateVar) {
+            this.component.updateVar(this.varName, value);
+        }
+
+        // Generate space key for persistence
+        const spaceKey = `__${this.component._slot.name}/${this.component.type}/vars/${this.varName}:${this.componentId}`;
+        if (window.SM) {
+            // Send the entire vars object
+            await window.SM.setSpaceProperty(spaceKey, this.component.properties.vars, false);
+        }
+
+        // Refresh UI if needed
+        if (window.inspectorApp?.propertiesPanel) {
+            window.inspectorApp.propertiesPanel.render(SM.selectedSlot);
+        }
+    }
+
+    getDescription() {
+        return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.newValue)}`;
+    }
+
+    getUndoDescription() {
+        return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
+    }
+}
+
 // Load Inventory
 // Duplicate Slot
