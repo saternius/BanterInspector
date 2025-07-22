@@ -67,4 +67,9 @@ export class Slot{
     export(){
         return deepClone(this, ['_bs', '_slot', 'bsRef']);
     }
+
+    async set(property, value){
+        const spaceKey = '__' + this.id + '/' + property + ':slot';
+        await SM.setSpaceProperty(spaceKey, value, false);
+    }
 }

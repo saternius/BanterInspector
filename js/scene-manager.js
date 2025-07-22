@@ -222,6 +222,14 @@ console.log("It is 6:03")
                             await slot.update(prop, newValue);
                         }
                         inspectorApp.hierarchyPanel.render()
+                    }else if(type[0] == "monobehavior"){
+                        console.log("updating monobehavior =>", property, newValue)
+                        let ref = path[0].slice(2)
+                        let monobehavior = this.getSlotComponentById(ref);
+                        if(monobehavior && monobehavior.scriptContext){
+                            monobehavior.scriptContext.vars[prop] = newValue;
+                        }
+                        inspectorApp.propertiesPanel.render(this.selectedSlot)
                     }else{
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
@@ -276,7 +284,6 @@ console.log("It is 6:03")
                 await this.moveSlot(slotId, newParentId, newSiblingIndex);
             }
 
-            
         }
 
 
@@ -287,9 +294,9 @@ console.log("It is 6:03")
             if (!this.scene) return;
             console.log("[setSpaceProperty]", key, value, isProtected)
 
-            if(value && value.value !== undefined){
-                value = value.value;
-            }
+            // if(value && value.value !== undefined){
+            //     value = value.value;
+            // }
 
             value = JSON.stringify(value);
 
