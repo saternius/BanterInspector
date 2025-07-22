@@ -33,13 +33,13 @@ export class SlotComponent{
     }
 
     fillProperties(properties){
-        let defaultProps = this.defaultProperties();
-        for(let property in defaultProps){
-            if(properties[property] === undefined){
-                properties[property] = defaultProps[property];
+        let newProps = this.defaultProperties();
+        for(let p in properties){
+            if(newProps[p] !== undefined){
+                newProps[p] = properties[p];
             }
         }
-        return properties;
+        return newProps;
     }
 
     async extractProperties(sceneComponent){
