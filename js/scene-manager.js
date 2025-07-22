@@ -37,6 +37,12 @@ console.log("It is 6:03")
                 this.setup = async ()=>{
                     if(this.loaded) return;
                     console.log("setting up inspector")
+                    if(localhost){
+                        let lastSpaceState = localStorage.getItem('lastSpaceState');
+                        if(lastSpaceState){
+                            this.scene.spaceState = JSON.parse(lastSpaceState);
+                        }
+                    }
                     try {
                         console.log('Gathering scene hierarchy...');
                         let hierarchy = null;
@@ -310,6 +316,7 @@ console.log("It is 6:03")
             
             if(localhost){
                 this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
+                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
             }
         }
 
