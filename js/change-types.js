@@ -30,21 +30,7 @@ export class SlotPropertyChange {
 
     async change(value){
         const slot = SM?.getSlotById(this.slotId);
-        if(!slot){
-            console.log(`ERROR: Slot not found ${this.slotId}`)
-            return;
-        }
-        let gO = window.SM.slotData.slotMap[this.slotId]._bs;
-        if (!gO){
-            console.log(`ERROR: Slot not found ${this.slotId}`)
-            return;
-        }
-
-        
-       
-
-        const spaceKey = '__' + slot.id + '/' + this.property + ':slot';
-        await window.SM.setSpaceProperty(spaceKey, value, false);
+        slot.set(this.property, value);
     }
 
     getDescription() {
@@ -83,11 +69,7 @@ export class ComponentPropertyChange {
     async change(value) {
         if(!this.component) return;
 
-        // Generate space key for persistence
-        const spaceKey = `__${this.component._slot.name}/${this.component.type}/${this.property}:${this.componentId}`;
-        if (window.SM) {
-            await window.SM.setSpaceProperty(spaceKey, value, false);
-        }
+        await this.component.set(this.property, value);
 
         // Refresh UI if needed
         if (window.inspectorApp?.spacePropsPanel) {
@@ -366,13 +348,13 @@ export class MonoBehaviorVarChange {
         this.varName = varName;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.component = SM.slotData.componentMap[componentId];
+        this.monobehavior = SM.getSlotComponentById(componentId);
         this.oldValue = deepClone(options.oldValue || this.getOldValue());
     }
 
     getOldValue() {
-        if (!this.component || !this.component.properties?.vars) return undefined;
-        return deepClone(this.component.properties.vars[this.varName]);
+        if (!this.monobehavior || !this.monobehavior.scriptContext?.vars) return undefined;
+        return deepClone(this.monobehavior.scriptContext.vars[this.varName]);
     }
 
     async apply() {
@@ -384,25 +366,15 @@ export class MonoBehaviorVarChange {
     }
 
     async change(value) {
-        if (!this.component) return;
+        console.log("[CHANGE] changing var =>", this.varName, value)
+        if (!this.monobehavior) return;
 
         // Update the properties.vars for persistence
-        if (!this.component.properties.vars) {
-            this.component.properties.vars = {};
-        }
-        this.component.properties.vars[this.varName] = value;
-
-        // Update the scriptContext.vars for runtime
-        if (this.component.updateVar) {
-            this.component.updateVar(this.varName, value);
+        if (!this.monobehavior.scriptContext.vars) {
+            return;
         }
 
-        // Generate space key for persistence
-        const spaceKey = `__${this.component._slot.name}/${this.component.type}/vars/${this.varName}:${this.componentId}`;
-        if (window.SM) {
-            // Send the entire vars object
-            await window.SM.setSpaceProperty(spaceKey, this.component.properties.vars, false);
-        }
+        await this.monobehavior.updateVar(this.varName, value);
 
         // Refresh UI if needed
         if (window.inspectorApp?.propertiesPanel) {

@@ -130,12 +130,12 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
     }
 
-    updateVar(varName, value) {
+    async updateVar(varName, value) {
+        console.log("[MONO] updating var =>", varName, value)
         if (!this.scriptContext || !this.scriptContext.vars) return;
-        
-        this.scriptContext.vars[varName] = value;
-        
-        console.log(`[MONO] Updated var ${varName} to`, value);
+        const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
+        await SM.setSpaceProperty(spaceKey, value, false);
+        // this.scriptContext.vars[varName] = value;
     }
 
     async destroy(){

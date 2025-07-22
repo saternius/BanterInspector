@@ -555,7 +555,7 @@
             body.appendChild(fileRow);
             
             // Render vars if any
-            if (component.properties.vars && Object.keys(component.properties.vars).length > 0) {
+            if (component.scriptContext.vars && Object.keys(component.scriptContext.vars).length > 0) {
                 const varsHeader = document.createElement('div');
                 varsHeader.className = 'property-row';
                 varsHeader.style.marginTop = '12px';
@@ -564,7 +564,7 @@
                 body.appendChild(varsHeader);
                 
                 // Render each variable
-                Object.entries(component.properties.vars).forEach(([varName, varValue]) => {
+                Object.entries(component.scriptContext.vars).forEach(([varName, varValue]) => {
                     const varRow = this.renderMonoBehaviorVar(varName, varValue, component, index);
                     body.appendChild(varRow);
                 });
@@ -611,35 +611,35 @@
             
             const valueContainer = document.createElement('div');
             valueContainer.className = 'property-value';
-            
+            console.log("varValue =>", varValue)
             // Determine type and render appropriate input
-            if (typeof varValue === 'boolean') {
+            if (varValue.type === 'boolean') {
                 const input = document.createElement('input');
                 input.type = 'checkbox';
                 input.className = 'checkbox-input';
-                input.checked = varValue;
+                input.checked = varValue.value;
                 input.onchange = () => {
-                    const change = new MonoBehaviorVarChange(component.id, varName, input.checked, { source: 'ui' });
+                    const change = new MonoBehaviorVarChange(component.id, varName, {type: 'boolean', value: input.checked}, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
                 
-            } else if (typeof varValue === 'number') {
+            } else if (varValue.type === 'number') {
                 const input = document.createElement('input');
                 input.type = 'number';
                 input.className = 'property-input number';
-                input.value = varValue;
+                input.value = varValue.value;
                 input.step = 'any';
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
                     if (!isNaN(numValue)) {
-                        const change = new MonoBehaviorVarChange(component.id, varName, numValue, { source: 'ui' });
+                        const change = new MonoBehaviorVarChange(component.id, varName, {type: 'number', value: numValue}, { source: 'ui' });
                         changeManager.applyChange(change);
                     }
                 };
                 valueContainer.appendChild(input);
                 
-            } else if (isVector3Object(varValue)) {
+            } else if (varValue.type === 'vector3') {
                 // Vector3 variable
                 const vectorGroup = document.createElement('div');
                 vectorGroup.className = 'vector-group';
@@ -652,13 +652,13 @@
                     const input = document.createElement('input');
                     input.type = 'number';
                     input.className = 'property-input number';
-                    input.value = varValue[axis] || 0;
+                    input.value = varValue.value[axis] || 0;
                     input.step = 'any';
                     input.onchange = () => {
                         const numValue = parseFloat(input.value);
                         if (!isNaN(numValue)) {
-                            varValue[axis] = numValue;
-                            const change = new MonoBehaviorVarChange(component.id, varName, varValue, { source: 'ui' });
+                            varValue.value[axis] = numValue;
+                            const change = new MonoBehaviorVarChange(component.id, varName, {type: 'vector3', value: varValue.value}, { source: 'ui' });
                             changeManager.applyChange(change);
                         }
                     };
@@ -669,7 +669,7 @@
                 
                 valueContainer.appendChild(vectorGroup);
                 
-            } else if (typeof varValue === 'object' && varValue !== null && 'r' in varValue) {
+            } else if (varValue.type === 'color') {
                 // Color variable
                 const colorGroup = document.createElement('div');
                 colorGroup.className = 'color-group';
@@ -678,20 +678,20 @@
                 preview.className = 'color-preview';
                 const swatch = document.createElement('div');
                 swatch.className = 'color-swatch';
-                swatch.style.backgroundColor = `rgba(${varValue.r * 255}, ${varValue.g * 255}, ${varValue.b * 255}, ${varValue.a || 1})`;
+                swatch.style.backgroundColor = `rgba(${varValue.value.r * 255}, ${varValue.value.g * 255}, ${varValue.value.b * 255}, ${varValue.value.a || 1})`;
                 preview.appendChild(swatch);
                 
                 const colorInput = document.createElement('input');
                 colorInput.type = 'color';
                 colorInput.style.display = 'none';
-                colorInput.value = rgbToHex(varValue.r * 255, varValue.g * 255, varValue.b * 255);
+                colorInput.value = rgbToHex(varValue.value.r * 255, varValue.value.g * 255, varValue.value.b * 255);
                 colorInput.onchange = () => {
                     const rgb = hexToRgb(colorInput.value);
-                    varValue.r = rgb.r / 255;
-                    varValue.g = rgb.g / 255;
-                    varValue.b = rgb.b / 255;
-                    swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${varValue.a || 1})`;
-                    const change = new MonoBehaviorVarChange(component.id, varName, varValue, { source: 'ui' });
+                    varValue.value.r = rgb.r / 255;
+                    varValue.value.g = rgb.g / 255;
+                    varValue.value.b = rgb.b / 255;
+                    swatch.style.backgroundColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${varValue.value.a || 1})`;
+                    const change = new MonoBehaviorVarChange(component.id, varName, {type: 'color', value: varValue.value}, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 
@@ -706,9 +706,9 @@
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.className = 'property-input';
-                input.value = varValue?.toString() || '';
+                input.value = varValue.value?.toString() || '';
                 input.onchange = () => {
-                    const change = new MonoBehaviorVarChange(component.id, varName, input.value, { source: 'ui' });
+                    const change = new MonoBehaviorVarChange(component.id, varName, {type: 'string', value: input.value}, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(input);
