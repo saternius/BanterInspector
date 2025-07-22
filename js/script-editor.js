@@ -3,13 +3,17 @@ export class ScriptEditor {
         this.currentScript = null;
         this.editor = null;
         this.isModified = false;
-        this.monoBehaviorInstance = null;
+        this.monoBehaviorSlots = new Map(); // Map of slotId -> MonoBehavior component
+        this.selectedSlotId = null;
         this.isPlaying = false;
     }
     
     open(scriptData) {
         this.currentScript = scriptData;
         this.isModified = false;
+        
+        // Find all slots with MonoBehavior components using this script
+        this.findMonoBehaviorSlots();
         
         // Create or update the editor page
         this.createEditorPage();
@@ -42,17 +46,6 @@ export class ScriptEditor {
                         <span class="modified-indicator" id="modifiedIndicator" style="display: none;">●</span>
                     </div>
                     <div class="editor-controls">
-                        <div class="playback-controls">
-                            <button class="control-btn play-btn" id="playBtn" title="Start">
-                                ▶️
-                            </button>
-                            <button class="control-btn pause-btn" id="pauseBtn" title="Pause" disabled>
-                                ⏸️
-                            </button>
-                            <button class="control-btn stop-btn" id="stopBtn" title="Stop" disabled>
-                                ⏹️
-                            </button>
-                        </div>
                         <button class="save-btn" id="saveBtn">
                             💾 Save
                         </button>
@@ -66,7 +59,33 @@ export class ScriptEditor {
                         <span>Author: ${this.currentScript.author}</span>
                         <span>Created: ${new Date(this.currentScript.created).toLocaleString()}</span>
                     </div>
-                    <div class="console-output" id="consoleOutput" style="display: none;">
+                    ${this.monoBehaviorSlots.size > 0 ? `
+                    <div class="monobehavior-controls">
+                        <div class="slot-selector-panel">
+                            <div class="slot-selector-title">MonoBehavior Instances:</div>
+                            <div class="slot-selector-buttons" id="slotSelectorButtons">
+                                ${Array.from(this.monoBehaviorSlots.entries()).map(([slotId, component]) => {
+                                    const slot = window.SM?.slots?.get(slotId);
+                                    const slotName = slot?.name || 'Unknown Slot';
+                                    const isSelected = this.selectedSlotId === slotId;
+                                    return `<button class="slot-selector-btn ${isSelected ? 'selected' : ''}" data-slot-id="${slotId}">${slotName}</button>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                        <div class="playback-controls">
+                            <button class="control-btn play-btn" id="playBtn" title="Start" ${!this.selectedSlotId ? 'disabled' : ''}>
+                                ▶️
+                            </button>
+                            <button class="control-btn pause-btn" id="pauseBtn" title="Pause" disabled>
+                                ⏸️
+                            </button>
+                            <button class="control-btn stop-btn" id="stopBtn" title="Stop" disabled>
+                                ⏹️
+                            </button>
+                        </div>
+                    </div>
+                    ` : ''}
+                    <div class="console-output" id="consoleOutput" style="display: ${this.monoBehaviorSlots.size > 0 ? 'block' : 'none'};">
                         <div class="console-header">Console Output</div>
                         <div class="console-content" id="consoleContent"></div>
                     </div>
@@ -155,6 +174,15 @@ export class ScriptEditor {
                 }
             }
         });
+        
+        // Slot selector buttons
+        const slotButtons = document.querySelectorAll('.slot-selector-btn');
+        slotButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const slotId = btn.dataset.slotId;
+                this.selectSlot(slotId);
+            });
+        });
     }
     
     save() {
@@ -181,73 +209,121 @@ export class ScriptEditor {
         this.showNotification('Script saved successfully');
     }
     
+    findMonoBehaviorSlots() {
+        this.monoBehaviorSlots.clear();
+        this.selectedSlotId = null;
+        
+        if (!window.SM || !window.SM.slots) return;
+        
+        // Iterate through all slots to find MonoBehavior components using this script
+        window.SM.slots.forEach((slot, slotId) => {
+            if (slot.components) {
+                slot.components.forEach(component => {
+                    if (component.type === 'MonoBehavior' && 
+                        component.properties?.file === this.currentScript.name) {
+                        this.monoBehaviorSlots.set(slotId, component);
+                    }
+                });
+            }
+        });
+        
+        // Auto-select first slot if any exist
+        if (this.monoBehaviorSlots.size > 0) {
+            this.selectedSlotId = this.monoBehaviorSlots.keys().next().value;
+        }
+    }
+    
+    selectSlot(slotId) {
+        this.selectedSlotId = slotId;
+        
+        // Update UI
+        document.querySelectorAll('.slot-selector-btn').forEach(btn => {
+            btn.classList.toggle('selected', btn.dataset.slotId === slotId);
+        });
+        
+        // Enable/disable playback controls
+        const playBtn = document.getElementById('playBtn');
+        if (playBtn) {
+            playBtn.disabled = !slotId;
+        }
+        
+        // Clear console when switching slots
+        this.clearConsole();
+    }
+    
     play() {
+        if (!this.selectedSlotId) return;
+        
+        const component = this.monoBehaviorSlots.get(this.selectedSlotId);
+        if (!component || !component.scriptContext) return;
+        
+        const slot = window.SM.slots.get(this.selectedSlotId);
+        const slotName = slot?.name || 'Unknown';
+        
         try {
-            const codeEditor = document.getElementById('codeEditor');
-            const code = codeEditor.value;
-            
-            // Create a new function from the script content
-            const scriptFunction = new Function('BS', 'SM', 'console', code);
-            
-            // Create a mock MonoBehavior context
-            this.monoBehaviorInstance = {
-                onStart: null,
-                onUpdate: null,
-                onDestroy: null,
-                onPause: null,
-                onResume: null,
-                gameObject: { name: 'ScriptEditor_TestObject' }
-            };
-            
-            // Create a console wrapper
-            const consoleWrapper = {
-                log: (...args) => this.log('log', ...args),
-                error: (...args) => this.log('error', ...args),
-                warn: (...args) => this.log('warn', ...args),
-                info: (...args) => this.log('info', ...args)
-            };
-            
-            // Show console
-            document.getElementById('consoleOutput').style.display = 'block';
-            this.clearConsole();
-            
-            // Execute the script to define the callbacks
-            scriptFunction.call(this.monoBehaviorInstance, window.BS || {}, window.SM || {}, consoleWrapper);
+            // Wrap the console for this component to capture logs
+            this.wrapConsoleForComponent(component, slotName);
             
             // Call onStart if defined
-            if (typeof this.monoBehaviorInstance.onStart === 'function') {
-                this.log('info', 'Calling onStart()...');
-                this.monoBehaviorInstance.onStart();
+            if (typeof component.scriptContext.onStart === 'function') {
+                this.log('info', 'Calling onStart()...', slotName);
+                component.scriptContext.onStart();
             }
             
             this.isPlaying = true;
             this.updatePlaybackButtons();
             
         } catch (error) {
-            this.log('error', `Script error: ${error.message}`);
+            this.log('error', `Script error: ${error.message}`, slotName);
+        }
+    }
+    
+    wrapConsoleForComponent(component, slotName) {
+        // Create a console wrapper that logs to our console
+        const consoleWrapper = {
+            log: (...args) => this.log('log', args.join(' '), slotName),
+            error: (...args) => this.log('error', args.join(' '), slotName),
+            warn: (...args) => this.log('warn', args.join(' '), slotName),
+            info: (...args) => this.log('info', args.join(' '), slotName)
+        };
+        
+        // Override the console in the script context
+        if (component.scriptContext) {
+            component.scriptContext.console = consoleWrapper;
         }
     }
     
     pause() {
-        if (!this.isPlaying || !this.monoBehaviorInstance) return;
+        if (!this.isPlaying || !this.selectedSlotId) return;
         
-        if (typeof this.monoBehaviorInstance.onPause === 'function') {
-            this.log('info', 'Calling onPause()...');
-            this.monoBehaviorInstance.onPause();
+        const component = this.monoBehaviorSlots.get(this.selectedSlotId);
+        if (!component || !component.scriptContext) return;
+        
+        const slot = window.SM.slots.get(this.selectedSlotId);
+        const slotName = slot?.name || 'Unknown';
+        
+        if (typeof component.scriptContext.onPause === 'function') {
+            this.log('info', 'Calling onPause()...', slotName);
+            component.scriptContext.onPause();
         }
         
         this.updatePlaybackButtons(true);
     }
     
     stop() {
-        if (!this.monoBehaviorInstance) return;
+        if (!this.selectedSlotId) return;
         
-        if (typeof this.monoBehaviorInstance.onDestroy === 'function') {
-            this.log('info', 'Calling onDestroy()...');
-            this.monoBehaviorInstance.onDestroy();
+        const component = this.monoBehaviorSlots.get(this.selectedSlotId);
+        if (!component || !component.scriptContext) return;
+        
+        const slot = window.SM.slots.get(this.selectedSlotId);
+        const slotName = slot?.name || 'Unknown';
+        
+        if (typeof component.scriptContext.onDestroy === 'function') {
+            this.log('info', 'Calling onDestroy()...', slotName);
+            component.scriptContext.onDestroy();
         }
         
-        this.monoBehaviorInstance = null;
         this.isPlaying = false;
         this.updatePlaybackButtons();
     }
@@ -275,7 +351,7 @@ export class ScriptEditor {
         }
     }
     
-    log(type, ...args) {
+    log(type, message, slotName) {
         const consoleContent = document.getElementById('consoleContent');
         if (!consoleContent) return;
         
@@ -283,9 +359,11 @@ export class ScriptEditor {
         entry.className = `console-entry console-${type}`;
         
         const timestamp = new Date().toLocaleTimeString();
+        const slotPrefix = slotName ? `[${slotName}] ` : '';
         entry.innerHTML = `
             <span class="console-timestamp">[${timestamp}]</span>
-            <span class="console-message">${args.join(' ')}</span>
+            <span class="console-slot">${slotPrefix}</span>
+            <span class="console-message">${message}</span>
         `;
         
         consoleContent.appendChild(entry);

@@ -113,23 +113,30 @@ export class MonoBehaviorComponent extends SlotComponent {
 
 
     newScriptContext(){
-        return {
+        let defaults =  {
             vars: {},
-            onStart: null,
-            onUpdate: null,
-            onPause: null,
-            onResume: null,
-            onDestroy: null,
-            onKeyDown: null,
-            onKeyUp: null,
-            keyDown: null,
-            keyUp: null,
-            keyPress: null,
+            onStart: ()=>{},
+            onUpdate: ()=>{},
+            onPause: ()=>{},
+            onResume: ()=>{},
+            onDestroy: ()=>{},
+            onKeyDown: ()=>{},
+            onKeyUp: ()=>{},
+            keyDown: ()=>{},
+            keyUp: ()=>{},
+            keyPress: ()=>{},
             _slot: this.slot, // Reference to the slot
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
             _component: this
         }
+
+        defaults.onScriptChanged = function() {
+            this.onDestroy();
+            this.onStart();
+        }
+
+        return defaults;
     }
 
     async updateVar(varName, value) {
