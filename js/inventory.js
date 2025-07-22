@@ -522,7 +522,7 @@ export class Inventory {
         }
         
         // Add edit button listener for scripts
-        const editBtn = this.previewPane.querySelector('.preview-edit-btn');
+        const editBtn = this.previewPane.querySelector('.edit-script-preview-btn');
         if (editBtn) {
             editBtn.addEventListener('click', () => {
                 this.openScriptEditor(itemName);
@@ -567,14 +567,14 @@ export class Inventory {
                         <span class="meta-value">${dateStr}</span>
                     </div>
                 </div>
-                <div class="preview-actions">
-                    <button class="preview-edit-btn" data-item-name="${item.name}">
-                        ✏️ Edit Script
-                    </button>
-                </div>
                 <div class="preview-content">
                     <h3>Script Content</h3>
                     <pre class="script-preview"><code>${this.escapeHtml(item.data)}</code></pre>
+                    <div class="preview-actions">
+                        <button class="action-btn edit-script-preview-btn" data-item-name="${item.name}">
+                            ✏️ Edit Script
+                        </button>
+                    </div>
                 </div>
             `;
         } else {
