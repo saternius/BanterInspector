@@ -64,4 +64,9 @@ export class SlotComponent{
             this._bs.Destroy();
         }
     }
+
+    async set(property, value){
+        const spaceKey = `__${this._slot.name}/${this.type}/${property}:${this.id}`;
+        await SM.setSpaceProperty(spaceKey, value, false);
+    }
 }
