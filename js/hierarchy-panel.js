@@ -98,7 +98,7 @@
             if (!this.treeContainer) return;
             
             this.treeContainer.innerHTML = '';
-            console.log("SM.slotData.slots =>", SM.slotData.slots)
+            //console.log("SM.slotData.slots =>", SM.slotData.slots)
             if (SM.slotData.slots.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;

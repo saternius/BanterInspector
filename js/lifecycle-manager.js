@@ -5,10 +5,6 @@
 
 export class LifecycleManager {
     constructor() {
-        if (LifecycleManager.instance) {
-            return LifecycleManager.instance;
-        }
-        
         this.monoBehaviors = new Map(); // Map of componentId -> MonoBehavior instance
         this.fps = 30; // Default 30 FPS for onUpdate
         this.updateInterval = null;
@@ -16,26 +12,15 @@ export class LifecycleManager {
         
         // Setup keyboard event listeners
         this.setupKeyboardListeners();
-        
-        LifecycleManager.instance = this;
         return this;
-    }
-    
-    /**
-     * Get singleton instance
-     */
-    static getInstance() {
-        if (!LifecycleManager.instance) {
-            new LifecycleManager();
-        }
-        return LifecycleManager.instance;
     }
     
     /**
      * Register a MonoBehavior component
      */
-    async registerMonoBehavior(componentId, monoBehavior) {
-        this.monoBehaviors.set(componentId, monoBehavior);
+    async registerMonoBehavior(monoBehavior) {
+        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+        this.monoBehaviors.set(monoBehavior.id, monoBehavior);
         
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
@@ -43,9 +28,9 @@ export class LifecycleManager {
         }
         
         // Call onStart for the newly registered behavior
-        if (monoBehavior.onStart && typeof monoBehavior.onStart === 'function') {
+        if (monoBehavior.scriptContext.onStart && typeof monoBehavior.scriptContext.onStart === 'function') {
             try {
-                monoBehavior.onStart();
+                monoBehavior.scriptContext.onStart();
             } catch (error) {
                 console.error(`Error in onStart for ${componentId}:`, error);
             }
@@ -55,24 +40,23 @@ export class LifecycleManager {
     /**
      * Unregister a MonoBehavior component
      */
-    unregisterMonoBehavior(componentId) {
-        const monoBehavior = this.monoBehaviors.get(componentId);
-        if (monoBehavior) {
-            // Call onDestroy before removing
-            if (monoBehavior.onDestroy && typeof monoBehavior.onDestroy === 'function') {
-                try {
-                    monoBehavior.onDestroy();
-                } catch (error) {
-                    console.error(`Error in onDestroy for ${componentId}:`, error);
-                }
+    unregisterMonoBehavior(monoBehavior) {
+        if(!monoBehavior) return;
+        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+
+       
+        // Call onDestroy before removing
+        if (monoBehavior.scriptContext.onDestroy && typeof monoBehavior.scriptContext.onDestroy === 'function') {
+            try {
+                monoBehavior.scriptContext.onDestroy();
+            } catch (error) {
+                console.error(`Error in onDestroy for ${componentId}:`, error);
             }
-            
-            this.monoBehaviors.delete(componentId);
-            
-            // Stop the lifecycle if no components remain
-            if (this.monoBehaviors.size === 0) {
-                this.stop();
-            }
+        }
+        this.monoBehaviors.delete(monoBehavior.id);
+        // Stop the lifecycle if no components remain
+        if (this.monoBehaviors.size === 0) {
+            this.stop();
         }
     }
     
@@ -128,9 +112,9 @@ export class LifecycleManager {
      */
     triggerUpdate() {
         this.monoBehaviors.forEach((monoBehavior, componentId) => {
-            if (monoBehavior.onUpdate && typeof monoBehavior.onUpdate === 'function') {
+            if (monoBehavior.scriptContext.onUpdate && typeof monoBehavior.scriptContext.onUpdate === 'function') {
                 try {
-                    monoBehavior.onUpdate();
+                    monoBehavior.scriptContext.onUpdate();
                 } catch (error) {
                     console.error(`Error in onUpdate for ${componentId}:`, error);
                 }
@@ -199,20 +183,8 @@ export class LifecycleManager {
             });
         });
     }
-    
-    /**
-     * Trigger onDestroy for a specific slot and its children
-     */
-    triggerDestroyForSlot(slotId) {
-        // Find all MonoBehaviors attached to this slot
-        this.monoBehaviors.forEach((monoBehavior, componentId) => {
-            if (monoBehavior.slot && monoBehavior.slot.id === slotId) {
-                this.unregisterMonoBehavior(componentId);
-            }
-        });
-    }
 }
 
 // Create and export singleton instance
-export const lifecycleManager = LifecycleManager.getInstance();
-window.lifecycleManager = lifecycleManager; // For debugging
+export const lifecycle = new LifecycleManager();
+window.lifecycle = lifecycle; // For debugging

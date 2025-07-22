@@ -525,13 +525,6 @@
             fileSelect.onchange = async () => {
                 if(component.properties.file === fileSelect.value) return;
                 
-                // Load the new script
-                if (component.type === 'MonoBehavior') {
-                    if (fileSelect.value) {
-                        await component.loadScript(fileSelect.value);
-                    }
-                }
-                
                 const change = new ComponentPropertyChange(component.id, 'file', fileSelect.value, { source: 'ui' });
                 changeManager.applyChange(change);
                 

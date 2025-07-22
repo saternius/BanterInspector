@@ -13,13 +13,14 @@ export class MonoBehaviorComponent extends SlotComponent {
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
         this.type = "MonoBehavior";
-        if(this.properties.file){
+        if(this.properties.file && this.properties.file.length > 0){
             this.loadScript(this.properties.file);
         }
         return this;
     }
 
     async update(property, value){
+        console.log("[MONO] updating property =>", property, value)
         if(property === 'file'){
             this.loadScript(value);
         }
@@ -51,8 +52,8 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
 
         
-
-        if(this.scriptContext.running){
+        console.log("this.scriptContext.running =>", this.scriptContext)
+        if(this.scriptContext._running){
             await this.scriptContext.onDestroy();
         }
 
@@ -104,8 +105,8 @@ export class MonoBehaviorComponent extends SlotComponent {
 
         this.scriptFunction.call(this.scriptContext);
         this.scriptInstance = this.scriptContext;
-        this.scriptContext.running = true;
-        window.lifecycleManager.registerMonoBehavior(this.id, this.scriptContext);    
+        this.scriptContext._running = true;
+        await lifecycle.registerMonoBehavior(this);    
         console.log(`Script "${fileName}" loaded successfully for ${this.properties.name}`);
     }
 
@@ -122,16 +123,16 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyDown: null,
             keyUp: null,
             keyPress: null,
-            slot: this.slot, // Reference to the slot
-            scene: window.scene, // Reference to the scene
-            BS: window.BS, // Reference to BanterScript library
-            transform: this.transform
+            _slot: this.slot, // Reference to the slot
+            _scene: window.scene, // Reference to the scene
+            _BS: window.BS, // Reference to BanterScript library
+            _component: this
         }
     }
 
     async destroy(){
         await super.destroy();
-        window.lifecycleManager.unregisterMonoBehavior(this.id);
-        await this.scriptContext.onDestroy();
+        await lifecycle.unregisterMonoBehavior(this);
+        
     }
 }

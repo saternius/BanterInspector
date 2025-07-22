@@ -466,13 +466,6 @@ console.log("It is 6:03")
                 }
             }
             
-            // Notify lifecycle manager of slot destruction
-            if (window.lifecycleManager) {
-                slotsToDelete.forEach(id => {
-                    window.lifecycleManager.triggerDestroyForSlot(id);
-                });
-            }
-            
             // Reverse order to delete children first
             for (let i = slotsToDelete.length - 1; i >= 0; i--) {
                 const deleteSlot = this.getSlotById(slotsToDelete[i]);
