@@ -17,6 +17,9 @@
             this.addComponentBtn = document.getElementById('addComponentBtn');
             this.selectedSlotNameElement = document.getElementById('selectedSlotName');
             
+            // Store collapsed state of components
+            this.collapsedComponents = new Set();
+            
             this.setupEventListeners();
         }
 
@@ -234,11 +237,24 @@
             section.appendChild(body);
             
             // Toggle functionality
-            let isExpanded = true;
+            const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            let isExpanded = !this.collapsedComponents.has(componentKey);
+            
+            // Apply initial state
+            body.style.display = isExpanded ? 'block' : 'none';
+            header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
+            
             header.onclick = () => {
                 isExpanded = !isExpanded;
                 body.style.display = isExpanded ? 'block' : 'none';
                 header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
+                
+                // Save collapsed state
+                if (isExpanded) {
+                    this.collapsedComponents.delete(componentKey);
+                } else {
+                    this.collapsedComponents.add(componentKey);
+                }
             };
             
             return section;
@@ -558,11 +574,24 @@
             section.appendChild(body);
             
             // Toggle functionality
-            let isExpanded = true;
+            const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            let isExpanded = !this.collapsedComponents.has(componentKey);
+            
+            // Apply initial state
+            body.style.display = isExpanded ? 'block' : 'none';
+            header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
+            
             header.onclick = () => {
                 isExpanded = !isExpanded;
                 body.style.display = isExpanded ? 'block' : 'none';
                 header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
+                
+                // Save collapsed state
+                if (isExpanded) {
+                    this.collapsedComponents.delete(componentKey);
+                } else {
+                    this.collapsedComponents.add(componentKey);
+                }
             };
             
             return section;
