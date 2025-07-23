@@ -1942,6 +1942,7 @@ body {
     overflow-y: auto;
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
     font-size: 12px;
+    height: 180px;
 }
 
 .console-entry {

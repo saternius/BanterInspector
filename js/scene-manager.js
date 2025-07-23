@@ -72,6 +72,18 @@ console.log("It is 6:03")
             window.scene = this.scene
         }
 
+        async reset(){
+            if(localhost){
+                localStorage.removeItem('lastSpaceState');
+            }
+            this.loaded = false;
+            this.scene.spaceState = {
+                public: {},
+                protected: {}
+            }
+            await this.initialize();
+        }
+
         async gatherSceneHierarchy(){
             console.log("gathering SceneHierarchy")
             let rootObj = await this.scene.Find("Root");

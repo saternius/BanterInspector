@@ -105,9 +105,41 @@ export class MonoBehaviorComponent extends SlotComponent {
 
         this.scriptFunction.call(this.scriptContext);
         this.scriptInstance = this.scriptContext;
-        this.scriptContext._running = true;
-        await lifecycle.registerMonoBehavior(this);    
+        await lifecycle.registerMonoBehavior(this);  
+        this.start();  
         console.log(`Script "${fileName}" loaded successfully for ${this.properties.name}`);
+    }
+
+    start(){
+        if(this.scriptContext._running) return;
+        this.scriptContext._running = true;
+        this.scriptContext.onStart();
+    }
+
+    pause(){
+        if(!this.scriptContext._running) return;
+        this.scriptContext._running = false;
+        this.scriptContext.onPause();
+    }
+
+    resume(){
+        if(this.scriptContext._running) return;
+        this.scriptContext._running = true;
+        this.scriptContext.onResume();
+    }
+
+    stop(){
+        if(!this.scriptContext._running) return;
+        this.scriptContext._running = false;
+        this.scriptContext.onDestroy();
+    }
+
+    refresh(){
+        console.log("refreshing script [", this.scriptContext._running, "]..")
+        if(!this.scriptContext._running) return;
+        this.scriptContext._running = false;
+        this.scriptContext.onDestroy();
+        this.loadScript(this.properties.file);
     }
 
 
@@ -125,10 +157,11 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyDown: ()=>{},
             keyUp: ()=>{},
             keyPress: ()=>{},
+            log: (...args)=>{ console.log(...args)},
             _slot: this.slot, // Reference to the slot
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
-            _component: this
+            _component: this,
         }
 
         defaults.onScriptChanged = function() {
@@ -149,6 +182,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async destroy(){
         await super.destroy();
+        this.stop();
         await lifecycle.unregisterMonoBehavior(this);
         
     }

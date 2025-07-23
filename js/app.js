@@ -73,6 +73,7 @@
                 window.spacePropsPanel = this.spacePropsPanel;
                 window.inventory = this.inventory;
                 window.navigation = this.navigation;
+                window.scriptEditor = this.scriptEditor;
                 
                 // Initial render
                 this.hierarchyPanel.render();

@@ -26,15 +26,6 @@ export class LifecycleManager {
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
             this.start();
         }
-        
-        // Call onStart for the newly registered behavior
-        if (monoBehavior.scriptContext.onStart && typeof monoBehavior.scriptContext.onStart === 'function') {
-            try {
-                monoBehavior.scriptContext.onStart();
-            } catch (error) {
-                console.error(`Error in onStart for ${componentId}:`, error);
-            }
-        }
     }
     
     /**
@@ -46,13 +37,6 @@ export class LifecycleManager {
 
        
         // Call onDestroy before removing
-        if (monoBehavior.scriptContext.onDestroy && typeof monoBehavior.scriptContext.onDestroy === 'function') {
-            try {
-                monoBehavior.scriptContext.onDestroy();
-            } catch (error) {
-                console.error(`Error in onDestroy for ${componentId}:`, error);
-            }
-        }
         this.monoBehaviors.delete(monoBehavior.id);
         // Stop the lifecycle if no components remain
         if (this.monoBehaviors.size === 0) {
@@ -112,6 +96,7 @@ export class LifecycleManager {
      */
     triggerUpdate() {
         this.monoBehaviors.forEach((monoBehavior, componentId) => {
+            if(!monoBehavior.scriptContext._running) return;
             if (monoBehavior.scriptContext.onUpdate && typeof monoBehavior.scriptContext.onUpdate === 'function') {
                 try {
                     monoBehavior.scriptContext.onUpdate();

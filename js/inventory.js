@@ -714,11 +714,11 @@ export class Inventory {
      * Load selected slot to scene
      */
     async loadSlotToScene() {
-        console.log("LOADING ITEM")
         if (!this.selectedItem) return;
         
         const item = this.items[this.selectedItem];
         if (!item || item.itemType !== 'slot') return;
+        console.log("loading slot =>", item.data)
         await SM.loadSlot(item.data, SM.selectedSlot)
         // Show success message
         this.showNotification(`Added "${item.name}" to scene`);
