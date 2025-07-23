@@ -5,6 +5,7 @@ export class ScriptEditor {
         this.isModified = false;
         this.monoBehaviorSlots = new Map(); // Map of slotId -> MonoBehavior component
         this.selectedSlots = new Set();
+        this.codemirror = null;
     }
     
     open(scriptData) {
@@ -70,7 +71,7 @@ export class ScriptEditor {
         this.updatePlaybackButtons();
     }
     
-    createEditorPage() {
+    async createEditorPage() {
         // Remove existing page if any
         const existingPage = document.getElementById('script-editor-page');
         if (existingPage) {
@@ -97,7 +98,9 @@ export class ScriptEditor {
                     </div>
                 </div>
                 <div class="script-editor-content">
-                    <textarea class="code-editor" id="codeEditor">${this.escapeHtml(this.currentScript.content)}</textarea>
+                    <div class="code-editor-wrapper" id="codeEditorWrapper">
+                        <textarea class="code-editor" id="codeEditor">${this.escapeHtml(this.currentScript.content)}</textarea>
+                    </div>
                 </div>
                 <div class="script-editor-footer">
                     
@@ -119,31 +122,103 @@ export class ScriptEditor {
             <span class="close-tab-btn" id="closeScriptEditor">×</span>
         `;
         
-        // Setup event listeners
+        // Setup event listeners and CodeMirror
         setTimeout(() => this.setupEventListeners(), 0);
+        await this.initializeCodeMirror();
     }
     
-    setupEventListeners() {
-        // Code editor
-        const codeEditor = document.getElementById('codeEditor');
-        if (codeEditor) {
-            codeEditor.addEventListener('input', () => {
+    async initializeCodeMirror() {
+        // Load CodeMirror from CDN
+        const isProduction = window.location.hostname !== 'localhost';
+        const cdnBase = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13';
+        
+        // Load CSS
+        const cssLinks = [
+            `${cdnBase}/codemirror.min.css`,
+            `${cdnBase}/theme/monokai.min.css`,
+            `${cdnBase}/addon/hint/show-hint.min.css`,
+            `${cdnBase}/addon/dialog/dialog.min.css`
+        ];
+        
+        cssLinks.forEach(href => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            document.head.appendChild(link);
+        });
+        
+        // Load scripts
+        await this.loadScript(`${cdnBase}/codemirror.min.js`);
+        await Promise.all([
+            this.loadScript(`${cdnBase}/mode/javascript/javascript.min.js`),
+            this.loadScript(`${cdnBase}/addon/edit/closebrackets.min.js`),
+            this.loadScript(`${cdnBase}/addon/edit/matchbrackets.min.js`),
+            this.loadScript(`${cdnBase}/addon/comment/comment.min.js`),
+            this.loadScript(`${cdnBase}/addon/hint/show-hint.min.js`),
+            this.loadScript(`${cdnBase}/addon/hint/javascript-hint.min.js`),
+            this.loadScript(`${cdnBase}/addon/search/searchcursor.min.js`),
+            this.loadScript(`${cdnBase}/addon/search/search.min.js`),
+            this.loadScript(`${cdnBase}/addon/dialog/dialog.min.js`),
+            this.loadScript(`${cdnBase}/addon/selection/active-line.min.js`)
+        ]);
+        
+        // Initialize CodeMirror
+        const textarea = document.getElementById('codeEditor');
+        if (textarea && window.CodeMirror) {
+            this.codemirror = CodeMirror.fromTextArea(textarea, {
+                mode: 'javascript',
+                theme: 'monokai',
+                lineNumbers: true,
+                autoCloseBrackets: true,
+                matchBrackets: true,
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: false,
+                styleActiveLine: true,
+                extraKeys: {
+                    'Tab': (cm) => {
+                        if (cm.somethingSelected()) {
+                            cm.indentSelection('add');
+                        } else {
+                            cm.replaceSelection(cm.getOption('indentWithTabs')? '\t' : 
+                                Array(cm.getOption('indentUnit') + 1).join(' '), 'end');
+                        }
+                    },
+                    'Shift-Tab': (cm) => cm.indentSelection('subtract'),
+                    'Ctrl-Space': 'autocomplete',
+                    'Cmd-Space': 'autocomplete',
+                    'Ctrl-/': 'toggleComment',
+                    'Cmd-/': 'toggleComment',
+                    'Ctrl-F': 'findPersistent',
+                    'Cmd-F': 'findPersistent'
+                }
+            });
+            
+            // Track modifications
+            this.codemirror.on('change', () => {
                 this.isModified = true;
                 document.getElementById('modifiedIndicator').style.display = 'inline';
             });
             
-            // Tab key support
-            codeEditor.addEventListener('keydown', (e) => {
-                if (e.key === 'Tab') {
-                    e.preventDefault();
-                    const start = codeEditor.selectionStart;
-                    const end = codeEditor.selectionEnd;
-                    const value = codeEditor.value;
-                    codeEditor.value = value.substring(0, start) + '    ' + value.substring(end);
-                    codeEditor.selectionStart = codeEditor.selectionEnd = start + 4;
-                }
-            });
+            // Set initial size
+            setTimeout(() => {
+                this.codemirror.refresh();
+            }, 100);
         }
+    }
+    
+    loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    }
+    
+    setupEventListeners() {
+        // CodeMirror is now initialized separately
         
         // Save button
         const saveBtn = document.getElementById('saveBtn');
@@ -178,14 +253,17 @@ export class ScriptEditor {
         }
         
         // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey || e.metaKey) {
-                if (e.key === 's') {
+        const handleKeyDown = (e) => {
+            // Only handle if script editor is active
+            if (navigation.currentPage === 'script-editor') {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     this.save();
                 }
             }
-        });
+        };
+        this.keydownHandler = handleKeyDown;
+        document.addEventListener('keydown', handleKeyDown);
         
         // Slot selector buttons
         const slotButtons = document.querySelectorAll('.slot-selector-btn');
@@ -198,10 +276,9 @@ export class ScriptEditor {
     }
     
     save() {
-        const codeEditor = document.getElementById('codeEditor');
-        if (!codeEditor) return;
+        if (!this.codemirror) return;
         
-        const newContent = codeEditor.value;
+        const newContent = this.codemirror.getValue();
         
         // Send save event back to inventory
         const event = new CustomEvent('save-script', {
@@ -378,7 +455,17 @@ export class ScriptEditor {
             if (!confirmClose) return;
         }
         
-      
+        // Cleanup CodeMirror
+        if (this.codemirror) {
+            this.codemirror.toTextArea();
+            this.codemirror = null;
+        }
+        
+        // Remove keyboard event listener
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+        }
+        
         navigation.removeDynamicPage('script-editor');
     }
     
