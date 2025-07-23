@@ -1,5 +1,6 @@
 let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
 const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
+const { eulerToQuaternion } = await import(`${basePath}/utils.js`);
 
 export class TransformComponent extends SlotComponent {
     constructor(){
@@ -33,9 +34,13 @@ export class TransformComponent extends SlotComponent {
                     parseFloat(value.w)
                 );
             } else {
-                // If somehow we get euler angles, convert to quaternion
-                console.warn('Received euler angles for rotation, expecting quaternion');
-                // For safety, just use current rotation
+                value = eulerToQuaternion(value);
+                this._bs[property] = new BS.Vector4(
+                    parseFloat(value.x),
+                    parseFloat(value.y),
+                    parseFloat(value.z),
+                    parseFloat(value.w)
+                );
             }
         }
     }
@@ -54,5 +59,18 @@ export class TransformComponent extends SlotComponent {
             localRotation: { x: 0, y: 0, z: 0, w: 1 },
             localScale: { x: 1, y: 1, z: 1 }
         }
+    }
+
+    async Add(property, vector3){
+        let addX = vector3.x || 0;
+        let addY = vector3.y || 0;
+        let addZ = vector3.z || 0;
+        let curVec = this.properties[property];
+        let newVec = {
+            x: curVec.x + addX,
+            y: curVec.y + addY,
+            z: curVec.z + addZ
+        }
+        await this.update(property, newVec);
     }
 }

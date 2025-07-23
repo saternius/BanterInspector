@@ -35,6 +35,15 @@ export class Slot{
         return this.components.find(component => component.type === "Transform");
     }
 
+    getComponent(componentType, index){
+        index = index || 0;
+        return this.components.find(component => component.type === componentType);
+    }
+
+    getComponents(componentType){
+        return this.components.filter(component => component.type === componentType);
+    }
+
     async setParent(newParent){
         // Cannot parent to itself
         if (newParent === this) return;

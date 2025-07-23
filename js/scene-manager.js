@@ -663,6 +663,7 @@ console.log("It is 6:03")
             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
                 detail: { slotId: slot.id }
             }));
+            await this.updateHierarchy(slot);
         }
  
     }

@@ -5,13 +5,14 @@ export class MonoBehaviorComponent extends SlotComponent {
     constructor(){
         super();
         this.bsRef = null;
-        this.scriptInstance = null;
-        this.scriptContext = this.newScriptContext();
-        this.scriptFunction = null;
+        
     }
 
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
+        this.scriptInstance = null;
+        this.scriptContext = this.newScriptContext();
+        this.scriptFunction = null;
         this.type = "MonoBehavior";
         if(this.properties.file && this.properties.file.length > 0){
             this.loadScript(this.properties.file);
@@ -158,10 +159,10 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyUp: ()=>{},
             keyPress: ()=>{},
             log: (...args)=>{ console.log(...args)},
-            _slot: this.slot, // Reference to the slot
+            _slot: this._slot, // Reference to the slot
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
-            _component: this,
+            _component: this
         }
 
         defaults.onScriptChanged = function() {
