@@ -664,7 +664,7 @@
             
             const valueContainer = document.createElement('div');
             valueContainer.className = 'property-value';
-            console.log("varValue =>", varValue)
+            //console.log("varValue =>", varValue)
             // Determine type and render appropriate input
             if (varValue.type === 'boolean') {
                 const input = document.createElement('input');

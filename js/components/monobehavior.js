@@ -18,7 +18,10 @@ export class MonoBehaviorComponent extends SlotComponent {
             this.loadScript(this.properties.file);
         }
         this.setId(this.id.replace("undefined","MonoBehavior"));
-        this.loadVarsFromSpaceState();
+        setTimeout(()=>{
+            this.loadVarsFromSpaceState();
+        }, 10)
+        
         return this;
     }
 
@@ -163,7 +166,6 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyUp: ()=>{},
             keyPress: ()=>{},
             log: (...args)=>{ console.log(...args)},
-            loadItem: SM.loadItem,
             _slot: this._slot, // Reference to the slot
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library

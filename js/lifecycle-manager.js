@@ -2,7 +2,7 @@
  * Lifecycle Manager
  * Singleton that manages lifecycle events for all MonoBehavior components
  */
-
+let localhost = window.location.hostname === 'localhost'
 export class LifecycleManager {
     constructor() {
         this.monoBehaviors = new Map(); // Map of componentId -> MonoBehavior instance
@@ -20,8 +20,13 @@ export class LifecycleManager {
      */
     async registerMonoBehavior(monoBehavior) {
         console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
-        this.monoBehaviors.set(monoBehavior.id, monoBehavior);
-        
+        if(!localhost){
+            if(SM.scene.localUser.name !== SM.scene.spaceState.masterUser){
+                console.log("[LIFECYCLE] NOT MASTER =>", monoBehavior.id)
+                return;
+            }
+        }
+        this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
             this.start();

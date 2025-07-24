@@ -265,7 +265,7 @@ console.log("It is 6:03")
 
 
         //Creates a slot from the inventory schema
-        async loadSlot(slotData, parentId){
+        async _loadSlot(slotData, parentId){
 
             let loadSubSlot = async (item, parentId)=>{ 
                 const newSlot = await new Slot().init({
@@ -275,7 +275,7 @@ console.log("It is 6:03")
     
     
                 for(let component of item.components){
-                    await this.addComponent(newSlot, component.type, component.properties);
+                    await this._addComponent(newSlot, component.type, component.properties);
                 }
     
                 item.children.forEach(async (child) => {
@@ -310,40 +310,6 @@ console.log("It is 6:03")
             return slot;
         }
 
-        async loadItem(name, parentName){
-            const item = inventory.items[name];
-            if(!item){
-                console.log("[ERROR] no item found =>", name)
-                return null;
-            }
-            if(item.itemType !== "slot"){
-                console.log("[ERROR] item is not a slot =>", name)
-                return null;
-            }
-
-            if(parentName){
-                let parentSlot = SM.getSlotByName(parentName);
-                if(!parentSlot){
-                    console.log("[ERROR] no parent slot found =>", parentName)
-                    return null;
-                }
-                parentId = parentSlot.id;
-            }
-
-            let getItemCount = (name, parentId)=>{
-                let parentSlot = SM.getSlotOrRoot(parentId);
-                let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
-                if(sims == 0){
-                    return "";
-                }else{
-                    return `_${sims}`;
-                }
-            }
-
-            let itemData = item.data;
-            itemData.name = name+getItemCount(name, parentId)
-            return await SM.loadSlot(itemData, parentId)
-        }
 
         getHistoricalProps(component_ref){
             let type = component_ref.split("_")[0]
@@ -405,7 +371,7 @@ console.log("It is 6:03")
         handleSpaceStateChange(event) {
             const { changes } = event.detail;
             changes.forEach(async (change) => {
-                console.log("[SPACE CHANGE] =>", change)
+                //console.log("[SPACE CHANGE] =>", change)
                 let { property, newValue, isProtected } = change;
                 newValue = JSON.parse(newValue);
                 
@@ -413,6 +379,12 @@ console.log("It is 6:03")
                     this.scene.spaceState.protected[property] = newValue;
                 } else {
                     this.scene.spaceState.public[property] = newValue;
+                }
+
+                let renderProps = (component)=>{
+                    if(this.selectedSlot === component._slot.id){
+                        inspectorApp.propertiesPanel.render(this.selectedSlot)
+                    }
                 }
                 
 
@@ -436,14 +408,14 @@ console.log("It is 6:03")
                         if(monobehavior && monobehavior.scriptContext){
                             monobehavior.scriptContext.vars[prop] = newValue;
                         }
-                        inspectorApp.propertiesPanel.render(this.selectedSlot)
+                        renderProps(monobehavior)
                     }else{
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
                             await component.update(prop, newValue);
                         }
+                        renderProps(component)
                     }
-                    inspectorApp.propertiesPanel.render(this.selectedSlot)
                 }
             });
         }
@@ -454,15 +426,15 @@ console.log("It is 6:03")
             let data = event.detail.data;
            
             if(data.startsWith("load_slot")){
-                let slot_data = JSON.parse(data.slice(10));
-                await this.loadSlot(slot_data, this.getSelectedSlot().id);
+                let [parentId, slot_data] = data.slice(10).split("|");
+                await this._loadSlot(JSON.parse(slot_data), parentId);
             }
 
             if(data.startsWith("component_added")){
                 let event = JSON.parse(data.slice(16));
                 let slot = this.getSlotById(event.slotId);
                 if(slot){
-                    await this.addComponent(slot, event.componentType, event.componentProperties);
+                    await this._addComponent(slot, event.componentType, event.componentProperties);
                 }
             }
 
@@ -470,33 +442,32 @@ console.log("It is 6:03")
                 let componentId = data.slice(18);
                 let component = this.getSlotComponentById(componentId);
                 if(component){
-                    await this.deleteComponent(component);
+                    await this._deleteComponent(component);
                 }
             }
 
 
             if(data.startsWith("slot_added")){
                 let [parentId, slotName] = data.slice(11).split(":");
-                await this.addNewSlot(slotName, parentId);
+                await this._addNewSlot(slotName, parentId);
             }
 
             if(data.startsWith("slot_removed")){
                 let slotId = data.slice(13);
-                await this.deleteSlot(slotId);
+                await this._deleteSlot(slotId);
             }
 
             if(data.startsWith("slot_moved")){
                 let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
                 newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
-                await this.moveSlot(slotId, newParentId, newSiblingIndex);
+                await this._moveSlot(slotId, newParentId, newSiblingIndex);
             }
-
         }
 
 
         async setSpaceProperty(key, value, isProtected) {
             if (!this.scene) return;
-            console.log("[setSpaceProperty]", key, value, isProtected)
+            //console.log("[setSpaceProperty]", key, value, isProtected)
 
             // if(value && value.value !== undefined){
             //     value = value.value;
@@ -560,10 +531,6 @@ console.log("It is 6:03")
             return this.slotData.slotMap[slotId];
         }
 
-        getSlotByName(slotName){
-            return this.getAllSlots().find(x=>x.name==slotName);
-        }
-        
 
         getAllSlots() {
             return Object.values(this.slotData.slotMap || {});
@@ -586,7 +553,7 @@ console.log("It is 6:03")
         }
 
 
-        async addNewSlot(slotName, parentId = null) {
+        async _addNewSlot(slotName, parentId = null) {
             if(!this.scene || !window.BS){
                 console.log("NO SCENE AVAILABLE")
                 return null;
@@ -618,7 +585,7 @@ console.log("It is 6:03")
             await this.updateHierarchy(newSlot);
         }
 
-        async deleteSlot(slotId) {
+        async _deleteSlot(slotId) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
             
@@ -639,7 +606,7 @@ console.log("It is 6:03")
                 const delSlot = this.getSlotById(delSlotId);
                 if (delSlot && delSlot.components) {
                     delSlot.components.forEach(comp => {
-                        this.deleteComponent(comp);
+                        this._deleteComponent(comp);
                     });
                 }
             }
@@ -674,7 +641,7 @@ console.log("It is 6:03")
         }
 
 
-        async moveSlot(slotId, newParentId, newSiblingIndex) {
+        async _moveSlot(slotId, newParentId, newSiblingIndex) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
 
@@ -688,7 +655,7 @@ console.log("It is 6:03")
             await this.updateHierarchy(slot);
         }
 
-        async addComponent(slot, componentType, componentProperties){
+        async _addComponent(slot, componentType, componentProperties){
             // Check if component already exists (for unique components)
             const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
             if (uniqueComponents.includes(componentType)) {
@@ -719,7 +686,7 @@ console.log("It is 6:03")
             return slotComponent;
         }
 
-        async handleComponentBundles(slot, slotComponent){ //TODO: make it so that this only triggers on the component menu
+        async _handleComponentBundles(slot, slotComponent){ //TODO: make it so that this only triggers on the component menu
             let bundles = componentBundleMap[slotComponent.type];
             let idx = parseInt(slotComponent.id.split("_")[1]);
             if(bundles){
@@ -727,13 +694,13 @@ console.log("It is 6:03")
                     let properties = {
                         id: `${bundle}_${idx}`,
                     }
-                    await this.addComponent(slot, bundle, properties);
+                    await this._addComponent(slot, bundle, properties);
                     idx += 1;
                 }
             }
         }
 
-        async deleteComponent(slotComponent){
+        async _deleteComponent(slotComponent){
             console.log("deleting component =>", slotComponent)
             await slotComponent.destroy();
             slotComponent.destroyed = true;
@@ -777,6 +744,55 @@ console.log("It is 6:03")
             }
 
             this.updateHierarchy(slotComponent._slot);
+        }
+
+
+        async LoadItem(name, parentName){
+            const item = inventory.items[name];
+            if(!item){
+                console.log("[ERROR] no item found =>", name)
+                return null;
+            }
+            if(item.itemType !== "slot"){
+                console.log("[ERROR] item is not a slot =>", name)
+                return null;
+            }
+
+            let parentId = null;
+
+            if(parentName){
+                let parentSlot = SM.getSlotByName(parentName);
+                if(!parentSlot){
+                    console.log("[ERROR] no parent slot found =>", parentName)
+                    return null;
+                }
+                parentId = parentSlot.id;
+            }
+
+            let getItemCount = (name, parentId)=>{
+                let parentSlot = SM.getSlotOrRoot(parentId);
+                let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
+                if(sims == 0){
+                    return "";
+                }else{
+                    return `_${sims}`;
+                }
+            }
+
+            let itemData = item.data;
+            itemData.name = name+getItemCount(name, parentId)
+
+            let data = `load_slot:${parentId}|${JSON.stringify(itemData)}`
+            SM.sendOneShot(data);
+        }
+
+        async DeleteSlot(slotId){
+            let data = `slot_removed:${slotId}`
+            SM.sendOneShot(data);
+        }
+
+        GetSlotByName(slotName){
+            return SM.getAllSlots().find(x=>x.name==slotName);
         }
 
     }

@@ -71,7 +71,7 @@ export class TransformComponent extends SlotComponent {
             y: curVec.y + addY,
             z: curVec.z + addZ
         }
-        await this.update(property, newVec);
+        await this.set(property, newVec);
         return this
     }
 
@@ -85,7 +85,8 @@ export class TransformComponent extends SlotComponent {
             y: curVec.y * multY,
             z: curVec.z * multZ
         }
-        await this.update(property, newVec);
+        await this.set(property, newVec);
         return this
     }
+
 }

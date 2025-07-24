@@ -291,7 +291,7 @@ export class SlotRemoveChange {
         if (!this.slotExport) return;
 
         // Recreate the slot hierarchy
-        let data = `load_slot:${JSON.stringify(this.slotExport)}`
+        let data = `load_slot:${this.slot.parentId}|${JSON.stringify(this.slotExport)}`
         SM.sendOneShot(data);
     }
 
@@ -390,6 +390,3 @@ export class MonoBehaviorVarChange {
         return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
     }
 }
-
-// Load Inventory
-// Duplicate Slot
