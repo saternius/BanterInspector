@@ -582,7 +582,7 @@
                 editButton.className = 'edit-script-btn';
                 editButton.style.width = '100%';
                 editButton.style.padding = '8px';
-                editButton.style.backgroundColor = '#2196F3';
+                editButton.style.backgroundColor = 'rgb(42 52 60)';
                 editButton.style.color = 'white';
                 editButton.style.border = 'none';
                 editButton.style.borderRadius = '4px';
@@ -590,7 +590,8 @@
                 editButton.innerHTML = '📝 Edit Script';
                 
                 editButton.onclick = () => {
-                    const scriptItem = window.inventory.getItem(component.properties.file);
+                    console.log("editButton clicked =>", component.properties.file)
+                    const scriptItem = window.inventory.items[component.properties.file];
                     if (scriptItem && scriptItem.itemType === 'script') {
                         const event = new CustomEvent('open-script-editor', {
                             detail: {
@@ -605,11 +606,11 @@
                 };
                 
                 editButton.onmouseover = () => {
-                    editButton.style.backgroundColor = '#1976D2';
+                    editButton.style.backgroundColor = 'rgb(41 70 92)';
                 };
                 
                 editButton.onmouseout = () => {
-                    editButton.style.backgroundColor = '#2196F3';
+                    editButton.style.backgroundColor = 'rgb(42 52 60)';
                 };
                 
                 editButtonRow.appendChild(document.createElement('span')); // Empty space for button column

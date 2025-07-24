@@ -1,4 +1,3 @@
-
 this.vars = {
     "rotationSpeed": {
         "type": "number",
@@ -6,30 +5,35 @@ this.vars = {
     }
 }
 
+this.updateVars = ()=>{
+    Object.keys(this.vars).forEach(v=>{
+        this[v] = this.vars[v].value
+    })
+}
+
 this.onStart = ()=>{
-    console.log("onStart")
+    this.log("[Start]")
+    this.transform = this._slot.getTransform()
+    this.updateVars()
 }
 
 this.onUpdate = ()=>{
-    //console.log(this)
+    //this.log("update")
+    this.transform.Add("localRotation", {
+        x: this.rotationSpeed,
+        y: this.rotationSpeed,
+        z: this.rotationSpeed
+    })
 }
 
 this.onDestroy = ()=>{
-    console.log("onDestroy")
-}
-
-this.onPause = ()=>{
-
-}
-
-this.onResume = ()=>{
-
+    this.log("onDestroy")
 }
 
 this.keyDown = (key)=>{
-    console.log("keyDown", key)
+    this.log("keyDown", key)
 }
 
 this.keyUp = (key)=>{
-    console.log("keyUp", key)
+    this.log("keyUp", key)
 }

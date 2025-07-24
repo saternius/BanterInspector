@@ -310,7 +310,7 @@ console.log("It is 6:03")
             return slot;
         }
 
-        async loadItem(name, parentId){
+        async loadItem(name, parentName){
             const item = inventory.items[name];
             if(!item){
                 console.log("[ERROR] no item found =>", name)
@@ -319,6 +319,15 @@ console.log("It is 6:03")
             if(item.itemType !== "slot"){
                 console.log("[ERROR] item is not a slot =>", name)
                 return null;
+            }
+
+            if(parentName){
+                let parentSlot = SM.getSlotByName(parentName);
+                if(!parentSlot){
+                    console.log("[ERROR] no parent slot found =>", parentName)
+                    return null;
+                }
+                parentId = parentSlot.id;
             }
 
             let getItemCount = (name, parentId)=>{
@@ -549,6 +558,10 @@ console.log("It is 6:03")
 
         getSlotById(slotId) {
             return this.slotData.slotMap[slotId];
+        }
+
+        getSlotByName(slotName){
+            return this.getAllSlots().find(x=>x.name==slotName);
         }
         
 
