@@ -240,7 +240,8 @@ export class SlotAddChange {
 
     async undo() {
         if (!this.newSlotId) return;
-        let data = `slot_removed:${this.parentId}/${this.slotName}`
+        let slot_id = `${this.parentId}/${this.slotName}`
+        let data = `slot_removed:${slot_id}`
         SM.sendOneShot(data);
     }
 
@@ -388,5 +389,58 @@ export class MonoBehaviorVarChange {
 
     getUndoDescription() {
         return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
+    }
+}
+
+
+export class LoadItemChange {
+    constructor(itemName, parentId, options) {
+        this.itemName = itemName;
+        this.parentId = parentId;
+        this.options = options || {};
+        this.slotId = null;
+    }
+
+    async apply() {
+        const item = inventory.items[this.itemName];
+        if(!item){
+            console.log("[ERROR] no item found =>", this.itemName)
+            return null;
+        }
+        if(item.itemType !== "slot"){
+            console.log("[ERROR] item is not a slot =>", this.itemName)
+            return null;
+        }
+
+        let getItemCount = (name, parentId)=>{
+            let parentSlot = SM.getSlotOrRoot(parentId);
+            let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
+            if(sims == 0){
+                return "";
+            }else{
+                return `_${sims}`;
+            }
+        }
+
+        let itemData = item.data;
+        itemData.name = this.itemName+getItemCount(this.itemName, this.parentId)
+
+        let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
+        SM.sendOneShot(data);
+        this.slotId = `${this.parentId}/${itemData.name}`
+    }
+
+    async undo() {
+        if(!this.slotId) return;
+        let data = `slot_removed:${this.slotId}`
+        SM.sendOneShot(data);
+    }
+
+    getDescription() {
+        return `Load item ${this.itemName} to ${this.parentId}`;
+    }
+
+    getUndoDescription() {
+        return `Remove item ${this.itemName} from ${this.parentId}`;
     }
 }

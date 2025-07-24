@@ -727,7 +727,8 @@ export class Inventory {
      * Load slot to scene by name
      */
     async loadSlotToSceneByName(itemName) {
-        SM.loadItem(itemName, SM.selectedSlot)
+        let change = new LoadItemChange(itemName, SM.selectedSlot, {source: 'ui'})
+        await changeManager.applyChange(change);
         this.showNotification(`Adding "${itemName}" to scene..`);
     }
     

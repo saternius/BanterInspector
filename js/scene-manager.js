@@ -552,6 +552,10 @@ console.log("It is 6:03")
             return this.getSlotOrRoot(this.selectedSlot);
         }
 
+        getSlotByName(slotName){
+            return SM.getAllSlots().find(x=>x.name==slotName);
+        }
+
 
         async _addNewSlot(slotName, parentId = null) {
             if(!this.scene || !window.BS){
@@ -639,7 +643,6 @@ console.log("It is 6:03")
 
             await this.updateHierarchy(null);
         }
-
 
         async _moveSlot(slotId, newParentId, newSiblingIndex) {
             const slot = this.getSlotById(slotId);
@@ -744,55 +747,6 @@ console.log("It is 6:03")
             }
 
             this.updateHierarchy(slotComponent._slot);
-        }
-
-
-        async LoadItem(name, parentName){
-            const item = inventory.items[name];
-            if(!item){
-                console.log("[ERROR] no item found =>", name)
-                return null;
-            }
-            if(item.itemType !== "slot"){
-                console.log("[ERROR] item is not a slot =>", name)
-                return null;
-            }
-
-            let parentId = null;
-
-            if(parentName){
-                let parentSlot = SM.getSlotByName(parentName);
-                if(!parentSlot){
-                    console.log("[ERROR] no parent slot found =>", parentName)
-                    return null;
-                }
-                parentId = parentSlot.id;
-            }
-
-            let getItemCount = (name, parentId)=>{
-                let parentSlot = SM.getSlotOrRoot(parentId);
-                let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
-                if(sims == 0){
-                    return "";
-                }else{
-                    return `_${sims}`;
-                }
-            }
-
-            let itemData = item.data;
-            itemData.name = name+getItemCount(name, parentId)
-
-            let data = `load_slot:${parentId}|${JSON.stringify(itemData)}`
-            SM.sendOneShot(data);
-        }
-
-        async DeleteSlot(slotId){
-            let data = `slot_removed:${slotId}`
-            SM.sendOneShot(data);
-        }
-
-        GetSlotByName(slotName){
-            return SM.getAllSlots().find(x=>x.name==slotName);
         }
 
     }
