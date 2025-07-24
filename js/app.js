@@ -66,8 +66,8 @@
                 // Initialize inventory
                 this.inventory = new Inventory();
                 
-                // Initialize script editor
-                this.scriptEditor = new ScriptEditor();
+                // Initialize script editors map
+                this.scriptEditors = new Map();
                 
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
@@ -193,7 +193,31 @@
             
             // Handle script editor events
             window.addEventListener('open-script-editor', (event) => {
-                this.scriptEditor.open(event.detail);
+                const scriptData = event.detail;
+                const editorKey = scriptData.name;
+                
+                // Check if editor for this script already exists
+                let existingEditor = null;
+                for (const [key, editor] of this.scriptEditors) {
+                    if (editor.currentScript.name === scriptData.name) {
+                        existingEditor = editor;
+                        // Switch to existing tab
+                        navigation.switchPage(editor.pageId);
+                        return;
+                    }
+                }
+                
+                // Create new script editor instance
+                const scriptEditor = new ScriptEditor(scriptData);
+                this.scriptEditors.set(editorKey, scriptEditor);
+                scriptEditor.open();
+                
+                // Clean up when editor is closed
+                const originalClose = scriptEditor.close.bind(scriptEditor);
+                scriptEditor.close = () => {
+                    originalClose();
+                    this.scriptEditors.delete(editorKey);
+                };
             });
             
             window.addEventListener('save-script', (event) => {

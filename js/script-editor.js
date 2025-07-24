@@ -1,31 +1,37 @@
 export class ScriptEditor {
-    constructor() {
-        this.currentScript = null;
+    constructor(scriptData) {
+        this.currentScript = scriptData;
         this.editor = null;
         this.isModified = false;
         this.monoBehaviorSlots = new Map(); // Map of slotId -> MonoBehavior component
         this.selectedSlots = new Set();
         this.codemirror = null;
+        this.pageId = `script-editor-${scriptData.name.replace(/[^a-zA-Z0-9]/g, '-')}-${Date.now()}`;
+        this.pageElement = null;
+        this.navElement = null;
+        this.keydownHandler = null;
     }
     
-    open(scriptData) {
-        this.currentScript = scriptData;
+    open() {
         this.isModified = false;
         // Switch to the editor page
         this.createEditorPage();
         
         this.renderFooter();
 
-
-        navigation.addDynamicPage('script-editor', this.pageElement, this.navElement);
-        navigation.switchPage('script-editor');
+        navigation.addDynamicPage(this.pageId, this.pageElement, this.navElement);
+        navigation.switchPage(this.pageId);
         
-        window.addEventListener('page-switched', (e) => {
+        this.pageSwitchHandler = (e) => {
             console.log("page-switched", e.detail.pageId);
-            if(e.detail.pageId === 'script-editor'){
+            if(e.detail.pageId === this.pageId){
                 this.renderFooter();
+                if (this.codemirror) {
+                    setTimeout(() => this.codemirror.refresh(), 100);
+                }
             }
-        });
+        };
+        window.addEventListener('page-switched', this.pageSwitchHandler);
     }
 
     renderFooter(){
@@ -72,16 +78,10 @@ export class ScriptEditor {
     }
     
     async createEditorPage() {
-        // Remove existing page if any
-        const existingPage = document.getElementById('script-editor-page');
-        if (existingPage) {
-            existingPage.remove();
-        }
-        
         // Create the page element
         this.pageElement = document.createElement('div');
         this.pageElement.className = 'page';
-        this.pageElement.id = 'script-editor-page';
+        this.pageElement.id = `${this.pageId}-page`;
         
         this.pageElement.innerHTML = `
             <div class="script-editor-container">
@@ -115,11 +115,11 @@ export class ScriptEditor {
         // Create nav element
         this.navElement = document.createElement('button');
         this.navElement.className = 'nav-item closeable';
-        this.navElement.setAttribute('data-page', 'script-editor');
+        this.navElement.setAttribute('data-page', this.pageId);
         this.navElement.innerHTML = `
             <span class="nav-icon">📜</span>
             ${this.currentScript.name}
-            <span class="close-tab-btn" id="closeScriptEditor">×</span>
+            <span class="close-tab-btn" data-close-script="${this.pageId}">×</span>
         `;
         
         // Setup event listeners and CodeMirror
@@ -244,7 +244,7 @@ export class ScriptEditor {
         }
         
         // Close button
-        const closeBtn = document.getElementById('closeScriptEditor');
+        const closeBtn = this.pageElement.querySelector(`[data-close-script="${this.pageId}"]`);
         if (closeBtn) {
             closeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -254,8 +254,8 @@ export class ScriptEditor {
         
         // Keyboard shortcuts
         const handleKeyDown = (e) => {
-            // Only handle if script editor is active
-            if (navigation.currentPage === 'script-editor') {
+            // Only handle if this script editor is active
+            if (navigation.currentPage === this.pageId) {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     this.save();
@@ -466,7 +466,12 @@ export class ScriptEditor {
             document.removeEventListener('keydown', this.keydownHandler);
         }
         
-        navigation.removeDynamicPage('script-editor');
+        // Remove page switch event listener
+        if (this.pageSwitchHandler) {
+            window.removeEventListener('page-switched', this.pageSwitchHandler);
+        }
+        
+        navigation.removeDynamicPage(this.pageId);
     }
     
     showNotification(message) {
