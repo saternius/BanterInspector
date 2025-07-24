@@ -28,7 +28,7 @@
             this.spacePropsPanel = null;
             this.componentMenu = null;
             this.inventory = null;
-            this.scriptEditor = null;
+            this.scriptEditors = null;
             this.initialized = false;
         }
 
@@ -73,7 +73,7 @@
                 window.spacePropsPanel = this.spacePropsPanel;
                 window.inventory = this.inventory;
                 window.navigation = this.navigation;
-                window.scriptEditor = this.scriptEditor;
+                window.scriptEditors = this.scriptEditors;
                 
                 // Initial render
                 this.hierarchyPanel.render();

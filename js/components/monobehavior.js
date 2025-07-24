@@ -138,9 +138,11 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     refresh(){
         console.log("refreshing script [", this.scriptContext._running, "]..")
-        if(!this.scriptContext._running) return;
-        this.scriptContext._running = false;
-        this.scriptContext.onDestroy();
+        if(this.scriptContext._running){
+            this.scriptContext._running = false;
+            this.scriptContext.onDestroy();
+        }
+        
         this.loadScript(this.properties.file);
     }
 
