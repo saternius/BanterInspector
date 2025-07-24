@@ -2114,3 +2114,11 @@ body {
     font-weight: bold;
     margin-right: 4px;
 }
+
+.cm-s.monokai{
+    height: 100%;
+}
+
+.cm-s-monokai.CodeMirror{
+    height: 100%;
+}

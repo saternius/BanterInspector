@@ -17,6 +17,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(this.properties.file && this.properties.file.length > 0){
             this.loadScript(this.properties.file);
         }
+        this.setId(this.id.replace("undefined","MonoBehavior"));
         return this;
     }
 

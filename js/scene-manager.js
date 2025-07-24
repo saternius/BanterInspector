@@ -8,7 +8,7 @@ console.log("It is 6:03")
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;
     const { loadMockSlotData } = await import(`${basePath}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap } = await import( `${basePath}/components/index.js`);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${basePath}/components/index.js`);
 
     export class SceneManager {
         constructor() {
@@ -23,9 +23,7 @@ console.log("It is 6:03")
             this.loaded = false;
         }
 
-        /**
-         * Initialize the scene manager
-         */
+
         async initialize() {
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
@@ -58,8 +56,6 @@ console.log("It is 6:03")
                         }
                         console.log("hierarchy =>", hierarchy)
                         this.loadHierarchy(hierarchy);
-                        // console.log('Setting up space state handlers...');
-                        // this.setupSpaceStateHandlers();
                     } catch (error) {
                         console.error('Error gathering scene hierarchy:', error);
                     }
@@ -72,6 +68,7 @@ console.log("It is 6:03")
             window.scene = this.scene
         }
 
+        // Resets the SpaceProperties
         async reset(){
             if(localhost){
                 localStorage.removeItem('lastSpaceState');
@@ -84,6 +81,7 @@ console.log("It is 6:03")
             await this.initialize();
         }
 
+        // This gathers the hierarchy of the scene via Unity GameObjects
         async gatherSceneHierarchy(){
             console.log("gathering SceneHierarchy")
             let rootObj = await this.scene.Find("Root");
@@ -134,6 +132,61 @@ console.log("It is 6:03")
             return rootSlot;
         }
 
+        // This gathers the hierarchy of the scene from the root slot
+        async gatherSceneHierarchyBySlot(){
+            let rootSlot = this.getRootSlot();
+            let createSlotHierarchy = (slot)=>{
+                let h = {
+                    name: slot.name,
+                    components: slot.components.map(c=>c.id),
+                    children: slot.children.map(c=>createSlotHierarchy(c))
+                }
+                return h;
+            }
+            let hierarchy = createSlotHierarchy(rootSlot);
+            return hierarchy;
+        }
+
+
+        getSlotSpaceProperties(slot){
+            let props = {}
+            let getSubSlotProps = (slot)=>{
+                props[`__${slot.id}/active:slot`] = slot.active
+                props[`__${slot.id}/persistent:slot`] = slot.persistent
+                props[`__${slot.id}/name:slot`] = slot.name
+                
+                slot.components.forEach(component=>{
+                    Object.keys(component.properties).forEach(prop=>{
+                        props[`__${slot.id}/${component.type}/${prop}:${component.id}`] = component.properties[prop]
+                    })
+                })
+
+                slot.children.forEach(child=>{
+                    getSubSlotProps(child)
+                })
+            }
+
+            getSubSlotProps(slot)
+            return props
+        }
+
+
+        // Updates the hierarchy of the scene from the root slot
+        async updateHierarchy(slot = null){  
+            let h = await this.gatherSceneHierarchyBySlot();
+            this.setSpaceProperty("hierarchy", h, false);
+
+            slot = slot || this.getRootSlot();
+            if(slot){
+                this.selectSlot(slot.id);
+                if(slot.parentId){
+                    this.expandedNodes.add(slot.parentId);
+                }
+            }
+        }
+
+
+        // Loads all the Slots on initialization
         async loadHierarchy(hierarchy){
             console.log("loading hierarchy =>", hierarchy)
             if(!hierarchy){ return null}
@@ -142,8 +195,7 @@ console.log("It is 6:03")
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
                 let gO = await this.scene.FindByPath(path);
                 if(!gO){
-                    console.log("no game object found at path =>", path)
-                    return null;
+                    return await this.loadHistoricalSlot(h, parent_path)
                 }
 
                 const slot = await new Slot().init({
@@ -176,18 +228,31 @@ console.log("It is 6:03")
                         //console.log("component =>", component)
                         let componentClass = componentBSTypeMap[component.type]
                         //console.log("componentClass =>", componentClass)
-                        let slotComponent = await new componentClass().init(slot, component);
+                        let props = this.getHistoricalProps(component_ref).props
+                        let slotComponent = await new componentClass().init(slot, component, props);
                         //console.log("slotComponent =>", slotComponent)
                         slotComponent.setId(component_ref);
                         slot.components.push(slotComponent);
                     }
                 }
 
+                //Add any MonoBehaviors
+                h.components.forEach(async component_ref=>{
+                    //console.log("component_ref =>", component_ref)
+                    if(component_ref.startsWith("MonoBehavior")){
+                        //console.log("MonoBehavior Spotted =>", component_ref)
+                        let props = this.getHistoricalProps(component_ref).props
+                        let slotComponent = await new MonoBehaviorComponent().init(slot, null, props)
+                        //console.log("slotComponent =>", slotComponent)
+                        slotComponent.setId(component_ref);
+                        slot.components.push(slotComponent);
+                    }
+                })
+
                 for(let child of h.children){
                     let childSlot = await hierarchyToSlot(child, slot.id);
                     await childSlot.setParent(slot);
                 }
-                slot.children = slot.children.filter(c => c);
                 return slot;
             }
 
@@ -198,10 +263,101 @@ console.log("It is 6:03")
             inspectorApp.hierarchyPanel.render()
         }
 
+
+        //Creates a slot from the inventory schema
+        async loadSlot(slotData, parentId){
+
+            let loadSubSlot = async (item, parentId)=>{ 
+                const newSlot = await new Slot().init({
+                    name: item.name,
+                    parentId: parentId
+                });
     
-        /**
-         * Initialize expanded nodes
-         */
+    
+                for(let component of item.components){
+                    await this.addComponent(newSlot, component.type, component.properties);
+                }
+    
+                item.children.forEach(async (child) => {
+                    let childSlot = await loadSubSlot(child, newSlot.id);
+                    await childSlot.setParent(newSlot);
+                });
+    
+                return newSlot;
+            }
+
+
+            let parentSlot = (parentId)? this.getSlotOrRoot(parentId) : this.getSlotOrRoot(slotData.parentId);
+            let slot = await loadSubSlot(slotData, parentId);
+            await slot.setParent(parentSlot);
+
+            this.expandedNodes.add(parentId);
+            this.selectSlot(slot.id);
+            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+                detail: { slotId: slot.id }
+            }));
+            await this.updateHierarchy(slot);
+
+            let spaceProps = this.getSlotSpaceProperties(slot)
+            this.scene.SetPublicSpaceProps(spaceProps)
+
+            if(localhost){
+                Object.keys(spaceProps).forEach(key=>{
+                    this.scene.spaceState.public[key] = spaceProps[key]
+                })
+                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
+            }
+        }
+
+        getHistoricalProps(component_ref){
+            let type = component_ref.split("_")[0]
+            let space_keys = Object.keys(this.scene.spaceState.public)
+            let props = {}
+            space_keys.forEach(key=>{
+                // console.log("key =>", key, component_ref)
+                if(key.endsWith(component_ref)){
+                    let path = key.split(":")[0].split("/")
+                    console.log("path =>", path)
+                    let prop = path[path.length-1]
+                    props[prop] = this.scene.spaceState.public[key]
+                }
+            })
+            return{
+                type: type,
+                props: props
+            }
+        }
+        
+
+
+        // Creates and hydrates a slot using the SpaceProperties
+        async loadHistoricalSlot(hierarchy, parentId){
+            
+            console.log("loading historical slot =>", hierarchy)
+            const slot = await new Slot().init({
+                name: hierarchy.name,
+                parentId: parentId,
+            });
+
+            for(let i=0; i<hierarchy.components.length; i++){
+                let component_ref = hierarchy.components[i]
+                let hist = this.getHistoricalProps(component_ref)
+                let componentClass = componentTypeMap[hist.type]
+                let props = hist.props
+                let slotComponent = await new componentClass().init(slot, null, props)
+                slotComponent.setId(component_ref);
+                slot.components.push(slotComponent);
+            }
+
+            hierarchy.children.forEach(async (child)=>{
+                let childSlot = await this.loadHistoricalSlot(child, slot.id);
+                await childSlot.setParent(slot);
+            })
+
+            return slot;
+        }
+
+    
         initializeExpandedNodes() {
             // Expand root nodes by default
             this.slotData.slots.forEach(slot => {
@@ -209,10 +365,7 @@ console.log("It is 6:03")
             });
         }
 
-    
-        /**
-         * Handle space state changes
-         */
+
         handleSpaceStateChange(event) {
             const { changes } = event.detail;
             changes.forEach(async (change) => {
@@ -305,9 +458,6 @@ console.log("It is 6:03")
         }
 
 
-        /**
-         * Set space property
-         */
         async setSpaceProperty(key, value, isProtected) {
             if (!this.scene) return;
             console.log("[setSpaceProperty]", key, value, isProtected)
@@ -341,21 +491,12 @@ console.log("It is 6:03")
             }
         }
 
-
-        
-
     
-        /**
-         * Get the component for a slot
-         */
         getSlotComponentById(componentId){
             return this.slotData.componentMap[componentId];
         }
 
         
-        /**
-         * Toggle node expansion
-         */
         toggleNodeExpansion(slotId) {
             if (this.expandedNodes.has(slotId)) {
                 this.expandedNodes.delete(slotId);
@@ -364,9 +505,7 @@ console.log("It is 6:03")
             }
         }
 
-        /**
-         * Select slot
-         */
+
         selectSlot(slotId) {
             this.selectedSlot = slotId;
 
@@ -381,16 +520,11 @@ console.log("It is 6:03")
         }
 
 
-        /**
-         * Get slot by ID
-         */
         getSlotById(slotId) {
             return this.slotData.slotMap[slotId];
         }
         
-        /**
-         * Get all slots as a flat array
-         */
+
         getAllSlots() {
             return Object.values(this.slotData.slotMap || {});
         }
@@ -411,26 +545,7 @@ console.log("It is 6:03")
             return this.getSlotOrRoot(this.selectedSlot);
         }
 
-        
 
-
-        async updateHierarchy(slot = null){
-            let h = await this.gatherSceneHierarchy();
-            this.setSpaceProperty("hierarchy", h, false);
-
-            slot = slot || this.getRootSlot();
-            if(slot){
-                this.selectSlot(slot.id);
-                if(slot.parentId){
-                    this.expandedNodes.add(slot.parentId);
-                }
-            }
-        }
-
-
-        /**
-         * Add new slot
-         */
         async addNewSlot(slotName, parentId = null) {
             if(!this.scene || !window.BS){
                 console.log("NO SCENE AVAILABLE")
@@ -463,9 +578,6 @@ console.log("It is 6:03")
             await this.updateHierarchy(newSlot);
         }
 
-        /**
-         * Delete slot
-         */
         async deleteSlot(slotId) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
@@ -521,9 +633,7 @@ console.log("It is 6:03")
             await this.updateHierarchy(null);
         }
 
-        /**
-         * Reparent a slot to a new parent
-         */
+
         async moveSlot(slotId, newParentId, newSiblingIndex) {
             const slot = this.getSlotById(slotId);
             if (!slot) return;
@@ -561,17 +671,15 @@ console.log("It is 6:03")
             slot.components.push(slotComponent);
             this.slotData.componentMap[slotComponent.id] = slotComponent;
 
-            await this.handleComponentBundles(slot, slotComponent);
-
             // Refresh properties panel
             if (window.inspectorApp?.propertiesPanel) {
                 window.inspectorApp.propertiesPanel.render(slot.id);
             }
-            
+            await this.updateHierarchy(slot);
             return slotComponent;
         }
 
-        async handleComponentBundles(slot, slotComponent){
+        async handleComponentBundles(slot, slotComponent){ //TODO: make it so that this only triggers on the component menu
             let bundles = componentBundleMap[slotComponent.type];
             let idx = parseInt(slotComponent.id.split("_")[1]);
             if(bundles){
@@ -631,41 +739,6 @@ console.log("It is 6:03")
             this.updateHierarchy(slotComponent._slot);
         }
 
-        async createSlotHierarchy(item, parentId){
-            //create a new slot
-            const newSlot = await new Slot().init({
-                name: item.name,
-                parentId: parentId
-            });
-
-
-            //create new components
-            for(let component of item.components){
-                await this.addComponent(newSlot, component.type, component.properties);
-            }
-
-            item.children.forEach(async (child) => {
-                let childSlot = await this.createSlotHierarchy(child, newSlot.id);
-                await childSlot.setParent(newSlot);
-            });
-
-            return newSlot;
-        }
-
-
-        async loadSlot(slotData, parentId){
-            let parentSlot = (parentId)? this.getSlotOrRoot(parentId) : this.getSlotOrRoot(slotData.parentId);
-            let slot = await this.createSlotHierarchy(slotData, parentId);
-            await slot.setParent(parentSlot);
-
-            this.expandedNodes.add(parentId);
-            this.selectSlot(slot.id);
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slot.id }
-            }));
-            await this.updateHierarchy(slot);
-        }
- 
     }
 
     // Create singleton instance

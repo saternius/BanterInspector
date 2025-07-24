@@ -48,8 +48,7 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterAttachedObject,
     BS.ComponentType.BanterGLTF,
     BS.ComponentType.BanterAssetBundle,
-    BS.ComponentType.BanterPortal,
-    MonoBehaviorComponent
+    BS.ComponentType.BanterPortal
 ]);
 
 export const componentTypeMap = {
