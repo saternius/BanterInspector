@@ -757,26 +757,158 @@ export class Inventory {
      * Create a new script
      */
     async createNewScript() {
-        // Ask user for script name
-        const scriptName = prompt('Enter a name for the new script (e.g., MyScript.js):');
+        // Show modal for script name input
+        this.showScriptNameModal();
+    }
+    
+    /**
+     * Show modal for script name input
+     */
+    showScriptNameModal() {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        modalOverlay.id = 'scriptNameModal';
         
-        if (!scriptName || scriptName.trim() === '') {
-            return;
-        }
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
         
-        // Ensure it ends with .js
-        const finalName = scriptName.endsWith('.js') ? scriptName : scriptName + '.js';
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>Create New Script</h3>
+                <button class="modal-close-btn" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="scriptNameInput">Script Name:</label>
+                <input type="text" id="scriptNameInput" placeholder="MyScript.js" autocomplete="off">
+                <div class="modal-hint">Enter a name for your script (e.g., PlayerController.js)</div>
+                <div class="modal-error" id="modalError" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-create-btn" id="modalCreateBtn">Create Script</button>
+            </div>
+        `;
         
-        // Check if name conflicts with existing script
-        if (this.items[finalName]) {
-            const overwrite = confirm(
-                `A script named "${finalName}" already exists. Do you want to override the existing file?`
-            );
-            if (!overwrite) {
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Focus on input
+        const input = modalContent.querySelector('#scriptNameInput');
+        setTimeout(() => input.focus(), 100);
+        
+        // Setup event listeners
+        const closeBtn = modalContent.querySelector('#modalCloseBtn');
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const createBtn = modalContent.querySelector('#modalCreateBtn');
+        const errorDiv = modalContent.querySelector('#modalError');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        const handleCreate = () => {
+            const scriptName = input.value.trim();
+            
+            if (!scriptName) {
+                errorDiv.textContent = 'Please enter a script name';
+                errorDiv.style.display = 'block';
                 return;
             }
-        }
+            
+            // Ensure it ends with .js
+            const finalName = scriptName.endsWith('.js') ? scriptName : scriptName + '.js';
+            
+            // Check if name conflicts with existing script
+            if (this.items[finalName]) {
+                this.showOverwriteModal(finalName, () => {
+                    closeModal();
+                    this.finalizeScriptCreation(finalName);
+                });
+            } else {
+                closeModal();
+                this.finalizeScriptCreation(finalName);
+            }
+        };
         
+        // Event listeners
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        createBtn.addEventListener('click', handleCreate);
+        
+        // Enter key to create
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleCreate();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    /**
+     * Show overwrite confirmation modal
+     */
+    showOverwriteModal(fileName, onConfirm) {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content modal-confirm';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>File Already Exists</h3>
+            </div>
+            <div class="modal-body">
+                <p>A script named "<strong>${fileName}</strong>" already exists.</p>
+                <p>Do you want to override the existing file?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-overwrite-btn" id="modalOverwriteBtn">Overwrite</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Setup event listeners
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const overwriteBtn = modalContent.querySelector('#modalOverwriteBtn');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        cancelBtn.addEventListener('click', closeModal);
+        overwriteBtn.addEventListener('click', () => {
+            closeModal();
+            onConfirm();
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    /**
+     * Finalize script creation after name validation
+     */
+    finalizeScriptCreation(finalName) {
         // Default script template
         const defaultScript = `this.vars = {
     "exampleVar": {
