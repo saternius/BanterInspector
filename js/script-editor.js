@@ -12,15 +12,18 @@ export class ScriptEditor {
         this.keydownHandler = null;
     }
     
-    open() {
+    async open() {
         this.isModified = false;
         // Switch to the editor page
-        this.createEditorPage();
+        await this.createEditorPage();
         
-        this.renderFooter();
-
         navigation.addDynamicPage(this.pageId, this.pageElement, this.navElement);
         navigation.switchPage(this.pageId);
+        
+        // Render footer after page is added to DOM
+        setTimeout(() => {
+            this.renderFooter();
+        }, 0);
         
         this.pageSwitchHandler = (e) => {
             console.log("page-switched", e.detail.pageId);
@@ -37,7 +40,7 @@ export class ScriptEditor {
     renderFooter(){
         this.findMonoBehaviorSlots();
         console.log("Rendering footer...");
-        const footer = document.querySelector('.script-editor-footer');
+        const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
             footer.innerHTML = `
                 <div class="footer-info">
@@ -48,7 +51,7 @@ export class ScriptEditor {
                 <div class="monobehavior-controls">
                     <div class="slot-selector-panel">
                         <div class="slot-selector-title">MonoBehavior Instances:</div>
-                        <div class="slot-selector-buttons" id="slotSelectorButtons">
+                        <div class="slot-selector-buttons" id="slotSelectorButtons-${this.pageId}">
                             ${Array.from(this.monoBehaviorSlots.entries()).map(([slotId, component]) => {
                                 const slot = SM.getSlotById(slotId);
                                 const slotName = slot?.name || 'Unknown Slot';
@@ -58,19 +61,19 @@ export class ScriptEditor {
                         </div>
                     </div>
                     <div class="playback-controls">
-                        <button class="control-btn play-btn" id="playBtn" title="Start" ${!this.canRun() ? 'disabled' : ''}>
+                        <button class="control-btn play-btn" id="playBtn-${this.pageId}" title="Start" ${!this.canRun() ? 'disabled' : ''}>
                             ▶️
                         </button>
                         
-                        <button class="control-btn stop-btn" id="stopBtn" title="Stop" disabled>
+                        <button class="control-btn stop-btn" id="stopBtn-${this.pageId}" title="Stop" disabled>
                             ⏹️
                         </button>
                     </div>
                 </div>
                 ` : ''}
-                <div class="console-output" id="consoleOutput" style="display: ${this.monoBehaviorSlots.size > 0 ? 'block' : 'none'};">
+                <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorSlots.size > 0 ? 'block' : 'none'};">
                     <div class="console-header">Console Output</div>
-                    <div class="console-content" id="consoleContent"></div>
+                    <div class="console-content" id="consoleContent-${this.pageId}"></div>
                 </div>
             `;
         }
@@ -90,17 +93,17 @@ export class ScriptEditor {
                     <div class="editor-title">
                         <span class="editor-icon">📜</span>
                         <h2>Editing: ${this.currentScript.name}</h2>
-                        <span class="modified-indicator" id="modifiedIndicator" style="display: none;">●</span>
+                        <span class="modified-indicator" id="modifiedIndicator-${this.pageId}" style="display: none;">●</span>
                     </div>
                     <div class="editor-controls">
-                        <button class="save-btn" id="saveBtn">
+                        <button class="save-btn" id="saveBtn-${this.pageId}">
                             💾 Save
                         </button>
                     </div>
                 </div>
                 <div class="script-editor-content">
-                    <div class="code-editor-wrapper" id="codeEditorWrapper">
-                        <textarea class="code-editor" id="codeEditor">${this.escapeHtml(this.currentScript.content)}</textarea>
+                    <div class="code-editor-wrapper" id="codeEditorWrapper-${this.pageId}">
+                        <textarea class="code-editor" id="codeEditor-${this.pageId}">${this.escapeHtml(this.currentScript.content)}</textarea>
                     </div>
                 </div>
                 <div class="script-editor-footer">
@@ -124,7 +127,10 @@ export class ScriptEditor {
         `;
         
         // Setup event listeners and CodeMirror
-        await this.initializeCodeMirror();
+        setTimeout(() => {
+            this.setupEventListeners();
+            this.initializeCodeMirror();
+        }, 100);
     }
     
     async initializeCodeMirror() {
@@ -163,7 +169,7 @@ export class ScriptEditor {
         ]);
         
         // Initialize CodeMirror
-        const textarea = document.getElementById('codeEditor');
+        const textarea = document.getElementById(`codeEditor-${this.pageId}`);
         if (textarea && window.CodeMirror) {
             this.codemirror = CodeMirror.fromTextArea(textarea, {
                 mode: 'javascript',
@@ -197,7 +203,7 @@ export class ScriptEditor {
             // Track modifications
             this.codemirror.on('change', () => {
                 this.isModified = true;
-                document.getElementById('modifiedIndicator').style.display = 'inline';
+                document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'inline';
             });
             
             // Set initial size
@@ -221,15 +227,15 @@ export class ScriptEditor {
         // CodeMirror is now initialized separately
         
         // Save button
-        const saveBtn = document.getElementById('saveBtn');
+        const saveBtn = document.getElementById(`saveBtn-${this.pageId}`);
         if (saveBtn) {
             saveBtn.addEventListener('click', () => this.save());
         }
         
         // Playback controls
-        const playBtn = document.getElementById('playBtn');
+        const playBtn = document.getElementById(`playBtn-${this.pageId}`);
         // const pauseBtn = document.getElementById('pauseBtn');
-        const stopBtn = document.getElementById('stopBtn');
+        const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
         
         if (playBtn) {
             playBtn.addEventListener('click', () => this.play());
@@ -244,7 +250,7 @@ export class ScriptEditor {
         }
         
         // Close button
-        const closeBtn = this.pageElement.querySelector(`[data-close-script="${this.pageId}"]`);
+        const closeBtn = this.navElement.querySelector(`[data-close-script="${this.pageId}"]`);
         if (closeBtn) {
             closeBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -266,7 +272,7 @@ export class ScriptEditor {
         document.addEventListener('keydown', handleKeyDown);
         
         // Slot selector buttons
-        const slotButtons = document.querySelectorAll('.slot-selector-btn');
+        const slotButtons = this.pageElement.querySelectorAll('.slot-selector-btn');
         slotButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const slotId = btn.dataset.slotId;
@@ -292,7 +298,7 @@ export class ScriptEditor {
         // Update local content
         this.currentScript.content = newContent;
         this.isModified = false;
-        document.getElementById('modifiedIndicator').style.display = 'none';
+        document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
         
         // Show save notification
         this.showNotification('Script saved successfully');
@@ -327,12 +333,12 @@ export class ScriptEditor {
         }
         
         // Update UI
-        document.querySelectorAll('.slot-selector-btn').forEach(btn => {
+        this.pageElement.querySelectorAll('.slot-selector-btn').forEach(btn => {
             btn.classList.toggle('selected', this.selectedSlots.has(btn.dataset.slotId));
         });
         
         // Enable/disable playback controls
-        const playBtn = document.getElementById('playBtn');
+        const playBtn = document.getElementById(`playBtn-${this.pageId}`);
         if (playBtn) {
             playBtn.disabled = !this.canRun();
         }
@@ -411,8 +417,8 @@ export class ScriptEditor {
 
     
     updatePlaybackButtons(isPaused = false) {
-        const playBtn = document.getElementById('playBtn');
-        const stopBtn = document.getElementById('stopBtn');
+        const playBtn = document.getElementById(`playBtn-${this.pageId}`);
+        const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
         if(playBtn){
             playBtn.disabled = !this.canRun();
         }
@@ -424,7 +430,7 @@ export class ScriptEditor {
     
     log(type, message, slotName) {
         console.log("logging=>", type, message, slotName);
-        const consoleContent = document.getElementById('consoleContent');
+        const consoleContent = document.getElementById(`consoleContent-${this.pageId}`);
         if (!consoleContent) return;
         
         const entry = document.createElement('div');
@@ -443,7 +449,7 @@ export class ScriptEditor {
     }
     
     clearConsole() {
-        const consoleContent = document.getElementById('consoleContent');
+        const consoleContent = document.getElementById(`consoleContent-${this.pageId}`);
         if (consoleContent) {
             consoleContent.innerHTML = '';
         }
