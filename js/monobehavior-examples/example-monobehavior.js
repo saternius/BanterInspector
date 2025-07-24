@@ -1,6 +1,6 @@
 
 this.vars = {
-    "rotationSpeed": {
+    "exampleVar": {
         "type": "number",
         "default": 1
     }
@@ -11,14 +11,7 @@ this.onStart = ()=>{
 }
 
 this.onUpdate = ()=>{
-    console.log(this)
-}
-
-this.onPause = ()=>{
-}
-
-this.onResume = ()=>{
-
+    console.log("onUpdate")
 }
 
 this.onDestroy = ()=>{
