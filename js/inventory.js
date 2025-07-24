@@ -184,6 +184,10 @@ export class Inventory {
                             Export
                         </button>
                     ` : ''}
+                    <button class="new-script-button" id="newScriptBtn">
+                        <span class="new-icon">📜</span>
+                        New Script
+                    </button>
                     <button class="upload-button" id="uploadFileBtn">
                         <span class="upload-icon">⬇️</span>
                         Import
@@ -242,6 +246,12 @@ export class Inventory {
         const addToSceneBtn = inventoryContainer.querySelector('#addToSceneBtn');
         if (addToSceneBtn) {
             addToSceneBtn.addEventListener('click', () => this.loadSlotToScene());
+        }
+        
+        // Add event listener for new script button
+        const newScriptBtn = inventoryContainer.querySelector('#newScriptBtn');
+        if (newScriptBtn) {
+            newScriptBtn.addEventListener('click', () => this.createNewScript());
         }
     }
     
@@ -741,6 +751,84 @@ export class Inventory {
             }
         });
         window.dispatchEvent(event);
+    }
+    
+    /**
+     * Create a new script
+     */
+    async createNewScript() {
+        // Ask user for script name
+        const scriptName = prompt('Enter a name for the new script (e.g., MyScript.js):');
+        
+        if (!scriptName || scriptName.trim() === '') {
+            return;
+        }
+        
+        // Ensure it ends with .js
+        const finalName = scriptName.endsWith('.js') ? scriptName : scriptName + '.js';
+        
+        // Check if name conflicts with existing script
+        if (this.items[finalName]) {
+            const overwrite = confirm(
+                `A script named "${finalName}" already exists. Do you want to override the existing file?`
+            );
+            if (!overwrite) {
+                return;
+            }
+        }
+        
+        // Default script template
+        const defaultScript = `this.vars = {
+    "exampleVar": {
+        "type": "number",
+        "default": 1
+    }
+}
+
+this.onStart = ()=>{
+    console.log("onStart")
+}
+
+this.onUpdate = ()=>{
+    console.log("onUpdate")
+}
+
+this.onDestroy = ()=>{
+    console.log("onDestroy")
+}
+
+this.keyDown = (key)=>{
+    console.log("keyDown", key)
+}
+
+this.keyUp = (key)=>{
+    console.log("keyUp", key)
+}`;
+        
+        // Create script item
+        const scriptItem = {
+            author: SM.scene?.localUser?.name || 'Unknown',
+            name: finalName,
+            created: Date.now(),
+            itemType: 'script',
+            data: defaultScript
+        };
+        
+        // Save to localStorage
+        const storageKey = `inventory_${finalName}`;
+        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
+        
+        // Update local items
+        this.items[finalName] = scriptItem;
+        
+        // Re-render
+        this.render();
+        
+        // Show success message
+        this.showNotification(`Created new script "${finalName}"`);
+        
+        // Open the script editor immediately
+        this.openScriptEditor(finalName);
     }
     
 }
