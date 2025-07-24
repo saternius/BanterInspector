@@ -317,7 +317,7 @@ console.log("It is 6:03")
                 // console.log("key =>", key, component_ref)
                 if(key.endsWith(component_ref)){
                     let path = key.split(":")[0].split("/")
-                    console.log("path =>", path)
+                    //console.log("path =>", path)
                     let prop = path[path.length-1]
                     props[prop] = this.scene.spaceState.public[key]
                 }

@@ -253,7 +253,7 @@ body {
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: #00a8cc;
+    background: #3e3e3e;
     border: 1px solid #00d4ff;
     color: #ffffff;
     border-radius: 4px;
@@ -392,8 +392,8 @@ body {
 .action-btn {
     flex: 1;
     padding: 6px 12px;
-    background: #00d4ff;
-    color: #000;
+    background: #3e3e3e;
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
