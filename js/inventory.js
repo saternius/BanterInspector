@@ -172,12 +172,6 @@ export class Inventory {
             <div class="inventory-header">
                 <h2>Saved Items (${Object.keys(this.items).length})</h2>
                 <div class="inventory-actions">
-                    ${this.selectedItem && this.items[this.selectedItem]?.itemType !== 'script' ? `
-                        <button class="add-to-scene-button" id="addToSceneBtn">
-                            <span class="add-icon">➕</span>
-                            Add to Scene
-                        </button>
-                    ` : ''}
                     ${this.selectedItem ? `
                         <button class="export-button" id="exportBtn">
                             <span class="export-icon">⬆️</span>
@@ -227,6 +221,15 @@ export class Inventory {
             });
         });
         
+        // Add event listeners for add to scene buttons
+        inventoryContainer.querySelectorAll('.add-to-scene-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                this.loadSlotToSceneByName(itemName);
+            });
+        });
+        
         // Add event listeners for file upload
         const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
         const fileInput = inventoryContainer.querySelector('#fileInput');
@@ -240,12 +243,6 @@ export class Inventory {
         const exportBtn = inventoryContainer.querySelector('#exportBtn');
         if (exportBtn) {
             exportBtn.addEventListener('click', () => this.exportSelectedItem());
-        }
-        
-        // Add event listener for add to scene button
-        const addToSceneBtn = inventoryContainer.querySelector('#addToSceneBtn');
-        if (addToSceneBtn) {
-            addToSceneBtn.addEventListener('click', () => this.loadSlotToScene());
         }
         
         // Add event listener for new script button
@@ -303,7 +300,13 @@ export class Inventory {
                             ✏️ Edit
                         </button>
                     </div>
-                ` : ''}
+                ` : `
+                    <div class="item-actions">
+                        <button class="action-btn add-to-scene-btn" data-item-name="${key}">
+                            ➕ Add to Scene
+                        </button>
+                    </div>
+                `}
             </div>
         `;
     }
@@ -727,6 +730,18 @@ export class Inventory {
         if (!this.selectedItem) return;
         
         const item = this.items[this.selectedItem];
+        if (!item || item.itemType !== 'slot') return;
+        console.log("loading slot =>", item.data)
+        await SM.loadSlot(item.data, SM.selectedSlot)
+        // Show success message
+        this.showNotification(`Added "${item.name}" to scene`);
+    }
+    
+    /**
+     * Load slot to scene by name
+     */
+    async loadSlotToSceneByName(itemName) {
+        const item = this.items[itemName];
         if (!item || item.itemType !== 'slot') return;
         console.log("loading slot =>", item.data)
         await SM.loadSlot(item.data, SM.selectedSlot)
