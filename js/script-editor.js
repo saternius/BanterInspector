@@ -68,6 +68,7 @@ export class ScriptEditor {
                 </div>
             `;
         }
+        this.setupEventListeners();
         this.updatePlaybackButtons();
     }
     
@@ -123,7 +124,6 @@ export class ScriptEditor {
         `;
         
         // Setup event listeners and CodeMirror
-        setTimeout(() => this.setupEventListeners(), 0);
         await this.initializeCodeMirror();
     }
     
