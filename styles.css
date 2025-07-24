@@ -807,6 +807,16 @@ body {
     border-color: #5a3030;
 }
 
+.action-button.save-button {
+    background: #203a20;
+    border-color: #254a25;
+}
+
+.action-button.save-button:hover {
+    background: #254a25;
+    border-color: #305a30;
+}
+
 .button-icon {
     font-size: 16px;
     font-weight: bold;

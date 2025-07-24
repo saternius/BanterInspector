@@ -5,7 +5,6 @@
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
-    const { deepClone } = await import(`${basePath}/utils.js`);
     const { changeManager } = await import(`${basePath}/change-manager.js`);
     const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/change-types.js`);
 
@@ -15,6 +14,7 @@
             this.searchInput = document.getElementById('searchInput');
             this.addChildBtn = document.getElementById('addChildSlotBtn');
             this.deleteBtn = document.getElementById('deleteSlotBtn');
+            this.saveBtn = document.getElementById('saveSlotBtn');
             
             this.searchTerm = '';
             this.draggedSlotId = null;
@@ -87,6 +87,25 @@
                     console.log("deleting slot =>", SM.selectedSlot)
                     const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
                     changeManager.applyChange(change);
+                }
+            });
+
+            // Save button
+            this.saveBtn.addEventListener('click', async () => {
+                if (!SM.selectedSlot) {
+                    alert('Please select a slot to save');
+                    return;
+                }
+                
+                const slot = SM.getSlotById(SM.selectedSlot);
+                if (!slot) return;
+                
+                // Export the slot
+                const exportedSlot = slot.export();
+                
+                // Use the inventory instance to save the slot
+                if (window.inspectorApp && window.inspectorApp.inventory) {
+                    await window.inspectorApp.inventory.addItem(exportedSlot, 'slot');
                 }
             });
         }
