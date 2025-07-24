@@ -570,6 +570,58 @@
                 });
             }
             
+            // Add Edit Script button
+            if (component.properties.file) {
+                const editButtonRow = document.createElement('div');
+                editButtonRow.className = 'property-row';
+                editButtonRow.style.marginTop = '12px';
+                editButtonRow.style.paddingTop = '12px';
+                editButtonRow.style.borderTop = '1px solid #333';
+                
+                const editButton = document.createElement('button');
+                editButton.className = 'edit-script-btn';
+                editButton.style.width = '100%';
+                editButton.style.padding = '8px';
+                editButton.style.backgroundColor = '#2196F3';
+                editButton.style.color = 'white';
+                editButton.style.border = 'none';
+                editButton.style.borderRadius = '4px';
+                editButton.style.cursor = 'pointer';
+                editButton.innerHTML = '📝 Edit Script';
+                
+                editButton.onclick = () => {
+                    const scriptItem = window.inventory.getItem(component.properties.file);
+                    if (scriptItem && scriptItem.itemType === 'script') {
+                        const event = new CustomEvent('open-script-editor', {
+                            detail: {
+                                name: component.properties.file,
+                                content: scriptItem.data,
+                                author: scriptItem.author,
+                                created: scriptItem.created
+                            }
+                        });
+                        window.dispatchEvent(event);
+                    }
+                };
+                
+                editButton.onmouseover = () => {
+                    editButton.style.backgroundColor = '#1976D2';
+                };
+                
+                editButton.onmouseout = () => {
+                    editButton.style.backgroundColor = '#2196F3';
+                };
+                
+                editButtonRow.appendChild(document.createElement('span')); // Empty space for button column
+                editButtonRow.appendChild(document.createElement('span')); // Empty space for label column
+                const buttonContainer = document.createElement('div');
+                buttonContainer.className = 'property-value';
+                buttonContainer.appendChild(editButton);
+                editButtonRow.appendChild(buttonContainer);
+                
+                body.appendChild(editButtonRow);
+            }
+            
             section.appendChild(header);
             section.appendChild(body);
             
