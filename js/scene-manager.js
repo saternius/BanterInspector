@@ -307,6 +307,33 @@ console.log("It is 6:03")
                 })
                 localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
             }
+            return slot;
+        }
+
+        async loadItem(name, parentId){
+            const item = inventory.items[name];
+            if(!item){
+                console.log("[ERROR] no item found =>", name)
+                return null;
+            }
+            if(item.itemType !== "slot"){
+                console.log("[ERROR] item is not a slot =>", name)
+                return null;
+            }
+
+            let getItemCount = (name, parentId)=>{
+                let parentSlot = SM.getSlotOrRoot(parentId);
+                let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
+                if(sims == 0){
+                    return "";
+                }else{
+                    return `_${sims}`;
+                }
+            }
+
+            let itemData = item.data;
+            itemData.name = name+getItemCount(name, parentId)
+            return await SM.loadSlot(itemData, parentId)
         }
 
         getHistoricalProps(component_ref){

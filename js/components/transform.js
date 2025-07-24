@@ -74,4 +74,18 @@ export class TransformComponent extends SlotComponent {
         await this.update(property, newVec);
         return this
     }
+
+    async Multiply(property, vector3){
+        let multX = vector3.x || 1;
+        let multY = vector3.y || 1;
+        let multZ = vector3.z || 1;
+        let curVec = this.properties[property];
+        let newVec = {
+            x: curVec.x * multX,
+            y: curVec.y * multY,
+            z: curVec.z * multZ
+        }
+        await this.update(property, newVec);
+        return this
+    }
 }

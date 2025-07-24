@@ -18,6 +18,7 @@ export class MonoBehaviorComponent extends SlotComponent {
             this.loadScript(this.properties.file);
         }
         this.setId(this.id.replace("undefined","MonoBehavior"));
+        this.loadVarsFromSpaceState();
         return this;
     }
 
@@ -162,6 +163,7 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyUp: ()=>{},
             keyPress: ()=>{},
             log: (...args)=>{ console.log(...args)},
+            loadItem: SM.loadItem,
             _slot: this._slot, // Reference to the slot
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
@@ -182,6 +184,16 @@ export class MonoBehaviorComponent extends SlotComponent {
         const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
         await SM.setSpaceProperty(spaceKey, value, false);
         // this.scriptContext.vars[varName] = value;
+    }
+
+    loadVarsFromSpaceState(){
+        console.log("loading vars from space state =>", this.id)
+        let spaceKeys = Object.keys(SM.scene.spaceState.public).filter(x=>x.startsWith("__"+this.id+"/"));
+        console.log("spaceKeys =>", spaceKeys)
+        for(let key of spaceKeys){
+            let varName = key.split('/')[1].split(':')[0];
+            this.scriptContext.vars[varName] = SM.scene.spaceState.public[key];
+        }
     }
 
     async destroy(){
