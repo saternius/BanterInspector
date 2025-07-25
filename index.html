@@ -136,42 +136,66 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </div>
         </div>
         
-        <!-- Space Props Panel -->
-        <div class="panel space-props-panel">
-            <div class="panel-header">
-                Space Properties
-            </div>
-            
-            <div class="properties-content">
-                <!-- Public Properties -->
-                <div class="space-props-section">
-                    <div class="space-props-header">
-                        <h3>Public Properties</h3>
-                        <span class="props-count" id="publicPropsCount">0</span>
-                    </div>
-                    <div class="props-list" id="publicPropsList">
-                        <div class="empty-props">No public properties</div>
-                    </div>
-                    <div class="add-prop-container">
-                        <input type="text" id="addPublicKey" class="prop-input" placeholder="Key">
-                        <input type="text" id="addPublicValue" class="prop-input" placeholder="Value">
-                        <button onclick="addPublicProp()" class="add-prop-button">Add</button>
-                    </div>
+        <!-- Space Props Panel Container (Split Horizontally) -->
+        <div class="panel space-props-panel-container">
+            <!-- Original Space Props Panel -->
+            <div class="space-props-panel">
+                <div class="panel-header">
+                    Space Properties
                 </div>
                 
-                <!-- Protected Properties -->
-                <div class="space-props-section">
-                    <div class="space-props-header">
-                        <h3>Protected Properties</h3>
-                        <span class="props-count" id="protectedPropsCount">0</span>
+                <div class="properties-content">
+                    <!-- Public Properties -->
+                    <div class="space-props-section">
+                        <div class="space-props-header">
+                            <h3>Public Properties</h3>
+                            <span class="props-count" id="publicPropsCount">0</span>
+                        </div>
+                        <div class="props-list" id="publicPropsList">
+                            <div class="empty-props">No public properties</div>
+                        </div>
+                        <div class="add-prop-container">
+                            <input type="text" id="addPublicKey" class="prop-input" placeholder="Key">
+                            <input type="text" id="addPublicValue" class="prop-input" placeholder="Value">
+                            <button onclick="addPublicProp()" class="add-prop-button">Add</button>
+                        </div>
                     </div>
-                    <div class="props-list" id="protectedPropsList">
-                        <div class="empty-props">No protected properties</div>
+                    
+                    <!-- Protected Properties -->
+                    <div class="space-props-section">
+                        <div class="space-props-header">
+                            <h3>Protected Properties</h3>
+                            <span class="props-count" id="protectedPropsCount">0</span>
+                        </div>
+                        <div class="props-list" id="protectedPropsList">
+                            <div class="empty-props">No protected properties</div>
+                        </div>
+                        <div class="add-prop-container">
+                            <input type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
+                            <input type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
+                            <button onclick="addProtectedProp()" class="add-prop-button">Add</button>
+                        </div>
                     </div>
-                    <div class="add-prop-container">
-                        <input type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
-                        <input type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
-                        <button onclick="addProtectedProp()" class="add-prop-button">Add</button>
+                </div>
+            </div>
+            
+            <!-- Lifecycle Panel -->
+            <div class="lifecycle-panel">
+                <div class="panel-header">
+                    <span>Lifecycle</span>
+                    <button class="console-clear-button" id="clearConsoleBtn" title="Clear Console">🗑️</button>
+                </div>
+                
+                <div class="lifecycle-content">
+                    <!-- MonoBehavior List -->
+                    <div class="lifecycle-list" id="lifecycleList">
+                        <div class="empty-lifecycle">No active MonoBehavior scripts</div>
+                    </div>
+                    
+                    <!-- Console -->
+                    <div class="lifecycle-console-container">
+                        <div class="console-header">Console</div>
+                        <div class="lifecycle-console" id="lifecycleConsole"></div>
                     </div>
                 </div>
             </div>
