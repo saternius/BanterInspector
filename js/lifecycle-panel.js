@@ -1,100 +1,76 @@
 /**
  * Lifecycle Panel
- * Displays and manages active MonoBehavior scripts like a task manager
+ * UI for displaying and managing MonoBehavior scripts from lifecycle-manager
  */
 
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
+    const { lifecycle } = await import(`${basePath}/lifecycle-manager.js`);
 
     export class LifecyclePanel {
         constructor() {
-            this.monobehaviors = new Map(); // Map of componentId -> monobehavior info
             this.selectedLogs = new Set(); // Set of componentIds that have logging enabled
             this.consoleBuffer = [];
             this.maxConsoleLines = 1000;
             this.setupEventListeners();
-            this.refreshMonobehaviors();
+            this.render();
         }
 
         /**
          * Setup event listeners
          */
         setupEventListeners() {
+            // Listen for lifecycle manager changes
+            document.addEventListener('monobehaviorRegistered', () => {
+                this.render();
+            });
+
+            document.addEventListener('monobehaviorUnregistered', () => {
+                this.render();
+            });
+
             // Listen for scene state changes
             document.addEventListener('sceneStateChanged', () => {
-                this.refreshMonobehaviors();
+                this.render();
             });
 
             // Listen for component changes
             document.addEventListener('componentChanged', (e) => {
                 if (e.detail?.componentType === 'MonoBehavior') {
-                    this.refreshMonobehaviors();
+                    this.render();
                 }
             });
 
-            // Listen for console output from MonoBehavior scripts
-            document.addEventListener('monobehaviorConsoleOutput', (e) => {
-                const { componentId, scriptName, output } = e.detail;
-                if (this.selectedLogs.has(componentId)) {
-                    this.addConsoleOutput(scriptName, output);
-                }
-            });
-        }
-
-        /**
-         * Refresh the list of monobehaviors from the scene
-         */
-        async refreshMonobehaviors() {
-            this.monobehaviors.clear();
-            
-            // Find all MonoBehavior components in the scene
-            const allSlots = this.getAllSlots(SM.scene.root);
-            
-            for (const slot of allSlots) {
-                if (slot.components) {
-                    for (const component of slot.components) {
-                        if (component.componentType === 'MonoBehavior' || component.componentType === 'monobehavior') {
-                            const scriptName = component.properties?.scriptPath || 'Unknown Script';
-                            const componentId = component.id || component.componentId;
-                            
-                            // Get existing info or create new
-                            let info = this.monobehaviors.get(componentId) || {
-                                id: componentId,
-                                scriptName: scriptName.split('/').pop().replace('.js', ''),
-                                fullScriptPath: scriptName,
-                                slots: [],
-                                component: component,
-                                isRunning: true // Assume running by default
-                            };
-                            
-                            // Add slot to the list
-                            info.slots.push(slot.name || 'Unnamed Slot');
-                            
-                            this.monobehaviors.set(componentId, info);
+            // Override console.log to capture MonoBehavior output
+            const originalLog = console.log;
+            console.log = (...args) => {
+                // Call original console.log
+                originalLog.apply(console, args);
+                
+                // Check if this is from a MonoBehavior context
+                const stack = new Error().stack;
+                if (stack && stack.includes('MonoBehavior')) {
+                    // Try to extract component ID from the log
+                    lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
+                        if (this.selectedLogs.has(componentId)) {
+                            const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                            this.addConsoleOutput(scriptName, args.join(' '));
                         }
-                    }
+                    });
                 }
-            }
-            
-            this.render();
+            };
         }
 
         /**
-         * Get all slots recursively
+         * Get slot information for a MonoBehavior
          */
-        getAllSlots(slot, result = []) {
-            if (!slot) return result;
-            
-            result.push(slot);
-            
-            if (slot.children) {
-                for (const child of slot.children) {
-                    this.getAllSlots(child, result);
-                }
+        getSlotInfo(monoBehavior) {
+            // MonoBehavior component has a direct reference to its slot
+            if (monoBehavior._slot) {
+                return [monoBehavior._slot.name || 'Unnamed Slot'];
             }
-            
-            return result;
+            return ['No slot'];
         }
 
         /**
@@ -106,7 +82,7 @@
             
             listElement.innerHTML = '';
             
-            if (this.monobehaviors.size === 0) {
+            if (lifecycle.monoBehaviors.size === 0) {
                 listElement.innerHTML = '<div class="empty-lifecycle">No active MonoBehavior scripts</div>';
                 return;
             }
@@ -130,10 +106,10 @@
             // Create body
             const tbody = document.createElement('tbody');
             
-            for (const [componentId, info] of this.monobehaviors) {
-                const row = this.createMonobehaviorRow(componentId, info);
+            lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
+                const row = this.createMonobehaviorRow(componentId, monoBehavior);
                 tbody.appendChild(row);
-            }
+            });
             
             table.appendChild(tbody);
             listElement.appendChild(table);
@@ -142,20 +118,22 @@
         /**
          * Create a row for a monobehavior
          */
-        createMonobehaviorRow(componentId, info) {
+        createMonobehaviorRow(componentId, monoBehavior) {
             const row = document.createElement('tr');
             row.className = 'lifecycle-row';
             
             // Name column
             const nameCell = document.createElement('td');
             nameCell.className = 'lifecycle-name';
-            nameCell.textContent = info.scriptName;
-            nameCell.title = info.fullScriptPath;
+            const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown Script';
+            nameCell.textContent = scriptName;
+            nameCell.title = `Script: ${monoBehavior.properties?.file || 'No script'}`;
             
             // Usage column
             const usageCell = document.createElement('td');
             usageCell.className = 'lifecycle-usage';
-            const slotsText = info.slots.join(', ');
+            const slots = this.getSlotInfo(monoBehavior);
+            const slotsText = slots.join(', ') || 'No slots';
             if (slotsText.length > 32) {
                 usageCell.textContent = slotsText.substring(0, 32) + '...';
                 usageCell.title = slotsText;
@@ -181,14 +159,14 @@
             stopBtn.className = 'lifecycle-button stop';
             stopBtn.innerHTML = '⏹';
             stopBtn.title = 'Stop';
-            stopBtn.onclick = () => this.stopMonobehavior(componentId, info);
+            stopBtn.onclick = () => this.stopMonobehavior(componentId, monoBehavior);
             
             // Refresh button
             const refreshBtn = document.createElement('button');
             refreshBtn.className = 'lifecycle-button refresh';
             refreshBtn.innerHTML = '🔄';
             refreshBtn.title = 'Refresh';
-            refreshBtn.onclick = () => this.refreshMonobehavior(componentId, info);
+            refreshBtn.onclick = () => this.refreshMonobehavior(componentId, monoBehavior);
             
             actionsCell.appendChild(stopBtn);
             actionsCell.appendChild(refreshBtn);
@@ -207,6 +185,12 @@
         toggleLogging(componentId, enabled) {
             if (enabled) {
                 this.selectedLogs.add(componentId);
+                // Add initial message
+                const monoBehavior = lifecycle.monoBehaviors.get(componentId);
+                if (monoBehavior) {
+                    const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                    this.addConsoleOutput(scriptName, '[Logging enabled]');
+                }
             } else {
                 this.selectedLogs.delete(componentId);
             }
@@ -215,40 +199,48 @@
         /**
          * Stop a monobehavior
          */
-        async stopMonobehavior(componentId, info) {
+        async stopMonobehavior(componentId, monoBehavior) {
             try {
-                // Call stop on the component
-                if (info.component && info.component.stop) {
-                    await info.component.stop();
+                // Use the MonoBehavior component's stop method
+                if (monoBehavior.stop && typeof monoBehavior.stop === 'function') {
+                    monoBehavior.stop();
+                } else if (monoBehavior.scriptContext) {
+                    // Fallback to manual stop
+                    monoBehavior.scriptContext._running = false;
+                    
+                    // Call onPause if it exists
+                    if (monoBehavior.scriptContext.onPause && typeof monoBehavior.scriptContext.onPause === 'function') {
+                        monoBehavior.scriptContext.onPause();
+                    }
                 }
                 
-                // Update UI
-                info.isRunning = false;
-                this.addConsoleOutput(info.scriptName, '[Stopped]');
+                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                this.addConsoleOutput(scriptName, '[Stopped]');
                 this.render();
             } catch (error) {
                 console.error('Failed to stop monobehavior:', error);
-                this.addConsoleOutput(info.scriptName, `[Error stopping: ${error.message}]`);
+                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                this.addConsoleOutput(scriptName, `[Error stopping: ${error.message}]`);
             }
         }
 
         /**
          * Refresh a monobehavior
          */
-        async refreshMonobehavior(componentId, info) {
+        async refreshMonobehavior(componentId, monoBehavior) {
             try {
-                // Call refresh on the component
-                if (info.component && info.component.refresh) {
-                    await info.component.refresh();
+                // Use the MonoBehavior component's refresh method
+                if (monoBehavior.refresh && typeof monoBehavior.refresh === 'function') {
+                    await monoBehavior.refresh();
                 }
                 
-                // Update UI
-                info.isRunning = true;
-                this.addConsoleOutput(info.scriptName, '[Refreshed]');
+                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                this.addConsoleOutput(scriptName, '[Refreshed]');
                 this.render();
             } catch (error) {
                 console.error('Failed to refresh monobehavior:', error);
-                this.addConsoleOutput(info.scriptName, `[Error refreshing: ${error.message}]`);
+                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+                this.addConsoleOutput(scriptName, `[Error refreshing: ${error.message}]`);
             }
         }
 
