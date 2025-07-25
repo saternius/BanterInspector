@@ -18,6 +18,7 @@
     const  { ScriptEditor } = await import(`${basePath}/script-editor.js`);
     const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
     const  { changeManager } = await import(`${basePath}/change-manager.js`);
+    const  { LifecyclePanel } = await import(`${basePath}/lifecycle-panel.js`);
 
     // Global app instance
     class InspectorApp {
@@ -29,6 +30,7 @@
             this.componentMenu = null;
             this.inventory = null;
             this.scriptEditors = null;
+            this.lifecyclePanel = null;
             this.initialized = false;
         }
 
@@ -62,6 +64,7 @@
                 this.propertiesPanel = new PropertiesPanel();
                 this.spacePropsPanel = new SpacePropsPanel();
                 this.componentMenu = new ComponentMenu();
+                this.lifecyclePanel = new LifecyclePanel();
                 
                 // Initialize inventory
                 this.inventory = new Inventory();
@@ -74,13 +77,23 @@
                 window.inventory = this.inventory;
                 window.navigation = this.navigation;
                 window.scriptEditors = this.scriptEditors;
+                window.lifecyclePanel = this.lifecyclePanel;
                 
                 // Initial render
                 this.hierarchyPanel.render();
                 this.spacePropsPanel.render();
+                this.lifecyclePanel.render();
                 
                 // Set up global event handlers
                 this.setupGlobalEventHandlers();
+                
+                // Setup clear console button
+                const clearConsoleBtn = document.getElementById('clearConsoleBtn');
+                if (clearConsoleBtn) {
+                    clearConsoleBtn.addEventListener('click', () => {
+                        this.lifecyclePanel.clearConsole();
+                    });
+                }
                 
                 // Set up history notifications
                 this.setupHistoryNotifications();

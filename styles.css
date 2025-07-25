@@ -1007,11 +1007,178 @@ body {
     min-width: 400px;
 }
 
-/* Space Props Panel */
-.space-props-panel {
+/* Space Props Panel Container */
+.space-props-panel-container {
     width: 480px;
     flex-shrink: 0;
     border-left: 1px solid #2a2a2a;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Space Props Panel (Top Half) */
+.space-props-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+}
+
+/* Lifecycle Panel (Bottom Half) */
+.lifecycle-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #2a2a2a;
+    min-height: 300px;
+}
+
+.lifecycle-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.lifecycle-list {
+    flex: 0 0 auto;
+    max-height: 40%;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+.lifecycle-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.lifecycle-table th,
+.lifecycle-table td {
+    padding: 6px 8px;
+    text-align: left;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.lifecycle-table th {
+    background: #1f1f1f;
+    color: #888;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+}
+
+.lifecycle-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.lifecycle-name {
+    font-weight: 500;
+    color: #e8e8e8;
+}
+
+.lifecycle-usage {
+    color: #888;
+    font-size: 11px;
+}
+
+.lifecycle-log {
+    text-align: center;
+}
+
+.lifecycle-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.lifecycle-button {
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    color: #888;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+}
+
+.lifecycle-button:hover {
+    background: #333;
+    border-color: #444;
+    color: #fff;
+}
+
+.lifecycle-button.stop:hover {
+    background: #ff4444;
+    border-color: #ff5555;
+}
+
+.lifecycle-button.refresh:hover {
+    background: #4a90e2;
+    border-color: #5a9fe2;
+}
+
+.empty-lifecycle {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
+
+/* Console */
+.lifecycle-console-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid #2a2a2a;
+    min-height: 150px;
+}
+
+.console-header {
+    background: #1f1f1f;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+}
+
+.lifecycle-console {
+    flex: 1;
+    overflow-y: auto;
+    background: #0f0f0f;
+    padding: 8px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 11px;
+}
+
+.console-line {
+    margin-bottom: 4px;
+    display: flex;
+    gap: 8px;
+}
+
+.console-time {
+    color: #666;
+    flex-shrink: 0;
+}
+
+.console-content {
+    color: #e8e8e8;
+    word-break: break-word;
+}
+
+.console-clear-button {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 2px 6px;
+    font-size: 12px;
+    margin-left: auto;
+}
+
+.console-clear-button:hover {
+    color: #fff;
 }
 
 .properties-content {
