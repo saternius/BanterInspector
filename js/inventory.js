@@ -95,25 +95,35 @@ export class Inventory {
         
         // Check if name already exists
         if (existingKeys.includes(itemName)) {
-            // Prompt user for new name
-            const newName = prompt(
-                `An item named "${itemName}" already exists in your inventory. Please enter a new name:`,
-                itemName
-            );
-            
-            if (!newName || newName.trim() === '') {
-                alert('Item not added to inventory - no name provided.');
-                return;
-            }
-            
-            // Check if new name also exists
-            if (existingKeys.includes(newName.trim())) {
-                alert(`An item named "${newName}" also exists. Please try again with a unique name.`);
-                return;
-            }
-            
-            itemName = newName.trim();
+            // Show modal for new name
+            this.showRenameModal(itemName, (newName) => {
+                if (!newName || newName.trim() === '') {
+                    this.showNotification('Item not added - no name provided.');
+                    return;
+                }
+                
+                const trimmedName = newName.trim();
+                
+                // Check if new name also exists
+                if (existingKeys.includes(trimmedName)) {
+                    this.showNotification(`An item named "${trimmedName}" also exists.`);
+                    return;
+                }
+                
+                // Continue with the new name
+                this.finalizeAddItem(slot, itemType, trimmedName);
+            });
+            return;
         }
+        
+        // No conflict, add directly
+        this.finalizeAddItem(slot, itemType, itemName);
+    }
+    
+    /**
+     * Finalize adding item after name validation
+     */
+    finalizeAddItem(slot, itemType, itemName) {
         
         // Create inventory item
         const inventoryItem = {
@@ -147,13 +157,17 @@ export class Inventory {
      * Remove item from inventory
      */
     removeItem(itemName) {
-        if (confirm(`Are you sure you want to remove "${itemName}" from your inventory?`)) {
-            const storageKey = `inventory_${itemName}`;
-            localStorage.removeItem(storageKey);
-            delete this.items[itemName];
-            this.render();
-            this.showNotification(`Removed "${itemName}" from inventory`);
-        }
+        this.showConfirmModal(
+            `Are you sure you want to remove "${itemName}" from your inventory?`,
+            () => {
+                const storageKey = `inventory_${itemName}`;
+                localStorage.removeItem(storageKey);
+                delete this.items[itemName];
+                this.render();
+                this.showNotification(`Removed "${itemName}" from inventory`);
+            },
+            'Remove Item'
+        );
     }
 
     getAvailableScripts(){
@@ -602,11 +616,11 @@ export class Inventory {
                 // Handle JSON files
                 await this.handleJsonUpload(fileName, fileContent);
             } else {
-                alert('Please upload a .js or .json file');
+                this.showNotification('Please upload a .js or .json file');
             }
         } catch (error) {
             console.error('File upload error:', error);
-            alert(`Error uploading file: ${error.message}`);
+            this.showNotification(`Error uploading file: ${error.message}`);
         }
         
         // Clear the input for next upload
@@ -633,11 +647,25 @@ export class Inventory {
         
         // Check for existing item
         if (existingKeys.includes(fileName)) {
-            const confirmed = confirm(
-                `An item named "${fileName}" already exists. Do you want to overwrite it?`
+            this.showConfirmModal(
+                `An item named "${fileName}" already exists. Do you want to overwrite it?`,
+                () => {
+                    // Continue with overwrite
+                    this.saveScriptItem(fileName, content);
+                },
+                'Overwrite Script'
             );
-            if (!confirmed) return;
+            return;
         }
+        
+        // No conflict, save directly
+        this.saveScriptItem(fileName, content);
+    }
+    
+    /**
+     * Save script item to storage
+     */
+    saveScriptItem(fileName, content) {
         
         // Create script item
         const scriptItem = {
@@ -668,6 +696,24 @@ export class Inventory {
     }
     
     /**
+     * Save inventory item (for JSON import)
+     */
+    saveInventoryItem(itemName, jsonData) {
+        // Save directly as it's already in the correct format
+        const storageKey = `inventory_${itemName}`;
+        localStorage.setItem(storageKey, JSON.stringify(jsonData));
+        
+        // Update local items
+        this.items[itemName] = jsonData;
+        
+        // Re-render
+        this.render();
+        
+        // Show success message
+        this.showNotification(`Imported "${itemName}" to inventory`);
+    }
+    
+    /**
      * Handle JSON file upload
      */
     async handleJsonUpload(fileName, content) {
@@ -681,29 +727,25 @@ export class Inventory {
                 
                 // Check for existing item
                 if (existingKeys.includes(itemName)) {
-                    const confirmed = confirm(
-                        `An item named "${itemName}" already exists. Do you want to overwrite it?`
+                    this.showConfirmModal(
+                        `An item named "${itemName}" already exists. Do you want to overwrite it?`,
+                        () => {
+                            // Continue with overwrite
+                            this.saveInventoryItem(itemName, jsonData);
+                        },
+                        'Overwrite Item'
                     );
-                    if (!confirmed) return;
+                    return;
                 }
                 
-                // Save directly as it's already in the correct format
-                const storageKey = `inventory_${itemName}`;
-                localStorage.setItem(storageKey, JSON.stringify(jsonData));
                 
-                // Update local items
-                this.items[itemName] = jsonData;
-                
-                // Re-render
-                this.render();
-                
-                // Show success message
-                this.showNotification(`Imported "${itemName}" to inventory`);
+                // No conflict, save directly
+                this.saveInventoryItem(itemName, jsonData);
             } else {
-                alert('The JSON file is not in the correct inventory slot format');
+                this.showNotification('The JSON file is not in the correct inventory slot format');
             }
         } catch (error) {
-            alert('Invalid JSON file');
+            this.showNotification('Invalid JSON file');
         }
     }
     
@@ -1161,35 +1203,36 @@ export class Inventory {
      * Create a new folder
      */
     createNewFolder() {
-        const folderName = prompt('Enter folder name:');
-        if (!folderName || folderName.trim() === '') return;
-        
-        const trimmedName = folderName.trim();
-        
-        // Check if folder already exists
-        if (this.folders[trimmedName]) {
-            alert(`A folder named "${trimmedName}" already exists.`);
-            return;
-        }
-        
-        // Create folder object
-        const folder = {
-            name: trimmedName,
-            created: Date.now(),
-            parent: this.currentFolder
-        };
-        
-        // Save to localStorage
-        const storageKey = `inventory_folder_${trimmedName}`;
-        localStorage.setItem(storageKey, JSON.stringify(folder));
-        
-        // Update local folders
-        this.folders[trimmedName] = folder;
-        
-        // Re-render
-        this.render();
-        
-        this.showNotification(`Created folder "${trimmedName}"`);
+        this.showFolderNameModal((folderName) => {
+            if (!folderName || folderName.trim() === '') return;
+            
+            const trimmedName = folderName.trim();
+            
+            // Check if folder already exists
+            if (this.folders[trimmedName]) {
+                this.showNotification(`A folder named "${trimmedName}" already exists.`);
+                return;
+            }
+            
+            // Create folder object
+            const folder = {
+                name: trimmedName,
+                created: Date.now(),
+                parent: this.currentFolder
+            };
+            
+            // Save to localStorage
+            const storageKey = `inventory_folder_${trimmedName}`;
+            localStorage.setItem(storageKey, JSON.stringify(folder));
+            
+            // Update local folders
+            this.folders[trimmedName] = folder;
+            
+            // Re-render
+            this.render();
+            
+            this.showNotification(`Created folder "${trimmedName}"`);
+        });
     }
     
     /**
@@ -1256,28 +1299,41 @@ export class Inventory {
         const hasSubfolders = Object.values(this.folders).some(f => f.parent === folderName);
         
         if (hasItems || hasSubfolders) {
-            if (!confirm(`Folder "${folder.name}" contains items. Delete anyway?`)) {
-                return;
-            }
-            
-            // Move all items to parent folder
-            Object.entries(this.items).forEach(([key, item]) => {
-                if (item.folder === folderName) {
-                    item.folder = folder.parent;
-                    const storageKey = `inventory_${key}`;
-                    localStorage.setItem(storageKey, JSON.stringify(item));
-                }
-            });
-            
-            // Move all subfolders to parent folder
-            Object.entries(this.folders).forEach(([key, subfolder]) => {
-                if (subfolder.parent === folderName) {
-                    subfolder.parent = folder.parent;
-                    const storageKey = `inventory_folder_${key}`;
-                    localStorage.setItem(storageKey, JSON.stringify(subfolder));
-                }
-            });
+            this.showConfirmModal(
+                `Folder "${folder.name}" contains items. Delete anyway?`,
+                () => {
+                    this.finalizeRemoveFolder(folderName, folder);
+                },
+                'Delete Folder'
+            );
+            return;
         }
+        
+        // Empty folder, remove directly
+        this.finalizeRemoveFolder(folderName, folder);
+    }
+    
+    /**
+     * Finalize removing folder after confirmation
+     */
+    finalizeRemoveFolder(folderName, folder) {
+        // Move all items to parent folder
+        Object.entries(this.items).forEach(([key, item]) => {
+            if (item.folder === folderName) {
+                item.folder = folder.parent;
+                const storageKey = `inventory_${key}`;
+                localStorage.setItem(storageKey, JSON.stringify(item));
+            }
+        });
+        
+        // Move all subfolders to parent folder
+        Object.entries(this.folders).forEach(([key, subfolder]) => {
+            if (subfolder.parent === folderName) {
+                subfolder.parent = folder.parent;
+                const storageKey = `inventory_folder_${key}`;
+                localStorage.setItem(storageKey, JSON.stringify(subfolder));
+            }
+        });
         
         // Remove folder
         const storageKey = `inventory_folder_${folderName}`;
@@ -1356,6 +1412,214 @@ this.keyUp = (key)=>{
         
         // Open the script editor immediately
         this.openScriptEditor(finalName);
+    }
+    
+    /**
+     * Show rename modal for duplicate item names
+     */
+    showRenameModal(originalName, onConfirm) {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>Duplicate Name</h3>
+                <button class="modal-close-btn" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <p>An item named "<strong>${originalName}</strong>" already exists in your inventory.</p>
+                <label for="newNameInput">Enter a new name:</label>
+                <input type="text" id="newNameInput" value="${originalName}" autocomplete="off">
+                <div class="modal-error" id="modalError" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-confirm-btn" id="modalConfirmBtn">Save</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Focus and select input
+        const input = modalContent.querySelector('#newNameInput');
+        setTimeout(() => {
+            input.focus();
+            input.select();
+        }, 100);
+        
+        // Setup event listeners
+        const closeBtn = modalContent.querySelector('#modalCloseBtn');
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const confirmBtn = modalContent.querySelector('#modalConfirmBtn');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        const handleConfirm = () => {
+            const newName = input.value.trim();
+            closeModal();
+            onConfirm(newName);
+        };
+        
+        // Event listeners
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        confirmBtn.addEventListener('click', handleConfirm);
+        
+        // Enter key to confirm
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleConfirm();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    /**
+     * Show folder name modal
+     */
+    showFolderNameModal(onConfirm) {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>Create New Folder</h3>
+                <button class="modal-close-btn" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="folderNameInput">Folder Name:</label>
+                <input type="text" id="folderNameInput" placeholder="New Folder" autocomplete="off">
+                <div class="modal-hint">Enter a name for your folder</div>
+                <div class="modal-error" id="modalError" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-create-btn" id="modalCreateBtn">Create Folder</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Focus on input
+        const input = modalContent.querySelector('#folderNameInput');
+        setTimeout(() => input.focus(), 100);
+        
+        // Setup event listeners
+        const closeBtn = modalContent.querySelector('#modalCloseBtn');
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const createBtn = modalContent.querySelector('#modalCreateBtn');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        const handleCreate = () => {
+            const folderName = input.value.trim();
+            closeModal();
+            onConfirm(folderName);
+        };
+        
+        // Event listeners
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        createBtn.addEventListener('click', handleCreate);
+        
+        // Enter key to create
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleCreate();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    /**
+     * Show confirmation modal
+     */
+    showConfirmModal(message, onConfirm, title = 'Confirm') {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content modal-confirm';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>${title}</h3>
+            </div>
+            <div class="modal-body">
+                <p>${message}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-confirm-btn" id="modalConfirmBtn">Confirm</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Setup event listeners
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const confirmBtn = modalContent.querySelector('#modalConfirmBtn');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        cancelBtn.addEventListener('click', closeModal);
+        confirmBtn.addEventListener('click', () => {
+            closeModal();
+            onConfirm();
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+        
+        // ESC key to close
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                document.removeEventListener('keydown', handleKeydown);
+            }
+        };
+        document.addEventListener('keydown', handleKeydown);
     }
     
 }
