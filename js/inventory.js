@@ -19,9 +19,12 @@ export class Inventory {
      */
     setupDropZone() {
         this.container.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-            this.container.classList.add('drag-over');
+            // Only handle external drags (from hierarchy)
+            if (!this.draggedItem) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                this.container.classList.add('drag-over');
+            }
         });
         
         this.container.addEventListener('dragleave', (e) => {
@@ -31,18 +34,21 @@ export class Inventory {
         });
         
         this.container.addEventListener('drop', async (e) => {
-            e.preventDefault();
-            this.container.classList.remove('drag-over');
-            
-            const slotId = e.dataTransfer.getData('text/plain');
-            const slotData = e.dataTransfer.getData('application/json');
-            
-            if (slotData) {
-                try {
-                    const slot = JSON.parse(slotData);
-                    await this.addItem(slot);
-                } catch (error) {
-                    console.error('Failed to parse slot data:', error);
+            // Only handle external drops (from hierarchy)
+            if (!this.draggedItem) {
+                e.preventDefault();
+                this.container.classList.remove('drag-over');
+                
+                const slotId = e.dataTransfer.getData('text/plain');
+                const slotData = e.dataTransfer.getData('application/json');
+                
+                if (slotData) {
+                    try {
+                        const slot = JSON.parse(slotData);
+                        await this.addItem(slot);
+                    } catch (error) {
+                        console.error('Failed to parse slot data:', error);
+                    }
                 }
             }
         });
@@ -339,20 +345,23 @@ export class Inventory {
             // Setup drag and drop for folders
             folder.addEventListener('dragover', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 e.dataTransfer.dropEffect = 'move';
                 folder.classList.add('drag-over');
             });
             
-            folder.addEventListener('dragleave', () => {
+            folder.addEventListener('dragleave', (e) => {
+                e.stopPropagation();
                 folder.classList.remove('drag-over');
             });
             
             folder.addEventListener('drop', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 folder.classList.remove('drag-over');
                 const itemName = e.dataTransfer.getData('text/inventory-item');
                 const folderName = folder.dataset.folderName;
-                if (itemName) {
+                if (itemName && this.draggedItem) {
                     this.moveItemToFolder(itemName, folderName);
                 }
             });
@@ -390,6 +399,31 @@ export class Inventory {
                     const folder = item.dataset.folder;
                     this.navigateToFolder(folder);
                 });
+            });
+        }
+        
+        // Add drop zone for inventory grid to move items to root or current folder
+        const inventoryGrid = inventoryContainer.querySelector('.inventory-grid');
+        if (inventoryGrid) {
+            inventoryGrid.addEventListener('dragover', (e) => {
+                // Only handle internal drags
+                if (this.draggedItem) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                }
+            });
+            
+            inventoryGrid.addEventListener('drop', (e) => {
+                // Only handle internal drops on empty areas
+                if (this.draggedItem && e.target === inventoryGrid) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const itemName = e.dataTransfer.getData('text/inventory-item');
+                    if (itemName) {
+                        // Move to current folder (or root if no current folder)
+                        this.moveItemToFolder(itemName, this.currentFolder);
+                    }
+                }
             });
         }
     }
@@ -1274,8 +1308,11 @@ export class Inventory {
         const item = this.items[itemName];
         if (!item) return;
         
+        // Don't move if it's already in the target folder
+        if (item.folder === folderName) return;
+        
         // Update item's folder property
-        item.folder = folderName;
+        item.folder = folderName || null;
         
         // Save to localStorage
         const storageKey = `inventory_${itemName}`;
@@ -1284,7 +1321,12 @@ export class Inventory {
         // Re-render
         this.render();
         
-        this.showNotification(`Moved "${itemName}" to folder "${this.folders[folderName].name}"`);
+        // Show appropriate notification
+        if (folderName) {
+            this.showNotification(`Moved "${itemName}" to folder "${this.folders[folderName].name}"`);
+        } else {
+            this.showNotification(`Moved "${itemName}" to root`);
+        }
     }
     
     /**
