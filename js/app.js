@@ -259,13 +259,19 @@
                     document.dispatchEvent(new CustomEvent('spaceStateChanged'));
                     SM.handleSpaceStateChange(event);
                 });
+
                 SM.scene.On("unity-loaded", async () => {
                     console.log("unity-loaded fired")
-                    SM.setup();
+                    setTimeout(()=>{
+                        SM.setup();
+                    }, 1000)
                 })
+
                 SM.scene.On("loaded", async () => {
                     console.log('Loaded fired');
-                    SM.setup();
+                    setTimeout(()=>{
+                        SM.setup();
+                    }, 1000)
                 });
 
                 SM.scene.On("one-shot", async (event) => {
@@ -273,6 +279,17 @@
                     SM.handleOneShot(event);
                     document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
                 });
+
+                SM.scene.On("user-left", (event) => {
+                    console.log("[USER LEFT] fired", event)
+                    //SM.handleUserLeft(event);
+                })
+
+                SM.scene.On("user-joined", (event) => {
+                    console.log("[USER JOINED] fired", event)
+                    
+                    //SM.handleUserJoined(event);
+                })
 
                 setTimeout(()=>{
                     SM.setup();

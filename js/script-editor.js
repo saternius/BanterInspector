@@ -302,7 +302,7 @@ export class ScriptEditor {
         
         // Show save notification
         this.showNotification('Script saved successfully');
-        this.run('refresh')
+        this.run('Refresh')
     }
     
     findMonoBehaviorSlots() {
@@ -384,9 +384,9 @@ export class ScriptEditor {
         let components = Array.from(this.selectedSlots)
         .map(slotId => this.monoBehaviorSlots.get(slotId))
 
-        if(action === 'start'){
+        if(action === 'Start'){
             components = components.filter(component => component && component.scriptContext && !component.scriptContext._running);
-        }else if(action === 'stop'){
+        }else if(action === 'Stop'){
             components = components.filter(component => component && component.scriptContext && component.scriptContext._running);
         }
         
@@ -408,11 +408,11 @@ export class ScriptEditor {
     }
 
     play() {
-        this.run('refresh');
+        this.run('Refresh');
     }
     
     stop() {
-        this.run('stop');
+        this.run('Stop');
     }
 
     

@@ -50,7 +50,9 @@ export class Slot{
         // Remove from current parent or root
         if (this.parentId) {
             const oldParent = window.SM.getSlotById(this.parentId);
-            oldParent.children = oldParent.children.filter(child => child.id !== this.id);
+            if(oldParent){
+                oldParent.children = oldParent.children.filter(child => child.id !== this.id);
+            }
         }
       
         newParent.children.push(this);

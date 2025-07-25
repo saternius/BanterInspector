@@ -1,4 +1,5 @@
 let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
+const { LoadItemChange } = await import(`${basePath}/change-types.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');

@@ -34,6 +34,7 @@ console.log("It is 6:03")
 
                 this.setup = async ()=>{
                     if(this.loaded) return;
+                    
                     console.log("setting up inspector")
                     if(localhost){
                         let lastSpaceState = localStorage.getItem('lastSpaceState');
@@ -41,6 +42,18 @@ console.log("It is 6:03")
                             this.scene.spaceState = JSON.parse(lastSpaceState);
                         }
                     }
+
+                    if(!this.scene.spaceState.public.hostUser){
+                        console.log("No host user found, setting to local user =>", SM.scene.localUser.name)
+                        this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                    }else{
+                        let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
+                        if(!hostHere){
+                            console.log("Host user not here, setting to local user =>", SM.scene.localUser.name)
+                            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                        }
+                    }
+
                     try {
                         console.log('Gathering scene hierarchy...');
                         let hierarchy = null;
@@ -461,6 +474,30 @@ console.log("It is 6:03")
                 let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
                 newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
                 await this._moveSlot(slotId, newParentId, newSiblingIndex);
+            }
+
+            if(data.startsWith("monobehavior_start")){
+                let componentId = data.slice(19);
+                let monobehavior = this.getSlotComponentById(componentId);
+                if(monobehavior){
+                    monobehavior._start();
+                }
+            }
+
+            if(data.startsWith("monobehavior_stop")){
+                let componentId = data.slice(18);
+                let monobehavior = this.getSlotComponentById(componentId);
+                if(monobehavior){
+                    monobehavior._stop();
+                }
+            }
+
+            if(data.startsWith("monobehavior_refresh")){
+                let componentId = data.slice(21);
+                let monobehavior = this.getSlotComponentById(componentId);
+                if(monobehavior){
+                    monobehavior._refresh();
+                }
             }
         }
 

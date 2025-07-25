@@ -20,17 +20,12 @@ export class LifecycleManager {
      */
     async registerMonoBehavior(monoBehavior) {
         console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
-        if(!localhost){
-            if(SM.scene.localUser.name !== SM.scene.spaceState.masterUser){
-                console.log("[LIFECYCLE] NOT MASTER =>", monoBehavior.id)
-                return;
-            }
-        }
         this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
             this.start();
         }
+        inspectorApp.lifecyclePanel.render()
     }
     
     /**
@@ -47,6 +42,7 @@ export class LifecycleManager {
         if (this.monoBehaviors.size === 0) {
             this.stop();
         }
+        inspectorApp.lifecyclePanel.render()
     }
     
     /**
@@ -64,6 +60,7 @@ export class LifecycleManager {
         }, intervalMs);
         
         console.log(`LifecycleManager started with ${this.fps} FPS`);
+        inspectorApp.lifecyclePanel.render()
     }
     
     /**
@@ -81,6 +78,7 @@ export class LifecycleManager {
         }
         
         console.log('LifecycleManager stopped');
+        inspectorApp.lifecyclePanel.render()
     }
     
     /**
@@ -101,14 +99,7 @@ export class LifecycleManager {
      */
     triggerUpdate() {
         this.monoBehaviors.forEach((monoBehavior, componentId) => {
-            if(!monoBehavior.scriptContext._running) return;
-            if (monoBehavior.scriptContext.onUpdate && typeof monoBehavior.scriptContext.onUpdate === 'function') {
-                try {
-                    monoBehavior.scriptContext.onUpdate();
-                } catch (error) {
-                    console.error(`Error in onUpdate for ${componentId}:`, error);
-                }
-            }
+            monoBehavior._update();
         });
     }
     
@@ -173,6 +164,7 @@ export class LifecycleManager {
             });
         });
     }
+
 }
 
 // Create and export singleton instance
