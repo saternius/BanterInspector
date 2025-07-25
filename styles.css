@@ -732,6 +732,138 @@ body {
     transform: translateY(0);
 }
 
+/* Folder styles */
+.new-folder-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.new-folder-button:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.folder-breadcrumb {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 14px;
+}
+
+.breadcrumb-item {
+    color: #00d4ff;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.breadcrumb-item:hover {
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.breadcrumb-separator {
+    color: #555;
+    margin: 0 4px;
+}
+
+.folder-item {
+    background: #242424;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.folder-item:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+}
+
+.folder-item.drag-over {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.folder-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.folder-expand-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+}
+
+.folder-expand-btn:hover {
+    color: #e8e8e8;
+}
+
+.folder-name {
+    flex: 1;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.folder-count {
+    color: #888;
+    font-size: 14px;
+}
+
+.remove-folder-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 8px;
+    transition: color 0.2s;
+}
+
+.remove-folder-btn:hover {
+    color: #ff4444;
+}
+
+.folder-contents {
+    padding: 0 15px 15px 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+.folder-empty {
+    color: #888;
+    font-style: italic;
+    padding: 20px;
+    text-align: center;
+}
+
+.inventory-item.dragging {
+    opacity: 0.5;
+}
+
 .inspector-container {
     display: flex;
     height: 100%;

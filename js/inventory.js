@@ -5,7 +5,11 @@ export class Inventory {
         this.container = document.getElementById('inventory-page');
         this.previewPane = document.getElementById('previewPane');
         this.items = this.loadItems();
+        this.folders = this.loadFolders();
         this.selectedItem = null;
+        this.currentFolder = null;
+        this.expandedFolders = new Set();
+        this.draggedItem = null;
         this.setupDropZone();
         this.render();
     }
@@ -51,7 +55,7 @@ export class Inventory {
         const items = {};
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key.startsWith('inventory_')) {
+            if (key.startsWith('inventory_') && !key.startsWith('inventory_folder_')) {
                 try {
                     const itemKey = key.replace('inventory_', '');
                     items[itemKey] = JSON.parse(localStorage.getItem(key));
@@ -61,6 +65,25 @@ export class Inventory {
             }
         }
         return items;
+    }
+    
+    /**
+     * Load folders from localStorage
+     */
+    loadFolders() {
+        const folders = {};
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('inventory_folder_')) {
+                try {
+                    const folderKey = key.replace('inventory_folder_', '');
+                    folders[folderKey] = JSON.parse(localStorage.getItem(key));
+                } catch (error) {
+                    console.error(`Failed to parse folder ${key}:`, error);
+                }
+            }
+        }
+        return folders;
     }
     
     /**
@@ -101,6 +124,11 @@ export class Inventory {
             data: slot
         };
         
+        // Only add folder property if we're in a folder
+        if (this.currentFolder) {
+            inventoryItem.folder = this.currentFolder;
+        }
+        
         // Save to localStorage
         const storageKey = `inventory_${itemName}`;
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
@@ -138,7 +166,7 @@ export class Inventory {
     render() {
         const inventoryContainer = this.container.querySelector('.inventory-container');
         
-        if (Object.keys(this.items).length === 0) {
+        if (Object.keys(this.items).length === 0 && Object.keys(this.folders).length === 0) {
             inventoryContainer.innerHTML = `
                 <div class="inventory-header">
                     <h2>Saved Items (0)</h2>
@@ -160,18 +188,26 @@ export class Inventory {
             // Add event listeners for file upload even in empty state
             const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
             const fileInput = inventoryContainer.querySelector('#fileInput');
+            const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
             
             if (uploadBtn && fileInput) {
                 uploadBtn.addEventListener('click', () => fileInput.click());
                 fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
             }
             
+            if (newFolderBtn) {
+                newFolderBtn.addEventListener('click', () => this.createNewFolder());
+            }
+            
             return;
         }
         
+        const totalItems = Object.keys(this.items).length;
+        const folderPath = this.getCurrentFolderPath();
+        
         inventoryContainer.innerHTML = `
             <div class="inventory-header">
-                <h2>Saved Items (${Object.keys(this.items).length})</h2>
+                <h2>${folderPath ? `📁 ${folderPath}` : `Saved Items (${totalItems})`}</h2>
                 <div class="inventory-actions">
                     ${this.selectedItem ? `
                         <button class="export-button" id="exportBtn">
@@ -179,6 +215,10 @@ export class Inventory {
                             Export
                         </button>
                     ` : ''}
+                    <button class="new-folder-button" id="newFolderBtn">
+                        <span class="folder-icon">📁</span>
+                        New Folder
+                    </button>
                     <button class="new-script-button" id="newScriptBtn">
                         <span class="new-icon">📜</span>
                         New Script
@@ -190,8 +230,14 @@ export class Inventory {
                     <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                 </div>
             </div>
+            ${this.currentFolder ? `
+                <div class="folder-breadcrumb">
+                    <span class="breadcrumb-item" data-folder="">Home</span>
+                    ${this.renderBreadcrumb()}
+                </div>
+            ` : ''}
             <div class="inventory-grid">
-                ${Object.entries(this.items).map(([key, item]) => this.renderItem(key, item)).join('')}
+                ${this.renderFoldersAndItems()}
             </div>
         `;
         
@@ -210,6 +256,15 @@ export class Inventory {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.removeItem(itemName);
+            });
+        });
+        
+        // Add event listeners for remove folder buttons
+        inventoryContainer.querySelectorAll('.remove-folder-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const folderName = btn.dataset.folderName;
+                this.removeFolder(folderName);
             });
         });
         
@@ -251,6 +306,199 @@ export class Inventory {
         if (newScriptBtn) {
             newScriptBtn.addEventListener('click', () => this.createNewScript());
         }
+        
+        // Add event listener for new folder button
+        const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
+        if (newFolderBtn) {
+            newFolderBtn.addEventListener('click', () => this.createNewFolder());
+        }
+        
+        // Add event listeners for folder items
+        inventoryContainer.querySelectorAll('.folder-item').forEach(folder => {
+            folder.addEventListener('click', (e) => {
+                if (!e.target.closest('.folder-expand-btn')) {
+                    const folderName = folder.dataset.folderName;
+                    this.openFolder(folderName);
+                }
+            });
+            
+            // Setup drag and drop for folders
+            folder.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                folder.classList.add('drag-over');
+            });
+            
+            folder.addEventListener('dragleave', () => {
+                folder.classList.remove('drag-over');
+            });
+            
+            folder.addEventListener('drop', (e) => {
+                e.preventDefault();
+                folder.classList.remove('drag-over');
+                const itemName = e.dataTransfer.getData('text/inventory-item');
+                const folderName = folder.dataset.folderName;
+                if (itemName) {
+                    this.moveItemToFolder(itemName, folderName);
+                }
+            });
+        });
+        
+        // Add event listeners for expand/collapse buttons
+        inventoryContainer.querySelectorAll('.folder-expand-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const folderName = btn.dataset.folderName;
+                this.toggleFolderExpansion(folderName);
+            });
+        });
+        
+        // Make inventory items draggable
+        inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
+            item.draggable = true;
+            item.addEventListener('dragstart', (e) => {
+                this.draggedItem = item.dataset.itemName;
+                e.dataTransfer.setData('text/inventory-item', this.draggedItem);
+                e.dataTransfer.effectAllowed = 'move';
+                item.classList.add('dragging');
+            });
+            
+            item.addEventListener('dragend', () => {
+                item.classList.remove('dragging');
+                this.draggedItem = null;
+            });
+        });
+        
+        // Add breadcrumb navigation
+        if (this.currentFolder) {
+            inventoryContainer.querySelectorAll('.breadcrumb-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const folder = item.dataset.folder;
+                    this.navigateToFolder(folder);
+                });
+            });
+        }
+    }
+    
+    /**
+     * Get current folder path for display
+     */
+    getCurrentFolderPath() {
+        if (!this.currentFolder) return null;
+        return this.currentFolder;
+    }
+    
+    /**
+     * Render breadcrumb navigation
+     */
+    renderBreadcrumb() {
+        if (!this.currentFolder) return '';
+        const parts = this.currentFolder.split('/');
+        let path = '';
+        return parts.map((part, index) => {
+            path += (index > 0 ? '/' : '') + part;
+            return `<span class="breadcrumb-separator">/</span><span class="breadcrumb-item" data-folder="${path}">${part}</span>`;
+        }).join('');
+    }
+    
+    /**
+     * Render folders and items for current view
+     */
+    renderFoldersAndItems() {
+        const foldersHtml = [];
+        const itemsHtml = [];
+        
+        // Get folders in current directory
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === this.currentFolder) {
+                foldersHtml.push(this.renderFolder(key, folder));
+            }
+        });
+        
+        // Get items in current directory
+        Object.entries(this.items).forEach(([key, item]) => {
+            if ((item.folder || null) === this.currentFolder) {
+                itemsHtml.push(this.renderItem(key, item));
+            }
+        });
+        
+        return foldersHtml.join('') + itemsHtml.join('');
+    }
+    
+    /**
+     * Render folder
+     */
+    renderFolder(key, folder) {
+        const itemCount = this.getItemCountInFolder(key);
+        const isExpanded = this.expandedFolders.has(key);
+        
+        return `
+            <div class="folder-item" data-folder-name="${key}">
+                <div class="folder-header">
+                    <button class="folder-expand-btn" data-folder-name="${key}">
+                        ${isExpanded ? '▼' : '▶'}
+                    </button>
+                    <span class="folder-icon">📁</span>
+                    <h3 class="folder-name">${folder.name}</h3>
+                    <span class="folder-count">${itemCount} items</span>
+                    <button class="remove-folder-btn" data-folder-name="${key}">×</button>
+                </div>
+                ${isExpanded ? `
+                    <div class="folder-contents">
+                        ${this.renderFolderContents(key)}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }
+    
+    /**
+     * Get item count in folder (including subfolders)
+     */
+    getItemCountInFolder(folderKey) {
+        let count = 0;
+        
+        // Count direct items
+        Object.values(this.items).forEach(item => {
+            if (item.folder === folderKey) count++;
+        });
+        
+        // Count items in subfolders
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === folderKey) {
+                count += this.getItemCountInFolder(key);
+            }
+        });
+        
+        return count;
+    }
+    
+    /**
+     * Render folder contents when expanded
+     */
+    renderFolderContents(folderKey) {
+        const items = [];
+        const subfolders = [];
+        
+        // Get subfolders
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === folderKey) {
+                subfolders.push(this.renderFolder(key, folder));
+            }
+        });
+        
+        // Get items
+        Object.entries(this.items).forEach(([key, item]) => {
+            if (item.folder === folderKey) {
+                items.push(this.renderItem(key, item));
+            }
+        });
+        
+        if (subfolders.length === 0 && items.length === 0) {
+            return '<div class="folder-empty">Empty folder</div>';
+        }
+        
+        return subfolders.join('') + items.join('');
     }
     
     /**
@@ -399,6 +647,11 @@ export class Inventory {
             itemType: 'script',
             data: content
         };
+        
+        // Only add folder property if we're in a folder
+        if (this.currentFolder) {
+            scriptItem.folder = this.currentFolder;
+        }
         
         // Save to localStorage
         const storageKey = `inventory_${fileName}`;
@@ -905,6 +1158,139 @@ export class Inventory {
     }
     
     /**
+     * Create a new folder
+     */
+    createNewFolder() {
+        const folderName = prompt('Enter folder name:');
+        if (!folderName || folderName.trim() === '') return;
+        
+        const trimmedName = folderName.trim();
+        
+        // Check if folder already exists
+        if (this.folders[trimmedName]) {
+            alert(`A folder named "${trimmedName}" already exists.`);
+            return;
+        }
+        
+        // Create folder object
+        const folder = {
+            name: trimmedName,
+            created: Date.now(),
+            parent: this.currentFolder
+        };
+        
+        // Save to localStorage
+        const storageKey = `inventory_folder_${trimmedName}`;
+        localStorage.setItem(storageKey, JSON.stringify(folder));
+        
+        // Update local folders
+        this.folders[trimmedName] = folder;
+        
+        // Re-render
+        this.render();
+        
+        this.showNotification(`Created folder "${trimmedName}"`);
+    }
+    
+    /**
+     * Open a folder
+     */
+    openFolder(folderName) {
+        this.currentFolder = folderName;
+        this.selectedItem = null;
+        this.hidePreview();
+        this.render();
+    }
+    
+    /**
+     * Navigate to folder (from breadcrumb)
+     */
+    navigateToFolder(folderPath) {
+        this.currentFolder = folderPath || null;
+        this.selectedItem = null;
+        this.hidePreview();
+        this.render();
+    }
+    
+    /**
+     * Toggle folder expansion
+     */
+    toggleFolderExpansion(folderName) {
+        if (this.expandedFolders.has(folderName)) {
+            this.expandedFolders.delete(folderName);
+        } else {
+            this.expandedFolders.add(folderName);
+        }
+        this.render();
+    }
+    
+    /**
+     * Move item to folder
+     */
+    moveItemToFolder(itemName, folderName) {
+        const item = this.items[itemName];
+        if (!item) return;
+        
+        // Update item's folder property
+        item.folder = folderName;
+        
+        // Save to localStorage
+        const storageKey = `inventory_${itemName}`;
+        localStorage.setItem(storageKey, JSON.stringify(item));
+        
+        // Re-render
+        this.render();
+        
+        this.showNotification(`Moved "${itemName}" to folder "${this.folders[folderName].name}"`);
+    }
+    
+    /**
+     * Remove folder
+     */
+    removeFolder(folderName) {
+        const folder = this.folders[folderName];
+        if (!folder) return;
+        
+        // Check if folder has items or subfolders
+        const hasItems = Object.values(this.items).some(item => item.folder === folderName);
+        const hasSubfolders = Object.values(this.folders).some(f => f.parent === folderName);
+        
+        if (hasItems || hasSubfolders) {
+            if (!confirm(`Folder "${folder.name}" contains items. Delete anyway?`)) {
+                return;
+            }
+            
+            // Move all items to parent folder
+            Object.entries(this.items).forEach(([key, item]) => {
+                if (item.folder === folderName) {
+                    item.folder = folder.parent;
+                    const storageKey = `inventory_${key}`;
+                    localStorage.setItem(storageKey, JSON.stringify(item));
+                }
+            });
+            
+            // Move all subfolders to parent folder
+            Object.entries(this.folders).forEach(([key, subfolder]) => {
+                if (subfolder.parent === folderName) {
+                    subfolder.parent = folder.parent;
+                    const storageKey = `inventory_folder_${key}`;
+                    localStorage.setItem(storageKey, JSON.stringify(subfolder));
+                }
+            });
+        }
+        
+        // Remove folder
+        const storageKey = `inventory_folder_${folderName}`;
+        localStorage.removeItem(storageKey);
+        delete this.folders[folderName];
+        
+        // Re-render
+        this.render();
+        
+        this.showNotification(`Removed folder "${folder.name}"`);
+    }
+    
+    /**
      * Finalize script creation after name validation
      */
     finalizeScriptCreation(finalName) {
@@ -949,6 +1335,11 @@ this.keyUp = (key)=>{
             itemType: 'script',
             data: defaultScript
         };
+        
+        // Only add folder property if we're in a folder
+        if (this.currentFolder) {
+            scriptItem.folder = this.currentFolder;
+        }
         
         // Save to localStorage
         const storageKey = `inventory_${finalName}`;
