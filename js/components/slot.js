@@ -71,7 +71,11 @@ export class Slot{
             this._bs.SetActive(newValue);
             this.components.forEach(component => {
                 if(component.type === "MonoBehavior"){
-                    component._refresh();
+                    if(newValue){
+                        component._refresh();
+                    }else{
+                        component._stop();
+                    }
                 }
             });
         }

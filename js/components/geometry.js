@@ -67,7 +67,7 @@ export class BanterGeometryComponent extends SlotComponent {
         return properties;
     }
 
-    update(property, value) {
+    _set(property, value) {
         if (!this._bs) return;
         //console.log("updating geometry =>", property, value)
 

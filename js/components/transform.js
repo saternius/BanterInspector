@@ -15,7 +15,7 @@ export class TransformComponent extends SlotComponent {
         return this;
     }
 
-    async update(property, value){
+    async _set(property, value){
         this.properties[property] = value;
         if (property === 'localPosition' || property === 'localScale') {
             this._bs[property] = new BS.Vector3(
