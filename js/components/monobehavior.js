@@ -177,7 +177,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     newScriptContext(){
         let defaults =  {
-            vars: {},
+            vars: (this.properties.vars || {}),
             onStart: ()=>{},
             onUpdate: ()=>{},
             onDestroy: ()=>{},

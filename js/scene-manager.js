@@ -329,6 +329,7 @@ console.log("It is 6:03")
                 })
                 localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
             }
+            slot.finished_loading = true;
             return slot;
         }
 
@@ -546,7 +547,7 @@ console.log("It is 6:03")
 
 
         async sendOneShot(data){
-            console.log("sending one shot =>", data)
+            //console.log("sending one shot =>", data)
             this.scene.OneShot(data);
             if(localhost){
                 this.handleOneShot({detail: {data: data}})
@@ -763,6 +764,7 @@ console.log("It is 6:03")
         }
 
         async _deleteComponent(slotComponent){
+            let isMonoBehavior = slotComponent.type === "MonoBehavior";
             console.log("deleting component =>", slotComponent)
             await slotComponent.destroy();
             slotComponent.destroyed = true;
@@ -806,6 +808,9 @@ console.log("It is 6:03")
             }
 
             this.updateHierarchy(slotComponent._slot);
+            if(isMonoBehavior){
+                inspectorApp.lifecyclePanel.render()
+            }
         }
 
     }

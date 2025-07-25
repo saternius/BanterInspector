@@ -43,23 +43,23 @@
             });
 
             // Override console.log to capture MonoBehavior output
-            const originalLog = console.log;
-            console.log = (...args) => {
-                // Call original console.log
-                originalLog.apply(console, args);
+            // const originalLog = console.log;
+            // console.log = (...args) => {
+            //     // Call original console.log
+            //     originalLog.apply(console, args);
                 
-                // Check if this is from a MonoBehavior context
-                const stack = new Error().stack;
-                if (stack && stack.includes('MonoBehavior')) {
-                    // Try to extract component ID from the log
-                    lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
-                        if (this.selectedLogs.has(componentId)) {
-                            const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                            this.addConsoleOutput(scriptName, args.join(' '));
-                        }
-                    });
-                }
-            };
+            //     // Check if this is from a MonoBehavior context
+            //     const stack = new Error().stack;
+            //     if (stack && stack.includes('MonoBehavior')) {
+            //         // Try to extract component ID from the log
+            //         lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
+            //             if (this.selectedLogs.has(componentId)) {
+            //                 const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
+            //                 this.addConsoleOutput(scriptName, args.join(' '));
+            //             }
+            //         });
+            //     }
+            // };
         }
 
         /**

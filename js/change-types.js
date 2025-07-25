@@ -50,7 +50,7 @@ export class ComponentPropertyChange {
         this.newValue = deepClone(newValue);
         this.options = options || {};
         this.component = SM.getSlotComponentById(componentId);
-        this.oldValue = deepClone(options.oldValue || this.getOldValue());
+        this.oldValue = deepClone(this.options.oldValue || this.getOldValue());
         console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
 
@@ -428,6 +428,21 @@ export class LoadItemChange {
         let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
         SM.sendOneShot(data);
         this.slotId = `${this.parentId}/${itemData.name}`
+        const returnWhenSlotLoaded = () => {
+            return new Promise(resolve => {
+              const check = () => {
+                const slot = SM.getSlotById(this.slotId);
+                if (slot !== undefined && slot.finished_loading) {
+                  resolve(slot);
+                } else {
+                  // try again in 100 ms
+                  setTimeout(check, 100);
+                }
+              };
+              check();
+            });
+          };
+        return await returnWhenSlotLoaded();
     }
 
     async undo() {
@@ -443,4 +458,48 @@ export class LoadItemChange {
     getUndoDescription() {
         return `Remove item ${this.itemName} from ${this.parentId}`;
     }
+}
+
+
+
+window.SetSlotProp = async (slotId, property, newValue, options)=>{
+    let change = new SlotPropertyChange(slotId, property, newValue, options);
+    return await change.apply();
+}
+window.SetComponentProp = async (componentId, property, newValue, options)=>{
+    let change = new ComponentPropertyChange(componentId, property, newValue, options);
+    return await change.apply();
+}
+window.SetSpaceProp = async (property, newValue, protect, options)=>{
+    let change = new SpacePropertyChange(property, newValue, protect, options);
+    return await change.apply();
+}
+window.AddComponent = async (slotId, componentType, options)=>{
+    let change = new ComponentAddChange(slotId, componentType, options);
+    return await change.apply();
+}
+window.RemoveComponent = async (componentId, options)=>{
+    let change = new ComponentRemoveChange(componentId, options);
+    return await change.apply();
+}
+window.AddSlot = async (parentId, slotName, options)=>{
+    let change = new SlotAddChange(parentId, slotName, options);
+    return await change.apply();
+}
+window.RemoveSlot = async (slotId, options)=>{
+    let change = new SlotRemoveChange(slotId, options);
+    return await change.apply();
+}
+window.MoveSlot = async (slotId, newParentId, options)=>{
+    let change = new SlotMoveChange(slotId, newParentId, options);
+    return await change.apply();
+}
+window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
+    let change = new MonoBehaviorVarChange(componentId, varName, newValue, options);
+    return await change.apply();
+}
+
+window.LoadItem = async (itemName, parentId, options)=>{
+    let change = new LoadItemChange(itemName, parentId, options);
+    return await change.apply();
 }
