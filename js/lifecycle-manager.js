@@ -25,7 +25,13 @@ export class LifecycleManager {
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
             this.start();
         }
+
+        this.pruneOrphanedMonoBehaviors();
         inspectorApp.lifecyclePanel.render()
+    }
+
+    pruneOrphanedMonoBehaviors(){
+        // TODO
     }
     
     /**
@@ -42,6 +48,7 @@ export class LifecycleManager {
         if (this.monoBehaviors.size === 0) {
             this.stop();
         }
+        this.pruneOrphanedMonoBehaviors();
         inspectorApp.lifecyclePanel.render()
     }
     

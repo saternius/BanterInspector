@@ -14,10 +14,15 @@ export class MonoBehaviorComponent extends SlotComponent {
         this.scriptContext = this.newScriptContext();
         this.scriptFunction = null;
         this.type = "MonoBehavior";
-        if(this.properties.file && this.properties.file.length > 0){
-            this._loadScript(this.properties.file);
-        }
         this.setId(this.id.replace("undefined","MonoBehavior"));
+        if(this.properties.file && this.properties.file.length > 0){
+            if(SM.scene.spaceState.public["__" + this.id + "_running:monobehavior"] !== false){
+                this._loadScript(this.properties.file);
+            }else{
+                this.scriptContext._running = false;
+            }
+        }
+        
         setTimeout(()=>{
             this.loadVarsFromSpaceState();
         }, 10)
@@ -123,6 +128,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(this.scriptContext._running) return;
         this.scriptContext._running = true;
         this.scriptContext.onStart();
+        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
         inspectorApp.lifecyclePanel.render()
     }
 
@@ -131,6 +137,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(!this.scriptContext._running) return;
         this.scriptContext._running = false;
         this.scriptContext.onDestroy();
+        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
         inspectorApp.lifecyclePanel.render()
     }
 
@@ -214,7 +221,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async destroy(){
         await super.destroy();
-        this.stop();
+        this._stop();
         await lifecycle.unregisterMonoBehavior(this);
         
     }

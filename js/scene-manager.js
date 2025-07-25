@@ -74,6 +74,9 @@ console.log("It is 6:03")
                     }
                     this.loaded = true;
                     inspectorApp.hierarchyPanel.render()
+                    setTimeout(()=>{
+                        inspectorApp.lifecyclePanel.render()
+                    }, 100)
                 }
             } catch (error) {
                 console.error('Failed to connect to Unity:', error);
@@ -92,6 +95,13 @@ console.log("It is 6:03")
                 protected: {}
             }
             await this.initialize();
+        }
+
+        claimHost(){
+            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+            setTimeout(()=>{
+                this.sendOneShot('reset');
+            }, 1000)
         }
 
         // This gathers the hierarchy of the scene via Unity GameObjects
@@ -255,9 +265,8 @@ console.log("It is 6:03")
                     if(component_ref.startsWith("MonoBehavior")){
                         //console.log("MonoBehavior Spotted =>", component_ref)
                         let props = this.getHistoricalProps(component_ref).props
+                        props.id = component_ref;
                         let slotComponent = await new MonoBehaviorComponent().init(slot, null, props)
-                        //console.log("slotComponent =>", slotComponent)
-                        slotComponent.setId(component_ref);
                         slot.components.push(slotComponent);
                     }
                 })
@@ -359,8 +368,8 @@ console.log("It is 6:03")
                 let hist = this.getHistoricalProps(component_ref)
                 let componentClass = componentTypeMap[hist.type]
                 let props = hist.props
+                props.id = component_ref;
                 let slotComponent = await new componentClass().init(slot, null, props)
-                slotComponent.setId(component_ref);
                 slot.components.push(slotComponent);
             }
 
@@ -419,9 +428,14 @@ console.log("It is 6:03")
                         let ref = path[0].slice(2)
                         let monobehavior = this.getSlotComponentById(ref);
                         if(monobehavior && monobehavior.scriptContext){
-                            monobehavior.scriptContext.vars[prop] = newValue;
+                            if(prop === "_running"){
+                                monobehavior.scriptContext._running = newValue;
+                                inspectorApp.lifecyclePanel.render()
+                            }else{
+                                monobehavior.scriptContext.vars[prop] = newValue;
+                                renderProps(monobehavior)
+                            }
                         }
-                        renderProps(monobehavior)
                     }else{
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
@@ -437,6 +451,10 @@ console.log("It is 6:03")
         async handleOneShot(event){
             console.log("handleOneShot =>", event)
             let data = event.detail.data;
+
+            if(data === "reset"){
+                window.location.reload();
+            }
            
             if(data.startsWith("load_slot")){
                 let [parentId, slot_data] = data.slice(10).split("|");
@@ -591,6 +609,10 @@ console.log("It is 6:03")
 
         getSlotByName(slotName){
             return SM.getAllSlots().find(x=>x.name==slotName);
+        }
+
+        getAllMonoBehaviors(){
+            return Object.values(this.slotData.componentMap).filter(x=>x.type === "MonoBehavior");
         }
 
 

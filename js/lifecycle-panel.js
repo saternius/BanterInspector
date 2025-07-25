@@ -81,8 +81,8 @@
             if (!listElement) return;
             
             listElement.innerHTML = '';
-            
-            if (lifecycle.monoBehaviors.size === 0) {
+            let monoBehaviors = SM.getAllMonoBehaviors();
+            if (monoBehaviors.length === 0) {
                 listElement.innerHTML = '<div class="empty-lifecycle">No active MonoBehavior scripts</div>';
                 return;
             }
@@ -96,6 +96,7 @@
             thead.innerHTML = `
                 <tr>
                     <th>Name</th>
+                    <th>Owner</th>
                     <th>Usage</th>
                     <th>Log</th>
                     <th>Actions</th>
@@ -106,8 +107,8 @@
             // Create body
             const tbody = document.createElement('tbody');
             
-            lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
-                const row = this.createMonobehaviorRow(componentId, monoBehavior);
+            monoBehaviors.forEach((monoBehavior) => {
+                const row = this.createMonobehaviorRow(monoBehavior);
                 tbody.appendChild(row);
             });
             
@@ -118,7 +119,7 @@
         /**
          * Create a row for a monobehavior
          */
-        createMonobehaviorRow(componentId, monoBehavior) {
+        createMonobehaviorRow(monoBehavior) {
             const row = document.createElement('tr');
             row.className = 'lifecycle-row';
             
@@ -128,6 +129,13 @@
             const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown Script';
             nameCell.textContent = scriptName;
             nameCell.title = `Script: ${monoBehavior.properties?.file || 'No script'}`;
+
+
+            // Owner column
+            const ownerCell = document.createElement('td');
+            ownerCell.className = 'lifecycle-owner';
+            ownerCell.textContent = monoBehavior.properties?.owner || 'Unknown Owner';
+            ownerCell.title = `Owner: ${monoBehavior.properties?.owner || 'No owner'}`;
             
             // Usage column
             const usageCell = document.createElement('td');
@@ -146,8 +154,8 @@
             logCell.className = 'lifecycle-log';
             const logCheckbox = document.createElement('input');
             logCheckbox.type = 'checkbox';
-            logCheckbox.checked = this.selectedLogs.has(componentId);
-            logCheckbox.onchange = () => this.toggleLogging(componentId, logCheckbox.checked);
+            logCheckbox.checked = this.selectedLogs.has(monoBehavior.id);
+            logCheckbox.onchange = () => this.toggleLogging(monoBehavior.id, logCheckbox.checked);
             logCell.appendChild(logCheckbox);
             
             // Actions column
@@ -159,19 +167,35 @@
             stopBtn.className = 'lifecycle-button stop';
             stopBtn.innerHTML = '⏹';
             stopBtn.title = 'Stop';
-            stopBtn.onclick = () => this.stopMonobehavior(componentId, monoBehavior);
+            if(monoBehavior.scriptContext._running){
+                stopBtn.onclick = () => {
+                    monoBehavior.Stop();
+                    this.addConsoleOutput(scriptName, '[Stopped]');
+                    this.render();
+                }
+            }else{
+                stopBtn.disabled = true;
+                stopBtn.title = 'Not running';
+                stopBtn.style.opacity = 0.25;
+                stopBtn.style.pointerEvents = 'none';
+            }
             
             // Refresh button
             const refreshBtn = document.createElement('button');
             refreshBtn.className = 'lifecycle-button refresh';
             refreshBtn.innerHTML = '🔄';
             refreshBtn.title = 'Refresh';
-            refreshBtn.onclick = () => this.refreshMonobehavior(componentId, monoBehavior);
+            refreshBtn.onclick = () => {
+                monoBehavior.Refresh();
+                this.addConsoleOutput(scriptName, '[Refreshed]');
+                this.render();
+            }
             
             actionsCell.appendChild(stopBtn);
             actionsCell.appendChild(refreshBtn);
             
             row.appendChild(nameCell);
+            row.appendChild(ownerCell);
             row.appendChild(usageCell);
             row.appendChild(logCell);
             row.appendChild(actionsCell);
@@ -196,53 +220,6 @@
             }
         }
 
-        /**
-         * Stop a monobehavior
-         */
-        async stopMonobehavior(componentId, monoBehavior) {
-            try {
-                // Use the MonoBehavior component's stop method
-                if (monoBehavior.stop && typeof monoBehavior.stop === 'function') {
-                    monoBehavior.stop();
-                } else if (monoBehavior.scriptContext) {
-                    // Fallback to manual stop
-                    monoBehavior.scriptContext._running = false;
-                    
-                    // Call onPause if it exists
-                    if (monoBehavior.scriptContext.onPause && typeof monoBehavior.scriptContext.onPause === 'function') {
-                        monoBehavior.scriptContext.onPause();
-                    }
-                }
-                
-                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                this.addConsoleOutput(scriptName, '[Stopped]');
-                this.render();
-            } catch (error) {
-                console.error('Failed to stop monobehavior:', error);
-                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                this.addConsoleOutput(scriptName, `[Error stopping: ${error.message}]`);
-            }
-        }
-
-        /**
-         * Refresh a monobehavior
-         */
-        async refreshMonobehavior(componentId, monoBehavior) {
-            try {
-                // Use the MonoBehavior component's refresh method
-                if (monoBehavior.refresh && typeof monoBehavior.refresh === 'function') {
-                    await monoBehavior.refresh();
-                }
-                
-                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                this.addConsoleOutput(scriptName, '[Refreshed]');
-                this.render();
-            } catch (error) {
-                console.error('Failed to refresh monobehavior:', error);
-                const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                this.addConsoleOutput(scriptName, `[Error refreshing: ${error.message}]`);
-            }
-        }
 
         /**
          * Add output to the console
