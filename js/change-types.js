@@ -30,7 +30,7 @@ export class SlotPropertyChange {
 
     async change(value){
         const slot = SM?.getSlotById(this.slotId);
-        slot.set(this.property, value);
+        slot.Set(this.property, value);
     }
 
     getDescription() {
@@ -69,7 +69,7 @@ export class ComponentPropertyChange {
     async change(value) {
         if(!this.component) return;
 
-        await this.component.set(this.property, value);
+        await this.component.Set(this.property, value);
 
         // Refresh UI if needed
         if (window.inspectorApp?.spacePropsPanel) {

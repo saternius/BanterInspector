@@ -14,7 +14,7 @@ export class SlotComponent{
             if(this.bsRef){
                 let newComponent = await slot._bs.AddComponent(new this.bsRef());
                 this._bs = newComponent;
-                this.updateMany(this.properties)
+                this._setMany(this.properties)
             }
         }
         
@@ -46,15 +46,15 @@ export class SlotComponent{
         return {};
     }
 
-    async updateMany(properties){
-        console.log(`(${this._slot.name})[${this.type}] updateMany`, properties)
+    async _setMany(properties){
+        console.log(`(${this._slot.name})[${this.type}] setMany`, properties)
         for(let property in properties){
-            await this.update(property, properties[property]);
+            await this._set(property, properties[property]);
         }
     }
 
-    async update(property, value){
-        console.log(`(${this._slot.name})[${this.type}] update ${property} =>`, value)
+    async _set(property, value){
+        console.log(`(${this._slot.name})[${this.type}] set ${property} =>`, value)
         this.properties[property] = value;
         this._bs[property] = value;
     }
@@ -65,7 +65,7 @@ export class SlotComponent{
         }
     }
 
-    async set(property, value){
+    async Set(property, value){
         const spaceKey = `__${this._slot.name}/${this.type}/${property}:${this.id}`;
         await SM.setSpaceProperty(spaceKey, value, false);
     }

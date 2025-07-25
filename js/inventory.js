@@ -909,12 +909,17 @@ export class Inventory {
      */
     finalizeScriptCreation(finalName) {
         // Default script template
-        const defaultScript = `this.vars = {
-    "exampleVar": {
-        "type": "number",
-        "default": 1
+        const defaultScript = `this.default = {
+    "slotRef": {
+        "type": "string",
+        "value": ""
     }
 }
+
+Object.entries(this.default).forEach(([key, val])=>{
+    if(!this.vars[key]) this.vars[key] = val
+})
+
 
 this.onStart = ()=>{
     console.log("onStart")

@@ -129,6 +129,22 @@
             const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown Script';
             nameCell.textContent = scriptName;
             nameCell.title = `Script: ${monoBehavior.properties?.file || 'No script'}`;
+            nameCell.style.cursor = 'pointer';
+            nameCell.onclick = () => {
+                console.log("editButton clicked =>", monoBehavior.properties.file)
+                    const scriptItem = window.inventory.items[monoBehavior.properties.file];
+                    if (scriptItem && scriptItem.itemType === 'script') {
+                        const event = new CustomEvent('open-script-editor', {
+                            detail: {
+                                name: monoBehavior.properties.file,
+                                content: scriptItem.data,
+                                author: scriptItem.author,
+                                created: scriptItem.created
+                            }
+                        });
+                        window.dispatchEvent(event);
+                    }
+            }
 
 
             // Owner column

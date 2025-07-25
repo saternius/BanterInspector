@@ -61,7 +61,7 @@ export class Slot{
 
     }
 
-    update(prop, newValue){
+    _set(prop, newValue){
         console.log(`(${this.name}) update ${prop} =>`, newValue)
         if(prop == "name"){
             this.name = newValue;
@@ -69,6 +69,11 @@ export class Slot{
         if(prop == "active"){
             this.active = newValue;
             this._bs.SetActive(newValue);
+            this.components.forEach(component => {
+                if(component.type === "MonoBehavior"){
+                    component._refresh();
+                }
+            });
         }
         if(prop == "persistent"){
             this.persistent = newValue;
@@ -79,7 +84,7 @@ export class Slot{
         return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running']);
     }
 
-    async set(property, value){
+    async Set(property, value){
         const spaceKey = '__' + this.id + '/' + property + ':slot';
         await SM.setSpaceProperty(spaceKey, value, false);
     }

@@ -30,7 +30,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         return this;
     }
 
-    async update(property, value){
+    async _set(property, value){
         console.log("[MONO] updating property =>", property, value)
         if(property === 'file'){
             this._loadScript(value);
@@ -57,6 +57,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async _loadScript(fileName) {        
         if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(!this._slot.active) return;
         console.log("loading script =>", fileName)
         const inventoryItem = window.inventory?.items?.[fileName];
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
@@ -126,6 +127,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     _start(){
         if(this.properties.owner !== SM.scene.localUser.name) return;
         if(this.scriptContext._running) return;
+        if(!this._slot.active) return;
         this.scriptContext._running = true;
         this.scriptContext.onStart();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
@@ -135,6 +137,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     _stop(){
         if(this.properties.owner !== SM.scene.localUser.name) return;
         if(!this.scriptContext._running) return;
+        if(!this._slot.active) return;
         this.scriptContext._running = false;
         this.scriptContext.onDestroy();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
@@ -144,11 +147,13 @@ export class MonoBehaviorComponent extends SlotComponent {
     _update(){
         if(this.properties.owner !== SM.scene.localUser.name) return;
         if(!this.scriptContext._running) return;
+        if(!this._slot.active) return;
         this.scriptContext.onUpdate();
     }
 
     _refresh(){
         if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(!this._slot.active) return;
         console.log("refreshing script [", this.scriptContext._running, "]..")
         if(this.scriptContext._running){
             this.scriptContext._running = false;

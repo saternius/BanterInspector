@@ -421,7 +421,7 @@ console.log("It is 6:03")
                         let ref = ['Root'].concat(path.slice(1,-1)).join("/")
                         let slot = this.getSlotById(ref);
                         if(slot){
-                            await slot.update(prop, newValue);
+                            await slot._set(prop, newValue);
                         }
                         inspectorApp.hierarchyPanel.render()
                     }else if(type[0] == "monobehavior"){
@@ -440,7 +440,7 @@ console.log("It is 6:03")
                     }else{
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
-                            await component.update(prop, newValue);
+                            await component._set(prop, newValue);
                         }
                         renderProps(component)
                     }
@@ -682,7 +682,7 @@ console.log("It is 6:03")
                     try {
                         await deleteSlot._bs.Destroy();
                         deleteSlot.destroyed = true;
-                        delete this.slotData.slotMap[this.id];
+                        delete this.slotData.slotMap[deleteSlot.id];
 
                     } catch (error) {
                         console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
