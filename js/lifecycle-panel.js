@@ -150,8 +150,8 @@
             // Owner column
             const ownerCell = document.createElement('td');
             ownerCell.className = 'lifecycle-owner';
-            ownerCell.textContent = monoBehavior.properties?.owner || 'Unknown Owner';
-            ownerCell.title = `Owner: ${monoBehavior.properties?.owner || 'No owner'}`;
+            ownerCell.textContent = monoBehavior.properties?._owner || 'Unknown Owner';
+            ownerCell.title = `Owner: ${monoBehavior.properties?._owner || 'No owner'}`;
             
             // Usage column
             const usageCell = document.createElement('td');

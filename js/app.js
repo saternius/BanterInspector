@@ -94,6 +94,13 @@
                         this.lifecyclePanel.clearConsole();
                     });
                 }
+
+                const refreshPanelBtn = document.getElementById('refreshPanelBtn');
+                if (refreshPanelBtn) {
+                    refreshPanelBtn.addEventListener('click', () => {
+                        this.lifecyclePanel.render();
+                    });
+                }
                 
                 // Set up history notifications
                 this.setupHistoryNotifications();

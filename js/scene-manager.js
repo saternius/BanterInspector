@@ -393,6 +393,7 @@ console.log("It is 6:03")
 
         handleSpaceStateChange(event) {
             const { changes } = event.detail;
+            console.log("[SPACE CHANGE] =>", changes)
             changes.forEach(async (change) => {
                 //console.log("[SPACE CHANGE] =>", change)
                 let { property, newValue, isProtected } = change;
@@ -422,8 +423,9 @@ console.log("It is 6:03")
                         let slot = this.getSlotById(ref);
                         if(slot){
                             await slot._set(prop, newValue);
+                            inspectorApp.hierarchyPanel.render()
                         }
-                        inspectorApp.hierarchyPanel.render()
+                        
                     }else if(type[0] == "monobehavior"){
                         console.log("updating monobehavior =>", property, newValue)
                         let ref = path[0].slice(2)
@@ -441,8 +443,9 @@ console.log("It is 6:03")
                         let component = this.getSlotComponentById(items[1]);
                         if(component){
                             await component._set(prop, newValue);
+                            renderProps(component)
                         }
-                        renderProps(component)
+                        
                     }
                 }
             });

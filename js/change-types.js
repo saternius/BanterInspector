@@ -427,6 +427,44 @@ export class LoadItemChange {
 
         let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
         SM.sendOneShot(data);
+
+        //Additionally send all of the slot properties to space props
+        if(!this.options.ephemeral){
+            let getItemProps = (slot)=>{
+                let data = {}
+                for(let prop in slot.properties){
+                    const spaceKey = '__' + slot.id + '/' + prop + ':slot';
+                    data[spaceKey] = slot.properties[prop];
+                }
+
+
+            
+                for(let component of slot.components){
+                    for(let prop in component.properties){
+                        const spaceKey = `__${slot.name}/${component.type}/${prop}:${component.id}`;
+                        data[spaceKey] = component.properties[prop];
+                    }
+                }
+
+                for(let child of slot.children){
+                    let childData = getItemProps(child);
+                    data = {...data, ...childData};
+                }
+                return data;
+            }
+
+            let itemProps = getItemProps(itemData);
+            console.log("[ITEM PROPS] =>", itemProps)
+            //SM.scene.SetPublicSpaceProps(itemProps); // Use this when you can debug in prod
+            Object.entries(itemProps).forEach(([key, value]) => {
+                SM.setSpaceProperty(key, value, false);
+            });
+        }
+
+
+
+
+
         this.slotId = `${this.parentId}/${itemData.name}`
         const returnWhenSlotLoaded = () => {
             return new Promise(resolve => {

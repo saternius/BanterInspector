@@ -51,12 +51,12 @@ export class MonoBehaviorComponent extends SlotComponent {
             name: "myScript",
             file: null,
             vars: {},
-            owner: SM.scene.spaceState.public.hostUser
+            _owner: SM.scene.spaceState.public.hostUser
         }
     }
 
     async _loadScript(fileName) {        
-        if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this._slot.active) return;
         console.log("loading script =>", fileName)
         const inventoryItem = window.inventory?.items?.[fileName];
@@ -125,7 +125,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _start(){
-        if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.scene.localUser.name) return;
         if(this.scriptContext._running) return;
         if(!this._slot.active) return;
         this.scriptContext._running = true;
@@ -135,7 +135,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _stop(){
-        if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this.scriptContext._running) return;
         if(!this._slot.active) return;
         this.scriptContext._running = false;
@@ -145,14 +145,14 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _update(){
-        if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this.scriptContext._running) return;
         if(!this._slot.active) return;
         this.scriptContext.onUpdate();
     }
 
     _refresh(){
-        if(this.properties.owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this._slot.active) return;
         console.log("refreshing script [", this.scriptContext._running, "]..")
         if(this.scriptContext._running){
