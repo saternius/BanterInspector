@@ -10,6 +10,12 @@ export class ScriptEditor {
         this.pageElement = null;
         this.navElement = null;
         this.keydownHandler = null;
+        this.eventListenersSetup = false;
+        this.saveBtnHandler = null;
+        this.playBtnHandler = null;
+        this.stopBtnHandler = null;
+        this.closeBtnHandler = null;
+        this.slotButtonHandlers = new Map();
     }
     
     async open() {
@@ -223,61 +229,117 @@ export class ScriptEditor {
         });
     }
     
+    cleanupEventListeners() {
+        // Remove save button listener
+        if (this.saveBtnHandler) {
+            const saveBtn = document.getElementById(`saveBtn-${this.pageId}`);
+            if (saveBtn) {
+                saveBtn.removeEventListener('click', this.saveBtnHandler);
+            }
+            this.saveBtnHandler = null;
+        }
+        
+        // Remove playback control listeners
+        if (this.playBtnHandler) {
+            const playBtn = document.getElementById(`playBtn-${this.pageId}`);
+            if (playBtn) {
+                playBtn.removeEventListener('click', this.playBtnHandler);
+            }
+            this.playBtnHandler = null;
+        }
+        
+        if (this.stopBtnHandler) {
+            const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
+            if (stopBtn) {
+                stopBtn.removeEventListener('click', this.stopBtnHandler);
+            }
+            this.stopBtnHandler = null;
+        }
+        
+        // Remove close button listener
+        if (this.closeBtnHandler && this.navElement) {
+            const closeBtn = this.navElement.querySelector(`[data-close-script="${this.pageId}"]`);
+            if (closeBtn) {
+                closeBtn.removeEventListener('click', this.closeBtnHandler);
+            }
+            this.closeBtnHandler = null;
+        }
+        
+        // Remove keyboard shortcut listener
+        if (this.keydownHandler) {
+            document.removeEventListener('keydown', this.keydownHandler);
+            this.keydownHandler = null;
+        }
+        
+        // Remove slot button listeners
+        this.slotButtonHandlers.forEach((handler, btn) => {
+            btn.removeEventListener('click', handler);
+        });
+        this.slotButtonHandlers.clear();
+    }
+    
     setupEventListeners() {
+        // Clean up any existing listeners first
+        this.cleanupEventListeners();
+        
         // CodeMirror is now initialized separately
         
         // Save button
         const saveBtn = document.getElementById(`saveBtn-${this.pageId}`);
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => this.save());
+            this.saveBtnHandler = () => this.save();
+            saveBtn.addEventListener('click', this.saveBtnHandler);
         }
         
         // Playback controls
         const playBtn = document.getElementById(`playBtn-${this.pageId}`);
-        // const pauseBtn = document.getElementById('pauseBtn');
         const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
         
         if (playBtn) {
-            playBtn.addEventListener('click', () => this.play());
+            this.playBtnHandler = () => this.play();
+            playBtn.addEventListener('click', this.playBtnHandler);
         }
         
-        // if (pauseBtn) {
-        //     pauseBtn.addEventListener('click', () => this.pause());
-        // }
-        
         if (stopBtn) {
-            stopBtn.addEventListener('click', () => this.stop());
+            this.stopBtnHandler = () => this.stop();
+            stopBtn.addEventListener('click', this.stopBtnHandler);
         }
         
         // Close button
-        const closeBtn = this.navElement.querySelector(`[data-close-script="${this.pageId}"]`);
-        if (closeBtn) {
-            closeBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.close();
-            });
+        if (this.navElement) {
+            const closeBtn = this.navElement.querySelector(`[data-close-script="${this.pageId}"]`);
+            if (closeBtn) {
+                this.closeBtnHandler = (e) => {
+                    e.stopPropagation();
+                    this.close();
+                };
+                closeBtn.addEventListener('click', this.closeBtnHandler);
+            }
         }
         
-        // Keyboard shortcuts
-        const handleKeyDown = (e) => {
-            // Only handle if this script editor is active
-            if (navigation.currentPage === this.pageId) {
-                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-                    e.preventDefault();
-                    this.save();
+        // Keyboard shortcuts - only add if not already added
+        if (!this.keydownHandler) {
+            this.keydownHandler = (e) => {
+                // Only handle if this script editor is active
+                if (navigation.currentPage === this.pageId) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        this.save();
+                    }
                 }
-            }
-        };
-        this.keydownHandler = handleKeyDown;
-        document.addEventListener('keydown', handleKeyDown);
+            };
+            document.addEventListener('keydown', this.keydownHandler);
+        }
         
         // Slot selector buttons
         const slotButtons = this.pageElement.querySelectorAll('.slot-selector-btn');
         slotButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
+            const handler = () => {
                 const slotId = btn.dataset.slotId;
                 this.selectSlot(slotId);
-            });
+            };
+            this.slotButtonHandlers.set(btn, handler);
+            btn.addEventListener('click', handler);
         });
     }
     
@@ -461,15 +523,13 @@ export class ScriptEditor {
             if (!confirmClose) return;
         }
         
+        // Cleanup all event listeners
+        this.cleanupEventListeners();
+        
         // Cleanup CodeMirror
         if (this.codemirror) {
             this.codemirror.toTextArea();
             this.codemirror = null;
-        }
-        
-        // Remove keyboard event listener
-        if (this.keydownHandler) {
-            document.removeEventListener('keydown', this.keydownHandler);
         }
         
         // Remove page switch event listener
