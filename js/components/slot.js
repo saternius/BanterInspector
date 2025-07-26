@@ -58,13 +58,46 @@ export class Slot{
         newParent.children.push(this);
         this.parentId = newParent.id;
         this._bs.SetParent(newParent._bs);
+        this.rename(this.name);
+    }
 
+    _deleteOldSpaceProperties(){
+        let toDelete = [];
+        Object.keys(SM.scene.spaceState.public).forEach(key=>{
+            let idx = key.lastIndexOf("/");
+            let target = key.substring(0, idx);
+            if(target == this.id){
+                toDelete.push(key);
+            }
+        })
+        console.log(` deleting [${toDelete.length}] space properties..`)
+
+        for(let key of toDelete){
+            SM.deleteSpaceProperty(key, false);
+        }
+    }
+
+    saveSpaceProperties(){
+        SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
+        SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
+        SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
+    }
+
+    rename(newName, localUpdate){
+        if(!localUpdate) this._deleteOldSpaceProperties();
+        this.name = newName;
+        this.id = this.parentId+"/"+this.name;
+        if(!localUpdate) this.saveSpaceProperties();
+        this.children.forEach(child=>{
+            child.parentId = this.id;
+            child.rename(child.name);
+        })
     }
 
     _set(prop, newValue){
         console.log(`(${this.name}) update ${prop} =>`, newValue)
         if(prop == "name"){
-            this.name = newValue;
+            this.rename(newValue, true);
         }
         if(prop == "active"){
             this.active = newValue;
@@ -91,5 +124,8 @@ export class Slot{
     async Set(property, value){
         const spaceKey = '__' + this.id + '/' + property + ':slot';
         await SM.setSpaceProperty(spaceKey, value, false);
+        if(property == "name"){
+            this.rename(value, false);
+        }
     }
 }

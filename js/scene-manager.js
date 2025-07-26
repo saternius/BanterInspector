@@ -526,6 +526,19 @@ console.log("It is 6:03")
             }
         }
 
+        async deleteSpaceProperty(key, isProtected){
+            if(isProtected){
+                this.scene.SetProtectedSpaceProps({ [key]: null });
+                delete this.scene.spaceState.protected[key];
+            }else{
+                this.scene.SetPublicSpaceProps({ [key]: null });
+                delete this.scene.spaceState.public[key];
+            }
+            if(localhost){
+                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
+            }
+        }
+
 
         async sendOneShot(data){
             //console.log("sending one shot =>", data)
@@ -766,17 +779,7 @@ console.log("It is 6:03")
                 
                 // Remove the properties
                 for (const { key, isProtected } of propsToRemove) {
-                    if (isProtected) {
-                        delete spaceState.protected[key];
-                        if (this.scene.SetProtectedSpaceProps) {
-                            this.scene.SetProtectedSpaceProps({ [key]: null });
-                        }
-                    } else {
-                        delete spaceState.public[key];
-                        if (this.scene.SetPublicSpaceProps) {
-                            this.scene.SetPublicSpaceProps({ [key]: null });
-                        }
-                    }
+                    await this.deleteSpaceProperty(key, isProtected);
                 }
             }
 
