@@ -171,34 +171,12 @@ console.log("It is 6:03")
         }
 
 
-        getSlotSpaceProperties(slot){
-            let props = {}
-            let getSubSlotProps = (slot)=>{
-                props[`__${slot.id}/active:slot`] = slot.active
-                props[`__${slot.id}/persistent:slot`] = slot.persistent
-                props[`__${slot.id}/name:slot`] = slot.name
-                
-                slot.components.forEach(component=>{
-                    Object.keys(component.properties).forEach(prop=>{
-                        props[`__${slot.id}/${component.type}/${prop}:${component.id}`] = component.properties[prop]
-                    })
-                })
-
-                slot.children.forEach(child=>{
-                    getSubSlotProps(child)
-                })
-            }
-
-            getSubSlotProps(slot)
-            return props
-        }
-
 
         // Updates the hierarchy of the scene from the root slot
         async updateHierarchy(slot = null){  
             let h = await this.gatherSceneHierarchyBySlot();
             this.setSpaceProperty("hierarchy", h, false);
-
+            console.log("[UPDATE HIERARCHY] =>", h)
             slot = slot || this.getRootSlot();
             if(slot){
                 this.selectSlot(slot.id);
@@ -288,7 +266,7 @@ console.log("It is 6:03")
 
         //Creates a slot from the inventory schema
         async _loadSlot(slotData, parentId){
-
+            console.log("loading slot =>", slotData)
             let loadSubSlot = async (item, parentId)=>{ 
                 const newSlot = await new Slot().init({
                     name: item.name,
@@ -297,13 +275,15 @@ console.log("It is 6:03")
     
     
                 for(let component of item.components){
+                    component.properties.id = component.id;
                     await this._addComponent(newSlot, component.type, component.properties);
                 }
-    
-                item.children.forEach(async (child) => {
+
+                for(let i=0; i<item.children.length; i++){
+                    let child = item.children[i];
                     let childSlot = await loadSubSlot(child, newSlot.id);
                     await childSlot.setParent(newSlot);
-                });
+                }
     
                 return newSlot;
             }
@@ -318,17 +298,8 @@ console.log("It is 6:03")
             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
                 detail: { slotId: slot.id }
             }));
-            await this.updateHierarchy(slot);
 
-            let spaceProps = this.getSlotSpaceProperties(slot)
-            this.scene.SetPublicSpaceProps(spaceProps)
-
-            if(localhost){
-                Object.keys(spaceProps).forEach(key=>{
-                    this.scene.spaceState.public[key] = spaceProps[key]
-                })
-                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            }
+            
             slot.finished_loading = true;
             return slot;
         }
@@ -367,6 +338,7 @@ console.log("It is 6:03")
             for(let i=0; i<hierarchy.components.length; i++){
                 let component_ref = hierarchy.components[i]
                 let hist = this.getHistoricalProps(component_ref)
+                console.log(`historical props for [${component_ref}] =>`, hist)
                 let componentClass = componentTypeMap[hist.type]
                 let props = hist.props
                 props.id = component_ref;
@@ -463,6 +435,7 @@ console.log("It is 6:03")
             if(data.startsWith("load_slot")){
                 let [parentId, slot_data] = data.slice(10).split("|");
                 await this._loadSlot(JSON.parse(slot_data), parentId);
+                await this.updateHierarchy(this.selectedSlot);
             }
 
             if(data.startsWith("component_added")){
@@ -470,6 +443,7 @@ console.log("It is 6:03")
                 let slot = this.getSlotById(event.slotId);
                 if(slot){
                     await this._addComponent(slot, event.componentType, event.componentProperties);
+                    await this.updateHierarchy(this.selectedSlot);
                 }
             }
 
@@ -478,6 +452,7 @@ console.log("It is 6:03")
                 let component = this.getSlotComponentById(componentId);
                 if(component){
                     await this._deleteComponent(component);
+                    await this.updateHierarchy(this.selectedSlot);
                 }
             }
 
@@ -485,17 +460,20 @@ console.log("It is 6:03")
             if(data.startsWith("slot_added")){
                 let [parentId, slotName] = data.slice(11).split(":");
                 await this._addNewSlot(slotName, parentId);
+                await this.updateHierarchy(this.selectedSlot);
             }
 
             if(data.startsWith("slot_removed")){
                 let slotId = data.slice(13);
                 await this._deleteSlot(slotId);
+                await this.updateHierarchy(this.selectedSlot);
             }
 
             if(data.startsWith("slot_moved")){
                 let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
                 newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
                 await this._moveSlot(slotId, newParentId, newSiblingIndex);
+                await this.updateHierarchy(this.selectedSlot);
             }
 
             if(data.startsWith("monobehavior_start")){
@@ -649,7 +627,6 @@ console.log("It is 6:03")
 
             
             await newSlot.setParent(parentSlot);
-            await this.updateHierarchy(newSlot);
         }
 
         async _deleteSlot(slotId) {
@@ -704,7 +681,6 @@ console.log("It is 6:03")
                 this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
             }
 
-            await this.updateHierarchy(null);
         }
 
         async _moveSlot(slotId, newParentId, newSiblingIndex) {
@@ -718,7 +694,6 @@ console.log("It is 6:03")
             if(newSiblingIndex){
                 //slot.setSiblingIndex(newSiblingIndex); TODO: implement this
             }
-            await this.updateHierarchy(slot);
         }
 
         async _addComponent(slot, componentType, componentProperties){
@@ -748,7 +723,6 @@ console.log("It is 6:03")
             if (window.inspectorApp?.propertiesPanel) {
                 window.inspectorApp.propertiesPanel.render(slot.id);
             }
-            await this.updateHierarchy(slot);
             return slotComponent;
         }
 
@@ -810,7 +784,7 @@ console.log("It is 6:03")
                 window.inspectorApp.propertiesPanel.render(this.slotId);
             }
 
-            this.updateHierarchy(slotComponent._slot);
+            //(slotComponent._slot);
             if(isMonoBehavior){
                 inspectorApp.lifecyclePanel.render()
             }

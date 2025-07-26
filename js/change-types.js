@@ -396,7 +396,7 @@ export class MonoBehaviorVarChange {
 export class LoadItemChange {
     constructor(itemName, parentId, options) {
         this.itemName = itemName;
-        this.parentId = parentId;
+        this.parentId = parentId || 'Root';
         this.options = options || {};
         this.slotId = null;
     }
@@ -412,47 +412,66 @@ export class LoadItemChange {
             return null;
         }
 
+        let changeChildrenIds = (slot)=>{
+            slot.components.forEach(component=>{
+                component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
+            })
+            slot.children.forEach(child=>{
+                child.parentId = slot.id;
+                child.id = slot.id+"/"+child.name;
+                changeChildrenIds(child);
+            })
+        }
+
         let itemData = item.data;
         itemData.name = this.itemName+"_"+Math.floor(Math.random() * 100000);
+        itemData.parentId = this.parentId;
+        itemData.id = this.parentId+"/"+itemData.name;
+        changeChildrenIds(itemData);
+
+        console.log("[ITEM DATA] =>", itemData)
+        
 
         let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
         SM.sendOneShot(data);
 
         //Additionally send all of the slot properties to space props
         if(!this.options.ephemeral){
-            let getItemProps = (slot)=>{
-                let data = {}
-                for(let prop in slot.properties){
-                    const spaceKey = '__' + slot.id + '/' + prop + ':slot';
-                    data[spaceKey] = slot.properties[prop];
-                }
 
-
-            
-                for(let component of slot.components){
-                    for(let prop in component.properties){
-                        const spaceKey = `__${slot.name}/${component.type}/${prop}:${component.id}`;
-                        data[spaceKey] = component.properties[prop];
-                    }
+            let getSlotSpaceProperties = (slot)=>{
+                let props = {}
+                let getSubSlotProps = (slot)=>{
+                    props[`__${slot.id}/active:slot`] = slot.active
+                    props[`__${slot.id}/persistent:slot`] = slot.persistent
+                    props[`__${slot.id}/name:slot`] = slot.name
+                    
+                    slot.components.forEach(component=>{
+                        Object.keys(component.properties).forEach(prop=>{
+                            props[`__${slot.id}/${component.type}/${prop}:${component.id}`] = component.properties[prop]
+                        })
+                    })
+    
+                    slot.children.forEach(child=>{
+                        getSubSlotProps(child)
+                    })
                 }
-
-                for(let child of slot.children){
-                    let childData = getItemProps(child);
-                    data = {...data, ...childData};
-                }
-                return data;
+    
+                getSubSlotProps(slot)
+                return props
             }
 
-            let itemProps = getItemProps(itemData);
+
+            let itemProps = getSlotSpaceProperties(itemData);
             console.log("[ITEM PROPS] =>", itemProps)
-            //SM.scene.SetPublicSpaceProps(itemProps); // Use this when you can debug in prod
-            Object.entries(itemProps).forEach(([key, value]) => {
-                SM.setSpaceProperty(key, value, false);
-            });
+            SM.scene.SetPublicSpaceProps(itemProps)
+
+            if(localhost){
+                Object.keys(itemProps).forEach(key=>{
+                    SM.scene.spaceState.public[key] = itemProps[key]
+                })
+                localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
+            }
         }
-
-
-
 
 
         this.slotId = `${this.parentId}/${itemData.name}`

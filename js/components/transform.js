@@ -6,12 +6,12 @@ export class TransformComponent extends SlotComponent {
     constructor(){
         super();
         this.bsRef = BS.Transform;
+        this.type = "Transform";
     }
 
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
-        this.type = "Transform";
-        this.setId(`Transform_${slot.id}`);
+        //this.setId(`Transform_${slot.id}`);
         return this;
     }
 
