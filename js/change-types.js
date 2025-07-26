@@ -412,18 +412,8 @@ export class LoadItemChange {
             return null;
         }
 
-        let getItemCount = (name, parentId)=>{
-            let parentSlot = SM.getSlotOrRoot(parentId);
-            let sims = parentSlot.children.map(x=>x.name).filter(x=>x.startsWith(name)).length;
-            if(sims == 0){
-                return "";
-            }else{
-                return `_${sims}`;
-            }
-        }
-
         let itemData = item.data;
-        itemData.name = this.itemName+getItemCount(this.itemName, this.parentId)
+        itemData.name = this.itemName+"_"+Math.floor(Math.random() * 100000);
 
         let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
         SM.sendOneShot(data);

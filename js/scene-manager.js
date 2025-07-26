@@ -393,7 +393,7 @@ console.log("It is 6:03")
 
         handleSpaceStateChange(event) {
             const { changes } = event.detail;
-            console.log("[SPACE CHANGE] =>", changes)
+            //console.log("[SPACE CHANGE] =>", changes)
             changes.forEach(async (change) => {
                 //console.log("[SPACE CHANGE] =>", change)
                 let { property, newValue, isProtected } = change;
