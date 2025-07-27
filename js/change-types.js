@@ -325,13 +325,15 @@ export class SlotMoveChange {
     }
 
     async apply() {
-        let data = `slot_moved:${this.slotId}:${this.newParentId}`
-        SM.sendOneShot(data);
+        const slot = this.getSlotById(this.slotId);
+        if (!slot) return;
+        await slot.SetParent(this.newParentId);
     }
 
     async undo() {
-        let data = `slot_moved:${this.slotId}:${this.oldParentId}:${this.oldSiblingIndex}`
-        SM.sendOneShot(data);
+        const slot = this.getSlotById(this.slotId);
+        if (!slot) return;
+        await slot.SetParent(this.oldParentId);
     }
 
     getDescription() {

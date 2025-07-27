@@ -47,6 +47,8 @@ export class SlotComponent{
         return {};
     }
 
+    
+
     async _setMany(properties){
         console.log(`(${this._slot.name})[${this.type}] setMany`, properties)
         for(let property in properties){
@@ -60,10 +62,36 @@ export class SlotComponent{
         this._bs[property] = value;
     }
 
-    async destroy(){
+    async _destroy(){
         if(this._bs){
             this._bs.Destroy();
         }
+        console.log("deleting component =>", this.id)
+        this._slot.components.splice(this._slot.components.indexOf(this), 1);
+        delete SM.slotData.componentMap[this.id];
+        
+        // Remove any space properties associated with this component
+        const propsToRemove = [];
+        const spaceState = SM.scene?.spaceState;
+        
+        if (spaceState) {
+            // Check both public and protected properties
+            ['public', 'protected'].forEach(type => {
+                const props = spaceState[type];
+                Object.keys(props).forEach(key => {
+                    if (key.includes(`__${this.id}/`)) {
+                        propsToRemove.push({ key, isProtected: type === 'protected' });
+                    }
+                });
+            });
+            
+            // Remove the properties
+            for (const { key, isProtected } of propsToRemove) {
+                await SM.deleteSpaceProperty(key, isProtected);
+            }
+        }
+
+        inspectorApp.propertiesPanel.render(this._slot.id);
     }
 
     async Set(property, value){

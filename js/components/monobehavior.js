@@ -224,10 +224,10 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
     }
 
-    async destroy(){
-        await super.destroy();
+    async _destroy(){
+        await super._destroy();
         this._stop();
         await lifecycle.unregisterMonoBehavior(this);
-        
+        inspectorApp.lifecyclePanel.render()
     }
 }

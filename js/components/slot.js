@@ -43,31 +43,58 @@ export class Slot{
         return this.components.filter(component => component.type === componentType);
     }
 
-    async setParent(newParent){
-        // Cannot parent to itself
+    
+
+    async _setParent(newParent){
         if (newParent === this) return;
-        
-        // Remove from current parent or root
         if (this.parentId) {
-            const oldParent = window.SM.getSlotById(this.parentId);
+            const oldParent = SM.getSlotById(this.parentId);
             if(oldParent){
                 oldParent.children = oldParent.children.filter(child => child.id !== this.id);
             }
         }
-      
         newParent.children.push(this);
         this.parentId = newParent.id;
         this._bs.SetParent(newParent._bs);
-        this.rename(this.name);
+        this.rename(this.name, true);
+    }
+
+    async _destroy(){
+        let children = [...this.children];
+        for(let child of children){
+            await child._destroy();
+        }
+
+        let components = [...this.components];
+        for(let component of components){
+            await component._destroy();
+        }
+
+        await this._bs.Destroy();
+        delete SM.slotData.slotMap[this.id];
+
+        SM.deleteSpaceProperty(`__${this.id}/active:slot`, false);
+        SM.deleteSpaceProperty(`__${this.id}/persistent:slot`, false);
+        SM.deleteSpaceProperty(`__${this.id}/name:slot`, false);
+
+        if(this.parentId){
+            const parent = SM.getSlotById(this.parentId);
+            if (parent) {
+                parent.children = parent.children.filter(child => child.id !== this.id);
+            }
+        }
     }
 
     _deleteOldSpaceProperties(){
         let toDelete = [];
         Object.keys(SM.scene.spaceState.public).forEach(key=>{
-            let idx = key.lastIndexOf("/");
-            let target = key.substring(0, idx);
-            console.log(`${key} => ${target}`)
-            if(target == this.id){
+            let lastSlash = key.lastIndexOf("/");
+            let compID = key.slice(2, lastSlash).trim();
+            let component = SM.getSlotComponentById(compID);
+            console.log(compID, "=>", component)
+            if(!component) return;
+            console.log(`${component._slot.id} => ${this.id}`)
+            if(component._slot.id === this.id){
                 toDelete.push(key);
             }
         })
@@ -79,19 +106,21 @@ export class Slot{
     }
 
     saveSpaceProperties(){
+        console.log(`saving space properties for ${this.id}`)
         SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
         SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
         SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
     }
 
     rename(newName, localUpdate){
+        console.log(`renaming ${this.id} to ${newName} : ${localUpdate}`)
         if(!localUpdate) this._deleteOldSpaceProperties();
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
         if(!localUpdate) this.saveSpaceProperties();
         this.children.forEach(child=>{
             child.parentId = this.id;
-            child.rename(child.name);
+            child.rename(child.name, localUpdate);
         })
     }
 
@@ -128,5 +157,11 @@ export class Slot{
         if(property == "name"){
             this.rename(value, false);
         }
+    }
+
+    async SetParent(newParentId){
+        await this._setParent(SM.getSlotOrRoot(newParentId), true);
+        let data = `slot_moved:${this.id}:${newParentId}:0`
+        SM.sendOneShot(data);
     }
 }

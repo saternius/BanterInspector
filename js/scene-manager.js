@@ -251,7 +251,7 @@ console.log("It is 6:03")
 
                 for(let child of h.children){
                     let childSlot = await hierarchyToSlot(child, slot.id);
-                    await childSlot.setParent(slot);
+                    await childSlot._setParent(slot);
                 }
                 return slot;
             }
@@ -282,7 +282,7 @@ console.log("It is 6:03")
                 for(let i=0; i<item.children.length; i++){
                     let child = item.children[i];
                     let childSlot = await loadSubSlot(child, newSlot.id);
-                    await childSlot.setParent(newSlot);
+                    await childSlot._setParent(newSlot);
                 }
     
                 return newSlot;
@@ -291,7 +291,7 @@ console.log("It is 6:03")
 
             let parentSlot = (parentId)? this.getSlotOrRoot(parentId) : this.getSlotOrRoot(slotData.parentId);
             let slot = await loadSubSlot(slotData, parentId);
-            await slot.setParent(parentSlot);
+            await slot._setParent(parentSlot);
 
             this.expandedNodes.add(parentId);
             this.selectSlot(slot.id);
@@ -348,7 +348,7 @@ console.log("It is 6:03")
 
             hierarchy.children.forEach(async (child)=>{
                 let childSlot = await this.loadHistoricalSlot(child, slot.id);
-                await childSlot.setParent(slot);
+                await childSlot._setParent(slot);
             })
 
             return slot;
@@ -451,7 +451,7 @@ console.log("It is 6:03")
                 let componentId = data.slice(18);
                 let component = this.getSlotComponentById(componentId);
                 if(component){
-                    await this._deleteComponent(component);
+                    await component._destroy();
                     await this.updateHierarchy(this.selectedSlot);
                 }
             }
@@ -465,14 +465,20 @@ console.log("It is 6:03")
 
             if(data.startsWith("slot_removed")){
                 let slotId = data.slice(13);
-                await this._deleteSlot(slotId);
-                await this.updateHierarchy(this.selectedSlot);
+                let slot = this.getSlotById(slotId);
+                if(slot){
+                    await slot._destroy();
+                    await this.updateHierarchy(this.selectedSlot);
+                }
             }
 
             if(data.startsWith("slot_moved")){
                 let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
-                newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
-                await this._moveSlot(slotId, newParentId, newSiblingIndex);
+                //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
+                const slot = this.getSlotById(slotId);
+                if (!slot) return;
+                if(!newParentId) newParentId = this.slotData.slots[0].id;
+                await slot._setParent(this.getSlotById(newParentId));
                 await this.updateHierarchy(this.selectedSlot);
             }
 
@@ -639,77 +645,10 @@ console.log("It is 6:03")
             newSlot.components.push(transform);
 
             
-            await newSlot.setParent(parentSlot);
+            await newSlot._setParent(parentSlot);
         }
 
-        async _deleteSlot(slotId) {
-            const slot = this.getSlotById(slotId);
-            if (!slot) return;
-            
-            // Get all slots to delete (including children)
-            const slotsToDelete = [slotId];
-            const collectChildren = (slot) => {
-                if (slot.children) {
-                    slot.children.forEach(child => {
-                        slotsToDelete.push(child.id);
-                        collectChildren(child);
-                    });
-                }
-            };
-            collectChildren(slot);
-            
-            // Clean up components before destroying
-            for (const delSlotId of slotsToDelete) {
-                const delSlot = this.getSlotById(delSlotId);
-                if (delSlot && delSlot.components) {
-                    delSlot.components.forEach(comp => {
-                        this._deleteComponent(comp);
-                    });
-                }
-            }
-            
-            // Reverse order to delete children first
-            for (let i = slotsToDelete.length - 1; i >= 0; i--) {
-                const deleteSlot = this.getSlotById(slotsToDelete[i]);
-                if (deleteSlot) {
-                    try {
-                        await deleteSlot._bs.Destroy();
-                        deleteSlot.destroyed = true;
-                        deleteSlot._deleteOldSpaceProperties();
-                        delete this.slotData.slotMap[deleteSlot.id];
-
-                    } catch (error) {
-                        console.error(`Failed to destroy GameObject ${deleteSlot.name}:`, error);
-                    }
-                }
-            }
-            
-            
-            // Remove from parent's children or root
-            if (slot.parentId) {
-                const parent = this.getSlotById(slot.parentId);
-                if (parent) {
-                    parent.children = parent.children.filter(child => child.id !== slotId);
-                }
-            } else {
-                this.slotData.slots = this.slotData.slots.filter(s => s.id !== slotId);
-            }
-
-        }
-
-        async _moveSlot(slotId, newParentId, newSiblingIndex) {
-            const slot = this.getSlotById(slotId);
-            if (!slot) return;
-
-            if(!newParentId){
-                newParentId = this.slotData.slots[0].id;
-            }
-            await slot.setParent(this.getSlotById(newParentId));
-            if(newSiblingIndex){
-                //slot.setSiblingIndex(newSiblingIndex); TODO: implement this
-            }
-        }
-
+       
         async _addComponent(slot, componentType, componentProperties){
             // Check if component already exists (for unique components)
             const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
@@ -753,47 +692,6 @@ console.log("It is 6:03")
                 }
             }
         }
-
-        async _deleteComponent(slotComponent){
-            let isMonoBehavior = slotComponent.type === "MonoBehavior";
-            console.log("deleting component =>", slotComponent)
-            await slotComponent.destroy();
-            slotComponent.destroyed = true;
-            slotComponent._slot.components.splice(slotComponent._slot.components.indexOf(slotComponent), 1);
-            delete this.slotData.componentMap[slotComponent.id];
-            
-            // Remove any space properties associated with this component
-            const propsToRemove = [];
-            const spaceState = this.scene?.spaceState;
-            
-            if (spaceState) {
-                // Check both public and protected properties
-                ['public', 'protected'].forEach(type => {
-                    const props = spaceState[type];
-                    Object.keys(props).forEach(key => {
-                        // Property keys for components have format: __SlotName/ComponentType/PropertyName:ComponentId
-                        if (key.includes(`:${slotComponent.id}`)) {
-                            propsToRemove.push({ key, isProtected: type === 'protected' });
-                        }
-                    });
-                });
-                
-                // Remove the properties
-                for (const { key, isProtected } of propsToRemove) {
-                    await this.deleteSpaceProperty(key, isProtected);
-                }
-            }
-
-            if (window.inspectorApp?.propertiesPanel) {
-                window.inspectorApp.propertiesPanel.render(this.slotId);
-            }
-
-            //(slotComponent._slot);
-            if(isMonoBehavior){
-                inspectorApp.lifecyclePanel.render()
-            }
-        }
-
     }
 
     // Create singleton instance
