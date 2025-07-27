@@ -30,6 +30,12 @@
             const publicValueInput = document.getElementById('addPublicValue');
             const protectedKeyInput = document.getElementById('addProtectedKey');
             const protectedValueInput = document.getElementById('addProtectedValue');
+            const refreshSpacePropsBtn = document.getElementById('refreshSpacePropsBtn');
+            if(refreshSpacePropsBtn){
+                refreshSpacePropsBtn.addEventListener('click', () => {
+                    this.render();
+                });
+            }
 
             if (publicKeyInput && publicValueInput) {
                 const addPublic = () => this.addPublicProp();

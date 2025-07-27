@@ -390,6 +390,7 @@ console.log("It is 6:03")
                     let path = items[0].split("/");
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
+                    console.log("updating =>", items, path, prop, type)
                     if(type[0] == "slot"){
                         let ref = ['Root'].concat(path.slice(1,-1)).join("/")
                         let slot = this.getSlotById(ref);
@@ -412,7 +413,7 @@ console.log("It is 6:03")
                             }
                         }
                     }else if(type[0] == "component"){
-                        let component = this.getSlotComponentById(path[0]);
+                        let component = this.getSlotComponentById(path[0].slice(2));
                         if(component){
                             await component._set(prop, newValue);
                             renderProps(component)

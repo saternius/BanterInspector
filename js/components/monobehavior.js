@@ -56,6 +56,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     async _loadScript(fileName) {        
+        console.log("loading script =>", fileName)
         if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this._slot.active) return;
         console.log("loading script =>", fileName)
@@ -113,8 +114,7 @@ export class MonoBehaviorComponent extends SlotComponent {
                 }
             }
             
-            this.properties.vars = initializedVars;
-            this.ctx.vars = initializedVars;
+            this.ctx.vars = {...this.ctx.vars, ...initializedVars};
         }
 
         this.scriptFunction.call(this.ctx);
