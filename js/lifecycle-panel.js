@@ -183,7 +183,7 @@
             stopBtn.className = 'lifecycle-button stop';
             stopBtn.innerHTML = '⏹';
             stopBtn.title = 'Stop';
-            if(monoBehavior.scriptContext._running){
+            if(monoBehavior.ctx._running){
                 stopBtn.onclick = () => {
                     monoBehavior.Stop();
                     this.addConsoleOutput(scriptName, '[Stopped]');

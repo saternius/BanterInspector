@@ -893,6 +893,8 @@ body {
     justify-content: space-between;
 }
 
+
+
 /* Hierarchy Panel */
 .hierarchy-panel {
     width: 320px;
@@ -1297,6 +1299,12 @@ body {
 .console-content {
     color: #e8e8e8;
     word-break: break-word;
+}
+
+
+.lifecycle-buttons {
+    display: flex;
+    gap: 4px;
 }
 
 .console-clear-button {

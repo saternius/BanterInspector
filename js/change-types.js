@@ -354,8 +354,8 @@ export class MonoBehaviorVarChange {
     }
 
     getOldValue() {
-        if (!this.monobehavior || !this.monobehavior.scriptContext?.vars) return undefined;
-        return deepClone(this.monobehavior.scriptContext.vars[this.varName]);
+        if (!this.monobehavior || !this.monobehavior.ctx?.vars) return undefined;
+        return deepClone(this.monobehavior.ctx.vars[this.varName]);
     }
 
     async apply() {
@@ -371,7 +371,7 @@ export class MonoBehaviorVarChange {
         if (!this.monobehavior) return;
 
         // Update the properties.vars for persistence
-        if (!this.monobehavior.scriptContext.vars) {
+        if (!this.monobehavior.ctx.vars) {
             return;
         }
 
@@ -447,7 +447,7 @@ export class LoadItemChange {
                     
                     slot.components.forEach(component=>{
                         Object.keys(component.properties).forEach(prop=>{
-                            props[`__${slot.id}/${component.type}/${prop}:${component.id}`] = component.properties[prop]
+                            props[`__${component.id}/${prop}:component`] = component.properties[prop]
                         })
                     })
     

@@ -402,17 +402,17 @@ console.log("It is 6:03")
                         console.log("updating monobehavior =>", property, newValue)
                         let ref = path[0].slice(2)
                         let monobehavior = this.getSlotComponentById(ref);
-                        if(monobehavior && monobehavior.scriptContext){
+                        if(monobehavior && monobehavior.ctx){
                             if(prop === "_running"){
-                                monobehavior.scriptContext._running = newValue;
+                                monobehavior.ctx._running = newValue;
                                 inspectorApp.lifecyclePanel.render()
                             }else{
-                                monobehavior.scriptContext.vars[prop] = newValue;
+                                monobehavior.ctx.vars[prop] = newValue;
                                 renderProps(monobehavior)
                             }
                         }
-                    }else{
-                        let component = this.getSlotComponentById(items[1]);
+                    }else if(type[0] == "component"){
+                        let component = this.getSlotComponentById(path[0]);
                         if(component){
                             await component._set(prop, newValue);
                             renderProps(component)
@@ -675,6 +675,7 @@ console.log("It is 6:03")
                     try {
                         await deleteSlot._bs.Destroy();
                         deleteSlot.destroyed = true;
+                        deleteSlot._deleteOldSpaceProperties();
                         delete this.slotData.slotMap[deleteSlot.id];
 
                     } catch (error) {

@@ -66,6 +66,7 @@ export class Slot{
         Object.keys(SM.scene.spaceState.public).forEach(key=>{
             let idx = key.lastIndexOf("/");
             let target = key.substring(0, idx);
+            console.log(`${key} => ${target}`)
             if(target == this.id){
                 toDelete.push(key);
             }

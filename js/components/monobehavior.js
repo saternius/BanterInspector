@@ -11,7 +11,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
         this.scriptInstance = null;
-        this.scriptContext = this.newScriptContext();
+        this.ctx = this.newScriptContext();
         this.scriptFunction = null;
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
@@ -19,7 +19,7 @@ export class MonoBehaviorComponent extends SlotComponent {
             if(SM.scene.spaceState.public["__" + this.id + "_running:monobehavior"] !== false){
                 this._loadScript(this.properties.file);
             }else{
-                this.scriptContext._running = false;
+                this.ctx._running = false;
             }
         }
         
@@ -66,20 +66,20 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
 
         
-        console.log("this.scriptContext.running =>", this.scriptContext)
-        if(this.scriptContext._running){
-            await this.scriptContext.onDestroy();
+        console.log("this.scriptContext.running =>", this.ctx)
+        if(this.ctx._running){
+            await this.ctx.onDestroy();
         }
 
-        this.scriptContext = this.newScriptContext();
+        this.ctx = this.newScriptContext();
         this.scriptFunction = new Function(`
             ${inventoryItem.data}
         `);
         
         // Extract vars definition if present
-        if (this.scriptContext.vars) {
+        if (this.ctx.vars) {
             // Initialize vars with defaults
-            const varDefinitions = this.scriptContext.vars;
+            const varDefinitions = this.ctx.vars;
             const initializedVars = {};
             
             for (const [varName, varDef] of Object.entries(varDefinitions)) {
@@ -114,11 +114,11 @@ export class MonoBehaviorComponent extends SlotComponent {
             }
             
             this.properties.vars = initializedVars;
-            this.scriptContext.vars = initializedVars;
+            this.ctx.vars = initializedVars;
         }
 
-        this.scriptFunction.call(this.scriptContext);
-        this.scriptInstance = this.scriptContext;
+        this.scriptFunction.call(this.ctx);
+        this.scriptInstance = this.ctx;
         await lifecycle.registerMonoBehavior(this);  
         this._start();  
         console.log(`Script "${fileName}" loaded successfully for ${this.properties.name}`);
@@ -126,38 +126,38 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     _start(){
         if(this.properties._owner !== SM.scene.localUser.name) return;
-        if(this.scriptContext._running) return;
+        if(this.ctx._running) return;
         if(!this._slot.active) return;
-        this.scriptContext._running = true;
-        this.scriptContext.onStart();
+        this.ctx._running = true;
+        this.ctx.onStart();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
         inspectorApp.lifecyclePanel.render()
     }
 
     _stop(){
         if(this.properties._owner !== SM.scene.localUser.name) return;
-        if(!this.scriptContext._running) return;
+        if(!this.ctx._running) return;
         if(!this._slot.active) return;
-        this.scriptContext._running = false;
-        this.scriptContext.onDestroy();
+        this.ctx._running = false;
+        this.ctx.onDestroy();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
         inspectorApp.lifecyclePanel.render()
     }
 
     _update(){
         if(this.properties._owner !== SM.scene.localUser.name) return;
-        if(!this.scriptContext._running) return;
+        if(!this.ctx._running) return;
         if(!this._slot.active) return;
-        this.scriptContext.onUpdate();
+        this.ctx.onUpdate();
     }
 
     _refresh(){
         if(this.properties._owner !== SM.scene.localUser.name) return;
         if(!this._slot.active) return;
-        console.log("refreshing script [", this.scriptContext._running, "]..")
-        if(this.scriptContext._running){
-            this.scriptContext._running = false;
-            this.scriptContext.onDestroy();
+        console.log("refreshing script [", this.ctx._running, "]..")
+        if(this.ctx._running){
+            this.ctx._running = false;
+            this.ctx.onDestroy();
         }
         
         this._loadScript(this.properties.file);
@@ -208,7 +208,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async updateVar(varName, value) {
         console.log("[MONO] updating var =>", varName, value)
-        if (!this.scriptContext || !this.scriptContext.vars) return;
+        if (!this.ctx || !this.ctx.vars) return;
         const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
         await SM.setSpaceProperty(spaceKey, value, false);
         // this.scriptContext.vars[varName] = value;
@@ -220,7 +220,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         console.log("spaceKeys =>", spaceKeys)
         for(let key of spaceKeys){
             let varName = key.split('/')[1].split(':')[0];
-            this.scriptContext.vars[varName] = SM.scene.spaceState.public[key];
+            this.ctx.vars[varName] = SM.scene.spaceState.public[key];
         }
     }
 

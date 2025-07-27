@@ -67,7 +67,7 @@ export class SlotComponent{
     }
 
     async Set(property, value){
-        const spaceKey = `__${this._slot.name}/${this.type}/${property}:${this.id}`;
+        const spaceKey = `__${this.id}/${property}:component`;
         await SM.setSpaceProperty(spaceKey, value, false);
     }
 }

@@ -555,7 +555,7 @@
             body.appendChild(fileRow);
             
             // Render vars if any
-            if (component.scriptContext.vars && Object.keys(component.scriptContext.vars).length > 0) {
+            if (component.ctx.vars && Object.keys(component.ctx.vars).length > 0) {
                 const varsHeader = document.createElement('div');
                 varsHeader.className = 'property-row';
                 varsHeader.style.marginTop = '12px';
@@ -564,7 +564,7 @@
                 body.appendChild(varsHeader);
                 
                 // Render each variable
-                Object.entries(component.scriptContext.vars).forEach(([varName, varValue]) => {
+                Object.entries(component.ctx.vars).forEach(([varName, varValue]) => {
                     const varRow = this.renderMonoBehaviorVar(varName, varValue, component, index);
                     body.appendChild(varRow);
                 });

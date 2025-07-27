@@ -412,7 +412,7 @@ export class ScriptEditor {
     canRun(){
         let stoppedSelected = Array.from(this.selectedSlots).filter(slotId => {
             let component = this.monoBehaviorSlots.get(slotId);
-            return !component.scriptContext._running;
+            return !component.ctx._running;
         })
         return stoppedSelected.length > 0;
     }
@@ -420,7 +420,7 @@ export class ScriptEditor {
     canStop(){
         let runningSelected = Array.from(this.selectedSlots).filter(slotId => {
             let component = this.monoBehaviorSlots.get(slotId);
-            return component.scriptContext._running;
+            return component.ctx._running;
         })
         return runningSelected.length > 0;
     }
@@ -436,8 +436,8 @@ export class ScriptEditor {
         };
         
         // Override the console in the script context
-        if (component.scriptContext) {
-            component.scriptContext.log = consoleWrapper.log;
+        if (component.ctx) {
+            component.ctx.log = consoleWrapper.log;
         }
     }
 
@@ -447,9 +447,9 @@ export class ScriptEditor {
         .map(slotId => this.monoBehaviorSlots.get(slotId))
 
         if(action === 'Start'){
-            components = components.filter(component => component && component.scriptContext && !component.scriptContext._running);
+            components = components.filter(component => component && component.ctx && !component.ctx._running);
         }else if(action === 'Stop'){
-            components = components.filter(component => component && component.scriptContext && component.scriptContext._running);
+            components = components.filter(component => component && component.ctx && component.ctx._running);
         }
         
         if (components.length === 0) return;
