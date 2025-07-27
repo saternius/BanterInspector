@@ -182,7 +182,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     newScriptContext(){
         let defaults =  {
-            vars: (this.properties.vars || {}),
+            vars: {},
             onStart: ()=>{},
             onUpdate: ()=>{},
             onDestroy: ()=>{},
@@ -215,13 +215,8 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     loadVarsFromSpaceState(){
-        console.log("loading vars from space state =>", this.id)
-        let spaceKeys = Object.keys(SM.scene.spaceState.public).filter(x=>x.startsWith("__"+this.id+"/"));
-        console.log("spaceKeys =>", spaceKeys)
-        for(let key of spaceKeys){
-            let varName = key.split('/')[1].split(':')[0];
-            this.ctx.vars[varName] = SM.scene.spaceState.public[key];
-        }
+        let key = "__" + this.id + "/vars:component";
+        this.ctx.vars = SM.scene.spaceState.public[key];
     }
 
     async _destroy(){

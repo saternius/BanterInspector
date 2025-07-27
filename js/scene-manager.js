@@ -311,7 +311,7 @@ console.log("It is 6:03")
             let props = {}
             space_keys.forEach(key=>{
                 // console.log("key =>", key, component_ref)
-                if(key.endsWith(component_ref)){
+                if(key.startsWith(`__${component_ref}/`)){
                     let path = key.split(":")[0].split("/")
                     //console.log("path =>", path)
                     let prop = path[path.length-1]
@@ -390,7 +390,7 @@ console.log("It is 6:03")
                     let path = items[0].split("/");
                     let prop = path[path.length-1];
                     let type = items[1].split("_")
-                    console.log("updating =>", items, path, prop, type)
+                    //console.log("updating =>", items, path, prop, type)
                     if(type[0] == "slot"){
                         let ref = ['Root'].concat(path.slice(1,-1)).join("/")
                         let slot = this.getSlotById(ref);
@@ -400,7 +400,7 @@ console.log("It is 6:03")
                         }
                         
                     }else if(type[0] == "monobehavior"){
-                        console.log("updating monobehavior =>", property, newValue)
+                        //console.log("updating monobehavior =>", property, newValue)
                         let ref = path[0].slice(2)
                         let monobehavior = this.getSlotComponentById(ref);
                         if(monobehavior && monobehavior.ctx){
@@ -678,20 +678,6 @@ console.log("It is 6:03")
                 window.inspectorApp.propertiesPanel.render(slot.id);
             }
             return slotComponent;
-        }
-
-        async _handleComponentBundles(slot, slotComponent){ //TODO: make it so that this only triggers on the component menu
-            let bundles = componentBundleMap[slotComponent.type];
-            let idx = parseInt(slotComponent.id.split("_")[1]);
-            if(bundles){
-                for(let bundle of bundles){
-                    let properties = {
-                        id: `${bundle}_${idx}`,
-                    }
-                    await this._addComponent(slot, bundle, properties);
-                    idx += 1;
-                }
-            }
         }
     }
 

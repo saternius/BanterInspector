@@ -325,13 +325,13 @@ export class SlotMoveChange {
     }
 
     async apply() {
-        const slot = this.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
         await slot.SetParent(this.newParentId);
     }
 
     async undo() {
-        const slot = this.getSlotById(this.slotId);
+        const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
         await slot.SetParent(this.oldParentId);
     }
@@ -509,6 +509,113 @@ export class LoadItemChange {
     }
 }
 
+export class CloneSlotChange {
+    constructor(slotId, options) {
+        this.sourceSlot = SM.getSlotById(slotId);
+        if(!this.sourceSlot){
+            console.error(`Source slot ${slotId} not found`);
+            return;
+        }
+        this.slotData = this.sourceSlot.export();
+        this.slotId = `${this.sourceSlot.parentId}/${this.sourceSlot.name}_${Math.floor(Math.random() * 100000)}`;
+        this.options = options || {};
+    }
+
+    async apply() {
+       
+
+        let changeChildrenIds = (slot)=>{
+            slot.components.forEach(component=>{
+                component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
+            })
+            slot.children.forEach(child=>{
+                child.parentId = slot.id;
+                child.id = slot.id+"/"+child.name;
+                changeChildrenIds(child);
+            })
+        }
+
+        let itemData = this.slotData;
+        itemData.name = this.sourceSlot.name+"_"+Math.floor(Math.random() * 100000);
+        itemData.parentId = this.sourceSlot.parentId;
+        itemData.id = this.sourceSlot.parentId+"/"+itemData.name;
+        changeChildrenIds(itemData);
+
+        let data = `load_slot:${this.sourceSlot.parentId}|${JSON.stringify(itemData)}`
+        SM.sendOneShot(data);
+
+        //Additionally send all of the slot properties to space props
+        if(!this.options.ephemeral){
+
+            let getSlotSpaceProperties = (slot)=>{
+                let props = {}
+                let getSubSlotProps = (slot)=>{
+                    props[`__${slot.id}/active:slot`] = slot.active
+                    props[`__${slot.id}/persistent:slot`] = slot.persistent
+                    props[`__${slot.id}/name:slot`] = slot.name
+                    
+                    slot.components.forEach(component=>{
+                        Object.keys(component.properties).forEach(prop=>{
+                            props[`__${component.id}/${prop}:component`] = component.properties[prop]
+                        })
+                    })
+    
+                    slot.children.forEach(child=>{
+                        getSubSlotProps(child)
+                    })
+                }
+    
+                getSubSlotProps(slot)
+                return props
+            }
+
+
+            let itemProps = getSlotSpaceProperties(itemData);
+            console.log("[ITEM PROPS] =>", itemProps)
+            SM.scene.SetPublicSpaceProps(itemProps)
+
+            if(localhost){
+                Object.keys(itemProps).forEach(key=>{
+                    SM.scene.spaceState.public[key] = itemProps[key]
+                })
+                localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
+            }
+        }
+
+
+        this.slotId = `${this.sourceSlot.parentId}/${itemData.name}`
+        const returnWhenSlotLoaded = () => {
+            return new Promise(resolve => {
+              const check = () => {
+                const slot = SM.getSlotById(this.slotId);
+                if (slot !== undefined && slot.finished_loading) {
+                  resolve(slot);
+                } else {
+                  // try again in 100 ms
+                  setTimeout(check, 100);
+                }
+              };
+              check();
+            });
+          };
+        return await returnWhenSlotLoaded();
+    }
+
+    async undo() {
+        if(!this.slotId) return;
+        let data = `slot_removed:${this.slotId}`
+        SM.sendOneShot(data);
+    }
+
+    getDescription() {
+        return `Clone slot ${this.sourceSlot.name}`;
+    }
+
+    getUndoDescription() {
+        return `Remove slot ${this.sourceSlot.name}`;
+    }
+}
+
 
 
 window.SetSlotProp = async (slotId, property, newValue, options)=>{
@@ -550,5 +657,10 @@ window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
 
 window.LoadItem = async (itemName, parentId, options)=>{
     let change = new LoadItemChange(itemName, parentId, options);
+    return await change.apply();
+}
+
+window.CloneSlot = async (slotId, options)=>{
+    let change = new CloneSlotChange(slotId, options);
     return await change.apply();
 }

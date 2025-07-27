@@ -7,6 +7,7 @@
 let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
 const { changeManager } = await import(`${basePath}/change-manager.js`);
 const { ComponentAddChange } = await import(`${basePath}/change-types.js`);
+const { componentBundleMap } = await import( `${basePath}/components/index.js`);
 
 export class ComponentMenu {
     constructor() {
@@ -214,12 +215,23 @@ export class ComponentMenu {
         
         await changeManager.applyChange(change);
         
+        
+        await this.handleComponentBundles(componentType);
+
         // Hide menu and refresh UI
         this.hide();
-        document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-            detail: { slotId: this.selectedSlotId }
-        }));
-        
+        // document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
+        //     detail: { slotId: this.selectedSlotId }
+        // }));
+    }
+
+    async handleComponentBundles(componentType){
+        let bundles = componentBundleMap[componentType];
+        if(bundles){
+            for(let bundle of bundles){
+                await this.addComponent(bundle);
+            }
+        }
     }
 
 }

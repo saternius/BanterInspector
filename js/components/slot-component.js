@@ -4,7 +4,7 @@ export class SlotComponent{
     }
 
     async init(slot, sceneComponent, properties){
-        console.log("init component =>", properties)
+        //console.log("init component =>", properties)
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
@@ -50,14 +50,14 @@ export class SlotComponent{
     
 
     async _setMany(properties){
-        console.log(`(${this._slot.name})[${this.type}] setMany`, properties)
+        //console.log(`(${this._slot.name})[${this.type}] setMany`, properties)
         for(let property in properties){
             await this._set(property, properties[property]);
         }
     }
 
     async _set(property, value){
-        console.log(`(${this._slot.name})[${this.type}] set ${property} =>`, value)
+        //console.log(`(${this._slot.name})[${this.type}] set ${property} =>`, value)
         this.properties[property] = value;
         this._bs[property] = value;
     }
@@ -66,7 +66,7 @@ export class SlotComponent{
         if(this._bs){
             this._bs.Destroy();
         }
-        console.log("deleting component =>", this.id)
+        //console.log("deleting component =>", this.id)
         this._slot.components.splice(this._slot.components.indexOf(this), 1);
         delete SM.slotData.componentMap[this.id];
         

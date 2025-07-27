@@ -91,14 +91,14 @@ export class Slot{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
             let component = SM.getSlotComponentById(compID);
-            console.log(compID, "=>", component)
+            //console.log(compID, "=>", component)
             if(!component) return;
-            console.log(`${component._slot.id} => ${this.id}`)
+            //console.log(`${component._slot.id} => ${this.id}`)
             if(component._slot.id === this.id){
                 toDelete.push(key);
             }
         })
-        console.log(` deleting [${toDelete.length}] space properties..`)
+        //console.log(` deleting [${toDelete.length}] space properties..`)
 
         for(let key of toDelete){
             SM.deleteSpaceProperty(key, false);
@@ -106,17 +106,19 @@ export class Slot{
     }
 
     saveSpaceProperties(){
-        console.log(`saving space properties for ${this.id}`)
+        //console.log(`saving space properties for ${this.id}`)
         SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
         SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
         SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
     }
 
     rename(newName, localUpdate){
-        console.log(`renaming ${this.id} to ${newName} : ${localUpdate}`)
+        //console.log(`renaming ${this.id} to ${newName} : ${localUpdate}`)
         if(!localUpdate) this._deleteOldSpaceProperties();
+        delete SM.slotData.slotMap[this.id]
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
+        SM.slotData.slotMap[this.id] = this;
         if(!localUpdate) this.saveSpaceProperties();
         this.children.forEach(child=>{
             child.parentId = this.id;
@@ -125,7 +127,7 @@ export class Slot{
     }
 
     _set(prop, newValue){
-        console.log(`(${this.name}) update ${prop} =>`, newValue)
+        //console.log(`(${this.name}) update ${prop} =>`, newValue)
         if(prop == "name"){
             this.rename(newValue, true);
         }

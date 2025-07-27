@@ -152,6 +152,13 @@
             ownerCell.className = 'lifecycle-owner';
             ownerCell.textContent = monoBehavior.properties?._owner || 'Unknown Owner';
             ownerCell.title = `Owner: ${monoBehavior.properties?._owner || 'No owner'}`;
+            ownerCell.style.cursor = 'pointer';
+            ownerCell.onclick = () => {
+                SetComponentProp(monoBehavior.id, "_owner", SM.scene.localUser.name);
+                setTimeout(()=>{
+                    this.render();
+                }, 150)
+            }
             
             // Usage column
             const usageCell = document.createElement('td');

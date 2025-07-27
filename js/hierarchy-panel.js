@@ -6,13 +6,14 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotAddChange, SlotRemoveChange, SlotMoveChange } = await import(`${basePath}/change-types.js`);
+    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange } = await import(`${basePath}/change-types.js`);
 
     export class HierarchyPanel {
         constructor() {
             this.treeContainer = document.getElementById('hierarchyTree');
             this.searchInput = document.getElementById('searchInput');
             this.addChildBtn = document.getElementById('addChildSlotBtn');
+            this.cloneBtn = document.getElementById('cloneSlotBtn');
             this.deleteBtn = document.getElementById('deleteSlotBtn');
             this.saveBtn = document.getElementById('saveSlotBtn');
             
@@ -69,6 +70,12 @@
                 
                 // Queue slot addition through change manager
                 const change = new SlotAddChange(parentId, null, { source: 'ui' });
+                changeManager.applyChange(change);
+            });
+
+            // Clone button
+            this.cloneBtn.addEventListener('click', async () => {
+                const change = new CloneSlotChange(SM.selectedSlot, { source: 'ui' });
                 changeManager.applyChange(change);
             });
 
