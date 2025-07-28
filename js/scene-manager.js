@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:03")
+console.log("It is 12:24")
 // (async () => {
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;
@@ -644,8 +644,18 @@ console.log("It is 6:03")
             });
 
             console.log("NEW SLOT:", newSlot)
+
+            function stringTo8DigitNumber(str) {
+                let hash = 0x811c9dc5; // FNV offset basis
+                for (let i = 0; i < str.length; i++) {
+                  hash ^= str.charCodeAt(i);
+                  hash = (hash + ((hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24))) >>> 0;
+                }
+                return hash % 100_000_000;
+              }
+
             let properties = {
-                id: `Transform_${newSlot.id}`
+                id: `Transform_${stringTo8DigitNumber(newSlot.id)}`
             }
 
             let transform = await new TransformComponent().init(newSlot, null, properties);
