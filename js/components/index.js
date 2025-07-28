@@ -24,6 +24,7 @@ const { BanterAttachedObjectComponent } = await import(`${basePath}/components/a
 const { BanterGLTFComponent } = await import(`${basePath}/components/gltf.js`);
 const { BanterAssetBundleComponent } = await import(`${basePath}/components/asset-bundle.js`);
 const { BanterPortalComponent } = await import(`${basePath}/components/portal.js`);
+const { BanterColliderEventsComponent } = await import(`${basePath}/components/collider-events.js`);
 
 
 export const SUPPORTED_COMPONENTS = new Set([
@@ -48,7 +49,8 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterAttachedObject,
     BS.ComponentType.BanterGLTF,
     BS.ComponentType.BanterAssetBundle,
-    BS.ComponentType.BanterPortal
+    BS.ComponentType.BanterPortal,
+    BS.ComponentType.BanterColliderEvents
 ]);
 
 export const componentTypeMap = {
@@ -74,6 +76,7 @@ export const componentTypeMap = {
     "BanterGLTF": BanterGLTFComponent,
     "BanterAssetBundle": BanterAssetBundleComponent,
     "BanterPortal": BanterPortalComponent,
+    "BanterColliderEvents": BanterColliderEventsComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
@@ -100,6 +103,7 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterGLTF]: BanterGLTFComponent,
     [BS.ComponentType.BanterAssetBundle]: BanterAssetBundleComponent,
     [BS.ComponentType.BanterPortal]: BanterPortalComponent,
+    [BS.ComponentType.BanterColliderEvents]: BanterColliderEventsComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
@@ -126,6 +130,7 @@ export const componentTextMap = {
     [BS.ComponentType.BanterGLTF]: "BanterGLTF",
     [BS.ComponentType.BanterAssetBundle]: "BanterAssetBundle",
     [BS.ComponentType.BanterPortal]: "BanterPortal",
+    [BS.ComponentType.BanterColliderEvents]: "BanterColliderEvents",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
@@ -162,5 +167,6 @@ export {
     BanterGLTFComponent,
     BanterAssetBundleComponent,
     BanterPortalComponent,
+    BanterColliderEventsComponent,
     MonoBehaviorComponent
 };
