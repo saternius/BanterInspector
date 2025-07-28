@@ -73,9 +73,12 @@ export class Slot{
         await this._bs.Destroy();
         delete SM.slotData.slotMap[this.id];
 
-        SM.deleteSpaceProperty(`__${this.id}/active:slot`, false);
-        SM.deleteSpaceProperty(`__${this.id}/persistent:slot`, false);
-        SM.deleteSpaceProperty(`__${this.id}/name:slot`, false);
+        delete SM.props[`__${this.id}/active:slot`];
+        delete SM.props[`__${this.id}/persistent:slot`];
+        delete SM.props[`__${this.id}/name:slot`];
+        //SM.deleteSpaceProperty(`__${this.id}/active:slot`, false);
+        //SM.deleteSpaceProperty(`__${this.id}/persistent:slot`, false);
+        //SM.deleteSpaceProperty(`__${this.id}/name:slot`, false);
 
         if(this.parentId){
             const parent = SM.getSlotById(this.parentId);
@@ -87,7 +90,7 @@ export class Slot{
 
     _deleteOldSpaceProperties(){
         let toDelete = [];
-        Object.keys(SM.scene.spaceState.public).forEach(key=>{
+        Object.keys(SM.props).forEach(key=>{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
             let component = SM.getSlotComponentById(compID);
@@ -101,15 +104,22 @@ export class Slot{
         //console.log(` deleting [${toDelete.length}] space properties..`)
 
         for(let key of toDelete){
-            SM.deleteSpaceProperty(key, false);
+            delete SM.props[key];
+            //SM.deleteSpaceProperty(key, false);
         }
     }
 
     saveSpaceProperties(){
         //console.log(`saving space properties for ${this.id}`)
-        SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
-        SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
-        SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
+        //SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
+        //SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
+        //SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
+        let message = `update_slot:${this.id}:active:${this.active}`;
+        SM.sendOneShot(message);
+        message = `update_slot:${this.id}:persistent:${this.persistent}`;
+        SM.sendOneShot(message);
+        message = `update_slot:${this.id}:name:${this.name}`;
+        SM.sendOneShot(message);
     }
 
     rename(newName, localUpdate){
@@ -154,8 +164,10 @@ export class Slot{
     }
 
     async Set(property, value){
-        const spaceKey = '__' + this.id + '/' + property + ':slot';
-        await SM.setSpaceProperty(spaceKey, value, false);
+        //const spaceKey = '__' + this.id + '/' + property + ':slot';
+        //await SM.setSpaceProperty(spaceKey, value, false);
+        let message = `update_slot:${this.id}:${property}:${value}`;
+        SM.sendOneShot(message);
         if(property == "name"){
             this.rename(value, false);
         }

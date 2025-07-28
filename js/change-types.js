@@ -111,10 +111,8 @@ export class SpacePropertyChange {
     }
 
     async change(value) {
-        if (window.SM) {
-            await window.SM.setSpaceProperty(this.property, value, this.protected);
-        }
-
+   
+        await SM.setSpaceProperty(this.property, value, this.protected);
         // Update space props panel
         if (inspector?.spacePropsPanel) {
             inspector.spacePropsPanel.render();
@@ -464,15 +462,12 @@ export class LoadItemChange {
 
 
             let itemProps = getSlotSpaceProperties(itemData);
-            console.log("[ITEM PROPS] =>", itemProps)
-            SM.scene.SetPublicSpaceProps(itemProps)
-
-            if(localhost){
-                Object.keys(itemProps).forEach(key=>{
-                    SM.scene.spaceState.public[key] = itemProps[key]
-                })
-                localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
-            }
+            // console.log("[ITEM PROPS] =>", itemProps)
+            // SM.scene.SetPublicSpaceProps(itemProps)
+            Object.keys(itemProps).forEach(key=>{
+                //SM.scene.spaceState.public[key] = itemProps[key]
+                SM.props[key] = itemProps[key]
+            })
         }
 
 
@@ -571,15 +566,12 @@ export class CloneSlotChange {
 
 
             let itemProps = getSlotSpaceProperties(itemData);
-            console.log("[ITEM PROPS] =>", itemProps)
-            SM.scene.SetPublicSpaceProps(itemProps)
-
-            if(localhost){
-                Object.keys(itemProps).forEach(key=>{
-                    SM.scene.spaceState.public[key] = itemProps[key]
-                })
-                localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
-            }
+            // console.log("[ITEM PROPS] =>", itemProps)
+            // SM.scene.SetPublicSpaceProps(itemProps)
+            Object.keys(itemProps).forEach(key=>{
+                //SM.scene.spaceState.public[key] = itemProps[key]
+                SM.props[key] = itemProps[key]
+            })
         }
 
 

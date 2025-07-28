@@ -18,6 +18,9 @@ console.log("It is 12:24")
                 slotMap:{},
                 componentMap: {}
             };
+            this.props = {
+                hierarchy: null,
+            }
             this.selectedSlot = null;
             this.expandedNodes = new Set();
             this.loaded = false;
@@ -43,6 +46,11 @@ console.log("It is 12:24")
                         }
                     }
 
+                    let lastProps = localStorage.getItem('lastProps');
+                    if(lastProps){
+                        this.props = JSON.parse(lastProps);
+                    }
+
                     if(!this.scene.spaceState.public.hostUser){
                         console.log("No host user found, setting to local user =>", SM.scene.localUser.name)
                         this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
@@ -57,11 +65,10 @@ console.log("It is 12:24")
                     try {
                         console.log('Gathering scene hierarchy...');
                         let hierarchy = null;
-                        if(!this.scene.spaceState.public.hierarchy){
+                        if(!this.props.hierarchy){
                             hierarchy = await this.gatherSceneHierarchy();
-                            this.setSpaceProperty("hierarchy", hierarchy, false);
                         }else{
-                            let h = this.scene.spaceState.public.hierarchy;
+                            let h = this.props.hierarchy;
                             if(typeof h == "string"){
                                 h = JSON.parse(h);
                             }
@@ -94,6 +101,10 @@ console.log("It is 12:24")
                 public: {},
                 protected: {}
             }
+            this.props = {
+                hierarchy: null,
+            }
+            localStorage.removeItem('lastProps');
             await this.initialize();
         }
 
@@ -102,6 +113,10 @@ console.log("It is 12:24")
             setTimeout(()=>{
                 this.sendOneShot('reset');
             }, 1000)
+        }
+
+        async saveScene(){
+            localStorage.setItem('lastProps', JSON.stringify(this.props));
         }
 
         // This gathers the hierarchy of the scene via Unity GameObjects
@@ -175,8 +190,7 @@ console.log("It is 12:24")
         // Updates the hierarchy of the scene from the root slot
         async updateHierarchy(slot = null){  
             let h = await this.gatherSceneHierarchyBySlot();
-            this.setSpaceProperty("hierarchy", h, false);
-            console.log("[UPDATE HIERARCHY] =>", h)
+            this.props.hierarchy = h;
             slot = slot || this.getRootSlot();
             if(slot){
                 this.selectSlot(slot.id);
@@ -191,6 +205,7 @@ console.log("It is 12:24")
         async loadHierarchy(hierarchy){
             console.log("loading hierarchy =>", hierarchy)
             if(!hierarchy){ return null}
+            this.props.hierarchy = hierarchy;
             
             let hierarchyToSlot = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
@@ -307,7 +322,7 @@ console.log("It is 12:24")
 
         getHistoricalProps(component_ref){
             let type = component_ref.split("_")[0]
-            let space_keys = Object.keys(this.scene.spaceState.public)
+            let space_keys = Object.keys(this.props)
             let props = {}
             space_keys.forEach(key=>{
                 // console.log("key =>", key, component_ref)
@@ -315,7 +330,7 @@ console.log("It is 12:24")
                     let path = key.split(":")[0].split("/")
                     //console.log("path =>", path)
                     let prop = path[path.length-1]
-                    props[prop] = this.scene.spaceState.public[key]
+                    props[prop] = this.props[key]
                 }
             })
             return{
@@ -426,8 +441,87 @@ console.log("It is 12:24")
 
 
         async handleOneShot(event){
+
+            let renderProps = (component)=>{
+                if(navigation.currentPage !== "world-inspector") return;
+                if(this.selectedSlot === component._slot.id){
+                    inspector.propertiesPanel.render(this.selectedSlot)
+                }
+            }
+
+
             console.log("handleOneShot =>", event)
-            let data = event.detail.data;
+            let message = event.detail.data;
+            let firstColon = message.indexOf(":");
+            let timestamp = message.slice(0, firstColon);
+            let data = message.slice(firstColon+1);
+
+            if(data.startsWith("update_slot")){ //`update_slot:${this.id}:${property}:${value}`;
+                let str = data.slice(12)
+                let nxtColon = str.indexOf(":")
+                let slotId = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let prop = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let value = str.slice(nxtColon+1)
+                let slot = this.getSlotById(slotId);
+                if(slot){
+                    await slot._set(prop, value);
+                    inspector.hierarchyPanel.render()
+                    renderProps(slot)
+                }
+                this.props[`__${slotId}/${prop}:slot`] = value
+                return;
+            }
+
+
+            if(data.startsWith("update_component")){ // `update_component:${this.id}:${property}:${value}`;
+                let str = data.slice(17)
+                let nxtColon = str.indexOf(":")
+                let componentId = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let prop = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let value = str.slice(nxtColon+1)
+                let component = this.getSlotComponentById(componentId);
+                if(component){
+                    await component._set(prop, value);
+                    renderProps(component)
+                }
+                this.props[`__${componentId}/${prop}:component`] = value
+                return;
+            }
+
+            //update_monobehavior, update_component, update_slot
+            if(data.startsWith("update_monobehavior")){
+                let str = data.slice(20)
+                let nxtColon = str.indexOf(":")
+                let componentId = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let op = str.slice(0, nxtColon)
+                str = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let prop = str.slice(nxtColon+1)
+                nxtColon = str.indexOf(":")
+                let value = str.slice(nxtColon+1)
+                let monobehavior = this.getSlotComponentById(componentId);
+                if(op === "vars"){
+                    monobehavior.ctx.vars[prop] = value;
+                    renderProps(monobehavior)
+                }else if(op === "_running"){
+                    monobehavior.ctx._running = value;
+                    inspector.lifecyclePanel.render()
+                }
+
+                this.props[`__${componentId}/${prop}:component`] = value
+
+                return;
+            }
 
             if(data === "reset"){
                 window.location.reload();
@@ -437,6 +531,7 @@ console.log("It is 12:24")
                 let [parentId, slot_data] = data.slice(10).split("|");
                 await this._loadSlot(JSON.parse(slot_data), parentId);
                 await this.updateHierarchy(this.selectedSlot);
+                return;
             }
 
             if(data.startsWith("component_added")){
@@ -446,6 +541,7 @@ console.log("It is 12:24")
                     await this._addComponent(slot, event.componentType, event.componentProperties);
                     await this.updateHierarchy(this.selectedSlot);
                 }
+                return;
             }
 
             if(data.startsWith("component_removed")){
@@ -455,6 +551,7 @@ console.log("It is 12:24")
                     await component._destroy();
                     await this.updateHierarchy(this.selectedSlot);
                 }
+                return;
             }
 
 
@@ -462,6 +559,7 @@ console.log("It is 12:24")
                 let [parentId, slotName] = data.slice(11).split(":");
                 await this._addNewSlot(slotName, parentId);
                 await this.updateHierarchy(this.selectedSlot);
+                return;
             }
 
             if(data.startsWith("slot_removed")){
@@ -471,6 +569,7 @@ console.log("It is 12:24")
                     await slot._destroy();
                     await this.updateHierarchy(this.selectedSlot);
                 }
+                return;
             }
 
             if(data.startsWith("slot_moved")){
@@ -481,6 +580,7 @@ console.log("It is 12:24")
                 if(!newParentId) newParentId = this.slotData.slots[0].id;
                 await slot._setParent(this.getSlotById(newParentId));
                 await this.updateHierarchy(this.selectedSlot);
+                return;
             }
 
             if(data.startsWith("monobehavior_start")){
@@ -489,6 +589,7 @@ console.log("It is 12:24")
                 if(monobehavior){
                     monobehavior._start();
                 }
+                return;
             }
 
             if(data.startsWith("monobehavior_stop")){
@@ -497,6 +598,7 @@ console.log("It is 12:24")
                 if(monobehavior){
                     monobehavior._stop();
                 }
+                return;
             }
 
             if(data.startsWith("monobehavior_refresh")){
@@ -505,6 +607,7 @@ console.log("It is 12:24")
                 if(monobehavior){
                     monobehavior._refresh();
                 }
+                return;
             }
         }
 
@@ -532,7 +635,7 @@ console.log("It is 12:24")
             
             if(localhost){
                 this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
-                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
+                //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
             }
         }
 
@@ -544,14 +647,15 @@ console.log("It is 12:24")
                 this.scene.SetPublicSpaceProps({ [key]: null });
                 delete this.scene.spaceState.public[key];
             }
-            if(localhost){
-                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            }
+            // if(localhost){
+            //     localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
+            // }
         }
 
 
         async sendOneShot(data){
             //console.log("sending one shot =>", data)
+            let data = `${Date.now()}:${data}`
             this.scene.OneShot(data);
             if(localhost){
                 this.handleOneShot({detail: {data: data}})

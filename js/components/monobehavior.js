@@ -16,7 +16,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
         if(this.properties.file && this.properties.file.length > 0){
-            if(SM.scene.spaceState.public["__" + this.id + "_running:monobehavior"] !== false){
+            if(SM.props["__" + this.id + "/_running:component"] !== false){
                 this._loadScript(this.properties.file);
             }else{
                 this.ctx._running = false;
@@ -130,7 +130,9 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(!this._slot.active) return;
         this.ctx._running = true;
         this.ctx.onStart();
-        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
+        //SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
+        let message = `update_monobehavior:${this.id}:_running:true`;
+        SM.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
@@ -140,7 +142,9 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(!this._slot.active) return;
         this.ctx._running = false;
         this.ctx.onDestroy();
-        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
+        //SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
+        let message = `update_monobehavior:${this.id}:_running:false`;
+        SM.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
@@ -213,14 +217,16 @@ export class MonoBehaviorComponent extends SlotComponent {
     async updateVar(varName, value) {
         console.log("[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
-        const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
-        await SM.setSpaceProperty(spaceKey, value, false);
+        //const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
+        //await SM.setSpaceProperty(spaceKey, value, false);
+        let message = `update_monobehavior:${this.id}:vars:${varName}:${value}`;
+        SM.sendOneShot(message);
         // this.scriptContext.vars[varName] = value;
     }
 
     loadVarsFromSpaceState(){
         let key = "__" + this.id + "/vars:component";
-        this.ctx.vars = SM.scene.spaceState.public[key] || {};
+        this.ctx.vars = SM.props[key] || {};
     }
 
     async _destroy(){

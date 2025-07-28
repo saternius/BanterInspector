@@ -72,30 +72,25 @@ export class SlotComponent{
         
         // Remove any space properties associated with this component
         const propsToRemove = [];
-        const spaceState = SM.scene?.spaceState;
-        
-        if (spaceState) {
-            // Check both public and protected properties
-            ['public', 'protected'].forEach(type => {
-                const props = spaceState[type];
-                Object.keys(props).forEach(key => {
-                    if (key.includes(`__${this.id}/`)) {
-                        propsToRemove.push({ key, isProtected: type === 'protected' });
-                    }
-                });
-            });
-            
-            // Remove the properties
-            for (const { key, isProtected } of propsToRemove) {
-                await SM.deleteSpaceProperty(key, isProtected);
+        // Check both public and protected properties
+        Object.keys(SM.props).forEach(key => {
+            if (key.includes(`__${this.id}/`)) {
+                propsToRemove.push(key);
             }
+        });
+        // Remove the properties
+        for (const key of propsToRemove) {
+            delete SM.props[key];
         }
+        
 
         inspector.propertiesPanel.render(this._slot.id);
     }
 
     async Set(property, value){
-        const spaceKey = `__${this.id}/${property}:component`;
-        await SM.setSpaceProperty(spaceKey, value, false);
+        //const spaceKey = `__${this.id}/${property}:component`;
+        //await SM.setSpaceProperty(spaceKey, value, false);
+        let message = `update_component:${this.id}:${property}:${value}`;
+        SM.sendOneShot(message);
     }
 }
