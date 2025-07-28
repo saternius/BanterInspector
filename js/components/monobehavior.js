@@ -131,7 +131,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         this.ctx._running = true;
         this.ctx.onStart();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
 
     _stop(){
@@ -141,7 +141,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         this.ctx._running = false;
         this.ctx.onDestroy();
         SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
 
     _update(){
@@ -223,6 +223,6 @@ export class MonoBehaviorComponent extends SlotComponent {
         await super._destroy();
         this._stop();
         await lifecycle.unregisterMonoBehavior(this);
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
 }

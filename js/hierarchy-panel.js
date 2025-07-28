@@ -111,8 +111,8 @@
                 const exportedSlot = slot.export();
                 
                 // Use the inventory instance to save the slot
-                if (window.inspectorApp && window.inspectorApp.inventory) {
-                    await window.inspectorApp.inventory.addItem(exportedSlot, 'slot');
+                if (inspector && inspector.inventory) {
+                    await inspector.inventory.addItem(exportedSlot, 'slot');
                 }
             });
         }

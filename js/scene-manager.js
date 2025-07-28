@@ -73,9 +73,9 @@ console.log("It is 6:03")
                         console.error('Error gathering scene hierarchy:', error);
                     }
                     this.loaded = true;
-                    inspectorApp.hierarchyPanel.render()
+                    inspector.hierarchyPanel.render()
                     setTimeout(()=>{
-                        inspectorApp.lifecyclePanel.render()
+                        inspector.lifecyclePanel.render()
                     }, 100)
                 }
             } catch (error) {
@@ -260,7 +260,7 @@ console.log("It is 6:03")
 
             this.slotData.slots = [slot];
             this.initializeExpandedNodes();
-            inspectorApp.hierarchyPanel.render()
+            inspector.hierarchyPanel.render()
         }
 
 
@@ -379,7 +379,7 @@ console.log("It is 6:03")
 
                 let renderProps = (component)=>{
                     if(this.selectedSlot === component._slot.id){
-                        inspectorApp.propertiesPanel.render(this.selectedSlot)
+                        inspector.propertiesPanel.render(this.selectedSlot)
                     }
                 }
                 
@@ -396,7 +396,7 @@ console.log("It is 6:03")
                         let slot = this.getSlotById(ref);
                         if(slot){
                             await slot._set(prop, newValue);
-                            inspectorApp.hierarchyPanel.render()
+                            inspector.hierarchyPanel.render()
                         }
                         
                     }else if(type[0] == "monobehavior"){
@@ -406,7 +406,7 @@ console.log("It is 6:03")
                         if(monobehavior && monobehavior.ctx){
                             if(prop === "_running"){
                                 monobehavior.ctx._running = newValue;
-                                inspectorApp.lifecyclePanel.render()
+                                inspector.lifecyclePanel.render()
                             }else{
                                 monobehavior.ctx.vars[prop] = newValue;
                                 renderProps(monobehavior)
@@ -578,8 +578,8 @@ console.log("It is 6:03")
                 detail: { slotId: slotId }
             }));
 
-            if (window.inspectorApp?.hierarchyPanel) {
-                window.inspectorApp.hierarchyPanel.render();
+            if (inspector?.hierarchyPanel) {
+                inspector.hierarchyPanel.render();
             }
         }
 
@@ -674,8 +674,8 @@ console.log("It is 6:03")
             this.slotData.componentMap[slotComponent.id] = slotComponent;
 
             // Refresh properties panel
-            if (window.inspectorApp?.propertiesPanel) {
-                window.inspectorApp.propertiesPanel.render(slot.id);
+            if (inspector?.propertiesPanel) {
+                inspector.propertiesPanel.render(slot.id);
             }
             return slotComponent;
         }

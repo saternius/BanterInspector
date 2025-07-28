@@ -27,7 +27,7 @@ export class LifecycleManager {
         }
 
         this.pruneOrphanedMonoBehaviors();
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
 
     pruneOrphanedMonoBehaviors(){
@@ -49,7 +49,7 @@ export class LifecycleManager {
             this.stop();
         }
         this.pruneOrphanedMonoBehaviors();
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
     
     /**
@@ -67,7 +67,7 @@ export class LifecycleManager {
         }, intervalMs);
         
         console.log(`LifecycleManager started with ${this.fps} FPS`);
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
     
     /**
@@ -85,7 +85,7 @@ export class LifecycleManager {
         }
         
         console.log('LifecycleManager stopped');
-        inspectorApp.lifecyclePanel.render()
+        inspector.lifecyclePanel.render()
     }
     
     /**

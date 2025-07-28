@@ -72,8 +72,8 @@ export class ComponentPropertyChange {
         await this.component.Set(this.property, value);
 
         // Refresh UI if needed
-        if (window.inspectorApp?.spacePropsPanel) {
-            window.inspectorApp.spacePropsPanel.render();
+        if (inspector?.spacePropsPanel) {
+            inspector.spacePropsPanel.render();
         }
     }
 
@@ -116,8 +116,8 @@ export class SpacePropertyChange {
         }
 
         // Update space props panel
-        if (window.inspectorApp?.spacePropsPanel) {
-            window.inspectorApp.spacePropsPanel.render();
+        if (inspector?.spacePropsPanel) {
+            inspector.spacePropsPanel.render();
         }
     }
 
@@ -380,8 +380,8 @@ export class MonoBehaviorVarChange {
         await this.monobehavior.updateVar(this.varName, value);
 
         // Refresh UI if needed
-        if (window.inspectorApp?.propertiesPanel) {
-            window.inspectorApp.propertiesPanel.render(SM.selectedSlot);
+        if (inspector?.propertiesPanel) {
+            inspector.propertiesPanel.render(SM.selectedSlot);
         }
     }
 

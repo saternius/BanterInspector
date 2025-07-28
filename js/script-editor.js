@@ -18,13 +18,15 @@ export class ScriptEditor {
         this.slotButtonHandlers = new Map();
     }
     
-    async open() {
+    async open(openInBackground) {
         this.isModified = false;
         // Switch to the editor page
         await this.createEditorPage();
         
         navigation.addDynamicPage(this.pageId, this.pageElement, this.navElement);
-        navigation.switchPage(this.pageId);
+        if(!openInBackground){
+            navigation.switchPage(this.pageId);
+        }
         
         // Render footer after page is added to DOM
         setTimeout(() => {

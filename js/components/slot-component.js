@@ -91,7 +91,7 @@ export class SlotComponent{
             }
         }
 
-        inspectorApp.propertiesPanel.render(this._slot.id);
+        inspector.propertiesPanel.render(this._slot.id);
     }
 
     async Set(property, value){

@@ -108,6 +108,9 @@
                 // Handle window resize
                 this.setupResizeHandlers();
                 
+                this.loadOldTabs();
+
+
                 this.initialized = true;
                 console.log('Inspector initialized successfully');
                 
@@ -222,7 +225,9 @@
                     if (editor.currentScript.name === scriptData.name) {
                         existingEditor = editor;
                         // Switch to existing tab
-                        navigation.switchPage(editor.pageId);
+                        if(!event.detail.openInBackground){
+                            navigation.switchPage(editor.pageId);
+                        }
                         return;
                     }
                 }
@@ -230,13 +235,19 @@
                 // Create new script editor instance
                 const scriptEditor = new ScriptEditor(scriptData);
                 this.scriptEditors.set(editorKey, scriptEditor);
-                scriptEditor.open();
+
+                let saveTabs = ()=>{
+                    localStorage.setItem(`openedEditors`, Array.from(this.scriptEditors.keys()).join(","));
+                }
+                saveTabs();
+                scriptEditor.open(event.detail.openInBackground);
                 
                 // Clean up when editor is closed
                 const originalClose = scriptEditor.close.bind(scriptEditor);
                 scriptEditor.close = () => {
                     originalClose();
                     this.scriptEditors.delete(editorKey);
+                    saveTabs();
                 };
             });
             
@@ -333,6 +344,28 @@
                     }
                 }
             });
+        }
+
+        loadOldTabs(){
+            let openedEditors = localStorage.getItem(`openedEditors`);
+            if(openedEditors){
+                openedEditors.split(",").forEach(editor=>{
+                    const scriptItem = window.inventory.items[editor];
+                    if (scriptItem && scriptItem.itemType === 'script') {
+                        const event = new CustomEvent('open-script-editor', {
+                            detail: {
+                                name: editor,
+                                content: scriptItem.data,
+                                author: scriptItem.author,
+                                created: scriptItem.created,
+                                openInBackground: true
+                            },
+                            
+                        });
+                        window.dispatchEvent(event);
+                    }
+                })
+            }
         }
 
         /**
@@ -447,7 +480,7 @@
     }
 
     // Export app instance for debugging
-    window.inspectorApp = app;
+    window.inspector = app;
 
 
     var loadLocalUserSceneFromLocalStorage = (scene)=>{

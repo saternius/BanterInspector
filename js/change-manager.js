@@ -198,6 +198,7 @@ class ChangeManager {
     setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && !e.altKey) {
+                if(navigation.currentPage !== "world-inspector") return;
                 if (e.key === 'z' && !e.shiftKey) {
                     e.preventDefault();
                     this.undo();
