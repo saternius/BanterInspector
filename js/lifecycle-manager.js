@@ -9,10 +9,15 @@ export class LifecycleManager {
         this.fps = 30; // Default 30 FPS for onUpdate
         this.updateInterval = null;
         this.isRunning = false;
-        
+        this.contexts = []
         // Setup keyboard event listeners
         this.setupKeyboardListeners();
         return this;
+    }
+
+
+    recordContext(context){
+        //this.contexts.push(context); // This is only for debugging
     }
     
     /**

@@ -161,7 +161,7 @@ console.log("It is 6:03")
             let createSlotHierarchy = (slot)=>{
                 let h = {
                     name: slot.name,
-                    components: slot.components.map(c=>c.id),
+                    components: Array.from(new Set(slot.components.map(c=>c.id))),
                     children: slot.children.map(c=>createSlotHierarchy(c))
                 }
                 return h;
@@ -511,6 +511,9 @@ console.log("It is 6:03")
 
         async setSpaceProperty(key, value, isProtected) {
             if (!this.scene) return;
+
+            //console.log(`setting space property => [${key}] => ${value}`)
+         
             //console.log("[setSpaceProperty]", key, value, isProtected)
 
             // if(value && value.value !== undefined){

@@ -161,6 +161,15 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
         
         this._loadScript(this.properties.file);
+        const event = new CustomEvent('script-refreshed', {
+            detail: {
+                componentId: this.id,
+                name: this.properties.name,
+                file: this.properties.file
+            },
+            
+        });
+        window.dispatchEvent(event);
     }
 
     Start(){
@@ -181,7 +190,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
 
     newScriptContext(){
-        let defaults =  {
+        let newContext =  {
             vars: {},
             onStart: ()=>{},
             onUpdate: ()=>{},
@@ -197,13 +206,8 @@ export class MonoBehaviorComponent extends SlotComponent {
             _BS: window.BS, // Reference to BanterScript library
             _component: this
         }
-
-        defaults.onScriptChanged = function() {
-            this.onDestroy();
-            this.onStart();
-        }
-
-        return defaults;
+        lifecycle.recordContext(newContext);
+        return newContext;
     }
 
     async updateVar(varName, value) {
@@ -216,7 +220,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     loadVarsFromSpaceState(){
         let key = "__" + this.id + "/vars:component";
-        this.ctx.vars = SM.scene.spaceState.public[key];
+        this.ctx.vars = SM.scene.spaceState.public[key] || {};
     }
 
     async _destroy(){

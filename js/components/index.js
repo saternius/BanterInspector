@@ -137,6 +137,10 @@ export const componentTextMap = {
 
 export const componentBundleMap = {
     "BanterGeometry": ['BanterMaterial'],
+    "BoxCollider": ['BanterColliderEvents'],
+    "SphereCollider": ['BanterColliderEvents'],
+    "CapsuleCollider": ['BanterColliderEvents'],
+    "MeshCollider": ['BanterColliderEvents']
 }
 
 
