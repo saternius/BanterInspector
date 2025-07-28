@@ -644,8 +644,11 @@ console.log("It is 6:03")
             });
 
             console.log("NEW SLOT:", newSlot)
+            let properties = {
+                id: `Transform_${newSlot.id}`
+            }
 
-            let transform = await new TransformComponent().init(newSlot);
+            let transform = await new TransformComponent().init(newSlot, null, properties);
             newSlot.components.push(transform);
 
             
