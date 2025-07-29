@@ -24,6 +24,7 @@ console.log("It is 12:24")
             this.selectedSlot = null;
             this.expandedNodes = new Set();
             this.loaded = false;
+            this.saveMethod = "aggressive"
         }
 
 
@@ -53,12 +54,12 @@ console.log("It is 12:24")
 
                     if(!this.scene.spaceState.public.hostUser){
                         console.log("No host user found, setting to local user =>", SM.scene.localUser.name)
-                        this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                        networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
                     }else{
                         let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
                             console.log("Host user not here, setting to local user =>", SM.scene.localUser.name)
-                            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                            networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
                         }
                     }
 
@@ -109,9 +110,9 @@ console.log("It is 12:24")
         }
 
         claimHost(){
-            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+            networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
             setTimeout(()=>{
-                this.sendOneShot('reset');
+                networking.sendOneShot('reset');
             }, 1000)
         }
 
@@ -340,7 +341,6 @@ console.log("It is 12:24")
         }
         
 
-
         // Creates and hydrates a slot using the SpaceProperties
         async loadHistoricalSlot(hierarchy, parentId){
             
@@ -375,291 +375,6 @@ console.log("It is 12:24")
             this.slotData.slots.forEach(slot => {
                 this.expandedNodes.add(slot.id);
             });
-        }
-
-
-        handleSpaceStateChange(event) {
-            const { changes } = event.detail;
-            //console.log("[SPACE CHANGE] =>", changes)
-            changes.forEach(async (change) => {
-                //console.log("[SPACE CHANGE] =>", change)
-                let { property, newValue, isProtected } = change;
-                newValue = JSON.parse(newValue);
-                
-                if (isProtected) {
-                    this.scene.spaceState.protected[property] = newValue;
-                } else {
-                    this.scene.spaceState.public[property] = newValue;
-                }
-
-                let renderProps = (component)=>{
-                    if(this.selectedSlot === component._slot.id){
-                        inspector.propertiesPanel.render(this.selectedSlot)
-                    }
-                }
-                
-
-                
-                if(property.slice(0,2) == "__"){
-                    let items = property.split(":");
-                    let path = items[0].split("/");
-                    let prop = path[path.length-1];
-                    let type = items[1].split("_")
-                    //console.log("updating =>", items, path, prop, type)
-                    if(type[0] == "slot"){
-                        let ref = ['Root'].concat(path.slice(1,-1)).join("/")
-                        let slot = this.getSlotById(ref);
-                        if(slot){
-                            await slot._set(prop, newValue);
-                            inspector.hierarchyPanel.render()
-                        }
-                        
-                    }else if(type[0] == "monobehavior"){
-                        //console.log("updating monobehavior =>", property, newValue)
-                        let ref = path[0].slice(2)
-                        let monobehavior = this.getSlotComponentById(ref);
-                        if(monobehavior && monobehavior.ctx){
-                            if(prop === "_running"){
-                                monobehavior.ctx._running = newValue;
-                                inspector.lifecyclePanel.render()
-                            }else{
-                                monobehavior.ctx.vars[prop] = newValue;
-                                renderProps(monobehavior)
-                            }
-                        }
-                    }else if(type[0] == "component"){
-                        let component = this.getSlotComponentById(path[0].slice(2));
-                        if(component){
-                            await component._set(prop, newValue);
-                            renderProps(component)
-                        }
-                        
-                    }
-                }
-            });
-        }
-
-
-        async handleOneShot(event){
-
-            let renderProps = (component)=>{
-                if(navigation.currentPage !== "world-inspector") return;
-                if(this.selectedSlot === component._slot.id){
-                    inspector.propertiesPanel.render(this.selectedSlot)
-                }
-            }
-
-
-            console.log("handleOneShot =>", event)
-            let message = event.detail.data;
-            let firstColon = message.indexOf(":");
-            let timestamp = message.slice(0, firstColon);
-            let data = message.slice(firstColon+1);
-
-            if(data.startsWith("update_slot")){ //`update_slot:${this.id}:${property}:${value}`;
-                let str = data.slice(12)
-                let nxtColon = str.indexOf(":")
-                let slotId = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let prop = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let value = str.slice(nxtColon+1)
-                let slot = this.getSlotById(slotId);
-                if(slot){
-                    await slot._set(prop, value);
-                    inspector.hierarchyPanel.render()
-                    renderProps(slot)
-                }
-                this.props[`__${slotId}/${prop}:slot`] = value
-                return;
-            }
-
-
-            if(data.startsWith("update_component")){ // `update_component:${this.id}:${property}:${value}`;
-                let str = data.slice(17)
-                let nxtColon = str.indexOf(":")
-                let componentId = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let prop = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let value = str.slice(nxtColon+1)
-                let component = this.getSlotComponentById(componentId);
-                if(component){
-                    await component._set(prop, value);
-                    renderProps(component)
-                }
-                this.props[`__${componentId}/${prop}:component`] = value
-                return;
-            }
-
-            //update_monobehavior, update_component, update_slot
-            if(data.startsWith("update_monobehavior")){
-                let str = data.slice(20)
-                let nxtColon = str.indexOf(":")
-                let componentId = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let op = str.slice(0, nxtColon)
-                str = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let prop = str.slice(nxtColon+1)
-                nxtColon = str.indexOf(":")
-                let value = str.slice(nxtColon+1)
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(op === "vars"){
-                    monobehavior.ctx.vars[prop] = value;
-                    renderProps(monobehavior)
-                }else if(op === "_running"){
-                    monobehavior.ctx._running = value;
-                    inspector.lifecyclePanel.render()
-                }
-
-                this.props[`__${componentId}/${prop}:component`] = value
-
-                return;
-            }
-
-            if(data === "reset"){
-                window.location.reload();
-            }
-           
-            if(data.startsWith("load_slot")){
-                let [parentId, slot_data] = data.slice(10).split("|");
-                await this._loadSlot(JSON.parse(slot_data), parentId);
-                await this.updateHierarchy(this.selectedSlot);
-                return;
-            }
-
-            if(data.startsWith("component_added")){
-                let event = JSON.parse(data.slice(16));
-                let slot = this.getSlotById(event.slotId);
-                if(slot){
-                    await this._addComponent(slot, event.componentType, event.componentProperties);
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-                return;
-            }
-
-            if(data.startsWith("component_removed")){
-                let componentId = data.slice(18);
-                let component = this.getSlotComponentById(componentId);
-                if(component){
-                    await component._destroy();
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-                return;
-            }
-
-
-            if(data.startsWith("slot_added")){
-                let [parentId, slotName] = data.slice(11).split(":");
-                await this._addNewSlot(slotName, parentId);
-                await this.updateHierarchy(this.selectedSlot);
-                return;
-            }
-
-            if(data.startsWith("slot_removed")){
-                let slotId = data.slice(13);
-                let slot = this.getSlotById(slotId);
-                if(slot){
-                    await slot._destroy();
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-                return;
-            }
-
-            if(data.startsWith("slot_moved")){
-                let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
-                //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
-                const slot = this.getSlotById(slotId);
-                if (!slot) return;
-                if(!newParentId) newParentId = this.slotData.slots[0].id;
-                await slot._setParent(this.getSlotById(newParentId));
-                await this.updateHierarchy(this.selectedSlot);
-                return;
-            }
-
-            if(data.startsWith("monobehavior_start")){
-                let componentId = data.slice(19);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._start();
-                }
-                return;
-            }
-
-            if(data.startsWith("monobehavior_stop")){
-                let componentId = data.slice(18);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._stop();
-                }
-                return;
-            }
-
-            if(data.startsWith("monobehavior_refresh")){
-                let componentId = data.slice(21);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._refresh();
-                }
-                return;
-            }
-        }
-
-
-        async setSpaceProperty(key, value, isProtected) {
-            if (!this.scene) return;
-
-            //console.log(`setting space property => [${key}] => ${value}`)
-         
-            //console.log("[setSpaceProperty]", key, value, isProtected)
-
-            // if(value && value.value !== undefined){
-            //     value = value.value;
-            // }
-
-            value = JSON.stringify(value);
-
-            if (isProtected) {
-                this.scene.SetProtectedSpaceProps({ [key]: value });
-                this.scene.spaceState.protected[key] = value;
-            } else {
-                this.scene.SetPublicSpaceProps({ [key]: value });
-                this.scene.spaceState.public[key] = value;
-            }
-            
-            if(localhost){
-                this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
-                //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            }
-        }
-
-        async deleteSpaceProperty(key, isProtected){
-            if(isProtected){
-                this.scene.SetProtectedSpaceProps({ [key]: null });
-                delete this.scene.spaceState.protected[key];
-            }else{
-                this.scene.SetPublicSpaceProps({ [key]: null });
-                delete this.scene.spaceState.public[key];
-            }
-            // if(localhost){
-            //     localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            // }
-        }
-
-
-        async sendOneShot(data){
-            //console.log("sending one shot =>", data)
-            let data = `${Date.now()}:${data}`
-            this.scene.OneShot(data);
-            if(localhost){
-                this.handleOneShot({detail: {data: data}})
-            }
         }
 
     

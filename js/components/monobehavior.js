@@ -130,9 +130,8 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(!this._slot.active) return;
         this.ctx._running = true;
         this.ctx.onStart();
-        //SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
         let message = `update_monobehavior:${this.id}:_running:true`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
@@ -142,9 +141,8 @@ export class MonoBehaviorComponent extends SlotComponent {
         if(!this._slot.active) return;
         this.ctx._running = false;
         this.ctx.onDestroy();
-        //SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
         let message = `update_monobehavior:${this.id}:_running:false`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
@@ -178,17 +176,17 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     Start(){
         const oneShot = 'monobehavior_start:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
     Stop(){
         const oneShot = 'monobehavior_stop:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
     Refresh(){
         const oneShot = 'monobehavior_refresh:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
 
@@ -217,10 +215,11 @@ export class MonoBehaviorComponent extends SlotComponent {
     async updateVar(varName, value) {
         console.log("[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
-        //const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
-        //await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
         let message = `update_monobehavior:${this.id}:vars:${varName}:${value}`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         // this.scriptContext.vars[varName] = value;
     }
 

@@ -76,10 +76,6 @@ export class Slot{
         delete SM.props[`__${this.id}/active:slot`];
         delete SM.props[`__${this.id}/persistent:slot`];
         delete SM.props[`__${this.id}/name:slot`];
-        //SM.deleteSpaceProperty(`__${this.id}/active:slot`, false);
-        //SM.deleteSpaceProperty(`__${this.id}/persistent:slot`, false);
-        //SM.deleteSpaceProperty(`__${this.id}/name:slot`, false);
-
         if(this.parentId){
             const parent = SM.getSlotById(this.parentId);
             if (parent) {
@@ -105,21 +101,16 @@ export class Slot{
 
         for(let key of toDelete){
             delete SM.props[key];
-            //SM.deleteSpaceProperty(key, false);
         }
     }
 
     saveSpaceProperties(){
-        //console.log(`saving space properties for ${this.id}`)
-        //SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
-        //SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
-        //SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
         let message = `update_slot:${this.id}:active:${this.active}`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         message = `update_slot:${this.id}:persistent:${this.persistent}`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         message = `update_slot:${this.id}:name:${this.name}`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
     }
 
     rename(newName, localUpdate){
@@ -164,10 +155,12 @@ export class Slot{
     }
 
     async Set(property, value){
-        //const spaceKey = '__' + this.id + '/' + property + ':slot';
-        //await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
+        SM.props[`__${this.id}/${property}:slot`] = value;
         let message = `update_slot:${this.id}:${property}:${value}`;
-        SM.sendOneShot(message);
+        networking.sendOneShot(message);
         if(property == "name"){
             this.rename(value, false);
         }
@@ -176,6 +169,6 @@ export class Slot{
     async SetParent(newParentId){
         await this._setParent(SM.getSlotOrRoot(newParentId), true);
         let data = `slot_moved:${this.id}:${newParentId}:0`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 }

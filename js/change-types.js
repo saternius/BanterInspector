@@ -1,4 +1,3 @@
-
 // Import required dependencies
 let localhost = window.location.hostname === 'localhost'
 let basePath = localhost ? '.' : `${window.repoUrl}/js`;
@@ -112,7 +111,7 @@ export class SpacePropertyChange {
 
     async change(value) {
    
-        await SM.setSpaceProperty(this.property, value, this.protected);
+        await networking.setSpaceProperty(this.property, value, this.protected);
         // Update space props panel
         if (inspector?.spacePropsPanel) {
             inspector.spacePropsPanel.render();
@@ -147,14 +146,14 @@ export class ComponentAddChange {
         }
         let event_str = JSON.stringify(event);
         let data = `component_added:${event_str}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
 
     }
 
     async undo() {
         if (!this.componentProperties.id) return;
         let data = `component_removed:${this.componentProperties.id}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
 
@@ -198,7 +197,7 @@ export class ComponentRemoveChange {
         }
 
         let data = `component_removed:${this.componentId}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     async undo() {
@@ -211,7 +210,7 @@ export class ComponentRemoveChange {
         }
         let event_str = JSON.stringify(event);
         let data = `component_added:${event_str}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     getDescription() {
@@ -233,14 +232,14 @@ export class SlotAddChange {
 
     async apply() {
         let data = `slot_added:${this.parentId}:${this.slotName}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     async undo() {
         if (!this.newSlotId) return;
         let slot_id = `${this.parentId}/${this.slotName}`
         let data = `slot_removed:${slot_id}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     getDescription() {
@@ -283,7 +282,7 @@ export class SlotRemoveChange {
 
     async apply() {
         let data = `slot_removed:${this.slot.id}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     async undo() {
@@ -291,7 +290,7 @@ export class SlotRemoveChange {
 
         // Recreate the slot hierarchy
         let data = `load_slot:${this.slot.parentId}|${JSON.stringify(this.slotExport)}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     getDescription() {
@@ -433,7 +432,7 @@ export class LoadItemChange {
         
 
         let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
 
         //Additionally send all of the slot properties to space props
         if(!this.options.ephemeral){
@@ -492,7 +491,7 @@ export class LoadItemChange {
     async undo() {
         if(!this.slotId) return;
         let data = `slot_removed:${this.slotId}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     getDescription() {
@@ -537,7 +536,7 @@ export class CloneSlotChange {
         changeChildrenIds(itemData);
 
         let data = `load_slot:${this.sourceSlot.parentId}|${JSON.stringify(itemData)}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
 
         //Additionally send all of the slot properties to space props
         if(!this.options.ephemeral){
@@ -596,7 +595,7 @@ export class CloneSlotChange {
     async undo() {
         if(!this.slotId) return;
         let data = `slot_removed:${this.slotId}`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 
     getDescription() {

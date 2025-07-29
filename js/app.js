@@ -7,6 +7,7 @@
 (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
     const  { sceneManager } = await import(`${basePath}/scene-manager.js`);
+    const  { networking } = await import(`${basePath}/networking.js`);
 
     const  { HierarchyPanel } = await import(`${basePath}/hierarchy-panel.js`);
     const  { PropertiesPanel } = await import(`${basePath}/properties-panel.js`);
@@ -275,7 +276,7 @@
                 SM.scene.addEventListener('space-state-changed', (event) => {
                     // Sync external changes through change manager
                     document.dispatchEvent(new CustomEvent('spaceStateChanged'));
-                    SM.handleSpaceStateChange(event);
+                    networking.handleSpaceStateChange(event);
                 });
 
                 SM.scene.On("unity-loaded", async () => {
@@ -294,7 +295,7 @@
 
                 SM.scene.On("one-shot", async (event) => {
                     console.log("oneshot fired", event)
-                    SM.handleOneShot(event);
+                    networking.handleOneShot(event);
                     document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
                 });
 

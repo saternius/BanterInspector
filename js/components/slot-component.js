@@ -88,9 +88,11 @@ export class SlotComponent{
     }
 
     async Set(property, value){
-        //const spaceKey = `__${this.id}/${property}:component`;
-        //await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
         let message = `update_component:${this.id}:${property}:${value}`;
-        SM.sendOneShot(message);
+        SM.props[`__${this.id}/${property}:component`] = value;
+        networking.sendOneShot(message);
     }
 }
