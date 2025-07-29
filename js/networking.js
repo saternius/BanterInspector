@@ -96,7 +96,7 @@ export class Networking {
             let value = str.slice(nxtColon+1)
             let component = SM.getSlotComponentById(componentId);
             if(component){
-                await component._set(prop, safeParse(value));
+                await component._setWithTimestamp(prop, safeParse(value), timestamp);
                 if(SM.selectedSlot === component._slot.id){
                     renderProps()
                 }

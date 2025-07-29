@@ -1,6 +1,7 @@
 export class SlotComponent{
     constructor(){
         this.bsRef = null;
+        this.lastUpdate = new Map();
     }
 
     async init(slot, sceneComponent, properties){
@@ -8,6 +9,7 @@ export class SlotComponent{
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
+        
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
@@ -54,6 +56,16 @@ export class SlotComponent{
         for(let property in properties){
             await this._set(property, properties[property]);
         }
+    }
+
+    async _setWithTimestamp(property, value, timestamp){
+        if(this.lastUpdate.has(property)){
+            if(this.lastUpdate.get(property) >= timestamp){
+                return;
+            }
+        }
+        this.lastUpdate.set(property, timestamp);
+        this._set(property, value);
     }
 
     async _set(property, value){
