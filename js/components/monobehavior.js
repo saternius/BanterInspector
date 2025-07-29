@@ -57,7 +57,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async _loadScript(fileName) {        
         console.log("loading script =>", fileName)
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this._slot.active) return;
         console.log("loading script =>", fileName)
         const inventoryItem = window.inventory?.items?.[fileName];
@@ -125,7 +125,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _start(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx._running = true;
@@ -136,7 +136,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _stop(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx._running = false;
@@ -147,14 +147,14 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _update(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx.onUpdate();
     }
 
     _refresh(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this._slot.active) return;
         console.log("refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){

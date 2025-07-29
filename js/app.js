@@ -294,7 +294,7 @@
                 });
 
                 SM.scene.On("one-shot", async (event) => {
-                    console.log("oneshot fired", event)
+                    //console.log("oneshot fired", event)
                     networking.handleOneShot(event);
                     document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
                 });

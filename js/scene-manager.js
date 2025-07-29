@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 12:24")
+console.log("It is 1:24")
 // (async () => {
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;
@@ -25,6 +25,10 @@ console.log("It is 12:24")
             this.expandedNodes = new Set();
             this.loaded = false;
             this.saveMethod = "aggressive"
+        }
+
+        myName(){
+            return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
         }
 
 
@@ -53,13 +57,13 @@ console.log("It is 12:24")
                     }
 
                     if(!this.scene.spaceState.public.hostUser){
-                        console.log("No host user found, setting to local user =>", SM.scene.localUser.name)
-                        networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                        console.log("No host user found, setting to local user =>", this.myName())
+                        networking.setSpaceProperty("hostUser", this.myName(), false);
                     }else{
-                        let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
+                        let hostHere = Object.values(this.scene.users).map(x=>`${x.name}_${x.id.slice(0,3)}`).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
-                            console.log("Host user not here, setting to local user =>", SM.scene.localUser.name)
-                            networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                            console.log("Host user not here, setting to local user =>", this.myName())
+                            networking.setSpaceProperty("hostUser", this.myName(), false);
                         }
                     }
 
@@ -110,7 +114,7 @@ console.log("It is 12:24")
         }
 
         claimHost(){
-            networking.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+            networking.setSpaceProperty("hostUser", this.myName(), false);
             setTimeout(()=>{
                 networking.sendOneShot('reset');
             }, 1000)
