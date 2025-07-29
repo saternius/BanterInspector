@@ -1,5 +1,44 @@
 let localhost = window.location.hostname === 'localhost'
 let basePath = localhost ? '.' : `${window.repoUrl}/js`;
+
+function safeParse(value) {
+    // Only operate on strings
+    if (typeof value !== 'string') return value;
+  
+    const str = value.trim();
+  
+    // 1) Booleans and null
+    if (/^(?:true|false|null)$/i.test(str)) {
+      if (str.toLowerCase() === 'null')   return null;
+      return str.toLowerCase() === 'true';
+    }
+  
+    // 2) Numbers (integer, float, scientific)
+    if (/^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(str)) {
+      // +0/-0 edge cases mirror Number()
+      return Number(str);
+    }
+  
+    // 3) JSON objects or arrays
+    if ((str.startsWith('{') && str.endsWith('}')) ||
+        (str.startsWith('[') && str.endsWith(']'))) {
+      try {
+        return JSON.parse(str);
+      } catch {
+        // fall through to return original string
+      }
+    }
+  
+    // 4) Fallback
+    return value;
+}
+
+let renderProps = ()=>{
+    if(navigation.currentPage !== "world-inspector") return;
+    inspector.propertiesPanel.render(SM.selectedSlot)
+}
+
+
 export class Networking {
     constructor(){
     }
@@ -17,52 +56,7 @@ export class Networking {
         });
     }
 
-
-    async handleOneShot(event){
-        let renderProps = ()=>{
-            if(navigation.currentPage !== "world-inspector") return;
-            inspector.propertiesPanel.render(SM.selectedSlot)
-        }
-
-
-        //console.log("handleOneShot =>", event)
-        let message = event.detail.data;
-        let firstColon = message.indexOf(":");
-        let timestamp = parseInt(message.slice(0, firstColon));
-        let data = message.slice(firstColon+1);
-
-        function safeParse(value) {
-            // Only operate on strings
-            if (typeof value !== 'string') return value;
-          
-            const str = value.trim();
-          
-            // 1) Booleans and null
-            if (/^(?:true|false|null)$/i.test(str)) {
-              if (str.toLowerCase() === 'null')   return null;
-              return str.toLowerCase() === 'true';
-            }
-          
-            // 2) Numbers (integer, float, scientific)
-            if (/^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(str)) {
-              // +0/-0 edge cases mirror Number()
-              return Number(str);
-            }
-          
-            // 3) JSON objects or arrays
-            if ((str.startsWith('{') && str.endsWith('}')) ||
-                (str.startsWith('[') && str.endsWith(']'))) {
-              try {
-                return JSON.parse(str);
-              } catch {
-                // fall through to return original string
-              }
-            }
-          
-            // 4) Fallback
-            return value;
-        }
-
+    async routeOneShot(data, timestamp){
 
         if(data.startsWith("update_slot")){ //`update_slot:${this.id}:${property}:${value}`;
             let str = data.slice(12)
@@ -214,6 +208,24 @@ export class Networking {
         }
     }
 
+    async handleOneShot(event){
+        //console.log("handleOneShot =>", event)
+        let message = event.detail.data;
+        let firstColon = message.indexOf(":");
+        let timestamp = parseInt(message.slice(0, firstColon));
+        
+        message = message.slice(firstColon+1);
+        let secondColon = message.indexOf(":");
+        let sender = message.slice(0, secondColon);
+        
+        if(sender === SM.myName()){
+            return;
+        }
+      
+        let data = message.slice(secondColon+1);
+        await this.routeOneShot(data, timestamp)
+    }
+
 
     async setSpaceProperty(key, value, isProtected) {
         if (!SM.scene) return;
@@ -249,11 +261,10 @@ export class Networking {
 
     async sendOneShot(data){
         //console.log("sending one shot =>", data)
-        data = `${Date.now()}:${data}`
-        SM.scene.OneShot(data);
-        if(localhost){
-            this.handleOneShot({detail: {data: data}})
-        }
+        let now = Date.now();
+        let remote_message = `${now}:${SM.myName()}:${data}`
+        SM.scene.OneShot(remote_message);
+        await this.routeOneShot(data, now)
     }
 
 }

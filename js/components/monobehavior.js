@@ -56,10 +56,8 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     async _loadScript(fileName) {        
-        console.log("loading script =>", fileName)
         if(this.properties._owner !== SM.myName()) return;
         if(!this._slot.active) return;
-        console.log("loading script =>", fileName)
         const inventoryItem = window.inventory?.items?.[fileName];
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
             console.error(`Script "${fileName}" not found in inventory`);
@@ -67,7 +65,6 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
 
         
-        console.log("this.scriptContext.running =>", this.ctx)
         if(this.ctx._running){
             await this.ctx.onDestroy();
         }

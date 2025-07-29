@@ -34,7 +34,7 @@ export class ScriptEditor {
         }, 0);
         
         this.pageSwitchHandler = (e) => {
-            console.log("page-switched", e.detail.pageId);
+            //console.log("page-switched", e.detail.pageId);
             if(e.detail.pageId === this.pageId){
                 this.renderFooter();
                 if (this.codemirror) {
@@ -47,7 +47,7 @@ export class ScriptEditor {
 
     renderFooter(){
         this.findMonoBehaviorSlots();
-        console.log("Rendering footer...");
+        //console.log("Rendering footer...");
         const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
             footer.innerHTML = `

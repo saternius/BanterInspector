@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 1:24")
+console.log("It is 3:00")
 // (async () => {
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;

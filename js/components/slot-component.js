@@ -105,6 +105,6 @@ export class SlotComponent{
         }
         let message = `update_component:${this.id}:${property}:${value}`;
         SM.props[`__${this.id}/${property}:component`] = value;
-        networking.sendOneShot(message);
+        await networking.sendOneShot(message);
     }
 }

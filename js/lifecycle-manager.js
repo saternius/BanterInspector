@@ -24,7 +24,7 @@ export class LifecycleManager {
      * Register a MonoBehavior component
      */
     async registerMonoBehavior(monoBehavior) {
-        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+        //console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
         this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
@@ -44,7 +44,7 @@ export class LifecycleManager {
      */
     unregisterMonoBehavior(monoBehavior) {
         if(!monoBehavior) return;
-        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+        //console.log("[LIFECYCLE] unregistering monoBehavior =>", monoBehavior.id)
 
        
         // Call onDestroy before removing
