@@ -1183,6 +1183,3 @@ window.EditScript = async (scriptName, scriptContent, options)=>{
     let change = new EditScriptItemChange(scriptName, scriptContent, options);
     return await change.apply();
 }
-
-
-
