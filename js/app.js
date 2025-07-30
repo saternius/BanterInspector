@@ -488,6 +488,7 @@
         var luser = JSON.parse(localStorage.getItem("localUser"));
         if(luser){
             scene.localUser = luser
+            scene.localUser.id = "abcdefghi"
             scene.users = {
                 [luser.uid]: luser
             }

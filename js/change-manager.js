@@ -44,6 +44,7 @@ class ChangeManager {
         }
 
         this.isProcessing = true;
+        let outcome = false;
 
         try {
             // Validate change object
@@ -58,7 +59,7 @@ class ChangeManager {
             const shouldRecord = !isFromHistory && change.options?.source === 'ui';
 
             // Apply the change
-            await change.apply();
+            outcome = await change.apply();
 
             // Record in history if applicable
             if (shouldRecord) {
@@ -74,6 +75,7 @@ class ChangeManager {
         } finally {
             this.isProcessing = false;
         }
+        return outcome;
     }
 
 

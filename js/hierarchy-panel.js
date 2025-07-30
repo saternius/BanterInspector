@@ -103,17 +103,10 @@
                     alert('Please select a slot to save');
                     return;
                 }
-                
-                const slot = SM.getSlotById(SM.selectedSlot);
-                if (!slot) return;
-                
-                // Export the slot
-                const exportedSlot = slot.export();
-                
-                // Use the inventory instance to save the slot
-                if (inspector && inspector.inventory) {
-                    await inspector.inventory.addItem(exportedSlot, 'slot');
-                }
+
+                let change = new SaveSlotItemChange(SM.selectedSlot, null, null, {source: 'ui'});
+                changeManager.applyChange(change);
+
             });
         }
 
@@ -311,11 +304,11 @@
             e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', slot.id);
             
-            console.log("slot", slot)
-            let copy = slot.export()
+            // console.log("slot", slot)
+            // let copy = slot.export()
 
-            // Store the full slot data for inventory
-            e.dataTransfer.setData('application/json', JSON.stringify(copy));
+            // // Store the full slot data for inventory
+            // e.dataTransfer.setData('application/json', JSON.stringify(copy));
             
             // Add dragging class
             e.target.classList.add('dragging');

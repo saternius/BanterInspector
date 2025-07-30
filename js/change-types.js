@@ -39,6 +39,16 @@ export class SlotPropertyChange {
     getUndoDescription() {
         return `Changed slot ${this.slotId} ${this.property} to ${this.oldValue}`;
     }
+
+    cmd(){
+        return {
+            action: "set_slot_property",
+            slotId: this.slotId,
+            property: this.property,
+            newValue: this.newValue,
+            options: this.options
+        }
+    }
 }
 
 export class ComponentPropertyChange {
@@ -79,8 +89,19 @@ export class ComponentPropertyChange {
     getDescription() {
         return `Changed ${this.component.type} ${this.property} to ${JSON.stringify(this.newValue)}`;
     }
+
     getUndoDescription() {
         return `Changed ${this.component.type} ${this.property} to ${JSON.stringify(this.oldValue)}`;
+    }
+
+    cmd(){
+        return {
+            action: "set_component_property",
+            componentId: this.componentId,
+            property: this.property,
+            newValue: this.newValue,
+            options: this.options
+        }
     }
 }
 
@@ -127,6 +148,16 @@ export class SpacePropertyChange {
         const propType = this.protected ? 'protected' : 'public';
         return `Change ${propType} property ${this.property} to ${this.oldValue}`;
     }
+
+    cmd(){
+        return {
+            action: "set_space_property",
+            property: this.property,
+            newValue: this.newValue,
+            protected: this.protected,
+            options: this.options
+        }
+    }
 }
 
 export class ComponentAddChange {
@@ -163,6 +194,16 @@ export class ComponentAddChange {
 
     getUndoDescription(){
         return `Remove ${this.componentType} component`;
+    }
+
+    cmd(){
+        return {
+            action: "add_component",
+            slotId: this.slotId,
+            componentType: this.componentType,
+            componentProperties: this.componentProperties,
+            options: this.options
+        }
     }
 }
 
@@ -220,6 +261,14 @@ export class ComponentRemoveChange {
     getUndoDescription(){
         return `Add ${this.componentData?.type || 'unknown'} component`;
     }
+
+    cmd(){
+        return {
+            action: "remove_component",
+            componentId: this.componentId,
+            options: this.options
+        }
+    }
 }
 
 export class SlotAddChange {
@@ -248,6 +297,15 @@ export class SlotAddChange {
 
     getUndoDescription(){
         return `Remove slot ${this.slotName}`;
+    }
+
+    cmd(){
+        return {
+            action: "add_slot",
+            parentId: this.parentId,
+            slotName: this.slotName,
+            options: this.options
+        }
     }
 }
 
@@ -300,6 +358,14 @@ export class SlotRemoveChange {
     getUndoDescription(){
         return `Add slot ${this.slotData?.name || ''}`;
     }
+
+    cmd(){
+        return {
+            action: "remove_slot",
+            slotId: this.slot.id,
+            options: this.options
+        }
+    }
 }
 
 export class SlotMoveChange {
@@ -339,6 +405,15 @@ export class SlotMoveChange {
 
     getUndoDescription(){
         return `Move slot`;
+    }
+
+    cmd(){
+        return {
+            action: "move_slot",
+            slotId: this.slotId,
+            newParentId: this.newParentId,
+            options: this.options
+        }
     }
 }
 
@@ -388,6 +463,16 @@ export class MonoBehaviorVarChange {
 
     getUndoDescription() {
         return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
+    }
+
+    cmd(){
+        return {
+            action: "set_mono_behavior_var",
+            componentId: this.componentId,
+            varName: this.varName,
+            newValue: this.newValue,
+            options: this.options
+        }
     }
 }
 
@@ -501,6 +586,15 @@ export class LoadItemChange {
     getUndoDescription() {
         return `Remove item ${this.itemName} from ${this.parentId}`;
     }
+
+    cmd(){
+        return {
+            action: "load_item",
+            itemName: this.itemName,
+            parentId: this.parentId,
+            options: this.options
+        }
+    }
 }
 
 export class CloneSlotChange {
@@ -605,6 +699,405 @@ export class CloneSlotChange {
     getUndoDescription() {
         return `Remove slot ${this.sourceSlot.name}`;
     }
+
+    cmd(){
+        return {
+            action: "clone_slot",
+            slotId: this.slotId,
+            options: this.options
+        }
+    }
+}
+
+export class SaveSlotItemChange{
+    constructor(slotId, itemName, folder, options){
+        this.slotId = slotId;
+        this.slot = SM.getSlotById(slotId);
+        this.itemName = itemName || this.slot.name;
+        this.folder = folder || inventory.currentFolder;
+        this.options = options || {};
+    }
+
+
+    finalizeAddItem(){
+        let data = this.slot.export();
+        const inventoryItem = {
+            author: SM.scene?.localUser?.name || 'Unknown',
+            name: this.itemName,
+            created: Date.now(),
+            itemType: "slot",
+            data: data,
+            folder: this.folder
+        };
+        const storageKey = `inventory_${this.itemName}`;
+        localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
+    }
+
+    async apply(){
+        const existingKeys = Object.keys(inventory.items);
+        if (existingKeys.includes(this.itemName)) {
+            if(this.options.source === 'ui'){
+                inventory.showRenameModal(this.itemName, (newName) => {
+                    if (!newName || newName.trim() === '') {
+                        inventory.showNotification('Item not added - no name provided.');
+                        return;
+                    }
+                    
+                    const trimmedName = newName.trim();
+                    if (existingKeys.includes(trimmedName)) {
+                        this.showNotification(`An item named "${trimmedName}" also exists.`);
+                        return;
+                    }
+                    this.itemName = trimmedName;
+                    this.finalizeAddItem();
+                    return true;
+                });
+            }
+            return false;
+        }
+        this.finalizeAddItem();
+        return true;
+    }
+
+    async undo(){
+        inventory.showNotification('[ NO UNDO FOR SAVE ITEM ]');
+    }
+
+    getDescription(){
+        return `Save item ${this.itemName} to ${this.folder}`;
+    }
+
+    getUndoDescription(){
+        return `Remove item ${this.itemName} from ${this.folder}`;
+    }
+
+    cmd(){
+        return {
+            action: "save_item",
+            slotId: this.slotId,
+            itemName: this.itemName,
+            folder: this.folder,
+            options: this.options
+        }
+    }
+}
+
+export class RenameItemChange{
+    //TODO: Implement this
+}
+
+export class DeleteItemChange{
+    constructor(itemName, options){
+        this.itemName = itemName;
+        this.options = options || {};
+    }
+
+    async apply(){
+        const storageKey = `inventory_${this.itemName}`;
+        localStorage.removeItem(storageKey);
+        delete inventory.items[this.itemName];
+        return true;
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR DELETE ITEM ]")
+    }
+
+    getDescription(){
+        return `Delete item ${this.itemName}`;
+    }
+
+    getUndoDescription(){
+        return `Restore item ${this.itemName}`;
+    }
+
+    cmd(){
+        return {
+            action: "delete_item",
+            itemName: this.itemName,
+            options: this.options
+        }
+    }
+}
+
+export class CreateFolderChange{
+    constructor(folderName, parentFolder,options){
+        this.folderName = folderName;
+        this.parentFolder = parentFolder || inventory.currentFolder;
+        this.options = options || {};
+    }
+
+    async apply(){
+        const trimmedName = this.folderName.trim();
+            
+        // Check if folder already exists
+        if (inventory.folders[trimmedName]) {
+            inventory.showNotification(`A folder named "${trimmedName}" already exists.`);
+            return false;
+        }
+        
+        // Create folder object
+        const folder = {
+            name: trimmedName,
+            created: Date.now(),
+            parent: this.parentFolder,
+            itemType: "folder"
+        };
+        
+        // Save to localStorage
+        const storageKey = `inventory_folder_${trimmedName}`;
+        localStorage.setItem(storageKey, JSON.stringify(folder));
+        
+        // Update local folders
+        this.folders[trimmedName] = folder;
+        return true;
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR CREATE FOLDER ]")
+    }
+
+    getDescription(){
+        return `Create folder ${this.folderName} in ${this.parentFolder}`;
+    }
+
+    getUndoDescription(){
+        return `Remove folder ${this.folderName} from ${this.parentFolder}`;
+    }
+
+    cmd(){
+        return {
+            action: "create_folder",
+            folderName: this.folderName,
+            parentFolder: this.parentFolder,
+            options: this.options
+        }
+    }
+}
+
+export class RenameFolderChange{
+    //TODO: Implement this
+}
+
+export class MoveFolderChange{
+    //TODO: Implement this
+}
+
+export class RemoveFolderChange{
+    constructor(folderName, options){
+        this.folderName = folderName;
+        this.options = options || {};
+    }
+
+    async apply(){
+        Object.entries(this.items).forEach(([key, item]) => {
+            if (item.folder === folderName) {
+                const storageKey = `inventory_${key}`;
+                localStorage.removeItem(storageKey);
+                delete inventory.items[key];
+            }
+        });
+        
+        Object.entries(this.folders).forEach(([key, subfolder]) => {
+            if (subfolder.parent === folderName) {
+                const storageKey = `inventory_folder_${key}`;
+                localStorage.removeItem(storageKey);
+                delete inventory.folders[key];
+            }
+        });
+        
+        const storageKey = `inventory_folder_${folderName}`;
+        localStorage.removeItem(storageKey);
+        delete this.folders[folderName];
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR REMOVE FOLDER ]")
+    }
+
+    getDescription(){
+        return `Remove folder ${this.folderName}`;
+    }
+
+    getUndoDescription(){
+        return `Restore folder ${this.folderName}`;
+    }
+
+    cmd(){
+        return {
+            action: "remove_folder",
+            folderName: this.folderName,
+            options: this.options
+        }
+    }
+}
+
+export class MoveItemDirectoryChange{
+    constructor(itemName, folderName, options){
+        this.itemName = itemName;
+        this.folderName = folderName;
+        this.options = options || {};
+    }
+
+    async apply(){
+        const item = inventory.items[this.itemName];
+        if (!item) return false;
+        
+        // Don't move if it's already in the target folder
+        if (item.folder === this.folderName) return false;
+        
+        // Update item's folder property
+        item.folder = this.folderName || null;
+        
+        // Save to localStorage
+        const storageKey = `inventory_${this.itemName}`;
+        localStorage.setItem(storageKey, JSON.stringify(item));
+        return true;
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR MOVE ITEM DIRECTORY ]")
+    }
+
+    getDescription(){
+        return `Move item ${this.itemName} to folder ${this.folderName}`;
+    }
+
+    getUndoDescription(){
+        return `Move item ${this.itemName} to folder ${this.folderName}`;
+    }
+
+    cmd(){
+        return {
+            action: "move_item_directory",
+            itemName: this.itemName,
+            folderName: this.folderName,
+            options: this.options
+        }
+    }
+}
+
+export class CreateScriptItemChange{
+    constructor(scriptName, options){
+        this.scriptName = scriptName;
+        this.options = options || {};
+    }
+
+    async apply(){
+        const defaultScript = `this.default = {
+    "slotRef": {
+        "type": "string",
+        "value": ""
+    }
+}
+
+Object.entries(this.default).forEach(([key, val])=>{
+    if(!this.vars[key]) this.vars[key] = val
+})
+
+
+this.onStart = ()=>{
+    console.log("onStart")
+}
+
+this.onUpdate = ()=>{
+    console.log("onUpdate")
+}
+
+this.onDestroy = ()=>{
+    console.log("onDestroy")
+}
+
+this.keyDown = (key)=>{
+    console.log("keyDown", key)
+}
+
+this.keyUp = (key)=>{
+    console.log("keyUp", key)
+}`;
+                
+        // Create script item
+        const scriptItem = {
+            author: SM.scene?.localUser?.name || 'Unknown',
+            name: this.scriptName,
+            created: Date.now(),
+            itemType: 'script',
+            data: defaultScript
+        };
+        
+        // Only add folder property if we're in a folder
+        if (inventory.currentFolder) {
+            scriptItem.folder = inventory.currentFolder;
+        }
+
+        // Save to localStorage
+        const storageKey = `inventory_${this.scriptName}`;
+        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
+        
+        // Update local items
+        inventory.items[this.scriptName] = scriptItem;
+        return true;
+    }
+    async undo(){
+        console.log("[ NO UNDO FOR SCRIPTS ]")
+    }
+
+    getDescription(){
+        return `Create script ${this.scriptName}`;
+    }
+
+    getUndoDescription(){
+        return `Delete script ${this.scriptName}`;
+    }
+
+    cmd(){
+        return {
+            action: "create_script",
+            scriptName: this.scriptName,
+            options: this.options
+        }
+    }
+}
+
+
+export class EditScriptItemChange{
+    constructor(scriptName, scriptContent, options){
+        this.scriptName = scriptName;
+        this.scriptContent = scriptContent;
+        this.options = options || {};
+    }
+
+    async apply(){
+        // Send save event back to inventory
+        const event = new CustomEvent('save-script', {
+            detail: {
+                name: this.scriptName,
+                content: this.scriptContent
+            }
+        });
+        window.dispatchEvent(event);
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR EDIT SCRIPT ]")
+    }
+
+    getDescription(){
+        return `Edit script ${this.scriptName}`;    
+    }
+
+    getUndoDescription(){
+        return `Edit script ${this.scriptName}`;
+    }
+
+    cmd(){
+        return {
+            action: "edit_script",
+            scriptName: this.scriptName,
+            scriptContent: this.scriptContent,
+            options: this.options
+        }
+    }
 }
 
 
@@ -655,3 +1148,41 @@ window.CloneSlot = async (slotId, options)=>{
     let change = new CloneSlotChange(slotId, options);
     return await change.apply();
 }
+
+window.SaveSlotItem = async (slotId, itemName, folder, options)=>{
+    let change = new SaveSlotItemChange(slotId, itemName, folder, options);
+    return await change.apply();
+}
+
+window.DeleteItem = async (itemName, options)=>{
+    let change = new DeleteItemChange(itemName, options);
+    return await change.apply();
+}
+
+window.CreateFolder = async (folderName, parentFolder, options)=>{
+    let change = new CreateFolderChange(folderName, parentFolder, options);
+    return await change.apply();
+}
+
+window.RemoveFolder = async (folderName, options)=>{
+    let change = new RemoveFolderChange(folderName, options);
+    return await change.apply();
+}
+
+window.MoveItemDirectory = async (itemName, folderName, options)=>{
+    let change = new MoveItemDirectoryChange(itemName, folderName, options);
+    return await change.apply();
+}
+
+window.CreateScript = async (scriptName, options)=>{
+    let change = new CreateScriptItemChange(scriptName, options);
+    return await change.apply();
+}
+
+window.EditScript = async (scriptName, scriptContent, options)=>{
+    let change = new EditScriptItemChange(scriptName, scriptContent, options);
+    return await change.apply();
+}
+
+
+

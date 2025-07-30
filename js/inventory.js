@@ -1,5 +1,5 @@
 let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-const { LoadItemChange } = await import(`${basePath}/change-types.js`);
+const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveSlotItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${basePath}/change-types.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
@@ -40,16 +40,9 @@ export class Inventory {
                 this.container.classList.remove('drag-over');
                 
                 const slotId = e.dataTransfer.getData('text/plain');
-                const slotData = e.dataTransfer.getData('application/json');
-                
-                if (slotData) {
-                    try {
-                        const slot = JSON.parse(slotData);
-                        await this.addItem(slot);
-                    } catch (error) {
-                        console.error('Failed to parse slot data:', error);
-                    }
-                }
+                let change = new SaveSlotItemChange(slotId, null, null, {source: 'ui'});
+                changeManager.applyChange(change);
+   
             }
         });
     }
@@ -91,74 +84,7 @@ export class Inventory {
         }
         return folders;
     }
-    
-    /**
-     * Add item to inventory
-     */
-    async addItem(slot, itemType = 'slot') {
-        let itemName = slot.name;
-        const existingKeys = Object.keys(this.items);
-        
-        // Check if name already exists
-        if (existingKeys.includes(itemName)) {
-            // Show modal for new name
-            this.showRenameModal(itemName, (newName) => {
-                if (!newName || newName.trim() === '') {
-                    this.showNotification('Item not added - no name provided.');
-                    return;
-                }
-                
-                const trimmedName = newName.trim();
-                
-                // Check if new name also exists
-                if (existingKeys.includes(trimmedName)) {
-                    this.showNotification(`An item named "${trimmedName}" also exists.`);
-                    return;
-                }
-                
-                // Continue with the new name
-                this.finalizeAddItem(slot, itemType, trimmedName);
-            });
-            return;
-        }
-        
-        // No conflict, add directly
-        this.finalizeAddItem(slot, itemType, itemName);
-    }
-    
-    /**
-     * Finalize adding item after name validation
-     */
-    finalizeAddItem(slot, itemType, itemName) {
-        
-        // Create inventory item
-        const inventoryItem = {
-            author: SM.scene?.localUser?.name || 'Unknown',
-            name: itemName,
-            created: Date.now(),
-            itemType: itemType,
-            data: slot
-        };
-        
-        // Only add folder property if we're in a folder
-        if (this.currentFolder) {
-            inventoryItem.folder = this.currentFolder;
-        }
-        
-        // Save to localStorage
-        const storageKey = `inventory_${itemName}`;
-        localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
-        
-        // Update local items
-        this.items[itemName] = inventoryItem;
-        
-        // Re-render
-        this.render();
-        
-        // Show success message
-        this.showNotification(`Added "${itemName}" to inventory`);
-    }
-    
+  
     /**
      * Remove item from inventory
      */
@@ -166,9 +92,8 @@ export class Inventory {
         this.showConfirmModal(
             `Are you sure you want to remove "${itemName}" from your inventory?`,
             () => {
-                const storageKey = `inventory_${itemName}`;
-                localStorage.removeItem(storageKey);
-                delete this.items[itemName];
+                let change = new DeleteItemChange(itemName, {source: 'ui'});
+                changeManager.applyChange(change);
                 this.render();
                 this.showNotification(`Removed "${itemName}" from inventory`);
             },
@@ -355,14 +280,14 @@ export class Inventory {
                 folder.classList.remove('drag-over');
             });
             
-            folder.addEventListener('drop', (e) => {
+            folder.addEventListener('drop', async(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 folder.classList.remove('drag-over');
                 const itemName = e.dataTransfer.getData('text/inventory-item');
                 const folderName = folder.dataset.folderName;
                 if (itemName && this.draggedItem) {
-                    this.moveItemToFolder(itemName, folderName);
+                    await this.moveItemToFolder(itemName, folderName);
                 }
             });
         });
@@ -413,7 +338,7 @@ export class Inventory {
                 }
             });
             
-            inventoryGrid.addEventListener('drop', (e) => {
+            inventoryGrid.addEventListener('drop', async (e) => {
                 // Only handle internal drops on empty areas
                 if (this.draggedItem && e.target === inventoryGrid) {
                     e.preventDefault();
@@ -421,7 +346,7 @@ export class Inventory {
                     const itemName = e.dataTransfer.getData('text/inventory-item');
                     if (itemName) {
                         // Move to current folder (or root if no current folder)
-                        this.moveItemToFolder(itemName, this.currentFolder);
+                        await this.moveItemToFolder(itemName, this.currentFolder);
                     }
                 }
             });
@@ -1240,27 +1165,8 @@ export class Inventory {
         this.showFolderNameModal((folderName) => {
             if (!folderName || folderName.trim() === '') return;
             
-            const trimmedName = folderName.trim();
-            
-            // Check if folder already exists
-            if (this.folders[trimmedName]) {
-                this.showNotification(`A folder named "${trimmedName}" already exists.`);
-                return;
-            }
-            
-            // Create folder object
-            const folder = {
-                name: trimmedName,
-                created: Date.now(),
-                parent: this.currentFolder
-            };
-            
-            // Save to localStorage
-            const storageKey = `inventory_folder_${trimmedName}`;
-            localStorage.setItem(storageKey, JSON.stringify(folder));
-            
-            // Update local folders
-            this.folders[trimmedName] = folder;
+            let change = new CreateFolderChange(folderName, this.currentFolder, {source: 'ui'});
+            changeManager.applyChange(change);
             
             // Re-render
             this.render();
@@ -1304,24 +1210,11 @@ export class Inventory {
     /**
      * Move item to folder
      */
-    moveItemToFolder(itemName, folderName) {
-        const item = this.items[itemName];
-        if (!item) return;
-        
-        // Don't move if it's already in the target folder
-        if (item.folder === folderName) return;
-        
-        // Update item's folder property
-        item.folder = folderName || null;
-        
-        // Save to localStorage
-        const storageKey = `inventory_${itemName}`;
-        localStorage.setItem(storageKey, JSON.stringify(item));
-        
-        // Re-render
+    async moveItemToFolder(itemName, folderName) {
+        let change = new MoveItemDirectoryChange(itemName, folderName, {source: 'ui'});
+        let outcome = await changeManager.applyChange(change);
+        if(!outcome) return;
         this.render();
-        
-        // Show appropriate notification
         if (folderName) {
             this.showNotification(`Moved "${itemName}" to folder "${this.folders[folderName].name}"`);
         } else {
@@ -1359,32 +1252,9 @@ export class Inventory {
      * Finalize removing folder after confirmation
      */
     finalizeRemoveFolder(folderName, folder) {
-        // Move all items to parent folder
-        Object.entries(this.items).forEach(([key, item]) => {
-            if (item.folder === folderName) {
-                item.folder = folder.parent;
-                const storageKey = `inventory_${key}`;
-                localStorage.setItem(storageKey, JSON.stringify(item));
-            }
-        });
-        
-        // Move all subfolders to parent folder
-        Object.entries(this.folders).forEach(([key, subfolder]) => {
-            if (subfolder.parent === folderName) {
-                subfolder.parent = folder.parent;
-                const storageKey = `inventory_folder_${key}`;
-                localStorage.setItem(storageKey, JSON.stringify(subfolder));
-            }
-        });
-        
-        // Remove folder
-        const storageKey = `inventory_folder_${folderName}`;
-        localStorage.removeItem(storageKey);
-        delete this.folders[folderName];
-        
-        // Re-render
+        let change = new RemoveFolderChange(folderName, {source: 'ui'});
+        changeManager.applyChange(change);
         this.render();
-        
         this.showNotification(`Removed folder "${folder.name}"`);
     }
     
@@ -1393,58 +1263,8 @@ export class Inventory {
      */
     finalizeScriptCreation(finalName) {
         // Default script template
-        const defaultScript = `this.default = {
-    "slotRef": {
-        "type": "string",
-        "value": ""
-    }
-}
-
-Object.entries(this.default).forEach(([key, val])=>{
-    if(!this.vars[key]) this.vars[key] = val
-})
-
-
-this.onStart = ()=>{
-    console.log("onStart")
-}
-
-this.onUpdate = ()=>{
-    console.log("onUpdate")
-}
-
-this.onDestroy = ()=>{
-    console.log("onDestroy")
-}
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}`;
-        
-        // Create script item
-        const scriptItem = {
-            author: SM.scene?.localUser?.name || 'Unknown',
-            name: finalName,
-            created: Date.now(),
-            itemType: 'script',
-            data: defaultScript
-        };
-        
-        // Only add folder property if we're in a folder
-        if (this.currentFolder) {
-            scriptItem.folder = this.currentFolder;
-        }
-        
-        // Save to localStorage
-        const storageKey = `inventory_${finalName}`;
-        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
-        
-        // Update local items
-        this.items[finalName] = scriptItem;
+        let change = new CreateScriptItemChange(finalName, {source: 'ui'});
+        changeManager.applyChange(change);
         
         // Re-render
         this.render();

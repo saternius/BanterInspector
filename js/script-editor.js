@@ -1,3 +1,6 @@
+let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
+const { EditScriptItemChange } = await import(`${basePath}/change-types.js`);
+
 export class ScriptEditor {
     constructor(scriptData) {
         this.currentScript = scriptData;
@@ -349,15 +352,8 @@ export class ScriptEditor {
         if (!this.codemirror) return;
         
         const newContent = this.codemirror.getValue();
-        
-        // Send save event back to inventory
-        const event = new CustomEvent('save-script', {
-            detail: {
-                name: this.currentScript.name,
-                content: newContent
-            }
-        });
-        window.dispatchEvent(event);
+        let change = new EditScriptItemChange(this.currentScript.name, newContent, {source: 'ui'});
+        changeManager.applyChange(change);
         
         // Update local content
         this.currentScript.content = newContent;
