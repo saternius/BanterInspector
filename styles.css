@@ -1338,7 +1338,7 @@ body {
 }
 
 .component-header {
-    background: #242424;
+    background: #2b3848;
     padding: 8px 12px;
     display: flex;
     align-items: center;
@@ -1348,7 +1348,7 @@ body {
 }
 
 .component-header:hover {
-    background: #2a2a2a;
+    background: #37485f;
 }
 
 .component-name {
