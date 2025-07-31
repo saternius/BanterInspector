@@ -73,10 +73,9 @@ export class Slot{
         await this._bs.Destroy();
         delete SM.slotData.slotMap[this.id];
 
-        SM.deleteSpaceProperty(`__${this.id}/active:slot`, false);
-        SM.deleteSpaceProperty(`__${this.id}/persistent:slot`, false);
-        SM.deleteSpaceProperty(`__${this.id}/name:slot`, false);
-
+        delete SM.props[`__${this.id}/active:slot`];
+        delete SM.props[`__${this.id}/persistent:slot`];
+        delete SM.props[`__${this.id}/name:slot`];
         if(this.parentId){
             const parent = SM.getSlotById(this.parentId);
             if (parent) {
@@ -87,7 +86,7 @@ export class Slot{
 
     _deleteOldSpaceProperties(){
         let toDelete = [];
-        Object.keys(SM.scene.spaceState.public).forEach(key=>{
+        Object.keys(SM.props).forEach(key=>{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
             let component = SM.getSlotComponentById(compID);
@@ -101,15 +100,17 @@ export class Slot{
         //console.log(` deleting [${toDelete.length}] space properties..`)
 
         for(let key of toDelete){
-            SM.deleteSpaceProperty(key, false);
+            delete SM.props[key];
         }
     }
 
     saveSpaceProperties(){
-        //console.log(`saving space properties for ${this.id}`)
-        SM.setSpaceProperty(`__${this.id}/active:slot`, this.active, false);
-        SM.setSpaceProperty(`__${this.id}/persistent:slot`, this.persistent, false);
-        SM.setSpaceProperty(`__${this.id}/name:slot`, this.name, false);
+        let message = `update_slot:${this.id}:active:${this.active}`;
+        networking.sendOneShot(message);
+        message = `update_slot:${this.id}:persistent:${this.persistent}`;
+        networking.sendOneShot(message);
+        message = `update_slot:${this.id}:name:${this.name}`;
+        networking.sendOneShot(message);
     }
 
     rename(newName, localUpdate){
@@ -150,12 +151,16 @@ export class Slot{
     }
 
     export(){
-        return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running', '._owner']);
+        return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id']);
     }
 
     async Set(property, value){
-        const spaceKey = '__' + this.id + '/' + property + ':slot';
-        await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
+        SM.props[`__${this.id}/${property}:slot`] = value;
+        let message = `update_slot:${this.id}:${property}:${value}`;
+        networking.sendOneShot(message);
         if(property == "name"){
             this.rename(value, false);
         }
@@ -164,6 +169,6 @@ export class Slot{
     async SetParent(newParentId){
         await this._setParent(SM.getSlotOrRoot(newParentId), true);
         let data = `slot_moved:${this.id}:${newParentId}:0`
-        SM.sendOneShot(data);
+        networking.sendOneShot(data);
     }
 }

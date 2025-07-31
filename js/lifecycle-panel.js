@@ -154,7 +154,7 @@
             ownerCell.title = `Owner: ${monoBehavior.properties?._owner || 'No owner'}`;
             ownerCell.style.cursor = 'pointer';
             ownerCell.onclick = () => {
-                SetComponentProp(monoBehavior.id, "_owner", SM.scene.localUser.name);
+                SetComponentProp(monoBehavior.id, "_owner", SM.myName());
                 setTimeout(()=>{
                     this.render();
                 }, 150)

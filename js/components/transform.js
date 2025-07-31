@@ -11,7 +11,6 @@ export class TransformComponent extends SlotComponent {
 
     async init(slot, sceneComponent, properties){
         await super.init(slot, sceneComponent, properties);
-        //this.setId(`Transform_${slot.id}`);
         return this;
     }
 
@@ -26,6 +25,10 @@ export class TransformComponent extends SlotComponent {
         } else if (property === 'localRotation') {
             // Rotation is stored as quaternion
             if ('w' in value) {
+                value.x = value.x || 0;
+                value.y = value.y || 0;
+                value.z = value.z || 0;
+                value.w = value.w || 1;
                 // Already a quaternion
                 this._bs[property] = new BS.Vector4(
                     parseFloat(value.x),
@@ -34,6 +37,10 @@ export class TransformComponent extends SlotComponent {
                     parseFloat(value.w)
                 );
             } else {
+                value.x = value.x || 0;
+                value.y = value.y || 0;
+                value.z = value.z || 0;
+                // console.log("VALUE: ", value)
                 value = eulerToQuaternion(value);
                 this._bs[property] = new BS.Vector4(
                     parseFloat(value.x),

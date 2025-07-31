@@ -1,3 +1,6 @@
+let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
+const { SaveSlotItemChange } = await import(`${basePath}/change-types.js`);
+
 export class Navigation {
     constructor() {
         this.currentPage = 'world-inspector';
@@ -79,22 +82,10 @@ export class Navigation {
             this.switchPage('inventory');
             
             // Get the slot data
-            const slotData = e.dataTransfer.getData('application/json');
-            
-            if (slotData) {
-                try {
-                    const slot = JSON.parse(slotData);
-                    
-                    // Small delay to ensure inventory is ready
-                    setTimeout(() => {
-                        if (window.inventory) {
-                            window.inventory.addItem(slot);
-                        }
-                    }, 100);
-                } catch (error) {
-                    console.error('Failed to parse slot data:', error);
-                }
-            }
+            const slotId = e.dataTransfer.getData('text/plain');
+            let change = new SaveSlotItemChange(slotId, null, null, {source: 'ui'});
+            changeManager.applyChange(change);
+
         });
     }
     

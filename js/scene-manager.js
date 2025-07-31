@@ -3,7 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 6:03")
+console.log("It is 3:00")
 // (async () => {
     let localhost = window.location.hostname === 'localhost'
     let basePath = localhost ? '.' : `${window.repoUrl}/js`;
@@ -18,9 +18,17 @@ console.log("It is 6:03")
                 slotMap:{},
                 componentMap: {}
             };
+            this.props = {
+                hierarchy: null,
+            }
             this.selectedSlot = null;
             this.expandedNodes = new Set();
             this.loaded = false;
+            this.saveMethod = "aggressive"
+        }
+
+        myName(){
+            return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
         }
 
 
@@ -43,25 +51,29 @@ console.log("It is 6:03")
                         }
                     }
 
+                    let lastProps = localStorage.getItem('lastProps');
+                    if(lastProps){
+                        this.props = JSON.parse(lastProps);
+                    }
+
                     if(!this.scene.spaceState.public.hostUser){
-                        console.log("No host user found, setting to local user =>", SM.scene.localUser.name)
-                        this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                        console.log("No host user found, setting to local user =>", this.myName())
+                        networking.setSpaceProperty("hostUser", this.myName(), false);
                     }else{
-                        let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
+                        let hostHere = Object.values(this.scene.users).map(x=>`${x.name}_${x.id.slice(0,3)}`).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
-                            console.log("Host user not here, setting to local user =>", SM.scene.localUser.name)
-                            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+                            console.log("Host user not here, setting to local user =>", this.myName())
+                            networking.setSpaceProperty("hostUser", this.myName(), false);
                         }
                     }
 
                     try {
                         console.log('Gathering scene hierarchy...');
                         let hierarchy = null;
-                        if(!this.scene.spaceState.public.hierarchy){
+                        if(!this.props.hierarchy){
                             hierarchy = await this.gatherSceneHierarchy();
-                            this.setSpaceProperty("hierarchy", hierarchy, false);
                         }else{
-                            let h = this.scene.spaceState.public.hierarchy;
+                            let h = this.props.hierarchy;
                             if(typeof h == "string"){
                                 h = JSON.parse(h);
                             }
@@ -94,14 +106,22 @@ console.log("It is 6:03")
                 public: {},
                 protected: {}
             }
+            this.props = {
+                hierarchy: null,
+            }
+            localStorage.removeItem('lastProps');
             await this.initialize();
         }
 
         claimHost(){
-            this.setSpaceProperty("hostUser", SM.scene.localUser.name, false);
+            networking.setSpaceProperty("hostUser", this.myName(), false);
             setTimeout(()=>{
-                this.sendOneShot('reset');
+                networking.sendOneShot('reset');
             }, 1000)
+        }
+
+        async saveScene(){
+            localStorage.setItem('lastProps', JSON.stringify(this.props));
         }
 
         // This gathers the hierarchy of the scene via Unity GameObjects
@@ -161,7 +181,7 @@ console.log("It is 6:03")
             let createSlotHierarchy = (slot)=>{
                 let h = {
                     name: slot.name,
-                    components: slot.components.map(c=>c.id),
+                    components: Array.from(new Set(slot.components.map(c=>c.id))),
                     children: slot.children.map(c=>createSlotHierarchy(c))
                 }
                 return h;
@@ -175,15 +195,15 @@ console.log("It is 6:03")
         // Updates the hierarchy of the scene from the root slot
         async updateHierarchy(slot = null){  
             let h = await this.gatherSceneHierarchyBySlot();
-            this.setSpaceProperty("hierarchy", h, false);
-            console.log("[UPDATE HIERARCHY] =>", h)
-            slot = slot || this.getRootSlot();
-            if(slot){
-                this.selectSlot(slot.id);
-                if(slot.parentId){
-                    this.expandedNodes.add(slot.parentId);
-                }
-            }
+            this.props.hierarchy = h;
+            this._updateUI();
+            // slot = slot || this.getRootSlot();
+            // if(slot){
+            //     this.selectSlot(slot.id);
+            //     if(slot.parentId){
+            //         this.expandedNodes.add(slot.parentId);
+            //     }
+            // }
         }
 
 
@@ -191,6 +211,7 @@ console.log("It is 6:03")
         async loadHierarchy(hierarchy){
             console.log("loading hierarchy =>", hierarchy)
             if(!hierarchy){ return null}
+            this.props.hierarchy = hierarchy;
             
             let hierarchyToSlot = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
@@ -295,11 +316,6 @@ console.log("It is 6:03")
 
             this.expandedNodes.add(parentId);
             this.selectSlot(slot.id);
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slot.id }
-            }));
-
-            
             slot.finished_loading = true;
             return slot;
         }
@@ -307,7 +323,7 @@ console.log("It is 6:03")
 
         getHistoricalProps(component_ref){
             let type = component_ref.split("_")[0]
-            let space_keys = Object.keys(this.scene.spaceState.public)
+            let space_keys = Object.keys(this.props)
             let props = {}
             space_keys.forEach(key=>{
                 // console.log("key =>", key, component_ref)
@@ -315,7 +331,7 @@ console.log("It is 6:03")
                     let path = key.split(":")[0].split("/")
                     //console.log("path =>", path)
                     let prop = path[path.length-1]
-                    props[prop] = this.scene.spaceState.public[key]
+                    props[prop] = this.props[key]
                 }
             })
             return{
@@ -324,7 +340,6 @@ console.log("It is 6:03")
             }
         }
         
-
 
         // Creates and hydrates a slot using the SpaceProperties
         async loadHistoricalSlot(hierarchy, parentId){
@@ -362,199 +377,6 @@ console.log("It is 6:03")
             });
         }
 
-
-        handleSpaceStateChange(event) {
-            const { changes } = event.detail;
-            //console.log("[SPACE CHANGE] =>", changes)
-            changes.forEach(async (change) => {
-                //console.log("[SPACE CHANGE] =>", change)
-                let { property, newValue, isProtected } = change;
-                newValue = JSON.parse(newValue);
-                
-                if (isProtected) {
-                    this.scene.spaceState.protected[property] = newValue;
-                } else {
-                    this.scene.spaceState.public[property] = newValue;
-                }
-
-                let renderProps = (component)=>{
-                    if(this.selectedSlot === component._slot.id){
-                        inspector.propertiesPanel.render(this.selectedSlot)
-                    }
-                }
-                
-
-                
-                if(property.slice(0,2) == "__"){
-                    let items = property.split(":");
-                    let path = items[0].split("/");
-                    let prop = path[path.length-1];
-                    let type = items[1].split("_")
-                    //console.log("updating =>", items, path, prop, type)
-                    if(type[0] == "slot"){
-                        let ref = ['Root'].concat(path.slice(1,-1)).join("/")
-                        let slot = this.getSlotById(ref);
-                        if(slot){
-                            await slot._set(prop, newValue);
-                            inspector.hierarchyPanel.render()
-                        }
-                        
-                    }else if(type[0] == "monobehavior"){
-                        //console.log("updating monobehavior =>", property, newValue)
-                        let ref = path[0].slice(2)
-                        let monobehavior = this.getSlotComponentById(ref);
-                        if(monobehavior && monobehavior.ctx){
-                            if(prop === "_running"){
-                                monobehavior.ctx._running = newValue;
-                                inspector.lifecyclePanel.render()
-                            }else{
-                                monobehavior.ctx.vars[prop] = newValue;
-                                renderProps(monobehavior)
-                            }
-                        }
-                    }else if(type[0] == "component"){
-                        let component = this.getSlotComponentById(path[0].slice(2));
-                        if(component){
-                            await component._set(prop, newValue);
-                            renderProps(component)
-                        }
-                        
-                    }
-                }
-            });
-        }
-
-
-        async handleOneShot(event){
-            console.log("handleOneShot =>", event)
-            let data = event.detail.data;
-
-            if(data === "reset"){
-                window.location.reload();
-            }
-           
-            if(data.startsWith("load_slot")){
-                let [parentId, slot_data] = data.slice(10).split("|");
-                await this._loadSlot(JSON.parse(slot_data), parentId);
-                await this.updateHierarchy(this.selectedSlot);
-            }
-
-            if(data.startsWith("component_added")){
-                let event = JSON.parse(data.slice(16));
-                let slot = this.getSlotById(event.slotId);
-                if(slot){
-                    await this._addComponent(slot, event.componentType, event.componentProperties);
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-            }
-
-            if(data.startsWith("component_removed")){
-                let componentId = data.slice(18);
-                let component = this.getSlotComponentById(componentId);
-                if(component){
-                    await component._destroy();
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-            }
-
-
-            if(data.startsWith("slot_added")){
-                let [parentId, slotName] = data.slice(11).split(":");
-                await this._addNewSlot(slotName, parentId);
-                await this.updateHierarchy(this.selectedSlot);
-            }
-
-            if(data.startsWith("slot_removed")){
-                let slotId = data.slice(13);
-                let slot = this.getSlotById(slotId);
-                if(slot){
-                    await slot._destroy();
-                    await this.updateHierarchy(this.selectedSlot);
-                }
-            }
-
-            if(data.startsWith("slot_moved")){
-                let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
-                //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
-                const slot = this.getSlotById(slotId);
-                if (!slot) return;
-                if(!newParentId) newParentId = this.slotData.slots[0].id;
-                await slot._setParent(this.getSlotById(newParentId));
-                await this.updateHierarchy(this.selectedSlot);
-            }
-
-            if(data.startsWith("monobehavior_start")){
-                let componentId = data.slice(19);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._start();
-                }
-            }
-
-            if(data.startsWith("monobehavior_stop")){
-                let componentId = data.slice(18);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._stop();
-                }
-            }
-
-            if(data.startsWith("monobehavior_refresh")){
-                let componentId = data.slice(21);
-                let monobehavior = this.getSlotComponentById(componentId);
-                if(monobehavior){
-                    monobehavior._refresh();
-                }
-            }
-        }
-
-
-        async setSpaceProperty(key, value, isProtected) {
-            if (!this.scene) return;
-            //console.log("[setSpaceProperty]", key, value, isProtected)
-
-            // if(value && value.value !== undefined){
-            //     value = value.value;
-            // }
-
-            value = JSON.stringify(value);
-
-            if (isProtected) {
-                this.scene.SetProtectedSpaceProps({ [key]: value });
-                this.scene.spaceState.protected[key] = value;
-            } else {
-                this.scene.SetPublicSpaceProps({ [key]: value });
-                this.scene.spaceState.public[key] = value;
-            }
-            
-            if(localhost){
-                this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
-                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            }
-        }
-
-        async deleteSpaceProperty(key, isProtected){
-            if(isProtected){
-                this.scene.SetProtectedSpaceProps({ [key]: null });
-                delete this.scene.spaceState.protected[key];
-            }else{
-                this.scene.SetPublicSpaceProps({ [key]: null });
-                delete this.scene.spaceState.public[key];
-            }
-            if(localhost){
-                localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-            }
-        }
-
-
-        async sendOneShot(data){
-            //console.log("sending one shot =>", data)
-            this.scene.OneShot(data);
-            if(localhost){
-                this.handleOneShot({detail: {data: data}})
-            }
-        }
-
     
         getSlotComponentById(componentId){
             return this.slotData.componentMap[componentId];
@@ -572,14 +394,16 @@ console.log("It is 6:03")
 
         selectSlot(slotId) {
             this.selectedSlot = slotId;
+            this._updateUI();
+        }
 
-             // Update UI
-             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slotId }
-            }));
-
+        _updateUI(){
+            // Update UI
             if (inspector?.hierarchyPanel) {
                 inspector.hierarchyPanel.render();
+            }
+            if(inspector?.propertiesPanel){
+                inspector.propertiesPanel.render(this.selectedSlot);
             }
         }
 
@@ -605,8 +429,11 @@ console.log("It is 6:03")
             return slot;
         }
 
-        getSelectedSlot(){
-            return this.getSlotOrRoot(this.selectedSlot);
+        getSelectedSlot(rootFallback){
+            if(rootFallback){
+                return this.getSlotOrRoot(this.selectedSlot);
+            }
+            return this.getSlotById(this.selectedSlot);
         }
 
         getSlotByName(slotName){
@@ -642,7 +469,20 @@ console.log("It is 6:03")
 
             console.log("NEW SLOT:", newSlot)
 
-            let transform = await new TransformComponent().init(newSlot);
+            function stringTo8DigitNumber(str) {
+                let hash = 0x811c9dc5; // FNV offset basis
+                for (let i = 0; i < str.length; i++) {
+                  hash ^= str.charCodeAt(i);
+                  hash = (hash + ((hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24))) >>> 0;
+                }
+                return hash % 100_000_000;
+              }
+
+            let properties = {
+                id: `Transform_${stringTo8DigitNumber(newSlot.id)}`
+            }
+
+            let transform = await new TransformComponent().init(newSlot, null, properties);
             newSlot.components.push(transform);
 
             

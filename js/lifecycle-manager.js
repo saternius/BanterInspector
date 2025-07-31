@@ -9,17 +9,22 @@ export class LifecycleManager {
         this.fps = 30; // Default 30 FPS for onUpdate
         this.updateInterval = null;
         this.isRunning = false;
-        
+        this.contexts = []
         // Setup keyboard event listeners
         this.setupKeyboardListeners();
         return this;
+    }
+
+
+    recordContext(context){
+        //this.contexts.push(context); // This is only for debugging
     }
     
     /**
      * Register a MonoBehavior component
      */
     async registerMonoBehavior(monoBehavior) {
-        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+        //console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
         this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
@@ -39,7 +44,7 @@ export class LifecycleManager {
      */
     unregisterMonoBehavior(monoBehavior) {
         if(!monoBehavior) return;
-        console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
+        //console.log("[LIFECYCLE] unregistering monoBehavior =>", monoBehavior.id)
 
        
         // Call onDestroy before removing

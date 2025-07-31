@@ -229,35 +229,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </div>
             
             <div class="component-menu-content">
-                <!-- Physics Category -->
-                <div class="component-category">
-                    <div class="category-header">
-                        <span class="category-icon">⚛</span>
-                        <span class="category-name">Physics</span>
-                    </div>
-                    <div class="category-items">
-                        <div class="component-item" data-component="BanterRigidbody">
-                            <span class="component-item-name">Rigidbody</span>
-                            <span class="component-item-desc">Enables physics simulation</span>
-                        </div>
-                        <div class="component-item" data-component="BoxCollider">
-                            <span class="component-item-name">Box Collider</span>
-                            <span class="component-item-desc">Box-shaped collision detection</span>
-                        </div>
-                        <div class="component-item" data-component="SphereCollider">
-                            <span class="component-item-name">Sphere Collider</span>
-                            <span class="component-item-desc">Sphere-shaped collision detection</span>
-                        </div>
-                        <div class="component-item" data-component="CapsuleCollider">
-                            <span class="component-item-name">Capsule Collider</span>
-                            <span class="component-item-desc">Capsule-shaped collision detection</span>
-                        </div>
-                        <div class="component-item" data-component="MeshCollider">
-                            <span class="component-item-name">Mesh Collider</span>
-                            <span class="component-item-desc">Mesh-based collision detection</span>
-                        </div>
-                    </div>
-                </div>
+                
                 
                 <!-- Rendering Category -->
                 <div class="component-category">
@@ -288,7 +260,69 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                         </div>
                     </div>
                 </div>
+
+                <!-- Physics Category -->
+                <div class="component-category">
+                    <div class="category-header">
+                        <span class="category-icon">⚛</span>
+                        <span class="category-name">Physics</span>
+                    </div>
+                    <div class="category-items">
+                        <div class="component-item" data-component="BanterRigidbody">
+                            <span class="component-item-name">Rigidbody</span>
+                            <span class="component-item-desc">Enables physics simulation</span>
+                        </div>
+                        <div class="component-item" data-component="BoxCollider">
+                            <span class="component-item-name">Box Collider</span>
+                            <span class="component-item-desc">Box-shaped collision detection</span>
+                        </div>
+                        <div class="component-item" data-component="SphereCollider">
+                            <span class="component-item-name">Sphere Collider</span>
+                            <span class="component-item-desc">Sphere-shaped collision detection</span>
+                        </div>
+                        <div class="component-item" data-component="CapsuleCollider">
+                            <span class="component-item-name">Capsule Collider</span>
+                            <span class="component-item-desc">Capsule-shaped collision detection</span>
+                        </div>
+                        <div class="component-item" data-component="MeshCollider">
+                            <span class="component-item-name">Mesh Collider</span>
+                            <span class="component-item-desc">Mesh-based collision detection</span>
+                        </div>
+                    </div>
+                </div>
                 
+                
+                
+                <!-- Interaction Category -->
+                <div class="component-category">
+                    <div class="category-header">
+                        <span class="category-icon">🤚</span>
+                        <span class="category-name">Interaction</span>
+                    </div>
+                    <div class="category-items">
+                        <div class="component-item" data-component="BanterColliderEvents">
+                            <span class="component-item-name">Collider Events</span>
+                            <span class="component-item-desc">Trigger and collision events</span>
+                        </div>
+                        <div class="component-item" data-component="BanterGrabHandle">
+                            <span class="component-item-name">Grab Handle</span>
+                            <span class="component-item-desc">Make object grabbable</span>
+                        </div>
+                        <div class="component-item" data-component="BanterHeldEvents">
+                            <span class="component-item-name">Held Events</span>
+                            <span class="component-item-desc">Input while holding</span>
+                        </div>
+                        <div class="component-item" data-component="BanterAttachedObject">
+                            <span class="component-item-name">Attached Object</span>
+                            <span class="component-item-desc">Attach to users</span>
+                        </div>
+                        <div class="component-item" data-component="BanterSyncedObject">
+                            <span class="component-item-name">Synced Object</span>
+                            <span class="component-item-desc">Network synchronization</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Media Category -->
                 <div class="component-category">
                     <div class="category-header">
@@ -307,32 +341,6 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                         <div class="component-item" data-component="BanterBrowser">
                             <span class="component-item-name">Web Browser</span>
                             <span class="component-item-desc">Embed web content</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Interaction Category -->
-                <div class="component-category">
-                    <div class="category-header">
-                        <span class="category-icon">🤚</span>
-                        <span class="category-name">Interaction</span>
-                    </div>
-                    <div class="category-items">
-                        <div class="component-item" data-component="BanterGrabHandle">
-                            <span class="component-item-name">Grab Handle</span>
-                            <span class="component-item-desc">Make object grabbable</span>
-                        </div>
-                        <div class="component-item" data-component="BanterHeldEvents">
-                            <span class="component-item-name">Held Events</span>
-                            <span class="component-item-desc">Input while holding</span>
-                        </div>
-                        <div class="component-item" data-component="BanterAttachedObject">
-                            <span class="component-item-name">Attached Object</span>
-                            <span class="component-item-desc">Attach to users</span>
-                        </div>
-                        <div class="component-item" data-component="BanterSyncedObject">
-                            <span class="component-item-name">Synced Object</span>
-                            <span class="component-item-desc">Network synchronization</span>
                         </div>
                     </div>
                 </div>

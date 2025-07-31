@@ -189,7 +189,7 @@
             const titleDiv = document.createElement('div');
             titleDiv.innerHTML = `
                 <span class="component-name">${component.type}</span>
-                <span class="component-type">#${index}</span>
+                <span class="component-type">${component.id}</span>
             `;
             
             const actionsDiv = document.createElement('div');

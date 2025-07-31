@@ -16,7 +16,7 @@ export class MonoBehaviorComponent extends SlotComponent {
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
         if(this.properties.file && this.properties.file.length > 0){
-            if(SM.scene.spaceState.public["__" + this.id + "_running:monobehavior"] !== false){
+            if(SM.props["__" + this.id + "/_running:component"] !== false){
                 this._loadScript(this.properties.file);
             }else{
                 this.ctx._running = false;
@@ -56,10 +56,8 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     async _loadScript(fileName) {        
-        console.log("loading script =>", fileName)
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this._slot.active) return;
-        console.log("loading script =>", fileName)
         const inventoryItem = window.inventory?.items?.[fileName];
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
             console.error(`Script "${fileName}" not found in inventory`);
@@ -67,7 +65,6 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
 
         
-        console.log("this.scriptContext.running =>", this.ctx)
         if(this.ctx._running){
             await this.ctx.onDestroy();
         }
@@ -125,34 +122,36 @@ export class MonoBehaviorComponent extends SlotComponent {
     }
 
     _start(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx._running = true;
         this.ctx.onStart();
-        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", true, false);
+        let message = `update_monobehavior:${this.id}:_running:true`;
+        networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
     _stop(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx._running = false;
         this.ctx.onDestroy();
-        SM.setSpaceProperty("__" + this.id + "_running:monobehavior", false, false);
+        let message = `update_monobehavior:${this.id}:_running:false`;
+        networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
     _update(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._slot.active) return;
         this.ctx.onUpdate();
     }
 
     _refresh(){
-        if(this.properties._owner !== SM.scene.localUser.name) return;
+        if(this.properties._owner !== SM.myName()) return;
         if(!this._slot.active) return;
         console.log("refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){
@@ -161,27 +160,36 @@ export class MonoBehaviorComponent extends SlotComponent {
         }
         
         this._loadScript(this.properties.file);
+        const event = new CustomEvent('script-refreshed', {
+            detail: {
+                componentId: this.id,
+                name: this.properties.name,
+                file: this.properties.file
+            },
+            
+        });
+        window.dispatchEvent(event);
     }
 
     Start(){
         const oneShot = 'monobehavior_start:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
     Stop(){
         const oneShot = 'monobehavior_stop:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
     Refresh(){
         const oneShot = 'monobehavior_refresh:' + this.id;
-        SM.sendOneShot(oneShot);
+        networking.sendOneShot(oneShot);
     }
 
 
 
     newScriptContext(){
-        let defaults =  {
+        let newContext =  {
             vars: {},
             onStart: ()=>{},
             onUpdate: ()=>{},
@@ -197,26 +205,24 @@ export class MonoBehaviorComponent extends SlotComponent {
             _BS: window.BS, // Reference to BanterScript library
             _component: this
         }
-
-        defaults.onScriptChanged = function() {
-            this.onDestroy();
-            this.onStart();
-        }
-
-        return defaults;
+        lifecycle.recordContext(newContext);
+        return newContext;
     }
 
     async updateVar(varName, value) {
         console.log("[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
-        const spaceKey = '__' + this.id + '/' + varName + ':monobehavior';
-        await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
+        let message = `update_monobehavior:${this.id}:vars:${varName}:${value}`;
+        networking.sendOneShot(message);
         // this.scriptContext.vars[varName] = value;
     }
 
     loadVarsFromSpaceState(){
         let key = "__" + this.id + "/vars:component";
-        this.ctx.vars = SM.scene.spaceState.public[key];
+        this.ctx.vars = SM.props[key] || {};
     }
 
     async _destroy(){

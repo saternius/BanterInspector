@@ -1,6 +1,7 @@
 export class SlotComponent{
     constructor(){
         this.bsRef = null;
+        this.lastUpdate = new Map();
     }
 
     async init(slot, sceneComponent, properties){
@@ -8,6 +9,7 @@ export class SlotComponent{
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._slot = slot;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
+        
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
@@ -56,6 +58,16 @@ export class SlotComponent{
         }
     }
 
+    async _setWithTimestamp(property, value, timestamp){
+        if(this.lastUpdate.has(property)){
+            if(this.lastUpdate.get(property) >= timestamp){
+                return;
+            }
+        }
+        this.lastUpdate.set(property, timestamp);
+        this._set(property, value);
+    }
+
     async _set(property, value){
         //console.log(`(${this._slot.name})[${this.type}] set ${property} =>`, value)
         this.properties[property] = value;
@@ -72,30 +84,27 @@ export class SlotComponent{
         
         // Remove any space properties associated with this component
         const propsToRemove = [];
-        const spaceState = SM.scene?.spaceState;
-        
-        if (spaceState) {
-            // Check both public and protected properties
-            ['public', 'protected'].forEach(type => {
-                const props = spaceState[type];
-                Object.keys(props).forEach(key => {
-                    if (key.includes(`__${this.id}/`)) {
-                        propsToRemove.push({ key, isProtected: type === 'protected' });
-                    }
-                });
-            });
-            
-            // Remove the properties
-            for (const { key, isProtected } of propsToRemove) {
-                await SM.deleteSpaceProperty(key, isProtected);
+        // Check both public and protected properties
+        Object.keys(SM.props).forEach(key => {
+            if (key.includes(`__${this.id}/`)) {
+                propsToRemove.push(key);
             }
+        });
+        // Remove the properties
+        for (const key of propsToRemove) {
+            delete SM.props[key];
         }
+        
 
         inspector.propertiesPanel.render(this._slot.id);
     }
 
     async Set(property, value){
-        const spaceKey = `__${this.id}/${property}:component`;
-        await SM.setSpaceProperty(spaceKey, value, false);
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
+        let message = `update_component:${this.id}:${property}:${value}`;
+        SM.props[`__${this.id}/${property}:component`] = value;
+        await networking.sendOneShot(message);
     }
 }

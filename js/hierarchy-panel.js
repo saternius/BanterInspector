@@ -6,7 +6,7 @@
 // (async () => {
     let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
     const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange } = await import(`${basePath}/change-types.js`);
+    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange, SaveSlotItemChange } = await import(`${basePath}/change-types.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -77,6 +77,7 @@
             this.cloneBtn.addEventListener('click', async () => {
                 const change = new CloneSlotChange(SM.selectedSlot, { source: 'ui' });
                 changeManager.applyChange(change);
+                SM.selectSlot(change.slotId);
             });
 
             // Delete button
@@ -94,6 +95,7 @@
                     console.log("deleting slot =>", SM.selectedSlot)
                     const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
                     changeManager.applyChange(change);
+                    SM.selectSlot('Root');
                 }
             });
 
@@ -103,17 +105,10 @@
                     alert('Please select a slot to save');
                     return;
                 }
-                
-                const slot = SM.getSlotById(SM.selectedSlot);
-                if (!slot) return;
-                
-                // Export the slot
-                const exportedSlot = slot.export();
-                
-                // Use the inventory instance to save the slot
-                if (inspector && inspector.inventory) {
-                    await inspector.inventory.addItem(exportedSlot, 'slot');
-                }
+
+                let change = new SaveSlotItemChange(SM.selectedSlot, null, null, {source: 'ui'});
+                changeManager.applyChange(change);
+
             });
         }
 
@@ -216,7 +211,7 @@
             node.appendChild(content);
             
             // Click handler
-            node.onclick = () => this.selectSlot(slot.id);
+            node.onclick = () => SM.selectSlot(slot.id);
             
             nodeDiv.appendChild(node);
             
@@ -278,18 +273,6 @@
             this.render();
         }
 
-        /**
-         * Select a slot
-         */
-        selectSlot(slotId) {
-            SM.selectSlot(slotId);
-            this.render();
-            
-            // Notify properties panel
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slotId }
-            }));
-        }
 
         /**
          * Show error message
@@ -311,11 +294,11 @@
             e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', slot.id);
             
-            console.log("slot", slot)
-            let copy = slot.export()
+            // console.log("slot", slot)
+            // let copy = slot.export()
 
-            // Store the full slot data for inventory
-            e.dataTransfer.setData('application/json', JSON.stringify(copy));
+            // // Store the full slot data for inventory
+            // e.dataTransfer.setData('application/json', JSON.stringify(copy));
             
             // Add dragging class
             e.target.classList.add('dragging');

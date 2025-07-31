@@ -1,3 +1,6 @@
+let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
+const { EditScriptItemChange } = await import(`${basePath}/change-types.js`);
+
 export class ScriptEditor {
     constructor(scriptData) {
         this.currentScript = scriptData;
@@ -34,7 +37,7 @@ export class ScriptEditor {
         }, 0);
         
         this.pageSwitchHandler = (e) => {
-            console.log("page-switched", e.detail.pageId);
+            //console.log("page-switched", e.detail.pageId);
             if(e.detail.pageId === this.pageId){
                 this.renderFooter();
                 if (this.codemirror) {
@@ -47,7 +50,7 @@ export class ScriptEditor {
 
     renderFooter(){
         this.findMonoBehaviorSlots();
-        console.log("Rendering footer...");
+        //console.log("Rendering footer...");
         const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
             footer.innerHTML = `
@@ -349,15 +352,8 @@ export class ScriptEditor {
         if (!this.codemirror) return;
         
         const newContent = this.codemirror.getValue();
-        
-        // Send save event back to inventory
-        const event = new CustomEvent('save-script', {
-            detail: {
-                name: this.currentScript.name,
-                content: newContent
-            }
-        });
-        window.dispatchEvent(event);
+        let change = new EditScriptItemChange(this.currentScript.name, newContent, {source: 'ui'});
+        changeManager.applyChange(change);
         
         // Update local content
         this.currentScript.content = newContent;
