@@ -19,6 +19,7 @@
     const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
     const  { changeManager } = await import(`${basePath}/change-manager.js`);
     const  { LifecyclePanel } = await import(`${basePath}/lifecycle-panel.js`);
+    const  { Feedback } = await import(`${basePath}/feedback.js`);
 
     // Global app instance
     class InspectorApp {
@@ -31,6 +32,7 @@
             this.inventory = null;
             this.scriptEditors = null;
             this.lifecyclePanel = null;
+            this.feedback = null;
             this.initialized = false;
         }
 
@@ -68,6 +70,9 @@
                 
                 // Initialize inventory
                 this.inventory = new Inventory();
+                
+                // Initialize feedback
+                this.feedback = new Feedback();
                 
                 // Initialize script editors map
                 this.scriptEditors = new Map();

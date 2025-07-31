@@ -10,7 +10,10 @@ This is the Unity Scene Inspector for the Banter VR platform. It provides a web-
 
 ### Core Modules
 - `app.js` - Application initialization and BS library loading
+- `navigation.js` - Header navigation menu responsible for page transitions
 - `scene-manager.js` - Unity scene state management and BS bridge communication
+- `networking.js` - Manages state syncing commands between clients
+- `change-types.js` - List of all the change actions that can be performed.
 - `hierarchy-panel.js` - GameObject hierarchy tree rendering
 - `properties-panel.js` - Component property editing interface
 - `change-manager.js` - Undo/redo system and change tracking
@@ -24,25 +27,35 @@ This is the Unity Scene Inspector for the Banter VR platform. It provides a web-
 3. **UI Updates**: Direct DOM manipulation with event delegation
 4. **Unity Bridge**: All Unity communication goes through the BS library via SceneManager
 
+
+### Change Managment System
+The application is meant to be a powerful tool for users to create complex VR experiences while inside VR. Due to the runtime development nature, having a reliable undo/redo mechanism is vital. To solve this all actions that can be performed should have be atomized with corresponsing sets of change classes.
+There will eventually be agentic integration into the inspector, so as such every action that can be triggered via the UX has a corresponding Change class that can alternatively be triggered via a cli command. These are defined in the change-types classes.
+
+When an action is generated that has effects that should be synced across clients, the change class would trigger a OneShot broadcast call that will send to all clients.
+networking.js is responsible for broadcasting events, and recieving/routing incoming broadcasts.
+To abstract this complexity, capitalized methods in components/slots/etc ex: .Set() are to be the intiative method ( the method that initiates the actions ), while _ methods ex: ._set() are to be executive method ( the method that actually performs the operation post sync )
+
+
 ### Component System
 Components are defined in `js/components/` with a common structure:
-- Export a component definition object with `displayName`, `properties`, and optional `handlers`
+- Export a component definition object with `properties`, and optional `handlers`
 - Properties define type, default values, and constraints
 - Register in `components/index.js`
 
+
 ### Undo/Redo System
+
 The ChangeManager tracks all modifications:
 - Property changes
 - Component additions/removals
 - GameObject (slot) operations
-- Supports batching related changes
 
 ## Critical Considerations
 
 1. **BS Library Dependency**: The inspector requires the BanterScript library to be loaded before initialization
-2. **Mock Mode**: When Unity connection fails, the app falls back to mock data for development
-3. **Property Types**: Supports primitives, Vector3, Color, and asset references (Texture, Material, Audio)
-4. **Asset URLs**: Production uses CDN URLs, development uses local paths
+2. **Property Types**: Supports primitives, Vector3, Color, and asset references (Texture, Material, Audio)
+3. **Asset URLs**: Production uses CDN URLs, development uses local paths
 
 
 ## Module Details
@@ -57,7 +70,6 @@ Key features:
 - Upload `.js` and `.json` files via file picker
 - Export items as JSON for sharing/backup
 - Script preview and editing integration
-- Automatic duplicate name handling
 
 ### Space Properties Panel (`space-props-panel.js`)
 Manages Banter space-level properties that persist across sessions:
@@ -79,8 +91,7 @@ Full-featured code editor using CodeMirror v5.65.13:
 ### MonoBehavior Component (`components/monobehavior.js`)
 BanterScript runtime component that:
 - Loads scripts from inventory by filename
-- Provides lifecycle methods: `onStart()`, `onUpdate()`, `onPause()`, `onResume()`, `onDestroy()`
+- Provides lifecycle methods: `onStart()`, `onUpdate()`, `onDestroy()`
 - Supports custom variables (`vars`) with type definitions
-- Variables persist in space properties with format `__[componentId]/[varName]:monobehavior`
 - Script context includes references to `_slot`, `_scene`, `_BS`, and `_component`
 - Hot-reload support via refresh functionality

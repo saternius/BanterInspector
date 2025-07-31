@@ -69,6 +69,10 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <span class="nav-icon">📦</span>
                 Inventory
             </button>
+            <button class="nav-item" data-page="feedback">
+                <span class="nav-icon">💬</span>
+                Feedback
+            </button>
         </div>
         <div class="nav-controls">
             <button id="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" disabled>
@@ -382,6 +386,65 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 </div>
                 <div class="inventory-preview-pane" id="previewPane" style="display: none;">
                     <!-- Preview content will go here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Feedback Page -->
+        <div class="page" id="feedback-page">
+            <div class="feedback-container">
+                <div class="feedback-header">
+                    <h2>Help Improve the Inspector</h2>
+                    <p>Your feedback helps us make the inspector better for everyone</p>
+                </div>
+                
+                <div class="feedback-form">
+                    <div class="feedback-section">
+                        <label class="feedback-label">What would you like to share?</label>
+                        <div class="feedback-type-selector">
+                            <button class="feedback-type-btn active" data-type="feature">
+                                <span class="feedback-type-icon">✨</span>
+                                Feature Request
+                            </button>
+                            <button class="feedback-type-btn" data-type="bug">
+                                <span class="feedback-type-icon">🐛</span>
+                                Bug Report
+                            </button>
+                            <button class="feedback-type-btn" data-type="improvement">
+                                <span class="feedback-type-icon">💡</span>
+                                Improvement
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="feedback-section">
+                        <label class="feedback-label" for="feedbackTitle">Title</label>
+                        <input type="text" id="feedbackTitle" class="feedback-input" placeholder="Brief description of your feedback">
+                    </div>
+                    
+                    <div class="feedback-section">
+                        <label class="feedback-label" for="feedbackDetails">Details</label>
+                        <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
+                    </div>
+                    
+                    <div class="feedback-section">
+                        <label class="feedback-label" for="feedbackEmail">Email (optional)</label>
+                        <input type="email" id="feedbackEmail" class="feedback-input" placeholder="your@email.com">
+                        <span class="feedback-hint">We'll only use this to follow up on your feedback</span>
+                    </div>
+                    
+                    <div class="feedback-actions">
+                        <button id="submitFeedbackBtn" class="feedback-submit-btn">
+                            <span class="btn-icon">📤</span>
+                            Submit Feedback
+                        </button>
+                    </div>
+                    
+                    <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>
+                </div>
+                
+                <div class="feedback-footer">
+                    <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
                 </div>
             </div>
         </div>
