@@ -14,8 +14,6 @@ export class ComponentMenu {
         this.overlay = document.getElementById('componentMenuOverlay');
         this.searchInput = document.getElementById('componentSearchInput');
         this.closeBtn = document.getElementById('closeComponentMenu');
-        
-        this.selectedSlotId = null;
         this.categoryStates = new Map(); // Track expanded/collapsed state
         this.setupEventListeners();
         this.initializeCategories();
@@ -50,7 +48,6 @@ export class ComponentMenu {
     setupEventListeners() {
         // Listen for show component menu events
         document.addEventListener('showComponentMenu', (event) => {
-            this.selectedSlotId = event.detail.slotId;
             this.show();
         });
 
@@ -128,7 +125,7 @@ export class ComponentMenu {
      * Show the component menu
      */
     show() {
-        if (!this.overlay || !this.selectedSlotId) return;
+        if (!this.overlay || !SM.selectedSlot) return;
         
         this.overlay.style.display = 'flex';
         this.searchInput.value = '';
@@ -150,7 +147,6 @@ export class ComponentMenu {
         if (!this.overlay) return;
         
         this.overlay.style.display = 'none';
-        this.selectedSlotId = null;
     }
 
     /**
@@ -201,14 +197,14 @@ export class ComponentMenu {
      * Add component to selected slot
      */
     async addComponent(componentType) {
-        if (!this.selectedSlotId) return;
+        if (!SM.selectedSlot) return;
         
-        const slot = SM.getSlotById(this.selectedSlotId);
+        const slot = SM.getSelectedSlot();
         if (!slot) return;
           
         // Create and apply the component add change
         const change = new ComponentAddChange(
-            this.selectedSlotId, 
+            slot.id, 
             componentType,
             { source: 'ui' }
         );
@@ -220,9 +216,7 @@ export class ComponentMenu {
 
         // Hide menu and refresh UI
         this.hide();
-        // document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-        //     detail: { slotId: this.selectedSlotId }
-        // }));
+        SM.selectSlot(slot.id);
     }
 
     async handleComponentBundles(componentType){

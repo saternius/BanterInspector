@@ -196,13 +196,14 @@ console.log("It is 3:00")
         async updateHierarchy(slot = null){  
             let h = await this.gatherSceneHierarchyBySlot();
             this.props.hierarchy = h;
-            slot = slot || this.getRootSlot();
-            if(slot){
-                this.selectSlot(slot.id);
-                if(slot.parentId){
-                    this.expandedNodes.add(slot.parentId);
-                }
-            }
+            this._updateUI();
+            // slot = slot || this.getRootSlot();
+            // if(slot){
+            //     this.selectSlot(slot.id);
+            //     if(slot.parentId){
+            //         this.expandedNodes.add(slot.parentId);
+            //     }
+            // }
         }
 
 
@@ -315,11 +316,6 @@ console.log("It is 3:00")
 
             this.expandedNodes.add(parentId);
             this.selectSlot(slot.id);
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slot.id }
-            }));
-
-            
             slot.finished_loading = true;
             return slot;
         }
@@ -398,14 +394,16 @@ console.log("It is 3:00")
 
         selectSlot(slotId) {
             this.selectedSlot = slotId;
+            this._updateUI();
+        }
 
-             // Update UI
-             document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slotId }
-            }));
-
+        _updateUI(){
+            // Update UI
             if (inspector?.hierarchyPanel) {
                 inspector.hierarchyPanel.render();
+            }
+            if(inspector?.propertiesPanel){
+                inspector.propertiesPanel.render(this.selectedSlot);
             }
         }
 
@@ -431,8 +429,11 @@ console.log("It is 3:00")
             return slot;
         }
 
-        getSelectedSlot(){
-            return this.getSlotOrRoot(this.selectedSlot);
+        getSelectedSlot(rootFallback){
+            if(rootFallback){
+                return this.getSlotOrRoot(this.selectedSlot);
+            }
+            return this.getSlotById(this.selectedSlot);
         }
 
         getSlotByName(slotName){

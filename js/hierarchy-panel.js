@@ -77,6 +77,7 @@
             this.cloneBtn.addEventListener('click', async () => {
                 const change = new CloneSlotChange(SM.selectedSlot, { source: 'ui' });
                 changeManager.applyChange(change);
+                SM.selectSlot(change.slotId);
             });
 
             // Delete button
@@ -94,6 +95,7 @@
                     console.log("deleting slot =>", SM.selectedSlot)
                     const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
                     changeManager.applyChange(change);
+                    SM.selectSlot('Root');
                 }
             });
 
@@ -209,7 +211,7 @@
             node.appendChild(content);
             
             // Click handler
-            node.onclick = () => this.selectSlot(slot.id);
+            node.onclick = () => SM.selectSlot(slot.id);
             
             nodeDiv.appendChild(node);
             
@@ -271,18 +273,6 @@
             this.render();
         }
 
-        /**
-         * Select a slot
-         */
-        selectSlot(slotId) {
-            SM.selectSlot(slotId);
-            this.render();
-            
-            // Notify properties panel
-            document.dispatchEvent(new CustomEvent('slotSelectionChanged', {
-                detail: { slotId: slotId }
-            }));
-        }
 
         /**
          * Show error message
