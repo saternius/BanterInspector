@@ -46,6 +46,12 @@ export class Inventory {
             }
         });
     }
+
+    reload(){
+        this.items = this.loadItems();
+        this.folders = this.loadFolders();
+        this.render();
+    }
     
     /**
      * Load items from localStorage

@@ -731,9 +731,11 @@ export class SaveSlotItemChange{
         };
         const storageKey = `inventory_${this.itemName}`;
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
+        inventory.reload();
     }
 
     async apply(){
+        console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.slotId, this.itemName, this.folder)
         const existingKeys = Object.keys(inventory.items);
         if (existingKeys.includes(this.itemName)) {
             if(this.options.source === 'ui'){

@@ -1,3 +1,6 @@
+let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;   
+const { SaveSlotItemChange } = await import(`${basePath}/change-types.js`);
+
 export class Navigation {
     constructor() {
         this.currentPage = 'world-inspector';
