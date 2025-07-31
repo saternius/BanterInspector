@@ -1,0 +1,123 @@
+<script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>    
+<script>
+    import { onMount, onDestroy } from "svelte";
+    let recording = false;
+    let speech_buffer = "";
+    let mic_inited = false
+    let rlen = 0
+    let updateLines = ()=>{
+        //console.log('update: ', room_state['speech_buffer'])
+        //io_send('comment', room_state['speech_buffer'])
+        //room_state['speech_buffer'] = ""
+        console.log("COMPLETE", speech_buffer)
+        speech_buffer = ""
+    }
+
+
+    let initializeMic = (useProfanity)=>{
+        console.log('MIC ATTEMPTING TO INITIALIZE: ', !mic_inited)
+        if(mic_inited) return
+        let recognizer = (function(){
+            try{
+                let speechConfig = SpeechSDK.SpeechConfig.fromSubscription("$SUBSCRIPTION", "eastus");
+                speechConfig.speechRecognitionLanguage = "en-US";
+                if(useProfanity){
+                    speechConfig.setProfanity(SpeechSDK.ProfanityOption.Raw);
+                }
+                let audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+                return new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+            }catch(e){
+                console.log(e)
+                console.log("FAILED TO INITIALIZE MIC!")
+            }
+        })()
+
+
+        recognizer.recognizing = (s, e) => {
+            console.log(e)
+            var recognizingLine = e.result.text
+            console.log()
+            var delta = recognizingLine.length - rlen
+            var dtext = recognizingLine.slice(rlen)
+            //room_state['speech_buffer'] += dtext
+            speech_buffer += dtext
+            console.log("Recognizing", delta, dtext)
+            rlen = recognizingLine.length
+            clearTimeout(talking_timeout)
+            talking_timeout = setTimeout((e)=>{
+                updateLines()
+            }, timeout_time)
+        };
+
+
+        recognizer.recognized = (s, e) => {
+            if (e.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
+                updateLines()
+                rlen = 0
+            } else if (e.result.reason === SpeechSDK.ResultReason.NoMatch) {
+                console.log("Could not parse")
+            }
+        };
+
+
+        recognizer.canceled = (s, e) => {
+            document.getElementById("canceled").textContent = `CANCELED: Reason=${e.reason}`;
+            if (e.reason === SpeechSDK.CancellationReason.Error) {
+                document.getElementById("canceled").textContent += `: ${e.errorDetails}`;
+            }
+        };
+
+
+        recognizer.sessionStopped = (s, e) => {
+            recognizer.stopContinuousRecognitionAsync();
+            console.log("recording session completed")
+        };
+
+
+        let toggleRecord = () => {
+            console.log("MIC WAS TOGGLED")
+            if(!recording){
+                recognizer.startContinuousRecognitionAsync();
+                console.log("starting recording")
+            }else{
+                recognizer.stopContinuousRecognitionAsync();
+                console.log("stopping recording")
+            }
+            recording = !recording
+        }
+        document.getElementById("micButton").addEventListener("click", toggleRecord);
+
+
+
+
+        //setTimeout(toggleRecord, 500)
+        mic_inited = true
+    }
+    onMount(()=>{
+        setTimeout(()=>{
+            initializeMic(true)
+        }, 500)
+    })
+   
+</script>
+
+
+<div class='toolbar'>
+    <button
+        class='app-btn'
+        id="micButton"
+        style:color={recording?'white':'initial'}
+        style:background={recording?'#cd3434':'revert-layer'}
+        >
+        {recording?"Mic Off":"Mic On"}
+    </button>
+</div>
+
+
+<div class='recognizing-line'>{speech_buffer}</div>
+
+
+
+
+       
+
