@@ -205,7 +205,6 @@ export class Feedback {
     
     async submitFeedback() {
         const details = document.getElementById('feedbackDetails').value.trim();
-        const email = document.getElementById('feedbackEmail').value.trim();
         
         if (!details) {
             this.showStatus('Please provide feedback details', 'error');
@@ -219,7 +218,6 @@ export class Feedback {
             type: this.selectedType,
             title,
             details,
-            email,
             timestamp: new Date().toISOString(),
             inspector_version: '1.0.0',
             user_agent: navigator.userAgent
@@ -243,8 +241,7 @@ export class Feedback {
             const githubUrl = `https://github.com/saternius/BanterInspector/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
             
             this.showStatus(
-                `Thank you for your feedback! Your ticket number is <strong>#${ticketId}</strong><br>
-                <a href="${githubUrl}" target="_blank">Click here to create a GitHub issue</a>`,
+                `Thank you for your feedback! Your ticket number is <strong>#${ticketId}</strong><br>`,
                 'success'
             );
             
