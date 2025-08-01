@@ -2,14 +2,29 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /feedback/{ticketId} {
+    // Feedback collection rules with subcollections
+    match /feedback/{userId}/tickets/{ticketId} {
+      // Anyone can read their own feedback tickets if they know the userId
       allow read: if true;
-      allow create:if true;
-      allow update: if true;
-      allow delete: if true;
+      
+      // Anyone can create feedback under any userId (since userId acts as the password)
+      allow create: if true;
+      
+      // Only allow updates/deletes to documents in your own userId directory
+      // The userId in the path acts as authentication
+      allow update, delete: if userId == resource.data.createdBy;
     }
-    match /{document=**} {
-      allow read, write: if true;
+    
+    // Prevent listing all feedback at root level
+    match /feedback {
+      allow read: if false;
+      allow write: if false;
+    }
+    
+    // Optional: Admin collection for future use
+    match /admins/{adminId} {
+      allow read: if false;
+      allow write: if false;
     }
   }
 }

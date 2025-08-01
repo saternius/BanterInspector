@@ -274,14 +274,17 @@ export class Feedback {
                 throw new Error('Firestore not available');
             }
             
-            // Add feedback to Firestore using networking utilities
-            await networking.setDocument('feedback', feedback.ticketId, {
+            const userId = feedback.createdBy;
+            const db = networking.getFirestore();
+            
+            // Save to user-specific subcollection: /feedback/{userId}/{ticketId}
+            await db.collection('feedback').doc(userId).collection('tickets').doc(feedback.ticketId).set({
                 ...feedback,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
             
-            console.log('Feedback saved to Firestore:', feedback.ticketId);
+            console.log('Feedback saved to Firestore:', `feedback/${userId}/tickets/${feedback.ticketId}`);
         } catch (error) {
             console.error('Error saving to Firestore:', error);
             // Don't throw - we'll still save locally
@@ -293,7 +296,22 @@ export class Feedback {
             const networking = window.networking;
             if (!networking || !networking.getFirestore()) return null;
             
-            return await networking.getDocument('feedback', ticketId);
+            const db = networking.getFirestore();
+            const userId = networking.getUserId();
+            
+            // First try to find in current user's tickets
+            let doc = await db.collection('feedback').doc(userId).collection('tickets').doc(ticketId).get();
+            
+            if (doc.exists) {
+                return { id: doc.id, ...doc.data() };
+            }
+            
+            // If not found, search all users (since ticketId should be unique)
+            // This requires knowing the userId or searching through all subcollections
+            // For now, return null if not found in user's own collection
+            console.log('Ticket not found in user collection:', ticketId);
+            return null;
+            
         } catch (error) {
             console.error('Error fetching feedback:', error);
             return null;
@@ -305,12 +323,22 @@ export class Feedback {
             const networking = window.networking;
             if (!networking || !networking.getFirestore()) return [];
             
-            return await networking.queryDocuments(
-                'feedback',
-                [],
-                { field: 'createdAt', direction: 'desc' },
-                limit
-            );
+            const db = networking.getFirestore();
+            const userId = networking.getUserId();
+            
+            // Get all feedback for current user from their subcollection
+            const snapshot = await db.collection('feedback')
+                .doc(userId)
+                .collection('tickets')
+                .orderBy('createdAt', 'desc')
+                .limit(limit)
+                .get();
+            
+            return snapshot.docs.map(doc => ({ 
+                id: doc.id, 
+                ...doc.data() 
+            }));
+            
         } catch (error) {
             console.error('Error fetching all feedback:', error);
             return [];
