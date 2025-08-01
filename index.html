@@ -58,7 +58,8 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         window.repoUrl = 'https://saternius.github.io/BanterInspector'
         window.fileServer = localStorage.getItem('file_server');
         if(window.fileServer === "local"){
-            window.repoUrl = 'http://localhost:9909';
+            // Update this with your ngrok URL each time you start ngrok
+            window.repoUrl = localStorage.getItem('ngrok_url') || 'http://localhost:9909';
         }
 
 

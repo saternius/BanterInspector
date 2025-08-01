@@ -21,5 +21,5 @@ if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 9931
     directory = sys.argv[2] if len(sys.argv) > 2 else os.getcwd()
     os.chdir(directory)
-    print(f"Serving {directory!r} on http://127.0.0.1:{port} with CORS enabled")
-    HTTPServer(('127.0.0.1', port), CORSRequestHandler).serve_forever()
+    print(f"Serving {directory!r} on http://0.0.0.0:{port} with CORS enabled")
+    HTTPServer(('0.0.0.0', port), CORSRequestHandler).serve_forever()
