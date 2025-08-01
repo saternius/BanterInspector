@@ -222,7 +222,8 @@ export class Feedback {
             email,
             timestamp: new Date().toISOString(),
             inspector_version: '1.0.0',
-            user_agent: navigator.userAgent
+            user_agent: navigator.userAgent,
+            createdBy: this.getUserId()
         };
         
         try {
@@ -264,6 +265,16 @@ export class Feedback {
         const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
         return `FB-${dateStr}-${random}`;
+    }
+    
+    getUserId() {
+        // Generate or retrieve a persistent user ID for this browser
+        let userId = localStorage.getItem('inspector_user_id');
+        if (!userId) {
+            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('inspector_user_id', userId);
+        }
+        return userId;
     }
     
     async saveFeedbackToFirestore(feedback) {
