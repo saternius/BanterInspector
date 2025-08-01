@@ -1,6 +1,288 @@
 let localhost = window.location.hostname === 'localhost'
 let basePath = localhost ? '.' : `${window.repoUrl}/js`;
 
+// Firestore REST API wrapper to bypass WebChannel issues
+class FirestoreREST {
+    constructor(projectId) {
+        this.projectId = projectId;
+        this.baseUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents`;
+    }
+    
+    // Helper to convert JS object to Firestore document format
+    toFirestoreDocument(data) {
+        const doc = { fields: {} };
+        
+        for (const [key, value] of Object.entries(data)) {
+            if (value === null) {
+                doc.fields[key] = { nullValue: null };
+            } else if (typeof value === 'boolean') {
+                doc.fields[key] = { booleanValue: value };
+            } else if (typeof value === 'number') {
+                if (Number.isInteger(value)) {
+                    doc.fields[key] = { integerValue: value.toString() };
+                } else {
+                    doc.fields[key] = { doubleValue: value };
+                }
+            } else if (typeof value === 'string') {
+                doc.fields[key] = { stringValue: value };
+            } else if (value instanceof Date) {
+                doc.fields[key] = { timestampValue: value.toISOString() };
+            } else if (Array.isArray(value)) {
+                doc.fields[key] = { 
+                    arrayValue: { 
+                        values: value.map(v => this.toFirestoreValue(v)) 
+                    } 
+                };
+            } else if (typeof value === 'object') {
+                doc.fields[key] = { 
+                    mapValue: { 
+                        fields: this.toFirestoreDocument(value).fields 
+                    } 
+                };
+            }
+        }
+        
+        return doc;
+    }
+    
+    // Helper to convert single value to Firestore format
+    toFirestoreValue(value) {
+        if (value === null) return { nullValue: null };
+        if (typeof value === 'boolean') return { booleanValue: value };
+        if (typeof value === 'number') {
+            return Number.isInteger(value) 
+                ? { integerValue: value.toString() }
+                : { doubleValue: value };
+        }
+        if (typeof value === 'string') return { stringValue: value };
+        if (value instanceof Date) return { timestampValue: value.toISOString() };
+        if (Array.isArray(value)) {
+            return { arrayValue: { values: value.map(v => this.toFirestoreValue(v)) } };
+        }
+        if (typeof value === 'object') {
+            return { mapValue: { fields: this.toFirestoreDocument(value).fields } };
+        }
+        return { stringValue: String(value) };
+    }
+    
+    // Helper to convert Firestore document to JS object
+    fromFirestoreDocument(doc) {
+        if (!doc.fields) return {};
+        
+        const result = {};
+        for (const [key, value] of Object.entries(doc.fields)) {
+            result[key] = this.fromFirestoreValue(value);
+        }
+        return result;
+    }
+    
+    // Helper to convert Firestore value to JS
+    fromFirestoreValue(value) {
+        if ('nullValue' in value) return null;
+        if ('booleanValue' in value) return value.booleanValue;
+        if ('integerValue' in value) return parseInt(value.integerValue);
+        if ('doubleValue' in value) return value.doubleValue;
+        if ('stringValue' in value) return value.stringValue;
+        if ('timestampValue' in value) return new Date(value.timestampValue);
+        if ('arrayValue' in value) {
+            return (value.arrayValue.values || []).map(v => this.fromFirestoreValue(v));
+        }
+        if ('mapValue' in value) {
+            return this.fromFirestoreDocument({ fields: value.mapValue.fields });
+        }
+        return null;
+    }
+    
+    // Create or update a document
+    async setDocument(collectionPath, documentId, data) {
+        const url = `${this.baseUrl}/${collectionPath}/${documentId}`;
+        const firestoreDoc = this.toFirestoreDocument({
+            ...data,
+            updatedAt: new Date().toISOString()
+        });
+        
+        try {
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(firestoreDoc)
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`Firestore REST error: ${response.status} - ${error}`);
+            }
+            
+            const result = await response.json();
+            return {
+                id: documentId,
+                ...this.fromFirestoreDocument(result)
+            };
+        } catch (error) {
+            console.error('REST API setDocument error:', error);
+            throw error;
+        }
+    }
+    
+    // Get a document
+    async getDocument(collectionPath, documentId) {
+        const url = `${this.baseUrl}/${collectionPath}/${documentId}`;
+        
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (response.status === 404) {
+                return null;
+            }
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`Firestore REST error: ${response.status} - ${error}`);
+            }
+            
+            const result = await response.json();
+            return {
+                id: documentId,
+                ...this.fromFirestoreDocument(result)
+            };
+        } catch (error) {
+            console.error('REST API getDocument error:', error);
+            throw error;
+        }
+    }
+    
+    // Delete a document
+    async deleteDocument(collectionPath, documentId) {
+        const url = `${this.baseUrl}/${collectionPath}/${documentId}`;
+        
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (!response.ok && response.status !== 404) {
+                const error = await response.text();
+                throw new Error(`Firestore REST error: ${response.status} - ${error}`);
+            }
+            
+            return true;
+        } catch (error) {
+            console.error('REST API deleteDocument error:', error);
+            throw error;
+        }
+    }
+    
+    // List documents in a collection
+    async listDocuments(collectionPath, options = {}) {
+        const { limit = 50, orderBy, startAfter } = options;
+        let url = `${this.baseUrl}/${collectionPath}`;
+        
+        const params = new URLSearchParams();
+        if (limit) params.append('pageSize', limit.toString());
+        if (orderBy) params.append('orderBy', orderBy);
+        if (startAfter) params.append('pageToken', startAfter);
+        
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(`Firestore REST error: ${response.status} - ${error}`);
+            }
+            
+            const result = await response.json();
+            const documents = (result.documents || []).map(doc => {
+                const pathParts = doc.name.split('/');
+                const id = pathParts[pathParts.length - 1];
+                return {
+                    id,
+                    ...this.fromFirestoreDocument(doc)
+                };
+            });
+            
+            return {
+                documents,
+                nextPageToken: result.nextPageToken
+            };
+        } catch (error) {
+            console.error('REST API listDocuments error:', error);
+            throw error;
+        }
+    }
+    
+    // List all subcollections across multiple parent documents
+    async listAllSubcollections(parentPath, subcollectionName, options = {}) {
+        const { limit = 50 } = options;
+        const allDocuments = [];
+        
+        try {
+            // First, get all parent documents
+            const parentResult = await this.listDocuments(parentPath, { limit: 1000 });
+            
+            // Then, for each parent, get its subcollection documents
+            for (const parent of parentResult.documents) {
+                const subcollectionPath = `${parentPath}/${parent.id}/${subcollectionName}`;
+                const subResult = await this.listDocuments(subcollectionPath, { limit });
+                
+                // Add parent reference to each document
+                subResult.documents.forEach(doc => {
+                    doc.parentId = parent.id;
+                });
+                
+                allDocuments.push(...subResult.documents);
+            }
+            
+            // Sort by creation date (newest first)
+            allDocuments.sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.timestamp);
+                const dateB = new Date(b.createdAt || b.timestamp);
+                return dateB - dateA;
+            });
+            
+            return allDocuments;
+        } catch (error) {
+            console.error('REST API listAllSubcollections error:', error);
+            throw error;
+        }
+    }
+    
+    // Create a document with auto-generated ID
+    async addDocument(collectionPath, data) {
+        // Generate a client-side ID
+        const documentId = this.generateDocumentId();
+        return await this.setDocument(collectionPath, documentId, data);
+    }
+    
+    // Generate a Firestore-like document ID
+    generateDocumentId() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let id = '';
+        for (let i = 0; i < 20; i++) {
+            id += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return id;
+    }
+}
+
 function safeParse(value) {
     // Only operate on strings
     if (typeof value !== 'string') return value;
@@ -42,7 +324,9 @@ let renderProps = ()=>{
 export class Networking {
     constructor(){
         this.db = null;
-        this.initFirebase();
+        this.restClient = null;
+        // Delay Firebase initialization to ensure all dependencies are loaded
+        setTimeout(() => this.initFirebase(), 1000);
     }
     
     initFirebase() {
@@ -57,11 +341,61 @@ export class Networking {
             measurementId: "G-3S4G5E0GVK"
         };
         
+        // Initialize REST client
+        this.restClient = new FirestoreREST(firebaseConfig.projectId);
+        console.log('Firestore REST client initialized');
+        
         // Initialize Firebase only if not already initialized
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            this.db = firebase.firestore();
-            console.log('Firebase initialized in networking.js');
+            try {
+                firebase.initializeApp(firebaseConfig);
+                this.db = firebase.firestore();
+                
+                // Enable offline persistence for better reliability
+                this.db.enablePersistence({ synchronizeTabs: true })
+                    .catch((err) => {
+                        if (err.code === 'failed-precondition') {
+                            console.warn('Firestore persistence failed: Multiple tabs open');
+                        } else if (err.code === 'unimplemented') {
+                            console.warn('Firestore persistence not available');
+                        }
+                    });
+                
+                console.log('Firebase SDK initialized (but using REST API instead)');
+                
+                // Test the REST connection instead
+                this.testRestConnection();
+            } catch (error) {
+                console.error('Failed to initialize Firebase:', error);
+            }
+        }
+    }
+    
+    async testRestConnection() {
+        try {
+            console.log('Testing Firestore REST API connection...');
+            
+            // Try a simple operation with REST API
+            const testDoc = await this.restClient.setDocument('test', 'connection-test', {
+                timestamp: new Date().toISOString(),
+                test: true,
+                message: 'REST API connection test'
+            });
+            
+            console.log('REST API write successful:', testDoc);
+            
+            // Try to read it back
+            const readDoc = await this.restClient.getDocument('test', 'connection-test');
+            console.log('REST API read successful:', readDoc);
+            
+            // Clean up
+            await this.restClient.deleteDocument('test', 'connection-test');
+            console.log('REST API delete successful');
+            
+            console.log('✅ Firestore REST API is working correctly!');
+            
+        } catch (error) {
+            console.error('REST API connection test failed:', error);
         }
     }
 
@@ -81,10 +415,36 @@ export class Networking {
         return this.db;
     }
     
+    // Get the REST client instead of SDK
+    getFirestoreREST() {
+        if (!this.restClient) {
+            const projectId = window.FIREBASE_CONFIG?.projectId || 'inspector-6bad1';
+            this.restClient = new FirestoreREST(projectId);
+        }
+        return this.restClient;
+    }
+    
     // Generic Firestore operations for future use
     async addDocument(collection, data) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        return await this.db.collection(collection).add(data);
+        if (!this.db) {
+            console.error('Firestore not initialized when calling addDocument');
+            throw new Error('Firestore not initialized');
+        }
+        
+        try {
+            console.log(`Adding document to collection: ${collection}`, data);
+            const docRef = await this.db.collection(collection).add({
+                ...data,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('Document added successfully with ID:', docRef.id);
+            return docRef;
+        } catch (error) {
+            console.error(`Failed to add document to ${collection}:`, error);
+            console.error('Error code:', error.code);
+            console.error('Error message:', error.message);
+            throw error;
+        }
     }
     
     async setDocument(collection, docId, data) {
@@ -358,4 +718,56 @@ export class Networking {
 }
 
 export const networking = new Networking();
-window.networking = networking
+window.networking = networking;
+
+// Debug function for testing Firestore REST API
+window.testFirestoreREST = async () => {
+    console.log('Testing Firestore REST API...');
+    try {
+        const rest = networking.getFirestoreREST();
+        
+        // Test 1: Add a document
+        const testData = {
+            test: true,
+            timestamp: new Date().toISOString(),
+            message: 'Test document from REST API',
+            number: 42,
+            boolean: true,
+            array: ['item1', 'item2'],
+            nested: { key: 'value' }
+        };
+        
+        console.log('Adding test document...');
+        const result = await rest.addDocument('test', testData);
+        console.log('✅ Document added:', result);
+        
+        // Test 2: Read it back
+        console.log('Reading document...');
+        const doc = await rest.getDocument('test', result.id);
+        console.log('✅ Retrieved document:', doc);
+        
+        // Test 3: Update it
+        console.log('Updating document...');
+        const updated = await rest.setDocument('test', result.id, {
+            ...doc,
+            updated: true,
+            updateTime: new Date().toISOString()
+        });
+        console.log('✅ Updated document:', updated);
+        
+        // Test 4: List documents
+        console.log('Listing documents...');
+        const list = await rest.listDocuments('test', { limit: 10 });
+        console.log('✅ Listed documents:', list);
+        
+        // Test 5: Delete
+        console.log('Deleting document...');
+        await rest.deleteDocument('test', result.id);
+        console.log('✅ Document deleted');
+        
+        return '✅ All REST API tests passed!';
+    } catch (error) {
+        console.error('❌ REST API test failed:', error);
+        return error;
+    }
+};

@@ -74,6 +74,7 @@
                 
                 // Initialize feedback
                 this.feedback = new Feedback();
+                window.feedback = this.feedback;
                 
                 // Initialize script editors map
                 this.scriptEditors = new Map();
