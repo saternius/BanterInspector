@@ -162,7 +162,7 @@ export class Feedback {
     
     completeRecognition() {
         this.updateTextarea();
-        this.speechBuffer = document.getElementById('feedbackDetails').value;
+        this.speechBuffer = document.getElementById('feedbackDetails').value+"\n";
         this.rlen = 0;
     }
     
