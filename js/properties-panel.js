@@ -27,12 +27,6 @@
          * Setup event listeners
          */
         setupEventListeners() {
-            // Listen for slot selection changes
-            document.addEventListener('slotSelectionChanged', (event) => {
-                const { slotId } = event.detail;
-                this.render(slotId);
-            });
-
             // Add component button
             this.addComponentBtn?.addEventListener('click', () => {
                 document.dispatchEvent(new CustomEvent('showComponentMenu', {
