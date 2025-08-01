@@ -41,6 +41,84 @@ let renderProps = ()=>{
 
 export class Networking {
     constructor(){
+        this.db = null;
+        this.initFirebase();
+    }
+    
+    initFirebase() {
+        // Firebase configuration
+        const firebaseConfig = window.FIREBASE_CONFIG || {
+            apiKey: '',
+            authDomain: '',
+            projectId: '',
+            storageBucket: '',
+            messagingSenderId: '',
+            appId: ''
+        };
+        
+        // Initialize Firebase only if not already initialized
+        if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+            this.db = firebase.firestore();
+            console.log('Firebase initialized in networking.js');
+        }
+    }
+    
+    getFirestore() {
+        if (!this.db && typeof firebase !== 'undefined') {
+            this.db = firebase.firestore();
+        }
+        return this.db;
+    }
+    
+    // Generic Firestore operations for future use
+    async addDocument(collection, data) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        return await this.db.collection(collection).add(data);
+    }
+    
+    async setDocument(collection, docId, data) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        return await this.db.collection(collection).doc(docId).set(data);
+    }
+    
+    async getDocument(collection, docId) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        const doc = await this.db.collection(collection).doc(docId).get();
+        return doc.exists ? { id: doc.id, ...doc.data() } : null;
+    }
+    
+    async queryDocuments(collection, queries = [], orderBy = null, limit = 50) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        let query = this.db.collection(collection);
+        
+        // Apply query conditions
+        queries.forEach(q => {
+            query = query.where(q.field, q.operator, q.value);
+        });
+        
+        // Apply ordering
+        if (orderBy) {
+            query = query.orderBy(orderBy.field, orderBy.direction || 'asc');
+        }
+        
+        // Apply limit
+        if (limit) {
+            query = query.limit(limit);
+        }
+        
+        const snapshot = await query.get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    }
+    
+    async updateDocument(collection, docId, updates) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        return await this.db.collection(collection).doc(docId).update(updates);
+    }
+    
+    async deleteDocument(collection, docId) {
+        if (!this.db) throw new Error('Firestore not initialized');
+        return await this.db.collection(collection).doc(docId).delete();
     }
 
     handleSpaceStateChange(event) {
