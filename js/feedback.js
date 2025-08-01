@@ -15,12 +15,15 @@ export class Feedback {
         this.setupTypeButtons();
         this.setupSubmitButton();
         this.setupSpeechRecognition();
+<<<<<<< HEAD
     }
 
     async get_key(){
         let key = await fetch(`https://banterbrush.com/something-for-the-time`);
         key = await key.text();
         this.key = key;
+=======
+>>>>>>> 9e66ac2ffca829f1dcdbb5325ba12f6121d0aa52
     }
     
     setupTypeButtons() {
@@ -57,12 +60,23 @@ export class Feedback {
         
         try {
             // You'll need to provide your Azure subscription key and region
+<<<<<<< HEAD
             if (!this.key) {
+=======
+            const subscriptionKey = window.AZURE_SPEECH_KEY || '';
+            const region = window.AZURE_SPEECH_REGION || 'eastus';
+            
+            if (!subscriptionKey) {
+>>>>>>> 9e66ac2ffca829f1dcdbb5325ba12f6121d0aa52
                 this.showSpeechStatus('Speech recognition not configured', 'error');
                 return;
             }
             
+<<<<<<< HEAD
             const speechConfig = window.SpeechSDK.SpeechConfig.fromSubscription(this.key, 'eastus');
+=======
+            const speechConfig = window.SpeechSDK.SpeechConfig.fromSubscription(subscriptionKey, region);
+>>>>>>> 9e66ac2ffca829f1dcdbb5325ba12f6121d0aa52
             speechConfig.speechRecognitionLanguage = 'en-US';
             
             const audioConfig = window.SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
