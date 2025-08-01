@@ -32,8 +32,26 @@ console.log("It is 3:00")
             return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
         }
 
+        toggleFileServer(){
+            let fileServer = localStorage.getItem('file_server');
+            if(fileServer === "github"){
+                localStorage.setItem('file_server', "local");
+            }else{
+                localStorage.setItem('file_server', "github");
+            }
+            window.location.reload();
+        }
+
 
         async initialize() {
+            let fileServer = localStorage.getItem('file_server');
+            if(!fileServer){
+                localStorage.setItem('file_server', "github");
+                fileServer = "github";
+            }
+            let fileServerEl = document.getElementById("fileServer");
+            fileServerEl.innerHTML = fileServer;
+
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
                     console.error('BS library not available');

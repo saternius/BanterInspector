@@ -3131,3 +3131,12 @@ body {
 .field-value.status-in-progress {
     color: #fbbf24;
 }
+
+.file-server{
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+    padding: 10px;
+    color: #534b71;
+    cursor: pointer;
+}

@@ -56,6 +56,14 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script>
         const isLocal = window.location.hostname === 'localhost';
         window.repoUrl = 'https://saternius.github.io/BanterInspector'
+        window.fileServer = localStorage.getItem('file_server');
+        if(window.fileServer === "local"){
+            window.repoUrl = 'http://localhost:9909';
+        }
+
+
+
+        
         const link = document.createElement('link');
         link.rel = 'stylesheet';
         link.href = isLocal ? './styles.css' : window.repoUrl + '/styles.css';
@@ -468,6 +476,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 </div>
             </div>
         </div>
+        <div class="file-server" id="fileServer" onclick="SM.toggleFileServer()">File Server</div>
     </div> <!-- End Page Container -->
 
     <!-- Load JavaScript modules -->
