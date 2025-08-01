@@ -1,12 +1,19 @@
 export class Feedback {
     constructor() {
         this.selectedType = 'feature';
+        this.recording = false;
+        this.speechRecognizer = null;
+        this.micInited = false;
+        this.speechBuffer = '';
+        this.rlen = 0;
+        this.timeoutId = null;
         this.init();
     }
     
     init() {
         this.setupTypeButtons();
         this.setupSubmitButton();
+        this.setupSpeechRecognition();
     }
     
     setupTypeButtons() {
@@ -25,15 +32,182 @@ export class Feedback {
         submitBtn.addEventListener('click', () => this.submitFeedback());
     }
     
+    setupSpeechRecognition() {
+        const micButton = document.getElementById('micButton');
+        if (!micButton) return;
+        
+        micButton.addEventListener('click', () => {
+            if (!this.micInited) {
+                this.initializeMic();
+            } else {
+                this.toggleRecording();
+            }
+        });
+    }
+    
+    initializeMic() {
+        if (this.micInited) return;
+        
+        try {
+            // You'll need to provide your Azure subscription key and region
+            const subscriptionKey = window.AZURE_SPEECH_KEY || '';
+            const region = window.AZURE_SPEECH_REGION || 'eastus';
+            
+            if (!subscriptionKey) {
+                this.showSpeechStatus('Speech recognition not configured', 'error');
+                return;
+            }
+            
+            const speechConfig = window.SpeechSDK.SpeechConfig.fromSubscription(subscriptionKey, region);
+            speechConfig.speechRecognitionLanguage = 'en-US';
+            
+            const audioConfig = window.SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+            this.speechRecognizer = new window.SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+            
+            this.speechRecognizer.recognizing = (s, e) => {
+                const recognizingText = e.result.text;
+                const delta = recognizingText.length - this.rlen;
+                const newText = recognizingText.slice(this.rlen);
+                
+                this.speechBuffer += newText;
+                this.updateTextarea();
+                this.rlen = recognizingText.length;
+                
+                // Reset timeout for auto-stop
+                clearTimeout(this.timeoutId);
+                this.timeoutId = setTimeout(() => {
+                    this.completeRecognition();
+                }, 2000);
+            };
+            
+            this.speechRecognizer.recognized = (s, e) => {
+                if (e.result.reason === window.SpeechSDK.ResultReason.RecognizedSpeech) {
+                    this.completeRecognition();
+                    this.rlen = 0;
+                }
+            };
+            
+            this.speechRecognizer.canceled = (s, e) => {
+                console.error('Speech recognition canceled:', e.reason);
+                if (e.reason === window.SpeechSDK.CancellationReason.Error) {
+                    this.showSpeechStatus('Speech recognition error: ' + e.errorDetails, 'error');
+                }
+                this.stopRecording();
+            };
+            
+            this.speechRecognizer.sessionStopped = (s, e) => {
+                this.stopRecording();
+            };
+            
+            this.micInited = true;
+            this.toggleRecording();
+            
+        } catch (error) {
+            console.error('Failed to initialize speech recognition:', error);
+            this.showSpeechStatus('Failed to initialize microphone', 'error');
+        }
+    }
+    
+    toggleRecording() {
+        if (!this.recording) {
+            this.startRecording();
+        } else {
+            this.stopRecording();
+        }
+    }
+    
+    startRecording() {
+        const micButton = document.getElementById('micButton');
+        const textarea = document.getElementById('feedbackDetails');
+        
+        // Save current textarea content
+        this.speechBuffer = textarea.value ? textarea.value + ' ' : '';
+        this.rlen = 0;
+        
+        this.speechRecognizer.startContinuousRecognitionAsync(
+            () => {
+                this.recording = true;
+                micButton.classList.add('recording');
+                this.showSpeechStatus('Listening...', 'recording');
+                
+                // Visual feedback
+                this.animateRecording();
+            },
+            (error) => {
+                console.error('Failed to start recording:', error);
+                this.showSpeechStatus('Failed to start recording', 'error');
+            }
+        );
+    }
+    
+    stopRecording() {
+        const micButton = document.getElementById('micButton');
+        
+        this.speechRecognizer.stopContinuousRecognitionAsync(
+            () => {
+                this.recording = false;
+                micButton.classList.remove('recording');
+                this.hideSpeechStatus();
+                clearTimeout(this.timeoutId);
+            },
+            (error) => {
+                console.error('Failed to stop recording:', error);
+            }
+        );
+    }
+    
+    completeRecognition() {
+        this.updateTextarea();
+        this.speechBuffer = document.getElementById('feedbackDetails').value;
+        this.rlen = 0;
+    }
+    
+    updateTextarea() {
+        const textarea = document.getElementById('feedbackDetails');
+        textarea.value = this.speechBuffer;
+        // Trigger input event for any listeners
+        textarea.dispatchEvent(new Event('input'));
+    }
+    
+    animateRecording() {
+        const indicator = document.querySelector('.recording-indicator');
+        if (!indicator || !this.recording) return;
+        
+        // Pulse animation
+        let scale = 1;
+        const animate = () => {
+            if (!this.recording) return;
+            
+            scale = scale === 1 ? 1.2 : 1;
+            indicator.style.transform = `scale(${scale})`;
+            setTimeout(() => animate(), 500);
+        };
+        animate();
+    }
+    
+    showSpeechStatus(message, type) {
+        const statusEl = document.getElementById('speechStatus');
+        statusEl.textContent = message;
+        statusEl.className = `speech-status ${type}`;
+        statusEl.style.display = 'block';
+    }
+    
+    hideSpeechStatus() {
+        const statusEl = document.getElementById('speechStatus');
+        statusEl.style.display = 'none';
+    }
+    
     async submitFeedback() {
-        const title = document.getElementById('feedbackTitle').value.trim();
         const details = document.getElementById('feedbackDetails').value.trim();
         const email = document.getElementById('feedbackEmail').value.trim();
         
-        if (!title || !details) {
-            this.showStatus('Please provide both a title and details', 'error');
+        if (!details) {
+            this.showStatus('Please provide feedback details', 'error');
             return;
         }
+        
+        // Generate a title from the first line or first 50 chars of feedback
+        const title = details.split('\n')[0].substring(0, 50) + (details.length > 50 ? '...' : '');
         
         const feedback = {
             type: this.selectedType,
@@ -46,8 +220,6 @@ export class Feedback {
         };
         
         try {
-            // For now, we'll store feedback locally and show instructions
-            // In production, this would send to an API endpoint
             this.storeFeedbackLocally(feedback);
             
             // Create GitHub issue URL
@@ -61,7 +233,6 @@ export class Feedback {
             );
             
             // Clear form
-            document.getElementById('feedbackTitle').value = '';
             document.getElementById('feedbackDetails').value = '';
             document.getElementById('feedbackEmail').value = '';
             

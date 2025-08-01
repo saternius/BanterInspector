@@ -2850,3 +2850,120 @@ body {
 .feedback-footer a:hover {
     text-decoration: underline;
 }
+
+/* Speech-to-text Styles */
+.feedback-input-container {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.mic-button {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 48px;
+    height: 48px;
+    background: #2a2a2a;
+    border: 2px solid #3a3a3a;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.mic-button:hover {
+    background: #333;
+    border-color: #4a4a4a;
+    transform: scale(1.05);
+}
+
+.mic-button.recording {
+    background: #ff3b3b;
+    border-color: #ff5555;
+    animation: pulse 1.5s infinite;
+}
+
+.mic-button.recording:hover {
+    background: #ff5555;
+    border-color: #ff6666;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 59, 59, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 59, 59, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 59, 59, 0);
+    }
+}
+
+.mic-icon {
+    font-size: 24px;
+    transition: transform 0.3s ease;
+}
+
+.mic-button.recording .mic-icon {
+    animation: micShake 0.3s infinite;
+}
+
+@keyframes micShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-1px); }
+    75% { transform: translateX(1px); }
+}
+
+.recording-indicator {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.mic-button.recording .recording-indicator {
+    opacity: 1;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.speech-status {
+    margin-top: 8px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    text-align: center;
+    animation: slideIn 0.3s ease;
+}
+
+.speech-status.recording {
+    background: rgba(0, 168, 204, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+}
+
+.speech-status.error {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    color: #ff7b7b;
+}
+
+/* Adjust textarea padding to accommodate mic button */
+.feedback-input-container .feedback-textarea {
+    padding-bottom: 70px;
+}
