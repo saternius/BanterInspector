@@ -235,12 +235,7 @@ export class Feedback {
             
             // Also save locally as backup
             this.storeFeedbackLocally(feedback);
-            
-            // Create GitHub issue URL
-            const issueTitle = `[${this.selectedType}] ${title}`;
-            const issueBody = this.formatGitHubIssue(feedback);
-            const githubUrl = `https://github.com/saternius/BanterInspector/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
-            
+                     
             this.showStatus(
                 `Thank you for your feedback! Your ticket number is <strong>#${ticketId}</strong><br>`,
                 'success'
@@ -267,6 +262,7 @@ export class Feedback {
     
     
     async saveFeedbackToFirestore(feedback) {
+        console.log("saving feedback to firestore =>", feedback)
         try {
             // Get networking instance to access Firestore
             const networking = window.networking;
@@ -351,22 +347,7 @@ export class Feedback {
         localStorage.setItem('inspector_feedback', JSON.stringify(feedbackHistory));
     }
     
-    formatGitHubIssue(feedback) {
-        let body = `**Type:** ${feedback.type}\n\n`;
-        body += `**Ticket ID:** ${feedback.ticketId}\n\n`;
-        body += `**Description:**\n${feedback.details}\n\n`;
-        
-        if (feedback.email) {
-            body += `**Contact:** ${feedback.email}\n\n`;
-        }
-        
-        body += `**Inspector Version:** ${feedback.inspector_version}\n`;
-        body += `**Submitted:** ${new Date(feedback.timestamp).toLocaleString()}\n\n`;
-        body += `---\n*This feedback was submitted through the Inspector feedback form*`;
-        
-        return body;
-    }
-    
+
     showStatus(message, type) {
         const statusEl = document.getElementById('feedbackStatus');
         statusEl.innerHTML = message;

@@ -64,6 +64,15 @@ export class Networking {
             console.log('Firebase initialized in networking.js');
         }
     }
+
+    getUserId(){
+        let userId = localStorage.getItem('inspector_user_id');
+        if (!userId) {
+            userId = SM.myName();
+            localStorage.setItem('inspector_user_id', userId);
+        }
+        return userId;
+    }
     
     getFirestore() {
         if (!this.db && typeof firebase !== 'undefined') {
