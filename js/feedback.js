@@ -254,11 +254,11 @@ export class Feedback {
     }
     
     generateTicketId() {
-        // Generate a ticket ID in format: FB-YYYYMMDD-XXXX
+        // Generate a ticket ID in format: FB_YYYYMMDD_XXXX (using underscores for Firestore compatibility)
         const date = new Date();
         const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        return `FB-${dateStr}-${random}`;
+        return `FB_${dateStr}_${random}`;
     }
     
     
@@ -274,10 +274,8 @@ export class Feedback {
                 throw new Error('Firestore REST client not available');
             }
             
-            const userId = feedback.createdBy;
-            
-            // Save to user-specific subcollection path: feedback/{userId}/tickets/{ticketId}
-            const collectionPath = `feedback/${userId}/tickets`;
+            // Save to public collection: feedback/tickets/{ticketId}
+            const collectionPath = `feedback/tickets`;
             
             await rest.setDocument(collectionPath, feedback.ticketId, {
                 ...feedback,
@@ -298,47 +296,15 @@ export class Feedback {
             
             if (!rest) return null;
             
-            const userId = networking.getUserId();
-            
-            // First try to find in current user's tickets
-            const collectionPath = `feedback/${userId}/tickets`;
+            // Get from public collection
+            const collectionPath = `feedback/tickets`;
             const doc = await rest.getDocument(collectionPath, ticketId);
             
-            if (doc) {
-                return doc;
-            }
-            
-            // If not found in user's collection
-            console.log('Ticket not found in user collection:', ticketId);
-            return null;
+            return doc;
             
         } catch (error) {
             console.error('Error fetching feedback:', error);
             return null;
-        }
-    }
-    
-    async getAllFeedback(limit = 50) {
-        try {
-            const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
-            
-            if (!rest) return [];
-            
-            const userId = networking.getUserId();
-            
-            // Get all feedback for current user from their subcollection
-            const collectionPath = `feedback/${userId}/tickets`;
-            const result = await rest.listDocuments(collectionPath, {
-                limit,
-                orderBy: 'createdAt desc'
-            });
-            
-            return result.documents || [];
-            
-        } catch (error) {
-            console.error('Error fetching all feedback:', error);
-            return [];
         }
     }
     
@@ -470,8 +436,16 @@ export class Feedback {
                 throw new Error('Firestore REST client not available');
             }
             
-            // Get all tickets across all users
-            const allTickets = await rest.listAllSubcollections('feedback', 'tickets', { limit: 100 });
+            // Get all tickets from public collection
+            const result = await rest.listDocuments('feedback/tickets', { limit: 100 });
+            const allTickets = result.documents || [];
+            
+            // Sort by creation date (newest first)
+            allTickets.sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.timestamp);
+                const dateB = new Date(b.createdAt || b.timestamp);
+                return dateB - dateA;
+            });
             
             this.tickets = allTickets;
             this.displayTickets(allTickets);
@@ -665,7 +639,7 @@ export class Feedback {
             // Update the ticket with the new comment
             const updatedComments = [...(this.currentTicket.comments || []), comment];
             
-            const collectionPath = `feedback/${this.currentTicket.parentId}/tickets`;
+            const collectionPath = `feedback/tickets`;
             await rest.setDocument(collectionPath, this.currentTicket.ticketId, {
                 ...this.currentTicket,
                 comments: updatedComments,
@@ -701,7 +675,7 @@ export class Feedback {
             const networking = window.networking;
             const rest = networking?.getFirestoreREST();
             
-            const collectionPath = `feedback/${ticket.parentId}/tickets`;
+            const collectionPath = `feedback/tickets`;
             await rest.setDocument(collectionPath, ticketId, {
                 ...ticket,
                 status: newStatus,
@@ -728,7 +702,7 @@ export class Feedback {
             const networking = window.networking;
             const rest = networking?.getFirestoreREST();
             
-            const collectionPath = `feedback/${ticket.parentId}/tickets`;
+            const collectionPath = `feedback/tickets`;
             await rest.deleteDocument(collectionPath, ticketId);
             
             // Remove from local data
