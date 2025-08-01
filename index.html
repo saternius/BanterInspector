@@ -49,6 +49,9 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <meta http-equiv='pragma' content='no-cache'>
     <title>Unity Scene Inspector - Resonite Style</title>
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script>
         const isLocal = window.location.hostname === 'localhost';
         window.repoUrl = 'https://saternius.github.io/BanterInspector'
@@ -449,6 +452,17 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 </div>
                 
                 <div class="feedback-footer">
+                    <div class="ticket-lookup-section">
+                        <h3>Check Ticket Status</h3>
+                        <div class="ticket-lookup-form">
+                            <input type="text" id="ticketLookupInput" class="ticket-input" placeholder="Enter ticket ID (e.g., FB-20240101-1234)">
+                            <button id="lookupTicketBtn" class="lookup-btn">
+                                <span class="btn-icon">🔍</span>
+                                Lookup
+                            </button>
+                        </div>
+                        <div id="ticketResult" class="ticket-result" style="display: none;"></div>
+                    </div>
                     <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
                 </div>
             </div>

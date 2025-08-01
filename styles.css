@@ -2967,3 +2967,167 @@ body {
 .feedback-input-container .feedback-textarea {
     padding-bottom: 70px;
 }
+
+/* Ticket Lookup Styles */
+.ticket-lookup-section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 8px;
+}
+
+.ticket-lookup-section h3 {
+    font-size: 18px;
+    color: #e8e8e8;
+    margin-bottom: 15px;
+}
+
+.ticket-lookup-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.ticket-input {
+    flex: 1;
+    padding: 10px 16px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.ticket-input:focus {
+    outline: none;
+    border-color: #00d4ff;
+}
+
+.lookup-btn {
+    padding: 10px 20px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #e8e8e8;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lookup-btn:hover {
+    background: #333;
+    border-color: #4a4a4a;
+}
+
+.lookup-btn .btn-icon {
+    font-size: 16px;
+}
+
+/* Ticket Result Styles */
+.ticket-result {
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    animation: fadeIn 0.3s ease;
+}
+
+.ticket-result.loading {
+    background: rgba(0, 168, 204, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+    text-align: center;
+}
+
+.ticket-result.error {
+    background: rgba(255, 59, 48, 0.1);
+    border: 1px solid rgba(255, 59, 48, 0.3);
+    color: #ff7b7b;
+}
+
+.ticket-result.success {
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.ticket-found {
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.ticket-found h4 {
+    font-size: 16px;
+    color: #00d4ff;
+    margin-bottom: 15px;
+}
+
+.ticket-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.ticket-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ticket-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.field-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.field-value {
+    font-size: 14px;
+    color: #e8e8e8;
+}
+
+.field-value.description {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+/* Status and Type Badges */
+.field-value.type-feature {
+    color: #a78bfa;
+}
+
+.field-value.type-bug {
+    color: #f87171;
+}
+
+.field-value.type-improvement {
+    color: #60a5fa;
+}
+
+.field-value.status-open {
+    color: #34d399;
+}
+
+.field-value.status-closed {
+    color: #9ca3af;
+}
+
+.field-value.status-in-progress {
+    color: #fbbf24;
+}
