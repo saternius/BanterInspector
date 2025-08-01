@@ -7,6 +7,8 @@ export class Feedback {
         this.speechBuffer = '';
         this.rlen = 0;
         this.timeoutId = null;
+        this.db = null;
+        this.initFirebase();
         this.init();
     }
     
@@ -14,6 +16,27 @@ export class Feedback {
         this.setupTypeButtons();
         this.setupSubmitButton();
         this.setupSpeechRecognition();
+        this.setupTicketLookup();
+    }
+    
+    initFirebase() {
+        // Firebase configuration
+        const firebaseConfig = window.FIREBASE_CONFIG || {
+            apiKey: '',
+            authDomain: '',
+            projectId: '',
+            storageBucket: '',
+            messagingSenderId: '',
+            appId: ''
+        };
+        
+        // Initialize Firebase only if not already initialized
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        
+        // Get Firestore instance
+        this.db = firebase.firestore();
     }
     
     setupTypeButtons() {
@@ -220,6 +243,15 @@ export class Feedback {
         };
         
         try {
+            // Generate ticket ID
+            const ticketId = this.generateTicketId();
+            feedback.ticketId = ticketId;
+            feedback.status = 'open';
+            
+            // Save to Firestore
+            await this.saveFeedbackToFirestore(feedback);
+            
+            // Also save locally as backup
             this.storeFeedbackLocally(feedback);
             
             // Create GitHub issue URL
@@ -228,7 +260,8 @@ export class Feedback {
             const githubUrl = `https://github.com/saternius/BanterInspector/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
             
             this.showStatus(
-                `Thank you for your feedback! <a href="${githubUrl}" target="_blank">Click here to create a GitHub issue</a>`,
+                `Thank you for your feedback! Your ticket number is <strong>#${ticketId}</strong><br>
+                <a href="${githubUrl}" target="_blank">Click here to create a GitHub issue</a>`,
                 'success'
             );
             
@@ -242,6 +275,68 @@ export class Feedback {
         }
     }
     
+    generateTicketId() {
+        // Generate a ticket ID in format: FB-YYYYMMDD-XXXX
+        const date = new Date();
+        const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+        const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+        return `FB-${dateStr}-${random}`;
+    }
+    
+    async saveFeedbackToFirestore(feedback) {
+        if (!this.db) {
+            throw new Error('Firestore not initialized');
+        }
+        
+        try {
+            // Add feedback to Firestore
+            await this.db.collection('feedback').doc(feedback.ticketId).set({
+                ...feedback,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            console.log('Feedback saved to Firestore:', feedback.ticketId);
+        } catch (error) {
+            console.error('Error saving to Firestore:', error);
+            // Don't throw - we'll still save locally
+        }
+    }
+    
+    async getFeedbackByTicket(ticketId) {
+        if (!this.db) return null;
+        
+        try {
+            const doc = await this.db.collection('feedback').doc(ticketId).get();
+            if (doc.exists) {
+                return { id: doc.id, ...doc.data() };
+            }
+            return null;
+        } catch (error) {
+            console.error('Error fetching feedback:', error);
+            return null;
+        }
+    }
+    
+    async getAllFeedback(limit = 50) {
+        if (!this.db) return [];
+        
+        try {
+            const snapshot = await this.db.collection('feedback')
+                .orderBy('createdAt', 'desc')
+                .limit(limit)
+                .get();
+                
+            return snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+        } catch (error) {
+            console.error('Error fetching all feedback:', error);
+            return [];
+        }
+    }
+    
     storeFeedbackLocally(feedback) {
         const feedbackHistory = JSON.parse(localStorage.getItem('inspector_feedback') || '[]');
         feedbackHistory.push(feedback);
@@ -250,6 +345,7 @@ export class Feedback {
     
     formatGitHubIssue(feedback) {
         let body = `**Type:** ${feedback.type}\n\n`;
+        body += `**Ticket ID:** ${feedback.ticketId}\n\n`;
         body += `**Description:**\n${feedback.details}\n\n`;
         
         if (feedback.email) {
@@ -274,5 +370,85 @@ export class Feedback {
                 statusEl.style.display = 'none';
             }, 10000);
         }
+    }
+    
+    setupTicketLookup() {
+        const lookupBtn = document.getElementById('lookupTicketBtn');
+        const lookupInput = document.getElementById('ticketLookupInput');
+        
+        if (!lookupBtn || !lookupInput) return;
+        
+        lookupBtn.addEventListener('click', () => this.lookupTicket());
+        lookupInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.lookupTicket();
+            }
+        });
+    }
+    
+    async lookupTicket() {
+        const ticketId = document.getElementById('ticketLookupInput').value.trim();
+        const resultDiv = document.getElementById('ticketResult');
+        
+        if (!ticketId) {
+            this.showTicketResult('Please enter a ticket ID', 'error');
+            return;
+        }
+        
+        this.showTicketResult('Looking up ticket...', 'loading');
+        
+        try {
+            const feedback = await this.getFeedbackByTicket(ticketId);
+            
+            if (feedback) {
+                const html = `
+                    <div class="ticket-found">
+                        <h4>Ticket #${feedback.ticketId}</h4>
+                        <div class="ticket-details">
+                            <div class="ticket-field">
+                                <span class="field-label">Type:</span>
+                                <span class="field-value type-${feedback.type}">${feedback.type}</span>
+                            </div>
+                            <div class="ticket-field">
+                                <span class="field-label">Status:</span>
+                                <span class="field-value status-${feedback.status}">${feedback.status}</span>
+                            </div>
+                            <div class="ticket-field">
+                                <span class="field-label">Submitted:</span>
+                                <span class="field-value">${new Date(feedback.timestamp).toLocaleString()}</span>
+                            </div>
+                            <div class="ticket-field full-width">
+                                <span class="field-label">Description:</span>
+                                <div class="field-value description">${this.escapeHtml(feedback.details)}</div>
+                            </div>
+                            ${feedback.email ? `
+                            <div class="ticket-field">
+                                <span class="field-label">Contact:</span>
+                                <span class="field-value">${this.escapeHtml(feedback.email)}</span>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                `;
+                this.showTicketResult(html, 'success');
+            } else {
+                this.showTicketResult('Ticket not found. Please check the ID and try again.', 'error');
+            }
+        } catch (error) {
+            console.error('Error looking up ticket:', error);
+            this.showTicketResult('Failed to lookup ticket. Please try again later.', 'error');
+        }
+    }
+    
+    showTicketResult(content, type) {
+        const resultDiv = document.getElementById('ticketResult');
+        resultDiv.innerHTML = content;
+        resultDiv.className = `ticket-result ${type}`;
+        resultDiv.style.display = 'block';
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
