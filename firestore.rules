@@ -1,48 +1,15 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // Helper function to check if the request includes a valid client password
-    function hasValidClientPassword() {
-      return request.auth != null && 
-             request.auth.token.clientPassword != null &&
-             request.auth.token.clientPassword == resource.data.clientPassword;
-    }
-    
-    // Helper function to check if user is admin
-    function isAdmin() {
-      return request.auth != null && 
-             request.auth.token.admin == true;
-    }
-    
-    // Helper function to check if user owns the document
-    function isOwner() {
-      return request.auth != null && 
-             request.auth.uid == resource.data.createdBy;
-    }
-    
-    // Rules for feedback collection
     match /feedback/{ticketId} {
-      // Allow anyone with a valid client password to read feedback
-      allow read: if request.auth != null;
-      
-      // Allow anyone with a valid client password to create new feedback
-      allow create: if request.auth != null &&
-                      request.resource.data.createdBy == request.auth.uid &&
-                      request.resource.data.ticketId != null &&
-                      request.resource.data.timestamp != null;
-      
-      // Allow update only if user is the owner or an admin
-      allow update: if isOwner() || isAdmin();
-      
-      // Allow delete only if user is the owner or an admin
-      allow delete: if isOwner() || isAdmin();
+      allow read: if true;
+      allow create:if true;
+      allow update: if true;
+      allow delete: if true;
     }
-    
-    // Optional: Collection for storing admin users
-    match /admins/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow write: if false; // Only set through Firebase Admin SDK
+    match /{document=**} {
+      allow read, write: if true;
     }
   }
 }

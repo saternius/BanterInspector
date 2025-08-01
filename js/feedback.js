@@ -221,7 +221,7 @@ export class Feedback {
             timestamp: new Date().toISOString(),
             inspector_version: '1.0.0',
             user_agent: navigator.userAgent,
-            createdBy: this.getUserId()
+            createdBy: networking.getUserId()
         };
         
         try {
@@ -264,15 +264,7 @@ export class Feedback {
         return `FB-${dateStr}-${random}`;
     }
     
-    getUserId() {
-        // Generate or retrieve a persistent user ID for this browser
-        let userId = localStorage.getItem('inspector_user_id');
-        if (!userId) {
-            userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('inspector_user_id', userId);
-        }
-        return userId;
-    }
+    
     
     async saveFeedbackToFirestore(feedback) {
         try {

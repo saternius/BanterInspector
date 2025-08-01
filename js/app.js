@@ -293,8 +293,9 @@
 
                 SM.scene.On("loaded", async () => {
                     console.log('Loaded fired');
-                    setTimeout(()=>{
+                    setTimeout(async ()=>{
                         SM.setup();
+                        await networking.initFirebase();
                     }, 1000)
                 });
 

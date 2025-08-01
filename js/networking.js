@@ -48,12 +48,13 @@ export class Networking {
     initFirebase() {
         // Firebase configuration
         const firebaseConfig = window.FIREBASE_CONFIG || {
-            apiKey: '',
-            authDomain: '',
-            projectId: '',
-            storageBucket: '',
-            messagingSenderId: '',
-            appId: ''
+            apiKey: "AIzaSyBrWGOkEJ6YjFmhXqvujbtDjWII3udLpWs",
+            authDomain: "inspector-6bad1.firebaseapp.com",
+            projectId: "inspector-6bad1",
+            storageBucket: "inspector-6bad1.firebasestorage.app",
+            messagingSenderId: "565892382854",
+            appId: "1:565892382854:web:06cc45d58cc0f0e3205107",
+            measurementId: "G-3S4G5E0GVK"
         };
         
         // Initialize Firebase only if not already initialized

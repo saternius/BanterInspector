@@ -26,6 +26,7 @@ console.log("It is 3:00")
             this.loaded = false;
             this.saveMethod = "aggressive"
         }
+        
 
         myName(){
             return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
