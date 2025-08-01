@@ -7,8 +7,6 @@ export class Feedback {
         this.speechBuffer = '';
         this.rlen = 0;
         this.timeoutId = null;
-        this.db = null;
-        this.initFirebase();
         this.init();
     }
     
@@ -20,25 +18,6 @@ export class Feedback {
         this.setupTicketLookup();
     }
     
-    initFirebase() {
-        // Firebase configuration
-        const firebaseConfig = window.FIREBASE_CONFIG || {
-            apiKey: '',
-            authDomain: '',
-            projectId: '',
-            storageBucket: '',
-            messagingSenderId: '',
-            appId: ''
-        };
-        
-        // Initialize Firebase only if not already initialized
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        
-        // Get Firestore instance
-        this.db = firebase.firestore();
-    }
 
     async get_key(){
         let key = await fetch(`https://banterbrush.com/something-for-the-time`);
@@ -288,13 +267,15 @@ export class Feedback {
     }
     
     async saveFeedbackToFirestore(feedback) {
-        if (!this.db) {
-            throw new Error('Firestore not initialized');
-        }
-        
         try {
-            // Add feedback to Firestore
-            await this.db.collection('feedback').doc(feedback.ticketId).set({
+            // Get networking instance to access Firestore
+            const networking = window.networking;
+            if (!networking || !networking.getFirestore()) {
+                throw new Error('Firestore not available');
+            }
+            
+            // Add feedback to Firestore using networking utilities
+            await networking.setDocument('feedback', feedback.ticketId, {
                 ...feedback,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -308,14 +289,11 @@ export class Feedback {
     }
     
     async getFeedbackByTicket(ticketId) {
-        if (!this.db) return null;
-        
         try {
-            const doc = await this.db.collection('feedback').doc(ticketId).get();
-            if (doc.exists) {
-                return { id: doc.id, ...doc.data() };
-            }
-            return null;
+            const networking = window.networking;
+            if (!networking || !networking.getFirestore()) return null;
+            
+            return await networking.getDocument('feedback', ticketId);
         } catch (error) {
             console.error('Error fetching feedback:', error);
             return null;
@@ -323,18 +301,16 @@ export class Feedback {
     }
     
     async getAllFeedback(limit = 50) {
-        if (!this.db) return [];
-        
         try {
-            const snapshot = await this.db.collection('feedback')
-                .orderBy('createdAt', 'desc')
-                .limit(limit)
-                .get();
-                
-            return snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            }));
+            const networking = window.networking;
+            if (!networking || !networking.getFirestore()) return [];
+            
+            return await networking.queryDocuments(
+                'feedback',
+                [],
+                { field: 'createdAt', direction: 'desc' },
+                limit
+            );
         } catch (error) {
             console.error('Error fetching all feedback:', error);
             return [];
