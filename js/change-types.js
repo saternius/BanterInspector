@@ -850,7 +850,7 @@ export class CreateFolderChange{
         localStorage.setItem(storageKey, JSON.stringify(folder));
         
         // Update local folders
-        this.folders[trimmedName] = folder;
+        inventory.folders[trimmedName] = folder;
         return true;
     }
 
