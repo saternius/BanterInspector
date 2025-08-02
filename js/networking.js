@@ -1,5 +1,3 @@
-let localhost = window.location.hostname === 'localhost'
-let basePath = localhost ? '.' : `${window.repoUrl}/js`;
 
 function safeParse(value) {
     // Only operate on strings

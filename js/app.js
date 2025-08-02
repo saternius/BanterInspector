@@ -5,22 +5,20 @@
  * the inspector application.
  */
 (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-    const  { sceneManager } = await import(`${basePath}/scene-manager.js`);
-    const  { networking } = await import(`${basePath}/networking.js`);
-
-    const  { HierarchyPanel } = await import(`${basePath}/hierarchy-panel.js`);
-    const  { PropertiesPanel } = await import(`${basePath}/properties-panel.js`);
-    const  { SpacePropsPanel } = await import(`${basePath}/space-props-panel.js`);
-    const  { ComponentMenu } = await import(`${basePath}/component-menu.js`);
-    const  { loadMockSpaceProps } = await import(`${basePath}/mock-data.js`);
-    const  { Navigation } = await import(`${basePath}/navigation.js`);
-    const  { Inventory } = await import(`${basePath}/inventory.js`);
-    const  { ScriptEditor } = await import(`${basePath}/script-editor.js`);
-    const  { lifecycleManager } = await import(`${basePath}/lifecycle-manager.js`);
-    const  { changeManager } = await import(`${basePath}/change-manager.js`);
-    const  { LifecyclePanel } = await import(`${basePath}/lifecycle-panel.js`);
-    const  { Feedback } = await import(`${basePath}/feedback.js`);
+    const  { sceneManager } = await import(`${window.repoUrl}/js/scene-manager.js`);
+    const  { networking } = await import(`${window.repoUrl}/js/networking.js`);
+    const  { HierarchyPanel } = await import(`${window.repoUrl}/js/hierarchy-panel.js`);
+    const  { PropertiesPanel } = await import(`${window.repoUrl}/js/properties-panel.js`);
+    const  { SpacePropsPanel } = await import(`${window.repoUrl}/js/space-props-panel.js`);
+    const  { ComponentMenu } = await import(`${window.repoUrl}/js/component-menu.js`);
+    const  { loadMockSpaceProps } = await import(`${window.repoUrl}/js/mock-data.js`);
+    const  { Navigation } = await import(`${window.repoUrl}/js/navigation.js`);
+    const  { Inventory } = await import(`${window.repoUrl}/js/inventory.js`);
+    const  { ScriptEditor } = await import(`${window.repoUrl}/js/script-editor.js`);
+    const  { lifecycleManager } = await import(`${window.repoUrl}/js/lifecycle-manager.js`);
+    const  { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
+    const  { LifecyclePanel } = await import(`${window.repoUrl}/js/lifecycle-panel.js`);
+    const  { Feedback } = await import(`${window.repoUrl}/js/feedback.js`);
 
     // Global app instance
     class InspectorApp {

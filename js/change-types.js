@@ -1,7 +1,6 @@
 // Import required dependencies
-let localhost = window.location.hostname === 'localhost'
-let basePath = localhost ? '.' : `${window.repoUrl}/js`;
-const { deepClone } = await import(`${basePath}/utils.js`);
+
+const { deepClone } = await import(`${window.repoUrl}/js/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 

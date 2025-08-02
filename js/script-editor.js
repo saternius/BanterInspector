@@ -1,5 +1,4 @@
-let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-const { EditScriptItemChange } = await import(`${basePath}/change-types.js`);
+const { EditScriptItemChange } = await import(`${window.repoUrl}/js/change-types.js`);
 
 export class ScriptEditor {
     constructor(scriptData) {

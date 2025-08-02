@@ -4,10 +4,9 @@
  */
 
 
-let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`; 
-const { changeManager } = await import(`${basePath}/change-manager.js`);
-const { ComponentAddChange } = await import(`${basePath}/change-types.js`);
-const { componentBundleMap } = await import( `${basePath}/components/index.js`);
+const { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
+const { ComponentAddChange } = await import(`${window.repoUrl}/js/change-types.js`);
+const { componentBundleMap } = await import( `${window.repoUrl}/js/components/index.js`);
 
 export class ComponentMenu {
     constructor() {

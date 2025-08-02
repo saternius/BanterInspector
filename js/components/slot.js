@@ -1,6 +1,5 @@
-let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
-const { TransformComponent } = await import(`${basePath}/components/transform.js`);
-const { deepClone } = await import(`${basePath}/utils.js`);
+const { TransformComponent } = await import(`${window.repoUrl}/js/components/transform.js`);
+const { deepClone } = await import(`${window.repoUrl}/js/utils.js`);
 
 export class Slot{
     async init(slotData){

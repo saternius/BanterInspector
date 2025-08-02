@@ -4,11 +4,10 @@
  */
 
 // (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
-    const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${basePath}/utils.js`);
-    const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange } = await import(`${basePath}/change-types.js`);
-    const { deepClone } = await import(`${basePath}/utils.js`);
+    const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${window.repoUrl}/js/utils.js`);
+    const { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
+    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange } = await import(`${window.repoUrl}/js/change-types.js`);
+    const { deepClone } = await import(`${window.repoUrl}/js/utils.js`);
     
     export class PropertiesPanel {
         constructor() {

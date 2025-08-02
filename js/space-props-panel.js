@@ -4,10 +4,9 @@
  */
 
 // (async () => {
-    let basePath = window.location.hostname === 'localhost'? '.' : `${window.repoUrl}/js`;
-    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${basePath}/utils.js`);
-    const { changeManager } = await import(`${basePath}/change-manager.js`);
-    const { SpacePropertyChange } = await import(`${basePath}/change-types.js`);
+    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${window.repoUrl}/js/utils.js`);
+    const { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
+    const { SpacePropertyChange } = await import(`${window.repoUrl}/js/change-types.js`);
 
     export class SpacePropsPanel {
         constructor() {

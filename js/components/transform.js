@@ -1,6 +1,5 @@
-let basePath = window.location.hostname === 'localhost'? '..' : `${window.repoUrl}/js`;
-const { SlotComponent } = await import(`${basePath}/components/slot-component.js`);
-const { eulerToQuaternion } = await import(`${basePath}/utils.js`);
+const { SlotComponent } = await import(`${window.repoUrl}/js/components/slot-component.js`);
+const { eulerToQuaternion } = await import(`${window.repoUrl}/js/utils.js`);
 
 export class TransformComponent extends SlotComponent {
     constructor(){
