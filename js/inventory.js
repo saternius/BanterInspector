@@ -177,6 +177,10 @@ export class Inventory {
                         <span class="upload-icon">⬇️</span>
                         Import
                     </button>
+                    <button class="make-remote-button" id="makeRemoteBtn">
+                        <span class="remote-icon">☁️</span>
+                        Make Remote
+                    </button>
                     <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                 </div>
             </div>
@@ -261,6 +265,12 @@ export class Inventory {
         const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
         if (newFolderBtn) {
             newFolderBtn.addEventListener('click', () => this.createNewFolder());
+        }
+        
+        // Add event listener for make remote button
+        const makeRemoteBtn = inventoryContainer.querySelector('#makeRemoteBtn');
+        if (makeRemoteBtn) {
+            makeRemoteBtn.addEventListener('click', () => this.makeRemote());
         }
         
         // Add event listeners for folder items
@@ -1487,6 +1497,200 @@ export class Inventory {
             }
         };
         document.addEventListener('keydown', handleKeydown);
+    }
+    
+    /**
+     * Calculate the size of an item or folder and its contents
+     */
+    calculateSize(itemOrFolderName, isFolder = false) {
+        let totalSize = 0;
+        
+        if (isFolder) {
+            // Calculate size of all items in this folder
+            Object.entries(this.items).forEach(([key, item]) => {
+                if (item.folder === itemOrFolderName) {
+                    const itemData = JSON.stringify(item);
+                    totalSize += new Blob([itemData]).size;
+                }
+            });
+            
+            // Calculate size of all subfolders
+            Object.entries(this.folders).forEach(([key, folder]) => {
+                if (folder.parent === itemOrFolderName) {
+                    totalSize += this.calculateSize(key, true);
+                }
+            });
+        } else {
+            // Calculate size of single item
+            const item = this.items[itemOrFolderName];
+            if (item) {
+                const itemData = JSON.stringify(item);
+                totalSize = new Blob([itemData]).size;
+            }
+        }
+        
+        return totalSize;
+    }
+    
+    /**
+     * Get all items and folders in the current view
+     */
+    getCurrentViewContents() {
+        const contents = {
+            items: {},
+            folders: {}
+        };
+        
+        // Get items in current folder
+        Object.entries(this.items).forEach(([key, item]) => {
+            if ((item.folder || null) === this.currentFolder) {
+                contents.items[key] = item;
+            }
+        });
+        
+        // Get folders in current folder
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === this.currentFolder) {
+                contents.folders[key] = folder;
+            }
+        });
+        
+        return contents;
+    }
+    
+    /**
+     * Get all contents recursively from a folder
+     */
+    getFolderContentsRecursive(folderName) {
+        const contents = {
+            items: {},
+            folders: {}
+        };
+        
+        // Get all items in this folder
+        Object.entries(this.items).forEach(([key, item]) => {
+            if (item.folder === folderName) {
+                contents.items[key] = item;
+            }
+        });
+        
+        // Get all subfolders and their contents
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === folderName) {
+                contents.folders[key] = folder;
+                // Recursively get subfolder contents
+                const subContents = this.getFolderContentsRecursive(key);
+                Object.assign(contents.items, subContents.items);
+                Object.assign(contents.folders, subContents.folders);
+            }
+        });
+        
+        return contents;
+    }
+    
+    /**
+     * Make items remote - upload to Firebase
+     */
+    async makeRemote() {
+        if (!SM.scene?.localUser?.name) {
+            this.showNotification('User not logged in. Cannot upload to Firebase.');
+            return;
+        }
+        
+        const userName = SM.scene.localUser.name;
+        const contents = this.getCurrentViewContents();
+        let totalSize = 0;
+        
+        // Calculate total size
+        Object.keys(contents.items).forEach(itemName => {
+            totalSize += this.calculateSize(itemName, false);
+        });
+        
+        Object.keys(contents.folders).forEach(folderName => {
+            totalSize += this.calculateSize(folderName, true);
+        });
+        
+        // Check if total size exceeds 1MB
+        const oneMB = 1024 * 1024;
+        if (totalSize > oneMB) {
+            this.showNotification(`Total size (${(totalSize / oneMB).toFixed(2)}MB) exceeds 1MB limit.`);
+            return;
+        }
+        
+        // Show confirmation modal
+        const itemCount = Object.keys(contents.items).length;
+        const folderCount = Object.keys(contents.folders).length;
+        const sizeInMB = (totalSize / oneMB).toFixed(2);
+        
+        this.showConfirmModal(
+            `Upload ${itemCount} items and ${folderCount} folders (${sizeInMB}MB) to Firebase?`,
+            async () => {
+                await this.uploadToFirebase(contents, userName);
+            },
+            'Upload to Firebase'
+        );
+    }
+    
+    /**
+     * Upload contents to Firebase
+     */
+    async uploadToFirebase(contents, userName) {
+        try {
+            // Initialize Firebase if not already done
+            if (!window.firebase || !window.firebase.database) {
+                this.showNotification('Firebase not initialized. Please check configuration.');
+                return;
+            }
+            
+            const db = window.firebase.database();
+            const basePath = `inventory/${userName}`;
+            
+            // Upload items
+            for (const [itemName, item] of Object.entries(contents.items)) {
+                const itemPath = this.currentFolder 
+                    ? `${basePath}/${this.currentFolder}/${itemName}`
+                    : `${basePath}/${itemName}`;
+                
+                await db.ref(itemPath).set(item);
+            }
+            
+            // Upload folders and their contents recursively
+            for (const [folderName, folder] of Object.entries(contents.folders)) {
+                const folderPath = this.currentFolder
+                    ? `${basePath}/${this.currentFolder}/${folderName}`
+                    : `${basePath}/${folderName}`;
+                
+                // Upload folder metadata
+                await db.ref(`${folderPath}/_folder`).set(folder);
+                
+                // Get and upload folder contents recursively
+                const folderContents = this.getFolderContentsRecursive(folderName);
+                
+                // Upload items in folder
+                for (const [itemName, item] of Object.entries(folderContents.items)) {
+                    const itemPath = item.folder
+                        ? `${basePath}/${item.folder}/${itemName}`
+                        : `${folderPath}/${itemName}`;
+                    
+                    await db.ref(itemPath).set(item);
+                }
+                
+                // Upload subfolders
+                for (const [subfolderName, subfolder] of Object.entries(folderContents.folders)) {
+                    const subfolderPath = subfolder.parent
+                        ? `${basePath}/${subfolder.parent}/${subfolderName}`
+                        : `${folderPath}/${subfolderName}`;
+                    
+                    await db.ref(`${subfolderPath}/_folder`).set(subfolder);
+                }
+            }
+            
+            this.showNotification('Successfully uploaded to Firebase!');
+            
+        } catch (error) {
+            console.error('Firebase upload error:', error);
+            this.showNotification(`Upload failed: ${error.message}`);
+        }
     }
     
 }

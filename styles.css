@@ -248,6 +248,31 @@ body {
     font-size: 16px;
 }
 
+.make-remote-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.make-remote-button:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.remote-icon {
+    font-size: 16px;
+}
+
 .export-button {
     display: flex;
     align-items: center;
