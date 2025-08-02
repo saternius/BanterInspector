@@ -3536,6 +3536,118 @@ body {
     font-style: italic;
 }
 
+/* Comment Editing Styles */
+.comment-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.comment-edit-btn,
+.comment-delete-btn {
+    padding: 4px 12px;
+    background: transparent;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    color: #888;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.comment-edit-btn:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.comment-delete-btn:hover {
+    background: rgba(255, 59, 48, 0.1);
+    border-color: #ff3b30;
+    color: #ff3b30;
+}
+
+/* Comment Edit Form */
+.comment-edit-form {
+    margin-top: 10px;
+}
+
+.comment-edit-textarea {
+    width: 100%;
+    padding: 10px;
+    background: #1a1a1a;
+    border: 1px solid #00d4ff;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.2s ease;
+}
+
+.comment-edit-textarea:focus {
+    outline: none;
+    background: #202020;
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+.comment-edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.comment-save-btn,
+.comment-cancel-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.comment-save-btn {
+    background: #00a8cc;
+    color: #ffffff;
+    border-color: #00d4ff;
+}
+
+.comment-save-btn:hover {
+    background: #00c6ed;
+    border-color: #4de6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.comment-cancel-btn {
+    background: #2a2a2a;
+    color: #e8e8e8;
+    border-color: #3a3a3a;
+}
+
+.comment-cancel-btn:hover {
+    background: #333;
+    border-color: #4a4a4a;
+}
+
+/* Enhanced comment header for edit mode */
+.comment-item.editing .comment-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 12px;
+}
+
+/* Edited indicator */
+.comment-time .edited-indicator {
+    color: #666;
+    font-style: italic;
+    margin-left: 4px;
+}
+
 .empty-tickets {
     text-align: center;
     color: #666;
