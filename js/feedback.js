@@ -234,8 +234,8 @@ export class Feedback {
             feedback.ticketId = ticketId;
             feedback.status = 'open';
             
-            // Save to Firestore
-            await this.saveFeedbackToFirestore(feedback);
+            // Save to Firebase
+            await this.saveFeedbackToFirebase(feedback);
             
             // Also save locally as backup
             this.storeFeedbackLocally(feedback);
@@ -244,6 +244,10 @@ export class Feedback {
                 `Thank you for your feedback! Your ticket number is <strong>#${ticketId}</strong><br>`,
                 'success'
             );
+
+            setTimeout(()=>{
+                this.loadAllTickets()
+            }, 250)
             
             // Clear form
             document.getElementById('feedbackDetails').value = '';            
@@ -263,28 +267,26 @@ export class Feedback {
     
     
     
-    async saveFeedbackToFirestore(feedback) {
-        console.log("saving feedback to firestore =>", feedback)
+    async saveFeedbackToFirebase(feedback) {
+        console.log("saving feedback to firebase =>", feedback)
         try {
-            // Get networking instance to access Firestore REST
+            // Get networking instance to access Firebase
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            if (!rest) {
-                throw new Error('Firestore REST client not available');
+            if (!db) {
+                throw new Error('Firebase Database not available');
             }
             
-            // Save to public collection: feedback/tickets/{ticketId}
-            const collectionPath = `feedback/tickets`;
-            
-            await rest.setDocument(collectionPath, feedback.ticketId, {
+            // Save to public path: feedback/tickets/{ticketId}
+            await db.ref(`feedback/tickets/${feedback.ticketId}`).set({
                 ...feedback,
-                createdAt: new Date().toISOString()
+                createdAt: firebase.database.ServerValue.TIMESTAMP
             });
             
-            console.log('Feedback saved via REST API:', `${collectionPath}/${feedback.ticketId}`);
+            console.log('Feedback saved to Firebase:', `feedback/tickets/${feedback.ticketId}`);
         } catch (error) {
-            console.error('Error saving to Firestore:', error);
+            console.error('Error saving to Firebase:', error);
             // Don't throw - we'll still save locally
         }
     }
@@ -292,15 +294,18 @@ export class Feedback {
     async getFeedbackByTicket(ticketId) {
         try {
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            if (!rest) return null;
+            if (!db) return null;
             
-            // Get from public collection
-            const collectionPath = `feedback/tickets`;
-            const doc = await rest.getDocument(collectionPath, ticketId);
+            // Get from public path
+            const snapshot = await db.ref(`feedback/tickets/${ticketId}`).once('value');
             
-            return doc;
+            if (snapshot.exists()) {
+                return { id: ticketId, ...snapshot.val() };
+            }
+            
+            return null;
             
         } catch (error) {
             console.error('Error fetching feedback:', error);
@@ -430,15 +435,23 @@ export class Feedback {
         
         try {
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            if (!rest) {
-                throw new Error('Firestore REST client not available');
+            if (!db) {
+                throw new Error('Firebase Database not available');
             }
             
-            // Get all tickets from public collection
-            const result = await rest.listDocuments('feedback/tickets', { limit: 100 });
-            const allTickets = result.documents || [];
+            // Get all tickets from public path
+            const snapshot = await db.ref('feedback/tickets').once('value');
+            const allTickets = [];
+            
+            snapshot.forEach(childSnapshot => {
+                allTickets.push({
+                    id: childSnapshot.key,
+                    ticketId: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
             
             // Sort by creation date (newest first)
             allTickets.sort((a, b) => {
@@ -527,6 +540,21 @@ export class Feedback {
         const ticket = this.tickets.find(t => t.ticketId === ticketId);
         if (!ticket) return;
         
+        // Fetch fresh ticket data to ensure we have latest comments
+        try {
+            const networking = window.networking;
+            const db = networking?.getDatabase();
+            if (db) {
+                const snapshot = await db.ref(`feedback/tickets/${ticketId}`).once('value');
+                if (snapshot.exists()) {
+                    const latestData = snapshot.val();
+                    Object.assign(ticket, latestData);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching latest ticket data:', error);
+        }
+        
         this.currentTicket = ticket;
         
         const modal = document.getElementById('ticketDetailModal');
@@ -588,6 +616,23 @@ export class Feedback {
         const commentsList = document.getElementById('commentsList');
         
         try {
+            // Fetch latest ticket data to ensure we have updated comments
+            const networking = window.networking;
+            const db = networking?.getDatabase();
+            
+            if (db) {
+                const snapshot = await db.ref(`feedback/tickets/${ticket.ticketId}`).once('value');
+                if (snapshot.exists()) {
+                    const latestData = snapshot.val();
+                    ticket.comments = latestData.comments || [];
+                    
+                    // Update the current ticket reference
+                    if (this.currentTicket && this.currentTicket.ticketId === ticket.ticketId) {
+                        this.currentTicket.comments = ticket.comments;
+                    }
+                }
+            }
+            
             const comments = ticket.comments || [];
             
             if (comments.length === 0) {
@@ -624,14 +669,14 @@ export class Feedback {
         
         try {
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            if (!rest) {
-                throw new Error('Firestore REST client not available');
+            if (!db) {
+                throw new Error('Firebase Database not available');
             }
             
             const comment = {
-                author: SM.scene.localUser.name || networking.getUserId(),
+                author: (SM.scene?.localUser?.name) || networking.getUserId() || 'Anonymous',
                 content: content,
                 timestamp: new Date().toISOString()
             };
@@ -639,9 +684,14 @@ export class Feedback {
             // Update the ticket with the new comment
             const updatedComments = [...(this.currentTicket.comments || []), comment];
             
-            const collectionPath = `feedback/tickets`;
-            await rest.setDocument(collectionPath, this.currentTicket.ticketId, {
-                ...this.currentTicket,
+            // First get the current ticket data to preserve all fields
+            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
+            const currentSnapshot = await ticketRef.once('value');
+            const currentData = currentSnapshot.val() || this.currentTicket;
+            
+            // Update with new comments
+            await ticketRef.set({
+                ...currentData,
                 comments: updatedComments,
                 updatedAt: new Date().toISOString()
             });
@@ -673,11 +723,13 @@ export class Feedback {
         
         try {
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            const collectionPath = `feedback/tickets`;
-            await rest.setDocument(collectionPath, ticketId, {
-                ...ticket,
+            if (!db) {
+                throw new Error('Firebase Database not available');
+            }
+            
+            await db.ref(`feedback/tickets/${ticketId}`).update({
                 status: newStatus,
                 updatedAt: new Date().toISOString()
             });
@@ -700,10 +752,13 @@ export class Feedback {
         
         try {
             const networking = window.networking;
-            const rest = networking?.getFirestoreREST();
+            const db = networking?.getDatabase();
             
-            const collectionPath = `feedback/tickets`;
-            await rest.deleteDocument(collectionPath, ticketId);
+            if (!db) {
+                throw new Error('Firebase Database not available');
+            }
+            
+            await db.ref(`feedback/tickets/${ticketId}`).remove();
             
             // Remove from local data
             this.tickets = this.tickets.filter(t => t.ticketId !== ticketId);

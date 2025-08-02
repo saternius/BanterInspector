@@ -54,7 +54,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script>
-        const isLocal = window.location.hostname === 'localhost';
+        window.isLocalHost = window.location.hostname === 'localhost';
         window.repoUrl = 'https://saternius.github.io/BanterInspector'
         window.fileServer = localStorage.getItem('file_server');
         if(window.fileServer === "local"){
