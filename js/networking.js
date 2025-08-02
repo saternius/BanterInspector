@@ -325,7 +325,7 @@ export class Networking {
             SM.scene.spaceState.public[key] = value;
         }
         
-        if(localhost){
+        if(window.isLocalHost){
             this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
             //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
         }

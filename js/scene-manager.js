@@ -5,7 +5,7 @@
 
 console.log("It is 3:00")
 // (async () => {
-    let localhost = window.location.hostname === 'localhost'
+    // let localhost = window.location.hostname === 'localhost'
     const { loadMockSlotData } = await import(`${window.repoUrl}/js/mock-data.js`);
     const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/js/components/index.js`);
 
@@ -62,7 +62,7 @@ console.log("It is 3:00")
                     if(this.loaded) return;
                     
                     console.log("setting up inspector")
-                    if(localhost){
+                    if(window.isLocalHost){
                         let lastSpaceState = localStorage.getItem('lastSpaceState');
                         if(lastSpaceState){
                             this.scene.spaceState = JSON.parse(lastSpaceState);
@@ -116,7 +116,7 @@ console.log("It is 3:00")
 
         // Resets the SpaceProperties
         async reset(){
-            if(localhost){
+            if(window.isLocalHost){
                 localStorage.removeItem('lastSpaceState');
             }
             this.loaded = false;
