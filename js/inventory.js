@@ -1180,13 +1180,22 @@ export class Inventory {
         this.showFolderNameModal((folderName) => {
             if (!folderName || folderName.trim() === '') return;
             
-            let change = new CreateFolderChange(folderName, this.currentFolder, {source: 'ui'});
+            // Validate folder name for Firebase compliance
+            if (!this.isValidFirebasePath(folderName)) {
+                this.showNotification('Folder name cannot contain: . $ # [ ] / or be empty');
+                return;
+            }
+            
+            // Sanitize the folder name
+            const sanitizedName = this.sanitizeFirebasePath(folderName);
+            
+            let change = new CreateFolderChange(sanitizedName, this.currentFolder, {source: 'ui'});
             changeManager.applyChange(change);
             
             // Re-render
             this.render();
             
-            this.showNotification(`Created folder "${trimmedName}"`);
+            this.showNotification(`Created folder "${sanitizedName}"`);
         });
     }
     
@@ -1387,7 +1396,7 @@ export class Inventory {
             <div class="modal-body">
                 <label for="folderNameInput">Folder Name:</label>
                 <input type="text" id="folderNameInput" placeholder="New Folder" autocomplete="off">
-                <div class="modal-hint">Enter a name for your folder</div>
+                <div class="modal-hint">Enter a name for your folder (cannot contain: . $ # [ ] /)</div>
                 <div class="modal-error" id="modalError" style="display: none;"></div>
             </div>
             <div class="modal-footer">
@@ -1414,6 +1423,23 @@ export class Inventory {
         
         const handleCreate = () => {
             const folderName = input.value.trim();
+            const errorDiv = modalContent.querySelector('#modalError');
+            
+            // Validate folder name
+            if (!folderName) {
+                errorDiv.textContent = 'Please enter a folder name';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Check for invalid characters
+            const invalidChars = /[\.\$#\[\]\/]/;
+            if (invalidChars.test(folderName)) {
+                errorDiv.textContent = 'Folder name cannot contain: . $ # [ ] /';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
             closeModal();
             onConfirm(folderName);
         };
@@ -1497,6 +1523,32 @@ export class Inventory {
             }
         };
         document.addEventListener('keydown', handleKeydown);
+    }
+    
+    /**
+     * Sanitize a string to be Firebase path compliant
+     * Firebase paths cannot contain: . $ # [ ] /
+     * Also removes leading/trailing whitespace and replaces spaces with underscores
+     */
+    sanitizeFirebasePath(str) {
+        if (!str) return '';
+        
+        // Replace invalid characters with underscores
+        return str
+            .trim()
+            .replace(/[\.\$#\[\]\/]/g, '_')
+            .replace(/\s+/g, '_') // Replace spaces with underscores
+            .replace(/_{2,}/g, '_') // Replace multiple underscores with single
+            .replace(/^_|_$/g, ''); // Remove leading/trailing underscores
+    }
+    
+    /**
+     * Validate if a folder name is Firebase compliant
+     */
+    isValidFirebasePath(str) {
+        // Check if string contains any invalid characters
+        const invalidChars = /[\.\$#\[\]\/]/;
+        return str && str.trim().length > 0 && !invalidChars.test(str);
     }
     
     /**
@@ -1597,7 +1649,7 @@ export class Inventory {
             return;
         }
         
-        const userName = SM.scene.localUser.name;
+        const userName = this.sanitizeFirebasePath(SM.scene.localUser.name);
         const contents = this.getCurrentViewContents();
         let totalSize = 0;
         
@@ -1647,18 +1699,22 @@ export class Inventory {
             
             // Upload items
             for (const [itemName, item] of Object.entries(contents.items)) {
-                const itemPath = this.currentFolder 
-                    ? `${basePath}/${this.currentFolder}/${itemName}`
-                    : `${basePath}/${itemName}`;
+                const sanitizedItemName = this.sanitizeFirebasePath(itemName);
+                const sanitizedCurrentFolder = this.currentFolder ? this.sanitizeFirebasePath(this.currentFolder) : null;
+                const itemPath = sanitizedCurrentFolder 
+                    ? `${basePath}/${sanitizedCurrentFolder}/${sanitizedItemName}`
+                    : `${basePath}/${sanitizedItemName}`;
                 
                 await db.ref(itemPath).set(item);
             }
             
             // Upload folders and their contents recursively
             for (const [folderName, folder] of Object.entries(contents.folders)) {
-                const folderPath = this.currentFolder
-                    ? `${basePath}/${this.currentFolder}/${folderName}`
-                    : `${basePath}/${folderName}`;
+                const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
+                const sanitizedCurrentFolder = this.currentFolder ? this.sanitizeFirebasePath(this.currentFolder) : null;
+                const folderPath = sanitizedCurrentFolder
+                    ? `${basePath}/${sanitizedCurrentFolder}/${sanitizedFolderName}`
+                    : `${basePath}/${sanitizedFolderName}`;
                 
                 // Upload folder metadata
                 await db.ref(`${folderPath}/_folder`).set(folder);
@@ -1668,18 +1724,22 @@ export class Inventory {
                 
                 // Upload items in folder
                 for (const [itemName, item] of Object.entries(folderContents.items)) {
-                    const itemPath = item.folder
-                        ? `${basePath}/${item.folder}/${itemName}`
-                        : `${folderPath}/${itemName}`;
+                    const sanitizedItemName = this.sanitizeFirebasePath(itemName);
+                    const sanitizedItemFolder = item.folder ? this.sanitizeFirebasePath(item.folder) : null;
+                    const itemPath = sanitizedItemFolder
+                        ? `${basePath}/${sanitizedItemFolder}/${sanitizedItemName}`
+                        : `${folderPath}/${sanitizedItemName}`;
                     
                     await db.ref(itemPath).set(item);
                 }
                 
                 // Upload subfolders
                 for (const [subfolderName, subfolder] of Object.entries(folderContents.folders)) {
-                    const subfolderPath = subfolder.parent
-                        ? `${basePath}/${subfolder.parent}/${subfolderName}`
-                        : `${folderPath}/${subfolderName}`;
+                    const sanitizedSubfolderName = this.sanitizeFirebasePath(subfolderName);
+                    const sanitizedParent = subfolder.parent ? this.sanitizeFirebasePath(subfolder.parent) : null;
+                    const subfolderPath = sanitizedParent
+                        ? `${basePath}/${sanitizedParent}/${sanitizedSubfolderName}`
+                        : `${folderPath}/${sanitizedSubfolderName}`;
                     
                     await db.ref(`${subfolderPath}/_folder`).set(subfolder);
                 }
