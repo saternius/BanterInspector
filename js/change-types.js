@@ -535,10 +535,13 @@ export class LoadItemChange {
                             props[`__${component.id}/${prop}:component`] = component.properties[prop]
                         })
                     })
-    
-                    slot.children.forEach(child=>{
-                        getSubSlotProps(child)
-                    })
+
+                    if(slot.children){
+                        slot.children.forEach(child=>{
+                            getSubSlotProps(child)
+                        })
+                    }
+                    
                 }
     
                 getSubSlotProps(slot)

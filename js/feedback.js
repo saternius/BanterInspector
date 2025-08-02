@@ -280,7 +280,13 @@ export class Feedback {
         const date = new Date();
         const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        return `FB_${dateStr}_${random}`;
+        let accro = "BUG"
+        if(this.selectedType === "feature"){
+            accro = "FEAT"
+        }else if(this.selectedType === "improvement"){
+            accro = "IDEA"
+        }
+        return `${accro}_${dateStr}_${random}`;
     }
     
     
