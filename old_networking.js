@@ -677,7 +677,9 @@ export class Networking {
 
     async setSpaceProperty(key, value, isProtected) {
         if (!SM.scene) return;
-        value = JSON.stringify(value);
+        if( value[0] === "{" || value[0] === "["){
+            value = JSON.stringify(value);
+        }
 
         if (isProtected) {
             SM.scene.SetProtectedSpaceProps({ [key]: value });

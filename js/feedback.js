@@ -19,7 +19,12 @@ export class Feedback {
         this.setupSpeechRecognition();
         this.setupTicketLookup();
         this.setupTicketsList();
-        this.loadAllTickets();
+        window.addEventListener('page-switched', (e)=>{
+            console.log("page-switched", e.detail.pageId)
+            if(e.detail.pageId === 'feedback'){
+                this.loadAllTickets();
+            }
+        })
     }
     
 

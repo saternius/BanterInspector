@@ -82,6 +82,7 @@
                 window.navigation = this.navigation;
                 window.scriptEditors = this.scriptEditors;
                 window.lifecyclePanel = this.lifecyclePanel;
+                window.feedback = this.feedback;
                 
                 // Initial render
                 this.hierarchyPanel.render();

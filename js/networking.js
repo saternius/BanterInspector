@@ -209,7 +209,9 @@ export class Networking {
         const { changes } = event.detail;
         changes.forEach(async (change) => {
             let { property, newValue, isProtected } = change;
-            newValue = JSON.parse(newValue);
+            if(newValue[0] === "{" || newValue[0] === "["){
+                newValue = JSON.parse(newValue);
+            }
             if (isProtected) {
                 SM.scene.spaceState.protected[property] = newValue;
             } else {
