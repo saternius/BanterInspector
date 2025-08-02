@@ -231,6 +231,10 @@ export class Inventory {
                         <span class="upload-icon">⬇️</span>
                         Import
                     </button>
+                    <button class="import-firebase-button" id="importFirebaseBtn" title="Import from Firebase">
+                        <span class="import-firebase-icon">☁️⬇️</span>
+                        Import Remote
+                    </button>
                     ${this.isRemote ? `
                         <button class="make-remote-button remote-status" id="remoteStatusBtn" disabled>
                             <span class="remote-icon">☁️</span>
@@ -341,6 +345,12 @@ export class Inventory {
         const copyLinkBtn = inventoryContainer.querySelector('#copyLinkBtn');
         if (copyLinkBtn) {
             copyLinkBtn.addEventListener('click', () => this.copyFirebaseRef());
+        }
+        
+        // Add event listener for import from Firebase button
+        const importFirebaseBtn = inventoryContainer.querySelector('#importFirebaseBtn');
+        if (importFirebaseBtn) {
+            importFirebaseBtn.addEventListener('click', () => this.showImportFirebaseModal());
         }
         
         // Add event listeners for folder items
@@ -1844,6 +1854,207 @@ export class Inventory {
         } catch (error) {
             console.error('Firebase upload error:', error);
             this.showNotification(`Upload failed: ${error.message}`);
+        }
+    }
+    
+    /**
+     * Show import from Firebase modal
+     */
+    showImportFirebaseModal() {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>Import from Firebase</h3>
+                <button class="modal-close-btn" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body">
+                <label for="firebaseRefInput">Firebase Reference Path:</label>
+                <input type="text" id="firebaseRefInput" placeholder="inventory/username/folder" autocomplete="off">
+                <div class="modal-hint">Enter a Firebase inventory path (e.g., inventory/john_doe/scripts)</div>
+                <div class="modal-error" id="modalError" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-import-btn" id="modalImportBtn">Import</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Focus on input
+        const input = modalContent.querySelector('#firebaseRefInput');
+        setTimeout(() => input.focus(), 100);
+        
+        // Setup event listeners
+        const closeBtn = modalContent.querySelector('#modalCloseBtn');
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const importBtn = modalContent.querySelector('#modalImportBtn');
+        const errorDiv = modalContent.querySelector('#modalError');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        const handleImport = async () => {
+            const firebaseRef = input.value.trim();
+            
+            if (!firebaseRef) {
+                errorDiv.textContent = 'Please enter a Firebase reference';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Validate format - should start with "inventory/"
+            if (!firebaseRef.startsWith('inventory/')) {
+                errorDiv.textContent = 'Reference must start with "inventory/"';
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            importBtn.textContent = 'Importing...';
+            importBtn.disabled = true;
+            
+            try {
+                const success = await this.importFromFirebase(firebaseRef);
+                if (success) {
+                    closeModal();
+                } else {
+                    errorDiv.textContent = 'No data found at this reference or import failed';
+                    errorDiv.style.display = 'block';
+                    importBtn.textContent = 'Import';
+                    importBtn.disabled = false;
+                }
+            } catch (error) {
+                errorDiv.textContent = `Import error: ${error.message}`;
+                errorDiv.style.display = 'block';
+                importBtn.textContent = 'Import';
+                importBtn.disabled = false;
+            }
+        };
+        
+        // Event listeners
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        importBtn.addEventListener('click', handleImport);
+        
+        // Enter key to import
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleImport();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Click outside to close
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    }
+    
+    /**
+     * Import inventory items from Firebase reference
+     */
+    async importFromFirebase(firebaseRef) {
+        if (!window.firebase || !window.firebase.database) {
+            this.showNotification('Firebase not initialized');
+            return false;
+        }
+        
+        try {
+            const db = window.firebase.database();
+            const snapshot = await db.ref(firebaseRef).once('value');
+            
+            if (!snapshot.exists()) {
+                return false;
+            }
+            
+            const data = snapshot.val();
+            let importedCount = 0;
+            
+            // Process each item in the Firebase data
+            for (const [key, value] of Object.entries(data)) {
+                // Skip the _folder metadata entries
+                if (key === '_folder') continue;
+                
+                // Check if it's a folder based on presence of _folder child
+                if (value._folder) {
+                    // It's a folder - import it
+                    const folderData = value._folder;
+                    const folderName = folderData.name || key;
+                    
+                    // Check if folder already exists
+                    if (!this.folders[folderName]) {
+                        const folder = {
+                            ...folderData,
+                            parent: this.currentFolder,
+                            remote: false // Set to false as it's a local copy
+                        };
+                        
+                        // Save to localStorage
+                        const storageKey = `inventory_folder_${folderName}`;
+                        localStorage.setItem(storageKey, JSON.stringify(folder));
+                        
+                        // Update local folders
+                        this.folders[folderName] = folder;
+                        importedCount++;
+                    }
+                } else if (value.itemType) {
+                    // It's an item - import it
+                    const itemName = value.name || key;
+                    
+                    // Generate unique name if conflict exists
+                    let finalItemName = itemName;
+                    let counter = 1;
+                    while (this.items[finalItemName]) {
+                        finalItemName = `${itemName}_imported_${counter}`;
+                        counter++;
+                    }
+                    
+                    // Create item with current folder as parent
+                    const item = {
+                        ...value,
+                        folder: this.currentFolder,
+                        imported: true,
+                        importedFrom: firebaseRef,
+                        importedAt: Date.now()
+                    };
+                    
+                    // Save to localStorage
+                    const storageKey = `inventory_${finalItemName}`;
+                    localStorage.setItem(storageKey, JSON.stringify(item));
+                    
+                    // Update local items
+                    this.items[finalItemName] = item;
+                    importedCount++;
+                }
+            }
+            
+            if (importedCount > 0) {
+                // Reload and re-render
+                this.reload();
+                this.showNotification(`Successfully imported ${importedCount} item(s)`);
+                return true;
+            } else {
+                this.showNotification('No new items to import');
+                return false;
+            }
+            
+        } catch (error) {
+            console.error('Firebase import error:', error);
+            this.showNotification(`Import failed: ${error.message}`);
+            return false;
         }
     }
     

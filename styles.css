@@ -313,6 +313,52 @@ body {
     font-size: 18px;
 }
 
+.import-firebase-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.import-firebase-button:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.import-firebase-icon {
+    font-size: 16px;
+}
+
+.modal-import-btn {
+    padding: 8px 20px;
+    background: #00d4ff;
+    border: none;
+    color: #1a1a1a;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-import-btn:hover:not(:disabled) {
+    background: #00a8cc;
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.modal-import-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .export-button {
     display: flex;
     align-items: center;
