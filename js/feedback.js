@@ -230,8 +230,8 @@ export class Feedback {
             feedback.ticketId = ticketId;
             feedback.status = 'open';
             
-            // Save to Firestore
-            await this.saveFeedbackToFirestore(feedback);
+            // Save to Firebase
+            await this.saveFeedbackToFirebase(feedback);
             
             // Also save locally as backup
             this.storeFeedbackLocally(feedback);
@@ -261,28 +261,28 @@ export class Feedback {
     
     
     
-    async saveFeedbackToFirestore(feedback) {
-        console.log("saving feedback to firestore =>", feedback)
+    async saveFeedbackToFirebase(feedback) {
+        console.log("saving feedback to firebase =>", feedback)
         try {
-            // Get networking instance to access Firestore
+            // Get networking instance to access Firebase
             const networking = window.networking;
-            if (!networking || !networking.getFirestore()) {
-                throw new Error('Firestore not available');
+            if (!networking || !networking.getDatabase()) {
+                throw new Error('Firebase Database not available');
             }
             
             const userId = feedback.createdBy;
-            const db = networking.getFirestore();
+            const db = networking.getDatabase();
             
-            // Save to user-specific subcollection: /feedback/{userId}/{ticketId}
-            await db.collection('feedback').doc(userId).collection('tickets').doc(feedback.ticketId).set({
+            // Save to user-specific path: /feedback/{userId}/tickets/{ticketId}
+            await db.ref(`feedback/${userId}/tickets/${feedback.ticketId}`).set({
                 ...feedback,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
             });
             
-            console.log('Feedback saved to Firestore:', `feedback/${userId}/tickets/${feedback.ticketId}`);
+            console.log('Feedback saved to Firebase:', `feedback/${userId}/tickets/${feedback.ticketId}`);
         } catch (error) {
-            console.error('Error saving to Firestore:', error);
+            console.error('Error saving to Firebase:', error);
             // Don't throw - we'll still save locally
         }
     }
@@ -290,16 +290,16 @@ export class Feedback {
     async getFeedbackByTicket(ticketId) {
         try {
             const networking = window.networking;
-            if (!networking || !networking.getFirestore()) return null;
+            if (!networking || !networking.getDatabase()) return null;
             
-            const db = networking.getFirestore();
+            const db = networking.getDatabase();
             const userId = networking.getUserId();
             
             // First try to find in current user's tickets
-            let doc = await db.collection('feedback').doc(userId).collection('tickets').doc(ticketId).get();
+            let snapshot = await db.ref(`feedback/${userId}/tickets/${ticketId}`).once('value');
             
-            if (doc.exists) {
-                return { id: doc.id, ...doc.data() };
+            if (snapshot.exists()) {
+                return { id: ticketId, ...snapshot.val() };
             }
             
             // If not found, search all users (since ticketId should be unique)
@@ -317,23 +317,27 @@ export class Feedback {
     async getAllFeedback(limit = 50) {
         try {
             const networking = window.networking;
-            if (!networking || !networking.getFirestore()) return [];
+            if (!networking || !networking.getDatabase()) return [];
             
-            const db = networking.getFirestore();
+            const db = networking.getDatabase();
             const userId = networking.getUserId();
             
-            // Get all feedback for current user from their subcollection
-            const snapshot = await db.collection('feedback')
-                .doc(userId)
-                .collection('tickets')
-                .orderBy('createdAt', 'desc')
-                .limit(limit)
-                .get();
+            // Get all feedback for current user
+            const snapshot = await db.ref(`feedback/${userId}/tickets`)
+                .orderByChild('createdAt')
+                .limitToLast(limit)
+                .once('value');
             
-            return snapshot.docs.map(doc => ({ 
-                id: doc.id, 
-                ...doc.data() 
-            }));
+            const feedbacks = [];
+            snapshot.forEach(childSnapshot => {
+                feedbacks.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+            
+            // Reverse to get newest first
+            return feedbacks.reverse();
             
         } catch (error) {
             console.error('Error fetching all feedback:', error);

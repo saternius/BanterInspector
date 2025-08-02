@@ -40,10 +40,12 @@ let renderProps = ()=>{
 export class Networking {
     constructor(){
         this.db = null;
-        this.initFirebase();
+        // Delay Firebase initialization to ensure all dependencies are loaded
+        setTimeout(() => this.initFirebase(), 1000);
     }
     
     initFirebase() {
+        console.log("INITIALIZING FIREBASE")
         // Firebase configuration
         const firebaseConfig = window.FIREBASE_CONFIG || {
             apiKey: "AIzaSyBrWGOkEJ6YjFmhXqvujbtDjWII3udLpWs",
@@ -52,14 +54,52 @@ export class Networking {
             storageBucket: "inspector-6bad1.firebasestorage.app",
             messagingSenderId: "565892382854",
             appId: "1:565892382854:web:06cc45d58cc0f0e3205107",
-            measurementId: "G-3S4G5E0GVK"
+            measurementId: "G-3S4G5E0GVK",
+            databaseURL: "https://inspector-6bad1-default-rtdb.firebaseio.com"
         };
         
         // Initialize Firebase only if not already initialized
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-            this.db = firebase.firestore();
-            console.log('Firebase initialized in networking.js');
+            try {
+                firebase.initializeApp(firebaseConfig);
+                this.db = firebase.database();
+                
+                console.log('Firebase Realtime Database initialized');
+                
+                // Test the connection
+                this.testConnection();
+            } catch (error) {
+                console.error('Failed to initialize Firebase:', error);
+            }
+        }
+    }
+    
+    async testConnection() {
+        try {
+            console.log('Testing Firebase Realtime Database connection...');
+            
+            // Try a simple write operation
+            const testRef = this.db.ref('test/connection-test');
+            await testRef.set({
+                timestamp: firebase.database.ServerValue.TIMESTAMP,
+                test: true,
+                message: 'Realtime Database connection test'
+            });
+            
+            console.log('Realtime Database write successful');
+            
+            // Try to read it back
+            const snapshot = await testRef.once('value');
+            console.log('Realtime Database read successful:', snapshot.val());
+            
+            // Clean up - commented out to preserve test data
+            // await testRef.remove();
+            // console.log('Realtime Database delete successful');
+            
+            console.log('✅ Firebase Realtime Database is working correctly!');
+            
+        } catch (error) {
+            console.error('Realtime Database connection test failed:', error);
         }
     }
 
@@ -72,61 +112,97 @@ export class Networking {
         return userId;
     }
     
-    getFirestore() {
+    // Get the Firebase Realtime Database reference
+    getDatabase() {
         if (!this.db && typeof firebase !== 'undefined') {
-            this.db = firebase.firestore();
+            this.db = firebase.database();
         }
         return this.db;
     }
     
-    // Generic Firestore operations for future use
-    async addDocument(collection, data) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        return await this.db.collection(collection).add(data);
-    }
-    
-    async setDocument(collection, docId, data) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        return await this.db.collection(collection).doc(docId).set(data);
-    }
-    
-    async getDocument(collection, docId) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        const doc = await this.db.collection(collection).doc(docId).get();
-        return doc.exists ? { id: doc.id, ...doc.data() } : null;
-    }
-    
-    async queryDocuments(collection, queries = [], orderBy = null, limit = 50) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        let query = this.db.collection(collection);
+    // Generic Firebase Realtime Database operations
+    async addData(path, data) {
+        if (!this.db) {
+            console.error('Firebase Database not initialized');
+            throw new Error('Firebase Database not initialized');
+        }
         
-        // Apply query conditions
-        queries.forEach(q => {
-            query = query.where(q.field, q.operator, q.value);
-        });
+        try {
+            console.log(`Adding data to path: ${path}`, data);
+            const newRef = this.db.ref(path).push();
+            await newRef.set({
+                ...data,
+                createdAt: firebase.database.ServerValue.TIMESTAMP
+            });
+            console.log('Data added successfully with key:', newRef.key);
+            return { id: newRef.key, ref: newRef };
+        } catch (error) {
+            console.error(`Failed to add data to ${path}:`, error);
+            throw error;
+        }
+    }
+    
+    async setData(path, data) {
+        if (!this.db) throw new Error('Firebase Database not initialized');
+        await this.db.ref(path).set(data);
+        return { path, data };
+    }
+    
+    async getData(path) {
+        if (!this.db) throw new Error('Firebase Database not initialized');
+        const snapshot = await this.db.ref(path).once('value');
+        return snapshot.val();
+    }
+    
+    async updateData(path, updates) {
+        if (!this.db) throw new Error('Firebase Database not initialized');
+        await this.db.ref(path).update(updates);
+        return { path, updates };
+    }
+    
+    async deleteData(path) {
+        if (!this.db) throw new Error('Firebase Database not initialized');
+        await this.db.ref(path).remove();
+        return { path };
+    }
+    
+    // Query data with filters
+    async queryData(path, options = {}) {
+        if (!this.db) throw new Error('Firebase Database not initialized');
+        let query = this.db.ref(path);
         
         // Apply ordering
-        if (orderBy) {
-            query = query.orderBy(orderBy.field, orderBy.direction || 'asc');
+        if (options.orderBy) {
+            query = query.orderByChild(options.orderBy);
         }
         
-        // Apply limit
-        if (limit) {
-            query = query.limit(limit);
+        // Apply filters
+        if (options.startAt !== undefined) {
+            query = query.startAt(options.startAt);
+        }
+        if (options.endAt !== undefined) {
+            query = query.endAt(options.endAt);
+        }
+        if (options.equalTo !== undefined) {
+            query = query.equalTo(options.equalTo);
         }
         
-        const snapshot = await query.get();
-        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    }
-    
-    async updateDocument(collection, docId, updates) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        return await this.db.collection(collection).doc(docId).update(updates);
-    }
-    
-    async deleteDocument(collection, docId) {
-        if (!this.db) throw new Error('Firestore not initialized');
-        return await this.db.collection(collection).doc(docId).delete();
+        // Apply limits
+        if (options.limitToFirst) {
+            query = query.limitToFirst(options.limitToFirst);
+        } else if (options.limitToLast) {
+            query = query.limitToLast(options.limitToLast);
+        }
+        
+        const snapshot = await query.once('value');
+        const result = [];
+        snapshot.forEach(childSnapshot => {
+            result.push({
+                id: childSnapshot.key,
+                ...childSnapshot.val()
+            });
+        });
+        return result;
     }
 
     handleSpaceStateChange(event) {
@@ -339,9 +415,9 @@ export class Networking {
             SM.scene.SetPublicSpaceProps({ [key]: null });
             delete SM.scene.spaceState.public[key];
         }
-        // if(localhost){
-        //     localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-        // }
+        if(window.isLocalHost){
+            localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
+        }
     }
 
 
@@ -356,4 +432,56 @@ export class Networking {
 }
 
 export const networking = new Networking();
-window.networking = networking
+window.networking = networking;
+
+// Debug function for testing Firebase Realtime Database
+window.testFirebaseDB = async () => {
+    console.log('Testing Firebase Realtime Database...');
+    try {
+        const db = networking.getDatabase();
+        
+        // Test 1: Add data
+        const testData = {
+            test: true,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            message: 'Test data from Realtime Database',
+            number: 42,
+            boolean: true,
+            array: ['item1', 'item2'],
+            nested: { key: 'value' }
+        };
+        
+        console.log('Adding test data...');
+        const newRef = db.ref('test').push();
+        await newRef.set(testData);
+        console.log('✅ Data added with key:', newRef.key);
+        
+        // Test 2: Read it back
+        console.log('Reading data...');
+        const snapshot = await newRef.once('value');
+        console.log('✅ Retrieved data:', snapshot.val());
+        
+        // Test 3: Update it
+        console.log('Updating data...');
+        await newRef.update({
+            updated: true,
+            updateTime: firebase.database.ServerValue.TIMESTAMP
+        });
+        console.log('✅ Data updated');
+        
+        // Test 4: List data
+        console.log('Listing data...');
+        const listSnapshot = await db.ref('test').limitToFirst(10).once('value');
+        console.log('✅ Listed data:', listSnapshot.val());
+        
+        // Test 5: Delete
+        console.log('Deleting data...');
+        await newRef.remove();
+        console.log('✅ Data deleted');
+        
+        return '✅ All Realtime Database tests passed!';
+    } catch (error) {
+        console.error('❌ Realtime Database test failed:', error);
+        return error;
+    }
+};

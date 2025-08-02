@@ -286,6 +286,7 @@
                     console.log("unity-loaded fired")
                     setTimeout(()=>{
                         SM.setup();
+                        networking.initFirebase();
                     }, 1000)
                 })
 
@@ -293,7 +294,7 @@
                     console.log('Loaded fired');
                     setTimeout(async ()=>{
                         SM.setup();
-                        await networking.initFirebase();
+                        
                     }, 1000)
                 });
 
