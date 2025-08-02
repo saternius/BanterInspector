@@ -3305,6 +3305,25 @@ body {
     color: #666;
 }
 
+.ticket-comments-badge {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(138, 43, 226, 0.1);
+    color: #a97dd4;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: default;
+    transition: all 0.2s ease;
+}
+
+.ticket-comments-badge:hover {
+    background: rgba(138, 43, 226, 0.2);
+    transform: translateY(-1px);
+}
+
 .ticket-item-title {
     font-size: 14px;
     color: #e8e8e8;

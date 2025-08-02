@@ -508,6 +508,11 @@ export class Feedback {
                         <div class="ticket-item-meta">
                             <span class="ticket-type-badge ${ticket.type}">${ticket.type}</span>
                             <span class="ticket-status-badge ${ticket.status}">${ticket.status}</span>
+                            ${ticket.comments && ticket.comments.length > 0 ? `
+                                <span class="ticket-comments-badge" title="${ticket.comments.length} comment${ticket.comments.length !== 1 ? 's' : ''}">
+                                    💬 ${ticket.comments.length}
+                                </span>
+                            ` : ''}
                         </div>
                     </div>
                     <div class="ticket-item-title">${this.escapeHtml(ticket.details ? (ticket.details.length > 100 ? ticket.details.substring(0, 100) + '...' : ticket.details) : 'No description')}</div>
@@ -748,6 +753,9 @@ export class Feedback {
             input.value = '';
             await this.loadComments(this.currentTicket);
             
+            // Update the comment count in the ticket list
+            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
+            
         } catch (error) {
             console.error('Error adding comment:', error);
             alert('Failed to add comment. Please try again.');
@@ -930,6 +938,9 @@ export class Feedback {
             // Reload comments to show the update
             await this.loadComments(this.currentTicket);
             
+            // Update the comment count in the ticket list
+            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
+            
         } catch (error) {
             console.error('Error saving edited comment:', error);
             alert('Failed to save comment. Please try again.');
@@ -973,9 +984,35 @@ export class Feedback {
             // Reload comments to show the update
             await this.loadComments(this.currentTicket);
             
+            // Update the comment count in the ticket list
+            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
+            
         } catch (error) {
             console.error('Error deleting comment:', error);
             alert('Failed to delete comment. Please try again.');
+        }
+    }
+    
+    updateTicketCommentCount(ticketId, commentCount) {
+        // Find the ticket item in the DOM
+        const ticketItem = document.querySelector(`.ticket-item[data-ticket-id="${ticketId}"]`);
+        if (!ticketItem) return;
+        
+        const metaContainer = ticketItem.querySelector('.ticket-item-meta');
+        if (!metaContainer) return;
+        
+        // Remove existing comment badge if any
+        const existingBadge = metaContainer.querySelector('.ticket-comments-badge');
+        if (existingBadge) {
+            existingBadge.remove();
+        }
+        
+        // Add new comment badge if there are comments
+        if (commentCount > 0) {
+            const commentBadge = `<span class="ticket-comments-badge" title="${commentCount} comment${commentCount !== 1 ? 's' : ''}">
+                💬 ${commentCount}
+            </span>`;
+            metaContainer.insertAdjacentHTML('beforeend', commentBadge);
         }
     }
 }
