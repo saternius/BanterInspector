@@ -3365,6 +3365,103 @@ body {
     z-index: 9999;
 }
 
+/* Ticket Edit Modal */
+.ticket-edit-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.2s ease;
+}
+
+.ticket-edit-modal .modal-content {
+    width: 400px;
+    max-width: 90%;
+}
+
+.ticket-edit-modal .modal-body {
+    padding: 20px;
+}
+
+.edit-form-group {
+    margin-bottom: 20px;
+}
+
+.edit-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.status-select {
+    width: 100%;
+    padding: 10px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.status-select:hover {
+    border-color: #4a4a4a;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-save-btn,
+.modal-cancel-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.modal-save-btn {
+    background: #00a8cc;
+    color: #ffffff;
+    border-color: #00d4ff;
+}
+
+.modal-save-btn:hover {
+    background: #00c6ed;
+    border-color: #4de6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.3);
+}
+
+.modal-cancel-btn {
+    background: #2a2a2a;
+    color: #e8e8e8;
+    border-color: #3a3a3a;
+}
+
+.modal-cancel-btn:hover {
+    background: #333;
+    border-color: #4a4a4a;
+}
+
 .modal-content {
     background: #1a1a1a;
     border: 1px solid #3a3a3a;

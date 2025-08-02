@@ -9,6 +9,7 @@ export class Feedback {
         this.timeoutId = null;
         this.tickets = [];
         this.currentTicket = null;
+        this.editingTicket = null;
         this.init();
     }
     
@@ -25,6 +26,17 @@ export class Feedback {
                 this.loadAllTickets();
             }
         })
+        
+        // Add keyboard event listeners for modal
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('ticketEditModal').style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    this.closeEditModal();
+                } else if (e.key === 'Enter' && e.target.id !== 'ticketStatusSelect') {
+                    this.saveTicketEdit();
+                }
+            }
+        });
     }
     
 
@@ -739,8 +751,28 @@ export class Feedback {
         const ticket = this.tickets.find(t => t.ticketId === ticketId);
         if (!ticket) return;
         
-        // For now, just allow editing the status
-        const newStatus = prompt('Enter new status (open/closed):', ticket.status);
+        // Store the ticket being edited
+        this.editingTicket = ticket;
+        
+        // Set current status in the select
+        const statusSelect = document.getElementById('ticketStatusSelect');
+        statusSelect.value = ticket.status;
+        
+        // Show the modal
+        document.getElementById('ticketEditModal').style.display = 'flex';
+    }
+    
+    closeEditModal() {
+        document.getElementById('ticketEditModal').style.display = 'none';
+        this.editingTicket = null;
+    }
+    
+    async saveTicketEdit() {
+        if (!this.editingTicket) return;
+        
+        const statusSelect = document.getElementById('ticketStatusSelect');
+        const newStatus = statusSelect.value;
+        
         if (!newStatus || (newStatus !== 'open' && newStatus !== 'closed')) return;
         
         try {
@@ -751,14 +783,24 @@ export class Feedback {
                 throw new Error('Firebase Database not available');
             }
             
-            await db.ref(`feedback/tickets/${ticketId}`).update({
+            await db.ref(`feedback/tickets/${this.editingTicket.ticketId}`).update({
                 status: newStatus,
                 updatedAt: new Date().toISOString()
             });
             
             // Update local data
-            ticket.status = newStatus;
+            this.editingTicket.status = newStatus;
             this.displayTickets(this.tickets);
+            
+            // Close the modal
+            this.closeEditModal();
+            
+            // If the ticket detail modal is open, update it
+            if (this.currentTicket && this.currentTicket.ticketId === this.editingTicket.ticketId) {
+                this.currentTicket.status = newStatus;
+                // Re-open the ticket detail to refresh the display
+                this.openTicketDetail(this.editingTicket.ticketId);
+            }
             
         } catch (error) {
             console.error('Error updating ticket:', error);
