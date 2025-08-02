@@ -1983,61 +1983,89 @@ export class Inventory {
             const data = snapshot.val();
             let importedCount = 0;
             
-            // Process each item in the Firebase data
-            for (const [key, value] of Object.entries(data)) {
-                // Skip the _folder metadata entries
-                if (key === '_folder') continue;
+            // Extract the folder name from the Firebase path
+            const pathParts = firebaseRef.split('/');
+            const importedFolderName = pathParts[pathParts.length - 1];
+            
+            // Check if we're importing a single folder with _folder metadata
+            const isSingleFolder = data._folder && typeof data._folder === 'object';
+            
+            // Determine if this looks like a folder (has items with itemType or nested folders)
+            const hasInventoryContent = Object.entries(data).some(([key, value]) => 
+                key !== '_folder' && (value.itemType || value._folder)
+            );
+            
+            if (isSingleFolder || hasInventoryContent) {
+                // We're importing a folder - create it first
+                let containerFolderName = importedFolderName;
+                let counter = 1;
                 
-                // Check if it's a folder based on presence of _folder child
-                if (value._folder) {
-                    // It's a folder - import it
-                    const folderData = value._folder;
-                    const folderName = folderData.name || key;
+                // Generate unique folder name if conflict exists
+                while (this.folders[containerFolderName]) {
+                    containerFolderName = `${importedFolderName}_imported_${counter}`;
+                    counter++;
+                }
+                
+                // Create the container folder
+                const containerFolder = {
+                    name: containerFolderName,
+                    created: Date.now(),
+                    parent: this.currentFolder,
+                    itemType: "folder",
+                    remote: false,
+                    imported: true,
+                    importedFrom: firebaseRef
+                };
+                
+                // Save container folder to localStorage
+                const folderStorageKey = `inventory_folder_${containerFolderName}`;
+                localStorage.setItem(folderStorageKey, JSON.stringify(containerFolder));
+                this.folders[containerFolderName] = containerFolder;
+                importedCount++;
+                
+                // Now import all contents into this folder
+                await this.importFolderContents(data, containerFolderName, firebaseRef);
+                
+                // Count imported items
+                const itemsInFolder = Object.values(this.items).filter(item => 
+                    item.folder === containerFolderName || 
+                    (item.folder && item.folder.startsWith(containerFolderName + '/'))
+                ).length;
+                
+                const foldersInFolder = Object.values(this.folders).filter(folder => 
+                    folder.parent === containerFolderName ||
+                    (folder.parent && folder.parent.startsWith(containerFolderName + '/'))
+                ).length;
+                
+                importedCount += itemsInFolder + foldersInFolder;
+                
+            } else {
+                // Direct items import (backward compatibility)
+                for (const [key, value] of Object.entries(data)) {
+                    if (key === '_folder') continue;
                     
-                    // Check if folder already exists
-                    if (!this.folders[folderName]) {
-                        const folder = {
-                            ...folderData,
-                            parent: this.currentFolder,
-                            remote: false // Set to false as it's a local copy
+                    if (value.itemType) {
+                        const itemName = value.name || key;
+                        let finalItemName = itemName;
+                        let counter = 1;
+                        while (this.items[finalItemName]) {
+                            finalItemName = `${itemName}_imported_${counter}`;
+                            counter++;
+                        }
+                        
+                        const item = {
+                            ...value,
+                            folder: this.currentFolder,
+                            imported: true,
+                            importedFrom: firebaseRef,
+                            importedAt: Date.now()
                         };
                         
-                        // Save to localStorage
-                        const storageKey = `inventory_folder_${folderName}`;
-                        localStorage.setItem(storageKey, JSON.stringify(folder));
-                        
-                        // Update local folders
-                        this.folders[folderName] = folder;
+                        const storageKey = `inventory_${finalItemName}`;
+                        localStorage.setItem(storageKey, JSON.stringify(item));
+                        this.items[finalItemName] = item;
                         importedCount++;
                     }
-                } else if (value.itemType) {
-                    // It's an item - import it
-                    const itemName = value.name || key;
-                    
-                    // Generate unique name if conflict exists
-                    let finalItemName = itemName;
-                    let counter = 1;
-                    while (this.items[finalItemName]) {
-                        finalItemName = `${itemName}_imported_${counter}`;
-                        counter++;
-                    }
-                    
-                    // Create item with current folder as parent
-                    const item = {
-                        ...value,
-                        folder: this.currentFolder,
-                        imported: true,
-                        importedFrom: firebaseRef,
-                        importedAt: Date.now()
-                    };
-                    
-                    // Save to localStorage
-                    const storageKey = `inventory_${finalItemName}`;
-                    localStorage.setItem(storageKey, JSON.stringify(item));
-                    
-                    // Update local items
-                    this.items[finalItemName] = item;
-                    importedCount++;
                 }
             }
             
@@ -2055,6 +2083,68 @@ export class Inventory {
             console.error('Firebase import error:', error);
             this.showNotification(`Import failed: ${error.message}`);
             return false;
+        }
+    }
+    
+    /**
+     * Import folder contents recursively
+     */
+    async importFolderContents(data, parentFolderName, firebaseRef) {
+        for (const [key, value] of Object.entries(data)) {
+            // Skip the _folder metadata
+            if (key === '_folder') continue;
+            
+            // Check if it's a subfolder
+            if (value._folder) {
+                const folderData = value._folder;
+                const folderName = folderData.name || key;
+                
+                // Create full folder path
+                const fullFolderName = `${parentFolderName}/${folderName}`;
+                
+                // Check if folder already exists
+                if (!this.folders[fullFolderName]) {
+                    const folder = {
+                        ...folderData,
+                        name: folderName,
+                        parent: parentFolderName,
+                        remote: false,
+                        imported: true,
+                        importedFrom: firebaseRef
+                    };
+                    
+                    const storageKey = `inventory_folder_${fullFolderName}`;
+                    localStorage.setItem(storageKey, JSON.stringify(folder));
+                    this.folders[fullFolderName] = folder;
+                    
+                    // Recursively import subfolder contents
+                    await this.importFolderContents(value, fullFolderName, firebaseRef);
+                }
+            } else if (value.itemType) {
+                // It's an item
+                const itemName = value.name || key;
+                let finalItemName = itemName;
+                let counter = 1;
+                
+                // Check for conflicts in the target folder
+                while (this.items[finalItemName] && this.items[finalItemName].folder === parentFolderName) {
+                    finalItemName = `${itemName}_imported_${counter}`;
+                    counter++;
+                }
+                
+                const item = {
+                    ...value,
+                    name: finalItemName,
+                    folder: parentFolderName,
+                    imported: true,
+                    importedFrom: firebaseRef,
+                    importedAt: Date.now()
+                };
+                
+                const storageKey = `inventory_${finalItemName}`;
+                localStorage.setItem(storageKey, JSON.stringify(item));
+                this.items[finalItemName] = item;
+            }
         }
     }
     
