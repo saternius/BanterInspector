@@ -645,15 +645,32 @@ export class Feedback {
                 return;
             }
             
-            const commentsHtml = comments.map(comment => {
+            const currentUser = (SM.scene?.localUser?.name) || networking.getUserId() || 'Anonymous';
+            
+            const commentsHtml = comments.map((comment, index) => {
                 const date = new Date(comment.timestamp);
+                const isAuthor = comment.author === currentUser;
+                
                 return `
-                    <div class="comment-item">
+                    <div class="comment-item" data-comment-index="${index}">
                         <div class="comment-header">
                             <span class="comment-author">${comment.author}</span>
-                            <span class="comment-time">${date.toLocaleString()}</span>
+                            <span class="comment-time">${date.toLocaleString()}${comment.editedAt ? ' (edited)' : ''}</span>
+                            ${isAuthor ? `
+                                <div class="comment-actions">
+                                    <button class="comment-edit-btn" onclick="feedback.editComment(${index})">Edit</button>
+                                    <button class="comment-delete-btn" onclick="feedback.deleteComment(${index})">Delete</button>
+                                </div>
+                            ` : ''}
                         </div>
-                        <div class="comment-content">${this.escapeHtml(comment.content)}</div>
+                        <div class="comment-content" id="comment-content-${index}">${this.escapeHtml(comment.content)}</div>
+                        <div class="comment-edit-form" id="comment-edit-${index}" style="display: none;">
+                            <textarea class="comment-edit-textarea" id="comment-edit-textarea-${index}">${this.escapeHtml(comment.content)}</textarea>
+                            <div class="comment-edit-actions">
+                                <button class="comment-save-btn" onclick="feedback.saveEditedComment(${index})">Save</button>
+                                <button class="comment-cancel-btn" onclick="feedback.cancelEditComment(${index})">Cancel</button>
+                            </div>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -772,6 +789,116 @@ export class Feedback {
         } catch (error) {
             console.error('Error deleting ticket:', error);
             alert('Failed to delete ticket. Please try again.');
+        }
+    }
+    
+    // Comment editing methods
+    editComment(commentIndex) {
+        // Hide the comment content and show the edit form
+        document.getElementById(`comment-content-${commentIndex}`).style.display = 'none';
+        document.getElementById(`comment-edit-${commentIndex}`).style.display = 'block';
+        
+        // Focus the textarea
+        const textarea = document.getElementById(`comment-edit-textarea-${commentIndex}`);
+        textarea.focus();
+        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+    }
+    
+    cancelEditComment(commentIndex) {
+        // Hide the edit form and show the comment content
+        document.getElementById(`comment-edit-${commentIndex}`).style.display = 'none';
+        document.getElementById(`comment-content-${commentIndex}`).style.display = 'block';
+    }
+    
+    async saveEditedComment(commentIndex) {
+        const textarea = document.getElementById(`comment-edit-textarea-${commentIndex}`);
+        const newContent = textarea.value.trim();
+        
+        if (!newContent || !this.currentTicket) return;
+        
+        try {
+            const networking = window.networking;
+            const db = networking?.getDatabase();
+            
+            if (!db) {
+                throw new Error('Firebase Database not available');
+            }
+            
+            // Update the comment content
+            const updatedComments = [...this.currentTicket.comments];
+            updatedComments[commentIndex] = {
+                ...updatedComments[commentIndex],
+                content: newContent,
+                editedAt: new Date().toISOString()
+            };
+            
+            // Save to Firebase
+            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
+            const currentSnapshot = await ticketRef.once('value');
+            const currentData = currentSnapshot.val() || this.currentTicket;
+            
+            await ticketRef.set({
+                ...currentData,
+                comments: updatedComments,
+                updatedAt: new Date().toISOString()
+            });
+            
+            // Update local data
+            this.currentTicket.comments = updatedComments;
+            const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
+            if (ticketIndex !== -1) {
+                this.tickets[ticketIndex] = this.currentTicket;
+            }
+            
+            // Reload comments to show the update
+            await this.loadComments(this.currentTicket);
+            
+        } catch (error) {
+            console.error('Error saving edited comment:', error);
+            alert('Failed to save comment. Please try again.');
+        }
+    }
+    
+    async deleteComment(commentIndex) {
+        if (!confirm('Are you sure you want to delete this comment?')) return;
+        
+        if (!this.currentTicket) return;
+        
+        try {
+            const networking = window.networking;
+            const db = networking?.getDatabase();
+            
+            if (!db) {
+                throw new Error('Firebase Database not available');
+            }
+            
+            // Remove the comment from the array
+            const updatedComments = this.currentTicket.comments.filter((_, index) => index !== commentIndex);
+            
+            // Save to Firebase
+            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
+            const currentSnapshot = await ticketRef.once('value');
+            const currentData = currentSnapshot.val() || this.currentTicket;
+            
+            await ticketRef.set({
+                ...currentData,
+                comments: updatedComments,
+                updatedAt: new Date().toISOString()
+            });
+            
+            // Update local data
+            this.currentTicket.comments = updatedComments;
+            const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
+            if (ticketIndex !== -1) {
+                this.tickets[ticketIndex] = this.currentTicket;
+            }
+            
+            // Reload comments to show the update
+            await this.loadComments(this.currentTicket);
+            
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+            alert('Failed to delete comment. Please try again.');
         }
     }
 }
