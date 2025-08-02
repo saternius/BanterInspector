@@ -273,6 +273,46 @@ body {
     font-size: 16px;
 }
 
+.make-remote-button.remote-status {
+    background: #1a3a1a;
+    border-color: #00ff00;
+    color: #00ff00;
+    cursor: default;
+}
+
+.make-remote-button.remote-status:hover {
+    background: #1a3a1a;
+    border-color: #00ff00;
+    color: #00ff00;
+}
+
+.link-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.link-button:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    color: #00d4ff;
+}
+
+.link-icon {
+    font-size: 18px;
+}
+
 .export-button {
     display: flex;
     align-items: center;

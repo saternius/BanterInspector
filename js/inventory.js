@@ -9,6 +9,7 @@ export class Inventory {
         this.currentFolder = null;
         this.expandedFolders = new Set();
         this.draggedItem = null;
+        this.isRemote = false;
         this.setupDropZone();
         this.render();
     }
@@ -111,9 +112,77 @@ export class Inventory {
     }
     
     /**
+     * Check if current directory exists in Firebase
+     */
+    async checkRemoteStatus() {
+        if (!window.firebase || !window.firebase.database || !SM.scene?.localUser?.name) {
+            this.isRemote = false;
+            return;
+        }
+        
+        try {
+            const db = window.firebase.database();
+            const userName = this.sanitizeFirebasePath(SM.scene.localUser.name);
+            const basePath = `inventory/${userName}`;
+            
+            let checkPath;
+            if (this.currentFolder) {
+                const sanitizedFolder = this.sanitizeFirebasePath(this.currentFolder);
+                checkPath = `${basePath}/${sanitizedFolder}`;
+            } else {
+                checkPath = basePath;
+            }
+            
+            const snapshot = await db.ref(checkPath).once('value');
+            this.isRemote = snapshot.exists();
+        } catch (error) {
+            console.error('Error checking remote status:', error);
+            this.isRemote = false;
+        }
+    }
+    
+    /**
+     * Get current Firebase path
+     */
+    getCurrentFirebasePath() {
+        if (!SM.scene?.localUser?.name) return null;
+        
+        const userName = this.sanitizeFirebasePath(SM.scene.localUser.name);
+        const basePath = `inventory/${userName}`;
+        
+        if (this.currentFolder) {
+            const sanitizedFolder = this.sanitizeFirebasePath(this.currentFolder);
+            return `${basePath}/${sanitizedFolder}`;
+        }
+        
+        return basePath;
+    }
+    
+    /**
+     * Copy Firebase reference to clipboard
+     */
+    async copyFirebaseRef() {
+        const firebasePath = this.getCurrentFirebasePath();
+        if (!firebasePath) {
+            this.showNotification('Unable to get Firebase path');
+            return;
+        }
+        
+        try {
+            await navigator.clipboard.writeText(firebasePath);
+            this.showNotification('Firebase path copied to clipboard!');
+        } catch (error) {
+            console.error('Failed to copy to clipboard:', error);
+            this.showNotification('Failed to copy path');
+        }
+    }
+    
+    /**
      * Render inventory items
      */
-    render() {
+    async render() {
+        // Check remote status
+        await this.checkRemoteStatus();
         const inventoryContainer = this.container.querySelector('.inventory-container');
         
         if (Object.keys(this.items).length === 0 && Object.keys(this.folders).length === 0) {
@@ -177,10 +246,20 @@ export class Inventory {
                         <span class="upload-icon">⬇️</span>
                         Import
                     </button>
-                    <button class="make-remote-button" id="makeRemoteBtn">
-                        <span class="remote-icon">☁️</span>
-                        Make Remote
-                    </button>
+                    ${this.isRemote ? `
+                        <button class="make-remote-button remote-status" id="remoteStatusBtn" disabled>
+                            <span class="remote-icon">☁️</span>
+                            Remote
+                        </button>
+                        <button class="link-button" id="copyLinkBtn" title="Copy Firebase path">
+                            <span class="link-icon">🔗</span>
+                        </button>
+                    ` : `
+                        <button class="make-remote-button" id="makeRemoteBtn">
+                            <span class="remote-icon">☁️</span>
+                            Make Remote
+                        </button>
+                    `}
                     <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
                 </div>
             </div>
@@ -271,6 +350,12 @@ export class Inventory {
         const makeRemoteBtn = inventoryContainer.querySelector('#makeRemoteBtn');
         if (makeRemoteBtn) {
             makeRemoteBtn.addEventListener('click', () => this.makeRemote());
+        }
+        
+        // Add event listener for copy link button
+        const copyLinkBtn = inventoryContainer.querySelector('#copyLinkBtn');
+        if (copyLinkBtn) {
+            copyLinkBtn.addEventListener('click', () => this.copyFirebaseRef());
         }
         
         // Add event listeners for folder items
@@ -1746,6 +1831,9 @@ export class Inventory {
             }
             
             this.showNotification('Successfully uploaded to Firebase!');
+            
+            // Re-render to show the new remote status
+            this.render();
             
         } catch (error) {
             console.error('Firebase upload error:', error);
