@@ -7,6 +7,8 @@ export class Feedback {
         this.speechBuffer = '';
         this.rlen = 0;
         this.timeoutId = null;
+        this.tickets = [];
+        this.currentTicket = null;
         this.init();
     }
     
@@ -16,6 +18,8 @@ export class Feedback {
         this.setupSubmitButton();
         this.setupSpeechRecognition();
         this.setupTicketLookup();
+        this.setupTicketsList();
+        this.loadAllTickets();
     }
     
 
@@ -230,8 +234,8 @@ export class Feedback {
             feedback.ticketId = ticketId;
             feedback.status = 'open';
             
-            // Save to Firebase
-            await this.saveFeedbackToFirebase(feedback);
+            // Save to Firestore
+            await this.saveFeedbackToFirestore(feedback);
             
             // Also save locally as backup
             this.storeFeedbackLocally(feedback);
@@ -242,9 +246,7 @@ export class Feedback {
             );
             
             // Clear form
-            document.getElementById('feedbackDetails').value = '';
-            document.getElementById('feedbackEmail').value = '';
-            
+            document.getElementById('feedbackDetails').value = '';            
         } catch (error) {
             console.error('Failed to submit feedback:', error);
             this.showStatus('Failed to submit feedback. Please try again.', 'error');
@@ -252,37 +254,37 @@ export class Feedback {
     }
     
     generateTicketId() {
-        // Generate a ticket ID in format: FB-YYYYMMDD-XXXX
+        // Generate a ticket ID in format: FB_YYYYMMDD_XXXX (using underscores for Firestore compatibility)
         const date = new Date();
         const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        return `FB-${dateStr}-${random}`;
+        return `FB_${dateStr}_${random}`;
     }
     
     
     
-    async saveFeedbackToFirebase(feedback) {
-        console.log("saving feedback to firebase =>", feedback)
+    async saveFeedbackToFirestore(feedback) {
+        console.log("saving feedback to firestore =>", feedback)
         try {
-            // Get networking instance to access Firebase
+            // Get networking instance to access Firestore REST
             const networking = window.networking;
-            if (!networking || !networking.getDatabase()) {
-                throw new Error('Firebase Database not available');
+            const rest = networking?.getFirestoreREST();
+            
+            if (!rest) {
+                throw new Error('Firestore REST client not available');
             }
             
-            const userId = feedback.createdBy;
-            const db = networking.getDatabase();
+            // Save to public collection: feedback/tickets/{ticketId}
+            const collectionPath = `feedback/tickets`;
             
-            // Save to user-specific path: /feedback/{userId}/tickets/{ticketId}
-            await db.ref(`feedback/${userId}/tickets/${feedback.ticketId}`).set({
+            await rest.setDocument(collectionPath, feedback.ticketId, {
                 ...feedback,
-                createdAt: firebase.database.ServerValue.TIMESTAMP,
-                updatedAt: firebase.database.ServerValue.TIMESTAMP
+                createdAt: new Date().toISOString()
             });
             
-            console.log('Feedback saved to Firebase:', `feedback/${userId}/tickets/${feedback.ticketId}`);
+            console.log('Feedback saved via REST API:', `${collectionPath}/${feedback.ticketId}`);
         } catch (error) {
-            console.error('Error saving to Firebase:', error);
+            console.error('Error saving to Firestore:', error);
             // Don't throw - we'll still save locally
         }
     }
@@ -290,58 +292,19 @@ export class Feedback {
     async getFeedbackByTicket(ticketId) {
         try {
             const networking = window.networking;
-            if (!networking || !networking.getDatabase()) return null;
+            const rest = networking?.getFirestoreREST();
             
-            const db = networking.getDatabase();
-            const userId = networking.getUserId();
+            if (!rest) return null;
             
-            // First try to find in current user's tickets
-            let snapshot = await db.ref(`feedback/${userId}/tickets/${ticketId}`).once('value');
+            // Get from public collection
+            const collectionPath = `feedback/tickets`;
+            const doc = await rest.getDocument(collectionPath, ticketId);
             
-            if (snapshot.exists()) {
-                return { id: ticketId, ...snapshot.val() };
-            }
-            
-            // If not found, search all users (since ticketId should be unique)
-            // This requires knowing the userId or searching through all subcollections
-            // For now, return null if not found in user's own collection
-            console.log('Ticket not found in user collection:', ticketId);
-            return null;
+            return doc;
             
         } catch (error) {
             console.error('Error fetching feedback:', error);
             return null;
-        }
-    }
-    
-    async getAllFeedback(limit = 50) {
-        try {
-            const networking = window.networking;
-            if (!networking || !networking.getDatabase()) return [];
-            
-            const db = networking.getDatabase();
-            const userId = networking.getUserId();
-            
-            // Get all feedback for current user
-            const snapshot = await db.ref(`feedback/${userId}/tickets`)
-                .orderByChild('createdAt')
-                .limitToLast(limit)
-                .once('value');
-            
-            const feedbacks = [];
-            snapshot.forEach(childSnapshot => {
-                feedbacks.push({
-                    id: childSnapshot.key,
-                    ...childSnapshot.val()
-                });
-            });
-            
-            // Reverse to get newest first
-            return feedbacks.reverse();
-            
-        } catch (error) {
-            console.error('Error fetching all feedback:', error);
-            return [];
         }
     }
     
@@ -414,11 +377,6 @@ export class Feedback {
                                 <span class="field-label">Description:</span>
                                 <div class="field-value description">${this.escapeHtml(feedback.details)}</div>
                             </div>
-                            ${feedback.email ? `
-                            <div class="ticket-field">
-                                <span class="field-label">Contact:</span>
-                                <span class="field-value">${this.escapeHtml(feedback.email)}</span>
-                            </div>` : ''}
                         </div>
                     </div>
                 `;
@@ -444,4 +402,321 @@ export class Feedback {
         div.textContent = text;
         return div.innerHTML;
     }
+    
+    // Tickets List Methods
+    setupTicketsList() {
+        const refreshBtn = document.getElementById('refreshTicketsBtn');
+        const typeFilter = document.getElementById('ticketFilterType');
+        const statusFilter = document.getElementById('ticketFilterStatus');
+        
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', () => this.loadAllTickets());
+        }
+        
+        if (typeFilter) {
+            typeFilter.addEventListener('change', () => this.filterTickets());
+        }
+        
+        if (statusFilter) {
+            statusFilter.addEventListener('change', () => this.filterTickets());
+        }
+    }
+    
+    async loadAllTickets() {
+        const ticketsList = document.getElementById('ticketsList');
+        if (!ticketsList) return;
+        
+        ticketsList.innerHTML = '<div class="loading-tickets">Loading tickets...</div>';
+        
+        try {
+            const networking = window.networking;
+            const rest = networking?.getFirestoreREST();
+            
+            if (!rest) {
+                throw new Error('Firestore REST client not available');
+            }
+            
+            // Get all tickets from public collection
+            const result = await rest.listDocuments('feedback/tickets', { limit: 100 });
+            const allTickets = result.documents || [];
+            
+            // Sort by creation date (newest first)
+            allTickets.sort((a, b) => {
+                const dateA = new Date(a.createdAt || a.timestamp);
+                const dateB = new Date(b.createdAt || b.timestamp);
+                return dateB - dateA;
+            });
+            
+            this.tickets = allTickets;
+            this.displayTickets(allTickets);
+            
+        } catch (error) {
+            console.error('Error loading tickets:', error);
+            ticketsList.innerHTML = '<div class="error-loading">Failed to load tickets</div>';
+        }
+    }
+    
+    displayTickets(tickets) {
+        const ticketsList = document.getElementById('ticketsList');
+        if (!ticketsList) return;
+        
+        if (tickets.length === 0) {
+            ticketsList.innerHTML = '<div class="empty-tickets">No tickets found</div>';
+            return;
+        }
+        
+        const currentUserId = networking.getUserId();
+        const ticketsHtml = tickets.map(ticket => {
+            const isOwner = ticket.createdBy === currentUserId;
+            const date = new Date(ticket.timestamp || ticket.createdAt);
+            
+            return `
+                <div class="ticket-item" data-ticket-id="${ticket.ticketId}">
+                    <div class="ticket-item-header">
+                        <span class="ticket-item-id">#${ticket.ticketId}</span>
+                        <div class="ticket-item-meta">
+                            <span class="ticket-type-badge ${ticket.type}">${ticket.type}</span>
+                            <span class="ticket-status-badge ${ticket.status}">${ticket.status}</span>
+                        </div>
+                    </div>
+                    <div class="ticket-item-title">${this.escapeHtml(ticket.title)}</div>
+                    <div class="ticket-item-author">
+                        by ${ticket.createdBy} • ${date.toLocaleDateString()}
+                    </div>
+                    ${isOwner ? `
+                        <div class="ticket-item-actions">
+                            <button class="ticket-action-btn edit" onclick="feedback.editTicket('${ticket.ticketId}')">Edit</button>
+                            <button class="ticket-action-btn delete" onclick="feedback.deleteTicket('${ticket.ticketId}')">Delete</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+        
+        ticketsList.innerHTML = ticketsHtml;
+        
+        // Add click handlers to open ticket details
+        ticketsList.querySelectorAll('.ticket-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('ticket-action-btn')) {
+                    const ticketId = item.getAttribute('data-ticket-id');
+                    this.openTicketDetail(ticketId);
+                }
+            });
+        });
+    }
+    
+    filterTickets() {
+        const typeFilter = document.getElementById('ticketFilterType').value;
+        const statusFilter = document.getElementById('ticketFilterStatus').value;
+        
+        let filteredTickets = this.tickets;
+        
+        if (typeFilter !== 'all') {
+            filteredTickets = filteredTickets.filter(t => t.type === typeFilter);
+        }
+        
+        if (statusFilter !== 'all') {
+            filteredTickets = filteredTickets.filter(t => t.status === statusFilter);
+        }
+        
+        this.displayTickets(filteredTickets);
+    }
+    
+    async openTicketDetail(ticketId) {
+        const ticket = this.tickets.find(t => t.ticketId === ticketId);
+        if (!ticket) return;
+        
+        this.currentTicket = ticket;
+        
+        const modal = document.getElementById('ticketDetailModal');
+        const modalTitle = document.getElementById('modalTicketId');
+        const modalContent = document.getElementById('modalTicketContent');
+        
+        modalTitle.textContent = `Ticket #${ticket.ticketId}`;
+        
+        const date = new Date(ticket.timestamp || ticket.createdAt);
+        const isOwner = ticket.createdBy === networking.getUserId();
+        
+        modalContent.innerHTML = `
+            <div class="ticket-detail-content">
+                <div class="ticket-detail-field">
+                    <div class="ticket-detail-label">Type</div>
+                    <div class="ticket-detail-value">
+                        <span class="ticket-type-badge ${ticket.type}">${ticket.type}</span>
+                    </div>
+                </div>
+                <div class="ticket-detail-field">
+                    <div class="ticket-detail-label">Status</div>
+                    <div class="ticket-detail-value">
+                        <span class="ticket-status-badge ${ticket.status}">${ticket.status}</span>
+                    </div>
+                </div>
+                <div class="ticket-detail-field">
+                    <div class="ticket-detail-label">Created By</div>
+                    <div class="ticket-detail-value">${ticket.createdBy}</div>
+                </div>
+                <div class="ticket-detail-field">
+                    <div class="ticket-detail-label">Created At</div>
+                    <div class="ticket-detail-value">${date.toLocaleString()}</div>
+                </div>
+                <div class="ticket-detail-field">
+                    <div class="ticket-detail-label">Description</div>
+                    <div class="ticket-detail-value">${this.escapeHtml(ticket.details)}</div>
+                </div>
+            </div>
+            
+            <div class="comments-section">
+                <h3 class="comments-header">Comments</h3>
+                <div id="commentsList" class="comments-list">
+                    <div class="loading-comments">Loading comments...</div>
+                </div>
+                <div class="comment-form">
+                    <textarea id="newCommentInput" class="comment-input" placeholder="Add a comment..."></textarea>
+                    <button class="comment-submit-btn" onclick="feedback.addComment()">Post</button>
+                </div>
+            </div>
+        `;
+        
+        modal.style.display = 'flex';
+        
+        // Load comments
+        await this.loadComments(ticket);
+    }
+    
+    async loadComments(ticket) {
+        const commentsList = document.getElementById('commentsList');
+        
+        try {
+            const comments = ticket.comments || [];
+            
+            if (comments.length === 0) {
+                commentsList.innerHTML = '<div class="empty-comments">No comments yet. Be the first to comment!</div>';
+                return;
+            }
+            
+            const commentsHtml = comments.map(comment => {
+                const date = new Date(comment.timestamp);
+                return `
+                    <div class="comment-item">
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.author}</span>
+                            <span class="comment-time">${date.toLocaleString()}</span>
+                        </div>
+                        <div class="comment-content">${this.escapeHtml(comment.content)}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            commentsList.innerHTML = commentsHtml;
+            
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            commentsList.innerHTML = '<div class="error-loading">Failed to load comments</div>';
+        }
+    }
+    
+    async addComment() {
+        const input = document.getElementById('newCommentInput');
+        const content = input.value.trim();
+        
+        if (!content || !this.currentTicket) return;
+        
+        try {
+            const networking = window.networking;
+            const rest = networking?.getFirestoreREST();
+            
+            if (!rest) {
+                throw new Error('Firestore REST client not available');
+            }
+            
+            const comment = {
+                author: SM.scene.localUser.name || networking.getUserId(),
+                content: content,
+                timestamp: new Date().toISOString()
+            };
+            
+            // Update the ticket with the new comment
+            const updatedComments = [...(this.currentTicket.comments || []), comment];
+            
+            const collectionPath = `feedback/tickets`;
+            await rest.setDocument(collectionPath, this.currentTicket.ticketId, {
+                ...this.currentTicket,
+                comments: updatedComments,
+                updatedAt: new Date().toISOString()
+            });
+            
+            // Update local data
+            this.currentTicket.comments = updatedComments;
+            const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
+            if (ticketIndex !== -1) {
+                this.tickets[ticketIndex] = this.currentTicket;
+            }
+            
+            // Clear input and reload comments
+            input.value = '';
+            await this.loadComments(this.currentTicket);
+            
+        } catch (error) {
+            console.error('Error adding comment:', error);
+            alert('Failed to add comment. Please try again.');
+        }
+    }
+    
+    async editTicket(ticketId) {
+        const ticket = this.tickets.find(t => t.ticketId === ticketId);
+        if (!ticket) return;
+        
+        // For now, just allow editing the status
+        const newStatus = prompt('Enter new status (open/closed):', ticket.status);
+        if (!newStatus || (newStatus !== 'open' && newStatus !== 'closed')) return;
+        
+        try {
+            const networking = window.networking;
+            const rest = networking?.getFirestoreREST();
+            
+            const collectionPath = `feedback/tickets`;
+            await rest.setDocument(collectionPath, ticketId, {
+                ...ticket,
+                status: newStatus,
+                updatedAt: new Date().toISOString()
+            });
+            
+            // Update local data
+            ticket.status = newStatus;
+            this.displayTickets(this.tickets);
+            
+        } catch (error) {
+            console.error('Error updating ticket:', error);
+            alert('Failed to update ticket. Please try again.');
+        }
+    }
+    
+    async deleteTicket(ticketId) {
+        if (!confirm('Are you sure you want to delete this ticket?')) return;
+        
+        const ticket = this.tickets.find(t => t.ticketId === ticketId);
+        if (!ticket) return;
+        
+        try {
+            const networking = window.networking;
+            const rest = networking?.getFirestoreREST();
+            
+            const collectionPath = `feedback/tickets`;
+            await rest.deleteDocument(collectionPath, ticketId);
+            
+            // Remove from local data
+            this.tickets = this.tickets.filter(t => t.ticketId !== ticketId);
+            this.displayTickets(this.tickets);
+            
+        } catch (error) {
+            console.error('Error deleting ticket:', error);
+            alert('Failed to delete ticket. Please try again.');
+        }
+    }
 }
+
+// Add global function handlers
+window.closeTicketModal = function() {
+    document.getElementById('ticketDetailModal').style.display = 'none';
+};

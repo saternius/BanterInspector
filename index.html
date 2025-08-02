@@ -418,66 +418,101 @@ The inspector will fall back to mock data if it cannot connect to Unity.
 
         <!-- Feedback Page -->
         <div class="page" id="feedback-page">
-            <div class="feedback-container">
-                <div class="feedback-header">
-                    <h2>Help Improve the Inspector</h2>
-                    <p>Your feedback helps us make the inspector better for everyone</p>
+            <div class="feedback-split-layout">
+                <!-- Left Side - Feedback Form -->
+                <div class="feedback-left-panel">
+                    <div class="feedback-container">
+                        <div class="feedback-header">
+                            <h2>Help Improve the Inspector</h2>
+                            <p>Your feedback helps us make the inspector better for everyone</p>
+                        </div>
+                        
+                        <div class="feedback-form">
+                            <div class="feedback-section">
+                                <label class="feedback-label">What would you like to share?</label>
+                                <div class="feedback-type-selector">
+                                    <button class="feedback-type-btn active" data-type="feature">
+                                        <span class="feedback-type-icon">✨</span>
+                                        Feature Request
+                                    </button>
+                                    <button class="feedback-type-btn" data-type="bug">
+                                        <span class="feedback-type-icon">🐛</span>
+                                        Bug Report
+                                    </button>
+                                    <button class="feedback-type-btn" data-type="improvement">
+                                        <span class="feedback-type-icon">💡</span>
+                                        Improvement
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="feedback-section">
+                                <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
+                                <div class="feedback-input-container">
+                                    <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
+                                    <button id="micButton" class="mic-button" title="Click to record feedback">
+                                        <span class="mic-icon">🎤</span>
+                                        <span class="recording-indicator"></span>
+                                    </button>
+                                </div>
+                                <div id="speechStatus" class="speech-status" style="display: none;"></div>
+                            </div>
+                            
+                            <div class="feedback-actions">
+                                <button id="submitFeedbackBtn" class="feedback-submit-btn">
+                                    <span class="btn-icon">📤</span>
+                                    Submit Feedback
+                                </button>
+                            </div>
+                            
+                            <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>
+                        </div>
+                        
+                        <div class="feedback-footer">
+                            <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="feedback-form">
-                    <div class="feedback-section">
-                        <label class="feedback-label">What would you like to share?</label>
-                        <div class="feedback-type-selector">
-                            <button class="feedback-type-btn active" data-type="feature">
-                                <span class="feedback-type-icon">✨</span>
-                                Feature Request
-                            </button>
-                            <button class="feedback-type-btn" data-type="bug">
-                                <span class="feedback-type-icon">🐛</span>
-                                Bug Report
-                            </button>
-                            <button class="feedback-type-btn" data-type="improvement">
-                                <span class="feedback-type-icon">💡</span>
-                                Improvement
+                <!-- Right Side - Tickets List -->
+                <div class="feedback-right-panel">
+                    <div class="tickets-container">
+                        <div class="tickets-header">
+                            <h2>Active Tickets</h2>
+                            <button id="refreshTicketsBtn" class="refresh-tickets-btn" title="Refresh tickets">
+                                <span class="btn-icon">🔄</span>
                             </button>
                         </div>
-                    </div>
-                    
-                    <div class="feedback-section">
-                        <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
-                        <div class="feedback-input-container">
-                            <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
-                            <button id="micButton" class="mic-button" title="Click to record feedback">
-                                <span class="mic-icon">🎤</span>
-                                <span class="recording-indicator"></span>
-                            </button>
+                        
+                        <div class="tickets-filters">
+                            <select id="ticketFilterType" class="ticket-filter">
+                                <option value="all">All Types</option>
+                                <option value="feature">Features</option>
+                                <option value="bug">Bugs</option>
+                                <option value="improvement">Improvements</option>
+                            </select>
+                            <select id="ticketFilterStatus" class="ticket-filter">
+                                <option value="all">All Status</option>
+                                <option value="open">Open</option>
+                                <option value="closed">Closed</option>
+                            </select>
                         </div>
-                        <div id="speechStatus" class="speech-status" style="display: none;"></div>
+                        
+                        <div id="ticketsList" class="tickets-list">
+                            <div class="loading-tickets">Loading tickets...</div>
+                        </div>
                     </div>
-                    
-                    <div class="feedback-actions">
-                        <button id="submitFeedbackBtn" class="feedback-submit-btn">
-                            <span class="btn-icon">📤</span>
-                            Submit Feedback
-                        </button>
-                    </div>
-                    
-                    <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>
                 </div>
-                
-                <div class="feedback-footer">
-                    <div class="ticket-lookup-section">
-                        <h3>Check Ticket Status</h3>
-                        <div class="ticket-lookup-form">
-                            <input type="text" id="ticketLookupInput" class="ticket-input" placeholder="Enter ticket ID (e.g., FB-20240101-1234)">
-                            <button id="lookupTicketBtn" class="lookup-btn">
-                                <span class="btn-icon">🔍</span>
-                                Lookup
-                            </button>
-                        </div>
-                        <div id="ticketResult" class="ticket-result" style="display: none;"></div>
+            </div>
+            
+            <!-- Ticket Detail Modal -->
+            <div id="ticketDetailModal" class="ticket-detail-modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modalTicketId"></h3>
+                        <button class="modal-close" onclick="closeTicketModal()">×</button>
                     </div>
-                    <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
+                    <div id="modalTicketContent" class="modal-body"></div>
                 </div>
             </div>
         </div>
