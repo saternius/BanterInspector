@@ -1,4 +1,4 @@
-const { SlotComponent } = await import(`${window.repoUrl}/js/components/slot-component.js`);
+const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
 
 export class BanterBillboardComponent extends SlotComponent {
     constructor() {

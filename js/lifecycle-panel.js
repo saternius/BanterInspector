@@ -4,8 +4,8 @@
  */
 
 // (async () => {
-    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${window.repoUrl}/js/utils.js`);
-    const { lifecycle } = await import(`${window.repoUrl}/js/lifecycle-manager.js`);
+    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${window.repoUrl}/utils.js`);
+    const { lifecycle } = await import(`${window.repoUrl}/lifecycle-manager.js`);
 
     export class LifecyclePanel {
         constructor() {

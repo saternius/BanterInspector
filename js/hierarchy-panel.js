@@ -4,8 +4,8 @@
  */
 
 // (async () => {
-    const { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
-    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange, SaveSlotItemChange } = await import(`${window.repoUrl}/js/change-types.js`);
+    const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
+    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange, SaveSlotItemChange } = await import(`${window.repoUrl}/change-types.js`);
 
     export class HierarchyPanel {
         constructor() {

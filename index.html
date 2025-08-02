@@ -55,15 +55,16 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script>
         window.isLocalHost = window.location.hostname === 'localhost';
-        window.repoUrl = 'https://saternius.github.io/BanterInspector'
+        window.repoUrl = '.'
         window.fileServer = localStorage.getItem('file_server');
-        if(window.fileServer === "local"){
-            // Update this with your ngrok URL each time you start ngrok
-            window.repoUrl = localStorage.getItem('ngrok_url') || 'http://localhost:9909';
+        if(window.fileServer === "github"){
+            window.repoUrl = 'https://saternius.github.io/BanterInspector'
+        }else if(window.fileServer === "local"){
+            window.repoUrl = localStorage.getItem('ngrok_url');
         }
 
-        if(window.isLocalHost){
-            window.repoUrl = 'http://192.168.0.148:9909';
+        if(window.isLocalHost && window.fileServer === "unity"){
+            window.repoUrl = 'http://localhost:42069'
         }
 
 
@@ -524,6 +525,9 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         const script = document.createElement('script');
         script.type = 'module';
         script.src = window.isLocalHost ? './js/app.js' : window.repoUrl + '/js/app.js';
+    
+        window.repoUrl += "/js"
+        console.log("window.repoUrl", window.repoUrl)
         document.body.appendChild(script);
         
         // Add debug script for testing (only in local development)

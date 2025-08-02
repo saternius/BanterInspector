@@ -1,4 +1,4 @@
-const { EditScriptItemChange } = await import(`${window.repoUrl}/js/change-types.js`);
+const { EditScriptItemChange } = await import(`${window.repoUrl}/change-types.js`);
 
 export class ScriptEditor {
     constructor(scriptData) {

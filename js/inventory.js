@@ -1,4 +1,4 @@
-const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveSlotItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/js/change-types.js`);
+const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveSlotItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');

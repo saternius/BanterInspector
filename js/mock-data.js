@@ -3,7 +3,7 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-const { Slot, componentTypeMap } = await import(`${window.repoUrl}/js/components/index.js`);
+const { Slot, componentTypeMap } = await import(`${window.repoUrl}/components/index.js`);
 
 export async function loadMockSlotData() {
     // Create mock slot data using the new Slot classes

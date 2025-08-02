@@ -1,4 +1,4 @@
-const { SaveSlotItemChange } = await import(`${window.repoUrl}/js/change-types.js`);
+const { SaveSlotItemChange } = await import(`${window.repoUrl}/change-types.js`);
 
 export class Navigation {
     constructor() {

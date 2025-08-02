@@ -1,5 +1,5 @@
-const { TransformComponent } = await import(`${window.repoUrl}/js/components/transform.js`);
-const { deepClone } = await import(`${window.repoUrl}/js/utils.js`);
+const { TransformComponent } = await import(`${window.repoUrl}/components/transform.js`);
+const { deepClone } = await import(`${window.repoUrl}/utils.js`);
 
 export class Slot{
     async init(slotData){

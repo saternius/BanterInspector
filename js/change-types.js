@@ -1,6 +1,6 @@
 // Import required dependencies
 
-const { deepClone } = await import(`${window.repoUrl}/js/utils.js`);
+const { deepClone } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 

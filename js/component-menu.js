@@ -4,9 +4,9 @@
  */
 
 
-const { changeManager } = await import(`${window.repoUrl}/js/change-manager.js`);
-const { ComponentAddChange } = await import(`${window.repoUrl}/js/change-types.js`);
-const { componentBundleMap } = await import( `${window.repoUrl}/js/components/index.js`);
+const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
+const { ComponentAddChange } = await import(`${window.repoUrl}/change-types.js`);
+const { componentBundleMap } = await import( `${window.repoUrl}/components/index.js`);
 
 export class ComponentMenu {
     constructor() {

@@ -6,8 +6,8 @@
 console.log("It is 3:00")
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
-    const { loadMockSlotData } = await import(`${window.repoUrl}/js/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/js/components/index.js`);
+    const { loadMockSlotData } = await import(`${window.repoUrl}/mock-data.js`);
+    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/components/index.js`);
 
     export class SceneManager {
         constructor() {

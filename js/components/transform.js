@@ -1,5 +1,5 @@
-const { SlotComponent } = await import(`${window.repoUrl}/js/components/slot-component.js`);
-const { eulerToQuaternion } = await import(`${window.repoUrl}/js/utils.js`);
+const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { eulerToQuaternion } = await import(`${window.repoUrl}/utils.js`);
 
 export class TransformComponent extends SlotComponent {
     constructor(){
