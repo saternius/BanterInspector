@@ -32,7 +32,8 @@ export class Feedback {
             if (document.getElementById('ticketEditModal').style.display === 'flex') {
                 if (e.key === 'Escape') {
                     this.closeEditModal();
-                } else if (e.key === 'Enter' && e.target.id !== 'ticketStatusSelect') {
+                } else if (e.key === 'Enter' && e.target.id !== 'ticketEditContent' && !e.shiftKey) {
+                    // Only save on Enter if not in the textarea
                     this.saveTicketEdit();
                 }
             }
@@ -509,7 +510,7 @@ export class Feedback {
                             <span class="ticket-status-badge ${ticket.status}">${ticket.status}</span>
                         </div>
                     </div>
-                    <div class="ticket-item-title">${this.escapeHtml(ticket.title)}</div>
+                    <div class="ticket-item-title">${this.escapeHtml(ticket.details ? (ticket.details.length > 100 ? ticket.details.substring(0, 100) + '...' : ticket.details) : 'No description')}</div>
                     <div class="ticket-item-author">
                         by ${ticket.createdBy} • ${date.toLocaleDateString()}
                     </div>
@@ -605,6 +606,12 @@ export class Feedback {
                     <div class="ticket-detail-label">Created At</div>
                     <div class="ticket-detail-value">${date.toLocaleString()}</div>
                 </div>
+                ${ticket.editedAt ? `
+                    <div class="ticket-detail-field">
+                        <div class="ticket-detail-label">Last Edited</div>
+                        <div class="ticket-detail-value">${new Date(ticket.editedAt).toLocaleString()}</div>
+                    </div>
+                ` : ''}
                 <div class="ticket-detail-field">
                     <div class="ticket-detail-label">Description</div>
                     <div class="ticket-detail-value">${this.escapeHtml(ticket.details)}</div>
@@ -754,12 +761,15 @@ export class Feedback {
         // Store the ticket being edited
         this.editingTicket = ticket;
         
-        // Set current status in the select
-        const statusSelect = document.getElementById('ticketStatusSelect');
-        statusSelect.value = ticket.status;
+        // Set current content in the textarea
+        const contentTextarea = document.getElementById('ticketEditContent');
+        contentTextarea.value = ticket.details || '';
         
         // Show the modal
         document.getElementById('ticketEditModal').style.display = 'flex';
+        
+        // Focus the textarea
+        setTimeout(() => contentTextarea.focus(), 100);
     }
     
     closeEditModal() {
@@ -770,10 +780,13 @@ export class Feedback {
     async saveTicketEdit() {
         if (!this.editingTicket) return;
         
-        const statusSelect = document.getElementById('ticketStatusSelect');
-        const newStatus = statusSelect.value;
+        const contentTextarea = document.getElementById('ticketEditContent');
+        const newContent = contentTextarea.value.trim();
         
-        if (!newStatus || (newStatus !== 'open' && newStatus !== 'closed')) return;
+        if (!newContent) {
+            alert('Feedback content cannot be empty.');
+            return;
+        }
         
         try {
             const networking = window.networking;
@@ -783,21 +796,43 @@ export class Feedback {
                 throw new Error('Firebase Database not available');
             }
             
-            await db.ref(`feedback/tickets/${this.editingTicket.ticketId}`).update({
-                status: newStatus,
-                updatedAt: new Date().toISOString()
+            // Get the current ticket data to preserve all fields
+            const ticketRef = db.ref(`feedback/tickets/${this.editingTicket.ticketId}`);
+            const currentSnapshot = await ticketRef.once('value');
+            const currentData = currentSnapshot.val() || this.editingTicket;
+            
+            // Update with new content
+            await ticketRef.set({
+                ...currentData,
+                details: newContent,
+                updatedAt: new Date().toISOString(),
+                editedAt: new Date().toISOString()
             });
             
             // Update local data
-            this.editingTicket.status = newStatus;
-            this.displayTickets(this.tickets);
+            this.editingTicket.details = newContent;
+            this.editingTicket.editedAt = new Date().toISOString();
+            
+            // Update the display to show the edited content
+            const ticketItems = document.querySelectorAll('.ticket-item');
+            ticketItems.forEach(item => {
+                if (item.getAttribute('data-ticket-id') === this.editingTicket.ticketId) {
+                    const titleElement = item.querySelector('.ticket-item-title');
+                    if (titleElement) {
+                        // Truncate to first 100 chars for display
+                        const truncated = newContent.length > 100 ? newContent.substring(0, 100) + '...' : newContent;
+                        titleElement.textContent = truncated;
+                    }
+                }
+            });
             
             // Close the modal
             this.closeEditModal();
             
             // If the ticket detail modal is open, update it
             if (this.currentTicket && this.currentTicket.ticketId === this.editingTicket.ticketId) {
-                this.currentTicket.status = newStatus;
+                this.currentTicket.details = newContent;
+                this.currentTicket.editedAt = this.editingTicket.editedAt;
                 // Re-open the ticket detail to refresh the display
                 this.openTicketDetail(this.editingTicket.ticketId);
             }

@@ -3421,6 +3421,31 @@ body {
     box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
 }
 
+.ticket-edit-textarea {
+    width: 100%;
+    padding: 12px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 150px;
+    transition: all 0.2s ease;
+}
+
+.ticket-edit-textarea:hover {
+    border-color: #4a4a4a;
+}
+
+.ticket-edit-textarea:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+    background: #2a2a2a;
+}
+
 .modal-actions {
     display: flex;
     gap: 10px;
