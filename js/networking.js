@@ -67,7 +67,7 @@ export class Networking {
                 console.log('Firebase Realtime Database initialized');
                 
                 // Test the connection
-                this.testConnection();
+                //this.testConnection();
             } catch (error) {
                 console.error('Failed to initialize Firebase:', error);
             }

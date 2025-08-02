@@ -499,11 +499,13 @@ export class LoadItemChange {
             slot.components.forEach(component=>{
                 component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
             })
-            slot.children.forEach(child=>{
-                child.parentId = slot.id;
-                child.id = slot.id+"/"+child.name;
-                changeChildrenIds(child);
-            })
+            if(slot.children){
+                slot.children.forEach(child=>{
+                    child.parentId = slot.id;
+                    child.id = slot.id+"/"+child.name;
+                    changeChildrenIds(child);
+                })
+            }
         }
 
         let itemData = item.data;

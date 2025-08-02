@@ -17,11 +17,16 @@ export class Slot{
             let newGameObject = new BS.GameObject(this.name);
             this._bs = newGameObject;
             let parentSlot = SM.getSlotOrRoot(this.parentId);
-            let parentGameObject = parentSlot._bs;
-            if(parentGameObject){
-                await newGameObject.SetParent(parentGameObject, true);
+            try{
+                let parentGameObject = parentSlot._bs;
+                if(parentGameObject){
+                    await newGameObject.SetParent(parentGameObject, true);
+                }
+                await newGameObject.SetActive(true);
+            }catch(e){
+                console.log(this, this.parentId, parentSlot)
+                console.error(e);
             }
-            await newGameObject.SetActive(true);
         }
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
