@@ -112,32 +112,17 @@ export class Inventory {
     }
     
     /**
-     * Check if current directory exists in Firebase
+     * Check if current directory is marked as remote
      */
     async checkRemoteStatus() {
-        if (!window.firebase || !window.firebase.database || !SM.scene?.localUser?.name) {
-            this.isRemote = false;
-            return;
-        }
-        
-        try {
-            const db = window.firebase.database();
-            const userName = this.sanitizeFirebasePath(SM.scene.localUser.name);
-            const basePath = `inventory/${userName}`;
-            
-            let checkPath;
-            if (this.currentFolder) {
-                const sanitizedFolder = this.sanitizeFirebasePath(this.currentFolder);
-                checkPath = `${basePath}/${sanitizedFolder}`;
-            } else {
-                checkPath = basePath;
-            }
-            
-            const snapshot = await db.ref(checkPath).once('value');
-            this.isRemote = snapshot.exists();
-        } catch (error) {
-            console.error('Error checking remote status:', error);
-            this.isRemote = false;
+        if (this.currentFolder) {
+            // Check if current folder has remote attribute set to true
+            const folder = this.folders[this.currentFolder];
+            this.isRemote = folder && folder.remote === true;
+        } else {
+            // For root directory, check localStorage flag
+            const rootRemoteKey = `inventory_root_remote_${this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default')}`;
+            this.isRemote = localStorage.getItem(rootRemoteKey) === 'true';
         }
     }
     
@@ -1828,6 +1813,27 @@ export class Inventory {
                     
                     await db.ref(`${subfolderPath}/_folder`).set(subfolder);
                 }
+            }
+            
+            // Mark uploaded folders as remote
+            for (const folderName of Object.keys(contents.folders)) {
+                if (this.folders[folderName]) {
+                    this.folders[folderName].remote = true;
+                    // Update localStorage
+                    const storageKey = `inventory_folder_${folderName}`;
+                    localStorage.setItem(storageKey, JSON.stringify(this.folders[folderName]));
+                }
+            }
+            
+            // Mark current folder as remote if we're in a folder
+            if (this.currentFolder && this.folders[this.currentFolder]) {
+                this.folders[this.currentFolder].remote = true;
+                const storageKey = `inventory_folder_${this.currentFolder}`;
+                localStorage.setItem(storageKey, JSON.stringify(this.folders[this.currentFolder]));
+            } else {
+                // Mark root as remote
+                const rootRemoteKey = `inventory_root_remote_${userName}`;
+                localStorage.setItem(rootRemoteKey, 'true');
             }
             
             this.showNotification('Successfully uploaded to Firebase!');

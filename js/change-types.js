@@ -842,7 +842,8 @@ export class CreateFolderChange{
             name: trimmedName,
             created: Date.now(),
             parent: this.parentFolder,
-            itemType: "folder"
+            itemType: "folder",
+            remote: false
         };
         
         // Save to localStorage
