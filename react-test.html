@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Components Test - Unity Inspector</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .test-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .component-section {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .component-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #4a8af4;
+        }
+        
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .component-demo {
+            background: #1a1a1a;
+            padding: 16px;
+            border-radius: 4px;
+            border: 1px solid #3a3a3a;
+        }
+        
+        .demo-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #e8e8e8;
+        }
+        
+        .value-display {
+            margin-top: 12px;
+            padding: 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #888;
+            font-family: monospace;
+        }
+        
+        .status-bar {
+            background: #1a1a1a;
+            padding: 12px 20px;
+            border-bottom: 1px solid #3a3a3a;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #51cf66;
+        }
+        
+        .toggle-button {
+            padding: 8px 16px;
+            background: #4a8af4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: auto;
+        }
+        
+        .toggle-button:hover {
+            background: #5a9aff;
+        }
+    </style>
+</head>
+<body>
+    <div class="status-bar">
+        <div class="status-indicator">
+            <div class="status-dot" id="reactStatus"></div>
+            <span id="statusText">Loading React...</span>
+        </div>
+        <button class="toggle-button" onclick="toggleReactMode()">Toggle React Mode</button>
+    </div>
+    
+    <div class="test-container">
+        <h1>React Components Test Page</h1>
+        <p>This page demonstrates the React components created for the Unity Inspector migration.</p>
+        
+        <!-- Input Components Section -->
+        <div class="component-section">
+            <h2 class="component-title">Input Components</h2>
+            <div class="component-grid">
+                <!-- Color Picker Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">ColorPicker</div>
+                    <div id="colorPickerDemo"></div>
+                    <div class="value-display" id="colorValue">Value: { r: 1, g: 0.5, b: 0.2, a: 1 }</div>
+                </div>
+                
+                <!-- Vector3 Input Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">Vector3Input</div>
+                    <div id="vector3Demo"></div>
+                    <div class="value-display" id="vector3Value">Value: { x: 10, y: 20, z: 30 }</div>
+                </div>
+                
+                <!-- Number Input Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">NumberInput</div>
+                    <div id="numberDemo"></div>
+                    <div class="value-display" id="numberValue">Value: 42</div>
+                </div>
+                
+                <!-- Slider Input Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">SliderInput</div>
+                    <div id="sliderDemo"></div>
+                    <div class="value-display" id="sliderValue">Value: 0.5</div>
+                </div>
+                
+                <!-- Select Dropdown Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">SelectDropdown</div>
+                    <div id="selectDemo"></div>
+                    <div class="value-display" id="selectValue">Value: "option2"</div>
+                </div>
+                
+                <!-- Asset Picker Demo -->
+                <div class="component-demo">
+                    <div class="demo-title">AssetPicker</div>
+                    <div id="assetDemo"></div>
+                    <div class="value-display" id="assetValue">Value: null</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Component Variations Section -->
+        <div class="component-section">
+            <h2 class="component-title">Component Variations</h2>
+            <div class="component-grid">
+                <!-- Integer Number Input -->
+                <div class="component-demo">
+                    <div class="demo-title">NumberInput (Integer)</div>
+                    <div id="integerDemo"></div>
+                    <div class="value-display" id="integerValue">Value: 100</div>
+                </div>
+                
+                <!-- Searchable Select -->
+                <div class="component-demo">
+                    <div class="demo-title">SelectDropdown (Searchable)</div>
+                    <div id="searchableSelectDemo"></div>
+                    <div class="value-display" id="searchableValue">Value: "item5"</div>
+                </div>
+                
+                <!-- Disabled Components -->
+                <div class="component-demo">
+                    <div class="demo-title">Disabled States</div>
+                    <div id="disabledDemo"></div>
+                    <div class="value-display">All components disabled</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Set repo URL for module loading
+        window.repoUrl = '/js';
+        
+        // Mock scene manager
+        window.SM = {
+            scene: {
+                textures: [
+                    { id: 'tex1', name: 'Brick Texture', url: '/textures/brick.png' },
+                    { id: 'tex2', name: 'Wood Texture', url: '/textures/wood.png' }
+                ],
+                materials: [
+                    { id: 'mat1', name: 'Stone Material' },
+                    { id: 'mat2', name: 'Metal Material' }
+                ],
+                audioClips: [
+                    { id: 'audio1', name: 'Background Music' },
+                    { id: 'audio2', name: 'Click Sound' }
+                ]
+            }
+        };
+        
+        // Toggle React mode
+        function toggleReactMode() {
+            window.inspector = window.inspector || {};
+            window.inspector.useReact = !window.inspector.useReact;
+            console.log('React mode:', window.inspector.useReact ? 'Enabled' : 'Disabled');
+            location.reload();
+        }
+        
+        // Initialize React components
+        async function initializeDemo() {
+            try {
+                // Load React dependencies
+                const { initializeReact } = await import('./js/react/react-bootstrap.js');
+                await initializeReact();
+                
+                // Update status
+                document.getElementById('statusText').textContent = 'React Loaded';
+                document.getElementById('reactStatus').style.background = '#51cf66';
+                
+                // Load component modules
+                const { renderReactComponent } = await import('./js/react/react-bootstrap.js');
+                
+                // Load all components
+                const components = await Promise.all([
+                    window.loadJSXModule('./js/react/components/common/ColorPicker.jsx'),
+                    window.loadJSXModule('./js/react/components/common/Vector3Input.jsx'),
+                    window.loadJSXModule('./js/react/components/common/NumberInput.jsx'),
+                    window.loadJSXModule('./js/react/components/common/SliderInput.jsx'),
+                    window.loadJSXModule('./js/react/components/common/SelectDropdown.jsx'),
+                    window.loadJSXModule('./js/react/components/common/AssetPicker.jsx')
+                ]);
+                
+                const [
+                    { ColorPicker },
+                    { Vector3Input },
+                    { NumberInput },
+                    { SliderInput },
+                    { SelectDropdown },
+                    { AssetPicker }
+                ] = components;
+                
+                // Demo data
+                const demos = [
+                    {
+                        component: ColorPicker,
+                        container: 'colorPickerDemo',
+                        valueDisplay: 'colorValue',
+                        props: {
+                            value: { r: 1, g: 0.5, b: 0.2, a: 1 },
+                            label: 'Tint Color'
+                        }
+                    },
+                    {
+                        component: Vector3Input,
+                        container: 'vector3Demo',
+                        valueDisplay: 'vector3Value',
+                        props: {
+                            value: { x: 10, y: 20, z: 30 },
+                            label: 'Position'
+                        }
+                    },
+                    {
+                        component: NumberInput,
+                        container: 'numberDemo',
+                        valueDisplay: 'numberValue',
+                        props: {
+                            value: 42,
+                            label: 'Speed',
+                            min: 0,
+                            max: 100,
+                            unit: 'm/s'
+                        }
+                    },
+                    {
+                        component: SliderInput,
+                        container: 'sliderDemo',
+                        valueDisplay: 'sliderValue',
+                        props: {
+                            value: 0.5,
+                            label: 'Volume',
+                            min: 0,
+                            max: 1,
+                            step: 0.01
+                        }
+                    },
+                    {
+                        component: SelectDropdown,
+                        container: 'selectDemo',
+                        valueDisplay: 'selectValue',
+                        props: {
+                            value: 'option2',
+                            label: 'Render Mode',
+                            options: [
+                                { value: 'option1', label: 'Opaque' },
+                                { value: 'option2', label: 'Transparent' },
+                                { value: 'option3', label: 'Additive' }
+                            ]
+                        }
+                    },
+                    {
+                        component: AssetPicker,
+                        container: 'assetDemo',
+                        valueDisplay: 'assetValue',
+                        props: {
+                            value: null,
+                            label: 'Texture',
+                            assetType: 'Texture'
+                        }
+                    },
+                    {
+                        component: NumberInput,
+                        container: 'integerDemo',
+                        valueDisplay: 'integerValue',
+                        props: {
+                            value: 100,
+                            label: 'Health Points',
+                            min: 0,
+                            max: 999,
+                            step: 1,
+                            precision: 0
+                        }
+                    },
+                    {
+                        component: SelectDropdown,
+                        container: 'searchableSelectDemo',
+                        valueDisplay: 'searchableValue',
+                        props: {
+                            value: 'item5',
+                            label: 'Item Selection',
+                            searchable: true,
+                            options: Array.from({ length: 20 }, (_, i) => ({
+                                value: `item${i + 1}`,
+                                label: `Item ${i + 1}`
+                            }))
+                        }
+                    }
+                ];
+                
+                // Render all demos
+                demos.forEach(({ component, container, valueDisplay, props }) => {
+                    renderReactComponent(component, {
+                        ...props,
+                        onChange: (value) => {
+                            console.log(`${container} changed:`, value);
+                            if (valueDisplay) {
+                                document.getElementById(valueDisplay).textContent = 
+                                    `Value: ${JSON.stringify(value)}`;
+                            }
+                        },
+                        onChangeComplete: (value) => {
+                            console.log(`${container} change complete:`, value);
+                        }
+                    }, container);
+                });
+                
+                // Disabled components demo
+                renderReactComponent(React.createElement('div', { 
+                    style: { display: 'flex', flexDirection: 'column', gap: '12px' } 
+                },
+                    React.createElement(NumberInput, {
+                        value: 50,
+                        label: 'Disabled Number',
+                        disabled: true
+                    }),
+                    React.createElement(ColorPicker, {
+                        value: { r: 0.5, g: 0.5, b: 0.5, a: 1 },
+                        label: 'Disabled Color',
+                        disabled: true
+                    })
+                ), {}, 'disabledDemo');
+                
+            } catch (error) {
+                console.error('Failed to initialize React demo:', error);
+                document.getElementById('statusText').textContent = 'Error loading React';
+                document.getElementById('reactStatus').style.background = '#ff6b6b';
+            }
+        }
+        
+        // Start initialization
+        initializeDemo();
+    </script>
+</body>
+</html>

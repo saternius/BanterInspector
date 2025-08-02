@@ -6,6 +6,14 @@
  */
 (async () => {
     console.log(window.repoUrl)
+    
+    // Import React loader and bootstrap
+    const { loadReactDependencies, loadJSXModule } = await import(`${window.repoUrl}/react-loader.js`);
+    const { initializeReact } = await import(`${window.repoUrl}/react/react-bootstrap.js`);
+    
+    // Initialize React before other modules
+    await initializeReact();
+    
     const  { sceneManager } = await import(`${window.repoUrl}/scene-manager.js`);
     const  { networking } = await import(`${window.repoUrl}/networking.js`);
     const  { HierarchyPanel } = await import(`${window.repoUrl}/hierarchy-panel.js`);
@@ -21,6 +29,10 @@
     const  { LifecyclePanel } = await import(`${window.repoUrl}/lifecycle-panel.js`);
     const  { Feedback } = await import(`${window.repoUrl}/feedback.js`);
 
+    // Store React loader functions globally for module access
+    window.loadJSXModule = loadJSXModule;
+    window.ReactLoader = { loadReactDependencies, loadJSXModule };
+    
     // Global app instance
     class InspectorApp {
         constructor() {
@@ -34,6 +46,7 @@
             this.lifecyclePanel = null;
             this.feedback = null;
             this.initialized = false;
+            this.useReact = false; // Flag to toggle React components
         }
 
         /**
