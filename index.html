@@ -515,6 +515,29 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                     <div id="modalTicketContent" class="modal-body"></div>
                 </div>
             </div>
+            
+            <!-- Ticket Edit Modal -->
+            <div id="ticketEditModal" class="ticket-edit-modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Ticket Status</h3>
+                        <button class="modal-close" onclick="feedback.closeEditModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="edit-form-group">
+                            <label for="ticketStatusSelect">Status:</label>
+                            <select id="ticketStatusSelect" class="status-select">
+                                <option value="open">Open</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </div>
+                        <div class="modal-actions">
+                            <button class="modal-save-btn" onclick="feedback.saveTicketEdit()">Save</button>
+                            <button class="modal-cancel-btn" onclick="feedback.closeEditModal()">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="file-server" id="fileServer" onclick="SM.toggleFileServer()">File Server</div>
     </div> <!-- End Page Container -->
