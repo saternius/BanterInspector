@@ -521,19 +521,16 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             <div id="ticketEditModal" class="ticket-edit-modal" style="display: none;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3>Edit Ticket Status</h3>
+                        <h3>Edit Feedback</h3>
                         <button class="modal-close" onclick="feedback.closeEditModal()">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="edit-form-group">
-                            <label for="ticketStatusSelect">Status:</label>
-                            <select id="ticketStatusSelect" class="status-select">
-                                <option value="open">Open</option>
-                                <option value="closed">Closed</option>
-                            </select>
+                            <label for="ticketEditContent">Feedback Details:</label>
+                            <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
                         </div>
                         <div class="modal-actions">
-                            <button class="modal-save-btn" onclick="feedback.saveTicketEdit()">Save</button>
+                            <button class="modal-save-btn" onclick="feedback.saveTicketEdit()">Save Changes</button>
                             <button class="modal-cancel-btn" onclick="feedback.closeEditModal()">Cancel</button>
                         </div>
                     </div>
