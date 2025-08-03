@@ -1,4 +1,6 @@
-class ConfigurableJointComponent extends SlotComponent {
+const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+
+export class ConfigurableJointComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.ConfigurableJoint;

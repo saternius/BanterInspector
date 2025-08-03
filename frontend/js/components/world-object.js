@@ -1,4 +1,6 @@
-class BanterWorldObjectComponent extends SlotComponent {
+const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+
+export class BanterWorldObjectComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterWorldObject;

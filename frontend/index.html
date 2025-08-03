@@ -250,32 +250,74 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             <div class="component-menu-content">
                 
                 
-                <!-- Rendering Category -->
+                <!-- Meshes Category -->
                 <div class="component-category">
                     <div class="category-header">
                         <span class="category-icon">🎨</span>
-                        <span class="category-name">Rendering</span>
+                        <span class="category-name">Meshes</span>
                     </div>
                     <div class="category-items">
+                        <div class="component-item" data-component="BanterBox">
+                            <span class="component-item-name">Box</span>
+                            <span class="component-item-desc">Box mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterSphere">
+                            <span class="component-item-name">Sphere</span>
+                            <span class="component-item-desc">Sphere mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterCircle">
+                            <span class="component-item-name">Circle</span>
+                            <span class="component-item-desc">Circle mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterCone">
+                            <span class="component-item-name">Cone</span>
+                            <span class="component-item-desc">Cone mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterCylinder">
+                            <span class="component-item-name">Cylinder</span>
+                            <span class="component-item-desc">Cylinder mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterTorus">
+                            <span class="component-item-name">Torus</span>
+                            <span class="component-item-desc">Torus mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterPlane">
+                            <span class="component-item-name">Plane</span>
+                            <span class="component-item-desc">Plane mesh</span>
+                        </div>
+                        <div class="component-item" data-component="BanterRing">
+                            <span class="component-item-name">Ring</span>
+                            <span class="component-item-desc">Ring mesh</span>
+                        </div>
                         <div class="component-item" data-component="BanterGeometry">
                             <span class="component-item-name">Geometry</span>
                             <span class="component-item-desc">3D procedural shapes</span>
                         </div>
-                        <div class="component-item" data-component="BanterMaterial">
-                            <span class="component-item-name">Material</span>
-                            <span class="component-item-desc">Surface appearance</span>
+                        <div class="component-item" data-component="BanterInvertedMesh">
+                            <span class="component-item-name">Inverted Mesh</span>
+                            <span class="component-item-desc">Inverted mesh</span>
                         </div>
                         <div class="component-item" data-component="BanterText">
                             <span class="component-item-name">Text</span>
                             <span class="component-item-desc">3D text display</span>
                         </div>
-                        <div class="component-item" data-component="BanterBillboard">
-                            <span class="component-item-name">Billboard</span>
-                            <span class="component-item-desc">Always faces camera</span>
+                    </div>
+                </div>
+
+                <!-- Materials Category -->
+                <div class="component-category">
+                    <div class="category-header">
+                        <span class="category-icon">🎨</span>
+                        <span class="category-name">Materials</span>
+                    </div>
+                    <div class="category-items">
+                        <div class="component-item" data-component="BanterMaterial">
+                            <span class="component-item-name">Material</span>
+                            <span class="component-item-desc">Surface appearance</span>
                         </div>
-                        <div class="component-item" data-component="BanterMirror">
-                            <span class="component-item-name">Mirror</span>
-                            <span class="component-item-desc">Reflective surface</span>
+                        <div class="component-item" data-component="BanterPhysicMaterial">
+                            <span class="component-item-name">Physic Material</span>
+                            <span class="component-item-desc">Physics material properties</span>
                         </div>
                     </div>
                 </div>
@@ -307,37 +349,9 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <span class="component-item-name">Mesh Collider</span>
                             <span class="component-item-desc">Mesh-based collision detection</span>
                         </div>
-                    </div>
-                </div>
-                
-                
-                
-                <!-- Interaction Category -->
-                <div class="component-category">
-                    <div class="category-header">
-                        <span class="category-icon">🤚</span>
-                        <span class="category-name">Interaction</span>
-                    </div>
-                    <div class="category-items">
-                        <div class="component-item" data-component="BanterColliderEvents">
-                            <span class="component-item-name">Collider Events</span>
-                            <span class="component-item-desc">Trigger and collision events</span>
-                        </div>
-                        <div class="component-item" data-component="BanterGrabHandle">
-                            <span class="component-item-name">Grab Handle</span>
-                            <span class="component-item-desc">Make object grabbable</span>
-                        </div>
-                        <div class="component-item" data-component="BanterHeldEvents">
-                            <span class="component-item-name">Held Events</span>
-                            <span class="component-item-desc">Input while holding</span>
-                        </div>
-                        <div class="component-item" data-component="BanterAttachedObject">
-                            <span class="component-item-name">Attached Object</span>
-                            <span class="component-item-desc">Attach to users</span>
-                        </div>
-                        <div class="component-item" data-component="BanterSyncedObject">
-                            <span class="component-item-name">Synced Object</span>
-                            <span class="component-item-desc">Network synchronization</span>
+                        <div class="component-item" data-component="ConfigurableJoint">
+                            <span class="component-item-name">Configurable Joint</span>
+                            <span class="component-item-desc">Configurable joint constraint</span>
                         </div>
                     </div>
                 </div>
@@ -349,6 +363,10 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                         <span class="category-name">Media</span>
                     </div>
                     <div class="category-items">
+                        <div class="component-item" data-component="BanterGLTF">
+                            <span class="component-item-name">GLTF</span>
+                            <span class="component-item-desc">Load 3D models</span>
+                        </div>
                         <div class="component-item" data-component="BanterAudioSource">
                             <span class="component-item-name">Audio Source</span>
                             <span class="component-item-desc">Play sounds and music</span>
@@ -357,27 +375,43 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <span class="component-item-name">Video Player</span>
                             <span class="component-item-desc">Play video content</span>
                         </div>
-                        <div class="component-item" data-component="BanterBrowser">
-                            <span class="component-item-name">Web Browser</span>
-                            <span class="component-item-desc">Embed web content</span>
+                        <div class="component-item" data-component="BanterBillboard">
+                            <span class="component-item-name">Billboard</span>
+                            <span class="component-item-desc">Always faces camera</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Loading Category -->
+                <!-- Misc Category -->
                 <div class="component-category">
                     <div class="category-header">
                         <span class="category-icon">📦</span>
-                        <span class="category-name">Loading</span>
+                        <span class="category-name">Misc</span>
                     </div>
                     <div class="category-items">
-                        <div class="component-item" data-component="BanterGLTF">
-                            <span class="component-item-name">GLTF Model</span>
-                            <span class="component-item-desc">Load 3D models</span>
+                        <div class="component-item" data-component="BanterMirror">
+                            <span class="component-item-name">Mirror</span>
+                            <span class="component-item-desc">Reflective surface</span>
+                        </div>
+                        <div class="component-item" data-component="BanterBrowser">
+                            <span class="component-item-name">Browser</span>
+                            <span class="component-item-desc">Embed web content</span>
                         </div>
                         <div class="component-item" data-component="BanterAssetBundle">
                             <span class="component-item-name">Asset Bundle</span>
                             <span class="component-item-desc">Unity asset bundles</span>
+                        </div>
+                        <div class="component-item" data-component="BanterWorldObject">
+                            <span class="component-item-name">World Object</span>
+                            <span class="component-item-desc">World object reference</span>
+                        </div>
+                        <div class="component-item" data-component="BanterStreetView">
+                            <span class="component-item-name">Street View</span>
+                            <span class="component-item-desc">Street view panorama</span>
+                        </div>
+                        <div class="component-item" data-component="BanterKitItem">
+                            <span class="component-item-name">Kit Item</span>
+                            <span class="component-item-desc">Kit item component</span>
                         </div>
                         <div class="component-item" data-component="BanterPortal">
                             <span class="component-item-name">Portal</span>
@@ -386,14 +420,33 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                     </div>
                 </div>
 
-
-                <!-- Script Category -->
+                <!-- Behaviors Category -->
                 <div class="component-category">
                     <div class="category-header">
-                        <span class="category-icon">📜</span>
-                        <span class="category-name">Script</span>
+                        <span class="category-icon">🤚</span>
+                        <span class="category-name">Behaviors</span>
                     </div>
                     <div class="category-items">
+                        <div class="component-item" data-component="BanterColliderEvents">
+                            <span class="component-item-name">Collider Events</span>
+                            <span class="component-item-desc">Trigger and collision events</span>
+                        </div>
+                        <div class="component-item" data-component="BanterAttachedObject">
+                            <span class="component-item-name">Attached Object</span>
+                            <span class="component-item-desc">Attach to users</span>
+                        </div>
+                        <div class="component-item" data-component="BanterSyncedObject">
+                            <span class="component-item-name">Synced Object</span>
+                            <span class="component-item-desc">Network synchronization</span>
+                        </div>
+                        <div class="component-item" data-component="BanterGrabHandle">
+                            <span class="component-item-name">Grab Handle</span>
+                            <span class="component-item-desc">Make object grabbable</span>
+                        </div>
+                        <div class="component-item" data-component="BanterHeldEvents">
+                            <span class="component-item-name">Held Events</span>
+                            <span class="component-item-desc">Input while holding</span>
+                        </div>
                         <div class="component-item" data-component="MonoBehavior">
                             <span class="component-item-name">MonoBehavior</span>
                             <span class="component-item-desc">Add a MonoBehavior script</span>
