@@ -108,6 +108,12 @@ export class Feedback {
         if (submitRefinementBtn) {
             submitRefinementBtn.addEventListener('click', () => this.submitRefinement());
         }
+        
+        // Setup clear draft button
+        const clearDraftBtn = document.getElementById('clearDraftBtn');
+        if (clearDraftBtn) {
+            clearDraftBtn.addEventListener('click', () => this.clearDraft());
+        }
     }
     
     setupSpeechRecognition() {
@@ -232,6 +238,16 @@ export class Feedback {
                 this.hideSpeechStatus();
                 clearTimeout(this.timeoutId);
                 console.log("[mic] stopped recording")
+                
+                // Update button icon back to "Add More" if in block mode
+                if (this.blockEditorContainer && this.blockEditorContainer.style.display !== 'none') {
+                    const micIcon = micButton.querySelector('.mic-icon');
+                    if (micIcon) {
+                        micIcon.textContent = '➕';
+                    }
+                    micButton.title = 'Add more content';
+                }
+                
                 // Process transcript with block editor if enabled
                 if (this.useBlockMode && this.statementBlockEditor) {
                     const transcript = document.getElementById('feedbackDetails').value.trim();
@@ -381,6 +397,12 @@ export class Feedback {
         // Show the block editor
         this.blockEditorContainer.style.display = 'block';
         
+        // Show the clear draft button
+        const clearDraftBtn = document.getElementById('clearDraftBtn');
+        if (clearDraftBtn) {
+            clearDraftBtn.style.display = 'inline-flex';
+        }
+        
         // Render the blocks
         this.statementBlockEditor.renderBlocks(this.blockEditorContainer);
         
@@ -392,6 +414,12 @@ export class Feedback {
         if (!this.blockEditorContainer) return;
         
         this.blockEditorContainer.style.display = 'none';
+        
+        // Hide the clear draft button
+        const clearDraftBtn = document.getElementById('clearDraftBtn');
+        if (clearDraftBtn) {
+            clearDraftBtn.style.display = 'none';
+        }
         
         // Reset textarea to editable
         const textarea = document.getElementById('feedbackDetails');
@@ -459,6 +487,12 @@ export class Feedback {
     }
     
     startAddingToBlocks() {
+        // If currently recording, stop it first
+        if (this.recording) {
+            this.stopRecording();
+            return;
+        }
+        
         this.isAddingToBlocks = true;
         const textarea = document.getElementById('feedbackDetails');
         
@@ -473,7 +507,7 @@ export class Feedback {
         this.showStatus('Record additional content to add to your blocks', 'info');
         
         // Start recording if mic is initialized
-        if (this.micInited && !this.recording) {
+        if (this.micInited) {
             this.startRecording();
         }
     }
@@ -490,10 +524,10 @@ export class Feedback {
         const micButton = document.getElementById('micButton');
         if (micButton) {
             const micIcon = micButton.querySelector('.mic-icon');
-            if (micIcon) {
+            if (micIcon && !this.recording) {
                 micIcon.textContent = '➕';
             }
-            micButton.title = 'Add more content';
+            micButton.title = this.recording ? 'Stop recording' : 'Add more content';
             
             // Update click handler for add more functionality
             micButton.removeEventListener('click', this.originalMicHandler);
@@ -572,6 +606,35 @@ export class Feedback {
         // Restore original value in case submission fails
         if (document.getElementById('feedbackDetails').value === formattedFeedback) {
             textarea.value = originalValue;
+        }
+    }
+    
+    clearDraft() {
+        if (confirm('Are you sure you want to clear your draft and start over?')) {
+            // Clear the block editor
+            if (this.statementBlockEditor) {
+                this.statementBlockEditor.clear();
+                this.statementBlockEditor.clearDraft();
+            }
+            
+            // Hide the block editor
+            this.hideBlockEditor();
+            
+            // Clear the textarea
+            const textarea = document.getElementById('feedbackDetails');
+            if (textarea) {
+                textarea.value = '';
+                textarea.readOnly = false;
+                textarea.style.opacity = '1';
+                textarea.focus();
+            }
+            
+            // Reset any recording flags
+            this.isAddingToBlocks = false;
+            
+            // Clear any existing status message
+            this.hideSpeechStatus();
+            this.showStatus("", "info");
         }
     }
     

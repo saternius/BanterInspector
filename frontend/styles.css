@@ -3968,6 +3968,31 @@ body {
     border-bottom: 1px solid #3a3a3a;
 }
 
+.clear-draft-btn {
+    padding: 6px 14px;
+    background: #444;
+    border: 1px solid #555;
+    border-radius: 6px;
+    color: #e8e8e8;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.clear-draft-btn:hover {
+    background: rgba(255, 59, 48, 0.1);
+    border-color: #ff3b30;
+    color: #ff7b7b;
+}
+
+.clear-draft-btn .btn-icon {
+    font-size: 14px;
+}
+
 .block-editor-header h3 {
     color: #e8e8e8;
     font-size: 18px;
