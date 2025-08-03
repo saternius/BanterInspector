@@ -21,6 +21,7 @@ export class StatementBlockEditor {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    intent:"The speaker is submitting in a feedback ticketing form for a VR creator tool project",
                     text: transcript,
                     existing_blocks: this.blocks
                 }),
@@ -62,7 +63,7 @@ export class StatementBlockEditor {
                 <div class="block-content" contenteditable="true">${this.escapeHtml(block)}</div>
                 <div class="block-actions">
                     <button class="block-delete" aria-label="Delete block">×</button>
-                    <button class="block-drag" aria-label="Reorder block">⋮⋮</button>
+                    <div class="block-drag" aria-label="Reorder block" role="button" tabindex="0">⋮⋮</div>
                 </div>
             </div>
         `).join('');
@@ -167,11 +168,111 @@ export class StatementBlockEditor {
             });
         });
         
-        // Drag functionality (placeholder for now)
-        blocksList.querySelectorAll('.block-drag').forEach(btn => {
-            btn.addEventListener('click', () => {
-                console.log('Drag reordering not implemented yet');
+        // Drag functionality
+        this._setupDragAndDrop(blocksList);
+    }
+    
+    _setupDragAndDrop(blocksList) {
+        let draggedElement = null;
+        let draggedIndex = null;
+        
+        // Make drag handles draggable
+        blocksList.querySelectorAll('.statement-block').forEach(block => {
+            const dragHandle = block.querySelector('.block-drag');
+            
+            // Ensure block is not draggable, only the handle
+            block.draggable = false;
+            
+            // Make the drag handle draggable
+            dragHandle.draggable = true;
+            
+            // Drag handle events
+            dragHandle.addEventListener('dragstart', (e) => {
+                draggedElement = block;
+                draggedIndex = parseInt(block.dataset.blockIndex);
+                block.classList.add('dragging');
+                
+                // Set drag effect
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', draggedIndex.toString());
+                
+                // Stop event from bubbling to prevent issues
+                e.stopPropagation();
             });
+            
+            dragHandle.addEventListener('dragend', (e) => {
+                if (draggedElement) {
+                    draggedElement.classList.remove('dragging');
+                }
+                
+                // Remove any drag-over classes
+                blocksList.querySelectorAll('.drag-over').forEach(el => {
+                    el.classList.remove('drag-over');
+                });
+                
+                draggedElement = null;
+                draggedIndex = null;
+            });
+            
+            // Drop zone events
+            block.addEventListener('dragover', (e) => {
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
+                e.dataTransfer.dropEffect = 'move';
+                
+                // Add visual feedback
+                const targetBlock = e.target.closest('.statement-block');
+                if (targetBlock && targetBlock !== draggedElement) {
+                    // Remove other drag-over classes
+                    blocksList.querySelectorAll('.drag-over').forEach(el => {
+                        el.classList.remove('drag-over');
+                    });
+                    targetBlock.classList.add('drag-over');
+                }
+                
+                return false;
+            });
+            
+            block.addEventListener('drop', (e) => {
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                }
+                
+                const targetBlock = e.target.closest('.statement-block');
+                if (targetBlock && draggedElement && targetBlock !== draggedElement) {
+                    const targetIndex = parseInt(targetBlock.dataset.blockIndex);
+                    
+                    // Perform the reorder
+                    this.reorderBlocks(draggedIndex, targetIndex);
+                }
+                
+                return false;
+            });
+            
+            block.addEventListener('dragenter', (e) => {
+                // Optional: Add enter animations
+            });
+            
+            block.addEventListener('dragleave', (e) => {
+                const targetBlock = e.target.closest('.statement-block');
+                if (targetBlock) {
+                    targetBlock.classList.remove('drag-over');
+                }
+            });
+        });
+        
+        // Prevent default drag behavior on document
+        document.addEventListener('dragover', (e) => {
+            if (draggedElement) {
+                e.preventDefault();
+            }
+        });
+        
+        document.addEventListener('drop', (e) => {
+            if (draggedElement) {
+                e.preventDefault();
+            }
         });
     }
     

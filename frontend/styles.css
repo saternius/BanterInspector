@@ -4027,6 +4027,7 @@ body {
     margin-bottom: 10px;
     position: relative;
     transition: all 0.2s ease;
+    user-select: none;
 }
 
 .statement-block:hover {
@@ -4035,16 +4036,13 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.statement-block.dragging {
-    opacity: 0.5;
-}
-
 .block-content {
     color: #e0e0e0;
     line-height: 1.5;
     min-height: 50px;
     padding-right: 80px;
     outline: none;
+    user-select: text;
 }
 
 .block-content:focus {
@@ -4082,10 +4080,30 @@ body {
     color: #ff3b30;
 }
 
+.block-drag {
+    cursor: grab;
+}
+
 .block-drag:hover {
     background: #404040;
     border-color: #555;
     color: #e8e8e8;
+}
+
+.block-drag:active {
+    cursor: grabbing;
+}
+
+/* Drag states */
+.statement-block.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.statement-block.drag-over {
+    border-color: #00d4ff;
+    border-width: 2px;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
 }
 
 .block-editor-actions {
