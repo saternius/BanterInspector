@@ -1054,13 +1054,21 @@ export class Feedback {
                     <div class="loading-comments">Loading comments...</div>
                 </div>
                 <div class="comment-form">
-                    <textarea id="newCommentInput" class="comment-input" placeholder="Add a comment..."></textarea>
+                    <div class="comment-input-container">
+                        <textarea id="newCommentInput" class="comment-input" placeholder="Add a comment..."></textarea>
+                        <button id="commentMicBtn" class="comment-mic-btn" title="Click to record comment">
+                            <span class="mic-icon">🎤</span>
+                        </button>
+                    </div>
                     <button class="comment-submit-btn" onclick="feedback.addComment()">Post</button>
                 </div>
             </div>
         `;
         
         modal.style.display = 'flex';
+        
+        // Setup comment mic button
+        this.setupCommentMic();
         
         // Load comments
         await this.loadComments(ticket);
@@ -1439,6 +1447,121 @@ export class Feedback {
             </span>`;
             metaContainer.insertAdjacentHTML('beforeend', commentBadge);
         }
+    }
+    
+    setupCommentMic() {
+        const commentMicBtn = document.getElementById('commentMicBtn');
+        if (!commentMicBtn) return;
+        
+        // Create a simple recording state for comments
+        let isRecordingComment = false;
+        
+        commentMicBtn.addEventListener('click', () => {
+            if (!this.micInited) {
+                // Initialize mic if not already done
+                this.initializeMic();
+                // After init, we'll need to click again to start recording
+                return;
+            }
+            
+            if (!isRecordingComment) {
+                // Start recording for comment
+                this.startCommentRecording(commentMicBtn);
+                isRecordingComment = true;
+            } else {
+                // Stop recording for comment
+                this.stopCommentRecording(commentMicBtn);
+                isRecordingComment = false;
+            }
+        });
+    }
+    
+    startCommentRecording(micButton) {
+        const commentInput = document.getElementById('newCommentInput');
+        if (!commentInput) return;
+        
+        // Save current content
+        this.commentSpeechBuffer = commentInput.value ? commentInput.value + ' ' : '';
+        
+        // Temporarily hijack the main speech buffer
+        const originalBuffer = this.speechBuffer;
+        this.speechBuffer = this.commentSpeechBuffer;
+        
+        this.speechRecognizer.recognizing = (s, e) => {
+            const recognizingText = e.result.text;
+            this.commentSpeechBuffer = this.commentSpeechBuffer + recognizingText.slice(this.rlen);
+            commentInput.value = this.commentSpeechBuffer;
+            this.rlen = recognizingText.length;
+        };
+        
+        this.speechRecognizer.recognized = (s, e) => {
+            if (e.result.reason === window.SpeechSDK.ResultReason.RecognizedSpeech) {
+                this.commentSpeechBuffer += ' ';
+                commentInput.value = this.commentSpeechBuffer;
+                this.rlen = 0;
+            }
+        };
+        
+        this.speechRecognizer.startContinuousRecognitionAsync(
+            () => {
+                micButton.classList.add('recording');
+                const micIcon = micButton.querySelector('.mic-icon');
+                if (micIcon) micIcon.textContent = '🔴';
+            },
+            (error) => {
+                console.error('Failed to start comment recording:', error);
+                this.showStatus('Failed to start recording', 'error');
+            }
+        );
+        
+        // Store original buffer to restore later
+        this._originalSpeechBuffer = originalBuffer;
+    }
+    
+    stopCommentRecording(micButton) {
+        this.speechRecognizer.stopContinuousRecognitionAsync(
+            () => {
+                micButton.classList.remove('recording');
+                const micIcon = micButton.querySelector('.mic-icon');
+                if (micIcon) micIcon.textContent = '🎤';
+                
+                // Restore original speech buffer and recognizer settings
+                this.speechBuffer = this._originalSpeechBuffer || '';
+                this.rlen = 0;
+                
+                // Re-setup main recognizer
+                this.setupMainRecognizer();
+            },
+            (error) => {
+                console.error('Failed to stop comment recording:', error);
+            }
+        );
+    }
+    
+    setupMainRecognizer() {
+        // Restore the main feedback recognizer settings
+        this.speechRecognizer.recognizing = (s, e) => {
+            const recognizingText = e.result.text;
+            const delta = recognizingText.length - this.rlen;
+            const newText = recognizingText.slice(this.rlen);
+            
+            this.speechBuffer += newText;
+            this.updateTextarea();
+            this.rlen = recognizingText.length;
+            
+            // Reset timeout for auto-stop
+            clearTimeout(this.timeoutId);
+            this.timeoutId = setTimeout(() => {
+                this.completeRecognition();
+            }, 2000);
+        };
+        
+        this.speechRecognizer.recognized = (s, e) => {
+            if (e.result.reason === window.SpeechSDK.ResultReason.RecognizedSpeech) {
+                this.completeRecognition();
+                this.rlen = 0;
+            }
+        };
     }
 }
 

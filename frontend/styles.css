@@ -2853,7 +2853,6 @@ body {
 
 .feedback-input, .feedback-textarea {
     width: 100%;
-    padding: 12px 16px;
     background: #242424;
     border: 1px solid #3a3a3a;
     border-radius: 6px;
@@ -2871,6 +2870,7 @@ body {
 .feedback-textarea {
     resize: vertical;
     min-height: 120px;
+    padding: 10px;
 }
 
 .feedback-hint {
@@ -3779,12 +3779,20 @@ body {
 
 .comment-form {
     display: flex;
+    flex-direction: column;
     gap: 10px;
+}
+
+.comment-input-container {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
 }
 
 .comment-input {
     flex: 1;
     padding: 10px;
+    padding-right: 50px;
     background: #242424;
     border: 1px solid #3a3a3a;
     border-radius: 6px;
@@ -3798,6 +3806,39 @@ body {
 .comment-input:focus {
     outline: none;
     border-color: #00d4ff;
+}
+
+.comment-mic-btn {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    width: 36px;
+    height: 36px;
+    background: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.comment-mic-btn:hover {
+    background: #333;
+    border-color: #4a4a4a;
+    transform: scale(1.05);
+}
+
+.comment-mic-btn.recording {
+    background: #ff3b3b;
+    border-color: #ff5555;
+    animation: pulse 1.5s infinite;
+}
+
+.comment-mic-btn .mic-icon {
+    font-size: 16px;
 }
 
 .comment-submit-btn {

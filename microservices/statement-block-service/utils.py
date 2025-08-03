@@ -105,9 +105,7 @@ def validate_request_data(data):
     if 'intent' in data:
         if not isinstance(data.get('intent'), str):
             errors.append("'intent' must be a string")
-        elif len(data.get('intent', '')) > Config.MAX_INTENT_LENGTH:
-            errors.append(f"'intent' exceeds maximum length of {Config.MAX_INTENT_LENGTH} characters")
-    
+
     if 'existing_blocks' in data:
         if not isinstance(data.get('existing_blocks'), list):
             errors.append("'existing_blocks' must be an array")
