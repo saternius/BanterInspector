@@ -54,6 +54,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script>
+        
         window.isLocalHost = window.location.hostname === 'localhost';
         window.repoUrl = '.'
         window.fileServer = localStorage.getItem('file_server');
@@ -62,12 +63,11 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         }else if(window.fileServer === "local"){
             window.repoUrl = localStorage.getItem('ngrok_url');
         }
-
+        
+        window.blockServiceUrl = `${localStorage.getItem('ngrok_url')}/api/process-text`;
         if(window.isLocalHost && window.fileServer === "unity"){
             window.repoUrl = 'http://localhost:42069'
         }
-
-
 
         
         const link = document.createElement('link');
@@ -449,7 +449,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             
                             <div class="feedback-section">
                                 <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
-                                <div class="feedback-input-container">
+                                <div class="feedback-input feedback-input-container">
                                     <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
                                     <button id="micButton" class="mic-button" title="Click to record feedback">
                                         <span class="mic-icon">🎤</span>
@@ -457,6 +457,18 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                                     </button>
                                 </div>
                                 <div id="speechStatus" class="speech-status" style="display: none;"></div>
+                                
+                                <!-- Block Editor Container -->
+                                <div id="blockEditorContainer" class="block-editor-container" style="display: none;">
+                                    <div class="block-editor-header">
+                                        <h3>Refined Feedback</h3>
+                                    </div>
+                                    <div class="block-editor-content">
+                                        <div id="blocksList" class="blocks-list">
+                                            <!-- Blocks will be rendered here -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             
                             <div class="feedback-actions">
@@ -464,6 +476,16 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                                     <span class="btn-icon">📤</span>
                                     Submit Feedback
                                 </button>
+                                <div id="dualSubmitButtons" class="dual-submit-buttons" style="display: none;">
+                                    <button id="submitOriginalBtn" class="feedback-submit-btn submit-original">
+                                        <span class="btn-icon">📄</span>
+                                        Submit Original
+                                    </button>
+                                    <button id="submitRefinementBtn" class="feedback-submit-btn submit-refinement">
+                                        <span class="btn-icon">✨</span>
+                                        Submit Refinement
+                                    </button>
+                                </div>
                             </div>
                             
                             <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>

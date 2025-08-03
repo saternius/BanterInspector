@@ -1,3 +1,5 @@
+import { StatementBlockEditor } from './statement-block-editor.js';
+
 export class Feedback {
     constructor() {
         this.selectedType = 'feature';
@@ -10,6 +12,10 @@ export class Feedback {
         this.tickets = [];
         this.currentTicket = null;
         this.editingTicket = null;
+        this.statementBlockEditor = null;
+        this.useBlockMode = true; // Feature flag
+        this.blockEditorContainer = null;
+        this.isAddingToBlocks = false;
         this.init();
     }
     
@@ -20,6 +26,8 @@ export class Feedback {
         this.setupSpeechRecognition();
         this.setupTicketLookup();
         this.setupTicketsList();
+        this.setupBlockEditor();
+        
         window.addEventListener('page-switched', (e)=>{
             console.log("page-switched", e.detail.pageId)
             if(e.detail.pageId === 'feedback'){
@@ -63,23 +71,66 @@ export class Feedback {
         submitBtn.addEventListener('click', () => this.submitFeedback());
     }
     
+    setupBlockEditor() {
+        this.blockEditorContainer = document.getElementById('blockEditorContainer');
+        
+        if (!this.blockEditorContainer) {
+            console.warn('Block editor container not found in DOM');
+            return;
+        }
+        
+        // Initialize the block editor
+        this.statementBlockEditor = new StatementBlockEditor({
+            serviceUrl: window.blockServiceUrl || 'http://localhost:5000/process-text',
+            onBlocksChanged: (blocks) => {
+                // Auto-save draft when blocks change
+                if (this.statementBlockEditor) {
+                    this.statementBlockEditor.saveDraft();
+                }
+            }
+        });
+        
+        // Check for existing draft
+        const draft = this.statementBlockEditor.loadDraft();
+        if (draft && draft.blocks.length > 0) {
+            this.showBlockEditor(draft.blocks);
+            this.showStatus('Draft restored from previous session', 'info');
+        }
+        
+        // Setup dual submit buttons
+        const submitOriginalBtn = document.getElementById('submitOriginalBtn');
+        const submitRefinementBtn = document.getElementById('submitRefinementBtn');
+        
+        if (submitOriginalBtn) {
+            submitOriginalBtn.addEventListener('click', () => this.submitOriginal());
+        }
+        
+        if (submitRefinementBtn) {
+            submitRefinementBtn.addEventListener('click', () => this.submitRefinement());
+        }
+    }
+    
     setupSpeechRecognition() {
         const micButton = document.getElementById('micButton');
         if (!micButton) return;
         
-        micButton.addEventListener('click', () => {
+        // Store the original mic handler
+        this.originalMicHandler = () => {
             if (!this.micInited) {
                 this.initializeMic();
             } else {
                 this.toggleRecording();
             }
-        });
+        };
+        
+        micButton.addEventListener('click', this.originalMicHandler);
     }
     
     initializeMic() {
         if (this.micInited) return;
         
         try {
+            console.log("[mic] initializing..")
             // You'll need to provide your Azure subscription key and region
             if (!this.key) {
                 this.showSpeechStatus('Speech recognition not configured', 'error');
@@ -96,7 +147,7 @@ export class Feedback {
                 const recognizingText = e.result.text;
                 const delta = recognizingText.length - this.rlen;
                 const newText = recognizingText.slice(this.rlen);
-                
+                console.log("[mic] recognizing..", newText)
                 this.speechBuffer += newText;
                 this.updateTextarea();
                 this.rlen = recognizingText.length;
@@ -110,6 +161,7 @@ export class Feedback {
             
             this.speechRecognizer.recognized = (s, e) => {
                 if (e.result.reason === window.SpeechSDK.ResultReason.RecognizedSpeech) {
+                    console.log("[mic] recognized: ", e.result.text)
                     this.completeRecognition();
                     this.rlen = 0;
                 }
@@ -124,6 +176,7 @@ export class Feedback {
             };
             
             this.speechRecognizer.sessionStopped = (s, e) => {
+                console.log("[mic] session stopped")
                 this.stopRecording();
             };
             
@@ -169,14 +222,33 @@ export class Feedback {
     }
     
     stopRecording() {
+        if(!this.recording) return;
         const micButton = document.getElementById('micButton');
         
         this.speechRecognizer.stopContinuousRecognitionAsync(
-            () => {
+            async () => {
                 this.recording = false;
                 micButton.classList.remove('recording');
                 this.hideSpeechStatus();
                 clearTimeout(this.timeoutId);
+                console.log("[mic] stopped recording")
+                // Process transcript with block editor if enabled
+                if (this.useBlockMode && this.statementBlockEditor) {
+                    const transcript = document.getElementById('feedbackDetails').value.trim();
+                    
+                    if (transcript) {
+                        if (this.isAddingToBlocks) {
+                            // Adding to existing blocks
+                            await this.processAdditionalTranscript(transcript);
+                            this.isAddingToBlocks = false;
+                        } else {
+                            // Process new transcript
+                            if(transcript.length > 60){
+                                await this.processTranscriptWithBlocks(transcript);
+                            }
+                        }
+                    }
+                }
             },
             (error) => {
                 console.error('Failed to stop recording:', error);
@@ -225,6 +297,284 @@ export class Feedback {
         statusEl.style.display = 'none';
     }
     
+    async processTranscriptWithBlocks(transcript) {
+        console.log("[block] processing transcript..", transcript)
+        try {
+            this.showProcessingUI();
+            const blocks = await this.statementBlockEditor.processTranscript(transcript);
+            this.hideProcessingUI();
+            
+            if (blocks && blocks.length > 0) {
+                this.showBlockEditor(blocks);
+                // Keep the original transcript visible
+            } else {
+                this.showFallbackOption(transcript);
+            }
+        } catch (error) {
+            console.error('Block processing failed:', error);
+            this.hideProcessingUI();
+            this.showFallbackOption(transcript);
+        }
+    }
+    
+    async processAdditionalTranscript(transcript) {
+        console.log("[block] processing additional transcript..", transcript)
+        try {
+            this.showProcessingUI();
+            // Get existing blocks to send as context
+            const existingBlocks = this.statementBlockEditor.getBlocks();
+            
+            // Process the new transcript with existing blocks as context
+            const blocks = await this.statementBlockEditor.processTranscript(transcript);
+            this.hideProcessingUI();
+            
+            if (blocks && blocks.length > 0) {
+                this.showBlockEditor(blocks);
+                // Re-enable the textarea and make it read-only again
+                const textarea = document.getElementById('feedbackDetails');
+                if (textarea) {
+                    textarea.readOnly = true;
+                    textarea.style.opacity = '0.7';
+                }
+            }
+        } catch (error) {
+            console.error('Failed to add additional content:', error);
+            this.hideProcessingUI();
+            this.showStatus('Failed to process additional content', 'error');
+        }
+    }
+    
+    showProcessingUI() {
+        const processingOverlay = document.createElement('div');
+        processingOverlay.id = 'processingOverlay';
+        processingOverlay.className = 'processing-overlay';
+        processingOverlay.innerHTML = `
+            <div class="processing-content">
+                <div class="processing-spinner"></div>
+                <p>Processing your feedback...</p>
+            </div>
+        `;
+        
+        const feedbackSection = document.querySelector('.feedback-section');
+        if (feedbackSection) {
+            feedbackSection.appendChild(processingOverlay);
+        }
+    }
+    
+    hideProcessingUI() {
+        const overlay = document.getElementById('processingOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+    
+    showBlockEditor(blocks) {
+        if (!this.blockEditorContainer || !this.statementBlockEditor) return;
+        
+        // Keep the original textarea visible but make it read-only
+        const textarea = document.getElementById('feedbackDetails');
+        if (textarea) {
+            textarea.readOnly = true;
+            textarea.style.opacity = '0.7';
+        }
+        
+        // Show the block editor
+        this.blockEditorContainer.style.display = 'block';
+        
+        // Render the blocks
+        this.statementBlockEditor.renderBlocks(this.blockEditorContainer);
+        
+        // Update UI for block mode
+        this.updateUIForBlockMode();
+    }
+    
+    hideBlockEditor() {
+        if (!this.blockEditorContainer) return;
+        
+        this.blockEditorContainer.style.display = 'none';
+        
+        // Reset textarea to editable
+        const textarea = document.getElementById('feedbackDetails');
+        if (textarea) {
+            textarea.readOnly = false;
+            textarea.style.opacity = '1';
+        }
+        
+        // Reset UI to normal mode
+        this.resetUIFromBlockMode();
+    }
+    
+    toggleTranscriptView() {
+        const originalView = document.querySelector('.original-transcript');
+        const blocksList = document.getElementById('blocksList');
+        const toggleBtn = document.querySelector('.toggle-view-btn');
+        
+        if (!originalView || !blocksList) return;
+        
+        if (originalView.style.display === 'none') {
+            // Show original transcript
+            originalView.style.display = 'block';
+            blocksList.style.display = 'none';
+            toggleBtn.textContent = 'View Blocks';
+            
+            // Display the original transcript
+            const originalTextDiv = document.getElementById('originalText');
+            if (originalTextDiv) {
+                originalTextDiv.textContent = this.statementBlockEditor.getRawTranscript();
+            }
+        } else {
+            // Show blocks
+            originalView.style.display = 'none';
+            blocksList.style.display = 'block';
+            toggleBtn.textContent = 'View Original';
+        }
+    }
+    
+    showFallbackOption(transcript) {
+        const message = `
+            <div>Unable to process into blocks. Would you like to:</div>
+            <div class="fallback-options">
+                <button onclick="feedback.useOriginalTranscript()">Use Original Text</button>
+                <button onclick="feedback.retryBlockProcessing()">Try Again</button>
+            </div>
+        `;
+        this.showStatus(message, 'warning');
+        
+        // Keep the transcript in the textarea
+        document.getElementById('feedbackDetails').value = transcript;
+    }
+    
+    useOriginalTranscript() {
+        this.useBlockMode = false;
+        this.hideBlockEditor();
+        this.hideSpeechStatus();
+        this.showStatus('Using original transcript', 'info');
+    }
+    
+    retryBlockProcessing() {
+        const transcript = document.getElementById('feedbackDetails').value.trim();
+        if (transcript) {
+            this.processTranscriptWithBlocks(transcript);
+        }
+    }
+    
+    startAddingToBlocks() {
+        this.isAddingToBlocks = true;
+        const textarea = document.getElementById('feedbackDetails');
+        
+        // Clear and enable textarea for new input
+        if (textarea) {
+            textarea.value = '';
+            textarea.readOnly = false;
+            textarea.style.opacity = '1';
+            textarea.focus();
+        }
+        
+        this.showStatus('Record additional content to add to your blocks', 'info');
+        
+        // Start recording if mic is initialized
+        if (this.micInited && !this.recording) {
+            this.startRecording();
+        }
+    }
+    
+    updateUIForBlockMode() {
+        // Hide single submit button, show dual buttons
+        const singleSubmit = document.getElementById('submitFeedbackBtn');
+        const dualSubmit = document.getElementById('dualSubmitButtons');
+        
+        if (singleSubmit) singleSubmit.style.display = 'none';
+        if (dualSubmit) dualSubmit.style.display = 'flex';
+        
+        // Convert mic button to "Add More" button
+        const micButton = document.getElementById('micButton');
+        if (micButton) {
+            const micIcon = micButton.querySelector('.mic-icon');
+            if (micIcon) {
+                micIcon.textContent = '➕';
+            }
+            micButton.title = 'Add more content';
+            
+            // Update click handler for add more functionality
+            micButton.removeEventListener('click', this.originalMicHandler);
+            this.addMoreHandler = () => this.startAddingToBlocks();
+            micButton.addEventListener('click', this.addMoreHandler);
+        }
+    }
+    
+    resetUIFromBlockMode() {
+        // Show single submit button, hide dual buttons
+        const singleSubmit = document.getElementById('submitFeedbackBtn');
+        const dualSubmit = document.getElementById('dualSubmitButtons');
+        
+        if (singleSubmit) singleSubmit.style.display = 'block';
+        if (dualSubmit) dualSubmit.style.display = 'none';
+        
+        // Reset mic button to original state
+        const micButton = document.getElementById('micButton');
+        if (micButton) {
+            const micIcon = micButton.querySelector('.mic-icon');
+            if (micIcon) {
+                micIcon.textContent = '🎤';
+            }
+            micButton.title = 'Click to record feedback';
+            
+            // Restore original click handler
+            if (this.addMoreHandler) {
+                micButton.removeEventListener('click', this.addMoreHandler);
+            }
+            micButton.addEventListener('click', this.originalMicHandler);
+        }
+        
+        // Clear blocks
+        if (this.statementBlockEditor) {
+            this.statementBlockEditor.clear();
+        }
+    }
+    
+    async submitOriginal() {
+        // Get the original transcript from the textarea
+        const originalText = document.getElementById('feedbackDetails').value.trim();
+        
+        if (!originalText) {
+            this.showStatus('Please provide feedback details', 'error');
+            return;
+        }
+        
+        // Submit the original text
+        await this.submitFeedback();
+    }
+    
+    async submitRefinement() {
+        if (!this.statementBlockEditor) {
+            this.showStatus('No refinement available', 'error');
+            return;
+        }
+        
+        const blocks = this.statementBlockEditor.getBlocks();
+        
+        if (blocks.length === 0) {
+            this.showStatus('Please add some feedback blocks', 'error');
+            return;
+        }
+        
+        // Format blocks into feedback text
+        const formattedFeedback = blocks.map((block, index) => `${index + 1}. ${block}`).join('\n\n');
+        
+        // Temporarily set the textarea value for submission
+        const textarea = document.getElementById('feedbackDetails');
+        const originalValue = textarea.value;
+        textarea.value = formattedFeedback;
+        
+        // Submit the refined text
+        await this.submitFeedback();
+        
+        // Restore original value in case submission fails
+        if (document.getElementById('feedbackDetails').value === formattedFeedback) {
+            textarea.value = originalValue;
+        }
+    }
+    
     async submitFeedback() {
         const details = document.getElementById('feedbackDetails').value.trim();
         
@@ -268,7 +618,13 @@ export class Feedback {
             }, 250)
             
             // Clear form
-            document.getElementById('feedbackDetails').value = '';            
+            document.getElementById('feedbackDetails').value = '';
+            
+            // Clear block editor if in use
+            if (this.useBlockMode && this.statementBlockEditor) {
+                this.statementBlockEditor.clear();
+                this.hideBlockEditor();
+            }
         } catch (error) {
             console.error('Failed to submit feedback:', error);
             this.showStatus('Failed to submit feedback. Please try again.', 'error');

@@ -305,23 +305,35 @@ console.log("It is 3:00")
 
         //Creates a slot from the inventory schema
         async _loadSlot(slotData, parentId){
-            console.log("loading slot =>", slotData)
+            //console.log("loading slot =>", slotData)
             let loadSubSlot = async (item, parentId)=>{ 
                 const newSlot = await new Slot().init({
                     name: item.name,
                     parentId: parentId
                 });
     
-    
-                for(let component of item.components){
-                    component.properties.id = component.id;
-                    await this._addComponent(newSlot, component.type, component.properties);
+                
+                if(item.components){
+                    for(let component of item.components){
+                        //console.log("adding component =>", component)
+                        if(component.properties){
+                            component.properties.id = component.id;
+                        }else{
+                            component.properties = {
+                                id: component.id
+                            }
+                        }
+                        await this._addComponent(newSlot, component.type, component.properties);
+                    }
                 }
 
-                for(let i=0; i<item.children.length; i++){
-                    let child = item.children[i];
-                    let childSlot = await loadSubSlot(child, newSlot.id);
-                    await childSlot._setParent(newSlot);
+                if(item.children){
+                    for(let i=0; i<item.children.length; i++){
+                        //console.log("adding child =>", item.children[i])
+                        let child = item.children[i];
+                        let childSlot = await loadSubSlot(child, newSlot.id);
+                        await childSlot._setParent(newSlot);
+                    }
                 }
     
                 return newSlot;

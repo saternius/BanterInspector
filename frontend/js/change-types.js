@@ -529,12 +529,16 @@ export class LoadItemChange {
                     props[`__${slot.id}/active:slot`] = slot.active
                     props[`__${slot.id}/persistent:slot`] = slot.persistent
                     props[`__${slot.id}/name:slot`] = slot.name
-                    
-                    slot.components.forEach(component=>{
-                        Object.keys(component.properties).forEach(prop=>{
-                            props[`__${component.id}/${prop}:component`] = component.properties[prop]
+                    if(slot.components){
+                        slot.components.forEach(component=>{
+                            if(component.properties){   
+                                Object.keys(component.properties).forEach(prop=>{
+                                    props[`__${component.id}/${prop}:component`] = component.properties[prop]
+                                })
+                            }
                         })
-                    })
+                    }
+                    
 
                     if(slot.children){
                         slot.children.forEach(child=>{
