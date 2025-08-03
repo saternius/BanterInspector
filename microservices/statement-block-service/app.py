@@ -8,7 +8,6 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 from config import Config
-from claude_processor import ClaudeProcessor
 from utils import validate_request_data, create_error_response, timer_decorator
 
 # Set up logging
@@ -25,8 +24,17 @@ app.config.from_object(Config)
 # Enable CORS
 CORS(app)
 
-# Initialize Claude processor
-claude_processor = ClaudeProcessor()
+# Initialize the appropriate processor based on config
+if Config.MODEL_PROVIDER == 'claude':
+    from claude_processor import ClaudeProcessor
+    text_processor = ClaudeProcessor()
+    logger.info("Using Claude model for text processing")
+elif Config.MODEL_PROVIDER == 'gemini':
+    from gemini_processor import GeminiProcessor
+    text_processor = GeminiProcessor()
+    logger.info("Using Gemini model for text processing")
+else:
+    raise ValueError(f"Unknown model provider: {Config.MODEL_PROVIDER}")
 
 # Set up rate limiter
 limiter = None
@@ -62,7 +70,8 @@ def health_check():
     health_status = {
         'status': 'healthy',
         'service': 'statement-block-service',
-        'version': '1.0.0'
+        'version': '1.0.0',
+        'model_provider': Config.MODEL_PROVIDER
     }
     
     # Check Redis connection if rate limiting is enabled
@@ -110,8 +119,8 @@ def process_text():
     try:
         # Set timeout for the entire operation
         start_time = time.time()
-        
-        blocks = claude_processor.process_text(text, existing_blocks, intent)
+        print(f"Processing text: {text}, existing_blocks: {existing_blocks}, intent: {intent}", text_processor)
+        blocks = text_processor.process_text(text, existing_blocks, intent)
         
         # Check if we exceeded timeout
         if time.time() - start_time > Config.REQUEST_TIMEOUT:

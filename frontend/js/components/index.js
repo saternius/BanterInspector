@@ -24,6 +24,19 @@ const { BanterGLTFComponent } = await import(`${window.repoUrl}/components/gltf.
 const { BanterAssetBundleComponent } = await import(`${window.repoUrl}/components/asset-bundle.js`);
 const { BanterPortalComponent } = await import(`${window.repoUrl}/components/portal.js`);
 const { BanterColliderEventsComponent } = await import(`${window.repoUrl}/components/collider-events.js`);
+const { BanterBoxComponent } = await import(`${window.repoUrl}/components/box.js`);
+const { BanterCircleComponent } = await import(`${window.repoUrl}/components/circle.js`);
+const { BanterConeComponent } = await import(`${window.repoUrl}/components/cone.js`);
+const { BanterCylinderComponent } = await import(`${window.repoUrl}/components/cylinder.js`);
+const { BanterPlaneComponent } = await import(`${window.repoUrl}/components/plane.js`);
+const { BanterRingComponent } = await import(`${window.repoUrl}/components/ring.js`);
+const { BanterSphereComponent } = await import(`${window.repoUrl}/components/sphere.js`);
+const { BanterTorusComponent } = await import(`${window.repoUrl}/components/torus.js`);
+const { BanterInvertedMeshComponent } = await import(`${window.repoUrl}/components/inverted-mesh.js`);
+const { BanterKitItemComponent } = await import(`${window.repoUrl}/components/kit-item.js`);
+const { BanterStreetViewComponent } = await import(`${window.repoUrl}/components/street-view.js`);
+const { BanterWorldObjectComponent } = await import(`${window.repoUrl}/components/world-object.js`);
+const { ConfigurableJointComponent } = await import(`${window.repoUrl}/components/configurable-joint.js`);
 
 
 export const SUPPORTED_COMPONENTS = new Set([
@@ -49,7 +62,20 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterGLTF,
     BS.ComponentType.BanterAssetBundle,
     BS.ComponentType.BanterPortal,
-    BS.ComponentType.BanterColliderEvents
+    BS.ComponentType.BanterColliderEvents,
+    BS.ComponentType.BanterBox,
+    BS.ComponentType.BanterCircle,
+    BS.ComponentType.BanterCone,
+    BS.ComponentType.BanterCylinder,
+    BS.ComponentType.BanterPlane,
+    BS.ComponentType.BanterRing,
+    BS.ComponentType.BanterSphere,
+    BS.ComponentType.BanterTorus,
+    BS.ComponentType.BanterInvertedMesh,
+    BS.ComponentType.BanterKitItem,
+    BS.ComponentType.BanterStreetView,
+    BS.ComponentType.BanterWorldObject,
+    BS.ComponentType.ConfigurableJoint
 ]);
 
 export const componentTypeMap = {
@@ -76,6 +102,19 @@ export const componentTypeMap = {
     "BanterAssetBundle": BanterAssetBundleComponent,
     "BanterPortal": BanterPortalComponent,
     "BanterColliderEvents": BanterColliderEventsComponent,
+    "BanterBox": BanterBoxComponent,
+    "BanterCircle": BanterCircleComponent,
+    "BanterCone": BanterConeComponent,
+    "BanterCylinder": BanterCylinderComponent,
+    "BanterPlane": BanterPlaneComponent,
+    "BanterRing": BanterRingComponent,
+    "BanterSphere": BanterSphereComponent,
+    "BanterTorus": BanterTorusComponent,
+    "BanterInvertedMesh": BanterInvertedMeshComponent,
+    "BanterKitItem": BanterKitItemComponent,
+    "BanterStreetView": BanterStreetViewComponent,
+    "BanterWorldObject": BanterWorldObjectComponent,
+    "ConfigurableJoint": ConfigurableJointComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
@@ -103,6 +142,19 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterAssetBundle]: BanterAssetBundleComponent,
     [BS.ComponentType.BanterPortal]: BanterPortalComponent,
     [BS.ComponentType.BanterColliderEvents]: BanterColliderEventsComponent,
+    [BS.ComponentType.BanterBox]: BanterBoxComponent,
+    [BS.ComponentType.BanterCircle]: BanterCircleComponent,
+    [BS.ComponentType.BanterCone]: BanterConeComponent,
+    [BS.ComponentType.BanterCylinder]: BanterCylinderComponent,
+    [BS.ComponentType.BanterPlane]: BanterPlaneComponent,
+    [BS.ComponentType.BanterRing]: BanterRingComponent,
+    [BS.ComponentType.BanterSphere]: BanterSphereComponent,
+    [BS.ComponentType.BanterTorus]: BanterTorusComponent,
+    [BS.ComponentType.BanterInvertedMesh]: BanterInvertedMeshComponent,
+    [BS.ComponentType.BanterKitItem]: BanterKitItemComponent,
+    [BS.ComponentType.BanterStreetView]: BanterStreetViewComponent,
+    [BS.ComponentType.BanterWorldObject]: BanterWorldObjectComponent,
+    [BS.ComponentType.ConfigurableJoint]: ConfigurableJointComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
@@ -130,6 +182,19 @@ export const componentTextMap = {
     [BS.ComponentType.BanterAssetBundle]: "BanterAssetBundle",
     [BS.ComponentType.BanterPortal]: "BanterPortal",
     [BS.ComponentType.BanterColliderEvents]: "BanterColliderEvents",
+    [BS.ComponentType.BanterBox]: "BanterBox",
+    [BS.ComponentType.BanterCircle]: "BanterCircle",
+    [BS.ComponentType.BanterCone]: "BanterCone",
+    [BS.ComponentType.BanterCylinder]: "BanterCylinder",
+    [BS.ComponentType.BanterPlane]: "BanterPlane",
+    [BS.ComponentType.BanterRing]: "BanterRing",
+    [BS.ComponentType.BanterSphere]: "BanterSphere",
+    [BS.ComponentType.BanterTorus]: "BanterTorus",
+    [BS.ComponentType.BanterInvertedMesh]: "BanterInvertedMesh",
+    [BS.ComponentType.BanterKitItem]: "BanterKitItem",
+    [BS.ComponentType.BanterStreetView]: "BanterStreetView",
+    [BS.ComponentType.BanterWorldObject]: "BanterWorldObject",
+    [BS.ComponentType.ConfigurableJoint]: "ConfigurableJoint",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
@@ -139,7 +204,15 @@ export const componentBundleMap = {
     "BoxCollider": ['BanterColliderEvents'],
     "SphereCollider": ['BanterColliderEvents'],
     "CapsuleCollider": ['BanterColliderEvents'],
-    "MeshCollider": ['BanterColliderEvents']
+    "MeshCollider": ['BanterColliderEvents'],
+    "BanterBox": ['BanterMaterial'],
+    "BanterCircle": ['BanterMaterial'],
+    "BanterCone": ['BanterMaterial'],
+    "BanterCylinder": ['BanterMaterial'],
+    "BanterPlane": ['BanterMaterial'],
+    "BanterRing": ['BanterMaterial'],
+    "BanterSphere": ['BanterMaterial'],
+    "BanterTorus": ['BanterMaterial']
 }
 
 
@@ -171,5 +244,18 @@ export {
     BanterAssetBundleComponent,
     BanterPortalComponent,
     BanterColliderEventsComponent,
+    BanterBoxComponent,
+    BanterCircleComponent,
+    BanterConeComponent,
+    BanterCylinderComponent,
+    BanterPlaneComponent,
+    BanterRingComponent,
+    BanterSphereComponent,
+    BanterTorusComponent,
+    BanterInvertedMeshComponent,
+    BanterKitItemComponent,
+    BanterStreetViewComponent,
+    BanterWorldObjectComponent,
+    ConfigurableJointComponent,
     MonoBehaviorComponent
 };

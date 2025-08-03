@@ -1,10 +1,10 @@
 # Statement Block Processing Microservice
 
-A Flask-based microservice that uses Claude Sonnet 3.5 to process unstructured text into organized statement blocks. This service is general-purpose and can be used across different contexts where text needs to be cleaned, organized, and structured.
+A Flask-based microservice that uses AI models (Claude or Gemini) to process unstructured text into organized statement blocks. This service is general-purpose and can be used across different contexts where text needs to be cleaned, organized, and structured.
 
 ## Features
 
-- **Intelligent Text Processing**: Uses Claude AI to break text into coherent statement blocks
+- **Intelligent Text Processing**: Uses AI (Claude or Gemini) to break text into coherent statement blocks
 - **Grammar Correction**: Automatically fixes grammar while preserving meaning
 - **Filler Word Removal**: Cleans up speech artifacts (um, uh, like, etc.)
 - **Block Merging**: Intelligently merges new text with existing blocks
@@ -19,7 +19,7 @@ A Flask-based microservice that uses Claude Sonnet 3.5 to process unstructured t
 
 - Python 3.11+
 - Redis (optional, for rate limiting)
-- Anthropic API key
+- API key (Anthropic for Claude or Google for Gemini)
 
 ### Local Setup
 
@@ -39,10 +39,12 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-4. Copy `.env.example` to `.env` and add your Anthropic API key:
+4. Copy `.env.example` to `.env` and add your API key:
 ```bash
 cp .env.example .env
-# Edit .env and add your ANTHROPIC_API_KEY
+# Edit .env and add your API key:
+# For Gemini (default): GOOGLE_API_KEY=your-key
+# For Claude: ANTHROPIC_API_KEY=your-key and MODEL_PROVIDER=claude
 ```
 
 5. Run the application:
@@ -114,6 +116,7 @@ Check the health status of the service.
     "status": "healthy",
     "service": "statement-block-service",
     "version": "1.0.0",
+    "model_provider": "gemini",
     "redis": "connected"
 }
 ```
@@ -124,7 +127,15 @@ Configuration is managed through environment variables:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key (required) | - |
+| `MODEL_PROVIDER` | Model provider to use ('claude' or 'gemini') | `gemini` |
+| `ANTHROPIC_API_KEY` | Your Anthropic API key (required for Claude) | - |
+| `GOOGLE_API_KEY` | Your Google API key (required for Gemini) | - |
+| `CLAUDE_MODEL` | Claude model to use | `claude-3-5-sonnet-20241022` |
+| `CLAUDE_MAX_TOKENS` | Max tokens for Claude | `4096` |
+| `CLAUDE_TEMPERATURE` | Temperature for Claude | `0.3` |
+| `GEMINI_MODEL` | Gemini model to use | `gemini-2.0-flash-latest` |
+| `GEMINI_MAX_TOKENS` | Max tokens for Gemini | `4096` |
+| `GEMINI_TEMPERATURE` | Temperature for Gemini | `0.3` |
 | `REDIS_URL` | Redis connection URL | `redis://localhost:6379` |
 | `MAX_TEXT_LENGTH` | Maximum input text length | `10000` |
 | `MAX_BLOCKS` | Maximum number of blocks | `50` |
@@ -200,7 +211,7 @@ server {
 ## How It Works
 
 1. **Text Reception**: The service receives unstructured text and optional existing blocks
-2. **AI Processing**: Claude Sonnet 3.5 processes the text to:
+2. **AI Processing**: The selected AI model (Claude or Gemini) processes the text to:
    - Identify distinct thoughts/statements
    - Clean up speech artifacts
    - Fix grammar without changing meaning

@@ -14,9 +14,9 @@ def client():
             yield client
 
 @pytest.fixture
-def mock_claude_processor():
-    """Mock the ClaudeProcessor."""
-    with patch('app.claude_processor') as mock:
+def mock_text_processor():
+    """Mock the text processor."""
+    with patch('app.text_processor') as mock:
         yield mock
 
 @pytest.fixture
@@ -37,6 +37,7 @@ class TestHealthEndpoint:
         assert data['status'] == 'healthy'
         assert data['service'] == 'statement-block-service'
         assert 'version' in data
+        assert 'model_provider' in data
     
     def test_health_check_with_rate_limiting_enabled(self, client):
         """Test health check with rate limiting enabled."""
@@ -61,9 +62,9 @@ class TestHealthEndpoint:
 
 class TestProcessTextEndpoint:
     
-    def test_process_text_success(self, client, mock_claude_processor):
+    def test_process_text_success(self, client, mock_text_processor):
         """Test successful text processing."""
-        mock_claude_processor.process_text.return_value = [
+        mock_text_processor.process_text.return_value = [
             "This is the first statement.",
             "This is the second statement."
         ]
@@ -148,9 +149,9 @@ class TestProcessTextEndpoint:
         assert 'error' in data
         assert 'must be a string' in str(data)
     
-    def test_process_text_with_existing_blocks(self, client, mock_claude_processor):
+    def test_process_text_with_existing_blocks(self, client, mock_text_processor):
         """Test processing with existing blocks."""
-        mock_claude_processor.process_text.return_value = [
+        mock_text_processor.process_text.return_value = [
             "Updated first block.",
             "Existing second block."
         ]
@@ -167,9 +168,9 @@ class TestProcessTextEndpoint:
         assert len(data['blocks']) == 2
         assert data['blocks'][0] == "Updated first block."
     
-    def test_process_text_empty_text(self, client, mock_claude_processor):
+    def test_process_text_empty_text(self, client, mock_text_processor):
         """Test processing empty text."""
-        mock_claude_processor.process_text.return_value = ['Existing block.']
+        mock_text_processor.process_text.return_value = ['Existing block.']
         
         response = client.post('/process-text',
             json={
@@ -182,9 +183,9 @@ class TestProcessTextEndpoint:
         assert response.status_code == 200
         assert data['blocks'] == ['Existing block.']
     
-    def test_process_text_exception_handling(self, client, mock_claude_processor):
+    def test_process_text_exception_handling(self, client, mock_text_processor):
         """Test exception handling during processing."""
-        mock_claude_processor.process_text.side_effect = Exception("Processing error")
+        mock_text_processor.process_text.side_effect = Exception("Processing error")
         
         response = client.post('/process-text',
             json={
@@ -219,10 +220,10 @@ class TestRateLimiting:
     @patch.object(Config, 'RATE_LIMIT_ENABLED', True)
     @patch.object(Config, 'RATE_LIMIT_CALLS', 2)
     @patch.object(Config, 'RATE_LIMIT_PERIOD', 60)
-    def test_rate_limiting_exceeded(self, client_with_rate_limiting, mock_claude_processor):
+    def test_rate_limiting_exceeded(self, client_with_rate_limiting, mock_text_processor):
         """Test rate limiting when exceeded."""
         # Make successful requests up to the limit
-        mock_claude_processor.process_text.return_value = ["Test response"]
+        mock_text_processor.process_text.return_value = ["Test response"]
         
         # First two requests should succeed
         for i in range(2):
@@ -242,9 +243,9 @@ class TestRateLimiting:
         assert 'error' in data or 'message' in data
     
     @patch.object(Config, 'RATE_LIMIT_ENABLED', False)
-    def test_rate_limiting_disabled(self, client, mock_claude_processor):
+    def test_rate_limiting_disabled(self, client, mock_text_processor):
         """Test that rate limiting can be disabled."""
-        mock_claude_processor.process_text.return_value = ["Test response"]
+        mock_text_processor.process_text.return_value = ["Test response"]
         
         # Make many requests - all should succeed when rate limiting is disabled
         for i in range(10):
