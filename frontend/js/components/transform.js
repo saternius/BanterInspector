@@ -14,39 +14,22 @@ export class TransformComponent extends SlotComponent {
     }
 
     async _set(property, value){
+        if(typeof value === "string"){
+            value = JSON.parse(value);
+        }
         this.properties[property] = value;
+        value.x = parseFloat(value.x || 0);
+        value.y = parseFloat(value.y || 0);
+        value.z = parseFloat(value.z || 0);
         if (property === 'localPosition' || property === 'localScale') {
-            this._bs[property] = new BS.Vector3(
-                parseFloat(value.x),
-                parseFloat(value.y),
-                parseFloat(value.z)
-            );
+            this._bs[property] = new BS.Vector3(value.x,value.y, value.z);
         } else if (property === 'localRotation') {
-            // Rotation is stored as quaternion
             if ('w' in value) {
-                value.x = value.x || 0;
-                value.y = value.y || 0;
-                value.z = value.z || 0;
-                value.w = value.w || 1;
-                // Already a quaternion
-                this._bs[property] = new BS.Vector4(
-                    parseFloat(value.x),
-                    parseFloat(value.y),
-                    parseFloat(value.z),
-                    parseFloat(value.w)
-                );
+                value.w = parseFloat(value.w || 1);
+                this._bs[property] = new BS.Vector4( value.x, value.y, value.z, value.w);
             } else {
-                value.x = value.x || 0;
-                value.y = value.y || 0;
-                value.z = value.z || 0;
-                // console.log("VALUE: ", value)
                 value = eulerToQuaternion(value);
-                this._bs[property] = new BS.Vector4(
-                    parseFloat(value.x),
-                    parseFloat(value.y),
-                    parseFloat(value.z),
-                    parseFloat(value.w)
-                );
+                this._bs[property] = new BS.Vector4(value.x, value.y, value.z, value.w);
             }
         }
     }
