@@ -10,3 +10,4 @@ tests.meta
 *.*.meta
 *.meta
 feedback-admin.html
+.vscode/
