@@ -55,14 +55,30 @@ export class BanterAttachedObjectComponent extends SlotComponent {
 
     _set(property, value) {
         if (!this._bs) return;
+        if(typeof value === "string" && (property === 'attachmentPosition' || property === 'attachmentRotation')){
+            value = JSON.parse(value);
+        }
 
         this.properties[property] = value;
 
         try {
             if (property === 'attachmentPosition' && typeof value === 'object') {
-                this._bs.attachmentPosition = new BS.Vector3(value.x || 0, value.y || 0, value.z || 0);
+                this._bs[property] = new BS.Vector3(
+                    parseFloat(value.x || 0),
+                    parseFloat(value.y || 0),
+                    parseFloat(value.z || 0)
+                );
             } else if (property === 'attachmentRotation' && typeof value === 'object') {
-                this._bs.attachmentRotation = new BS.Quaternion(value.x || 0, value.y || 0, value.z || 0, value.w || 1);
+                value.x = parseFloat(value.x || 0);
+                value.y = parseFloat(value.y || 0);
+                value.z = parseFloat(value.z || 0);
+                if( 'w' in value ){
+                    value.w = parseFloat(value.w || 1);
+                    this._bs[property] = new BS.Vector4(value.x,value.y,value.z,value.w);
+                }else{
+                    value = eulerToQuaternion(value);
+                    this._bs[property] = new BS.Vector4(value.x,value.y,value.z,value.w);
+                }
             } else if (this._bs[property] !== undefined) {
                 this._bs[property] = value;
             }

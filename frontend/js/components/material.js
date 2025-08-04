@@ -51,6 +51,9 @@ export class BanterMaterialComponent extends SlotComponent {
 
     _set(property, value) {
         if (!this._bs) return;
+        if(property === 'color' && typeof value === "string"){
+            value = JSON.parse(value);
+        }
 
         this.properties[property] = value;
 
