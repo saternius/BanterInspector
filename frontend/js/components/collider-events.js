@@ -15,7 +15,7 @@ export class BanterColliderEventsComponent extends SlotComponent {
         return {};
     }
 
-    update(property, value) {
+    _set(property, value) {
         // BanterColliderEvents has no properties to update
     }
 }

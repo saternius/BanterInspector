@@ -40,7 +40,7 @@ export class BanterSphereComponent extends SlotComponent {
         return properties;
     }
 
-    update(property, value) {
+    _set(property, value) {
         if (!this._bs) return;
 
         this.properties[property] = value;

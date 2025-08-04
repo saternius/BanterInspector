@@ -15,7 +15,7 @@ export class BanterWorldObjectComponent extends SlotComponent {
         return {};
     }
 
-    update(property, value) {
+    _set(property, value) {
         // BanterWorldObject has no properties to update
     }
 }

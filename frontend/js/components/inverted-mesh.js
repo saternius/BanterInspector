@@ -15,7 +15,7 @@ export class BanterInvertedMeshComponent extends SlotComponent {
         return {};
     }
 
-    update(property, value) {
+    _set(property, value) {
         // BanterInvertedMesh has no properties to update
     }
 }
