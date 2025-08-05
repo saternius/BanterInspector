@@ -217,6 +217,21 @@
             // Body
             const body = document.createElement('div');
             body.className = 'component-body';
+
+
+            if(component.controls){
+                let controls = component.controls;
+                Object.values(controls.controls).forEach(control=>{
+                    if(control.input === "button"){
+                        const button = document.createElement('button');
+                        button.className = 'property-button prop-control-btn';
+                        button.textContent = control.label;
+                        button.id = `${component.id}_${control.id}`;
+                        button.onclick = control.callback;
+                        body.appendChild(button);
+                    }
+                })
+            }
             
             // Render properties
             if (component.properties) {
