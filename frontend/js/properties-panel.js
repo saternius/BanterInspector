@@ -221,7 +221,7 @@
             // Render properties
             if (component.properties) {
                 Object.entries(component.properties).forEach(([key, value], propIndex) => {
-                    const propertyRow = this.renderProperty(key, value, component.type, component.id, index, propIndex);
+                    const propertyRow = this.renderProperty(key, value, component, index, propIndex);
                     body.appendChild(propertyRow);
                 });
             }
@@ -256,7 +256,9 @@
         /**
          * Render a property row
          */
-        renderProperty(key, value, componentType, componentId, componentIndex, propertyIndex) {
+        renderProperty(key, value, component, componentIndex, propertyIndex) {
+            const componentType = component.type;
+            const componentId = component.id;
             const row = document.createElement('div');
             row.className = 'property-row';
             
@@ -276,8 +278,54 @@
             const valueContainer = document.createElement('div');
             valueContainer.className = 'property-value';
             
-            // Render based on value type
-            if (typeof value === 'boolean') {
+            const enums = component.enums();
+            if(enums[key]){
+                const dropdown = document.createElement('select');
+                dropdown.className = 'property-input';
+                dropdown.style.width = '100%';
+                Object.keys(enums[key]).forEach(enumKey => {
+                    const option = document.createElement('option');
+                    option.value = enumKey;
+                    option.textContent = enums[key][enumKey];
+                    if(value == enumKey){
+                        option.selected = true;
+                    }
+                    dropdown.appendChild(option);
+                });
+                dropdown.onchange = () => {
+                    const change = new ComponentPropertyChange(componentId, key, parseInt(dropdown.value), { source: 'ui' });
+                    changeManager.applyChange(change);
+                };
+                valueContainer.appendChild(dropdown);
+            } else if(key === "uid"){
+                //create a dropdown input that list all of the users Object.values(SM.scene.users) with the label being user.name and the value being user.uid
+                const dropdown = document.createElement('select');
+                dropdown.className = 'property-input';
+                dropdown.style.width = '100%';
+                Object.values(SM.scene.users).forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.uid;
+                    option.textContent = user.name;
+                    if(value === user.uid){
+                        option.selected = true;
+                    }
+                    dropdown.appendChild(option);
+                });
+
+                let nullOption = document.createElement('option');
+                nullOption.value = "";
+                nullOption.textContent = "None";
+                if(value === ""){
+                    nullOption.selected = true;
+                }
+                dropdown.appendChild(nullOption);
+
+                dropdown.onchange = () => {
+                    const change = new ComponentPropertyChange(componentId, key, dropdown.value, { source: 'ui' });
+                    changeManager.applyChange(change);
+                };
+                valueContainer.appendChild(dropdown);
+            }else if (typeof value === 'boolean') {
                 const input = document.createElement('input');
                 input.type = 'checkbox';
                 input.className = 'checkbox-input';
@@ -303,7 +351,7 @@
                 };
                 valueContainer.appendChild(input);
                 
-            } else if (componentType === 'Transform' && key === 'localRotation' && isQuaternion(value)) {
+            } else if (key.includes('otation') && isQuaternion(value)) {
                 // Transform rotation - convert quaternion to Euler angles
                 const eulerAngles = quaternionToEuler(value);
                 const vectorGroup = document.createElement('div');
