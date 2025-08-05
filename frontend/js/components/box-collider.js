@@ -1,10 +1,68 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
 
+export class BoxColliderControls{
+    constructor(component){
+        this.component = component;
+        this.visible = false;
+        this.visual = null;
+        this.visualTransform = null;
+        this.controls = {
+            'view': {
+                'input': 'button',
+                'callback': this.view.bind(this),
+                'label': 'View',
+                'id': 'view'
+            }
+        }
+    }
+
+    updateVisual(){
+        if(!this.visual) return;
+        if(!this.visualTransform) return;
+
+        this.visualTransform.localScale = new BS.Vector3(this.component.properties.size.x, this.component.properties.size.y, this.component.properties.size.z);
+        this.visualTransform.localPosition = new BS.Vector3(this.component.properties.center.x, this.component.properties.center.y, this.component.properties.center.z);
+
+
+    }
+
+    async view(){
+        this.visible = !this.visible;
+            
+        if(this.visible){
+            this.visual = new BS.GameObject(this.name);
+
+            this.visualTransform = new BS.Transform()
+            this.visualTransform.localScale = new BS.Vector3(this.component.properties.size.x, this.component.properties.size.y, this.component.properties.size.z);
+            this.visualTransform.localPosition = new BS.Vector3(this.component.properties.center.x, this.component.properties.center.y, this.component.properties.center.z);
+            this.visual.AddComponent(this.visualTransform);
+
+            this.visual.AddComponent(new BS.BanterGeometry());
+            let material = new BS.BanterMaterial()
+            material.color = new BS.Vector4(0, 1, 0, .5);
+            this.visual.AddComponent(material);
+            await this.visual.SetParent(this.component._slot._bs, true);
+            this.controls['view'].label = "Hide";
+        }else{
+            if(this.visual){
+                this.visual.Destroy();
+                this.visual = null;
+            }
+            this.controls['view'].label = "View";
+        }
+
+        let buttonEl = document.getElementById(`${this.component.id}_view`);
+        buttonEl.innerHTML = this.controls['view'].label
+
+    }
+}
+
 export class BoxColliderComponent extends SlotComponent {
     constructor() {
         super();
         this.bsRef = BS.BoxCollider;
         this.type = 'BoxCollider';
+        this.controls = new BoxColliderControls(this);
     }
 
     defaultProperties() {
@@ -49,6 +107,7 @@ export class BoxColliderComponent extends SlotComponent {
         try {
             if ((property === 'center' || property === 'size') && typeof value === 'object') {
                 this._bs[property] = new BS.Vector3(value.x || 0, value.y || 0, value.z || 0);
+                this.controls.updateVisual();
             } else if (this._bs[property] !== undefined) {
                 this._bs[property] = value;
             }

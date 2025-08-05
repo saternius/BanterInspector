@@ -263,6 +263,9 @@ console.log("It is 3:00")
                     if(component.type == BS.ComponentType.Transform) continue;
                     let component_ref = h.components[ref_idx]
                     ref_idx++;
+                    if(!component_ref){
+                        console.log("no component ref found for", component, h.components, ref_idx)
+                    }
 
                     if(SUPPORTED_COMPONENTS.has(component.type)){
                         //console.log("component =>", component)

@@ -1535,6 +1535,13 @@ body {
     color: #b8b8b8;
 }
 
+
+.prop-control-btn{
+    width: fit-content;
+    padding: 5px;
+    margin: 12px 0px;
+}
+
 .property-label {
     flex: 0 0 140px;
     font-size: 12px;
