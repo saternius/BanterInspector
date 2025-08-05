@@ -25,6 +25,10 @@ export class SlotComponent{
         return this;
     }
 
+    enums(){
+        return {};
+    }
+
     setId(id){
         delete window.SM.slotData.componentMap[this.id];
         this.id = id;

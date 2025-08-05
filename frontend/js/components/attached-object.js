@@ -10,13 +10,25 @@ export class BanterAttachedObjectComponent extends SlotComponent {
     defaultProperties() {
         return {
             uid: '',
-            attachmentPosition: { x: 0, y: 0, z: 0 },
-            attachmentRotation: { x: 0, y: 0, z: 0, w: 1 },
-            attachmentType: 0,
-            avatarAttachmentType: 0,
-            avatarAttachmentPoint: 0,
+            // attachmentPosition: { x: 0, y: 0, z: 0 },
+            // attachmentRotation: { x: 0, y: 0, z: 0, w: 1 },
+            // attachmentType: 0,
+            // avatarAttachmentType: 0,
+            // avatarAttachmentPoint: 0,
             attachmentPoint: 0
         };
+    }
+
+    enums(){
+        return {
+            attachmentPoint: {
+                0: 'HEAD',
+                1: 'BODY',
+                2: 'LEFT_HAND',
+                3: 'RIGHT_HAND',
+                4: 'COCKPIT'
+            }
+        }
     }
 
     extractProperties(sceneComponent) {
@@ -59,6 +71,11 @@ export class BanterAttachedObjectComponent extends SlotComponent {
             value = JSON.parse(value);
         }
 
+        if(property === "uid" && value === "" && this.properties.uid !== ""){
+            console.log("Detaching Object", this.properties)
+            SM.scene.LegacyAttachObject(this._slot._bs, null, null);
+        }
+
         this.properties[property] = value;
 
         try {
@@ -84,6 +101,11 @@ export class BanterAttachedObjectComponent extends SlotComponent {
             }
         } catch (e) {
             console.error(`Failed to update ${property} on BanterAttachedObject:`, e);
+        }
+        
+        if(this.properties.uid){
+            console.log("Attaching Object", this._slot._bs, this.properties.uid, this.properties.attachmentPoint)
+            SM.scene.LegacyAttachObject(this._slot._bs, this.properties.uid, this.properties.attachmentPoint);
         }
     }
 }
