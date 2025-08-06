@@ -102,6 +102,11 @@ export class BoxColliderComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        if(typeof value === "string" && (property === 'center' || property === 'size')){
+            value = JSON.parse(value);
+        }
+
+
         this.properties[property] = value;
 
         try {
