@@ -62,7 +62,7 @@ export class BoxColliderComponent extends SlotComponent {
         super();
         this.bsRef = BS.BoxCollider;
         this.type = 'BoxCollider';
-        this.controls = new BoxColliderControls(this);
+        this._controls = new BoxColliderControls(this);
     }
 
     defaultProperties() {
@@ -107,7 +107,7 @@ export class BoxColliderComponent extends SlotComponent {
         try {
             if ((property === 'center' || property === 'size') && typeof value === 'object') {
                 this._bs[property] = new BS.Vector3(value.x || 0, value.y || 0, value.z || 0);
-                this.controls.updateVisual();
+                this._controls.updateVisual();
             } else if (this._bs[property] !== undefined) {
                 this._bs[property] = value;
             }
