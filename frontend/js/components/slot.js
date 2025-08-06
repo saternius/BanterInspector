@@ -155,7 +155,7 @@ export class Slot{
     }
 
     export(){
-        return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id']);
+        return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id', '_controls']);
     }
 
     async Set(property, value){

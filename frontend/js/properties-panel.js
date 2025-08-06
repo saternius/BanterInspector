@@ -219,8 +219,8 @@
             body.className = 'component-body';
 
 
-            if(component.controls){
-                let controls = component.controls;
+            if(component._controls){
+                let controls = component._controls;
                 Object.values(controls.controls).forEach(control=>{
                     if(control.input === "button"){
                         const button = document.createElement('button');
