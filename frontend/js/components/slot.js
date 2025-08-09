@@ -9,6 +9,7 @@ export class Slot{
         this.children = slotData.children || [];
         this._bs = slotData._bs;
         this.active = true;
+        this.layer = parseInt(slotData.layer) || 0;
         this.persistent = true;
         this.identifiers = new Set();
         
@@ -81,6 +82,7 @@ export class Slot{
         delete SM.props[`__${this.id}/active:slot`];
         delete SM.props[`__${this.id}/persistent:slot`];
         delete SM.props[`__${this.id}/name:slot`];
+        delete SM.props[`__${this.id}/layer:slot`];
         if(this.parentId){
             const parent = SM.getSlotById(this.parentId);
             if (parent) {
@@ -115,6 +117,8 @@ export class Slot{
         message = `update_slot:${this.id}:persistent:${this.persistent}`;
         networking.sendOneShot(message);
         message = `update_slot:${this.id}:name:${this.name}`;
+        networking.sendOneShot(message);
+        message = `update_slot:${this.id}:layer:${this.layer}`;
         networking.sendOneShot(message);
     }
 
@@ -153,6 +157,11 @@ export class Slot{
         }
         if(prop == "persistent"){
             this.persistent = newValue;
+        }
+
+        if(prop == "layer"){
+            this.layer = newValue;
+            this._bs.SetLayer(newValue);
         }
     }
 
