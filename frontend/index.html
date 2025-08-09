@@ -100,6 +100,9 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             <button id="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" disabled>
                 <span class="control-icon">↷</span>
             </button>
+            <button id="saveBtn" class="nav-control-btn" title="Save Scene">
+                <span class="control-icon">💾</span>
+            </button>
         </div>
     </nav>
 
@@ -214,7 +217,6 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="panel-header">
                     <span>Lifecycle</span>
                     <div class="lifecycle-buttons">
-                        <button class="console-clear-button" id="clearConsoleBtn" title="Clear Console">🗑️</button>
                         <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel">🔄</button>
                     </div>
                 </div>
@@ -227,7 +229,16 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                     
                     <!-- Console -->
                     <div class="lifecycle-console-container">
-                        <div class="console-header">Console</div>
+                        <div class="console-header">
+                            <span>Console</span>
+                            <div class="console-toggles">
+                                <button class="console-toggle active" data-toggle="command" title="Command">Command</button>
+                                <button class="console-toggle active" data-toggle="script" title="Scripts">Scripts</button>
+                                <button class="console-toggle active" data-toggle="oneShot" title="OneShot">OneShot</button>
+                                <button class="console-toggle active" data-toggle="spaceProps" title="SpaceProps">SpaceProps</button>
+                                <button class="console-clear-button" id="clearConsoleBtn2" title="Clear Console">🗑️</button>
+                            </div>
+                        </div>
                         <div class="lifecycle-console" id="lifecycleConsole"></div>
                     </div>
                 </div>

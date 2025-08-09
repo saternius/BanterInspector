@@ -23,7 +23,10 @@ console.log("It is 3:00")
             this.selectedSlot = null;
             this.expandedNodes = new Set();
             this.loaded = false;
-            this.saveMethod = "aggressive"
+
+            setInterval(()=>{
+                this.saveScene();
+            }, 5000)
         }
         
 

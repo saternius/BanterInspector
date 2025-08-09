@@ -384,3 +384,17 @@ export function parseBest(str) {
     // Default: return the original string
     return str;
 }
+
+export function appendToConsole(tag, id, str){
+    if(window.logger.include[tag]){
+        let consoleEl = document.getElementById("lifecycleConsole");
+        
+        const children = consoleEl.children;
+        if (children.length >= 500) {
+            consoleEl.removeChild(children[0]);
+        }
+        
+        consoleEl.innerHTML += `<div class="change-item" id="${id}">${str}</div>`;
+        consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+}
