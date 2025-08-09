@@ -1,11 +1,49 @@
 // Import required dependencies
 
-const { deepClone } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
-export class SlotPropertyChange {
+let appendToConsole = (id, str)=>{
+    let consoleEl = document.getElementById("lifecycleConsole");
+    consoleEl.innerHTML += `<div class="change-item" id="${id}">${str}</div>`
+}
+
+export class Change {
+    constructor(){
+        this.id = `change_${Math.floor(Math.random() * 1000000)}`;
+    }
+
+    async apply(){
+        let command = this.cmd();
+        let commandStr = "";
+        Object.entries(command).forEach(([key, value])=>{
+            if(typeof value === "object"){
+                value = JSON.stringify(value);
+            }
+            if(key === "options"){
+                return;
+            }
+            commandStr += value + " ";
+        })
+        appendToConsole(this.id, commandStr);
+    }
+
+    async undo(){
+        console.log("[ NO UNDO FOR CHANGE ]")
+    }
+
+    cmd(){
+        return {
+            action: "empty_change"
+        }
+    }
+}
+
+
+export class SlotPropertyChange extends Change{
     constructor(slotId, property, newValue, options) {
+        super();
         this.slotId = slotId;
         this.property = property;
         this.newValue = newValue;
@@ -19,6 +57,7 @@ export class SlotPropertyChange {
     }
 
     async apply(){
+        super.apply();
         await this.change(this.newValue)
     }
 
@@ -50,8 +89,9 @@ export class SlotPropertyChange {
     }
 }
 
-export class ComponentPropertyChange {
+export class ComponentPropertyChange extends Change{
     constructor(componentId, property, newValue, options) {
+        super();
         //console.log("ComponentPropertyChange: ", componentId, property, newValue, options)
         this.componentId = componentId;
         this.property = property;
@@ -67,6 +107,7 @@ export class ComponentPropertyChange {
     }
 
     async apply() {
+        super.apply();
         await this.change(this.newValue);
     }
 
@@ -104,8 +145,9 @@ export class ComponentPropertyChange {
     }
 }
 
-export class SpacePropertyChange {
+export class SpacePropertyChange extends Change{
     constructor(property, newValue, protect, options) {
+        super();
         this.property = property;
         this.newValue = newValue;
         this.protected = protect;
@@ -122,6 +164,7 @@ export class SpacePropertyChange {
     }
 
     async apply() {
+        super.apply();
         await this.change(this.newValue);
     }
 
@@ -159,8 +202,9 @@ export class SpacePropertyChange {
     }
 }
 
-export class ComponentAddChange {
+export class ComponentAddChange extends Change{
     constructor(slotId, componentType, options) {
+        super();
         this.slotId = slotId;
         this.componentType = componentType;
         this.options = options || {};
@@ -168,6 +212,7 @@ export class ComponentAddChange {
     }
 
     async apply() {
+        super.apply();
         this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
         let event = {
             slotId: this.slotId,
@@ -206,8 +251,9 @@ export class ComponentAddChange {
     }
 }
 
-export class ComponentRemoveChange {
+export class ComponentRemoveChange extends Change{
     constructor(componentId, options) {
+        super();
         this.componentId = componentId;
         this.componentData = this.captureComponentData();
         this.slotId = null;
@@ -231,6 +277,7 @@ export class ComponentRemoveChange {
     }
 
     async apply() {
+        super.apply();
         if (!this.componentData) {
             console.error('No component data to remove');
             return;
@@ -270,8 +317,9 @@ export class ComponentRemoveChange {
     }
 }
 
-export class SlotAddChange {
+export class SlotAddChange extends Change{
     constructor(parentId, slotName, options) {
+        super();
         this.parentId = parentId;
         this.slotName = slotName || `NewSlot_${Math.floor(Math.random() * 100000)}`;
         this.newSlotId = null; // Will be set after creation
@@ -279,6 +327,7 @@ export class SlotAddChange {
     }
 
     async apply() {
+        super.apply();
         let data = `slot_added:${this.parentId}:${this.slotName}`
         networking.sendOneShot(data);
     }
@@ -308,8 +357,9 @@ export class SlotAddChange {
     }
 }
 
-export class SlotRemoveChange {
+export class SlotRemoveChange extends Change{
     constructor(slotId, options) {
+        super();
         console.log("SlotRemoveChange: ", slotId)
         this.slot = SM.getSlotById(slotId);
         this.slotExport = this.slot.export();
@@ -338,6 +388,7 @@ export class SlotRemoveChange {
 
 
     async apply() {
+        super.apply();
         let data = `slot_removed:${this.slot.id}`
         networking.sendOneShot(data);
     }
@@ -367,8 +418,9 @@ export class SlotRemoveChange {
     }
 }
 
-export class SlotMoveChange {
+export class SlotMoveChange extends Change{
     constructor(slotId, newParentId, options) {
+        super();
         this.slotId = slotId;
         this.newParentId = newParentId;
         const slot = SM.getSlotById(slotId);
@@ -387,6 +439,7 @@ export class SlotMoveChange {
     }
 
     async apply() {
+        super.apply();
         const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
         await slot.SetParent(this.newParentId);
@@ -416,8 +469,9 @@ export class SlotMoveChange {
     }
 }
 
-export class MonoBehaviorVarChange {
+export class MonoBehaviorVarChange extends Change{
     constructor(componentId, varName, newValue, options) {
+        super();
         this.componentId = componentId;
         this.varName = varName;
         this.newValue = deepClone(newValue);
@@ -432,6 +486,7 @@ export class MonoBehaviorVarChange {
     }
 
     async apply() {
+        super.apply();
         await this.change(this.newValue);
     }
 
@@ -476,8 +531,9 @@ export class MonoBehaviorVarChange {
 }
 
 
-export class LoadItemChange {
+export class LoadItemChange extends Change{
     constructor(itemName, parentId, options) {
+        super();
         this.itemName = itemName;
         this.parentId = parentId || 'Root';
         this.options = options || {};
@@ -485,6 +541,7 @@ export class LoadItemChange {
     }
 
     async apply() {
+        super.apply();
         const item = inventory.items[this.itemName];
         if(!item){
             console.log("[ERROR] no item found =>", this.itemName)
@@ -605,8 +662,9 @@ export class LoadItemChange {
     }
 }
 
-export class CloneSlotChange {
+export class CloneSlotChange extends Change{
     constructor(slotId, options) {
+        super();
         this.sourceSlot = SM.getSlotById(slotId);
         if(!this.sourceSlot){
             console.error(`Source slot ${slotId} not found`);
@@ -618,7 +676,7 @@ export class CloneSlotChange {
     }
 
     async apply() {
-       
+        super.apply();
 
         let changeChildrenIds = (slot)=>{
             slot.components.forEach(component=>{
@@ -717,8 +775,9 @@ export class CloneSlotChange {
     }
 }
 
-export class SaveSlotItemChange{
+export class SaveSlotItemChange extends Change{
     constructor(slotId, itemName, folder, options){
+        super();
         this.slotId = slotId;
         this.slot = SM.getSlotById(slotId);
         this.itemName = itemName || this.slot.name;
@@ -744,6 +803,7 @@ export class SaveSlotItemChange{
     }
 
     async apply(){
+        super.apply();
         console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.slotId, this.itemName, this.folder)
         const existingKeys = Object.keys(inventory.items);
         if (existingKeys.includes(this.itemName)) {
@@ -793,17 +853,19 @@ export class SaveSlotItemChange{
     }
 }
 
-export class RenameItemChange{
+export class RenameItemChange extends Change{
     //TODO: Implement this
 }
 
-export class DeleteItemChange{
+export class DeleteItemChange extends Change{
     constructor(itemName, options){
+        super();
         this.itemName = itemName;
         this.options = options || {};
     }
 
     async apply(){
+        super.apply();
         const storageKey = `inventory_${this.itemName}`;
         localStorage.removeItem(storageKey);
         delete inventory.items[this.itemName];
@@ -831,14 +893,16 @@ export class DeleteItemChange{
     }
 }
 
-export class CreateFolderChange{
+export class CreateFolderChange extends Change{
     constructor(folderName, parentFolder,options){
+        super();
         this.folderName = folderName;
         this.parentFolder = parentFolder || inventory.currentFolder;
         this.options = options || {};
     }
 
     async apply(){
+        super.apply();
         const trimmedName = this.folderName.trim();
             
         // Check if folder already exists
@@ -887,21 +951,23 @@ export class CreateFolderChange{
     }
 }
 
-export class RenameFolderChange{
+export class RenameFolderChange extends Change{
     //TODO: Implement this
 }
 
-export class MoveFolderChange{
+export class MoveFolderChange extends Change{
     //TODO: Implement this
 }
 
-export class RemoveFolderChange{
+export class RemoveFolderChange extends Change{
     constructor(folderName, options){
+        super();
         this.folderName = folderName;
         this.options = options || {};
     }
 
     async apply(){
+        super.apply();
         Object.entries(this.items).forEach(([key, item]) => {
             if (item.folder === folderName) {
                 const storageKey = `inventory_${key}`;
@@ -944,14 +1010,16 @@ export class RemoveFolderChange{
     }
 }
 
-export class MoveItemDirectoryChange{
+export class MoveItemDirectoryChange extends Change{
     constructor(itemName, folderName, options){
+        super();
         this.itemName = itemName;
         this.folderName = folderName;
         this.options = options || {};
     }
 
     async apply(){
+        super.apply();
         const item = inventory.items[this.itemName];
         if (!item) return false;
         
@@ -989,19 +1057,16 @@ export class MoveItemDirectoryChange{
     }
 }
 
-export class CreateScriptItemChange{
+export class CreateScriptItemChange extends Change{
     constructor(scriptName, options){
+        super();
         this.scriptName = scriptName;
         this.options = options || {};
     }
 
     async apply(){
-        const defaultScript = `this.default = {
-    "slotRef": {
-        "type": "string",
-        "value": ""
-    }
-}
+        super.apply();
+        const defaultScript = `this.default = {}
 
 Object.entries(this.default).forEach(([key, val])=>{
     if(!this.vars[key]) this.vars[key] = val
@@ -1072,14 +1137,16 @@ this.keyUp = (key)=>{
 }
 
 
-export class EditScriptItemChange{
+export class EditScriptItemChange extends Change{
     constructor(scriptName, scriptContent, options){
+        super();
         this.scriptName = scriptName;
         this.scriptContent = scriptContent;
         this.options = options || {};
     }
 
     async apply(){
+        super.apply();
         // Send save event back to inventory
         const event = new CustomEvent('save-script', {
             detail: {
@@ -1112,6 +1179,84 @@ export class EditScriptItemChange{
     }
 }
 
+
+window.RunCommand = async (execString, options)=>{
+
+    let args = execString.split(" ").map(arg=>parseBest(arg));
+    console.log(args)
+    let change = null;
+    switch(args[0]){
+        case "add_slot":
+            change = new SlotAddChange(args[1], args[2], options);
+            break;
+        case "remove_slot":
+            change = new SlotRemoveChange(args[1], options);
+            break;
+        case "move_slot":
+            change = new SlotMoveChange(args[1], args[2], options);
+            break;
+        case "set_slot_property":
+            change = new SlotPropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "add_component":
+            change = new ComponentAddChange(args[1], args[2], options);
+            break;
+        case "remove_component":
+            change = new ComponentRemoveChange(args[1], options);
+            break;
+        case "set_component_property":
+            change = new ComponentPropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "set_space_property":
+            change = new SpacePropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "set_mono_behavior_var":
+            change = new MonoBehaviorVarChange(args[1], args[2], args[3], options);
+            break;
+        case "load_item":
+            change = new LoadItemChange(args[1], args[2], options);
+            break;
+        case "clone_slot":
+            change = new CloneSlotChange(args[1], options);
+            break;
+        case "save_item":
+            change = new SaveSlotItemChange(args[1], args[2], args[3], options);
+            break;
+        case "delete_item":
+            change = new DeleteItemChange(args[1], options);
+            break;
+        case "create_folder":
+            change = new CreateFolderChange(args[1], args[2], options);
+            break;
+        case "remove_folder":
+            change = new RemoveFolderChange(args[1], options);
+            break;
+        case "move_item_directory":
+            change = new MoveItemDirectoryChange(args[1], args[2], options);
+            break;
+        case "create_script":
+            change = new CreateScriptItemChange(args[1], options);
+            break;
+        case "edit_script":
+            change = new EditScriptItemChange(args[1], args[2], options);
+            break;
+        default:
+            appendToConsole("custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
+    }
+
+    if(change){
+        await change.apply();
+    }
+}
+
+let commmandInputEl = document.getElementById("commandConsoleInput");
+commmandInputEl.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){
+        let execString = commmandInputEl.value;
+        window.RunCommand(execString);
+        commmandInputEl.value = "";
+    }
+})
 
 
 window.SetSlotProp = async (slotId, property, newValue, options)=>{
