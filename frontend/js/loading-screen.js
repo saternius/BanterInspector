@@ -6,16 +6,11 @@
 export class LoadingScreen {
     constructor() {
         this.stages = [
-            { id: 'dom', label: 'Initializing application...', weight: 5 },
-            { id: 'modules', label: 'Loading modules...', weight: 15 },
-            { id: 'bs-wait', label: 'Waiting for BanterScript library...', weight: 10 },
-            { id: 'scene-connect', label: 'Connecting to Unity scene...', weight: 10 },
-            { id: 'components', label: 'Registering components...', weight: 10 },
-            { id: 'hierarchy', label: 'Gathering scene hierarchy...', weight: 15 },
-            { id: 'slots', label: 'Generating slots...', weight: 15 },
-            { id: 'ui-panels', label: 'Initializing UI panels...', weight: 10 },
-            { id: 'events', label: 'Setting up event handlers...', weight: 5 },
-            { id: 'render', label: 'Rendering interface...', weight: 5 }
+            { id: 'banterScene', label: 'Initializing BS Library...', weight: 25 },
+            { id: 'modules', label: 'Loading modules...', weight: 30 },
+            { id: 'scene-connect', label: 'Connecting to Unity scene...', weight: 20 },
+            { id: 'hierarchy', label: 'Gathering scene hierarchy...', weight: 5 },
+            { id: 'slots', label: 'Generating slots...', weight: 20 },
         ];
         
         this.currentStageIndex = -1;
@@ -44,7 +39,7 @@ export class LoadingScreen {
                 <div class="loading-logo">
                     <div class="loading-spinner"></div>
                 </div>
-                <h2 class="loading-title">Unity Scene Inspector</h2>
+                <h2 class="loading-title">Banter Scene Inspector</h2>
                 <div class="loading-progress-container">
                     <div class="loading-progress-bar">
                         <div class="loading-progress-fill" style="width: 0%"></div>
@@ -57,7 +52,6 @@ export class LoadingScreen {
                     <div class="loading-error-message"></div>
                     <div class="loading-error-actions">
                         <button class="loading-retry-btn">Retry</button>
-                        <button class="loading-continue-btn">Continue without Unity</button>
                     </div>
                 </div>
             </div>
@@ -80,20 +74,11 @@ export class LoadingScreen {
         
         // Setup error button handlers
         const retryBtn = this.element.querySelector('.loading-retry-btn');
-        const continueBtn = this.element.querySelector('.loading-continue-btn');
         
         if (retryBtn) {
             retryBtn.addEventListener('click', () => {
                 this.clearError();
                 window.location.reload();
-            });
-        }
-        
-        if (continueBtn) {
-            continueBtn.addEventListener('click', () => {
-                this.hide();
-                // Dispatch event to continue with mock data
-                window.dispatchEvent(new CustomEvent('loadingScreenContinueWithoutUnity'));
             });
         }
     }
