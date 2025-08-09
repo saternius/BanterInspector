@@ -256,6 +256,47 @@ class ChangeManager {
             isApplying: this.isApplying
         };
     }
+
+
+    gatherHistory(slot){
+        let get_ids = (slot)=>{
+            let ids = new Array(...slot.identifiers)
+            let component_ids = slot.components.map(x=>x.id)
+            ids = ids.concat(component_ids)
+            slot.children.forEach((c)=>{
+                let children_ids = get_ids(c)
+                ids = ids.concat(children_ids)
+            })
+            return ids
+        }
+    
+        function valueExists(obj, validSet) {
+            return Object.values(obj).some(value => {
+                if (value && typeof value === 'object') {
+                    return valueExists(value, validSet);
+                }
+                return validSet.has(value);
+            });
+        }
+    
+        let relevant = new Set(get_ids(slot))
+        console.log("Relevant: ", relevant)
+        let history = []
+        this.undoStack.map(u=>u.change.cmd()).forEach(command=>{
+            if(command.action === "add_slot"){
+                let mergeId = command.parentId+"/"+command.slotName
+                if(relevant.has(mergeId)){
+                    history.push(command)
+                }
+            }
+            
+            if(valueExists(command, relevant)){
+                history.push(command)
+            }
+        })
+        return history
+    }
+    
     
     /**
      * Clear all history
