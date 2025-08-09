@@ -15,6 +15,13 @@ export class Change {
     }
 
     async apply(){
+        let cmd_el = document.getElementById(this.id);
+        if(cmd_el){
+            cmd_el.style.textDecoration = "none";
+            cmd_el.style.color = "white";
+            return;
+        }
+
         let command = this.cmd();
         let commandStr = "";
         Object.entries(command).forEach(([key, value])=>{
@@ -30,7 +37,11 @@ export class Change {
     }
 
     async undo(){
-        console.log("[ NO UNDO FOR CHANGE ]")
+        let cmd_el = document.getElementById(this.id);
+        if(cmd_el){
+            cmd_el.style.textDecoration = "line-through";
+            cmd_el.style.color = "gray";
+        }
     }
 
     cmd(){
@@ -112,6 +123,7 @@ export class ComponentPropertyChange extends Change{
     }
 
     async undo() {
+        super.undo();
         await this.change(this.oldValue);
     }
 
@@ -169,6 +181,7 @@ export class SpacePropertyChange extends Change{
     }
 
     async undo() {
+        super.undo();
         await this.change(this.oldValue);
     }
 
@@ -226,6 +239,7 @@ export class ComponentAddChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if (!this.componentProperties.id) return;
         let data = `component_removed:${this.componentProperties.id}`
         networking.sendOneShot(data);
@@ -288,6 +302,7 @@ export class ComponentRemoveChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if (!this.componentData) return;
         this.componentData.properties.id = this.componentData.id;
         let event = {
@@ -333,6 +348,7 @@ export class SlotAddChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if (!this.newSlotId) return;
         let slot_id = `${this.parentId}/${this.slotName}`
         let data = `slot_removed:${slot_id}`
@@ -394,6 +410,7 @@ export class SlotRemoveChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if (!this.slotExport) return;
 
         // Recreate the slot hierarchy
@@ -446,6 +463,7 @@ export class SlotMoveChange extends Change{
     }
 
     async undo() {
+        super.undo();
         const slot = SM.getSlotById(this.slotId);
         if (!slot) return;
         await slot.SetParent(this.oldParentId);
@@ -491,6 +509,7 @@ export class MonoBehaviorVarChange extends Change{
     }
 
     async undo() {
+        super.undo();
         await this.change(this.oldValue);
     }
 
@@ -639,6 +658,7 @@ export class LoadItemChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if(!this.slotId) return;
         let data = `slot_removed:${this.slotId}`
         networking.sendOneShot(data);
@@ -753,6 +773,7 @@ export class CloneSlotChange extends Change{
     }
 
     async undo() {
+        super.undo();
         if(!this.slotId) return;
         let data = `slot_removed:${this.slotId}`
         networking.sendOneShot(data);
@@ -831,6 +852,7 @@ export class SaveSlotItemChange extends Change{
     }
 
     async undo(){
+        super.undo();
         inventory.showNotification('[ NO UNDO FOR SAVE ITEM ]');
     }
 
@@ -873,6 +895,7 @@ export class DeleteItemChange extends Change{
     }
 
     async undo(){
+        super.undo();
         console.log("[ NO UNDO FOR DELETE ITEM ]")
     }
 
@@ -930,6 +953,7 @@ export class CreateFolderChange extends Change{
     }
 
     async undo(){
+        super.undo();   
         console.log("[ NO UNDO FOR CREATE FOLDER ]")
     }
 
@@ -990,6 +1014,7 @@ export class RemoveFolderChange extends Change{
     }
 
     async undo(){
+        super.undo();
         console.log("[ NO UNDO FOR REMOVE FOLDER ]")
     }
 
@@ -1036,6 +1061,7 @@ export class MoveItemDirectoryChange extends Change{
     }
 
     async undo(){
+        super.undo();
         console.log("[ NO UNDO FOR MOVE ITEM DIRECTORY ]")
     }
 
@@ -1116,6 +1142,7 @@ this.keyUp = (key)=>{
         return true;
     }
     async undo(){
+        super.undo();
         console.log("[ NO UNDO FOR SCRIPTS ]")
     }
 
@@ -1158,6 +1185,7 @@ export class EditScriptItemChange extends Change{
     }
 
     async undo(){
+        super.undo();   
         console.log("[ NO UNDO FOR EDIT SCRIPT ]")
     }
 
