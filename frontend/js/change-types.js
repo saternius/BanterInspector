@@ -55,8 +55,8 @@ export class SlotPropertyChange extends Change{
         this.slotId = slotId;
         this.property = property;
         this.newValue = newValue;
-        this.options = options;
-        this.oldValue = options.oldValue || this.getOldValue();
+        this.options = options || {};
+        this.oldValue = this.options.oldValue || this.getOldValue();
     }
 
     getOldValue() {
@@ -223,7 +223,9 @@ export class ComponentAddChange extends Change{
 
     async apply() {
         super.apply();
-        this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
+        if(!this.componentProperties.id){
+            this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
+        }
         let event = {
             slotId: this.slotId,
             componentType: this.componentType,
@@ -548,49 +550,52 @@ export class MonoBehaviorVarChange extends Change{
 
 
 export class LoadItemChange extends Change{
-    constructor(itemName, parentId, options) {
+    constructor(itemName, parentId, itemData, options) {
         super();
         this.itemName = itemName;
         this.parentId = parentId || 'Root';
         this.options = options || {};
         this.slotId = null;
+        this.itemData = itemData;
     }
 
     async apply() {
         super.apply();
-        const item = inventory.items[this.itemName];
-        if(!item){
-            console.log("[ERROR] no item found =>", this.itemName)
-            return null;
-        }
-        if(item.itemType !== "slot"){
-            console.log("[ERROR] item is not a slot =>", this.itemName)
-            return null;
-        }
-
-        let changeChildrenIds = (slot)=>{
-            slot.components.forEach(component=>{
-                component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
-            })
-            if(slot.children){
-                slot.children.forEach(child=>{
-                    child.parentId = slot.id;
-                    child.id = slot.id+"/"+child.name;
-                    changeChildrenIds(child);
-                })
+        if(!this.itemData){
+            const item = inventory.items[this.itemName];
+            if(!item){
+                console.log("[ERROR] no item found =>", this.itemName)
+                return null;
             }
+            if(item.itemType !== "slot"){
+                console.log("[ERROR] item is not a slot =>", this.itemName)
+                return null;
+            }
+    
+            let changeChildrenIds = (slot)=>{
+                slot.components.forEach(component=>{
+                    component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
+                })
+                if(slot.children){
+                    slot.children.forEach(child=>{
+                        child.parentId = slot.id;
+                        child.id = slot.id+"/"+child.name;
+                        changeChildrenIds(child);
+                    })
+                }
+            }
+    
+            let itemData = item.data;
+            itemData.name = this.itemName+"_"+Math.floor(Math.random() * 100000);
+            itemData.parentId = this.parentId;
+            itemData.id = this.parentId+"/"+itemData.name;
+            changeChildrenIds(itemData);
+    
+            console.log("[ITEM DATA] =>", itemData)
+            this.itemData = itemData;    
         }
-
-        let itemData = item.data;
-        itemData.name = this.itemName+"_"+Math.floor(Math.random() * 100000);
-        itemData.parentId = this.parentId;
-        itemData.id = this.parentId+"/"+itemData.name;
-        changeChildrenIds(itemData);
-
-        console.log("[ITEM DATA] =>", itemData)
-        
-
-        let data = `load_slot:${this.parentId}|${JSON.stringify(itemData)}`
+       
+        let data = `load_slot:${this.parentId}|${JSON.stringify(this.itemData)}`
         networking.sendOneShot(data);
 
         //Additionally send all of the slot properties to space props
@@ -602,6 +607,7 @@ export class LoadItemChange extends Change{
                     props[`__${slot.id}/active:slot`] = slot.active
                     props[`__${slot.id}/persistent:slot`] = slot.persistent
                     props[`__${slot.id}/name:slot`] = slot.name
+                    props[`__${slot.id}/layer:slot`] = slot.layer
                     if(slot.components){
                         slot.components.forEach(component=>{
                             if(component.properties){   
@@ -626,7 +632,7 @@ export class LoadItemChange extends Change{
             }
 
 
-            let itemProps = getSlotSpaceProperties(itemData);
+            let itemProps = getSlotSpaceProperties(this.itemData);
             // console.log("[ITEM PROPS] =>", itemProps)
             // SM.scene.SetPublicSpaceProps(itemProps)
             Object.keys(itemProps).forEach(key=>{
@@ -635,8 +641,7 @@ export class LoadItemChange extends Change{
             })
         }
 
-
-        this.slotId = `${this.parentId}/${itemData.name}`
+        this.slotId = `${this.parentId}/${this.itemData.name}`
         const returnWhenSlotLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
@@ -674,6 +679,7 @@ export class LoadItemChange extends Change{
             action: "load_item",
             itemName: this.itemName,
             parentId: this.parentId,
+            itemData: this.itemData,
             options: this.options
         }
     }
@@ -724,6 +730,7 @@ export class CloneSlotChange extends Change{
                     props[`__${slot.id}/active:slot`] = slot.active
                     props[`__${slot.id}/persistent:slot`] = slot.persistent
                     props[`__${slot.id}/name:slot`] = slot.name
+                    props[`__${slot.id}/layer:slot`] = slot.layer
                     
                     slot.components.forEach(component=>{
                         Object.keys(component.properties).forEach(prop=>{
@@ -1210,6 +1217,7 @@ window.RunCommand = async (execString, options)=>{
     let args = execString.split(" ").map(arg=>parseBest(arg));
     console.log(args)
     let change = null;
+    options = options || {};
     switch(args[0]){
         case "add_slot":
             change = new SlotAddChange(args[1], args[2], options);
@@ -1224,6 +1232,7 @@ window.RunCommand = async (execString, options)=>{
             change = new SlotPropertyChange(args[1], args[2], args[3], options);
             break;
         case "add_component":
+            options.componentProperties = args[3];
             change = new ComponentAddChange(args[1], args[2], options);
             break;
         case "remove_component":
@@ -1239,7 +1248,7 @@ window.RunCommand = async (execString, options)=>{
             change = new MonoBehaviorVarChange(args[1], args[2], args[3], options);
             break;
         case "load_item":
-            change = new LoadItemChange(args[1], args[2], options);
+            change = new LoadItemChange(args[1], args[2], args[3], options);
             break;
         case "clone_slot":
             change = new CloneSlotChange(args[1], options);
@@ -1322,7 +1331,7 @@ window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
 }
 
 window.LoadItem = async (itemName, parentId, options)=>{
-    let change = new LoadItemChange(itemName, parentId, options);
+    let change = new LoadItemChange(itemName, parentId, null, options);
     return await change.apply();
 }
 

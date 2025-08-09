@@ -1077,9 +1077,37 @@ export class Inventory {
      * Load slot to scene by name
      */
     async loadSlotToSceneByName(itemName) {
-        let change = new LoadItemChange(itemName, SM.selectedSlot, {source: 'ui'})
+        let change = new LoadItemChange(itemName, SM.selectedSlot, null, {source: 'ui'})
         await changeManager.applyChange(change);
         this.showNotification(`Adding "${itemName}" to scene..`);
+    }
+
+    async loadByCMD(itemName, delay=1000){
+        let data = localStorage.getItem("inventory_"+itemName)
+        if(!data){
+            console.log(" NO ITEM NAMED:  ", itemName)
+            return;
+        }
+        let item = JSON.parse(data)
+        console.log(item.history, item.history.length)
+        for(let i=0; i<item.history.length; i++){
+            let h = item.history[i]
+            command = ""
+            Object.entries(h).forEach(([k,v])=>{
+                if(k === "options"){
+                    return
+                }
+                if(typeof(v) === "object"){
+                    command += JSON.stringify(v)+" "
+                }else{
+                    command += v + " "
+                }
+            })
+            command = command.trim()
+            console.log(i, command)
+            await RunCommand(command)
+            await new Promise(r => setTimeout(r, delay));
+        }
     }
     
     /**
