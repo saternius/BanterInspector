@@ -383,14 +383,14 @@
             // Make panels resizable
             const hierarchyPanel = document.querySelector('.hierarchy-panel');
             const propertiesPanel = document.querySelector('.properties-panel');
-            const spacePropsPanel = document.querySelector('.space-props-panel');
+            const spacePropsContainer = document.querySelector('.space-props-panel-container');
             
             if (hierarchyPanel && propertiesPanel) {
                 this.makeResizable(hierarchyPanel, 'right', 200, 500);
             }
             
-            if (spacePropsPanel && propertiesPanel) {
-                this.makeResizable(spacePropsPanel, 'left', 300, 600);
+            if (spacePropsContainer && propertiesPanel) {
+                this.makeResizable(spacePropsContainer, 'left', 300, 600);
             }
         }
 

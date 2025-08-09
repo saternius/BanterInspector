@@ -115,7 +115,12 @@ console.log("It is 3:00")
         }
 
         // Resets the SpaceProperties
-        async reset(){
+        async Reset(){
+            networking.sendOneShot('reset');
+            await this._reset();
+        }
+        
+        async _reset(){
             if(window.isLocalHost){
                 localStorage.removeItem('lastSpaceState');
             }

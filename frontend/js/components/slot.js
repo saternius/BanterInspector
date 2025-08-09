@@ -10,8 +10,8 @@ export class Slot{
         this._bs = slotData._bs;
         this.active = true;
         this.persistent = true;
+        this.identifiers = new Set();
         
-
 
         if(!slotData._bs){
             let newGameObject = new BS.GameObject(this.name);
@@ -30,6 +30,7 @@ export class Slot{
         }
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
+        this.identifiers.add(this.id);
         window.SM.slotData.slotMap[this.id] = this;
         return this;
     }
@@ -129,6 +130,7 @@ export class Slot{
             child.parentId = this.id;
             child.rename(child.name, localUpdate);
         })
+        this.identifiers.add(this.id);
     }
 
     _set(prop, newValue){
@@ -171,8 +173,8 @@ export class Slot{
     }
 
     async SetParent(newParentId){
-        await this._setParent(SM.getSlotOrRoot(newParentId), true);
         let data = `slot_moved:${this.id}:${newParentId}:0`
+        //await this._setParent(SM.getSlotOrRoot(newParentId), true);
         networking.sendOneShot(data);
     }
 }

@@ -291,7 +291,7 @@ export class Networking {
         }
 
         if(data === "reset"){
-            window.location.reload();
+            await SM._reset();
         }
        
         if(data.startsWith("load_slot")){
@@ -373,7 +373,7 @@ export class Networking {
     }
 
     async handleOneShot(event){
-        //console.log("handleOneShot =>", event)
+        console.log("handleOneShot =>", event)
         let message = event.detail.data;
         let firstColon = message.indexOf(":");
         let timestamp = parseInt(message.slice(0, firstColon));

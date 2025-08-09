@@ -735,7 +735,8 @@ export class SaveSlotItemChange{
             created: Date.now(),
             itemType: "slot",
             data: data,
-            folder: this.folder
+            folder: this.folder,
+            history: changeManager.gatherHistory(this.slot)
         };
         const storageKey = `inventory_${this.itemName}`;
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));

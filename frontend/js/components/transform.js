@@ -21,9 +21,9 @@ export class TransformComponent extends SlotComponent {
         value.x = parseFloat(value.x || 0);
         value.y = parseFloat(value.y || 0);
         value.z = parseFloat(value.z || 0);
-        if (property === 'localPosition' || property === 'localScale') {
+        if (property === 'localPosition' || property === 'localScale' || property === "position" || property === "scale") {
             this._bs[property] = new BS.Vector3(value.x,value.y, value.z);
-        } else if (property === 'localRotation') {
+        } else if (property === 'localRotation' || property === "rotation") {
             if ('w' in value) {
                 value.w = parseFloat(value.w || 1);
                 this._bs[property] = new BS.Vector4( value.x, value.y, value.z, value.w);
