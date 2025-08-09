@@ -77,6 +77,32 @@ window.updateModuleProgress("world-object");
 const { ConfigurableJointComponent } = await import(`${window.repoUrl}/components/configurable-joint.js`);
 window.updateModuleProgress("configurable-joint");
 
+export const BanterLayers = {
+    Default: 0,
+    TransparentFX: 1,
+    IgnoreRaycast: 2,
+    UserLayer1: 3,
+    Water: 4,
+    UI: 5,
+    UserLayer2: 6,
+    UserLayer3: 7,
+    UserLayer4: 8,
+    UserLayer5: 9,
+    UserLayer6: 10,
+    UserLayer7: 11,
+    UserLayer8: 12,
+    UserLayer9: 13,
+    UserLayer10: 14,
+    UserLayer11: 15,
+    UserLayer12: 16,
+    NetworkPlayer: 17,
+    RPMAvatarHead: 18,
+    RPMAvatarBody: 19,
+    Grabbable: 20,
+    HandColliders: 21,
+    WalkingLegs: 22,
+    PhysicsPlayer: 23,
+ }
 
 export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.Transform,

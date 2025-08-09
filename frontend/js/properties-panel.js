@@ -8,7 +8,8 @@
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange } = await import(`${window.repoUrl}/change-types.js`);
     const { deepClone } = await import(`${window.repoUrl}/utils.js`);
-    
+    const { BanterLayers } = await import(`${window.repoUrl}/components/index.js`);
+
     export class PropertiesPanel {
         constructor() {
             this.propertiesContent = document.getElementById('propertiesContent');
@@ -131,6 +132,14 @@
             
             inputName.addEventListener('blur', handleRename);
             nameRow.appendChild(inputName);
+
+            // Layer property
+            const layerRow = this.createPropertyRow('Layer', slot.layer, 'dropdown',  (value) => {
+                const change = new SlotPropertyChange(slot.id, 'layer', value, { source: 'ui' });
+                changeManager.applyChange(change);
+            }, BanterLayers);
+
+
             
             // Active property
             const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
@@ -145,6 +154,7 @@
             });
             
             body.appendChild(nameRow);
+            body.appendChild(layerRow);
             body.appendChild(activeRow);
             body.appendChild(persistentRow);
             
@@ -833,7 +843,7 @@
         /**
          * Create a simple property row
          */
-        createPropertyRow(label, value, type, onChange) {
+        createPropertyRow(label, value, type, onChange, enums) {
             const row = document.createElement('div');
             row.className = 'property-row';
             
@@ -858,6 +868,21 @@
                 input.value = value || '';
                 input.onchange = () => onChange(input.value);
                 valueContainer.appendChild(input);
+            } else if (type === 'dropdown') {
+                const select = document.createElement('select');
+                select.className = 'property-input';
+                select.value = value || '';
+                select.onchange = () => onChange(select.value);
+                Object.entries(enums).forEach(([key, enumValue]) => {
+                    const option = document.createElement('option');
+                    option.value = enumValue;
+                    option.textContent = key;
+                    if(enumValue === value){
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+                valueContainer.appendChild(select);
             }
             
             row.appendChild(document.createElement('span')); // Empty space for button

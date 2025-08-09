@@ -233,6 +233,7 @@ console.log("It is 3:00")
             let createSlotHierarchy = (slot)=>{
                 let h = {
                     name: slot.name,
+                    layer: slot.layer,
                     components: Array.from(new Set(slot.components.map(c=>c.id))),
                     children: slot.children.map(c=>createSlotHierarchy(c))
                 }
@@ -286,7 +287,8 @@ console.log("It is 3:00")
                 const slot = await new Slot().init({
                     name: h.name || 'GameObject',
                     parentId: parent_path,
-                    _bs: gO
+                    _bs: gO,
+                    layer: gO.layer
                 });
                 
                 // Update slot generation progress
@@ -378,7 +380,8 @@ console.log("It is 3:00")
             let loadSubSlot = async (item, parentId)=>{ 
                 const newSlot = await new Slot().init({
                     name: item.name,
-                    parentId: parentId
+                    parentId: parentId,
+                    layer: item.layer
                 });
     
                 
@@ -447,6 +450,7 @@ console.log("It is 3:00")
             const slot = await new Slot().init({
                 name: hierarchy.name,
                 parentId: parentId,
+                layer: hierarchy.layer
             });
 
             for(let i=0; i<hierarchy.components.length; i++){
