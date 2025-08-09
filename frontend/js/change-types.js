@@ -1,13 +1,10 @@
 // Import required dependencies
 
-const { deepClone, parseBest } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest, appendToConsole } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
-let appendToConsole = (id, str)=>{
-    let consoleEl = document.getElementById("lifecycleConsole");
-    consoleEl.innerHTML += `<div class="change-item" id="${id}">${str}</div>`
-}
+
 
 export class Change {
     constructor(){
@@ -33,7 +30,7 @@ export class Change {
             }
             commandStr += value + " ";
         })
-        appendToConsole(this.id, commandStr);
+        appendToConsole("command", this.id, commandStr);
     }
 
     async undo(){
@@ -1269,7 +1266,7 @@ window.RunCommand = async (execString, options)=>{
             change = new EditScriptItemChange(args[1], args[2], options);
             break;
         default:
-            appendToConsole("custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
+            appendToConsole("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
     }
 
     if(change){

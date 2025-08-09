@@ -1561,6 +1561,41 @@ body {
     font-size: 12px;
     font-weight: 500;
     color: #888;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.console-toggles {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.console-toggle {
+    background: #2a2a2a;
+    border: 1px solid #333;
+    color: #666;
+    padding: 2px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.console-toggle:hover {
+    background: #333;
+}
+
+.console-toggle.active {
+    background: #1f3024;
+    border-color: #1f3024;
+    color: #aaa;
+}
+
+.console-toggle.active:hover {
+    background: #27422e;
+    color: #fff;
 }
 
 .lifecycle-console {
@@ -2402,6 +2437,12 @@ body {
     background: #222842;
     border-color: #334466;
     color: #8899ff;
+}
+
+.history-notification.success {
+    background: #224422;
+    border-color: #336633;
+    color: #88ff88;
 }
 
 /* Script Editor Styles */

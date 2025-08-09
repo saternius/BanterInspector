@@ -1,3 +1,4 @@
+const { appendToConsole } = await import(`${window.repoUrl}/utils.js`);
 
 function safeParse(value) {
     // Only operate on strings
@@ -209,6 +210,10 @@ export class Networking {
         const { changes } = event.detail;
         changes.forEach(async (change) => {
             let { property, newValue, isProtected } = change;
+            if(window.logger.include.spaceProps){
+                appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
+            }
+
             if(newValue[0] === "{" || newValue[0] === "["){
                 newValue = JSON.parse(newValue);
             }
@@ -366,15 +371,15 @@ export class Networking {
                 monobehavior._refresh();
             }
         }
-
-        if(SM.saveMethod === "aggressive"){
-            SM.saveScene();
-        }
     }
 
     async handleOneShot(event){
-        console.log("handleOneShot =>", event)
+
         let message = event.detail.data;
+        
+        if(window.logger.include.oneShot){
+            appendToConsole("oneShot", "oneShot_"+Math.floor(Math.random()*1000000), message);
+        }
         let firstColon = message.indexOf(":");
         let timestamp = parseInt(message.slice(0, firstColon));
         

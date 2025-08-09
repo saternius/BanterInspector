@@ -126,8 +126,29 @@
                 this.setupGlobalEventHandlers();
                 
                 
-                // Setup clear console button
-                const clearConsoleBtn = document.getElementById('clearConsoleBtn');
+                // Initialize logger settings
+                window.logger = {
+                    include: {
+                        command: true,
+                        script: true,
+                        oneShot: false,
+                        spaceProps: false
+                    }
+                };
+
+
+                // Setup console toggle buttons
+                const toggleButtons = document.querySelectorAll('.console-toggle');
+                toggleButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const toggleType = btn.dataset.toggle;
+                        window.logger.include[toggleType] = !window.logger.include[toggleType];
+                        btn.classList.toggle('active', window.logger.include[toggleType]);
+                    });
+                });
+
+                // Setup clear console button (moved to console header)
+                const clearConsoleBtn = document.getElementById('clearConsoleBtn2');
                 if (clearConsoleBtn) {
                     clearConsoleBtn.addEventListener('click', () => {
                         this.lifecyclePanel.clearConsole();
@@ -198,6 +219,15 @@
                     if (changeManager) {
                         changeManager.redo();
                     }
+                });
+            }
+            
+            // Wire up save button
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    SM.saveScene();
+                    this.showNotification('Scene saved', 'success');
                 });
             }
             

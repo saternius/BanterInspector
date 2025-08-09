@@ -192,7 +192,7 @@
             if(monoBehavior.ctx._running){
                 stopBtn.onclick = () => {
                     monoBehavior.Stop();
-                    this.addConsoleOutput(scriptName, '[Stopped]');
+                    this.addConsoleOutput(scriptName, '[Stopped]', monoBehavior.id);
                     this.render();
                 }
             }else{
@@ -209,7 +209,7 @@
             refreshBtn.title = 'Refresh';
             refreshBtn.onclick = () => {
                 monoBehavior.Refresh();
-                this.addConsoleOutput(scriptName, '[Refreshed]');
+                this.addConsoleOutput(scriptName, '[Refreshed]', monoBehavior.id);
                 this.render();
             }
             
@@ -235,7 +235,7 @@
                 const monoBehavior = lifecycle.monoBehaviors.get(componentId);
                 if (monoBehavior) {
                     const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                    this.addConsoleOutput(scriptName, '[Logging enabled]');
+                    this.addConsoleOutput(scriptName, '[Logging enabled]', monoBehavior.id);
                 }
             } else {
                 this.selectedLogs.delete(componentId);
@@ -246,62 +246,19 @@
         /**
          * Add output to the console
          */
-        addConsoleOutput(scriptName, output) {
-            const timestamp = new Date().toLocaleTimeString();
-            const entry = {
-                timestamp,
-                scriptName,
-                output,
-                formatted: `[${scriptName}]: ${output}`
-            };
-            
-            this.consoleBuffer.push(entry);
-            
-            // Limit buffer size
-            if (this.consoleBuffer.length > this.maxConsoleLines) {
-                this.consoleBuffer.shift();
-            }
-            
-            this.renderConsole();
+        addConsoleOutput(scriptName, output, id) {
+            let outputStr = `[${scriptName}]: ${output}`;
+            appendToConsole("script", "script_"+id+"_"+Math.floor(Math.random()*1000000), outputStr);
         }
 
-        /**
-         * Render the console output
-         */
-        renderConsole() {
-            const consoleElement = document.getElementById('lifecycleConsole');
-            if (!consoleElement) return;
-            
-            // Clear and rebuild console
-            consoleElement.innerHTML = '';
-            
-            for (const entry of this.consoleBuffer) {
-                const line = document.createElement('div');
-                line.className = 'console-line';
-                
-                const time = document.createElement('span');
-                time.className = 'console-time';
-                time.textContent = entry.timestamp;
-                
-                const content = document.createElement('span');
-                content.className = 'console-content';
-                content.textContent = entry.formatted;
-                
-                line.appendChild(time);
-                line.appendChild(content);
-                consoleElement.appendChild(line);
-            }
-            
-            // Auto-scroll to bottom
-            consoleElement.scrollTop = consoleElement.scrollHeight;
-        }
+
 
         /**
          * Clear the console
          */
         clearConsole() {
-            this.consoleBuffer = [];
-            this.renderConsole();
+            let consoleEl = document.getElementById("lifecycleConsole");
+            consoleEl.innerHTML = "";
         }
     }
 
