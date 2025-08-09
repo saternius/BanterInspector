@@ -349,3 +349,38 @@ export function getComponentIcon(componentType) {
     
     return icons[componentType] || '●';
 }
+
+export function parseBest(str) {
+    if (typeof str !== 'string') return str; // Already not a string
+
+    // Trim whitespace
+    const trimmed = str.trim();
+
+    // Handle booleans
+    if (trimmed.toLowerCase() === "true") return true;
+    if (trimmed.toLowerCase() === "false") return false;
+
+    // Handle null
+    if (trimmed.toLowerCase() === "null") return null;
+
+    // Handle undefined
+    if (trimmed.toLowerCase() === "undefined") return undefined;
+
+    // Handle numbers (int, float, negative, exponential)
+    if (!isNaN(trimmed) && trimmed !== '') {
+        return Number(trimmed);
+    }
+
+    // Handle JSON objects/arrays
+    if ((trimmed.startsWith("{") && trimmed.endsWith("}")) ||
+        (trimmed.startsWith("[") && trimmed.endsWith("]"))) {
+        try {
+            return JSON.parse(trimmed);
+        } catch (e) {
+            // If invalid JSON, just return as string
+        }
+    }
+
+    // Default: return the original string
+    return str;
+}
