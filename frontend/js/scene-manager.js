@@ -89,16 +89,31 @@ console.log("It is 3:00")
                         console.log('Gathering scene hierarchy...');
                         let hierarchy = null;
                         if(!this.props.hierarchy){
+                            // Update loading screen progress for hierarchy gathering
+                            if (window.loadingScreen) {
+                                window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
+                            }
                             hierarchy = await this.gatherSceneHierarchy();
+                            if (window.loadingScreen) {
+                                window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+                            }
                         }else{
                             let h = this.props.hierarchy;
                             if(typeof h == "string"){
                                 h = JSON.parse(h);
                             }
                             hierarchy = h;
+                            if (window.loadingScreen) {
+                                window.loadingScreen.updateStage('hierarchy', 100, 'Using cached hierarchy');
+                            }
                         }
                         console.log("hierarchy =>", hierarchy)
-                        this.loadHierarchy(hierarchy);
+                        
+                        // Start slot generation
+                        if (window.loadingScreen) {
+                            window.loadingScreen.updateStage('slots', 0, 'Generating slots...');
+                        }
+                        await this.loadHierarchy(hierarchy);
                     } catch (error) {
                         console.error('Error gathering scene hierarchy:', error);
                     }
@@ -150,10 +165,21 @@ console.log("It is 3:00")
         // This gathers the hierarchy of the scene via Unity GameObjects
         async gatherSceneHierarchy(){
             console.log("gathering SceneHierarchy")
+            
+            // Update progress: finding root
+            if (window.loadingScreen) {
+                window.loadingScreen.updateStage('hierarchy', 10, 'Finding root object...');
+            }
+            
             let rootObj = await this.scene.Find("Root");
             if(!rootObj){
                 console.log("no root object found")
                 return null;
+            }
+            
+            // Update progress: found root
+            if (window.loadingScreen) {
+                window.loadingScreen.updateStage('hierarchy', 20, 'Root object found');
             }
 
             let createSlotHierarchy = async (obj)=>{
@@ -236,6 +262,17 @@ console.log("It is 3:00")
             if(!hierarchy){ return null}
             this.props.hierarchy = hierarchy;
             
+            // Count total slots for progress tracking
+            let totalSlots = 0;
+            let processedSlots = 0;
+            const countSlots = (h) => {
+                totalSlots++;
+                if (h.children) {
+                    h.children.forEach(child => countSlots(child));
+                }
+            };
+            countSlots(hierarchy);
+            
             let hierarchyToSlot = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
                 let gO = await this.scene.FindByPath(path);
@@ -248,6 +285,14 @@ console.log("It is 3:00")
                     parentId: parent_path,
                     _bs: gO
                 });
+                
+                // Update slot generation progress
+                processedSlots++;
+                if (window.loadingScreen) {
+                    const progress = (processedSlots / totalSlots) * 100;
+                    window.loadingScreen.updateStage('slots', progress, 
+                        `Processing slot ${processedSlots} of ${totalSlots}: ${h.name}`);
+                }
 
                 //Make transform the top component
                 let ref_idx = 0;
@@ -295,6 +340,13 @@ console.log("It is 3:00")
                         slot.components.push(slotComponent);
                     }
                 })
+                
+                // Update components progress
+                if (window.loadingScreen && h.components.length > 0) {
+                    window.loadingScreen.updateStage('components', 
+                        (processedSlots / totalSlots) * 100, 
+                        `Registered ${h.components.length} components for ${h.name}`);
+                }
 
                 for(let child of h.children){
                     let childSlot = await hierarchyToSlot(child, slot.id);
@@ -307,6 +359,12 @@ console.log("It is 3:00")
 
             this.slotData.slots = [slot];
             this.initializeExpandedNodes();
+            
+            // Slots generation complete
+            if (window.loadingScreen) {
+                window.loadingScreen.updateStage('slots', 100, 'All slots generated');
+            }
+            
             inspector.hierarchyPanel.render()
         }
 

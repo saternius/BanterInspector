@@ -6,20 +6,53 @@
  */
 (async () => {
     console.log(window.repoUrl)
+    
+    // Import and show loading screen first
+    const { loadingScreen } = await import(`${window.repoUrl}/loading-screen.js`);
+    window.loadingScreen = loadingScreen; // Make globally accessible
+    loadingScreen.show();
+    loadingScreen.updateStage('dom', 100, 'DOM loaded');
+    
+    // Track module loading progress
+    const totalModules = 13;
+    let loadedModules = 0;
+    const updateModuleProgress = () => {
+        loadedModules++;
+        const progress = (loadedModules / totalModules) * 100;
+        loadingScreen.updateStage('modules', progress, `Loading module ${loadedModules} of ${totalModules}`);
+    };
+    
+    // Load modules with progress tracking
+    loadingScreen.updateStage('modules', 0, 'Starting module imports...');
+    
     const  { sceneManager } = await import(`${window.repoUrl}/scene-manager.js`);
+    updateModuleProgress();
     const  { networking } = await import(`${window.repoUrl}/networking.js`);
+    updateModuleProgress();
     const  { HierarchyPanel } = await import(`${window.repoUrl}/hierarchy-panel.js`);
+    updateModuleProgress();
     const  { PropertiesPanel } = await import(`${window.repoUrl}/properties-panel.js`);
+    updateModuleProgress();
     const  { SpacePropsPanel } = await import(`${window.repoUrl}/space-props-panel.js`);
+    updateModuleProgress();
     const  { ComponentMenu } = await import(`${window.repoUrl}/component-menu.js`);
+    updateModuleProgress();
     const  { loadMockSpaceProps } = await import(`${window.repoUrl}/mock-data.js`);
+    updateModuleProgress();
     const  { Navigation } = await import(`${window.repoUrl}/navigation.js`);
+    updateModuleProgress();
     const  { Inventory } = await import(`${window.repoUrl}/inventory.js`);
+    updateModuleProgress();
     const  { ScriptEditor } = await import(`${window.repoUrl}/script-editor.js`);
+    updateModuleProgress();
     const  { lifecycleManager } = await import(`${window.repoUrl}/lifecycle-manager.js`);
+    updateModuleProgress();
     const  { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
+    updateModuleProgress();
     const  { LifecyclePanel } = await import(`${window.repoUrl}/lifecycle-panel.js`);
+    updateModuleProgress();
     const  { Feedback } = await import(`${window.repoUrl}/feedback.js`);
+    updateModuleProgress();
 
     // Global app instance
     class InspectorApp {
@@ -45,11 +78,21 @@
             console.log('Initializing Unity Scene Inspector...');
             
             try {
+                // Wait for BS library to be available
+                loadingScreen.updateStage('bs-wait', 0, 'Checking for BanterScript library...');
+                await loadingScreen.createBSLibraryTimeout(10000).catch(error => {
+                    console.error('BS Library timeout:', error);
+                    loadingScreen.setError(error.message);
+                    throw error;
+                });
                 // Initialize navigation
+                loadingScreen.updateStage('ui-panels', 10, 'Initializing navigation...');
                 this.navigation = new Navigation();
                 
                 // Initialize scene manager
+                loadingScreen.updateStage('scene-connect', 0, 'Connecting to Unity scene...');
                 await SM.initialize();
+                loadingScreen.updateStage('scene-connect', 100, 'Scene connected');
                 
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
@@ -62,16 +105,27 @@
                 
                 
                 // Initialize UI panels
+                loadingScreen.updateStage('ui-panels', 20, 'Creating hierarchy panel...');
                 this.hierarchyPanel = new HierarchyPanel();
+                
+                loadingScreen.updateStage('ui-panels', 40, 'Creating properties panel...');
                 this.propertiesPanel = new PropertiesPanel();
+                
+                loadingScreen.updateStage('ui-panels', 60, 'Creating space properties panel...');
                 this.spacePropsPanel = new SpacePropsPanel();
+                
+                loadingScreen.updateStage('ui-panels', 70, 'Creating component menu...');
                 this.componentMenu = new ComponentMenu();
+                
+                loadingScreen.updateStage('ui-panels', 80, 'Creating lifecycle panel...');
                 this.lifecyclePanel = new LifecyclePanel();
                 
                 // Initialize inventory
+                loadingScreen.updateStage('ui-panels', 90, 'Initializing inventory...');
                 this.inventory = new Inventory();
                 
                 // Initialize feedback
+                loadingScreen.updateStage('ui-panels', 100, 'Initializing feedback system...');
                 this.feedback = new Feedback();
                 
                 // Initialize script editors map
@@ -86,12 +140,20 @@
                 window.feedback = this.feedback;
                 
                 // Initial render
+                loadingScreen.updateStage('render', 30, 'Rendering hierarchy panel...');
                 this.hierarchyPanel.render();
+                
+                loadingScreen.updateStage('render', 60, 'Rendering space properties...');
                 this.spacePropsPanel.render();
+                
+                loadingScreen.updateStage('render', 90, 'Rendering lifecycle panel...');
                 this.lifecyclePanel.render();
                 
                 // Set up global event handlers
+                loadingScreen.updateStage('events', 50, 'Setting up event handlers...');
                 this.setupGlobalEventHandlers();
+                
+                loadingScreen.updateStage('events', 80, 'Setting up UI controls...');
                 
                 // Setup clear console button
                 const clearConsoleBtn = document.getElementById('clearConsoleBtn');
@@ -109,20 +171,32 @@
                 }
                 
                 // Set up history notifications
+                loadingScreen.updateStage('events', 90, 'Setting up history...');
                 this.setupHistoryNotifications();
                 
                 // Handle window resize
                 this.setupResizeHandlers();
                 
+                loadingScreen.updateStage('events', 100, 'Loading saved tabs...');
                 this.loadOldTabs();
 
 
                 this.initialized = true;
                 console.log('Inspector initialized successfully');
                 
+                // Hide loading screen
+                loadingScreen.updateStage('render', 100, 'Complete!');
+                setTimeout(() => loadingScreen.hide(), 500);
+                
             } catch (error) {
                 console.error('Failed to initialize inspector:', error);
-                this.showInitError(error);
+                
+                // Show error in loading screen if it's still visible
+                if (loadingScreen.element) {
+                    loadingScreen.setError(error.message || 'Failed to initialize the Scene Inspector');
+                } else {
+                    this.showInitError(error);
+                }
             }
         }
 
@@ -479,6 +553,12 @@
 
     // Create and initialize app instance
     const app = new InspectorApp();
+    
+    // Handle continue without Unity event
+    window.addEventListener('loadingScreenContinueWithoutUnity', () => {
+        console.log('Continuing without Unity connection...');
+        // You could load mock data here if needed
+    });
 
     // Initialize when DOM is ready
     if (document.readyState === 'loading') {
