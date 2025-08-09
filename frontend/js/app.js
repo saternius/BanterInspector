@@ -228,6 +228,8 @@
                 saveBtn.addEventListener('click', () => {
                     SM.saveScene();
                     this.showNotification('Scene saved', 'success');
+                    saveBtn.style.opacity = 0.5;
+                    saveBtn.style.pointerEvents = "none";
                 });
             }
             

@@ -371,6 +371,14 @@ export class Networking {
                 monobehavior._refresh();
             }
         }
+
+        
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+            saveBtn.style.opacity = 1;
+            saveBtn.style.cursor = "pointer";
+            saveBtn.style.pointerEvents = "auto";
+        }
     }
 
     async handleOneShot(event){
