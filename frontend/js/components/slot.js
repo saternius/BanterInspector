@@ -24,6 +24,7 @@ export class Slot{
                     await newGameObject.SetParent(parentGameObject, true);
                 }
                 await newGameObject.SetActive(true);
+                await newGameObject.SetLayer(this.layer);
             }catch(e){
                 console.log(this, this.parentId, parentSlot)
                 console.error(e);
