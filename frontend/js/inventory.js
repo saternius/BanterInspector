@@ -10,6 +10,8 @@ export class Inventory {
         this.expandedFolders = new Set();
         this.draggedItem = null;
         this.isRemote = false;
+        this.sortBy = 'alphabetical'; // alphabetical, date, last_used
+        this.sortDirection = 'asc'; // asc or desc
         this.setupDropZone();
         this.render();
     }
@@ -174,6 +176,16 @@ export class Inventory {
             inventoryContainer.innerHTML = `
                 <div class="inventory-header">
                     <h2>Saved Items (0)</h2>
+                    <div class="inventory-sorting">
+                        <select id="sortDropdown" class="sort-dropdown">
+                            <option value="alphabetical" ${this.sortBy === 'alphabetical' ? 'selected' : ''}>Alphabetical</option>
+                            <option value="date" ${this.sortBy === 'date' ? 'selected' : ''}>Creation Date</option>
+                            <option value="last_used" ${this.sortBy === 'last_used' ? 'selected' : ''}>Last Used</option>
+                        </select>
+                        <button id="sortDirectionBtn" class="sort-direction-btn" title="${this.sortDirection === 'asc' ? 'Ascending' : 'Descending'}">
+                            ${this.sortDirection === 'asc' ? '↑' : '↓'}
+                        </button>
+                    </div>
                     <div class="inventory-actions">
                         <button class="upload-button" id="uploadFileBtn">
                             <span class="upload-icon">⬇️</span>
@@ -193,6 +205,8 @@ export class Inventory {
             const uploadBtn = inventoryContainer.querySelector('#uploadFileBtn');
             const fileInput = inventoryContainer.querySelector('#fileInput');
             const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
+            const sortDropdown = inventoryContainer.querySelector('#sortDropdown');
+            const sortDirectionBtn = inventoryContainer.querySelector('#sortDirectionBtn');
             
             if (uploadBtn && fileInput) {
                 uploadBtn.addEventListener('click', () => fileInput.click());
@@ -201,6 +215,20 @@ export class Inventory {
             
             if (newFolderBtn) {
                 newFolderBtn.addEventListener('click', () => this.createNewFolder());
+            }
+            
+            if (sortDropdown) {
+                sortDropdown.addEventListener('change', (e) => {
+                    this.sortBy = e.target.value;
+                    this.render();
+                });
+            }
+            
+            if (sortDirectionBtn) {
+                sortDirectionBtn.addEventListener('click', () => {
+                    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                    this.render();
+                });
             }
             
             return;
@@ -212,6 +240,16 @@ export class Inventory {
         inventoryContainer.innerHTML = `
             <div class="inventory-header">
                 <h2>${folderPath ? `📁 ${folderPath}` : `Saved Items (${totalItems})`}</h2>
+                <div class="inventory-sorting">
+                    <select id="sortDropdown" class="sort-dropdown">
+                        <option value="alphabetical" ${this.sortBy === 'alphabetical' ? 'selected' : ''}>Alphabetical</option>
+                        <option value="date" ${this.sortBy === 'date' ? 'selected' : ''}>Creation Date</option>
+                        <option value="last_used" ${this.sortBy === 'last_used' ? 'selected' : ''}>Last Used</option>
+                    </select>
+                    <button id="sortDirectionBtn" class="sort-direction-btn" title="${this.sortDirection === 'asc' ? 'Ascending' : 'Descending'}">
+                        ${this.sortDirection === 'asc' ? '↑' : '↓'}
+                    </button>
+                </div>
                 <div class="inventory-actions">
                     ${this.selectedItem ? `
                         <button class="export-button" id="exportBtn">
@@ -262,6 +300,24 @@ export class Inventory {
                 ${this.renderFoldersAndItems()}
             </div>
         `;
+        
+        // Add event listeners for sorting controls
+        const sortDropdown = inventoryContainer.querySelector('#sortDropdown');
+        const sortDirectionBtn = inventoryContainer.querySelector('#sortDirectionBtn');
+        
+        if (sortDropdown) {
+            sortDropdown.addEventListener('change', (e) => {
+                this.sortBy = e.target.value;
+                this.render();
+            });
+        }
+        
+        if (sortDirectionBtn) {
+            sortDirectionBtn.addEventListener('click', () => {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+                this.render();
+            });
+        }
         
         // Add event listeners for inventory items
         inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
@@ -477,20 +533,61 @@ export class Inventory {
         const itemsHtml = [];
         
         // Get folders in current directory
-        Object.entries(this.folders).forEach(([key, folder]) => {
-            if (folder.parent === this.currentFolder) {
-                foldersHtml.push(this.renderFolder(key, folder));
-            }
+        let foldersArray = Object.entries(this.folders)
+            .filter(([key, folder]) => folder.parent === this.currentFolder)
+            .map(([key, folder]) => ({key, ...folder}));
+        
+        // Sort folders
+        foldersArray = this.sortItems(foldersArray, true);
+        
+        // Render sorted folders
+        foldersArray.forEach(folder => {
+            foldersHtml.push(this.renderFolder(folder.key, folder));
         });
         
         // Get items in current directory
-        Object.entries(this.items).forEach(([key, item]) => {
-            if ((item.folder || null) === this.currentFolder) {
-                itemsHtml.push(this.renderItem(key, item));
-            }
+        let itemsArray = Object.entries(this.items)
+            .filter(([key, item]) => (item.folder || null) === this.currentFolder)
+            .map(([key, item]) => ({key, ...item}));
+        
+        // Sort items
+        itemsArray = this.sortItems(itemsArray, false);
+        
+        // Render sorted items
+        itemsArray.forEach(item => {
+            itemsHtml.push(this.renderItem(item.key, item));
         });
         
         return foldersHtml.join('') + itemsHtml.join('');
+    }
+    
+    /**
+     * Sort items or folders based on current sort settings
+     */
+    sortItems(items, isFolder = false) {
+        const sorted = [...items].sort((a, b) => {
+            let compareValue = 0;
+            
+            switch (this.sortBy) {
+                case 'alphabetical':
+                    compareValue = (a.name || a.key).localeCompare(b.name || b.key);
+                    break;
+                case 'date':
+                    compareValue = (a.created || 0) - (b.created || 0);
+                    break;
+                case 'last_used':
+                    // If no last_used, fall back to created date
+                    const aTime = a.last_used || a.created || 0;
+                    const bTime = b.last_used || b.created || 0;
+                    compareValue = aTime - bTime;
+                    break;
+            }
+            
+            // Apply sort direction
+            return this.sortDirection === 'asc' ? compareValue : -compareValue;
+        });
+        
+        return sorted;
     }
     
     /**
@@ -722,10 +819,12 @@ export class Inventory {
     saveScriptItem(fileName, content) {
         
         // Create script item
+        const now = Date.now();
         const scriptItem = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: fileName,
-            created: Date.now(),
+            created: now,
+            last_used: now,
             itemType: 'script',
             data: content
         };
@@ -759,9 +858,8 @@ export class Inventory {
         
         // Update local items
         this.items[itemName] = jsonData;
-        
-        // Re-render
-        this.render();
+
+        this.selectItem(itemName);
         
         // Show success message
         this.showNotification(`Imported "${itemName}" to inventory`);
@@ -1077,12 +1175,30 @@ export class Inventory {
      * Load slot to scene by name
      */
     async loadSlotToSceneByName(itemName) {
+        // Update last_used timestamp
+        this.updateLastUsed(itemName);
+        
         let change = new LoadItemChange(itemName, SM.selectedSlot, null, {source: 'ui'})
         await changeManager.applyChange(change);
         this.showNotification(`Adding "${itemName}" to scene..`);
     }
+    
+    /**
+     * Update last_used timestamp for an item
+     */
+    updateLastUsed(itemName) {
+        const item = this.items[itemName];
+        if (item) {
+            item.last_used = Date.now();
+            const storageKey = `inventory_${itemName}`;
+            localStorage.setItem(storageKey, JSON.stringify(item));
+            this.items[itemName] = item;
+        }
+        this.render();
+        console.log("SIJODAS")
+    }
 
-    async loadByCMD(itemName, delay=1000){
+    async loadByCMD(itemName){
         let data = localStorage.getItem("inventory_"+itemName)
         if(!data){
             console.log(" NO ITEM NAMED:  ", itemName)
@@ -1092,7 +1208,7 @@ export class Inventory {
         console.log(item.history, item.history.length)
         for(let i=0; i<item.history.length; i++){
             let h = item.history[i]
-            command = ""
+            let command = ""
             Object.entries(h).forEach(([k,v])=>{
                 if(k === "options"){
                     return
@@ -1106,7 +1222,6 @@ export class Inventory {
             command = command.trim()
             console.log(i, command)
             await RunCommand(command)
-            await new Promise(r => setTimeout(r, delay));
         }
     }
     
@@ -1116,6 +1231,9 @@ export class Inventory {
     openScriptEditor(itemName) {
         const item = this.items[itemName];
         if (!item || item.itemType !== 'script') return;
+        
+        // Update last_used timestamp
+        this.updateLastUsed(itemName);
         
         // Create a custom event to open the script editor
         const event = new CustomEvent('open-script-editor', {
@@ -1311,10 +1429,26 @@ export class Inventory {
      * Open a folder
      */
     openFolder(folderName) {
+        // Update last_used timestamp for folder
+        this.updateFolderLastUsed(folderName);
+        
         this.currentFolder = folderName;
         this.selectedItem = null;
         this.hidePreview();
         this.render();
+    }
+    
+    /**
+     * Update last_used timestamp for a folder
+     */
+    updateFolderLastUsed(folderName) {
+        const folder = this.folders[folderName];
+        if (folder) {
+            folder.last_used = Date.now();
+            const storageKey = `inventory_folder_${folderName}`;
+            localStorage.setItem(storageKey, JSON.stringify(folder));
+            this.folders[folderName] = folder;
+        }
     }
     
     /**

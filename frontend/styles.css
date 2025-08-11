@@ -362,16 +362,71 @@ body {
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #2a2a2a;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .inventory-header h2 {
     font-size: 20px;
     color: #e8e8e8;
+    flex: 0 0 auto;
+}
+
+.inventory-sorting {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.sort-dropdown {
+    padding: 6px 12px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sort-dropdown:hover {
+    background: #2a2a2a;
+    border-color: #4a4a4a;
+}
+
+.sort-dropdown:focus {
+    outline: none;
+    border-color: #00d4ff;
+}
+
+.sort-direction-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    color: #e8e8e8;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.sort-direction-btn:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    color: #00d4ff;
 }
 
 .inventory-actions {
     display: flex;
     gap: 10px;
+    flex: 0 0 auto;
 }
 
 .upload-button {
@@ -3111,18 +3166,18 @@ body {
 }
 
 .feedback-submit-btn {
-    padding: 12px 30px;
+    padding: 12px 12px;
     background: #00a8cc;
     border: 1px solid #00d4ff;
     border-radius: 6px;
     color: #ffffff;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .feedback-submit-btn:hover {
@@ -3260,6 +3315,12 @@ body {
 .mic-button.recording:hover {
     background: #ff5555;
     border-color: #ff6666;
+}
+
+.mic-status{
+    position: absolute;
+    left: 2px;
+    top: 4px;
 }
 
 @keyframes pulse {

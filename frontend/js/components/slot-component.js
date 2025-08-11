@@ -2,6 +2,7 @@ export class SlotComponent{
     constructor(){
         this.bsRef = null;
         this.lastUpdate = new Map();
+        this.initialized = false;
     }
 
     async init(slot, sceneComponent, properties){
@@ -22,6 +23,7 @@ export class SlotComponent{
         }
         
         window.SM.slotData.componentMap[this.id] = this;
+        this.initialized = true;
         return this;
     }
 
