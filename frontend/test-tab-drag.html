@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tab Dragging Test</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .test-info {
+            padding: 20px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        
+        .test-info h2 {
+            margin: 0 0 10px 0;
+            color: #00d4ff;
+        }
+        
+        .test-info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .test-info li {
+            margin: 5px 0;
+            color: #b0b0b0;
+        }
+        
+        .test-controls {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            background: #00a8cc;
+            border: 1px solid #00d4ff;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .test-btn:hover {
+            background: #00c6ed;
+        }
+        
+        .page {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .page h1 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+        }
+        
+        .page p {
+            color: #b0b0b0;
+            font-size: 18px;
+        }
+        
+        /* Closeable tab styles for testing */
+        .nav-item.closeable {
+            position: relative;
+            padding-right: 30px;
+        }
+        
+        .close-tab-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #888;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+        
+        .close-tab-btn:hover {
+            background: rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h2>Tab Dragging Test</h2>
+        <ul>
+            <li><strong>Drag tabs to reorder:</strong> Click and drag any tab to move it to a new position</li>
+            <li><strong>Visual feedback:</strong> A blue insertion indicator shows where the tab will be placed</li>
+            <li><strong>Browser-like experience:</strong> Similar to Chrome/Firefox tab reordering</li>
+            <li><strong>Dynamic tabs:</strong> Click "Add Tab" to create closeable tabs that can also be reordered</li>
+        </ul>
+    </div>
+    
+    <!-- Navigation Header -->
+    <nav class="navigation-header">
+        <div class="nav-items">
+            <button class="nav-item active" data-page="world-inspector">
+                <span class="nav-icon">🌍</span>
+                World Inspector
+            </button>
+            <button class="nav-item" data-page="inventory">
+                <span class="nav-icon">📦</span>
+                Inventory
+            </button>
+            <button class="nav-item" data-page="feedback">
+                <span class="nav-icon">💬</span>
+                Feedback
+            </button>
+        </div>
+    </nav>
+    
+    <div class="test-controls">
+        <button class="test-btn" onclick="addTestTab()">Add Dynamic Tab</button>
+        <button class="test-btn" onclick="logTabOrder()">Log Tab Order</button>
+    </div>
+    
+    <!-- Pages -->
+    <div id="world-inspector-page" class="page active">
+        <h1>🌍 World Inspector</h1>
+        <p>This is the World Inspector page. Try dragging the tabs above to reorder them!</p>
+    </div>
+    
+    <div id="inventory-page" class="page">
+        <h1>📦 Inventory</h1>
+        <p>This is the Inventory page. The tab order persists as you switch between pages.</p>
+    </div>
+    
+    <div id="feedback-page" class="page">
+        <h1>💬 Feedback</h1>
+        <p>This is the Feedback page. Dynamic tabs can also be reordered!</p>
+    </div>
+
+    <script type="module">
+        // Simple change manager mock for testing
+        window.changeManager = {
+            applyChange: (change) => console.log('Change applied:', change)
+        };
+        
+        // Mock repo URL
+        window.repoUrl = './js';
+        
+        let tabCounter = 1;
+        
+        window.addTestTab = () => {
+            const pageId = `test-tab-${tabCounter}`;
+            const pageElement = document.createElement('div');
+            pageElement.id = `${pageId}-page`;
+            pageElement.className = 'page';
+            pageElement.innerHTML = `
+                <h1>🧪 Test Tab ${tabCounter}</h1>
+                <p>This is dynamic test tab #${tabCounter}. It can be dragged and reordered like any other tab!</p>
+            `;
+            document.body.appendChild(pageElement);
+            
+            const navElement = document.createElement('button');
+            navElement.className = 'nav-item closeable';
+            navElement.setAttribute('data-page', pageId);
+            navElement.innerHTML = `
+                <span class="nav-icon">🧪</span>
+                Test Tab ${tabCounter}
+                <button class="close-tab-btn" onclick="navigation.removeDynamicPage('${pageId}')">×</button>
+            `;
+            
+            navigation.addDynamicPage(pageId, pageElement, navElement);
+            navigation.switchPage(pageId);
+            
+            tabCounter++;
+        };
+        
+        window.logTabOrder = () => {
+            console.log('Current tab order:', navigation.tabOrder);
+            alert('Tab order logged to console:\n' + navigation.tabOrder.join(', '));
+        };
+        
+        // Import and initialize navigation
+        import('./js/navigation.js').then(module => {
+            window.navigation = new module.Navigation();
+            console.log('Navigation initialized. Try dragging tabs to reorder them!');
+        });
+    </script>
+</body>
+</html>
