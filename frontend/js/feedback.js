@@ -185,7 +185,6 @@ export class Feedback {
                 console.log("[mic] session stopped")
                 this.stopRecording();
             };
-            
             this.micInited = true;
             this.toggleRecording();
             
@@ -206,13 +205,15 @@ export class Feedback {
     startRecording() {
         const micButton = document.getElementById('micButton');
         const textarea = document.getElementById('feedbackDetails');
-        
+        const micStatus = document.getElementById('micButton').querySelector('.mic-status');
         // Save current textarea content
         this.speechBuffer = textarea.value ? textarea.value + ' ' : '';
         this.rlen = 0;
-        
+        let lastStatus = micStatus.textContent;
+        micStatus.textContent = '⏳';
         this.speechRecognizer.startContinuousRecognitionAsync(
             () => {
+                micStatus.textContent = lastStatus;
                 this.recording = true;
                 micButton.classList.add('recording');
                 this.showSpeechStatus('Listening...', 'recording');
@@ -241,9 +242,9 @@ export class Feedback {
                 
                 // Update button icon back to "Add More" if in block mode
                 if (this.blockEditorContainer && this.blockEditorContainer.style.display !== 'none') {
-                    const micIcon = micButton.querySelector('.mic-icon');
-                    if (micIcon) {
-                        micIcon.textContent = '➕';
+                    const micStatus = micButton.querySelector('.mic-status');
+                    if (micStatus) {
+                        micStatus.textContent = '➕';
                     }
                     micButton.title = 'Add more content';
                 }
@@ -509,6 +510,8 @@ export class Feedback {
         // Start recording if mic is initialized
         if (this.micInited) {
             this.startRecording();
+        }else{
+            this.initializeMic();
         }
     }
     
@@ -516,23 +519,28 @@ export class Feedback {
         // Hide single submit button, show dual buttons
         const singleSubmit = document.getElementById('submitFeedbackBtn');
         const dualSubmit = document.getElementById('dualSubmitButtons');
+        const fixWithVoice = document.getElementById('fixWithVoice');
         
         if (singleSubmit) singleSubmit.style.display = 'none';
         if (dualSubmit) dualSubmit.style.display = 'flex';
-        
+        if (fixWithVoice) fixWithVoice.style.display = 'flex';
         // Convert mic button to "Add More" button
         const micButton = document.getElementById('micButton');
+        this.addMoreHandler = () => this.startAddingToBlocks();
+
         if (micButton) {
-            const micIcon = micButton.querySelector('.mic-icon');
-            if (micIcon && !this.recording) {
-                micIcon.textContent = '➕';
+            const micStatus = micButton.querySelector('.mic-status');
+            if (micStatus && !this.recording) {
+                micStatus.textContent = '➕';
             }
             micButton.title = this.recording ? 'Stop recording' : 'Add more content';
             
             // Update click handler for add more functionality
             micButton.removeEventListener('click', this.originalMicHandler);
-            this.addMoreHandler = () => this.startAddingToBlocks();
             micButton.addEventListener('click', this.addMoreHandler);
+        }
+        if(fixWithVoice){
+            fixWithVoice.addEventListener('click', this.addMoreHandler);
         }
     }
     
@@ -540,16 +548,17 @@ export class Feedback {
         // Show single submit button, hide dual buttons
         const singleSubmit = document.getElementById('submitFeedbackBtn');
         const dualSubmit = document.getElementById('dualSubmitButtons');
-        
+        const fixWithVoice = document.getElementById('fixWithVoice');
         if (singleSubmit) singleSubmit.style.display = 'block';
         if (dualSubmit) dualSubmit.style.display = 'none';
+        if (fixWithVoice) fixWithVoice.style.display = 'none';
         
         // Reset mic button to original state
         const micButton = document.getElementById('micButton');
         if (micButton) {
-            const micIcon = micButton.querySelector('.mic-icon');
-            if (micIcon) {
-                micIcon.textContent = '🎤';
+            const micStatus = micButton.querySelector('.mic-status');
+            if (micStatus) {
+                micStatus.textContent = '';
             }
             micButton.title = 'Click to record feedback';
             

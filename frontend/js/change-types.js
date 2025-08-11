@@ -235,6 +235,20 @@ export class ComponentAddChange extends Change{
         let data = `component_added:${event_str}`
         networking.sendOneShot(data);
 
+        const returnWhenComponentLoaded = () => {
+            return new Promise(resolve => {
+              const check = () => {
+                const component = SM.getSlotComponentById(this.componentProperties.id);
+                if (component !== undefined && component.initialized) {
+                  resolve(component);
+                } else {
+                  setTimeout(check, 50);
+                }
+              };
+              check();
+            });
+          };
+        return await returnWhenComponentLoaded();
     }
 
     async undo() {
@@ -344,6 +358,23 @@ export class SlotAddChange extends Change{
         super.apply();
         let data = `slot_added:${this.parentId}:${this.slotName}`
         networking.sendOneShot(data);
+
+        let expectedSlotId = `${this.parentId}/${this.slotName}`
+
+        const returnWhenSlotLoaded = () => {
+            return new Promise(resolve => {
+              const check = () => {
+                const slot = SM.getSlotById(expectedSlotId);
+                if (slot !== undefined && slot.initialized) {
+                  resolve(slot);
+                } else {
+                  setTimeout(check, 50);
+                }
+              };
+              check();
+            });
+          };
+        return await returnWhenSlotLoaded();
     }
 
     async undo() {
@@ -649,8 +680,7 @@ export class LoadItemChange extends Change{
                 if (slot !== undefined && slot.finished_loading) {
                   resolve(slot);
                 } else {
-                  // try again in 100 ms
-                  setTimeout(check, 100);
+                  setTimeout(check, 50);
                 }
               };
               check();
@@ -766,8 +796,7 @@ export class CloneSlotChange extends Change{
                 if (slot !== undefined && slot.finished_loading) {
                   resolve(slot);
                 } else {
-                  // try again in 100 ms
-                  setTimeout(check, 100);
+                  setTimeout(check, 50);
                 }
               };
               check();
@@ -813,10 +842,12 @@ export class SaveSlotItemChange extends Change{
 
     finalizeAddItem(){
         let data = this.slot.export();
+        const now = Date.now();
         const inventoryItem = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: this.itemName,
-            created: Date.now(),
+            created: now,
+            last_used: now,
             itemType: "slot",
             data: data,
             folder: this.folder,
@@ -939,9 +970,11 @@ export class CreateFolderChange extends Change{
         }
         
         // Create folder object
+        const now = Date.now();
         const folder = {
             name: trimmedName,
-            created: Date.now(),
+            created: now,
+            last_used: now,
             parent: this.parentFolder,
             itemType: "folder",
             remote: false
@@ -1124,10 +1157,12 @@ this.keyUp = (key)=>{
 }`;
                 
         // Create script item
+        const now = Date.now();
         const scriptItem = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: this.scriptName,
-            created: Date.now(),
+            created: now,
+            last_used: now,
             itemType: 'script',
             data: defaultScript
         };

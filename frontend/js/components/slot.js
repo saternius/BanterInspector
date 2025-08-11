@@ -12,6 +12,7 @@ export class Slot{
         this.layer = parseInt(slotData.layer) || 0;
         this.persistent = true;
         this.identifiers = new Set();
+        this.initialized = false;
         
 
         if(!slotData._bs){
@@ -34,6 +35,7 @@ export class Slot{
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         this.identifiers.add(this.id);
         window.SM.slotData.slotMap[this.id] = this;
+        this.initialized = true;
         return this;
     }
 

@@ -124,6 +124,9 @@
                     const change = new SlotPropertyChange(slot.id, 'name', newName, { source: 'ui' });
                     changeManager.applyChange(change);
                 }
+                setTimeout(()=>{
+                    SM.selectSlot(slot.parentId+"/"+newName)
+                }, 70)
             };
             
             inputName.addEventListener('change', (e) => {
