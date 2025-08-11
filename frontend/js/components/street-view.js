@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterStreetViewComponent extends SlotComponent {
     constructor() {
@@ -17,7 +18,7 @@ export class BanterStreetViewComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.panoId !== undefined) {
-            properties.panoId = sceneComponent.panoId;
+            properties.panoId = parseBest(sceneComponent.panoId);
         }
         
         return properties;
@@ -26,6 +27,7 @@ export class BanterStreetViewComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

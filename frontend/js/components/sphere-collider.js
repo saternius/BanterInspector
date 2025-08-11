@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class SphereColliderComponent extends SlotComponent {
     constructor() {
@@ -19,7 +20,7 @@ export class SphereColliderComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.isTrigger !== undefined) {
-            properties.isTrigger = sceneComponent.isTrigger;
+            properties.isTrigger = parseBest(sceneComponent.isTrigger);
         }
         
         if (sceneComponent.center !== undefined) {
@@ -31,7 +32,7 @@ export class SphereColliderComponent extends SlotComponent {
         }
         
         if (sceneComponent.radius !== undefined) {
-            properties.radius = sceneComponent.radius;
+            properties.radius = parseBest(sceneComponent.radius);
         }
         
         return properties;
@@ -40,6 +41,7 @@ export class SphereColliderComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

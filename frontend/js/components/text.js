@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterTextComponent extends SlotComponent {
     constructor() {
@@ -24,7 +25,7 @@ export class BanterTextComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.text !== undefined) {
-            properties.text = sceneComponent.text;
+            properties.text = parseBest(sceneComponent.text);
         }
         
         if (sceneComponent.color !== undefined) {
@@ -40,18 +41,18 @@ export class BanterTextComponent extends SlotComponent {
         const intProps = ['horizontalAlignment', 'verticalAlignment'];
         intProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
         if (sceneComponent.fontSize !== undefined) {
-            properties.fontSize = sceneComponent.fontSize;
+            properties.fontSize = parseBest(sceneComponent.fontSize);
         }
         
         const boolProps = ['richText', 'enableWordWrapping'];
         boolProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -68,6 +69,7 @@ export class BanterTextComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

@@ -1,5 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
-const { eulerToQuaternion } = await import(`${window.repoUrl}/utils.js`);
+const { eulerToQuaternion, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class TransformComponent extends SlotComponent {
     constructor(){
@@ -14,9 +14,7 @@ export class TransformComponent extends SlotComponent {
     }
 
     async _set(property, value){
-        if(typeof value === "string"){
-            value = JSON.parse(value);
-        }
+        value = parseBest(value);
         this.properties[property] = value;
         value.x = parseFloat(value.x || 0);
         value.y = parseFloat(value.y || 0);

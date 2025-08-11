@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterGrabHandleComponent extends SlotComponent {
     constructor() {
@@ -18,11 +19,11 @@ export class BanterGrabHandleComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.grabType !== undefined) {
-            properties.grabType = sceneComponent.grabType;
+            properties.grabType = parseBest(sceneComponent.grabType);
         }
         
         if (sceneComponent.grabRadius !== undefined) {
-            properties.grabRadius = sceneComponent.grabRadius;
+            properties.grabRadius = parseBest(sceneComponent.grabRadius);
         }
         
         return properties;
@@ -31,6 +32,7 @@ export class BanterGrabHandleComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

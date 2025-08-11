@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterGLTFComponent extends SlotComponent {
     constructor() {
@@ -23,7 +24,7 @@ export class BanterGLTFComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.url !== undefined) {
-            properties.url = sceneComponent.url;
+            properties.url = parseBest(sceneComponent.url);
         }
         
         const boolProps = [
@@ -32,7 +33,7 @@ export class BanterGLTFComponent extends SlotComponent {
         ];
         boolProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -42,6 +43,7 @@ export class BanterGLTFComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

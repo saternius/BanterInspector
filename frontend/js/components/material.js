@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterMaterialComponent extends SlotComponent {
     constructor() {
@@ -21,11 +22,11 @@ export class BanterMaterialComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.shaderName !== undefined) {
-            properties.shaderName = sceneComponent.shaderName;
+            properties.shaderName = parseBest(sceneComponent.shaderName);
         }
         
         if (sceneComponent.texture !== undefined) {
-            properties.texture = sceneComponent.texture;
+            properties.texture = parseBest(sceneComponent.texture);
         }
         
         if (sceneComponent.color !== undefined) {
@@ -39,11 +40,11 @@ export class BanterMaterialComponent extends SlotComponent {
         }
         
         if (sceneComponent.side !== undefined) {
-            properties.side = sceneComponent.side;
+            properties.side = parseBest(sceneComponent.side);
         }
         
         if (sceneComponent.generateMipMaps !== undefined) {
-            properties.generateMipMaps = sceneComponent.generateMipMaps;
+            properties.generateMipMaps = parseBest(sceneComponent.generateMipMaps);
         }
         
         return properties;
@@ -51,10 +52,8 @@ export class BanterMaterialComponent extends SlotComponent {
 
     _set(property, value) {
         if (!this._bs) return;
-        if(property === 'color' && typeof value === "string"){
-            value = JSON.parse(value);
-        }
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

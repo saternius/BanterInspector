@@ -1,3 +1,5 @@
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+
 export class SlotComponent{
     constructor(){
         this.bsRef = null;
@@ -75,7 +77,7 @@ export class SlotComponent{
     }
 
     async _set(property, value){
-        //console.log(`(${this._slot.name})[${this.type}] set ${property} =>`, value)
+        value = parseBest(value);
         this.properties[property] = value;
         this._bs[property] = value;
     }
