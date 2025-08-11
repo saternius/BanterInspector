@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterAssetBundleComponent extends SlotComponent {
     constructor() {
@@ -23,7 +24,7 @@ export class BanterAssetBundleComponent extends SlotComponent {
         const urlProps = ['windowsUrl', 'osxUrl', 'linuxUrl', 'androidUrl', 'iosUrl'];
         urlProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -33,6 +34,7 @@ export class BanterAssetBundleComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

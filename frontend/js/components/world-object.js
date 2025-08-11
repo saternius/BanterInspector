@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterWorldObjectComponent extends SlotComponent {
     constructor() {

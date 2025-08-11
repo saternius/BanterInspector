@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterGeometryComponent extends SlotComponent {
     constructor() {
@@ -41,8 +42,8 @@ export class BanterGeometryComponent extends SlotComponent {
 
     extractProperties(sceneComponent) {
         const properties = {
-            geometryType: sceneComponent.geometryType || 0,
-            parametricType: sceneComponent.parametricType || 0
+            geometryType: parseBest(sceneComponent.geometryType) || 0,
+            parametricType: parseBest(sceneComponent.parametricType) || 0
         };
 
         const floatProps = [
@@ -55,12 +56,12 @@ export class BanterGeometryComponent extends SlotComponent {
 
         floatProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
 
         if (sceneComponent.openEnded !== undefined) {
-            properties.openEnded = sceneComponent.openEnded;
+            properties.openEnded = parseBest(sceneComponent.openEnded);
         }
 
         return properties;
@@ -70,6 +71,7 @@ export class BanterGeometryComponent extends SlotComponent {
         if (!this._bs) return;
         //console.log("updating geometry =>", property, value)
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

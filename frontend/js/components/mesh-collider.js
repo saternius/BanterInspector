@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class MeshColliderComponent extends SlotComponent {
     constructor() {
@@ -18,11 +19,11 @@ export class MeshColliderComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.isTrigger !== undefined) {
-            properties.isTrigger = sceneComponent.isTrigger;
+            properties.isTrigger = parseBest(sceneComponent.isTrigger);
         }
         
         if (sceneComponent.convex !== undefined) {
-            properties.convex = sceneComponent.convex;
+            properties.convex = parseBest(sceneComponent.convex);
         }
         
         return properties;
@@ -31,6 +32,7 @@ export class MeshColliderComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class CapsuleColliderComponent extends SlotComponent {
     constructor() {
@@ -21,7 +22,7 @@ export class CapsuleColliderComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.isTrigger !== undefined) {
-            properties.isTrigger = sceneComponent.isTrigger;
+            properties.isTrigger = parseBest(sceneComponent.isTrigger);
         }
         
         if (sceneComponent.center !== undefined) {
@@ -33,15 +34,15 @@ export class CapsuleColliderComponent extends SlotComponent {
         }
         
         if (sceneComponent.radius !== undefined) {
-            properties.radius = sceneComponent.radius;
+            properties.radius = parseBest(sceneComponent.radius);
         }
         
         if (sceneComponent.height !== undefined) {
-            properties.height = sceneComponent.height;
+            properties.height = parseBest(sceneComponent.height);
         }
         
         if (sceneComponent.direction !== undefined) {
-            properties.direction = sceneComponent.direction;
+            properties.direction = parseBest(sceneComponent.direction);
         }
         
         return properties;
@@ -50,6 +51,7 @@ export class CapsuleColliderComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

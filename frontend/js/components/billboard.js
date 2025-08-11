@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterBillboardComponent extends SlotComponent {
     constructor() {
@@ -20,13 +21,13 @@ export class BanterBillboardComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.smoothing !== undefined) {
-            properties.smoothing = sceneComponent.smoothing;
+            properties.smoothing = parseBest(sceneComponent.smoothing);
         }
         
         const boolProps = ['enableXAxis', 'enableYAxis', 'enableZAxis'];
         boolProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -36,6 +37,7 @@ export class BanterBillboardComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

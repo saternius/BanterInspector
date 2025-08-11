@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterMirrorComponent extends SlotComponent {
     constructor() {
@@ -19,15 +20,15 @@ export class BanterMirrorComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.renderTextureSize !== undefined) {
-            properties.renderTextureSize = sceneComponent.renderTextureSize;
+            properties.renderTextureSize = parseBest(sceneComponent.renderTextureSize);
         }
         
         if (sceneComponent.cameraClear !== undefined) {
-            properties.cameraClear = sceneComponent.cameraClear;
+            properties.cameraClear = parseBest(sceneComponent.cameraClear);
         }
         
         if (sceneComponent.backgroundColor !== undefined) {
-            properties.backgroundColor = sceneComponent.backgroundColor;
+            properties.backgroundColor = parseBest(sceneComponent.backgroundColor);
         }
         
         return properties;
@@ -36,6 +37,7 @@ export class BanterMirrorComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

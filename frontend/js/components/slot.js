@@ -1,5 +1,5 @@
 const { TransformComponent } = await import(`${window.repoUrl}/components/transform.js`);
-const { deepClone } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class Slot{
     async init(slotData){
@@ -142,6 +142,7 @@ export class Slot{
 
     _set(prop, newValue){
         //console.log(`(${this.name}) update ${prop} =>`, newValue)
+        newValue = parseBest(newValue);
         if(prop == "name"){
             this.rename(newValue, true);
         }

@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterAttachedObjectComponent extends SlotComponent {
     constructor() {
@@ -35,7 +36,7 @@ export class BanterAttachedObjectComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.uid !== undefined) {
-            properties.uid = sceneComponent.uid;
+            properties.uid = parseBest(sceneComponent.uid);
         }
         
         if (sceneComponent.attachmentPosition !== undefined) {
@@ -58,7 +59,7 @@ export class BanterAttachedObjectComponent extends SlotComponent {
         const enumProps = ['attachmentType', 'avatarAttachmentType', 'avatarAttachmentPoint', 'attachmentPoint'];
         enumProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -67,9 +68,8 @@ export class BanterAttachedObjectComponent extends SlotComponent {
 
     _set(property, value) {
         if (!this._bs) return;
-        if(typeof value === "string" && (property === 'attachmentPosition' || property === 'attachmentRotation')){
-            value = JSON.parse(value);
-        }
+
+        value = parseBest(value);
 
         if(property === "uid" && value === "" && this.properties.uid !== ""){
             console.log("Detaching Object", this.properties)

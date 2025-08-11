@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterAudioSourceComponent extends SlotComponent {
     constructor() {
@@ -27,7 +28,7 @@ export class BanterAudioSourceComponent extends SlotComponent {
         const floatProps = ['volume', 'pitch', 'spatialBlend'];
         floatProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -35,7 +36,7 @@ export class BanterAudioSourceComponent extends SlotComponent {
                           'bypassReverbZones', 'playOnAwake'];
         boolProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
@@ -45,6 +46,7 @@ export class BanterAudioSourceComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

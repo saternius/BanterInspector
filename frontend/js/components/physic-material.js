@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterPhysicMaterialComponent extends SlotComponent {
     constructor() {
@@ -18,11 +19,11 @@ export class BanterPhysicMaterialComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.dynamicFriction !== undefined) {
-            properties.dynamicFriction = sceneComponent.dynamicFriction;
+            properties.dynamicFriction = parseBest(sceneComponent.dynamicFriction);
         }
         
         if (sceneComponent.staticFriction !== undefined) {
-            properties.staticFriction = sceneComponent.staticFriction;
+            properties.staticFriction = parseBest(sceneComponent.staticFriction);
         }
         
         return properties;
@@ -31,6 +32,7 @@ export class BanterPhysicMaterialComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

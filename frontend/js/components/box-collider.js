@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BoxColliderControls{
     constructor(component){
@@ -77,7 +78,7 @@ export class BoxColliderComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.isTrigger !== undefined) {
-            properties.isTrigger = sceneComponent.isTrigger;
+            properties.isTrigger = parseBest(sceneComponent.isTrigger);
         }
         
         if (sceneComponent.center !== undefined) {
@@ -102,11 +103,7 @@ export class BoxColliderComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
-        if(typeof value === "string" && (property === 'center' || property === 'size')){
-            value = JSON.parse(value);
-        }
-
-
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {

@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class MonoBehaviorComponent extends SlotComponent {
     constructor(){
@@ -31,6 +32,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async _set(property, value){
         console.log("[MONO] updating property =>", property, value)
+        value = parseBest(value);
         if(property === 'file'){
             this._loadScript(value);
         }

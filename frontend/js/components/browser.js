@@ -1,4 +1,5 @@
 const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BanterBrowserComponent extends SlotComponent {
     constructor() {
@@ -22,18 +23,18 @@ export class BanterBrowserComponent extends SlotComponent {
         const properties = {};
         
         if (sceneComponent.url !== undefined) {
-            properties.url = sceneComponent.url;
+            properties.url = parseBest(sceneComponent.url);
         }
         
         const intProps = ['mipMaps', 'pixelsPerUnit', 'pageWidth', 'pageHeight'];
         intProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
-                properties[prop] = sceneComponent[prop];
+                properties[prop] = parseBest(sceneComponent[prop]);
             }
         });
         
         if (sceneComponent.actions !== undefined) {
-            properties.actions = sceneComponent.actions;
+            properties.actions = parseBest(sceneComponent.actions);
         }
         
         return properties;
@@ -42,6 +43,7 @@ export class BanterBrowserComponent extends SlotComponent {
     _set(property, value) {
         if (!this._bs) return;
 
+        value = parseBest(value);
         this.properties[property] = value;
 
         try {
