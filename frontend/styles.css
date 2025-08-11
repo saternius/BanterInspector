@@ -237,6 +237,63 @@ body {
     color: #00d4ff;
 }
 
+/* Tab dragging styles */
+.nav-item.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+}
+
+.nav-items {
+    position: relative;
+}
+
+/* Tab insertion indicator */
+.tab-insert-indicator {
+    position: absolute;
+    width: 3px;
+    background: #00d4ff;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+    transition: none;
+}
+
+.tab-insert-indicator::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 9px;
+    height: 9px;
+    background: #00d4ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+}
+
+.tab-insert-indicator::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: -3px;
+    width: 9px;
+    height: 9px;
+    background: #00d4ff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
+}
+
+/* Prevent text selection during drag */
+.nav-items.dragging-active {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Tab hover effect during drag */
+.nav-item:not(.dragging) {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
 .nav-icon {
     font-size: 16px;
 }
