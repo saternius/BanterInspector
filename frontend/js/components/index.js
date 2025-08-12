@@ -269,19 +269,20 @@ export const componentBundleMap = {
     "BoxCollider": ['BanterColliderEvents'],
     "SphereCollider": ['BanterColliderEvents'],
     "CapsuleCollider": ['BanterColliderEvents'],
-    "MeshCollider": ['BanterColliderEvents'],
-    "BanterBox": ['BanterMaterial'],
-    "BanterCircle": ['BanterMaterial'],
-    "BanterCone": ['BanterMaterial'],
-    "BanterCylinder": ['BanterMaterial'],
-    "BanterPlane": ['BanterMaterial'],
-    "BanterRing": ['BanterMaterial'],
-    "BanterSphere": ['BanterMaterial'],
-    "BanterTorus": ['BanterMaterial']
+    "MeshCollider": ['BanterColliderEvents']//,
+    // "BanterBox": ['BanterMaterial'],
+    // "BanterCircle": ['BanterMaterial'],
+    // "BanterCone": ['BanterMaterial'],
+    // "BanterCylinder": ['BanterMaterial'],
+    // "BanterPlane": ['BanterMaterial'],
+    // "BanterRing": ['BanterMaterial'],
+    // "BanterSphere": ['BanterMaterial'],
+    // "BanterTorus": ['BanterMaterial']
 }
 
 
 window.componentBSTypeMap = componentBSTypeMap;
+window.componentTextMap = componentTextMap;
 
 export { 
     Slot, 
