@@ -52,7 +52,25 @@ export class Slot{
         return this.components.filter(component => component.type === componentType);
     }
 
-    
+    async _checkForGhostComponents(id){
+        let visible_components = this.components.map(x=>x._bs)
+        Object.values(this._bs.components).forEach(async bs_comp => {
+            if(!visible_components.includes(bs_comp)){
+                console.log("ghost component", bs_comp)
+                let component_ref = `${componentTextMap[bs_comp.type]}_${id}`
+                let props = {
+                    id: component_ref
+                }
+                let componentClass = componentBSTypeMap[bs_comp.type];
+                let slotComponent = await new componentClass().init(this, bs_comp, props);
+                slotComponent.setId(component_ref);
+                this.components.push(slotComponent);
+                SM.slotData.componentMap[component_ref] = slotComponent;
+                //SM.updateHierarchy();
+                inspector.propertiesPanel.render(this.id);
+            }
+        })
+    }
 
     async _setParent(newParent){
         if (newParent === this) return;

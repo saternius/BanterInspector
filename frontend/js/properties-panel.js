@@ -16,6 +16,7 @@
             this.addComponentContainer = document.getElementById('addComponentContainer');
             this.addComponentBtn = document.getElementById('addComponentBtn');
             this.selectedSlotNameElement = document.getElementById('selectedSlotName');
+            this.collapseAllBtn = document.getElementById('collapseAllBtn');
             
             // Store collapsed state of components
             this.collapsedComponents = new Set();
@@ -33,6 +34,49 @@
                     detail: { slotId: SM.selectedSlot }
                 }));
             });
+            
+            // Collapse all button
+            this.collapseAllBtn?.addEventListener('click', () => {
+                this.collapseAllComponents();
+            });
+        }
+
+        /**
+         * Collapse all components
+         */
+        collapseAllComponents() {
+            const slot = SM.getSlotById(SM.selectedSlot);
+            if (!slot || !slot.components) return;
+            
+            // Add all components to collapsed set
+            slot.components.forEach((component, index) => {
+                const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+                this.collapsedComponents.add(componentKey);
+            });
+            
+            // Re-render to apply collapsed state
+            this.render(SM.selectedSlot);
+        }
+
+        /**
+         * Update collapse all button visibility
+         */
+        updateCollapseAllButtonVisibility() {
+            if (!this.collapseAllBtn) return;
+            
+            const slot = SM.getSlotById(SM.selectedSlot);
+            if (!slot || !slot.components || slot.components.length === 0) {
+                this.collapseAllBtn.style.display = 'none';
+                return;
+            }
+            
+            // Check if at least one component is expanded
+            const hasExpandedComponent = slot.components.some((component, index) => {
+                const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+                return !this.collapsedComponents.has(componentKey);
+            });
+            
+            this.collapseAllBtn.style.display = hasExpandedComponent ? 'block' : 'none';
         }
 
         /**
@@ -83,6 +127,9 @@
             if (this.addComponentContainer) {
                 this.addComponentContainer.style.display = 'block';
             }
+            
+            // Update collapse all button visibility
+            this.updateCollapseAllButtonVisibility();
         }
 
         /**
@@ -276,6 +323,9 @@
                 } else {
                     this.collapsedComponents.add(componentKey);
                 }
+                
+                // Update collapse all button visibility
+                this.updateCollapseAllButtonVisibility();
             };
             
             return section;
@@ -714,6 +764,9 @@
                 } else {
                     this.collapsedComponents.add(componentKey);
                 }
+                
+                // Update collapse all button visibility
+                this.updateCollapseAllButtonVisibility();
             };
             
             return section;

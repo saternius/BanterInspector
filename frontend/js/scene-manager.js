@@ -162,6 +162,7 @@ console.log("It is 3:00")
         }
 
         async saveScene(){
+            await this.updateHierarchy();
             localStorage.setItem('lastProps', JSON.stringify(this.props));
         }
 
@@ -246,17 +247,10 @@ console.log("It is 3:00")
 
 
         // Updates the hierarchy of the scene from the root slot
-        async updateHierarchy(slot = null){  
+        async updateHierarchy(){  
             let h = await this.gatherSceneHierarchyBySlot();
             this.props.hierarchy = h;
             this._updateUI();
-            // slot = slot || this.getRootSlot();
-            // if(slot){
-            //     this.selectSlot(slot.id);
-            //     if(slot.parentId){
-            //         this.expandedNodes.add(slot.parentId);
-            //     }
-            // }
         }
 
 
@@ -320,6 +314,7 @@ console.log("It is 3:00")
                     ref_idx++;
                     if(!component_ref){
                         console.log("no component ref found for", component, h.components, ref_idx)
+                        continue;
                     }
 
                     if(SUPPORTED_COMPONENTS.has(component.type)){
@@ -588,7 +583,7 @@ console.log("It is 3:00")
             let transform = await new TransformComponent().init(newSlot, null, properties);
             newSlot.components.push(transform);
 
-            
+            //this.updateHierarchy()
             await newSlot._setParent(parentSlot);
         }
 
@@ -620,6 +615,10 @@ console.log("It is 3:00")
             if (inspector?.propertiesPanel) {
                 inspector.propertiesPanel.render(slot.id);
             }
+
+         
+            slot._checkForGhostComponents(slotComponent.id.split("_")[1]);
+            //this.updateHierarchy()
             return slotComponent;
         }
     }
@@ -632,6 +631,7 @@ console.log("It is 3:00")
         let dig = (slot)=>{
             let map = {
                 slot: slot,
+                _bs: slot._bs,
                 name: slot.name,
                 '.': slot.components,
                 '_': slot.components.map(c=>c.type)
