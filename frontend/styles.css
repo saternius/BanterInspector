@@ -821,6 +821,26 @@ body {
     color: #e8e8e8;
 }
 
+.preview-header h2.editable-name {
+    cursor: text;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    outline: none;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.preview-header h2.editable-name:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.preview-header h2.editable-name:focus {
+    background-color: rgba(74, 158, 255, 0.1);
+    border: 1px solid #4a9eff;
+    padding: 1px 3px;
+}
+
 .preview-close-btn {
     background: transparent;
     border: none;
@@ -852,6 +872,32 @@ body {
     justify-content: space-between;
     padding: 8px 0;
     font-size: 13px;
+    align-items: flex-start;
+}
+
+.description-textarea {
+    width: 100%;
+    min-height: 60px;
+    max-height: 150px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    resize: vertical;
+    margin-top: 4px;
+}
+
+.description-textarea:focus {
+    outline: none;
+    border-color: #4a9eff;
+    background: #1f1f1f;
+}
+
+.description-textarea::placeholder {
+    color: #666;
 }
 
 .meta-label {
@@ -3102,6 +3148,45 @@ body {
 .modal-overwrite-btn:hover {
     background: #e66000;
     border-color: #ff8833;
+}
+
+/* Warning Modal Styles */
+.modal-warning .modal-header h3 {
+    color: #ffa500;
+}
+
+.modal-warning .modal-body {
+    padding: 20px;
+}
+
+.modal-warning .modal-body p {
+    color: #ccc;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.modal-warning .modal-body strong {
+    color: #ffa500;
+    font-weight: 600;
+}
+
+.modal-warning .modal-body code {
+    background: #1a1a1a;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #4a9eff;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+}
+
+.modal-warning-btn {
+    background: #cc7700 !important;
+    border: 1px solid #ff9500 !important;
+}
+
+.modal-warning-btn:hover {
+    background: #e68800 !important;
+    border-color: #ffaa00 !important;
 }
 
 /* Feedback Page Styles */

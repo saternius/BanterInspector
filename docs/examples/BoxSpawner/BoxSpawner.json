@@ -1,0 +1,623 @@
+{
+  "author": "Technocrat",
+  "name": "BoxSpawner",
+  "created": 1754908215691,
+  "last_used": 1754908215691,
+  "itemType": "slot",
+  "description": "",
+  "data": {
+    "name": "BoxSpawner2",
+    "parentId": "Root",
+    "components": [
+      {
+        "lastUpdate": {},
+        "initialized": true,
+        "type": "Transform",
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "children": [
+      {
+        "name": "Box",
+        "parentId": "Root/BoxSpawner2",
+        "components": [
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 8325.714336500001,
+                "y": 8325.827541,
+                "z": 8325.7168863
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          },
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "type": "BanterGeometry",
+            "properties": {
+              "geometryType": 0,
+              "parametricType": 0,
+              "width": 1,
+              "height": 1,
+              "depth": 1,
+              "radius": 0.5,
+              "radiusTop": 0.5,
+              "radiusBottom": 0.5,
+              "radialSegments": 32,
+              "heightSegments": 1,
+              "openEnded": false,
+              "thetaStart": 0,
+              "thetaLength": 6.283185,
+              "phiStart": 0,
+              "phiLength": 6.283185,
+              "widthSegments": 1,
+              "depthSegments": 1,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "arc": 6.283185,
+              "p": 2,
+              "q": 3,
+              "segments": 64,
+              "innerRadius": 0.2,
+              "outerRadius": 0.5,
+              "phiSegments": 8,
+              "thetaSegments": 6
+            }
+          },
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "type": "BanterMaterial",
+            "properties": {
+              "shaderName": {
+                "0": "U",
+                "1": "n",
+                "2": "l",
+                "3": "i",
+                "4": "t",
+                "5": "/",
+                "6": "D",
+                "7": "i",
+                "8": "f",
+                "9": "f",
+                "10": "u",
+                "11": "s",
+                "12": "e"
+              },
+              "texture": {},
+              "color": {
+                "r": 1,
+                "g": 1,
+                "b": 1,
+                "a": 1
+              },
+              "side": 0,
+              "generateMipMaps": true
+            }
+          },
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "properties": {
+              "name": "myScript",
+              "file": "RotatingBox.js",
+              "vars": {}
+            },
+            "scriptInstance": {
+              "vars": {
+                "rotationSpeed": {
+                  "type": "number",
+                  "value": 1
+                }
+              },
+              "transform": {
+                "lastUpdate": {},
+                "initialized": true,
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 8325.714336500001,
+                    "y": 8325.827541,
+                    "z": 8325.7168863
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
+              },
+              "rotationSpeed": 1
+            },
+            "ctx": {
+              "vars": {
+                "rotationSpeed": {
+                  "type": "number",
+                  "value": 1
+                }
+              },
+              "transform": {
+                "lastUpdate": {},
+                "initialized": true,
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 8325.714336500001,
+                    "y": 8325.827541,
+                    "z": 8325.7168863
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
+              },
+              "rotationSpeed": 1
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "children": [],
+        "active": true,
+        "layer": 0,
+        "persistent": true,
+        "identifiers": {},
+        "initialized": true
+      },
+      {
+        "name": "BoxSpawner",
+        "parentId": "Root/BoxSpawner2",
+        "components": [
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          },
+          {
+            "lastUpdate": {},
+            "initialized": true,
+            "properties": {
+              "name": "myScript2",
+              "file": "BoxSpawner.js",
+              "vars": {
+                "slotRef": {
+                  "type": "string",
+                  "value": "Box"
+                }
+              }
+            },
+            "scriptInstance": {
+              "vars": {
+                "slotRef": {
+                  "type": "string",
+                  "value": "Box"
+                }
+              },
+              "default": {
+                "slotRef": {
+                  "type": "string",
+                  "value": ""
+                }
+              },
+              "spawnerTimeout": 161
+            },
+            "ctx": {
+              "vars": {
+                "slotRef": {
+                  "type": "string",
+                  "value": "Box"
+                }
+              },
+              "default": {
+                "slotRef": {
+                  "type": "string",
+                  "value": ""
+                }
+              },
+              "spawnerTimeout": 161
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "children": [],
+        "active": true,
+        "layer": 0,
+        "persistent": true,
+        "identifiers": {},
+        "initialized": true
+      }
+    ],
+    "active": true,
+    "layer": 0,
+    "persistent": true,
+    "identifiers": {},
+    "initialized": true,
+    "finished_loading": true
+  },
+  "folder": "BoxSpawner",
+  "history": [
+    {
+      "action": "load_item",
+      "itemName": "BoxSpawner",
+      "parentId": "Root",
+      "itemData": {
+        "name": "BoxSpawner_57869",
+        "parentId": "Root",
+        "components": [
+          {
+            "id": "Transform_36500",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "children": [
+          {
+            "name": "Box",
+            "parentId": "Root/BoxSpawner_57869",
+            "components": [
+              {
+                "id": "Transform_34306",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 3614.7143365,
+                    "y": 3614.827541,
+                    "z": 3614.7168862999997
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "type": "BanterGeometry",
+                "id": "BanterGeometry_49367",
+                "properties": {
+                  "geometryType": 0,
+                  "parametricType": 0,
+                  "width": 1,
+                  "height": 1,
+                  "depth": 1,
+                  "radius": 0.5,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185,
+                  "phiStart": 0,
+                  "phiLength": 6.283185,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6,
+                  "openEnded": false
+                }
+              },
+              {
+                "type": "BanterMaterial",
+                "id": "BanterMaterial_5830",
+                "properties": {
+                  "shaderName": {
+                    "0": "U",
+                    "1": "n",
+                    "2": "l",
+                    "3": "i",
+                    "4": "t",
+                    "5": "/",
+                    "6": "D",
+                    "7": "i",
+                    "8": "f",
+                    "9": "f",
+                    "10": "u",
+                    "11": "s",
+                    "12": "e"
+                  },
+                  "texture": {},
+                  "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                }
+              },
+              {
+                "id": "MonoBehavior_33210",
+                "properties": {
+                  "name": "myScript",
+                  "file": "RotatingBox.js",
+                  "vars": {},
+                  "owner": "Opportunity Dissatisfied"
+                },
+                "scriptInstance": {
+                  "vars": {
+                    "rotationSpeed": {
+                      "type": "number",
+                      "value": 1
+                    }
+                  },
+                  "transform": {
+                    "id": "Transform_Root/Box",
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "x": 3614.7143365,
+                        "y": 3614.827541,
+                        "z": 3614.7168862999997
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  "rotationSpeed": 1
+                },
+                "scriptContext": {
+                  "vars": {
+                    "rotationSpeed": {
+                      "type": "number",
+                      "value": 1
+                    }
+                  },
+                  "transform": {
+                    "id": "Transform_Root/Box",
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "x": 3614.7143365,
+                        "y": 3614.827541,
+                        "z": 3614.7168862999997
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  "rotationSpeed": 1
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/BoxSpawner_57869/Box"
+          },
+          {
+            "name": "BoxSpawner",
+            "parentId": "Root/BoxSpawner_57869",
+            "components": [
+              {
+                "id": "Transform_80537",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "MonoBehavior_45922",
+                "properties": {
+                  "name": "myScript2",
+                  "file": "Course.js",
+                  "vars": {
+                    "slotRef": {
+                      "type": "string",
+                      "value": "Box"
+                    }
+                  },
+                  "owner": "Opportunity Dissatisfied"
+                },
+                "scriptInstance": {
+                  "vars": {
+                    "slotRef": {
+                      "type": "string",
+                      "value": "Box"
+                    }
+                  },
+                  "default": {
+                    "slotRef": {
+                      "type": "string",
+                      "value": ""
+                    }
+                  },
+                  "spawnerTimeout": 92
+                },
+                "scriptContext": {
+                  "vars": {
+                    "slotRef": {
+                      "type": "string",
+                      "value": "Box"
+                    }
+                  },
+                  "default": {
+                    "slotRef": {
+                      "type": "string",
+                      "value": ""
+                    }
+                  },
+                  "spawnerTimeout": 92
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/BoxSpawner_57869/BoxSpawner"
+          }
+        ],
+        "active": true,
+        "persistent": true,
+        "id": "Root/BoxSpawner_57869"
+      },
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_45922",
+      "property": "file",
+      "newValue": "BoxSpawner.js",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_45922",
+      "varName": "slotRef",
+      "newValue": {
+        "type": "string",
+        "value": "Box"
+      },
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_slot_property",
+      "slotId": "Root/BoxSpawner_57869",
+      "property": "name",
+      "newValue": "BoxSpawner2",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_45922",
+      "varName": "slotRef",
+      "newValue": {
+        "type": "string",
+        "value": "Box"
+      },
+      "options": {
+        "source": "ui"
+      }
+    }
+  ]
+}
