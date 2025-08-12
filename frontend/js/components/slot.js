@@ -51,6 +51,28 @@ export class Slot{
     getComponents(componentType){
         return this.components.filter(component => component.type === componentType);
     }
+    
+    reorderComponent(fromIndex, toIndex){
+        if (fromIndex < 0 || fromIndex >= this.components.length ||
+            toIndex < 0 || toIndex >= this.components.length) {
+            console.error('Invalid component indices for reorder');
+            return false;
+        }
+        
+        // Don't allow moving Transform component (should always be at index 0)
+        if (fromIndex === 0 || toIndex === 0) {
+            console.warn('Cannot reorder Transform component');
+            return false;
+        }
+        
+        // Perform the reorder
+        const [movedComponent] = this.components.splice(fromIndex, 1);
+        this.components.splice(toIndex, 0, movedComponent);
+        
+        // Update the Unity side if needed (this might require BS API support)
+        // For now, just update the local state
+        return true;
+    }
 
     async _checkForGhostComponents(id){
         let visible_components = this.components.map(x=>x._bs)

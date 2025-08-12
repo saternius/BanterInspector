@@ -278,6 +278,76 @@ export class ComponentAddChange extends Change{
     }
 }
 
+export class ComponentReorderChange extends Change{
+    constructor(slotId, fromIndex, toIndex, options) {
+        super();
+        this.slotId = slotId;
+        this.fromIndex = fromIndex;
+        this.toIndex = toIndex;
+        this.options = options || {};
+    }
+
+    async apply() {
+        super.apply();
+        const slot = SM.getSlotById(this.slotId);
+        if (!slot || !slot.components) return;
+        
+        // Don't allow moving Transform component (index 0)
+        if (this.fromIndex === 0 || this.toIndex === 0) {
+            console.warn('Cannot reorder Transform component');
+            return;
+        }
+        
+        const components = slot.components;
+        if (this.fromIndex < 0 || this.fromIndex >= components.length ||
+            this.toIndex < 0 || this.toIndex >= components.length) {
+            console.error('Invalid component indices for reorder');
+            return;
+        }
+        
+        // Send the reorder command
+        let event = {
+            slotId: this.slotId,
+            fromIndex: this.fromIndex,
+            toIndex: this.toIndex
+        };
+        let event_str = JSON.stringify(event);
+        let data = `component_reordered:${event_str}`;
+        networking.sendOneShot(data);
+    }
+
+    async undo() {
+        super.undo();
+        // Reverse the reorder
+        let event = {
+            slotId: this.slotId,
+            fromIndex: this.toIndex,
+            toIndex: this.fromIndex
+        };
+        let event_str = JSON.stringify(event);
+        let data = `component_reordered:${event_str}`;
+        networking.sendOneShot(data);
+    }
+
+    getDescription() {
+        return `Reorder component from position ${this.fromIndex} to ${this.toIndex}`;
+    }
+
+    getUndoDescription() {
+        return `Reorder component from position ${this.toIndex} to ${this.fromIndex}`;
+    }
+
+    cmd() {
+        return {
+            action: "reorder_component",
+            slotId: this.slotId,
+            fromIndex: this.fromIndex,
+            toIndex: this.toIndex,
+            options: this.options
+        };
+    }
+}
+
 export class ComponentRemoveChange extends Change{
     constructor(componentId, options) {
         super();
@@ -1310,6 +1380,9 @@ window.RunCommand = async (execString, options)=>{
             break;
         case "edit_script":
             change = new EditScriptItemChange(args[1], args[2], options);
+            break;
+        case "reorder_component":
+            change = new ComponentReorderChange(args[1], args[2], args[3], options);
             break;
         default:
             appendToConsole("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)

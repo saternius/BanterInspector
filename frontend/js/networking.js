@@ -227,6 +227,22 @@ export class Networking {
 
     async routeOneShot(data, timestamp){
 
+        if(data.startsWith("component_reordered:")){ // `component_reordered:${event_str}`;
+            let eventData = data.slice(20); // Remove "component_reordered:" prefix
+            try {
+                let event = JSON.parse(eventData);
+                let slot = SM.getSlotById(event.slotId);
+                if(slot){
+                    slot.reorderComponent(event.fromIndex, event.toIndex);
+                    if(SM.selectedSlot === slot.id){
+                        renderProps();
+                    }
+                }
+            } catch(e) {
+                console.error("Failed to parse component_reordered event:", e);
+            }
+        }
+
         if(data.startsWith("update_slot")){ //`update_slot:${this.id}:${property}:${value}`;
             let str = data.slice(12)
             let nxtColon = str.indexOf(":")

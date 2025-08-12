@@ -230,6 +230,9 @@ console.log("It is 3:00")
 
         // This gathers the hierarchy of the scene from the root slot
         async gatherSceneHierarchyBySlot(){
+            if(!this.slotData.slots.length){
+                return null;
+            }
             let rootSlot = this.getRootSlot();
             let createSlotHierarchy = (slot)=>{
                 let h = {

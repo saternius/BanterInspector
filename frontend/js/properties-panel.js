@@ -6,7 +6,7 @@
 // (async () => {
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
     const { deepClone } = await import(`${window.repoUrl}/utils.js`);
     const { BanterLayers } = await import(`${window.repoUrl}/components/index.js`);
 
@@ -20,6 +20,11 @@
             
             // Store collapsed state of components
             this.collapsedComponents = new Set();
+            
+            // Drag and drop state
+            this.draggedElement = null;
+            this.draggedIndex = null;
+            this.dropTarget = null;
             
             this.setupEventListeners();
         }
@@ -115,11 +120,21 @@
             const slotSection = this.createSlotPropertiesSection(slot);
             this.propertiesContent.appendChild(slotSection);
             
-            // Render components
+            // Render components with drop zones for drag and drop
             if (slot.components && slot.components.length > 0) {
+                // Add initial drop zone (but not before Transform at index 0)
+                // const initialDropZone = this.createDropZone(1);
+                // this.propertiesContent.appendChild(initialDropZone);
+                
                 slot.components.forEach((component, index) => {
                     const componentElement = this.renderComponent(component, index);
                     this.propertiesContent.appendChild(componentElement);
+                    
+                    // Add drop zone after each component (except after Transform if it's first)
+                    if (index > 0 ) {
+                        const dropZone = this.createDropZone(index + 1);
+                        this.propertiesContent.appendChild(dropZone);
+                    }
                 });
             }
             
@@ -216,6 +231,63 @@
 
 
         /**
+         * Create a drop zone for component reordering
+         */
+        createDropZone(dropIndex) {
+            const dropZone = document.createElement('div');
+            dropZone.className = 'component-drop-zone';
+            dropZone.dataset.dropIndex = dropIndex;
+            
+            dropZone.addEventListener('dragover', (e) => {
+                if (!this.draggedElement) return;
+                
+                // Don't allow dropping at index 0 (before Transform)
+                if (dropIndex === 0) return;
+                
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                
+                // Clear other highlights
+                document.querySelectorAll('.component-drop-zone.drag-over').forEach(zone => {
+                    if (zone !== dropZone) zone.classList.remove('drag-over');
+                });
+                
+                dropZone.classList.add('drag-over');
+                this.dropTarget = { type: 'reorder', element: dropZone, index: dropIndex };
+            });
+            
+            dropZone.addEventListener('drop', (e) => {
+                if (e.stopPropagation) {
+                    e.stopPropagation();
+                }
+                
+                if (this.draggedElement && dropIndex !== this.draggedIndex && dropIndex !== this.draggedIndex + 1) {
+                    // Calculate the actual target index after the move
+                    let targetIndex = dropIndex;
+                    if (dropIndex > this.draggedIndex) {
+                        targetIndex = dropIndex - 1;
+                    }
+                    
+                    // Apply the reorder change
+                    const change = new ComponentReorderChange(SM.selectedSlot, this.draggedIndex, targetIndex, { source: 'ui' });
+                    changeManager.applyChange(change);
+                    
+                    // Re-render after a short delay to allow the change to process
+                    setTimeout(() => this.render(SM.selectedSlot), 100);
+                }
+            });
+            
+            dropZone.addEventListener('dragleave', (e) => {
+                dropZone.classList.remove('drag-over');
+                if (this.dropTarget && this.dropTarget.element === dropZone) {
+                    this.dropTarget = null;
+                }
+            });
+            
+            return dropZone;
+        }
+
+        /**
          * Render a component
          */
         renderComponent(component, index) {
@@ -249,6 +321,51 @@
             actionsDiv.style.display = 'flex';
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
+            
+            // Add drag handle (except for Transform component)
+            if (component.type !== 'Transform') {
+                const dragHandle = document.createElement('div');
+                dragHandle.className = 'component-drag-handle';
+                dragHandle.innerHTML = '⋮⋮';
+                dragHandle.title = 'Drag to reorder';
+                dragHandle.draggable = true;
+                
+                dragHandle.addEventListener('dragstart', (e) => {
+                    this.draggedElement = section;
+                    this.draggedIndex = index;
+                    section.classList.add('dragging');
+                    
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', index.toString());
+                    
+                    // Show drop zones
+                    document.querySelectorAll('.component-drop-zone').forEach(zone => {
+                        zone.classList.add('active');
+                    });
+                    
+                    e.stopPropagation();
+                });
+                
+                dragHandle.addEventListener('dragend', (e) => {
+                    if (this.draggedElement) {
+                        this.draggedElement.classList.remove('dragging');
+                    }
+                    
+                    // Clean up
+                    document.querySelectorAll('.component-drop-zone').forEach(zone => {
+                        zone.classList.remove('active', 'drag-over');
+                    });
+                    document.querySelectorAll('.component-section.drag-over').forEach(el => {
+                        el.classList.remove('drag-over');
+                    });
+                    
+                    this.draggedElement = null;
+                    this.draggedIndex = null;
+                    this.dropTarget = null;
+                });
+                
+                actionsDiv.appendChild(dragHandle);
+            }
             
             // Delete button (don't allow deleting Transform components)
             if (component.type !== 'Transform') {
@@ -588,6 +705,49 @@
             actionsDiv.style.display = 'flex';
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
+            
+            // Add drag handle for MonoBehavior
+            const dragHandle = document.createElement('div');
+            dragHandle.className = 'component-drag-handle';
+            dragHandle.innerHTML = '⋮⋮';
+            dragHandle.title = 'Drag to reorder';
+            dragHandle.draggable = true;
+            
+            dragHandle.addEventListener('dragstart', (e) => {
+                this.draggedElement = section;
+                this.draggedIndex = index;
+                section.classList.add('dragging');
+                
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', index.toString());
+                
+                // Show drop zones
+                document.querySelectorAll('.component-drop-zone').forEach(zone => {
+                    zone.classList.add('active');
+                });
+                
+                e.stopPropagation();
+            });
+            
+            dragHandle.addEventListener('dragend', (e) => {
+                if (this.draggedElement) {
+                    this.draggedElement.classList.remove('dragging');
+                }
+                
+                // Clean up
+                document.querySelectorAll('.component-drop-zone').forEach(zone => {
+                    zone.classList.remove('active', 'drag-over');
+                });
+                document.querySelectorAll('.component-section.drag-over').forEach(el => {
+                    el.classList.remove('drag-over');
+                });
+                
+                this.draggedElement = null;
+                this.draggedIndex = null;
+                this.dropTarget = null;
+            });
+            
+            actionsDiv.appendChild(dragHandle);
             
             // Delete button
             const deleteBtn = document.createElement('button');
