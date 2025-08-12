@@ -1,0 +1,734 @@
+{
+  "author": "Technocrat",
+  "name": "PipeHurdleF",
+  "created": 1753777611794,
+  "itemType": "slot",
+  "data": {
+    "name": "PipeHurdleF_77457",
+    "parentId": "Root/Flappy_1128_4930_82947/Pipes",
+    "components": [
+      {
+        "lastUpdate": {},
+        "type": "Transform",
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 2.376389456441852,
+            "z": 0.05000000000001295
+          },
+          "localRotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "w": 1
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "id": "Transform_41587"
+      },
+      {
+        "lastUpdate": {},
+        "properties": {
+          "name": "myScript",
+          "file": "PipeMovement.js",
+          "vars": {
+            "speed": {
+              "type": "number",
+              "value": 0
+            }
+          }
+        },
+        "scriptInstance": {
+          "vars": {},
+          "speed": 0.05,
+          "started": true,
+          "scored": false,
+          "transform": {
+            "lastUpdate": {},
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 2.376389456441852,
+                "z": 0.05000000000001295
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          }
+        },
+        "ctx": {
+          "vars": {},
+          "speed": 0.05,
+          "started": true,
+          "scored": false,
+          "transform": {
+            "lastUpdate": {},
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 2.376389456441852,
+                "z": 0.05000000000001295
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          }
+        },
+        "type": "MonoBehavior",
+        "id": "MonoBehavior_61201"
+      }
+    ],
+    "children": [
+      {
+        "name": "Pipe",
+        "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457",
+        "components": [
+          {
+            "lastUpdate": {},
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0,
+                "w": 1
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "id": "Transform_23600"
+          },
+          {
+            "lastUpdate": {},
+            "type": "BoxCollider",
+            "properties": {
+              "isTrigger": true,
+              "center": {
+                "x": 0,
+                "y": -1.35,
+                "z": 0
+              },
+              "size": {
+                "x": 1,
+                "y": 3,
+                "z": 1
+              }
+            },
+            "id": "BoxCollider_28117"
+          },
+          {
+            "lastUpdate": {},
+            "type": "BanterColliderEvents",
+            "properties": {},
+            "id": "BanterColliderEvents_4780"
+          }
+        ],
+        "children": [
+          {
+            "name": "PipeHole",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.1,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 0.85,
+                    "y": 0.25,
+                    "z": 0.85
+                  }
+                },
+                "id": "Transform_53821"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 0.5,
+                  "height": 0.25,
+                  "depth": 1,
+                  "radius": 0.25,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_70711"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0.011764705882352941,
+                    "g": 0.011764705882352941,
+                    "b": 0.011764705882352941,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_60326"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeHole"
+          },
+          {
+            "name": "PipeShaft",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -1.55,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 0.85,
+                    "y": 3,
+                    "z": 0.85
+                  }
+                },
+                "id": "Transform_22227"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 1,
+                  "height": 1,
+                  "depth": 1,
+                  "radius": 0.5,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_44494"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0,
+                    "g": 0.8196078431372549,
+                    "b": 0.09411764705882353,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_38754"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeShaft"
+          },
+          {
+            "name": "PipeTop",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "id": "Transform_3700"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 1,
+                  "height": 0.25,
+                  "depth": 1,
+                  "radius": 0.5,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_17212"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0.054901960784313725,
+                    "g": 0.8196078431372549,
+                    "b": 0,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_9293"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeTop"
+          }
+        ],
+        "active": true,
+        "persistent": true,
+        "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe"
+      },
+      {
+        "name": "Pipe_23907",
+        "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457",
+        "components": [
+          {
+            "lastUpdate": {},
+            "type": "Transform",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 2,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 6.123233995736766e-17,
+                "x": 1,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "id": "Transform_32166"
+          },
+          {
+            "lastUpdate": {},
+            "type": "BoxCollider",
+            "properties": {
+              "isTrigger": true,
+              "center": {
+                "x": 0,
+                "y": -1.35,
+                "z": 0
+              },
+              "size": {
+                "x": 1,
+                "y": 3,
+                "z": 1
+              }
+            },
+            "id": "BoxCollider_61518"
+          },
+          {
+            "lastUpdate": {},
+            "type": "BanterColliderEvents",
+            "properties": {},
+            "id": "BanterColliderEvents_7578"
+          }
+        ],
+        "children": [
+          {
+            "name": "PipeHole",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.1,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 0.85,
+                    "y": 0.25,
+                    "z": 0.85
+                  }
+                },
+                "id": "Transform_90578"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 0.5,
+                  "height": 0.25,
+                  "depth": 1,
+                  "radius": 0.25,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_21230"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0.011764705882352941,
+                    "g": 0.011764705882352941,
+                    "b": 0.011764705882352941,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_64508"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeHole"
+          },
+          {
+            "name": "PipeShaft",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -1.55,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 0.85,
+                    "y": 3,
+                    "z": 0.85
+                  }
+                },
+                "id": "Transform_56830"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 1,
+                  "height": 1,
+                  "depth": 1,
+                  "radius": 0.5,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_83396"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0,
+                    "g": 0.8196078431372549,
+                    "b": 0.09411764705882353,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_80933"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeShaft"
+          },
+          {
+            "name": "PipeTop",
+            "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
+            "components": [
+              {
+                "lastUpdate": {},
+                "type": "Transform",
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0,
+                    "w": 1
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "id": "Transform_69436"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterGeometry",
+                "properties": {
+                  "geometryType": 2,
+                  "parametricType": 0,
+                  "width": 1,
+                  "height": 0.25,
+                  "depth": 1,
+                  "radius": 0.5,
+                  "radiusTop": 0.5,
+                  "radiusBottom": 0.5,
+                  "radialSegments": 32,
+                  "heightSegments": 1,
+                  "openEnded": false,
+                  "thetaStart": 0,
+                  "thetaLength": 6.283185307179586,
+                  "phiStart": 0,
+                  "phiLength": 6.283185307179586,
+                  "widthSegments": 1,
+                  "depthSegments": 1,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "arc": 6.283185307179586,
+                  "p": 2,
+                  "q": 3,
+                  "segments": 64,
+                  "innerRadius": 0.2,
+                  "outerRadius": 0.5,
+                  "phiSegments": 8,
+                  "thetaSegments": 6
+                },
+                "id": "BanterGeometry_52067"
+              },
+              {
+                "lastUpdate": {},
+                "type": "BanterMaterial",
+                "properties": {
+                  "shaderName": "Standard",
+                  "texture": "",
+                  "color": {
+                    "r": 0.054901960784313725,
+                    "g": 0.8196078431372549,
+                    "b": 0,
+                    "a": 1
+                  },
+                  "side": 0,
+                  "generateMipMaps": true
+                },
+                "id": "BanterMaterial_55592"
+              }
+            ],
+            "children": [],
+            "active": true,
+            "persistent": true,
+            "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeTop"
+          }
+        ],
+        "active": true,
+        "persistent": true,
+        "finished_loading": true,
+        "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907"
+      }
+    ],
+    "active": true,
+    "persistent": true,
+    "finished_loading": true,
+    "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457"
+  },
+  "folder": "FlappyBird"
+}

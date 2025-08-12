@@ -826,6 +826,7 @@ export class Inventory {
             created: now,
             last_used: now,
             itemType: 'script',
+            description: '',  // Initialize with empty description
             data: content
         };
         
@@ -989,6 +990,63 @@ export class Inventory {
                 this.openScriptEditor(itemName);
             });
         }
+        
+        // Add description textarea listener
+        const descriptionTextarea = this.previewPane.querySelector('.description-textarea');
+        if (descriptionTextarea) {
+            // Save description on blur
+            descriptionTextarea.addEventListener('blur', () => {
+                this.updateItemDescription(itemName, descriptionTextarea.value);
+            });
+            
+            // Also save on Enter key (with Shift+Enter for new line)
+            descriptionTextarea.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    descriptionTextarea.blur();
+                }
+            });
+        }
+        
+        // Add editable name listener
+        const editableName = this.previewPane.querySelector('.editable-name');
+        if (editableName) {
+            const originalName = itemName;
+            
+            // Prevent line breaks in name
+            editableName.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    editableName.blur();
+                }
+                // Escape key to cancel edit
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    editableName.textContent = originalName;
+                    editableName.blur();
+                }
+            });
+            
+            // Save name on blur
+            editableName.addEventListener('blur', () => {
+                const newName = editableName.textContent.trim();
+                if (newName && newName !== originalName) {
+                    this.renameItem(originalName, newName);
+                } else if (!newName) {
+                    // Restore original name if empty
+                    editableName.textContent = originalName;
+                }
+            });
+            
+            // Select all text on focus for easier editing
+            editableName.addEventListener('focus', () => {
+                const range = document.createRange();
+                range.selectNodeContents(editableName);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+        }
     }
     
     /**
@@ -1007,11 +1065,12 @@ export class Inventory {
     generatePreviewContent(item) {
         const dateStr = new Date(item.created).toLocaleString();
         const itemType = item.itemType || 'slot';
+        const description = item.description || '';
         
         if (itemType === 'script') {
             return `
                 <div class="preview-header">
-                    <h2>${item.name}</h2>
+                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
                     <button class="preview-close-btn">×</button>
                 </div>
                 <div class="preview-meta">
@@ -1027,6 +1086,10 @@ export class Inventory {
                         <span class="meta-label">Created:</span>
                         <span class="meta-value">${dateStr}</span>
                     </div>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-label">Description:</div>
+                    <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
                 </div>
                 <div class="preview-content">
                     <h3>Script Content</h3>
@@ -1044,7 +1107,7 @@ export class Inventory {
             
             return `
                 <div class="preview-header">
-                    <h2>${item.name}</h2>
+                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
                     <button class="preview-close-btn">×</button>
                 </div>
                 <div class="preview-meta">
@@ -1060,6 +1123,10 @@ export class Inventory {
                         <span class="meta-label">Created:</span>
                         <span class="meta-value">${dateStr}</span>
                     </div>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-label">Description:</div>
+                    <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
                 </div>
                 <div class="preview-content">
                     <h3>Slot Data</h3>
@@ -1196,6 +1263,149 @@ export class Inventory {
         }
         this.render();
         console.log("SIJODAS")
+    }
+    
+    /**
+     * Update item description
+     */
+    updateItemDescription(itemName, description) {
+        const item = this.items[itemName];
+        if (item) {
+            item.description = description || '';
+            const storageKey = `inventory_${itemName}`;
+            localStorage.setItem(storageKey, JSON.stringify(item));
+            this.items[itemName] = item;
+            this.showNotification(`Description updated for "${itemName}"`);
+        }
+    }
+    
+    /**
+     * Rename an inventory item
+     */
+    renameItem(oldName, newName) {
+        const item = this.items[oldName];
+        if (!item) return;
+        
+        // Show warning about broken references for slots
+        const warningMessage = item.itemType === 'slot' 
+            ? `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may break existing references in scripts or other slots that depend on this name.<br><br>Any code using <code>SM.findSlotByName("${oldName}")</code> or similar references will need to be updated.<br><br>Do you want to continue?`
+            : `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may affect other items that reference this script.<br><br>Do you want to continue?`;
+        
+        this.showRenameWarningModal(
+            warningMessage,
+            () => {
+                // User confirmed, now check for naming conflicts
+                if (this.items[newName] && newName !== oldName) {
+                    this.showConfirmModal(
+                        `An item named "${newName}" already exists. Do you want to overwrite it?`,
+                        () => {
+                            // Delete the existing item
+                            const existingStorageKey = `inventory_${newName}`;
+                            localStorage.removeItem(existingStorageKey);
+                            delete this.items[newName];
+                            
+                            // Proceed with rename
+                            this.finalizeRename(oldName, newName);
+                        },
+                        'Overwrite Item'
+                    );
+                } else {
+                    // No conflict, proceed with rename
+                    this.finalizeRename(oldName, newName);
+                }
+            },
+            () => {
+                // User cancelled, restore original name in the UI
+                const editableName = this.previewPane.querySelector('.editable-name');
+                if (editableName) {
+                    editableName.textContent = oldName;
+                }
+            }
+        );
+    }
+    
+    /**
+     * Finalize the rename operation
+     */
+    finalizeRename(oldName, newName) {
+        const item = this.items[oldName];
+        if (!item) return;
+        
+        // For scripts, ensure .js extension
+        if (item.itemType === 'script' && !newName.endsWith('.js')) {
+            newName = newName + '.js';
+        }
+        
+        // Update item name
+        item.name = newName;
+        
+        // Remove old storage key
+        const oldStorageKey = `inventory_${oldName}`;
+        localStorage.removeItem(oldStorageKey);
+        
+        // Save with new key
+        const newStorageKey = `inventory_${newName}`;
+        localStorage.setItem(newStorageKey, JSON.stringify(item));
+        
+        // Update items object
+        delete this.items[oldName];
+        this.items[newName] = item;
+        
+        // Update selected item reference
+        if (this.selectedItem === oldName) {
+            this.selectedItem = newName;
+        }
+        
+        // If this is a script, update any open script editor tabs
+        if (item.itemType === 'script' && window.inspector && window.inspector.scriptEditors) {
+            // Find and update the script editor with the old name
+            for (const [key, editor] of window.inspector.scriptEditors) {
+                if (editor.currentScript.name === oldName) {
+                    // Update the script editor's internal reference
+                    editor.currentScript.name = newName;
+                    editor.currentScript.data = item.data;
+                    
+                    // Update the navigation tab text
+                    if (editor.navElement) {
+                        // Store the old close button handler before updating innerHTML
+                        const oldCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        
+                        editor.navElement.innerHTML = `
+                            <span class="nav-icon">📜</span>
+                            ${newName}
+                            <span class="close-tab-btn" data-close-script="${editor.pageId}">×</span>
+                        `;
+                        
+                        // Re-attach close button handler
+                        const newCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        if (newCloseBtn && editor.closeBtnHandler) {
+                            newCloseBtn.addEventListener('click', editor.closeBtnHandler);
+                        }
+                    }
+                    
+                    // Update the editor page title
+                    const editorTitle = document.querySelector(`#${editor.pageId}-page .editor-title h2`);
+                    if (editorTitle) {
+                        editorTitle.textContent = `Editing: ${newName}`;
+                    }
+                    
+                    // Update the scriptEditors map key
+                    window.inspector.scriptEditors.delete(key);
+                    window.inspector.scriptEditors.set(newName, editor);
+                    
+                    // Update localStorage for opened editors
+                    localStorage.setItem(`openedEditors`, Array.from(window.inspector.scriptEditors.keys()).join(","));
+                    
+                    break;
+                }
+            }
+        }
+        
+        // Re-render and show updated preview
+        this.render();
+        this.showPreview(newName);
+        
+        this.showNotification(`Renamed "${oldName}" to "${newName}"`);
     }
 
     async loadByCMD(itemName){
@@ -1706,6 +1916,71 @@ export class Inventory {
                 closeModal();
             }
         });
+    }
+    
+    /**
+     * Show rename warning modal
+     */
+    showRenameWarningModal(message, onConfirm, onCancel) {
+        // Create modal overlay
+        const modalOverlay = document.createElement('div');
+        modalOverlay.className = 'modal-overlay';
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.className = 'modal-content modal-warning';
+        
+        modalContent.innerHTML = `
+            <div class="modal-header">
+                <h3>⚠️ Rename Warning</h3>
+            </div>
+            <div class="modal-body">
+                <p>${message}</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
+                <button class="modal-confirm-btn modal-warning-btn" id="modalConfirmBtn">Continue Anyway</button>
+            </div>
+        `;
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        // Setup event listeners
+        const cancelBtn = modalContent.querySelector('#modalCancelBtn');
+        const confirmBtn = modalContent.querySelector('#modalConfirmBtn');
+        
+        const closeModal = () => {
+            modalOverlay.remove();
+        };
+        
+        cancelBtn.addEventListener('click', () => {
+            closeModal();
+            if (onCancel) onCancel();
+        });
+        
+        confirmBtn.addEventListener('click', () => {
+            closeModal();
+            if (onConfirm) onConfirm();
+        });
+        
+        // Click outside to close (and cancel)
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                closeModal();
+                if (onCancel) onCancel();
+            }
+        });
+        
+        // ESC key to close (and cancel)
+        const handleKeydown = (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                if (onCancel) onCancel();
+                document.removeEventListener('keydown', handleKeydown);
+            }
+        };
+        document.addEventListener('keydown', handleKeydown);
     }
     
     /**

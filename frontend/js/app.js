@@ -69,6 +69,16 @@
             this.lifecyclePanel = null;
             this.feedback = null;
             this.initialized = false;
+            
+            // Initialize logger settings
+            window.logger = {
+                include: {
+                    command: true,
+                    script: true,
+                    oneShot: false,
+                    spaceProps: false
+                }
+            };
         }
 
         /**
@@ -76,6 +86,8 @@
          */
         async initialize() {
             if (this.initialized) return;
+
+            
             
             console.log('Initializing Unity Scene Inspector...');
             try {
@@ -126,16 +138,7 @@
                 this.setupGlobalEventHandlers();
                 
                 
-                // Initialize logger settings
-                window.logger = {
-                    include: {
-                        command: true,
-                        script: true,
-                        oneShot: false,
-                        spaceProps: false
-                    }
-                };
-
+                
 
                 // Setup console toggle buttons
                 const toggleButtons = document.querySelectorAll('.console-toggle');
@@ -396,6 +399,22 @@
                     console.log("[USER JOINED] fired", event)
                     
                     //SM.handleUserJoined(event);
+                })
+
+                scene.On("button-released", e => {
+                    SM.getAllMonoBehaviors().forEach(m=>{
+                        if(m.ctx.buttonReleased){
+                            m.ctx.buttonReleased(e)
+                        }
+                    })
+                })
+
+                scene.On("button-pressed", e => {
+                    SM.getAllMonoBehaviors().forEach(m=>{
+                        if(m.ctx.buttonPressed){
+                            m.ctx.buttonPressed(e)
+                        }
+                    })
                 })
 
                 // setTimeout(()=>{

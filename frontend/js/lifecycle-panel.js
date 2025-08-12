@@ -248,7 +248,7 @@
          */
         addConsoleOutput(scriptName, output, id) {
             let outputStr = `[${scriptName}]: ${output}`;
-            appendToConsole("script", "script_"+id+"_"+Math.floor(Math.random()*1000000), outputStr);
+            //appendToConsole("script", "script_"+id+"_"+Math.floor(Math.random()*1000000), outputStr);
         }
 
 

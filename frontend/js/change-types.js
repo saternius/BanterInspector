@@ -849,6 +849,7 @@ export class SaveSlotItemChange extends Change{
             created: now,
             last_used: now,
             itemType: "slot",
+            description: '',  // Initialize with empty description
             data: data,
             folder: this.folder,
             history: changeManager.gatherHistory(this.slot)
@@ -1164,6 +1165,7 @@ this.keyUp = (key)=>{
             created: now,
             last_used: now,
             itemType: 'script',
+            description: '',  // Initialize with empty description
             data: defaultScript
         };
         

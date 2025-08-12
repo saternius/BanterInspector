@@ -25,7 +25,7 @@ inspector/
 ### Frontend Modules
 All frontend code is now located in the `frontend/` directory:
 
-- `frontend/js/app.js` - Application initialization and BS library loading
+- `frontend/js/inspector.js` - Application initialization and BS library loading
 - `frontend/js/navigation.js` - Header navigation menu responsible for page transitions
 - `frontend/js/scene-manager.js` - Unity scene state management and BS bridge communication
 - `frontend/js/networking.js` - Manages state syncing commands between clients

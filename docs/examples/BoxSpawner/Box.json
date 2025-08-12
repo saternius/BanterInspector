@@ -1,0 +1,158 @@
+{
+  "author": "Primary Acrimonious",
+  "name": "Box",
+  "created": 1753269153735,
+  "itemType": "slot",
+  "data": {
+    "name": "Box_50888",
+    "parentId": "Root",
+    "components": [
+      {
+        "id": "Transform_23491",
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "x": 2027,
+            "y": 2027,
+            "z": 2027
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "type": "BanterGeometry",
+        "id": "BanterGeometry_74958",
+        "properties": {
+          "geometryType": 0,
+          "parametricType": 0,
+          "width": 1,
+          "height": 1,
+          "depth": 1,
+          "radius": 0.5,
+          "radiusTop": 0.5,
+          "radiusBottom": 0.5,
+          "radialSegments": 32,
+          "heightSegments": 1,
+          "openEnded": false,
+          "thetaStart": 0,
+          "thetaLength": 6.283185,
+          "phiStart": 0,
+          "phiLength": 6.283185,
+          "widthSegments": 1,
+          "depthSegments": 1,
+          "tube": 0.4,
+          "tubularSegments": 64,
+          "arc": 6.283185,
+          "p": 2,
+          "q": 3,
+          "segments": 64,
+          "innerRadius": 0.2,
+          "outerRadius": 0.5,
+          "phiSegments": 8,
+          "thetaSegments": 6
+        }
+      },
+      {
+        "type": "BanterMaterial",
+        "id": "BanterMaterial_57401",
+        "properties": {
+          "shaderName": "Standard",
+          "texture": "",
+          "color": {
+            "r": 1,
+            "g": 1,
+            "b": 1,
+            "a": 1
+          },
+          "side": 0,
+          "generateMipMaps": true
+        }
+      },
+      {
+        "id": "MonoBehavior_88633",
+        "properties": {
+          "name": "myScript",
+          "file": "RotatingBox.js",
+          "vars": {}
+        },
+        "scriptInstance": {
+          "vars": {
+            "rotationSpeed": {
+              "type": "number",
+              "value": 1
+            }
+          },
+          "transform": {
+            "id": "Transform_Root/Box",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 2027,
+                "y": 2027,
+                "z": 2027
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          "rotationSpeed": 1
+        },
+        "scriptContext": {
+          "vars": {
+            "rotationSpeed": {
+              "type": "number",
+              "value": 1
+            }
+          },
+          "transform": {
+            "id": "Transform_Root/Box",
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "x": 2027,
+                "y": 2027,
+                "z": 2027
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          "rotationSpeed": 1
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "children": [],
+    "active": true,
+    "persistent": true,
+    "id": "Root/Box_50888"
+  },
+  "folder": "BoxSpawner",
+  "last_used": 1754890184402,
+  "description": "A simple rotating cube, just coasting along the (1,1,1,1) direction in 4D quaternion space."
+}
