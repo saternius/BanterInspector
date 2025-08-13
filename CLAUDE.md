@@ -12,38 +12,68 @@ This is the Unity Scene Inspector for the Banter VR platform. It provides a web-
 inspector/
 ├── frontend/          # Web-based inspector interface
 │   ├── js/            # JavaScript modules
+│   │   ├── pages/     # Page-specific modules organized by feature
+│   │   │   ├── feedback/         # Feedback and statement blocks
+│   │   │   ├── inventory/        # Inventory management
+│   │   │   ├── script-editor/    # Script editing interface
+│   │   │   └── world-inspector/  # Core inspector panels
+│   │   ├── entity-components/    # Component definitions
+│   │   └── *.js       # Core modules and utilities
 │   ├── styles.css     # Global stylesheet
-│   ├── index.html     # Main application entry
-│   └── tests/         # Frontend tests
+│   └── index.html     # Main application entry
 ├── microservices/     # Backend services
-│   └── statement-blocks/  # Text processing service
+│   ├── statement-block-service/  # Text processing service
+│   └── file_server/   # File serving utilities
+├── docs/              # Documentation and examples
+│   ├── examples/      # Example scenes and scripts
+│   └── site/          # Docusaurus documentation site
 └── todo/              # Task specifications and planning docs
 ```
 
 ## Architecture
 
 ### Frontend Modules
-All frontend code is now located in the `frontend/` directory:
+The frontend code is organized hierarchically in the `frontend/` directory:
 
-- `frontend/js/inspector.js` - Application initialization and BS library loading
-- `frontend/js/navigation.js` - Header navigation menu responsible for page transitions
-- `frontend/js/scene-manager.js` - Unity scene state management and BS bridge communication
-- `frontend/js/networking.js` - Manages state syncing commands between clients
-- `frontend/js/change-types.js` - List of all the change actions that can be performed
-- `frontend/js/hierarchy-panel.js` - GameObject hierarchy tree rendering
-- `frontend/js/properties-panel.js` - Component property editing interface
-- `frontend/js/change-manager.js` - Undo/redo system and change tracking
-- `frontend/js/inventory.js` - Persistent storage for reusable GameObjects and scripts
-- `frontend/js/space-props-panel.js` - Public and protected space properties management
-- `frontend/js/script-editor.js` - CodeMirror-based JavaScript editor for BanterScript files
-- `frontend/js/feedback.js` - User feedback system with voice input support
+#### Core Modules (`frontend/js/`)
+- `app.js` - Main application entry point and module loader
+- `navigation.js` - Header navigation menu responsible for page transitions
+- `scene-manager.js` - Unity scene state management and BS bridge communication
+- `networking.js` - Manages state syncing commands between clients
+- `change-types.js` - List of all the change actions that can be performed
+- `change-manager.js` - Undo/redo system and change tracking
+- `lifecycle-manager.js` - Manages component lifecycle events
+- `entity.js` - Entity (GameObject) management
+- `utils.js` - Shared utility functions
+
+#### Page Modules (`frontend/js/pages/`)
+Organized by feature area:
+
+**World Inspector** (`world-inspector/`)
+- `hierarchy-panel.js` - GameObject hierarchy tree rendering
+- `properties-panel.js` - Component property editing interface
+- `space-props-panel.js` - Public and protected space properties management
+- `component-menu.js` - Component selection and addition menu
+- `lifecycle-panel.js` - Lifecycle management UI
+- `loading-screen.js` - Application loading progress display
+
+**Inventory** (`inventory/`)
+- `inventory.js` - Persistent storage for reusable GameObjects and scripts
+
+**Script Editor** (`script-editor/`)
+- `script-editor.js` - CodeMirror-based JavaScript editor for BanterScript files
+
+**Feedback** (`feedback/`)
+- `feedback.js` - User feedback system with voice input support
+- `statement-block-editor.js` - Statement block editing interface
 
 ### Microservices
 Backend services are located in the `microservices/` directory:
 
-- `microservices/statement-blocks/` - Flask service using Claude API for text processing
+- `statement-block-service/` - Flask service using Claude/Gemini API for text processing
   - Converts unstructured speech/text into organized statement blocks
   - General-purpose design for reuse across different contexts
+- `file_server/` - File serving utilities for development
 
 ### Key Patterns
 1. **Module Loading**: ES6 modules with dynamic imports based on environment (CDN for prod, local for dev)
@@ -66,6 +96,13 @@ Components are defined in `frontend/js/entity-components/` with a common structu
 - Export a component definition object with `properties`, and optional `handlers`
 - Properties define type, default values, and constraints
 - Register in `frontend/js/entity-components/index.js`
+- Organized into categories:
+  - `behaviors/` - Interactive behaviors (grab handles, synced objects, etc.)
+  - `materials/` - Material and physics material components
+  - `media/` - Audio, video, and GLTF components
+  - `meshes/` - 3D primitives and geometry components
+  - `misc/` - Various utility components (portals, mirrors, browsers, etc.)
+  - `physics/` - Colliders, rigidbodies, and joints
 
 
 ### Undo/Redo System
@@ -86,7 +123,7 @@ The ChangeManager tracks all modifications:
 
 ### Frontend Modules
 
-#### Inventory System (`frontend/js/inventory.js`)
+#### Inventory System (`frontend/js/pages/inventory/inventory.js`)
 The inventory provides persistent storage using localStorage for:
 - **Entity**: GameObject hierarchies exported from Unity scenes
 - **Scripts**: JavaScript files for use with MonoBehavior components
@@ -97,7 +134,7 @@ Key features:
 - Export items as JSON for sharing/backup
 - Script preview and editing integration
 
-#### Space Properties Panel (`frontend/js/space-props-panel.js`)
+#### Space Properties Panel (`frontend/js/pages/world-inspector/space-props-panel.js`)
 Manages Banter space-level properties that persist across sessions:
 - **Public Properties**: Accessible by all users in the space
 - **Protected Properties**: Only modifiable by space admins
@@ -105,7 +142,7 @@ Manages Banter space-level properties that persist across sessions:
 - Real-time synchronization across connected clients
 - Inline editing with type validation
 
-#### Script Editor (`frontend/js/script-editor.js`)
+#### Script Editor (`frontend/js/pages/script-editor/script-editor.js`)
 Full-featured code editor using CodeMirror v5.65.13:
 - JavaScript syntax highlighting with Monokai theme
 - Keyboard shortcuts (Ctrl/Cmd+S to save, Ctrl/Cmd+F to search)
@@ -122,7 +159,7 @@ BanterScript runtime component that:
 - Script context includes references to `_entity`, `_scene`, `_BS`, and `_component`
 - Hot-reload support via refresh functionality
 
-#### Feedback System (`frontend/js/feedback.js`)
+#### Feedback System (`frontend/js/pages/feedback/feedback.js`)
 User feedback collection system with:
 - Voice input using Azure Speech SDK
 - Support for bug reports, feature requests, and improvements
@@ -132,7 +169,7 @@ User feedback collection system with:
 
 ### Microservices
 
-#### Statement Blocks Service (`microservices/statement-blocks/`)
+#### Statement Blocks Service (`microservices/statement-block-service/`)
 Flask-based text processing service:
 - Uses Claude Sonnet 3.5 API for natural language processing
 - Converts stream-of-consciousness text into organized statements

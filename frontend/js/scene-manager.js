@@ -33,25 +33,115 @@ console.log("It is 3:00")
             return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
         }
 
-        toggleFileServer(){
-            let fileServer = localStorage.getItem('file_server');
-            if(fileServer === "github"){
-                localStorage.setItem('file_server', "local");
-            }else{
-                localStorage.setItem('file_server', "github");
-            }
+        changeFileServer(value){
+            localStorage.setItem('file_server', value);
             window.location.reload();
         }
 
+        async initializeMock(){
+            this.scene = {
+                unityLoaded: true,
+                spaceState:{
+                    public:{
+                        text:"Hello World"
+                    },
+                    protected:{
+                        maxPlayers: 8
+                    },
+                },
+                localUser:{
+                    name: "Tutorial User",
+                    uid: "tutorial-user-123",
+                    id: "abcdefghi",
+                    isLocal: true,
+                    color: "#667eea"
+                },
+                addEventListener: (event, callback)=>{
+                    console.log("event =>", event, callback)
+                },
+                On: (event, callback)=>{
+                    console.log("event =>", event, callback)
+                },
+                Find: (path)=>{
+                    console.log("Find =>", path)
+                    return null;
+                },
+                FindByPath: (path)=>{
+                    console.log("FindByPath =>", path)
+                    return null;
+                },
+                OneShot: (string)=>{
+                    console.log("OneShot =>", string)
+                }
+            }
+            this.props = {
+                hierarchy:{
+                    "name": "Root",
+                    "layer": 0,
+                    "components": [
+                        "Transform_5523"
+                    ],
+                    "children": [
+                        {
+                            "name": "Ground",
+                            "layer": 0,
+                            "components": [
+                                "Transform_58041",
+                                "BoxCollider_25563"
+                            ],
+                            "children": [
+                                {
+                                    "name": "GroundMesh",
+                                    "layer": 0,
+                                    "components": [
+                                        "Transform_98837"
+                                    ],
+                                    "children": []
+                                },
+                                {
+                                    "name": "Sigil",
+                                    "layer": 0,
+                                    "components": [
+                                        "Transform_46066"
+                                    ],
+                                    "children": []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+            let root = new BS.GameObject("Root");
+            let entity = new Entity().init({
+                name: "Root",
+                parentId: null,
+                layer: 0,
+                _bs: root
+            });
+            this.entityData.entities = [entity];
+            this.entityData.entityMap[entity.id] = entity;
+            await this.loadHierarchy(this.props.hierarchy);
+            this.loaded = true;
+        }
 
         async initialize() {
+            if(window.useMock){
+                await this.initializeMock();
+                this.setup = async ()=>{
+                    this.loaded = true;
+                }
+                return;
+            }
+
             let fileServer = localStorage.getItem('file_server');
             if(!fileServer){
-                localStorage.setItem('file_server', "github");
-                fileServer = "github";
+                localStorage.setItem('file_server', "stable");
+                fileServer = "stable";
             }
             let fileServerEl = document.getElementById("fileServer");
-            fileServerEl.innerHTML = fileServer;
+            if(fileServerEl){
+                fileServerEl.value = fileServer;
+            }
 
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
@@ -367,7 +457,7 @@ console.log("It is 3:00")
                 window.loadingScreen.updateStage('entities', 100, 'All entities generated');
             }
             
-            inspector.hierarchyPanel.render()
+            inspector?.hierarchyPanel?.render()
         }
 
 

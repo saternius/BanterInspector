@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Scene Inspector - Interactive Tutorial</title>
+    <!-- Load tutorial-specific styles -->
+    <link rel="stylesheet" href="tutorial.css">
+    <!-- Load main styles -->
+    <link rel="stylesheet" href="../styles.css">
+   
+</head>
+<body class="tutorial-mode">
+    <!-- Tutorial Overlay -->
+    <div id="tutorialOverlay" class="tutorial-overlay">
+        <div class="tutorial-welcome">
+            <h1>Welcome to the Unity Scene Inspector Tutorial</h1>
+            <p>Hover over any element to learn what it does and how to use it.</p>
+            <button id="startTutorial" class="tutorial-start-btn">Start Interactive Tutorial</button>
+        </div>
+    </div>
+
+    <!-- Main Split Container -->
+    <div class="tutorial-split-container">
+        <!-- Left Side - Inspector UI -->
+        <div class="inspector-ui-container">
+            <!-- Navigation Header -->
+            <nav class="navigation-header" data-tutorial="navigation">
+        <div class="nav-items">
+            <button class="nav-item active" data-page="world-inspector" data-tutorial="world-inspector-tab">
+                <span class="nav-icon">🌍</span>
+                World Inspector
+            </button>
+            <button class="nav-item" data-page="inventory" data-tutorial="inventory-tab">
+                <span class="nav-icon">📦</span>
+                Inventory
+            </button>
+            <button class="nav-item" data-page="feedback" data-tutorial="feedback-tab">
+                <span class="nav-icon">💬</span>
+                Feedback
+            </button>
+        </div>
+        <div class="nav-controls">
+            <button id="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" data-tutorial="undo-btn">
+                <span class="control-icon">↶</span>
+            </button>
+            <button id="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" data-tutorial="redo-btn">
+                <span class="control-icon">↷</span>
+            </button>
+            <button id="saveBtn" class="nav-control-btn" title="Save Scene" data-tutorial="save-btn">
+                <span class="control-icon">💾</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Container -->
+    <div class="page-container">
+        <!-- World Inspector Page -->
+        <div class="page active" id="world-inspector-page">
+            <div class="inspector-container">
+                <!-- Hierarchy Panel -->
+                <div class="panel hierarchy-panel" data-tutorial="hierarchy-panel">
+                    <div class="panel-header" data-tutorial="hierarchy-header">
+                        Scene Hierarchy
+                    </div>
+                    
+                    <div class="search-container" data-tutorial="search-container">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Search entities...">
+                    </div>
+                    
+                    <div class="entity-actions-container" data-tutorial="entity-actions">
+                        <button class="action-button" id="addChildEntityBtn" title="Add Child" data-tutorial="add-child-btn">
+                            <span class="button-icon">+</span>
+                        </button>
+                        <button class="action-button" id="cloneEntityBtn" title="Clone" data-tutorial="clone-btn">
+                            <span class="button-icon">🧬</span>
+                        </button>
+                        <button class="action-button delete-button" id="deleteEntityBtn" title="Delete" data-tutorial="delete-btn">
+                            <span class="button-icon">×</span>
+                        </button>
+                        <button class="action-button save-button" id="saveEntityBtn" title="Save" data-tutorial="save-entity-btn">
+                            <span class="button-icon">💾</span>
+                        </button>
+                    </div>
+                    
+                    <div class="hierarchy-tree" id="hierarchyTree" data-tutorial="hierarchy-tree">
+                        <!-- Hierarchy will be populated from mock data -->
+                    </div>
+                </div>
+                
+                <!-- Properties Panel -->
+                <div class="panel properties-panel" id="propertiesPanel" data-tutorial="properties-panel">
+                    <div class="panel-header" data-tutorial="properties-header">
+                        <span id="selectedEntityName">Properties</span>
+                        <button id="collapseAllBtn" class="collapse-all-btn" data-tutorial="collapse-all-btn">Collapse All</button>
+                    </div>
+                    
+                    <div class="properties-content" id="propertiesContent" data-tutorial="properties-content">
+                        <div class="empty-state">
+                            <h3>No entity selected</h3>
+                            <p>Select an entity from the hierarchy to view its properties</p>
+                        </div>
+                    </div>
+                    
+                    <div class="add-component-container" id="addComponentContainer" data-tutorial="add-component-container">
+                        <button class="add-component-button" id="addComponentBtn" data-tutorial="add-component-btn">
+                            <span>+</span>
+                            Add Component
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Space Props Panel Container -->
+                <div class="panel space-props-panel-container" data-tutorial="space-props-container">
+                    <!-- Space Props Panel -->
+                    <div class="space-props-panel" data-tutorial="space-props-panel">
+                        <div class="panel-header" data-tutorial="space-props-header">
+                            Space Properties
+                            <div class="lifecycle-buttons">
+                                <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel">🔄</button>
+                            </div>
+                        </div>
+                        
+                        <div class="properties-content">
+                            <div class="space-props-section" data-tutorial="public-props">
+                                <div class="space-props-header">
+                                    <h3>Public Properties</h3>
+                                    <span class="props-count" id="publicPropsCount">2</span>
+                                </div>
+                                <div class="props-list" id="publicPropsList">
+                                    <div class="prop-item">
+                                        <span class="prop-key">maxPlayers</span>
+                                        <span class="prop-value">8</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-props-section" data-tutorial="protected-props">
+                                <div class="space-props-header">
+                                    <h3>Protected Properties</h3>
+                                    <span class="props-count" id="protectedPropsCount">1</span>
+                                </div>
+                                <div class="props-list" id="protectedPropsList">
+                                    <div class="prop-item">
+                                        <span class="prop-key">adminMode</span>
+                                        <span class="prop-value">true</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lifecycle Panel -->
+                    <div class="lifecycle-panel" data-tutorial="lifecycle-panel">
+                        <div class="panel-header" data-tutorial="lifecycle-header">
+                            <span>Lifecycle</span>
+                            <div class="lifecycle-buttons">
+                                <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel">🔄</button>
+                            </div>
+                        </div>
+                        
+                        <div class="lifecycle-content">
+                            <div class="lifecycle-list" id="lifecycleList" data-tutorial="lifecycle-list">
+                                <div class="lifecycle-item">
+                                    <span class="lifecycle-name">PlayerController.js</span>
+                                    <span class="lifecycle-status">Running</span>
+                                </div>
+                            </div>
+                            
+                            <div class="lifecycle-console-container" data-tutorial="console-container">
+                                <div class="console-header" data-tutorial="console-header">
+                                    <span>Console</span>
+                                    <div class="console-toggles" data-tutorial="console-toggles">
+                                        <button class="console-toggle active" data-toggle="command">Command</button>
+                                        <button class="console-toggle active" data-toggle="script">Scripts</button>
+                                        <button class="console-toggle active" data-toggle="oneShot">OneShot</button>
+                                        <button class="console-toggle active" data-toggle="spaceProps">SpaceProps</button>
+                                        <button class="console-clear-button" id="clearConsoleBtn">🗑️</button>
+                                    </div>
+                                </div>
+                                <div class="lifecycle-console" id="lifecycleConsole" data-tutorial="console-output"></div>
+                                <input class="command-console-input" id="commandConsoleInput" placeholder="> cmd">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Page -->
+        <div class="page" id="inventory-page">
+            <div class="inventory-layout">
+                <div class="inventory-container">
+                    <!-- Inventory content will go here -->
+                </div>
+                <div class="inventory-preview-pane" id="previewPane" style="display: none;">
+                    <!-- Preview content will go here -->
+                </div>
+            </div>
+        </div>
+
+        <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
+            <option value="stable">Stable</option>
+            <option value="ngrok">Ngrok</option>
+            <option value="local">Local</option>
+        </select>
+    </div>
+
+     <!-- Feedback Page -->
+     <div class="page" id="feedback-page">
+        <div class="feedback-split-layout">
+            <!-- Left Side - Feedback Form -->
+            <div class="feedback-left-panel">
+                <div class="feedback-container">
+                    <div class="feedback-header">
+                        <h2>Help Improve the Inspector</h2>
+                        <p>Your feedback helps us make the inspector better for everyone</p>
+                    </div>
+                    
+                    <div class="feedback-form">
+                        <div class="feedback-section">
+                            <label class="feedback-label">What would you like to share?</label>
+                            <div class="feedback-type-selector">
+                                <button class="feedback-type-btn active" data-type="feature">
+                                    <span class="feedback-type-icon">✨</span>
+                                    Feature
+                                </button>
+                                <button class="feedback-type-btn" data-type="bug">
+                                    <span class="feedback-type-icon">🐛</span>
+                                    Bug 
+                                </button>
+                                <button class="feedback-type-btn" data-type="improvement">
+                                    <span class="feedback-type-icon">💡</span>
+                                    Idea
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-section">
+                            <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
+                            <div class="feedback-input feedback-input-container">
+                                <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
+                                <button id="micButton" class="mic-button" title="Click to record feedback">
+                                    <span class="mic-status"></span>
+                                    <span class="mic-icon">🎤</span>
+                                    <span class="recording-indicator"></span>
+                                </button>
+                            </div>
+                            <div id="speechStatus" class="speech-status" style="display: none;"></div>
+                            
+                            <!-- Block Editor Container -->
+                            <div id="blockEditorContainer" class="block-editor-container" style="display: none;">
+                                <div class="block-editor-header">
+                                    <h3>Refined Feedback</h3>
+                                    <button id="clearDraftBtn" class="clear-draft-btn" title="Clear draft and start over" style="display: none;">
+                                        <span class="btn-icon">🗑️</span>
+                                        Clear Draft
+                                    </button>
+                                </div>
+                                <div class="block-editor-content">
+                                    <div id="blocksList" class="blocks-list">
+                                        <!-- Blocks will be rendered here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-actions">
+                            <button id="submitFeedbackBtn" class="feedback-submit-btn">
+                                <span class="btn-icon">📤</span>
+                                Submit Feedback
+                            </button>
+                            <div id="dualSubmitButtons" class="dual-submit-buttons" style="display: none;">
+                                <button id="submitOriginalBtn" class="feedback-submit-btn submit-original">
+                                    <span class="btn-icon">📄</span>
+                                    Submit Original
+                                </button>
+                                <button id="submitRefinementBtn" class="feedback-submit-btn submit-original">
+                                    <span class="btn-icon">✨</span>
+                                    Submit Refinement
+                                </button>
+                                <button id="fixWithVoice" class="feedback-submit-btn submit-original">
+                                    <span class="btn-icon">🎤</span>
+                                    Fix with Voice
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>
+                    </div>
+                    
+                    <div class="feedback-footer">
+                        <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Side - Tickets List -->
+            <div class="feedback-right-panel">
+                <div class="tickets-container">
+                    <div class="tickets-header">
+                        <h2>Active Tickets</h2>
+                        <button id="refreshTicketsBtn" class="refresh-tickets-btn" title="Refresh tickets">
+                            <span class="btn-icon">🔄</span>
+                        </button>
+                    </div>
+                    
+                    <div class="tickets-filters">
+                        <select id="ticketFilterType" class="ticket-filter">
+                            <option value="all">All Types</option>
+                            <option value="feature">Features</option>
+                            <option value="bug">Bugs</option>
+                            <option value="improvement">Improvements</option>
+                        </select>
+                        <select id="ticketFilterStatus" class="ticket-filter">
+                            <option value="all">All Status</option>
+                            <option value="open">Open</option>
+                            <option value="qa">QA</option>                                
+                            <option value="postponed">Postponed</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                    </div>
+                    
+                    <div id="ticketsList" class="tickets-list">
+                        <div class="loading-tickets">Loading tickets...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ticket Detail Modal -->
+        <div id="ticketDetailModal" class="ticket-detail-modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modalTicketId"></h3>
+                    <button class="modal-close" onclick="closeTicketModal()">×</button>
+                </div>
+                <div id="modalTicketContent" class="modal-body"></div>
+            </div>
+        </div>
+        
+        <!-- Ticket Edit Modal -->
+        <div id="ticketEditModal" class="ticket-edit-modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Edit Feedback</h3>
+                    <button class="modal-close" onclick="feedback.closeEditModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="edit-form-group">
+                        <label for="ticketEditContent">Feedback Details:</label>
+                        <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="modal-save-btn" onclick="feedback.saveTicketEdit()">Save Changes</button>
+                        <button class="modal-cancel-btn" onclick="feedback.closeEditModal()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+            <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
+            <option value="stable">Stable</option>
+            <option value="ngrok">Ngrok</option>
+            <option value="local">Local</option>
+        </select>
+            </div> <!-- End Page Container -->
+        </div> <!-- End Inspector UI Container -->
+
+        <!-- Tutorial Side Panel -->
+    <div class="tutorial-side-panel">
+        <div class="tutorial-panel-header">
+            <h2>Interactive Tutorial</h2>
+            <!-- <button class="tutorial-toggle-btn" id="toggleTutorial" title="Toggle Tutorial Mode">
+                <span class="toggle-icon">👁️</span>
+            </button> -->
+        </div>
+        
+        <!-- Tutorial Progress -->
+        <div class="tutorial-progress-section">
+            <h3>Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <span class="progress-text">Hover over elements to explore</span>
+        </div>
+        
+        <!-- Tooltip Container -->
+        <div class="tutorial-tooltip-section">
+            <h3>Current Element</h3>
+            <div id="tooltip" class="tutorial-tooltip-content">
+                <div class="tooltip-empty">
+                    <p>Hover over any element in the inspector to learn about it</p>
+                </div>
+                <div class="tooltip-content" style="display: none;">
+                    <h3 class="tooltip-title"></h3>
+                    <p class="tooltip-description"></p>
+                    <div class="tooltip-tips"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tutorial Controls -->
+        <div class="tutorial-controls">
+            <button class="tutorial-control-btn" onclick="resetProgress()">
+                Reset Progress
+            </button>
+            <div class="tutorial-hint">
+                Press <kbd>F1</kbd> to toggle tutorial mode
+            </div>
+        </div>
+    </div> <!-- End Tutorial Side Panel -->
+</div> <!-- End Split Container -->
+
+    <script src="tutorial.js"></script>
+</body>
+</html>

@@ -38,7 +38,6 @@ If the BS library integration doesn't work, you may need to:
    - Dynamic object creation/destruction
    - Network-synced objects
 
-The inspector will fall back to mock data if it cannot connect to Unity.
 -->
 <html lang="en" android-bundle windows-bundle>
 <head>
@@ -616,7 +615,11 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 </div>
             </div>
         </div>
-        <div class="file-server" id="fileServer" onclick="SM.toggleFileServer()">File Server</div>
+        <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
+            <option value="stable">Stable</option>
+            <option value="ngrok">Ngrok</option>
+            <option value="local">Local</option>
+        </select>
     </div> <!-- End Page Container -->
 
     <!-- Load JavaScript modules -->

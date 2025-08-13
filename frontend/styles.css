@@ -3758,9 +3758,19 @@ body {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    padding: 10px;
-    color: #534b71;
+    padding: 8px 12px;
+    background: #242424;
+    border: 1px solid #3a3a3a;
+    border-radius: 6px;
+    color: #e8e8e8;
     cursor: pointer;
+    font-size: 14px;
+    min-width: 120px;
+}
+
+.file-server:focus {
+    outline: none;
+    border-color: #00d4ff;
 }
 
 /* Split Layout Styles */
