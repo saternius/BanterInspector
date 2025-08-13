@@ -8,7 +8,7 @@
     console.log(window.repoUrl)
     
     // Import and show loading screen first
-    const { loadingScreen } = await import(`${window.repoUrl}/loading-screen.js`);
+    const { loadingScreen } = await import(`${window.repoUrl}/pages/world-inspector/loading-screen.js`);
     window.loadingScreen = loadingScreen; // Make globally accessible
     loadingScreen.show();
     loadingScreen.updateStage('banterScene', 100, 'BS Library loaded');
@@ -31,29 +31,27 @@
     updateModuleProgress("scene-manager");
     const  { networking } = await import(`${window.repoUrl}/networking.js`);
     updateModuleProgress("networking");
-    const  { HierarchyPanel } = await import(`${window.repoUrl}/hierarchy-panel.js`);
+    const  { HierarchyPanel } = await import(`${window.repoUrl}/pages/world-inspector/hierarchy-panel.js`);
     updateModuleProgress("hierarchy-panel");
-    const  { PropertiesPanel } = await import(`${window.repoUrl}/properties-panel.js`);
+    const  { PropertiesPanel } = await import(`${window.repoUrl}/pages/world-inspector/properties-panel.js`);
     updateModuleProgress("properties-panel");
-    const  { SpacePropsPanel } = await import(`${window.repoUrl}/space-props-panel.js`);
+    const  { SpacePropsPanel } = await import(`${window.repoUrl}/pages/world-inspector/space-props-panel.js`);
     updateModuleProgress("space-props-panel");
-    const  { ComponentMenu } = await import(`${window.repoUrl}/component-menu.js`);
+    const  { ComponentMenu } = await import(`${window.repoUrl}/pages/world-inspector/component-menu.js`);
     updateModuleProgress("component-menu");
-    const  { loadMockSpaceProps } = await import(`${window.repoUrl}/mock-data.js`);
-    updateModuleProgress("mock-data");
     const  { Navigation } = await import(`${window.repoUrl}/navigation.js`);
     updateModuleProgress("navigation");
-    const  { Inventory } = await import(`${window.repoUrl}/inventory.js`);
+    const  { Inventory } = await import(`${window.repoUrl}/pages/inventory/inventory.js`);
     updateModuleProgress("inventory");
-    const  { ScriptEditor } = await import(`${window.repoUrl}/script-editor.js`);
+    const  { ScriptEditor } = await import(`${window.repoUrl}/pages/script-editor/script-editor.js`);
     updateModuleProgress("script-editor");
     const  { lifecycleManager } = await import(`${window.repoUrl}/lifecycle-manager.js`);
     updateModuleProgress("lifecycle-manager");
     const  { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     updateModuleProgress("change-manager");
-    const  { LifecyclePanel } = await import(`${window.repoUrl}/lifecycle-panel.js`);
+    const  { LifecyclePanel } = await import(`${window.repoUrl}/pages/world-inspector/lifecycle-panel.js`);
     updateModuleProgress("lifecycle-panel");
-    const  { Feedback } = await import(`${window.repoUrl}/feedback.js`);
+    const  { Feedback } = await import(`${window.repoUrl}/pages/feedback/feedback.js`);
     updateModuleProgress("feedback");
 
     // Global app instance
