@@ -1,5 +1,4 @@
-import { StatementBlockEditor } from './statement-block-editor.js';
-
+const { StatementBlockEditor } = await import(`${window.repoUrl}/pages/feedback/statement-block-editor.js`);
 export class Feedback {
     constructor() {
         this.selectedType = 'feature';

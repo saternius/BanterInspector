@@ -181,7 +181,6 @@ this.onHierarchyProgress = (current, total) => {
 - Clear error message
 - Suggested actions
 - Option to view detailed error log
-- Fallback to mock data option
 
 ## Implementation Steps
 
