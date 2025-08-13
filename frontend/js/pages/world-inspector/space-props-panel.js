@@ -102,6 +102,7 @@
             keyElement.className = 'prop-key';
             keyElement.textContent = key;
             keyElement.title = key;
+            keyElement.style.marginLeft = "14px";
             
             const valueContainer = document.createElement('div');
             valueContainer.className = 'prop-value';
