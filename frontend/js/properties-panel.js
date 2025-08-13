@@ -8,7 +8,7 @@
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
     const { deepClone } = await import(`${window.repoUrl}/utils.js`);
-    const { BanterLayers } = await import(`${window.repoUrl}/components/index.js`);
+    const { BanterLayers } = await import(`${window.repoUrl}/entity-components/index.js`);
 
     export class PropertiesPanel {
         constructor() {

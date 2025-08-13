@@ -77,7 +77,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/docs/components/',
+          to: '/docs/entity-components/',
           label: 'Components',
           position: 'left',
         },

@@ -3,7 +3,7 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-const { Entity, componentTypeMap } = await import(`${window.repoUrl}/components/index.js`);
+const { Entity, componentTypeMap } = await import(`${window.repoUrl}/entity-components/index.js`);
 
 export async function loadMockEntityData() {
     // Create mock entity data using the new Entity classes

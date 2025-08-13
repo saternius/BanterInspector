@@ -122,4 +122,4 @@ Try these enhancements:
 Ready for more? Check out:
 - [More Examples](/docs/examples/) - Complete project examples
 - [Scripting Guide](/docs/scripting/) - Deep dive into scripting
-- [Component Reference](/docs/components/) - All available components
+- [Component Reference](/docs/entity-components/) - All available components

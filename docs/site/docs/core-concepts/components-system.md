@@ -339,4 +339,4 @@ component.metadata = {
 Continue learning with:
 - [BanterScript Bridge](./banterscript-bridge) - How components connect to Unity
 - [Change Management](./change-management) - Tracking component modifications
-- [Component Reference](/docs/components/) - Detailed component documentation
+- [Component Reference](/docs/entity-components/) - Detailed component documentation

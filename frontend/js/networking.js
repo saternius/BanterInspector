@@ -244,7 +244,7 @@ export class Networking {
         }
 
         if(data.startsWith("update_entity")){ //`update_entity:${this.id}:${property}:${value}`;
-            let str = data.slice(12)
+            let str = data.slice(14)
             let nxtColon = str.indexOf(":")
             let entityId = str.slice(0, nxtColon)
             str = str.slice(nxtColon+1)
@@ -316,7 +316,7 @@ export class Networking {
         }
        
         if(data.startsWith("load_entity")){
-            let [parentId, entity_data] = data.slice(10).split("|");
+            let [parentId, entity_data] = data.slice(12).split("|");
             await SM._loadEntity(JSON.parse(entity_data), parentId);
             await SM.updateHierarchy(this.selectedEntity);
         }
@@ -340,13 +340,13 @@ export class Networking {
         }
 
         if(data.startsWith("entity_added")){
-            let [parentId, entityName] = data.slice(11).split(":");
+            let [parentId, entityName] = data.slice(13).split(":");
             await SM._addNewEntity(entityName, parentId);
             await SM.updateHierarchy(SM.selectedEntity);
         }
 
         if(data.startsWith("entity_removed")){
-            let entityId = data.slice(13);
+            let entityId = data.slice(15);
             let entity = SM.getEntityById(entityId);
             if(entity){
                 await entity._destroy();
@@ -355,7 +355,7 @@ export class Networking {
         }
 
         if(data.startsWith("entity_moved")){
-            let [entityId, newParentId, newSiblingIndex] = data.slice(11).split(":");
+            let [entityId, newParentId, newSiblingIndex] = data.slice(13).split(":");
             //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
             const entity = SM.getEntityById(entityId);
             if (!entity) return;
