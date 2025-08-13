@@ -7,7 +7,7 @@ console.log("It is 3:00")
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
     const { loadMockEntityData } = await import(`${window.repoUrl}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/components/index.js`);
+    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
 
     export class SceneManager {
         constructor() {

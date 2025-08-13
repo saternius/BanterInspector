@@ -58,14 +58,14 @@ There will eventually be agentic integration into the inspector, so as such ever
 
 When an action is generated that has effects that should be synced across clients, the change class would trigger a OneShot broadcast call that will send to all clients.
 networking.js is responsible for broadcasting events, and recieving/routing incoming broadcasts.
-To abstract this complexity, capitalized methods in components/slots/etc ex: .Set() are to be the intiative method ( the method that initiates the actions ), while _ methods ex: ._set() are to be executive method ( the method that actually performs the operation post sync )
+To abstract this complexity, capitalized methods in components,entites,etc ex: .Set() are to be the intiative method ( the method that initiates the actions ), while _ methods ex: ._set() are to be executive method ( the method that actually performs the operation post sync )
 
 
 ### Component System
-Components are defined in `frontend/js/components/` with a common structure:
+Components are defined in `frontend/js/entity-components/` with a common structure:
 - Export a component definition object with `properties`, and optional `handlers`
 - Properties define type, default values, and constraints
-- Register in `frontend/js/components/index.js`
+- Register in `frontend/js/entity-components/index.js`
 
 
 ### Undo/Redo System
@@ -73,7 +73,7 @@ Components are defined in `frontend/js/components/` with a common structure:
 The ChangeManager tracks all modifications:
 - Property changes
 - Component additions/removals
-- GameObject (slot) operations
+- GameObject (entity) operations
 
 ## Critical Considerations
 
@@ -88,7 +88,7 @@ The ChangeManager tracks all modifications:
 
 #### Inventory System (`frontend/js/inventory.js`)
 The inventory provides persistent storage using localStorage for:
-- **Slots**: GameObject hierarchies exported from Unity scenes
+- **Entity**: GameObject hierarchies exported from Unity scenes
 - **Scripts**: JavaScript files for use with MonoBehavior components
 
 Key features:
@@ -114,12 +114,12 @@ Full-featured code editor using CodeMirror v5.65.13:
 - Integration with MonoBehavior components
 - Modified indicator for unsaved changes
 
-#### MonoBehavior Component (`frontend/js/components/monobehavior.js`)
+#### MonoBehavior Component (`frontend/js/entity-components/monobehavior.js`)
 BanterScript runtime component that:
 - Loads scripts from inventory by filename
 - Provides lifecycle methods: `onStart()`, `onUpdate()`, `onDestroy()`
 - Supports custom variables (`vars`) with type definitions
-- Script context includes references to `_slot`, `_scene`, `_BS`, and `_component`
+- Script context includes references to `_entity`, `_scene`, `_BS`, and `_component`
 - Hot-reload support via refresh functionality
 
 #### Feedback System (`frontend/js/feedback.js`)

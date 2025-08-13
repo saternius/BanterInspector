@@ -258,12 +258,12 @@ Congratulations! 🎉 You've just created your first interactive VR object. Here
 
 ### Beginner Tutorials
 - [**Hello VR World**](/docs/tutorials/hello-vr-world) - Create a welcome sign with text
-- [**Component Reference**](/docs/components/) - Explore all available components
+- [**Component Reference**](/docs/entity-components/) - Explore all available components
 - [**Example Projects**](/docs/examples/) - Learn from complete examples
 
 ### Learn More
 - [**Core Concepts**](/docs/core-concepts/) - Understand the fundamentals
-- [**Component Reference**](/docs/components/) - Explore all available components
+- [**Component Reference**](/docs/entity-components/) - Explore all available components
 - [**Scripting Guide**](/docs/scripting/) - Deep dive into MonoBehavior scripting
 
 ### Get Help

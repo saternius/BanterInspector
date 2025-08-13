@@ -6,7 +6,7 @@
 
 const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
 const { ComponentAddChange } = await import(`${window.repoUrl}/change-types.js`);
-const { componentBundleMap } = await import( `${window.repoUrl}/components/index.js`);
+const { componentBundleMap } = await import( `${window.repoUrl}/entity-components/index.js`);
 
 export class ComponentMenu {
     constructor() {

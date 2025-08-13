@@ -442,4 +442,4 @@ Save your completed button:
 Ready for more? Try:
 - [Rotating Gallery](./rotating-gallery) - Multiple synchronized objects
 - [Spawn System](/docs/examples/) - Dynamic object creation
-- [Component Reference](/docs/components/) - Explore all components
+- [Component Reference](/docs/entity-components/) - Explore all components
