@@ -1,4 +1,4 @@
-const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveSlotItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
+const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
 export class Inventory {
     constructor() {
         this.container = document.getElementById('inventory-page');
@@ -41,8 +41,8 @@ export class Inventory {
                 e.preventDefault();
                 this.container.classList.remove('drag-over');
                 
-                const slotId = e.dataTransfer.getData('text/plain');
-                let change = new SaveSlotItemChange(slotId, null, null, {source: 'ui'});
+                const entityId = e.dataTransfer.getData('text/plain');
+                let change = new SaveEntityItemChange(entityId, null, null, {source: 'ui'});
                 changeManager.applyChange(change);
    
             }
@@ -197,7 +197,7 @@ export class Inventory {
                 <div class="inventory-empty">
                     <div class="empty-icon">📦</div>
                     <h3>Your inventory is empty</h3>
-                    <p>Drag slots from the World Inspector or upload files to save them here</p>
+                    <p>Drag entities from the World Inspector or upload files to save them here</p>
                 </div>
             `;
             
@@ -360,7 +360,7 @@ export class Inventory {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
-                this.loadSlotToSceneByName(itemName);
+                this.loadEntityToSceneByName(itemName);
             });
         });
         
@@ -673,7 +673,7 @@ export class Inventory {
         const componentCount = item.data.components ? item.data.components.length : 0;
         const childCount = item.data.children ? item.data.children.length : 0;
         const dateStr = new Date(item.created).toLocaleDateString();
-        const itemType = item.itemType || 'slot'; // Default to 'slot' for backward compatibility
+        const itemType = item.itemType || 'entity'; // Default to 'entity' for backward compatibility
         const itemIcon = itemType === 'script' ? '📜' : '📦';
         const isSelected = this.selectedItem === key;
         
@@ -873,8 +873,8 @@ export class Inventory {
         try {
             const jsonData = JSON.parse(content);
             
-            // Check if it's a slot inventory item format
-            if (this.isInventorySlotFormat(jsonData)) {
+            // Check if it's a entity inventory item format
+            if (this.isInventoryEntityFormat(jsonData)) {
                 const itemName = jsonData.name;
                 const existingKeys = Object.keys(this.items);
                 
@@ -895,7 +895,7 @@ export class Inventory {
                 // No conflict, save directly
                 this.saveInventoryItem(itemName, jsonData);
             } else {
-                this.showNotification('The JSON file is not in the correct inventory slot format');
+                this.showNotification('The JSON file is not in the correct inventory entity format');
             }
         } catch (error) {
             this.showNotification('Invalid JSON file');
@@ -903,9 +903,9 @@ export class Inventory {
     }
     
     /**
-     * Check if JSON data is in inventory slot format
+     * Check if JSON data is in inventory entity format
      */
-    isInventorySlotFormat(data) {
+    isInventoryEntityFormat(data) {
         return data && 
                typeof data === 'object' &&
                'author' in data &&
@@ -1064,7 +1064,7 @@ export class Inventory {
      */
     generatePreviewContent(item) {
         const dateStr = new Date(item.created).toLocaleString();
-        const itemType = item.itemType || 'slot';
+        const itemType = item.itemType || 'entity';
         const description = item.description || '';
         
         if (itemType === 'script') {
@@ -1102,8 +1102,8 @@ export class Inventory {
                 </div>
             `;
         } else {
-            // Slot preview - show full JSON
-            const slot = item.data;
+            // Entity preview - show full JSON
+            const entity = item.data;
             
             return `
                 <div class="preview-header">
@@ -1113,7 +1113,7 @@ export class Inventory {
                 <div class="preview-meta">
                     <div class="meta-item">
                         <span class="meta-label">Type:</span>
-                        <span class="meta-value">Slot</span>
+                        <span class="meta-value">Entity</span>
                     </div>
                     <div class="meta-item">
                         <span class="meta-label">Author:</span>
@@ -1129,9 +1129,9 @@ export class Inventory {
                     <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
                 </div>
                 <div class="preview-content">
-                    <h3>Slot Data</h3>
+                    <h3>Entity Data</h3>
                     <div class="json-viewer">
-                        ${this.renderJsonTree(slot, 'slot-data')}
+                        ${this.renderJsonTree(entity, 'entity-data')}
                     </div>
                 </div>
             `;
@@ -1239,13 +1239,13 @@ export class Inventory {
     }
     
     /**
-     * Load slot to scene by name
+     * Load entity to scene by name
      */
-    async loadSlotToSceneByName(itemName) {
+    async loadEntityToSceneByName(itemName) {
         // Update last_used timestamp
         this.updateLastUsed(itemName);
         
-        let change = new LoadItemChange(itemName, SM.selectedSlot, null, {source: 'ui'})
+        let change = new LoadItemChange(itemName, SM.selectedEntity, null, {source: 'ui'})
         await changeManager.applyChange(change);
         this.showNotification(`Adding "${itemName}" to scene..`);
     }
@@ -1286,9 +1286,9 @@ export class Inventory {
         const item = this.items[oldName];
         if (!item) return;
         
-        // Show warning about broken references for slots
-        const warningMessage = item.itemType === 'slot' 
-            ? `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may break existing references in scripts or other slots that depend on this name.<br><br>Any code using <code>SM.findSlotByName("${oldName}")</code> or similar references will need to be updated.<br><br>Do you want to continue?`
+        // Show warning about broken references for entities
+        const warningMessage = item.itemType === 'entity' 
+            ? `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may break existing references in scripts or other entities that depend on this name.<br><br>Any code using <code>SM.findEntityByName("${oldName}")</code> or similar references will need to be updated.<br><br>Do you want to continue?`
             : `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may affect other items that reference this script.<br><br>Do you want to continue?`;
         
         this.showRenameWarningModal(

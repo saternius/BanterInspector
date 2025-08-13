@@ -12,8 +12,8 @@ Implement a loading screen that displays during the Unity Scene Inspector initia
 4. **Scene Connection** - Establishing connection with Unity scene via BS.BanterScene
 5. **Component Registration** - Loading and registering all component definitions
 6. **Scene Hierarchy Gathering** - Fetching full GameObject hierarchy from Unity
-7. **Slot Generation** - Creating slot instances for each GameObject
-8. **Component Processing** - Processing all components for each slot
+7. **Entity Generation** - Creating entity instances for each GameObject
+8. **Component Processing** - Processing all components for each entity
 9. **UI Panel Initialization** - Creating all UI panel instances
 10. **Event Handler Setup** - Wiring up all event listeners
 11. **Initial Render** - First render of hierarchy and properties panels
@@ -51,7 +51,7 @@ export class LoadingScreen {
             { id: 'scene-connect', label: 'Connecting to Unity scene...', weight: 10 },
             { id: 'components', label: 'Registering components...', weight: 10 },
             { id: 'hierarchy', label: 'Gathering scene hierarchy...', weight: 15 },
-            { id: 'slots', label: 'Generating slots...', weight: 15 },
+            { id: 'entities', label: 'Generating entities...', weight: 15 },
             { id: 'ui-panels', label: 'Initializing UI panels...', weight: 10 },
             { id: 'events', label: 'Setting up event handlers...', weight: 5 },
             { id: 'render', label: 'Rendering interface...', weight: 5 }
@@ -142,7 +142,7 @@ export class LoadingScreen {
 
 ### 2. Modify `scene-manager.js`
 - Add progress callbacks during `gatherSceneHierarchy()`
-- Report slot generation progress
+- Report entity generation progress
 - Update during component processing
 
 ### 3. Add Progress Hooks
@@ -166,7 +166,7 @@ this.onHierarchyProgress = (current, total) => {
 
 ### Progress Reporting
 - Module loading: Track imported modules (1-22)
-- Hierarchy: Report slots processed vs total
+- Hierarchy: Report entities processed vs total
 - Components: Track components registered
 - BS Library: Use timeout with retry indication
 

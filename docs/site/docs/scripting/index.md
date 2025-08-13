@@ -29,7 +29,7 @@ this.vars = {
 // Called when script starts
 this.onStart = () => {
     console.log("Script started!");
-    this.transform = this._slot.getTransform();
+    this.transform = this._entity.getTransform();
 }
 
 // Called every frame
@@ -57,7 +57,7 @@ Called when the script is removed. Use for cleanup.
 ## Available Objects
 
 Your scripts have access to:
-- `this._slot` - The GameObject this script is attached to
+- `this._entity` - The GameObject this script is attached to
 - `this._scene` - The current scene
 - `this._BS` - The BanterScript library
 - `this._component` - The MonoBehavior component itself
@@ -79,12 +79,12 @@ this.transform.Multiply("localScale", {x: 1.1, y: 1.1, z: 1.1});
 ### Event Handling
 ```javascript
 // Click events
-this._slot._bs.On("click", () => {
+this._entity._bs.On("click", () => {
     console.log("Clicked!");
 });
 
 // Collision events
-this._slot._bs.On("trigger-enter", (other) => {
+this._entity._bs.On("trigger-enter", (other) => {
     console.log("Collided with:", other);
 });
 ```

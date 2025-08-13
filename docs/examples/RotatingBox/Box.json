@@ -2,7 +2,7 @@
   "author": "Primary Acrimonious",
   "name": "Box",
   "created": 1753269153735,
-  "itemType": "slot",
+  "itemType": "entity",
   "data": {
     "name": "Box_50888",
     "parentId": "Root",

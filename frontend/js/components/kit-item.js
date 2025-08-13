@@ -1,7 +1,7 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterKitItemComponent extends SlotComponent {
+export class BanterKitItemComponent extends EntityComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterKitItem;

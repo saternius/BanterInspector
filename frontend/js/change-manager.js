@@ -258,12 +258,12 @@ class ChangeManager {
     }
 
 
-    gatherHistory(slot){
-        let get_ids = (slot)=>{
-            let ids = new Array(...slot.identifiers)
-            let component_ids = slot.components.map(x=>x.id)
+    gatherHistory(entity){
+        let get_ids = (entity)=>{
+            let ids = new Array(...entity.identifiers)
+            let component_ids = entity.components.map(x=>x.id)
             ids = ids.concat(component_ids)
-            slot.children.forEach((c)=>{
+            entity.children.forEach((c)=>{
                 let children_ids = get_ids(c)
                 ids = ids.concat(children_ids)
             })
@@ -279,12 +279,12 @@ class ChangeManager {
             });
         }
     
-        let relevant = new Set(get_ids(slot))
+        let relevant = new Set(get_ids(entity))
         console.log("Relevant: ", relevant)
         let history = []
         this.undoStack.map(u=>u.change.cmd()).forEach(command=>{
-            if(command.action === "add_slot"){
-                let mergeId = command.parentId+"/"+command.slotName
+            if(command.action === "add_entity"){
+                let mergeId = command.parentId+"/"+command.entityName
                 if(relevant.has(mergeId)){
                     history.push(command)
                 }

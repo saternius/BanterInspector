@@ -1,7 +1,7 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterAttachedObjectComponent extends SlotComponent {
+export class BanterAttachedObjectComponent extends EntityComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterAttachedObject;
@@ -73,7 +73,7 @@ export class BanterAttachedObjectComponent extends SlotComponent {
 
         if(property === "uid" && value === "" && this.properties.uid !== ""){
             console.log("Detaching Object", this.properties)
-            SM.scene.LegacyAttachObject(this._slot._bs, null, null);
+            SM.scene.LegacyAttachObject(this._entity._bs, null, null);
         }
 
         this.properties[property] = value;
@@ -104,8 +104,8 @@ export class BanterAttachedObjectComponent extends SlotComponent {
         }
         
         if(this.properties.uid){
-            console.log("Attaching Object", this._slot._bs, this.properties.uid, this.properties.attachmentPoint)
-            SM.scene.LegacyAttachObject(this._slot._bs, this.properties.uid, this.properties.attachmentPoint);
+            console.log("Attaching Object", this._entity._bs, this.properties.uid, this.properties.attachmentPoint)
+            SM.scene.LegacyAttachObject(this._entity._bs, this.properties.uid, this.properties.attachmentPoint);
         }
     }
 }

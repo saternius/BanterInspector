@@ -1,5 +1,5 @@
 this.default = {
-    "slotRef": {
+    "entityRef": {
         "type": "string",
         "value": ""
     }
@@ -18,38 +18,38 @@ let v = (str)=>{
 }
 
 let loadItem = async (itemRef, target) =>{
-    if(target === "_self") target = this._slot.id
+    if(target === "_self") target = this._entity.id
     if(target === undefined) target = "Root"
     return await LoadItem(itemRef, target)
 }
 
-let deleteSlot = async (slot) =>{ 
-    if(typeof(slot) === "object"){
-        if(!slot.id){
-            console.log("ERROR: no slot id found in ", slot)
+let deleteEntity = async (entity) =>{ 
+    if(typeof(entity) === "object"){
+        if(!entity.id){
+            console.log("ERROR: no entity id found in ", entity)
             return
         }
-        slot = slot.id
+        entity = entity.id
     }
-    RemoveSlot(slot)
+    RemoveEntity(entity)
 }
 
-let getSlotByName = (slotName) =>{
-    return SM.getAllSlots().find(x=>x.name === slotName)
+let getEntityByName = (entityName) =>{
+    return SM.getAllEntities().find(x=>x.name === entityName)
 }
 
 let spawner_active = false
 function handleKey(e){
     if(e.code === "Numpad9"){
         console.log(e)
-        let boxYard = getSlotByName("BoxSpawner")
-        boxYard.children.forEach(slot=>{
-            deleteSlot(slot)
+        let boxYard = getEntityByName("BoxSpawner")
+        boxYard.children.forEach(entity=>{
+            deleteEntity(entity)
         })
     }
     if(e.code === "Numpad7"){
         spawner_active = !spawner_active
-        let box = getSlotByName("Box")
+        let box = getEntityByName("Box")
         let mat_id = box.getComponent("BanterMaterial").id
         let target_color = (spawner_active) ? {r:1,g:0,b:0,a:1}:{r:1,g:1,b:1,a:1}
         SetComponentProp(mat_id, "color", target_color)
@@ -64,7 +64,7 @@ this.onStart = ()=>{
     document.addEventListener("keydown", handleKey)
     this.spawnerTimeout = setInterval(async ()=>{
         if(!spawner_active) return;
-        let name = v('slotRef')
+        let name = v('entityRef')
         console.log(`Spawning [${name}]`)
         let item = await loadItem(name, "_self")
         if(!item){

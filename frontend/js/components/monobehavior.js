@@ -1,15 +1,15 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class MonoBehaviorComponent extends SlotComponent {
+export class MonoBehaviorComponent extends EntityComponent {
     constructor(){
         super();
         this.bsRef = null;
         
     }
 
-    async init(slot, sceneComponent, properties){
-        await super.init(slot, sceneComponent, properties);
+    async init(entity, sceneComponent, properties){
+        await super.init(entity, sceneComponent, properties);
         this.scriptInstance = null;
         this.ctx = this.newScriptContext();
         this.scriptFunction = null;
@@ -58,7 +58,7 @@ export class MonoBehaviorComponent extends SlotComponent {
 
     async _loadScript(fileName) {        
         if(this.properties._owner !== SM.myName()) return;
-        if(!this._slot.active) return;
+        if(!this._entity.active) return;
         const inventoryItem = window.inventory?.items?.[fileName];
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
             console.error(`Script "${fileName}" not found in inventory`);
@@ -125,7 +125,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     _start(){
         if(this.properties._owner !== SM.myName()) return;
         if(this.ctx._running) return;
-        if(!this._slot.active) return;
+        if(!this._entity.active) return;
         this.ctx._running = true;
         this.ctx.onStart();
         let message = `update_monobehavior:${this.id}:_running:true`;
@@ -136,7 +136,7 @@ export class MonoBehaviorComponent extends SlotComponent {
     _stop(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
-        if(!this._slot.active) return;
+        if(!this._entity.active) return;
         this.ctx._running = false;
         this.ctx.onDestroy();
         let message = `update_monobehavior:${this.id}:_running:false`;
@@ -147,13 +147,13 @@ export class MonoBehaviorComponent extends SlotComponent {
     _update(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
-        if(!this._slot.active) return;
+        if(!this._entity.active) return;
         this.ctx.onUpdate();
     }
 
     _refresh(){
         if(this.properties._owner !== SM.myName()) return;
-        if(!this._slot.active) return;
+        if(!this._entity.active) return;
         console.log("refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){
             this.ctx._running = false;
@@ -201,7 +201,7 @@ export class MonoBehaviorComponent extends SlotComponent {
             keyUp: ()=>{},
             keyPress: ()=>{},
             log: (...args)=>{ console.log(...args)},
-            _slot: this._slot, // Reference to the slot
+            _entity: this._entity, // Reference to the entity
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
             _component: this

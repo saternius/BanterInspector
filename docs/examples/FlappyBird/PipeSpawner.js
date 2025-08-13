@@ -6,24 +6,24 @@ let v = (str)=>{
 }
 
 let loadItem = async (itemRef, target) =>{
-    if(target === "_self") target = this._slot.id
+    if(target === "_self") target = this._entity.id
     if(target === undefined) target = "Root"
     return await LoadItem(itemRef, target)
 }
 
-let deleteSlot = async (slot) =>{ 
-    if(typeof(slot) === "object"){
-        if(!slot.id){
-            console.log("ERROR: no slot id found in ", slot)
+let deleteEntity = async (entity) =>{ 
+    if(typeof(entity) === "object"){
+        if(!entity.id){
+            console.log("ERROR: no entity id found in ", entity)
             return
         }
-        slot = slot.id
+        entity = entity.id
     }
-    RemoveSlot(slot)
+    RemoveEntity(entity)
 }
 
-let getSlotByName = (slotName) =>{
-    return SM.getAllSlots().find(x=>x.name === slotName)
+let getEntityByName = (entityName) =>{
+    return SM.getAllEntities().find(x=>x.name === entityName)
 }
 
 
@@ -68,7 +68,7 @@ this.start = ()=>{
 
 this.setSpeed = (s)=>{
     this.speed = s;
-    this._slot.children.forEach(child=>{
+    this._entity.children.forEach(child=>{
         if(child._isPipe){
             let mScript = child.getComponent("MonoBehavior").ctx
             console.log(mScript)
@@ -83,10 +83,10 @@ this.stop = ()=>{
 }
 
 this.clear = ()=>{
-    console.log("clearing children", this._slot.children)
-    this._slot.children.forEach(child=>{
+    console.log("clearing children", this._entity.children)
+    this._entity.children.forEach(child=>{
         if(child._isPipe){
-            deleteSlot(child)
+            deleteEntity(child)
         }
     })
 }

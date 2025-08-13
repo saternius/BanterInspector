@@ -9,7 +9,7 @@ Understanding these fundamental concepts will help you use the Wraptor Inspector
 
 ## The Scene Hierarchy
 
-The scene hierarchy represents all GameObjects (called "Slots" in BanterScript) in your VR space. Think of it as a family tree where objects can have parent-child relationships.
+The scene hierarchy represents all GameObjects (called "Entities" in BanterScript) in your VR space. Think of it as a family tree where objects can have parent-child relationships.
 
 <div style={{
   backgroundColor: '#f0f0f0',
@@ -32,7 +32,7 @@ The scene hierarchy represents all GameObjects (called "Slots" in BanterScript) 
 </div>
 
 ### Key Concepts:
-- **GameObjects (Slots)**: Basic building blocks of your scene
+- **GameObjects (Entities)**: Basic building blocks of your scene
 - **Parent-Child Relationships**: Children inherit transforms from parents
 - **Transform Inheritance**: Position, rotation, and scale cascade down
 - **Component System**: Add functionality through components

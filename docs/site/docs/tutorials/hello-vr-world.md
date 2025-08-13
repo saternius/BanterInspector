@@ -93,17 +93,17 @@ Add a simple hover effect:
 ```javascript
 this.onStart = () => {
     this.originalScale = {x: 1, y: 1, z: 1};
-    this.transform = this._slot.getTransform();
+    this.transform = this._entity.getTransform();
     
     // Hover enter - grow
-    this._slot._bs.On("hover-enter", () => {
+    this._entity._bs.On("hover-enter", () => {
         this.transform.Set("localScale", {
             x: 1.1, y: 1.1, z: 1.1
         });
     });
     
     // Hover exit - shrink back
-    this._slot._bs.On("hover-exit", () => {
+    this._entity._bs.On("hover-exit", () => {
         this.transform.Set("localScale", this.originalScale);
     });
 }

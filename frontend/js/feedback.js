@@ -50,7 +50,7 @@ export class Feedback {
     
 
     async get_key(){
-        let key = await fetch(`https://banterbrush.com/something-for-the-time`);
+        let key = await fetch(`${window.repoUrl}/../something-for-the-time`);
         key = await key.text();
         this.key = key;
     }

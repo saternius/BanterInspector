@@ -52,7 +52,7 @@
 
 #### Topics:
 1. **The Scene Hierarchy**
-   - GameObjects (Slots) explained
+   - GameObjects (Entities) explained
    - Parent-child relationships
    - Transform inheritance
    - Best practices for organization

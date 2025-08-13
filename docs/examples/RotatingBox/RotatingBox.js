@@ -13,7 +13,7 @@ this.updateVars = ()=>{
 
 this.onStart = ()=>{
     this.log("[Start]")
-    this.transform = this._slot.getTransform()
+    this.transform = this._entity.getTransform()
     this.updateVars()
 }
 

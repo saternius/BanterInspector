@@ -124,7 +124,7 @@ export class ComponentMenu {
      * Show the component menu
      */
     show() {
-        if (!this.overlay || !SM.selectedSlot) return;
+        if (!this.overlay || !SM.selectedEntity) return;
         
         this.overlay.style.display = 'flex';
         this.searchInput.value = '';
@@ -193,17 +193,17 @@ export class ComponentMenu {
     }
 
     /**
-     * Add component to selected slot
+     * Add component to selected entity
      */
     async addComponent(componentType) {
-        if (!SM.selectedSlot) return;
+        if (!SM.selectedEntity) return;
         
-        const slot = SM.getSelectedSlot();
-        if (!slot) return;
+        const entity = SM.getSelectedEntity();
+        if (!entity) return;
           
         // Create and apply the component add change
         const change = new ComponentAddChange(
-            slot.id, 
+            entity.id, 
             componentType,
             { source: 'ui' }
         );
@@ -215,7 +215,7 @@ export class ComponentMenu {
 
         // Hide menu and refresh UI
         this.hide();
-        SM.selectSlot(slot.id);
+        SM.selectEntity(entity.id);
     }
 
     async handleComponentBundles(componentType){

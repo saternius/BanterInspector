@@ -34,7 +34,7 @@ function safeParse(value) {
 
 let renderProps = ()=>{
     if(navigation.currentPage !== "world-inspector") return;
-    inspector.propertiesPanel.render(SM.selectedSlot)
+    inspector.propertiesPanel.render(SM.selectedEntity)
 }
 
 
@@ -231,10 +231,10 @@ export class Networking {
             let eventData = data.slice(20); // Remove "component_reordered:" prefix
             try {
                 let event = JSON.parse(eventData);
-                let slot = SM.getSlotById(event.slotId);
-                if(slot){
-                    slot.reorderComponent(event.fromIndex, event.toIndex);
-                    if(SM.selectedSlot === slot.id){
+                let entity = SM.getEntityById(event.entityId);
+                if(entity){
+                    entity.reorderComponent(event.fromIndex, event.toIndex);
+                    if(SM.selectedEntity === entity.id){
                         renderProps();
                     }
                 }
@@ -243,25 +243,25 @@ export class Networking {
             }
         }
 
-        if(data.startsWith("update_slot")){ //`update_slot:${this.id}:${property}:${value}`;
+        if(data.startsWith("update_entity")){ //`update_entity:${this.id}:${property}:${value}`;
             let str = data.slice(12)
             let nxtColon = str.indexOf(":")
-            let slotId = str.slice(0, nxtColon)
+            let entityId = str.slice(0, nxtColon)
             str = str.slice(nxtColon+1)
             nxtColon = str.indexOf(":")
             let prop = str.slice(0, nxtColon)
             str = str.slice(nxtColon+1)
             nxtColon = str.indexOf(":")
             let value = str.slice(nxtColon+1)
-            let slot = SM.getSlotById(slotId);
-            if(slot){
-                await slot._set(prop, safeParse(value));
+            let entity = SM.getEntityById(entityId);
+            if(entity){
+                await entity._set(prop, safeParse(value));
                 inspector.hierarchyPanel.render()
-                if(SM.selectedSlot === slot.id){
+                if(SM.selectedEntity === entity.id){
                     renderProps()
                 }
             }
-            SM.props[`__${slotId}/${prop}:slot`] = value
+            SM.props[`__${entityId}/${prop}:entity`] = value
         }
 
 
@@ -273,17 +273,17 @@ export class Networking {
             nxtColon = str.indexOf(":")
             let prop = str.slice(0, nxtColon)
             let value = str.slice(nxtColon+1)
-            let component = SM.getSlotComponentById(componentId);
+            let component = SM.getEntityComponentById(componentId);
             if(component){
                 await component._setWithTimestamp(prop, safeParse(value), timestamp);
-                if(SM.selectedSlot === component._slot.id){
+                if(SM.selectedEntity === component._entity.id){
                     renderProps()
                 }
             }
             SM.props[`__${componentId}/${prop}:component`] = value
         }
 
-        //update_monobehavior, update_component, update_slot
+        //update_monobehavior, update_component, update_entity
         if(data.startsWith("update_monobehavior")){
             let str = data.slice(20)
             let nxtColon = str.indexOf(":")
@@ -295,10 +295,10 @@ export class Networking {
             nxtColon = str.indexOf(":")
             let prop = str.slice(0, nxtColon)
             let value = str.slice(nxtColon+1)
-            let monobehavior = SM.getSlotComponentById(componentId);
+            let monobehavior = SM.getEntityComponentById(componentId);
             if(op === "vars"){
                 monobehavior.ctx.vars[prop] = safeParse(value);
-                if(SM.selectedSlot === monobehavior._slot.id){
+                if(SM.selectedEntity === monobehavior._entity.id){
                     renderProps()
                 }
             }else if(op === "_running"){
@@ -315,58 +315,58 @@ export class Networking {
             await SM._reset();
         }
        
-        if(data.startsWith("load_slot")){
-            let [parentId, slot_data] = data.slice(10).split("|");
-            await SM._loadSlot(JSON.parse(slot_data), parentId);
-            await SM.updateHierarchy(this.selectedSlot);
+        if(data.startsWith("load_entity")){
+            let [parentId, entity_data] = data.slice(10).split("|");
+            await SM._loadEntity(JSON.parse(entity_data), parentId);
+            await SM.updateHierarchy(this.selectedEntity);
         }
 
         if(data.startsWith("component_added")){
             let event = JSON.parse(data.slice(16));
-            let slot = SM.getSlotById(event.slotId);
-            if(slot){
-                await SM._addComponent(slot, event.componentType, event.componentProperties);
-                await SM.updateHierarchy(this.selectedSlot);
+            let entity = SM.getEntityById(event.entityId);
+            if(entity){
+                await SM._addComponent(entity, event.componentType, event.componentProperties);
+                await SM.updateHierarchy(this.selectedEntity);
             }
         }
 
         if(data.startsWith("component_removed")){
             let componentId = data.slice(18);
-            let component = SM.getSlotComponentById(componentId);
+            let component = SM.getEntityComponentById(componentId);
             if(component){
                 await component._destroy();
-                await SM.updateHierarchy(this.selectedSlot);
+                await SM.updateHierarchy(this.selectedEntity);
             }
         }
 
-        if(data.startsWith("slot_added")){
-            let [parentId, slotName] = data.slice(11).split(":");
-            await SM._addNewSlot(slotName, parentId);
-            await SM.updateHierarchy(SM.selectedSlot);
+        if(data.startsWith("entity_added")){
+            let [parentId, entityName] = data.slice(11).split(":");
+            await SM._addNewEntity(entityName, parentId);
+            await SM.updateHierarchy(SM.selectedEntity);
         }
 
-        if(data.startsWith("slot_removed")){
-            let slotId = data.slice(13);
-            let slot = SM.getSlotById(slotId);
-            if(slot){
-                await slot._destroy();
-                await SM.updateHierarchy(this.selectedSlot);
+        if(data.startsWith("entity_removed")){
+            let entityId = data.slice(13);
+            let entity = SM.getEntityById(entityId);
+            if(entity){
+                await entity._destroy();
+                await SM.updateHierarchy(this.selectedEntity);
             }
         }
 
-        if(data.startsWith("slot_moved")){
-            let [slotId, newParentId, newSiblingIndex] = data.slice(11).split(":");
+        if(data.startsWith("entity_moved")){
+            let [entityId, newParentId, newSiblingIndex] = data.slice(11).split(":");
             //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
-            const slot = SM.getSlotById(slotId);
-            if (!slot) return;
-            if(!newParentId) newParentId = SM.slotData.slots[0].id;
-            await slot._setParent(SM.getSlotById(newParentId));
-            await SM.updateHierarchy(SM.selectedSlot);
+            const entity = SM.getEntityById(entityId);
+            if (!entity) return;
+            if(!newParentId) newParentId = SM.entityData.entities[0].id;
+            await entity._setParent(SM.getEntityById(newParentId));
+            await SM.updateHierarchy(SM.selectedEntity);
         }
 
         if(data.startsWith("monobehavior_start")){
             let componentId = data.slice(19);
-            let monobehavior = SM.getSlotComponentById(componentId);
+            let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._start();
             }
@@ -374,7 +374,7 @@ export class Networking {
 
         if(data.startsWith("monobehavior_stop")){
             let componentId = data.slice(18);
-            let monobehavior = SM.getSlotComponentById(componentId);
+            let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._stop();
             }
@@ -382,7 +382,7 @@ export class Networking {
 
         if(data.startsWith("monobehavior_refresh")){
             let componentId = data.slice(21);
-            let monobehavior = SM.getSlotComponentById(componentId);
+            let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._refresh();
             }

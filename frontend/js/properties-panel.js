@@ -6,7 +6,7 @@
 // (async () => {
     const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { SlotPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
     const { deepClone } = await import(`${window.repoUrl}/utils.js`);
     const { BanterLayers } = await import(`${window.repoUrl}/components/index.js`);
 
@@ -15,16 +15,11 @@
             this.propertiesContent = document.getElementById('propertiesContent');
             this.addComponentContainer = document.getElementById('addComponentContainer');
             this.addComponentBtn = document.getElementById('addComponentBtn');
-            this.selectedSlotNameElement = document.getElementById('selectedSlotName');
+            this.selectedEntityNameElement = document.getElementById('selectedEntityName');
             this.collapseAllBtn = document.getElementById('collapseAllBtn');
             
             // Store collapsed state of components
             this.collapsedComponents = new Set();
-            
-            // Drag and drop state
-            this.draggedElement = null;
-            this.draggedIndex = null;
-            this.dropTarget = null;
             
             this.setupEventListeners();
         }
@@ -36,7 +31,7 @@
             // Add component button
             this.addComponentBtn?.addEventListener('click', () => {
                 document.dispatchEvent(new CustomEvent('showComponentMenu', {
-                    detail: { slotId: SM.selectedSlot }
+                    detail: { entityId: SM.selectedEntity }
                 }));
             });
             
@@ -50,17 +45,17 @@
          * Collapse all components
          */
         collapseAllComponents() {
-            const slot = SM.getSlotById(SM.selectedSlot);
-            if (!slot || !slot.components) return;
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity || !entity.components) return;
             
             // Add all components to collapsed set
-            slot.components.forEach((component, index) => {
-                const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            entity.components.forEach((component, index) => {
+                const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
                 this.collapsedComponents.add(componentKey);
             });
             
             // Re-render to apply collapsed state
-            this.render(SM.selectedSlot);
+            this.render(SM.selectedEntity);
         }
 
         /**
@@ -69,15 +64,15 @@
         updateCollapseAllButtonVisibility() {
             if (!this.collapseAllBtn) return;
             
-            const slot = SM.getSlotById(SM.selectedSlot);
-            if (!slot || !slot.components || slot.components.length === 0) {
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity || !entity.components || entity.components.length === 0) {
                 this.collapseAllBtn.style.display = 'none';
                 return;
             }
             
             // Check if at least one component is expanded
-            const hasExpandedComponent = slot.components.some((component, index) => {
-                const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            const hasExpandedComponent = entity.components.some((component, index) => {
+                const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
                 return !this.collapsedComponents.has(componentKey);
             });
             
@@ -85,56 +80,46 @@
         }
 
         /**
-         * Render properties for a slot
+         * Render properties for a entity
          */
-        render(slotId = null) {
+        render(entityId = null) {
             if (!this.propertiesContent) return;
             
-            const slot = slotId ? SM.getSlotById(slotId) : null;
+            const entity = entityId ? SM.getEntityById(entityId) : null;
             
-            if (!slot) {
+            if (!entity) {
                 this.propertiesContent.innerHTML = `
                     <div class="empty-state">
-                        <h3>No slot selected</h3>
-                        <p>Select a slot from the hierarchy to view its properties</p>
+                        <h3>No entity selected</h3>
+                        <p>Select a entity from the hierarchy to view its properties</p>
                     </div>
                 `;
                 if (this.addComponentContainer) {
                     this.addComponentContainer.style.display = 'none';
                 }
-                if (this.selectedSlotNameElement) {
-                    this.selectedSlotNameElement.textContent = 'Properties';
+                if (this.selectedEntityNameElement) {
+                    this.selectedEntityNameElement.textContent = 'Properties';
                 }
                 return;
             }
             
             // Update header
-            if (this.selectedSlotNameElement) {
-                this.selectedSlotNameElement.textContent = `Properties - ${slot.name}`;
+            if (this.selectedEntityNameElement) {
+                this.selectedEntityNameElement.textContent = `Properties - ${entity.name}`;
             }
             
             // Clear content
             this.propertiesContent.innerHTML = '';
             
-            // Slot properties section
-            const slotSection = this.createSlotPropertiesSection(slot);
-            this.propertiesContent.appendChild(slotSection);
+            // Entity properties section
+            const entitySection = this.createEntityPropertiesSection(entity);
+            this.propertiesContent.appendChild(entitySection);
             
-            // Render components with drop zones for drag and drop
-            if (slot.components && slot.components.length > 0) {
-                // Add initial drop zone (but not before Transform at index 0)
-                // const initialDropZone = this.createDropZone(1);
-                // this.propertiesContent.appendChild(initialDropZone);
-                
-                slot.components.forEach((component, index) => {
-                    const componentElement = this.renderComponent(component, index);
+            // Render components
+            if (entity.components && entity.components.length > 0) {
+                entity.components.forEach((component, index) => {
+                    const componentElement = this.renderComponent(component, index, entity.components.length);
                     this.propertiesContent.appendChild(componentElement);
-                    
-                    // Add drop zone after each component (except after Transform if it's first)
-                    if (index > 0 ) {
-                        const dropZone = this.createDropZone(index + 1);
-                        this.propertiesContent.appendChild(dropZone);
-                    }
                 });
             }
             
@@ -148,9 +133,9 @@
         }
 
         /**
-         * Create slot properties section
+         * Create entity properties section
          */
-        createSlotPropertiesSection(slot) {
+        createEntityPropertiesSection(entity) {
             const section = document.createElement('div');
             section.className = 'component-section';
             
@@ -158,8 +143,8 @@
             header.className = 'component-header';
             header.innerHTML = `
                 <div>
-                    <span class="component-name">Slot</span>
-                    <span class="component-type">${slot.id}</span>
+                    <span class="component-name">Entity</span>
+                    <span class="component-type">${entity.id}</span>
                 </div>
             `;
             
@@ -177,17 +162,17 @@
             const inputName = document.createElement('input');
             inputName.type = 'text';
             inputName.className = 'name-input';
-            inputName.value = slot.name;
+            inputName.value = entity.name;
             inputName.style.width = '100%';
             
             const handleRename = () => {
                 const newName = inputName.value.trim();
-                if(newName && newName !== slot.name){
-                    const change = new SlotPropertyChange(slot.id, 'name', newName, { source: 'ui' });
+                if(newName && newName !== entity.name){
+                    const change = new EntityPropertyChange(entity.id, 'name', newName, { source: 'ui' });
                     changeManager.applyChange(change);
                 }
                 setTimeout(()=>{
-                    SM.selectSlot(slot.parentId+"/"+newName)
+                    SM.selectEntity(entity.parentId+"/"+newName)
                 }, 70)
             };
             
@@ -199,22 +184,22 @@
             nameRow.appendChild(inputName);
 
             // Layer property
-            const layerRow = this.createPropertyRow('Layer', slot.layer, 'dropdown',  (value) => {
-                const change = new SlotPropertyChange(slot.id, 'layer', value, { source: 'ui' });
+            const layerRow = this.createPropertyRow('Layer', entity.layer, 'dropdown',  (value) => {
+                const change = new EntityPropertyChange(entity.id, 'layer', value, { source: 'ui' });
                 changeManager.applyChange(change);
             }, BanterLayers);
 
 
             
             // Active property
-            const activeRow = this.createPropertyRow('Active', slot.active, 'checkbox', (value) => {
-                const change = new SlotPropertyChange(slot.id, 'active', value, { source: 'ui' });
+            const activeRow = this.createPropertyRow('Active', entity.active, 'checkbox', (value) => {
+                const change = new EntityPropertyChange(entity.id, 'active', value, { source: 'ui' });
                 changeManager.applyChange(change);
             });
             
             // Persistent property
-            const persistentRow = this.createPropertyRow('Persistent', slot.persistent, 'checkbox', (value) => {
-                const change = new SlotPropertyChange(slot.id, 'persistent', value, { source: 'ui' });
+            const persistentRow = this.createPropertyRow('Persistent', entity.persistent, 'checkbox', (value) => {
+                const change = new EntityPropertyChange(entity.id, 'persistent', value, { source: 'ui' });
                 changeManager.applyChange(change);
             });
             
@@ -231,69 +216,38 @@
 
 
         /**
-         * Create a drop zone for component reordering
+         * Move component up in the order
          */
-        createDropZone(dropIndex) {
-            const dropZone = document.createElement('div');
-            dropZone.className = 'component-drop-zone';
-            dropZone.dataset.dropIndex = dropIndex;
+        moveComponentUp(index) {
+            if (index <= 1) return; // Can't move Transform or already at top after Transform
             
-            dropZone.addEventListener('dragover', (e) => {
-                if (!this.draggedElement) return;
-                
-                // Don't allow dropping at index 0 (before Transform)
-                if (dropIndex === 0) return;
-                
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-                
-                // Clear other highlights
-                document.querySelectorAll('.component-drop-zone.drag-over').forEach(zone => {
-                    if (zone !== dropZone) zone.classList.remove('drag-over');
-                });
-                
-                dropZone.classList.add('drag-over');
-                this.dropTarget = { type: 'reorder', element: dropZone, index: dropIndex };
-            });
+            const change = new ComponentReorderChange(SM.selectedEntity, index, index - 1, { source: 'ui' });
+            changeManager.applyChange(change);
             
-            dropZone.addEventListener('drop', (e) => {
-                if (e.stopPropagation) {
-                    e.stopPropagation();
-                }
-                
-                if (this.draggedElement && dropIndex !== this.draggedIndex && dropIndex !== this.draggedIndex + 1) {
-                    // Calculate the actual target index after the move
-                    let targetIndex = dropIndex;
-                    if (dropIndex > this.draggedIndex) {
-                        targetIndex = dropIndex - 1;
-                    }
-                    
-                    // Apply the reorder change
-                    const change = new ComponentReorderChange(SM.selectedSlot, this.draggedIndex, targetIndex, { source: 'ui' });
-                    changeManager.applyChange(change);
-                    
-                    // Re-render after a short delay to allow the change to process
-                    setTimeout(() => this.render(SM.selectedSlot), 100);
-                }
-            });
+            // Re-render after a short delay
+            setTimeout(() => this.render(SM.selectedEntity), 100);
+        }
+        
+        /**
+         * Move component down in the order
+         */
+        moveComponentDown(index, totalComponents) {
+            if (index === 0 || index >= totalComponents - 1) return; // Can't move Transform or already at bottom
             
-            dropZone.addEventListener('dragleave', (e) => {
-                dropZone.classList.remove('drag-over');
-                if (this.dropTarget && this.dropTarget.element === dropZone) {
-                    this.dropTarget = null;
-                }
-            });
+            const change = new ComponentReorderChange(SM.selectedEntity, index, index + 1, { source: 'ui' });
+            changeManager.applyChange(change);
             
-            return dropZone;
+            // Re-render after a short delay
+            setTimeout(() => this.render(SM.selectedEntity), 100);
         }
 
         /**
          * Render a component
          */
-        renderComponent(component, index) {
+        renderComponent(component, index, totalComponents) {
             // Special handling for MonoBehavior components
             if (component.type === 'MonoBehavior') {
-                return this.renderMonoBehaviorComponent(component, index);
+                return this.renderMonoBehaviorComponent(component, index, totalComponents);
             }
             
             const section = document.createElement('div');
@@ -322,49 +276,33 @@
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
             
-            // Add drag handle (except for Transform component)
+            // Add up/down arrows (except for Transform component)
             if (component.type !== 'Transform') {
-                const dragHandle = document.createElement('div');
-                dragHandle.className = 'component-drag-handle';
-                dragHandle.innerHTML = '⋮⋮';
-                dragHandle.title = 'Drag to reorder';
-                dragHandle.draggable = true;
+                // Up arrow - hide if component is at index 1 (right after Transform)
+                if (index > 1) {
+                    const upBtn = document.createElement('button');
+                    upBtn.className = 'component-reorder-btn';
+                    upBtn.innerHTML = '▲';
+                    upBtn.title = 'Move up';
+                    upBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.moveComponentUp(index);
+                    };
+                    actionsDiv.appendChild(upBtn);
+                }
                 
-                dragHandle.addEventListener('dragstart', (e) => {
-                    this.draggedElement = section;
-                    this.draggedIndex = index;
-                    section.classList.add('dragging');
-                    
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', index.toString());
-                    
-                    // Show drop zones
-                    document.querySelectorAll('.component-drop-zone').forEach(zone => {
-                        zone.classList.add('active');
-                    });
-                    
-                    e.stopPropagation();
-                });
-                
-                dragHandle.addEventListener('dragend', (e) => {
-                    if (this.draggedElement) {
-                        this.draggedElement.classList.remove('dragging');
-                    }
-                    
-                    // Clean up
-                    document.querySelectorAll('.component-drop-zone').forEach(zone => {
-                        zone.classList.remove('active', 'drag-over');
-                    });
-                    document.querySelectorAll('.component-section.drag-over').forEach(el => {
-                        el.classList.remove('drag-over');
-                    });
-                    
-                    this.draggedElement = null;
-                    this.draggedIndex = null;
-                    this.dropTarget = null;
-                });
-                
-                actionsDiv.appendChild(dragHandle);
+                // Down arrow - hide if component is the last one
+                if (index < totalComponents - 1) {
+                    const downBtn = document.createElement('button');
+                    downBtn.className = 'component-reorder-btn';
+                    downBtn.innerHTML = '▼';
+                    downBtn.title = 'Move down';
+                    downBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        this.moveComponentDown(index, totalComponents);
+                    };
+                    actionsDiv.appendChild(downBtn);
+                }
             }
             
             // Delete button (don't allow deleting Transform components)
@@ -422,7 +360,7 @@
             section.appendChild(body);
             
             // Toggle functionality
-            const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
             let isExpanded = !this.collapsedComponents.has(componentKey);
             
             // Apply initial state
@@ -679,7 +617,7 @@
         /**
          * Render MonoBehavior component with special handling
          */
-        renderMonoBehaviorComponent(component, index) {
+        renderMonoBehaviorComponent(component, index, totalComponents) {
             const section = document.createElement('div');
             section.className = 'component-section';
             section.dataset.componentId = component.id;
@@ -706,48 +644,32 @@
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
             
-            // Add drag handle for MonoBehavior
-            const dragHandle = document.createElement('div');
-            dragHandle.className = 'component-drag-handle';
-            dragHandle.innerHTML = '⋮⋮';
-            dragHandle.title = 'Drag to reorder';
-            dragHandle.draggable = true;
+            // Add up/down arrows for MonoBehavior
+            // Up arrow - hide if component is at index 1 (right after Transform)
+            if (index > 1) {
+                const upBtn = document.createElement('button');
+                upBtn.className = 'component-reorder-btn';
+                upBtn.innerHTML = '▲';
+                upBtn.title = 'Move up';
+                upBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    this.moveComponentUp(index);
+                };
+                actionsDiv.appendChild(upBtn);
+            }
             
-            dragHandle.addEventListener('dragstart', (e) => {
-                this.draggedElement = section;
-                this.draggedIndex = index;
-                section.classList.add('dragging');
-                
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', index.toString());
-                
-                // Show drop zones
-                document.querySelectorAll('.component-drop-zone').forEach(zone => {
-                    zone.classList.add('active');
-                });
-                
-                e.stopPropagation();
-            });
-            
-            dragHandle.addEventListener('dragend', (e) => {
-                if (this.draggedElement) {
-                    this.draggedElement.classList.remove('dragging');
-                }
-                
-                // Clean up
-                document.querySelectorAll('.component-drop-zone').forEach(zone => {
-                    zone.classList.remove('active', 'drag-over');
-                });
-                document.querySelectorAll('.component-section.drag-over').forEach(el => {
-                    el.classList.remove('drag-over');
-                });
-                
-                this.draggedElement = null;
-                this.draggedIndex = null;
-                this.dropTarget = null;
-            });
-            
-            actionsDiv.appendChild(dragHandle);
+            // Down arrow - hide if component is the last one
+            if (index < totalComponents - 1) {
+                const downBtn = document.createElement('button');
+                downBtn.className = 'component-reorder-btn';
+                downBtn.innerHTML = '▼';
+                downBtn.title = 'Move down';
+                downBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    this.moveComponentDown(index, totalComponents);
+                };
+                actionsDiv.appendChild(downBtn);
+            }
             
             // Delete button
             const deleteBtn = document.createElement('button');
@@ -824,7 +746,7 @@
                 changeManager.applyChange(change);
                 
                 // Re-render to show vars
-                this.render(SM.selectedSlot);
+                this.render(SM.selectedEntity);
             };
             
             fileContainer.appendChild(fileSelect);
@@ -906,7 +828,7 @@
             section.appendChild(body);
             
             // Toggle functionality
-            const componentKey = `${SM.selectedSlot}_${component.type}_${index}`;
+            const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
             let isExpanded = !this.collapsedComponents.has(componentKey);
             
             // Apply initial state
@@ -1112,10 +1034,10 @@
          * Handle Vector3 property changes
          */
         handleVector3Change(componentType, componentId, key, axis, value, componentIndex) {
-            const slot = SM.getSlotById(SM.selectedSlot);
-            if (!slot) return;
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity) return;
             
-            const component = slot.components.find(c => c.id === componentId);
+            const component = entity.components.find(c => c.id === componentId);
             if (!component || !component.properties[key]) return;
             
             const vector = component.properties[key];
@@ -1132,10 +1054,10 @@
          * Handle rotation changes (Euler angles to Quaternion)
          */
         handleRotationChange(componentId, axis, value, componentIndex) {
-            const slot = SM.getSlotById(SM.selectedSlot);
-            if (!slot) return;
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity) return;
             
-            const component = slot.components.find(c => c.id === componentId);
+            const component = entity.components.find(c => c.id === componentId);
             if (!component || !component.properties.localRotation) return;
             
             // Get current quaternion and convert to Euler
@@ -1160,11 +1082,11 @@
 
 
         /**
-         * Delete a component from the selected slot
+         * Delete a component from the selected entity
          */
         async deleteComponent(componentId, componentType) {
-            const slotId = SM.selectedSlot;
-            if (!slotId) return;
+            const entityId = SM.selectedEntity;
+            if (!entityId) return;
             
             // Queue the component removal through change manager
             const change = new ComponentRemoveChange(componentId, { source: 'ui' });
@@ -1172,7 +1094,7 @@
             
             // The actual deletion will be handled by the change manager
             // Re-render will happen after the change is processed
-            setTimeout(() => this.render(slotId), 100);
+            setTimeout(() => this.render(entityId), 100);
         }
     }
 // })()

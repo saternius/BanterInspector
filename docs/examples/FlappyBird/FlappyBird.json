@@ -2,7 +2,7 @@
   "author": "Technocrat",
   "name": "Flappy_1128_4930",
   "created": 1753778456503,
-  "itemType": "slot",
+  "itemType": "entity",
   "data": {
     "name": "Flappy_1128_4930_82947",
     "parentId": "Root",

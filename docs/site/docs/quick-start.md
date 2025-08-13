@@ -156,7 +156,7 @@ this.vars = {
 // Called when the script starts
 this.onStart = () => {
     // Get reference to the transform
-    this.transform = this._slot.getTransform();
+    this.transform = this._entity.getTransform();
     console.log("Spinning cube started!");
 }
 
@@ -190,13 +190,13 @@ Add this to your existing script:
 ```javascript
 // Add a color-changing click handler
 this.onStart = () => {
-    this.transform = this._slot.getTransform();
+    this.transform = this._entity.getTransform();
     
     // Get the material component
-    this.material = this._slot.getComponent("BanterMaterial");
+    this.material = this._entity.getComponent("BanterMaterial");
     
     // Listen for clicks
-    this._slot._bs.On("click", () => {
+    this._entity._bs.On("click", () => {
         // Generate random color
         let r = Math.random();
         let g = Math.random();
@@ -213,7 +213,7 @@ this.onStart = () => {
 // Clean up when script is destroyed
 this.onDestroy = () => {
     // Remove click listener
-    this._slot._bs.Off("click");
+    this._entity._bs.Off("click");
 }
 ```
 

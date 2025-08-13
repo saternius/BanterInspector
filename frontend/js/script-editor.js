@@ -5,8 +5,8 @@ export class ScriptEditor {
         this.currentScript = scriptData;
         this.editor = null;
         this.isModified = false;
-        this.monoBehaviorSlots = new Map(); // Map of slotId -> MonoBehavior component
-        this.selectedSlots = new Set();
+        this.monoBehaviorEntities = new Map(); // Map of entityId -> MonoBehavior component
+        this.selectedEntities = new Set();
         this.codemirror = null;
         this.pageId = `script-editor-${scriptData.name.replace(/[^a-zA-Z0-9]/g, '-')}-${Date.now()}`;
         this.pageElement = null;
@@ -17,7 +17,7 @@ export class ScriptEditor {
         this.playBtnHandler = null;
         this.stopBtnHandler = null;
         this.closeBtnHandler = null;
-        this.slotButtonHandlers = new Map();
+        this.entityButtonHandlers = new Map();
     }
     
     async open(openInBackground) {
@@ -48,7 +48,7 @@ export class ScriptEditor {
     }
 
     renderFooter(){
-        this.findMonoBehaviorSlots();
+        this.findMonoBehaviorEntities();
         //console.log("Rendering footer...");
         const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
@@ -57,16 +57,16 @@ export class ScriptEditor {
                     <span>Author: ${this.currentScript.author}</span>
                     <span>Created: ${new Date(this.currentScript.created).toLocaleString()}</span>
                 </div>
-                ${this.monoBehaviorSlots.size > 0 ? `
+                ${this.monoBehaviorEntities.size > 0 ? `
                 <div class="monobehavior-controls">
-                    <div class="slot-selector-panel">
-                        <div class="slot-selector-title">MonoBehavior Instances:</div>
-                        <div class="slot-selector-buttons" id="slotSelectorButtons-${this.pageId}">
-                            ${Array.from(this.monoBehaviorSlots.entries()).map(([slotId, component]) => {
-                                const slot = SM.getSlotById(slotId);
-                                const slotName = slot?.name || 'Unknown Slot';
-                                const isSelected = this.selectedSlots.has(slotId);
-                                return `<button class="slot-selector-btn ${isSelected ? 'selected' : ''}" data-slot-id="${slotId}">${slotName}</button>`;
+                    <div class="entity-selector-panel">
+                        <div class="entity-selector-title">MonoBehavior Instances:</div>
+                        <div class="entity-selector-buttons" id="entitySelectorButtons-${this.pageId}">
+                            ${Array.from(this.monoBehaviorEntities.entries()).map(([entityId, component]) => {
+                                const entity = SM.getEntityById(entityId);
+                                const entityName = entity?.name || 'Unknown Entity';
+                                const isSelected = this.selectedEntities.has(entityId);
+                                return `<button class="entity-selector-btn ${isSelected ? 'selected' : ''}" data-entity-id="${entityId}">${entityName}</button>`;
                             }).join('')}
                         </div>
                     </div>
@@ -81,7 +81,7 @@ export class ScriptEditor {
                     </div>
                 </div>
                 ` : ''}
-                <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorSlots.size > 0 ? 'block' : 'none'};">
+                <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorEntities.size > 0 ? 'block' : 'none'};">
                     <div class="console-header">Console Output</div>
                     <div class="console-content" id="consoleContent-${this.pageId}"></div>
                 </div>
@@ -275,11 +275,11 @@ export class ScriptEditor {
             this.keydownHandler = null;
         }
         
-        // Remove slot button listeners
-        this.slotButtonHandlers.forEach((handler, btn) => {
+        // Remove entity button listeners
+        this.entityButtonHandlers.forEach((handler, btn) => {
             btn.removeEventListener('click', handler);
         });
-        this.slotButtonHandlers.clear();
+        this.entityButtonHandlers.clear();
     }
     
     setupEventListeners() {
@@ -335,14 +335,14 @@ export class ScriptEditor {
             document.addEventListener('keydown', this.keydownHandler);
         }
         
-        // Slot selector buttons
-        const slotButtons = this.pageElement.querySelectorAll('.slot-selector-btn');
-        slotButtons.forEach(btn => {
+        // Entity selector buttons
+        const entityButtons = this.pageElement.querySelectorAll('.entity-selector-btn');
+        entityButtons.forEach(btn => {
             const handler = () => {
-                const slotId = btn.dataset.slotId;
-                this.selectSlot(slotId);
+                const entityId = btn.dataset.entityId;
+                this.selectEntity(entityId);
             };
-            this.slotButtonHandlers.set(btn, handler);
+            this.entityButtonHandlers.set(btn, handler);
             btn.addEventListener('click', handler);
         });
     }
@@ -364,36 +364,36 @@ export class ScriptEditor {
         this.run('Refresh')
     }
     
-    findMonoBehaviorSlots() {
-        this.monoBehaviorSlots.clear();
+    findMonoBehaviorEntities() {
+        this.monoBehaviorEntities.clear();
                 
-        // Iterate through all slots to find MonoBehavior components using this script
-        SM.getAllSlots().forEach((slot) => {
-            if (slot.components) {
-                slot.components.forEach(component => {
+        // Iterate through all entities to find MonoBehavior components using this script
+        SM.getAllEntities().forEach((entity) => {
+            if (entity.components) {
+                entity.components.forEach(component => {
                     if (component.type === 'MonoBehavior' && 
                         component.properties?.file === this.currentScript.name) {
-                        this.monoBehaviorSlots.set(slot.id, component);
-                        this.wrapConsoleForComponent(component, slot.name);
+                        this.monoBehaviorEntities.set(entity.id, component);
+                        this.wrapConsoleForComponent(component, entity.name);
                     }
                 });
             }
         });
         
-        this.selectedSlots = new Set(this.monoBehaviorSlots.keys());
-        return this.monoBehaviorSlots;
+        this.selectedEntities = new Set(this.monoBehaviorEntities.keys());
+        return this.monoBehaviorEntities;
     }
     
-    selectSlot(slotId) {
-        if(this.selectedSlots.has(slotId)){
-            this.selectedSlots.delete(slotId);
+    selectEntity(entityId) {
+        if(this.selectedEntities.has(entityId)){
+            this.selectedEntities.delete(entityId);
         }else{
-            this.selectedSlots.add(slotId);
+            this.selectedEntities.add(entityId);
         }
         
         // Update UI
-        this.pageElement.querySelectorAll('.slot-selector-btn').forEach(btn => {
-            btn.classList.toggle('selected', this.selectedSlots.has(btn.dataset.slotId));
+        this.pageElement.querySelectorAll('.entity-selector-btn').forEach(btn => {
+            btn.classList.toggle('selected', this.selectedEntities.has(btn.dataset.entityId));
         });
         
         // Enable/disable playback controls
@@ -402,34 +402,34 @@ export class ScriptEditor {
             playBtn.disabled = !this.canRun();
         }
         
-        // Clear console when switching slots
+        // Clear console when switching entities
         //this.clearConsole();
     }
     
     canRun(){
-        let stoppedSelected = Array.from(this.selectedSlots).filter(slotId => {
-            let component = this.monoBehaviorSlots.get(slotId);
+        let stoppedSelected = Array.from(this.selectedEntities).filter(entityId => {
+            let component = this.monoBehaviorEntities.get(entityId);
             return !component.ctx._running;
         })
         return stoppedSelected.length > 0;
     }
 
     canStop(){
-        let runningSelected = Array.from(this.selectedSlots).filter(slotId => {
-            let component = this.monoBehaviorSlots.get(slotId);
+        let runningSelected = Array.from(this.selectedEntities).filter(entityId => {
+            let component = this.monoBehaviorEntities.get(entityId);
             return component.ctx._running;
         })
         return runningSelected.length > 0;
     }
     
     
-    wrapConsoleForComponent(component, slotName) {
+    wrapConsoleForComponent(component, entityName) {
         // Create a console wrapper that logs to our console
         const consoleWrapper = {
-            log: (...args) => this.log('log', args.join(' '), slotName),
-            error: (...args) => this.log('error', args.join(' '), slotName),
-            warn: (...args) => this.log('warn', args.join(' '), slotName),
-            info: (...args) => this.log('info', args.join(' '), slotName)
+            log: (...args) => this.log('log', args.join(' '), entityName),
+            error: (...args) => this.log('error', args.join(' '), entityName),
+            warn: (...args) => this.log('warn', args.join(' '), entityName),
+            info: (...args) => this.log('info', args.join(' '), entityName)
         };
         
         // Override the console in the script context
@@ -440,8 +440,8 @@ export class ScriptEditor {
 
     run(action){
         console.log("running=>", action);
-        let components = Array.from(this.selectedSlots)
-        .map(slotId => this.monoBehaviorSlots.get(slotId))
+        let components = Array.from(this.selectedEntities)
+        .map(entityId => this.monoBehaviorEntities.get(entityId))
 
         if(action === 'Start'){
             components = components.filter(component => component && component.ctx && !component.ctx._running);
@@ -451,14 +451,14 @@ export class ScriptEditor {
         
         if (components.length === 0) return;
         components.forEach(component => {
-            let slot = component._slot;
-            let slotName = slot?.name || 'Unknown';
+            let entity = component._entity;
+            let entityName = entity?.name || 'Unknown';
             try {
                 
                 component[action]();
-                this.wrapConsoleForComponent(component, slotName);
+                this.wrapConsoleForComponent(component, entityName);
             } catch (error) {
-                this.log('error', `Script error: ${error.message}`, slotName);
+                this.log('error', `Script error: ${error.message}`, entityName);
             }
         })
         setTimeout(()=>{
@@ -487,8 +487,8 @@ export class ScriptEditor {
 
     }
     
-    log(type, message, slotName) {
-        console.log("logging=>", type, message, slotName);
+    log(type, message, entityName) {
+        console.log("logging=>", type, message, entityName);
         const consoleContent = document.getElementById(`consoleContent-${this.pageId}`);
         if (!consoleContent) return;
         
@@ -496,10 +496,10 @@ export class ScriptEditor {
         entry.className = `console-entry console-${type}`;
         
         const timestamp = new Date().toLocaleTimeString();
-        const slotPrefix = slotName ? `[${slotName}] ` : '';
+        const entityPrefix = entityName ? `[${entityName}] ` : '';
         entry.innerHTML = `
             <span class="console-timestamp">[${timestamp}]</span>
-            <span class="console-slot">${slotPrefix}</span>
+            <span class="console-entity">${entityPrefix}</span>
             <span class="console-message">${message}</span>
         `;
         

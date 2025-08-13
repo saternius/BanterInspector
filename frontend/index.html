@@ -118,23 +118,23 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </div>
             
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search slots...">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search entities...">
             </div>
             
-            <div class="slot-actions-container">
-                <button class="action-button" id="addChildSlotBtn" title="Add Child">
+            <div class="entity-actions-container">
+                <button class="action-button" id="addChildEntityBtn" title="Add Child">
                     <span class="button-icon">+</span>
                     
                 </button>
-                <button class="action-button" id="cloneSlotBtn" title="Clone">
+                <button class="action-button" id="cloneEntityBtn" title="Clone">
                     <span class="button-icon">🧬</span>
                    
                 </button>
-                <button class="action-button delete-button" id="deleteSlotBtn" title="Delete">
+                <button class="action-button delete-button" id="deleteEntityBtn" title="Delete">
                     <span class="button-icon">×</span>
                    
                 </button>
-                <button class="action-button save-button" id="saveSlotBtn" title="Save">
+                <button class="action-button save-button" id="saveEntityBtn" title="Save">
                     <span class="button-icon">💾</span>
                    
                 </button>
@@ -148,14 +148,14 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         <!-- Properties Panel -->
         <div class="panel properties-panel" id="propertiesPanel">
             <div class="panel-header">
-                <span id="selectedSlotName">Properties</span>
+                <span id="selectedEntityName">Properties</span>
                 <button id="collapseAllBtn" class="collapse-all-btn" style="display: none;">Collapse All</button>
             </div>
             
             <div class="properties-content" id="propertiesContent">
                 <div class="empty-state">
-                    <h3>No slot selected</h3>
-                    <p>Select a slot from the hierarchy to view its properties</p>
+                    <h3>No entity selected</h3>
+                    <p>Select a entity from the hierarchy to view its properties</p>
                 </div>
             </div>
             

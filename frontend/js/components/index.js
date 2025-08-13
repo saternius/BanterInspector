@@ -1,7 +1,7 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
-window.updateModuleProgress("slot-component");
-const { Slot } = await import(`${window.repoUrl}/components/slot.js`);
-window.updateModuleProgress("slot");
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
+window.updateModuleProgress("entity-component");
+const { Entity } = await import(`${window.repoUrl}/components/entity.js`);
+window.updateModuleProgress("entity");
 const { TransformComponent } = await import(`${window.repoUrl}/components/transform.js`);
 window.updateModuleProgress("transform");
 const { MonoBehaviorComponent } = await import(`${window.repoUrl}/components/monobehavior.js`);
@@ -285,8 +285,8 @@ window.componentBSTypeMap = componentBSTypeMap;
 window.componentTextMap = componentTextMap;
 
 export { 
-    Slot, 
-    SlotComponent, 
+    Entity, 
+    EntityComponent, 
     TransformComponent,
     BanterGeometryComponent,
     BanterMaterialComponent,

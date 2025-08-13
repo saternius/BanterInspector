@@ -103,7 +103,7 @@
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
                     this.spacePropsPanel.render();
-                    this.propertiesPanel.render(SM.selectedSlot);
+                    this.propertiesPanel.render(SM.selectedEntity);
                 });
                 
                 
@@ -248,13 +248,13 @@
                 const change = event.detail.change;
                 if (change.type === 'spaceProperty') {
                     this.spacePropsPanel.render();
-                } else if (change.type === 'component' || change.type === 'slot' ||
+                } else if (change.type === 'component' || change.type === 'entity' ||
                           change.type === 'componentAdd' || change.type === 'componentRemove') {
-                    this.propertiesPanel.render(SM.selectedSlot);
-                } else if (change.type === 'slotAdd' || change.type === 'slotRemove' || 
-                          change.type === 'slotMove') {
+                    this.propertiesPanel.render(SM.selectedEntity);
+                } else if (change.type === 'entityAdd' || change.type === 'entityRemove' || 
+                          change.type === 'entityMove') {
                     this.hierarchyPanel.render();
-                    this.propertiesPanel.render(SM.selectedSlot);
+                    this.propertiesPanel.render(SM.selectedEntity);
                 }
             });
         }
@@ -286,15 +286,15 @@
             console.log("setting up global event handlers")
             // Handle hierarchy changes from change manager
             changeManager.addChangeListener((change) => {
-                // Update hierarchy panel if slot names or active state changed
-                const hierarchyChanges = change.type === 'slot' && (change.property === 'name' || change.property === 'active');
+                // Update hierarchy panel if entity names or active state changed
+                const hierarchyChanges = change.type === 'entity' && (change.property === 'name' || change.property === 'active');
                 if (hierarchyChanges.length > 0) {
                     this.hierarchyPanel.render();
                 }
             });
             
             // Handle hierarchy changes (legacy - for compatibility)
-            document.addEventListener('slotPropertiesChanged', () => {
+            document.addEventListener('entityPropertiesChanged', () => {
                 this.hierarchyPanel.render();
             });
             
@@ -439,18 +439,18 @@
                     }
                 }
                 
-                // Delete key: Delete selected slot
-                if (e.key === 'Delete' && SM.selectedSlot) {
-                    const deleteBtn = document.getElementById('deleteSlotBtn');
+                // Delete key: Delete selected entity
+                if (e.key === 'Delete' && SM.selectedEntity) {
+                    const deleteBtn = document.getElementById('deleteEntityBtn');
                     if (deleteBtn && !e.target.matches('input, textarea')) {
                         deleteBtn.click();
                     }
                 }
                 
-                // Ctrl/Cmd + N: Add new child slot
+                // Ctrl/Cmd + N: Add new child entity
                 if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
                     e.preventDefault();
-                    const addBtn = document.getElementById('addChildSlotBtn');
+                    const addBtn = document.getElementById('addChildEntityBtn');
                     if (addBtn) {
                         addBtn.click();
                     }
