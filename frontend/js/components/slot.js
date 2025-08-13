@@ -1,40 +1,40 @@
 const { TransformComponent } = await import(`${window.repoUrl}/components/transform.js`);
 const { deepClone, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class Slot{
-    async init(slotData){
-        this.name = slotData.name || `New_Slot_${Math.floor(Math.random()*99999)}`;
-        this.parentId = slotData.parentId;
-        this.components = slotData.components || [];
-        this.children = slotData.children || [];
-        this._bs = slotData._bs;
+export class Entity{
+    async init(entityData){
+        this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
+        this.parentId = entityData.parentId;
+        this.components = entityData.components || [];
+        this.children = entityData.children || [];
+        this._bs = entityData._bs;
         this.active = true;
-        this.layer = parseInt(slotData.layer) || 0;
+        this.layer = parseInt(entityData.layer) || 0;
         this.persistent = true;
         this.identifiers = new Set();
         this.initialized = false;
         
 
-        if(!slotData._bs){
+        if(!entityData._bs){
             let newGameObject = new BS.GameObject(this.name);
             this._bs = newGameObject;
-            let parentSlot = SM.getSlotOrRoot(this.parentId);
+            let parentEntity = SM.getEntityOrRoot(this.parentId);
             try{
-                let parentGameObject = parentSlot._bs;
+                let parentGameObject = parentEntity._bs;
                 if(parentGameObject){
                     await newGameObject.SetParent(parentGameObject, true);
                 }
                 await newGameObject.SetActive(true);
                 await newGameObject.SetLayer(this.layer);
             }catch(e){
-                console.log(this, this.parentId, parentSlot)
+                console.log(this, this.parentId, parentEntity)
                 console.error(e);
             }
         }
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         this.identifiers.add(this.id);
-        window.SM.slotData.slotMap[this.id] = this;
+        window.SM.entityData.entityMap[this.id] = this;
         this.initialized = true;
         return this;
     }
@@ -84,10 +84,10 @@ export class Slot{
                     id: component_ref
                 }
                 let componentClass = componentBSTypeMap[bs_comp.type];
-                let slotComponent = await new componentClass().init(this, bs_comp, props);
-                slotComponent.setId(component_ref);
-                this.components.push(slotComponent);
-                SM.slotData.componentMap[component_ref] = slotComponent;
+                let entityComponent = await new componentClass().init(this, bs_comp, props);
+                entityComponent.setId(component_ref);
+                this.components.push(entityComponent);
+                SM.entityData.componentMap[component_ref] = entityComponent;
                 //SM.updateHierarchy();
                 inspector.propertiesPanel.render(this.id);
             }
@@ -97,7 +97,7 @@ export class Slot{
     async _setParent(newParent){
         if (newParent === this) return;
         if (this.parentId) {
-            const oldParent = SM.getSlotById(this.parentId);
+            const oldParent = SM.getEntityById(this.parentId);
             if(oldParent){
                 oldParent.children = oldParent.children.filter(child => child.id !== this.id);
             }
@@ -120,14 +120,14 @@ export class Slot{
         }
 
         await this._bs.Destroy();
-        delete SM.slotData.slotMap[this.id];
+        delete SM.entityData.entityMap[this.id];
 
-        delete SM.props[`__${this.id}/active:slot`];
-        delete SM.props[`__${this.id}/persistent:slot`];
-        delete SM.props[`__${this.id}/name:slot`];
-        delete SM.props[`__${this.id}/layer:slot`];
+        delete SM.props[`__${this.id}/active:entity`];
+        delete SM.props[`__${this.id}/persistent:entity`];
+        delete SM.props[`__${this.id}/name:entity`];
+        delete SM.props[`__${this.id}/layer:entity`];
         if(this.parentId){
-            const parent = SM.getSlotById(this.parentId);
+            const parent = SM.getEntityById(this.parentId);
             if (parent) {
                 parent.children = parent.children.filter(child => child.id !== this.id);
             }
@@ -139,11 +139,11 @@ export class Slot{
         Object.keys(SM.props).forEach(key=>{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
-            let component = SM.getSlotComponentById(compID);
+            let component = SM.getEntityComponentById(compID);
             //console.log(compID, "=>", component)
             if(!component) return;
-            //console.log(`${component._slot.id} => ${this.id}`)
-            if(component._slot.id === this.id){
+            //console.log(`${component._entity.id} => ${this.id}`)
+            if(component._entity.id === this.id){
                 toDelete.push(key);
             }
         })
@@ -155,23 +155,23 @@ export class Slot{
     }
 
     saveSpaceProperties(){
-        let message = `update_slot:${this.id}:active:${this.active}`;
+        let message = `update_entity:${this.id}:active:${this.active}`;
         networking.sendOneShot(message);
-        message = `update_slot:${this.id}:persistent:${this.persistent}`;
+        message = `update_entity:${this.id}:persistent:${this.persistent}`;
         networking.sendOneShot(message);
-        message = `update_slot:${this.id}:name:${this.name}`;
+        message = `update_entity:${this.id}:name:${this.name}`;
         networking.sendOneShot(message);
-        message = `update_slot:${this.id}:layer:${this.layer}`;
+        message = `update_entity:${this.id}:layer:${this.layer}`;
         networking.sendOneShot(message);
     }
 
     rename(newName, localUpdate){
         //console.log(`renaming ${this.id} to ${newName} : ${localUpdate}`)
         if(!localUpdate) this._deleteOldSpaceProperties();
-        delete SM.slotData.slotMap[this.id]
+        delete SM.entityData.entityMap[this.id]
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
-        SM.slotData.slotMap[this.id] = this;
+        SM.entityData.entityMap[this.id] = this;
         if(!localUpdate) this.saveSpaceProperties();
         this.children.forEach(child=>{
             child.parentId = this.id;
@@ -210,15 +210,15 @@ export class Slot{
     }
 
     export(){
-        return deepClone(this, ['_bs', '_slot', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id', '_controls']);
+        return deepClone(this, ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id', '_controls']);
     }
 
     async Set(property, value){
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
-        SM.props[`__${this.id}/${property}:slot`] = value;
-        let message = `update_slot:${this.id}:${property}:${value}`;
+        SM.props[`__${this.id}/${property}:entity`] = value;
+        let message = `update_entity:${this.id}:${property}:${value}`;
         networking.sendOneShot(message);
         if(property == "name"){
             this.rename(value, false);
@@ -226,8 +226,8 @@ export class Slot{
     }
 
     async SetParent(newParentId){
-        let data = `slot_moved:${this.id}:${newParentId}:0`
-        //await this._setParent(SM.getSlotOrRoot(newParentId), true);
+        let data = `entity_moved:${this.id}:${newParentId}:0`
+        //await this._setParent(SM.getEntityOrRoot(newParentId), true);
         networking.sendOneShot(data);
     }
 }

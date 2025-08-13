@@ -1,35 +1,35 @@
-let getSlot = (slotPath)=>{
-    let rel_path = this._slot.parentId+"/"+slotPath
+let getEntity = (entityPath)=>{
+    let rel_path = this._entity.parentId+"/"+entityPath
     //console.log("rel_path => ", rel_path)
-    return SM.getSlotById(rel_path)
+    return SM.getEntityById(rel_path)
 }
 
-let getSlotScript = (slotPath, scriptName) =>{
-    let slot = getSlot(slotPath)
-    if(!slot){
-        console.log("NO SLOT IN PATH: ", slotPath)
+let getEntityScript = (entityPath, scriptName) =>{
+    let entity = getEntity(entityPath)
+    if(!entity){
+        console.log("NO SLOT IN PATH: ", entityPath)
         return
     }
-    //console.log("PIPE SLOT => ", slot)
-    return slot.components.find(x=>x.type === "MonoBehavior" && x.properties.name === scriptName)
+    //console.log("PIPE SLOT => ", entity)
+    return entity.components.find(x=>x.type === "MonoBehavior" && x.properties.name === scriptName)
 }
 
 
-let getScript = async (slotPath, scriptName)=>{
-    const returnWhenSlotLoaded = () => {
+let getScript = async (entityPath, scriptName)=>{
+    const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
                 console.log("checking: ", this._running, this)
                 if(!this._running){
                     resolve()
                 }else{
-                    const script = getSlotScript(slotPath, scriptName);
+                    const script = getEntityScript(entityPath, scriptName);
                      //console.log("SCRIPT FOUND => ", script)
                     if (script !== undefined ) {
                       resolve(script.ctx);
                     } else {
                       // try again in 100 ms
-                      console.log(`Script in [${slotPath}](${scriptName}) not found from ${this._slot.id} retrying..`)
+                      console.log(`Script in [${entityPath}](${scriptName}) not found from ${this._entity.id} retrying..`)
                       setTimeout(check, 100);
                     }
                 }
@@ -37,7 +37,7 @@ let getScript = async (slotPath, scriptName)=>{
               check();
             });
           };
-    return await returnWhenSlotLoaded();
+    return await returnWhenEntityLoaded();
 }
 
 
@@ -64,7 +64,7 @@ let alive = true;
 let started = false;
 let vy = 0;
 let rotation = 0;
-// let material = this._slot.getComponent("BanterMaterial")
+// let material = this._entity.getComponent("BanterMaterial")
 // let mat_id = material.id
 let points = 0
 let speed = 1
@@ -191,10 +191,10 @@ let handleKey = (e)=>{
 this.onStart = async ()=>{
     console.log("onStart");
     pipeSpawner = await getScript("Pipes", "PipeSpawner")
-    debugText = getSlot("DebugText")
+    debugText = getEntity("DebugText")
     window.addEventListener('script-refreshed', handleScriptUpdates)
     window.addEventListener("keydown", handleKey)
-    this.transform = this._slot.getTransform();
+    this.transform = this._entity.getTransform();
     this.reset();
     
 }
@@ -239,11 +239,11 @@ this.onUpdate = ()=>{
 this.onDestroy = ()=>{
     window.removeEventListener("keydown", handleKey)
     window.removeEventListener('script-refreshed', handleScriptUpdates)
-    this._slot._bs.listeners.get("trigger-enter").clear();
+    this._entity._bs.listeners.get("trigger-enter").clear();
 }
 
 
-this._slot._bs.On("trigger-enter", (e)=>{
+this._entity._bs.On("trigger-enter", (e)=>{
     console.log("[TRIGGER]", e)
     die()
 })

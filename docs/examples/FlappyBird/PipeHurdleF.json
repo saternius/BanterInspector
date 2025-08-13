@@ -2,7 +2,7 @@
   "author": "Technocrat",
   "name": "PipeHurdleF",
   "created": 1753777611794,
-  "itemType": "slot",
+  "itemType": "entity",
   "data": {
     "name": "PipeHurdleF_77457",
     "parentId": "Root/Flappy_1128_4930_82947/Pipes",

@@ -1,6 +1,6 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 
-export class BanterColliderEventsComponent extends SlotComponent {
+export class BanterColliderEventsComponent extends EntityComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterColliderEvents;

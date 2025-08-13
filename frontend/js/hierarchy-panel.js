@@ -5,19 +5,19 @@
 
 // (async () => {
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { SlotAddChange, SlotRemoveChange, SlotMoveChange, CloneSlotChange, SaveSlotItemChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { EntityAddChange, EntityRemoveChange, EntityMoveChange, CloneEntityChange, SaveEntityItemChange } = await import(`${window.repoUrl}/change-types.js`);
 
     export class HierarchyPanel {
         constructor() {
             this.treeContainer = document.getElementById('hierarchyTree');
             this.searchInput = document.getElementById('searchInput');
-            this.addChildBtn = document.getElementById('addChildSlotBtn');
-            this.cloneBtn = document.getElementById('cloneSlotBtn');
-            this.deleteBtn = document.getElementById('deleteSlotBtn');
-            this.saveBtn = document.getElementById('saveSlotBtn');
+            this.addChildBtn = document.getElementById('addChildEntityBtn');
+            this.cloneBtn = document.getElementById('cloneEntityBtn');
+            this.deleteBtn = document.getElementById('deleteEntityBtn');
+            this.saveBtn = document.getElementById('saveEntityBtn');
             
             this.searchTerm = '';
-            this.draggedSlotId = null;
+            this.draggedEntityId = null;
             this.dropTargetId = null;
             this.setupEventListeners();
         }
@@ -40,7 +40,7 @@
             // Add drag and drop to the tree container for root level drops
             this.treeContainer.addEventListener('dragover', (e) => {
                 // Only allow drop at root level if not over a node
-                if (!e.target.closest('.tree-node') && this.draggedSlotId) {
+                if (!e.target.closest('.tree-node') && this.draggedEntityId) {
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'move';
                     this.treeContainer.classList.add('drag-over-root');
@@ -56,7 +56,7 @@
             
             this.treeContainer.addEventListener('drop', (e) => {
                 // Handle drop at root level
-                if (!e.target.closest('.tree-node') && this.draggedSlotId) {
+                if (!e.target.closest('.tree-node') && this.draggedEntityId) {
                     e.preventDefault();
                     this.treeContainer.classList.remove('drag-over-root');
                     this.handleDropToRoot();
@@ -65,47 +65,47 @@
 
             // Add child button
             this.addChildBtn.addEventListener('click', async () => {
-                const parentId = SM.selectedSlot;
+                const parentId = SM.selectedEntity;
                 
-                // Queue slot addition through change manager
-                const change = new SlotAddChange(parentId, null, { source: 'ui' });
+                // Queue entity addition through change manager
+                const change = new EntityAddChange(parentId, null, { source: 'ui' });
                 changeManager.applyChange(change);
             });
 
             // Clone button
             this.cloneBtn.addEventListener('click', async () => {
-                const change = new CloneSlotChange(SM.selectedSlot, { source: 'ui' });
+                const change = new CloneEntityChange(SM.selectedEntity, { source: 'ui' });
                 changeManager.applyChange(change);
-                SM.selectSlot(change.slotId);
+                SM.selectEntity(change.entityId);
             });
 
             // Delete button
             this.deleteBtn.addEventListener('click', async () => {
-                if (!SM.selectedSlot) {
-                    alert('Please select a slot to delete');
+                if (!SM.selectedEntity) {
+                    alert('Please select a entity to delete');
                     return;
                 }
                 
-                const slot = SM.getSlotById(SM.selectedSlot);
-                if (!slot) return;
+                const entity = SM.getEntityById(SM.selectedEntity);
+                if (!entity) return;
                 
-                if (confirm(`Are you sure you want to delete "${slot.name}" and all its children?`)) {
-                    // Queue slot deletion through change manager
-                    console.log("deleting slot =>", SM.selectedSlot)
-                    const change = new SlotRemoveChange(SM.selectedSlot, { source: 'ui' });
+                if (confirm(`Are you sure you want to delete "${entity.name}" and all its children?`)) {
+                    // Queue entity deletion through change manager
+                    console.log("deleting entity =>", SM.selectedEntity)
+                    const change = new EntityRemoveChange(SM.selectedEntity, { source: 'ui' });
                     changeManager.applyChange(change);
-                    SM.selectSlot('Root');
+                    SM.selectEntity('Root');
                 }
             });
 
             // Save button
             this.saveBtn.addEventListener('click', async () => {
-                if (!SM.selectedSlot) {
-                    alert('Please select a slot to save');
+                if (!SM.selectedEntity) {
+                    alert('Please select a entity to save');
                     return;
                 }
 
-                let change = new SaveSlotItemChange(SM.selectedSlot, null, null, {source: 'ui'});
+                let change = new SaveEntityItemChange(SM.selectedEntity, null, null, {source: 'ui'});
                 changeManager.applyChange(change);
 
             });
@@ -118,18 +118,18 @@
             if (!this.treeContainer) return;
             
             this.treeContainer.innerHTML = '';
-            //console.log("SM.slotData.slots =>", SM.slotData.slots)
-            if (SM.slotData.slots.length === 0) {
+            //console.log("SM.entityData.entities =>", SM.entityData.entities)
+            if (SM.entityData.entities.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;
             }
             
-            // Get root slots
-            const rootSlots = SM.slotData.slots;
+            // Get root entities
+            const rootEntities = SM.entityData.entities;
             
-            // Render each root slot
-            rootSlots.forEach(slot => {
-                const nodeElement = this.renderSlotNode(slot, this.searchTerm, 0);
+            // Render each root entity
+            rootEntities.forEach(entity => {
+                const nodeElement = this.renderEntityNode(entity, this.searchTerm, 0);
                 if (nodeElement) {
                     this.treeContainer.appendChild(nodeElement);
                 }
@@ -137,38 +137,38 @@
         }
 
         /**
-         * Render a single slot node
+         * Render a single entity node
          */
-        renderSlotNode(slot, searchTerm, level) {
-            //console.log("rendering slot node", slot)
+        renderEntityNode(entity, searchTerm, level) {
+            //console.log("rendering entity node", entity)
             // Check if this node or any children match the search
-            if (searchTerm && !this.matchesSearch(slot, searchTerm)) {
+            if (searchTerm && !this.matchesSearch(entity, searchTerm)) {
                 return null;
             }
             
-            const isExpanded = SM.expandedNodes.has(slot.id);
-            const hasChildren = slot.children && slot.children.length > 0;
-            const isSelected = SM.selectedSlot === slot.id;
+            const isExpanded = SM.expandedNodes.has(entity.id);
+            const hasChildren = entity.children && entity.children.length > 0;
+            const isSelected = SM.selectedEntity === entity.id;
             
             // Create node container
             const nodeDiv = document.createElement('div');
             nodeDiv.className = 'tree-node-container';
-            nodeDiv.dataset.slotId = slot.id;
+            nodeDiv.dataset.entityId = entity.id;
             
             // Create node element
             const node = document.createElement('div');
             node.className = 'tree-node';
             if (isSelected) node.classList.add('selected');
-            if (!slot.active) node.classList.add('inactive');
-            if (!slot.persistent) node.classList.add('non-persistent');
+            if (!entity.active) node.classList.add('inactive');
+            if (!entity.persistent) node.classList.add('non-persistent');
             node.style.paddingLeft = `${level * 20 + 8}px`;
             
             // Make node draggable
             node.draggable = true;
-            node.dataset.slotId = slot.id;
+            node.dataset.entityId = entity.id;
             
             // Add drag event handlers
-            node.addEventListener('dragstart', (e) => this.handleDragStart(e, slot));
+            node.addEventListener('dragstart', (e) => this.handleDragStart(e, entity));
             node.addEventListener('dragend', (e) => this.handleDragEnd(e));
             node.addEventListener('dragover', (e) => this.handleDragOver(e));
             node.addEventListener('drop', (e) => this.handleDrop(e));
@@ -183,7 +183,7 @@
                 toggle.textContent = isExpanded ? '▼' : '▶';
                 toggle.onclick = (e) => {
                     e.stopPropagation();
-                    this.toggleNode(slot.id);
+                    this.toggleNode(entity.id);
                 };
             } else {
                 toggle.classList.add('empty');
@@ -201,7 +201,7 @@
             // Node name
             const name = document.createElement('span');
             name.className = 'node-name';
-            name.textContent = slot.name;
+            name.textContent = entity.name;
             
             // Assemble node
             content.appendChild(icon);
@@ -210,7 +210,7 @@
             node.appendChild(content);
             
             // Click handler
-            node.onclick = () => SM.selectSlot(slot.id);
+            node.onclick = () => SM.selectEntity(entity.id);
             
             nodeDiv.appendChild(node);
             
@@ -219,8 +219,8 @@
                 const childrenContainer = document.createElement('div');
                 childrenContainer.className = 'tree-children';
                 
-                slot.children.forEach(child => {
-                    const childNode = this.renderSlotNode(child, searchTerm, level + 1);
+                entity.children.forEach(child => {
+                    const childNode = this.renderEntityNode(child, searchTerm, level + 1);
                     if (childNode) {
                         childrenContainer.appendChild(childNode);
                     }
@@ -233,19 +233,19 @@
         }
 
         /**
-         * Check if slot matches search term
+         * Check if entity matches search term
          */
-        matchesSearch(slot, searchTerm) {
+        matchesSearch(entity, searchTerm) {
             if (!searchTerm) return true;
             
-            // Check slot name
-            if (slot.name.toLowerCase().includes(searchTerm)) {
+            // Check entity name
+            if (entity.name.toLowerCase().includes(searchTerm)) {
                 return true;
             }
             
             // Check component types
-            if (slot.components) {
-                for (const component of slot.components) {
+            if (entity.components) {
+                for (const component of entity.components) {
                     if (component.type.toLowerCase().includes(searchTerm)) {
                         return true;
                     }
@@ -253,8 +253,8 @@
             }
             
             // Check children
-            if (slot.children) {
-                for (const child of slot.children) {
+            if (entity.children) {
+                for (const child of entity.children) {
                     if (this.matchesSearch(child, searchTerm)) {
                         return true;
                     }
@@ -267,8 +267,8 @@
         /**
          * Toggle node expansion
          */
-        toggleNode(slotId) {
-            SM.toggleNodeExpansion(slotId);
+        toggleNode(entityId) {
+            SM.toggleNodeExpansion(entityId);
             this.render();
         }
 
@@ -288,15 +288,15 @@
         /**
          * Handle drag start
          */
-        handleDragStart(e, slot) {
-            this.draggedSlotId = slot.id;
+        handleDragStart(e, entity) {
+            this.draggedEntityId = entity.id;
             e.dataTransfer.effectAllowed = 'copyMove';
-            e.dataTransfer.setData('text/plain', slot.id);
+            e.dataTransfer.setData('text/plain', entity.id);
             
-            // console.log("slot", slot)
-            // let copy = slot.export()
+            // console.log("entity", entity)
+            // let copy = entity.export()
 
-            // // Store the full slot data for inventory
+            // // Store the full entity data for inventory
             // e.dataTransfer.setData('application/json', JSON.stringify(copy));
             
             // Add dragging class
@@ -311,7 +311,7 @@
          */
         handleDragEnd(e) {
             e.target.classList.remove('dragging');
-            this.draggedSlotId = null;
+            this.draggedEntityId = null;
             
             // Remove all drag-over classes
             document.querySelectorAll('.drag-over').forEach(el => {
@@ -334,16 +334,16 @@
          * Handle drag enter
          */
         handleDragEnter(e) {
-            if (!this.draggedSlotId) return;
+            if (!this.draggedEntityId) return;
             
             const target = e.target.closest('.tree-node');
             if (!target) return;
             
-            const targetSlotId = target.dataset.slotId;
-            if (targetSlotId === this.draggedSlotId) return;
+            const targetEntityId = target.dataset.entityId;
+            if (targetEntityId === this.draggedEntityId) return;
             
             // Check if we can drop here (not on a descendant)
-            if (this.isDescendant(this.draggedSlotId, targetSlotId)) {
+            if (this.isDescendant(this.draggedEntityId, targetEntityId)) {
                 return;
             }
             
@@ -370,29 +370,29 @@
             const target = e.target.closest('.tree-node');
             if (!target) return;
             
-            const targetSlotId = target.dataset.slotId;
-            if (!targetSlotId || targetSlotId === this.draggedSlotId) return;
+            const targetEntityId = target.dataset.entityId;
+            if (!targetEntityId || targetEntityId === this.draggedEntityId) return;
             
             // Check if we can drop here
-            if (this.isDescendant(this.draggedSlotId, targetSlotId)) {
-                alert('Cannot move a slot into one of its descendants');
+            if (this.isDescendant(this.draggedEntityId, targetEntityId)) {
+                alert('Cannot move a entity into one of its descendants');
                 return;
             }
             
-            // Queue slot move through change manager
-            const change = new SlotMoveChange(this.draggedSlotId, targetSlotId, { source: 'ui' });
+            // Queue entity move through change manager
+            const change = new EntityMoveChange(this.draggedEntityId, targetEntityId, { source: 'ui' });
             changeManager.applyChange(change);
             
             // Expand the target node to show the newly added child
-            SM.expandedNodes.add(targetSlotId);
+            SM.expandedNodes.add(targetEntityId);
         }
 
         /**
-         * Check if targetId is a descendant of slotId
+         * Check if targetId is a descendant of entityId
          */
-        isDescendant(slotId, targetId) {
-            const slot = SM.getSlotById(slotId);
-            if (!slot) return false;
+        isDescendant(entityId, targetId) {
+            const entity = SM.getEntityById(entityId);
+            if (!entity) return false;
             
             const checkChildren = (parent) => {
                 if (!parent.children) return false;
@@ -404,17 +404,17 @@
                 return false;
             };
             
-            return checkChildren(slot);
+            return checkChildren(entity);
         }
 
         /**
          * Handle drop to root level
          */
         async handleDropToRoot() {
-            if (!this.draggedSlotId) return;
+            if (!this.draggedEntityId) return;
             
-            // Queue slot move to root through change manager
-            const change = new SlotMoveChange(this.draggedSlotId, null, { source: 'ui' });
+            // Queue entity move to root through change manager
+            const change = new EntityMoveChange(this.draggedEntityId, null, { source: 'ui' });
             changeManager.applyChange(change);
         }
     }

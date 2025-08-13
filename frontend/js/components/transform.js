@@ -1,15 +1,15 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 const { eulerToQuaternion, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class TransformComponent extends SlotComponent {
+export class TransformComponent extends EntityComponent {
     constructor(){
         super();
         this.bsRef = BS.Transform;
         this.type = "Transform";
     }
 
-    async init(slot, sceneComponent, properties){
-        await super.init(slot, sceneComponent, properties);
+    async init(entity, sceneComponent, properties){
+        await super.init(entity, sceneComponent, properties);
         return this;
     }
 

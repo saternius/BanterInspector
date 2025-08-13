@@ -6,21 +6,21 @@
 console.log("It is 3:00")
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
-    const { loadMockSlotData } = await import(`${window.repoUrl}/mock-data.js`);
-    const { SUPPORTED_COMPONENTS, Slot, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/components/index.js`);
+    const { loadMockEntityData } = await import(`${window.repoUrl}/mock-data.js`);
+    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/components/index.js`);
 
     export class SceneManager {
         constructor() {
             this.scene = null;
-            this.slotData = {
-                slots: [],
-                slotMap:{},
+            this.entityData = {
+                entities: [],
+                entityMap:{},
                 componentMap: {}
             };
             this.props = {
                 hierarchy: null,
             }
-            this.selectedSlot = null;
+            this.selectedEntity = null;
             this.expandedNodes = new Set();
             this.loaded = false;
 
@@ -112,9 +112,9 @@ console.log("It is 3:00")
                         }
                         console.log("hierarchy =>", hierarchy)
                         
-                        // Start slot generation
+                        // Start entity generation
                         if (window.loadingScreen) {
-                            window.loadingScreen.updateStage('slots', 0, 'Generating slots...');
+                            window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
                         }
                         await this.loadHierarchy(hierarchy);
                     } catch (error) {
@@ -186,9 +186,9 @@ console.log("It is 3:00")
                 window.loadingScreen.updateStage('hierarchy', 20, 'Root object found');
             }
 
-            let createSlotHierarchy = async (obj)=>{
+            let createEntityHierarchy = async (obj)=>{
                 let component_refs = []
-                let slot = {}
+                let entity = {}
 
                 // Make transform the top component
                 let transform = obj.GetComponent(BS.ComponentType.Transform)
@@ -205,95 +205,95 @@ console.log("It is 3:00")
                 }
 
 
-                slot.name = obj.name;
-                slot.components = component_refs;
+                entity.name = obj.name;
+                entity.components = component_refs;
                 if (obj.Traverse) {
                     const childPromises = [];
                     obj.Traverse((child) => {
                         if (child && child.id !== obj.id) {
                             if (child.parent == obj.id) {
-                                childPromises.push(createSlotHierarchy(child));
+                                childPromises.push(createEntityHierarchy(child));
                             }
                         }
                     });
                     
-                    const childSlots = await Promise.all(childPromises);
-                    slot.children = childSlots.filter(s => s);
+                    const childEntities = await Promise.all(childPromises);
+                    entity.children = childEntities.filter(s => s);
                 } 
-                return slot;
+                return entity;
             }
 
-            let rootSlot = await createSlotHierarchy(rootObj, null);
-            console.log("rootSlot =>", rootSlot)
-            return rootSlot;
+            let rootEntity = await createEntityHierarchy(rootObj, null);
+            console.log("rootEntity =>", rootEntity)
+            return rootEntity;
         }
 
-        // This gathers the hierarchy of the scene from the root slot
-        async gatherSceneHierarchyBySlot(){
-            if(!this.slotData.slots.length){
+        // This gathers the hierarchy of the scene from the root entity
+        async gatherSceneHierarchyByEntity(){
+            if(!this.entityData.entities.length){
                 return null;
             }
-            let rootSlot = this.getRootSlot();
-            let createSlotHierarchy = (slot)=>{
+            let rootEntity = this.getRootEntity();
+            let createEntityHierarchy = (entity)=>{
                 let h = {
-                    name: slot.name,
-                    layer: slot.layer,
-                    components: Array.from(new Set(slot.components.map(c=>c.id))),
-                    children: slot.children.map(c=>createSlotHierarchy(c))
+                    name: entity.name,
+                    layer: entity.layer,
+                    components: Array.from(new Set(entity.components.map(c=>c.id))),
+                    children: entity.children.map(c=>createEntityHierarchy(c))
                 }
                 return h;
             }
-            let hierarchy = createSlotHierarchy(rootSlot);
+            let hierarchy = createEntityHierarchy(rootEntity);
             return hierarchy;
         }
 
 
 
-        // Updates the hierarchy of the scene from the root slot
+        // Updates the hierarchy of the scene from the root entity
         async updateHierarchy(){  
-            let h = await this.gatherSceneHierarchyBySlot();
+            let h = await this.gatherSceneHierarchyByEntity();
             this.props.hierarchy = h;
             this._updateUI();
         }
 
 
-        // Loads all the Slots on initialization
+        // Loads all the Entities on initialization
         async loadHierarchy(hierarchy){
             console.log("loading hierarchy =>", hierarchy)
             if(!hierarchy){ return null}
             this.props.hierarchy = hierarchy;
             
-            // Count total slots for progress tracking
-            let totalSlots = 0;
-            let processedSlots = 0;
-            const countSlots = (h) => {
-                totalSlots++;
+            // Count total entities for progress tracking
+            let totalEntities = 0;
+            let processedEntities = 0;
+            const countEntities = (h) => {
+                totalEntities++;
                 if (h.children) {
-                    h.children.forEach(child => countSlots(child));
+                    h.children.forEach(child => countEntities(child));
                 }
             };
-            countSlots(hierarchy);
+            countEntities(hierarchy);
             
-            let hierarchyToSlot = async (h, parent_path = null)=>{
+            let hierarchyToEntity = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
                 let gO = await this.scene.FindByPath(path);
                 if(!gO){
-                    return await this.loadHistoricalSlot(h, parent_path)
+                    return await this.loadHistoricalEntity(h, parent_path)
                 }
 
-                const slot = await new Slot().init({
+                const entity = await new Entity().init({
                     name: h.name || 'GameObject',
                     parentId: parent_path,
                     _bs: gO,
                     layer: gO.layer
                 });
                 
-                // Update slot generation progress
-                processedSlots++;
+                // Update entity generation progress
+                processedEntities++;
                 if (window.loadingScreen) {
-                    const progress = (processedSlots / totalSlots) * 100;
-                    window.loadingScreen.updateStage('slots', progress, 
-                        `Processing slot ${processedSlots} of ${totalSlots}: ${h.name}`);
+                    const progress = (processedEntities / totalEntities) * 100;
+                    window.loadingScreen.updateStage('entities', progress, 
+                        `Processing entity ${processedEntities} of ${totalEntities}: ${h.name}`);
                 }
 
                 //Make transform the top component
@@ -302,9 +302,9 @@ console.log("It is 3:00")
                 if(transform){
                     let component_ref = h.components[ref_idx]
                     let componentClass = componentBSTypeMap[transform.type]
-                    let slotComponent = await new componentClass().init(slot, transform);
-                    slotComponent.setId(component_ref);
-                    slot.components.push(slotComponent);
+                    let entityComponent = await new componentClass().init(entity, transform);
+                    entityComponent.setId(component_ref);
+                    entity.components.push(entityComponent);
                     ref_idx++;
                 }
 
@@ -325,10 +325,10 @@ console.log("It is 3:00")
                         let componentClass = componentBSTypeMap[component.type]
                         //console.log("componentClass =>", componentClass)
                         let props = this.getHistoricalProps(component_ref).props
-                        let slotComponent = await new componentClass().init(slot, component, props);
-                        //console.log("slotComponent =>", slotComponent)
-                        slotComponent.setId(component_ref);
-                        slot.components.push(slotComponent);
+                        let entityComponent = await new componentClass().init(entity, component, props);
+                        //console.log("entityComponent =>", entityComponent)
+                        entityComponent.setId(component_ref);
+                        entity.components.push(entityComponent);
                     }
                 }
 
@@ -339,44 +339,44 @@ console.log("It is 3:00")
                         //console.log("MonoBehavior Spotted =>", component_ref)
                         let props = this.getHistoricalProps(component_ref).props
                         props.id = component_ref;
-                        let slotComponent = await new MonoBehaviorComponent().init(slot, null, props)
-                        slot.components.push(slotComponent);
+                        let entityComponent = await new MonoBehaviorComponent().init(entity, null, props)
+                        entity.components.push(entityComponent);
                     }
                 })
                 
                 // Update components progress
                 if (window.loadingScreen && h.components.length > 0) {
                     window.loadingScreen.updateStage('components', 
-                        (processedSlots / totalSlots) * 100, 
+                        (processedEntities / totalEntities) * 100, 
                         `Registered ${h.components.length} components for ${h.name}`);
                 }
 
                 for(let child of h.children){
-                    let childSlot = await hierarchyToSlot(child, slot.id);
-                    await childSlot._setParent(slot);
+                    let childEntity = await hierarchyToEntity(child, entity.id);
+                    await childEntity._setParent(entity);
                 }
-                return slot;
+                return entity;
             }
 
-            const slot = await hierarchyToSlot(hierarchy, null);
+            const entity = await hierarchyToEntity(hierarchy, null);
 
-            this.slotData.slots = [slot];
+            this.entityData.entities = [entity];
             this.initializeExpandedNodes();
             
-            // Slots generation complete
+            // Entities generation complete
             if (window.loadingScreen) {
-                window.loadingScreen.updateStage('slots', 100, 'All slots generated');
+                window.loadingScreen.updateStage('entities', 100, 'All entities generated');
             }
             
             inspector.hierarchyPanel.render()
         }
 
 
-        //Creates a slot from the inventory schema
-        async _loadSlot(slotData, parentId){
-            //console.log("loading slot =>", slotData)
-            let loadSubSlot = async (item, parentId)=>{ 
-                const newSlot = await new Slot().init({
+        //Creates a entity from the inventory schema
+        async _loadEntity(entityData, parentId){
+            //console.log("loading entity =>", entityData)
+            let loadSubEntity = async (item, parentId)=>{ 
+                const newEntity = await new Entity().init({
                     name: item.name,
                     parentId: parentId,
                     layer: item.layer
@@ -393,7 +393,7 @@ console.log("It is 3:00")
                                 id: component.id
                             }
                         }
-                        await this._addComponent(newSlot, component.type, component.properties);
+                        await this._addComponent(newEntity, component.type, component.properties);
                     }
                 }
 
@@ -401,23 +401,23 @@ console.log("It is 3:00")
                     for(let i=0; i<item.children.length; i++){
                         //console.log("adding child =>", item.children[i])
                         let child = item.children[i];
-                        let childSlot = await loadSubSlot(child, newSlot.id);
-                        await childSlot._setParent(newSlot);
+                        let childEntity = await loadSubEntity(child, newEntity.id);
+                        await childEntity._setParent(newEntity);
                     }
                 }
     
-                return newSlot;
+                return newEntity;
             }
 
 
-            let parentSlot = (parentId)? this.getSlotOrRoot(parentId) : this.getSlotOrRoot(slotData.parentId);
-            let slot = await loadSubSlot(slotData, parentId);
-            await slot._setParent(parentSlot);
+            let parentEntity = (parentId)? this.getEntityOrRoot(parentId) : this.getEntityOrRoot(entityData.parentId);
+            let entity = await loadSubEntity(entityData, parentId);
+            await entity._setParent(parentEntity);
 
             this.expandedNodes.add(parentId);
-            this.selectSlot(slot.id);
-            slot.finished_loading = true;
-            return slot;
+            this.selectEntity(entity.id);
+            entity.finished_loading = true;
+            return entity;
         }
 
 
@@ -441,11 +441,11 @@ console.log("It is 3:00")
         }
         
 
-        // Creates and hydrates a slot using the SpaceProperties
-        async loadHistoricalSlot(hierarchy, parentId){
+        // Creates and hydrates a entity using the SpaceProperties
+        async loadHistoricalEntity(hierarchy, parentId){
             
-            console.log("loading historical slot =>", hierarchy)
-            const slot = await new Slot().init({
+            console.log("loading historical entity =>", hierarchy)
+            const entity = await new Entity().init({
                 name: hierarchy.name,
                 parentId: parentId,
                 layer: hierarchy.layer
@@ -458,43 +458,43 @@ console.log("It is 3:00")
                 let componentClass = componentTypeMap[hist.type]
                 let props = hist.props
                 props.id = component_ref;
-                let slotComponent = await new componentClass().init(slot, null, props)
-                slot.components.push(slotComponent);
+                let entityComponent = await new componentClass().init(entity, null, props)
+                entity.components.push(entityComponent);
             }
 
             hierarchy.children.forEach(async (child)=>{
-                let childSlot = await this.loadHistoricalSlot(child, slot.id);
-                await childSlot._setParent(slot);
+                let childEntity = await this.loadHistoricalEntity(child, entity.id);
+                await childEntity._setParent(entity);
             })
 
-            return slot;
+            return entity;
         }
 
     
         initializeExpandedNodes() {
             // Expand root nodes by default
-            this.slotData.slots.forEach(slot => {
-                this.expandedNodes.add(slot.id);
+            this.entityData.entities.forEach(entity => {
+                this.expandedNodes.add(entity.id);
             });
         }
 
     
-        getSlotComponentById(componentId){
-            return this.slotData.componentMap[componentId];
+        getEntityComponentById(componentId){
+            return this.entityData.componentMap[componentId];
         }
 
         
-        toggleNodeExpansion(slotId) {
-            if (this.expandedNodes.has(slotId)) {
-                this.expandedNodes.delete(slotId);
+        toggleNodeExpansion(entityId) {
+            if (this.expandedNodes.has(entityId)) {
+                this.expandedNodes.delete(entityId);
             } else {
-                this.expandedNodes.add(slotId);
+                this.expandedNodes.add(entityId);
             }
         }
 
 
-        selectSlot(slotId) {
-            this.selectedSlot = slotId;
+        selectEntity(entityId) {
+            this.selectedEntity = entityId;
             this._updateUI();
         }
 
@@ -504,71 +504,71 @@ console.log("It is 3:00")
                 inspector.hierarchyPanel.render();
             }
             if(inspector?.propertiesPanel){
-                inspector.propertiesPanel.render(this.selectedSlot);
+                inspector.propertiesPanel.render(this.selectedEntity);
             }
         }
 
 
-        getSlotById(slotId) {
-            return this.slotData.slotMap[slotId];
+        getEntityById(entityId) {
+            return this.entityData.entityMap[entityId];
         }
 
 
-        getAllSlots() {
-            return Object.values(this.slotData.slotMap || {});
+        getAllEntities() {
+            return Object.values(this.entityData.entityMap || {});
         }
 
-        getRootSlot(){
-            return this.slotData.slots[0];
+        getRootEntity(){
+            return this.entityData.entities[0];
         }
 
-        getSlotOrRoot(slotId){
-            let slot = this.getSlotById(slotId);
-            if(!slot){
-                slot = this.getRootSlot();
+        getEntityOrRoot(entityId){
+            let entity = this.getEntityById(entityId);
+            if(!entity){
+                entity = this.getRootEntity();
             }
-            return slot;
+            return entity;
         }
 
-        getSelectedSlot(rootFallback){
+        getSelectedEntity(rootFallback){
             if(rootFallback){
-                return this.getSlotOrRoot(this.selectedSlot);
+                return this.getEntityOrRoot(this.selectedEntity);
             }
-            return this.getSlotById(this.selectedSlot);
+            return this.getEntityById(this.selectedEntity);
         }
 
-        getSlotByName(slotName){
-            return SM.getAllSlots().find(x=>x.name==slotName);
+        getEntityByName(entityName){
+            return SM.getAllEntities().find(x=>x.name==entityName);
         }
 
         getAllMonoBehaviors(){
-            return Object.values(this.slotData.componentMap).filter(x=>x.type === "MonoBehavior");
+            return Object.values(this.entityData.componentMap).filter(x=>x.type === "MonoBehavior");
         }
 
 
-        async _addNewSlot(slotName, parentId = null) {
+        async _addNewEntity(entityName, parentId = null) {
             if(!this.scene || !window.BS){
                 console.log("NO SCENE AVAILABLE")
                 return null;
             }
 
             if(!parentId){
-                parentId = this.slotData.slots[0].id;
+                parentId = this.entityData.entities[0].id;
             }
 
-            let parentSlot = this.getSlotById(parentId);
-            if(!parentSlot){
-                console.log("no parent slot found")
+            let parentEntity = this.getEntityById(parentId);
+            if(!parentEntity){
+                console.log("no parent entity found")
                 return null;
             }
           
             // Create new GameObject
-            let newSlot = await new Slot().init({
+            let newEntity = await new Entity().init({
                 parentId: parentId,
-                name: slotName
+                name: entityName
             });
 
-            console.log("NEW SLOT:", newSlot)
+            console.log("NEW SLOT:", newEntity)
 
             function stringTo8DigitNumber(str) {
                 let hash = 0x811c9dc5; // FNV offset basis
@@ -580,24 +580,24 @@ console.log("It is 3:00")
               }
 
             let properties = {
-                id: `Transform_${stringTo8DigitNumber(newSlot.id)}`
+                id: `Transform_${stringTo8DigitNumber(newEntity.id)}`
             }
 
-            let transform = await new TransformComponent().init(newSlot, null, properties);
-            newSlot.components.push(transform);
+            let transform = await new TransformComponent().init(newEntity, null, properties);
+            newEntity.components.push(transform);
 
             //this.updateHierarchy()
-            await newSlot._setParent(parentSlot);
+            await newEntity._setParent(parentEntity);
         }
 
        
-        async _addComponent(slot, componentType, componentProperties){
+        async _addComponent(entity, componentType, componentProperties){
             // Check if component already exists (for unique components)
             const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
             if (uniqueComponents.includes(componentType)) {
-                const exists = slot.components.some(c => c.type === componentType);
+                const exists = entity.components.some(c => c.type === componentType);
                 if (exists) {
-                    console.warn(`A ${componentType} component already exists on this slot`);
+                    console.warn(`A ${componentType} component already exists on this entity`);
                     return;
                 }
             }
@@ -610,40 +610,40 @@ console.log("It is 3:00")
                 return;
             }
             
-            let slotComponent = await new ComponentClass().init(slot, null, componentProperties);
-            slot.components.push(slotComponent);
-            this.slotData.componentMap[slotComponent.id] = slotComponent;
+            let entityComponent = await new ComponentClass().init(entity, null, componentProperties);
+            entity.components.push(entityComponent);
+            this.entityData.componentMap[entityComponent.id] = entityComponent;
 
             // Refresh properties panel
             if (inspector?.propertiesPanel) {
-                inspector.propertiesPanel.render(slot.id);
+                inspector.propertiesPanel.render(entity.id);
             }
 
          
-            slot._checkForGhostComponents(slotComponent.id.split("_")[1]);
+            entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
             //this.updateHierarchy()
-            return slotComponent;
+            return entityComponent;
         }
     }
 
     // Create singleton instance
     export const sceneManager = new SceneManager();
     window.SM = sceneManager
-    window.slots = ()=>{ return window.SM.slotData.slots }
+    window.entities = ()=>{ return window.SM.entityData.entities }
     window.crawl = ()=>{
-        let dig = (slot)=>{
+        let dig = (entity)=>{
             let map = {
-                slot: slot,
-                _bs: slot._bs,
-                name: slot.name,
-                '.': slot.components,
-                '_': slot.components.map(c=>c.type)
+                entity: entity,
+                _bs: entity._bs,
+                name: entity.name,
+                '.': entity.components,
+                '_': entity.components.map(c=>c.type)
             }
-            for(let i=0; i<slot.children.length; i++){
-                map[i] = dig(slot.children[i])
+            for(let i=0; i<entity.children.length; i++){
+                map[i] = dig(entity.children[i])
             }
             return map
         }
-        return dig(window.slots()[0])
+        return dig(window.entities()[0])
     }
 //})()

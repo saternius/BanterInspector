@@ -10,7 +10,7 @@ export class LoadingScreen {
             { id: 'modules', label: 'Loading modules...', weight: 30 },
             { id: 'scene-connect', label: 'Connecting to Unity scene...', weight: 20 },
             { id: 'hierarchy', label: 'Gathering scene hierarchy...', weight: 5 },
-            { id: 'slots', label: 'Generating slots...', weight: 20 },
+            { id: 'entities', label: 'Generating entities...', weight: 20 },
         ];
         
         this.currentStageIndex = -1;

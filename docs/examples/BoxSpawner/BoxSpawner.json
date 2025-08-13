@@ -3,7 +3,7 @@
   "name": "BoxSpawner",
   "created": 1754908215691,
   "last_used": 1754908215691,
-  "itemType": "slot",
+  "itemType": "entity",
   "description": "",
   "data": {
     "name": "BoxSpawner2",
@@ -239,7 +239,7 @@
               "name": "myScript2",
               "file": "BoxSpawner.js",
               "vars": {
-                "slotRef": {
+                "entityRef": {
                   "type": "string",
                   "value": "Box"
                 }
@@ -247,13 +247,13 @@
             },
             "scriptInstance": {
               "vars": {
-                "slotRef": {
+                "entityRef": {
                   "type": "string",
                   "value": "Box"
                 }
               },
               "default": {
-                "slotRef": {
+                "entityRef": {
                   "type": "string",
                   "value": ""
                 }
@@ -262,13 +262,13 @@
             },
             "ctx": {
               "vars": {
-                "slotRef": {
+                "entityRef": {
                   "type": "string",
                   "value": "Box"
                 }
               },
               "default": {
-                "slotRef": {
+                "entityRef": {
                   "type": "string",
                   "value": ""
                 }
@@ -523,7 +523,7 @@
                   "name": "myScript2",
                   "file": "Course.js",
                   "vars": {
-                    "slotRef": {
+                    "entityRef": {
                       "type": "string",
                       "value": "Box"
                     }
@@ -532,13 +532,13 @@
                 },
                 "scriptInstance": {
                   "vars": {
-                    "slotRef": {
+                    "entityRef": {
                       "type": "string",
                       "value": "Box"
                     }
                   },
                   "default": {
-                    "slotRef": {
+                    "entityRef": {
                       "type": "string",
                       "value": ""
                     }
@@ -547,13 +547,13 @@
                 },
                 "scriptContext": {
                   "vars": {
-                    "slotRef": {
+                    "entityRef": {
                       "type": "string",
                       "value": "Box"
                     }
                   },
                   "default": {
-                    "slotRef": {
+                    "entityRef": {
                       "type": "string",
                       "value": ""
                     }
@@ -589,7 +589,7 @@
     {
       "action": "set_mono_behavior_var",
       "componentId": "MonoBehavior_45922",
-      "varName": "slotRef",
+      "varName": "entityRef",
       "newValue": {
         "type": "string",
         "value": "Box"
@@ -599,8 +599,8 @@
       }
     },
     {
-      "action": "set_slot_property",
-      "slotId": "Root/BoxSpawner_57869",
+      "action": "set_entity_property",
+      "entityId": "Root/BoxSpawner_57869",
       "property": "name",
       "newValue": "BoxSpawner2",
       "options": {
@@ -610,7 +610,7 @@
     {
       "action": "set_mono_behavior_var",
       "componentId": "MonoBehavior_45922",
-      "varName": "slotRef",
+      "varName": "entityRef",
       "newValue": {
         "type": "string",
         "value": "Box"

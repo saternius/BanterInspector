@@ -13,14 +13,14 @@ The main interface for scene manipulation.
 
 ### Methods
 
-#### `getSlot(slotId)`
-Returns a slot (GameObject) by its ID.
+#### `getEntity(entityId)`
+Returns a entity (GameObject) by its ID.
 
-#### `createSlot(type, parentId)`
-Creates a new slot of the specified type.
+#### `createEntity(type, parentId)`
+Creates a new entity of the specified type.
 
-#### `removeSlot(slotId)`
-Removes a slot from the scene.
+#### `removeEntity(entityId)`
+Removes a entity from the scene.
 
 ## Component APIs
 
@@ -42,7 +42,7 @@ material.Set("texture", textureUrl)
 ### Creating Changes
 ```javascript
 new ComponentPropertyChange(componentId, property, value)
-new AddComponentChange(slotId, componentType)
+new AddComponentChange(entityId, componentType)
 new RemoveComponentChange(componentId)
 ```
 
@@ -58,13 +58,13 @@ networking.on("event-type", handler)
 
 ### Saving Items
 ```javascript
-inventory.saveSlot(slot, name, folder)
+inventory.saveEntity(entity, name, folder)
 inventory.saveScript(script, name, folder)
 ```
 
 ### Loading Items
 ```javascript
-inventory.loadItem(itemId, parentSlotId)
+inventory.loadItem(itemId, parentEntityId)
 inventory.getItems(folder)
 ```
 

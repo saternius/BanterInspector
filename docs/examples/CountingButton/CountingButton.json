@@ -3,7 +3,7 @@
   "name": "CountingButton",
   "created": 1754911749338,
   "last_used": 1754911749338,
-  "itemType": "slot",
+  "itemType": "entity",
   "description": "A simple button with a number that increments by 1 if you click it.",
   "data": {
     "name": "CountingButton",
@@ -1754,8 +1754,8 @@
       }
     },
     {
-      "action": "set_slot_property",
-      "slotId": "Root/Button",
+      "action": "set_entity_property",
+      "entityId": "Root/Button",
       "property": "name",
       "newValue": "CountingButton",
       "options": {
@@ -1764,7 +1764,7 @@
     },
     {
       "action": "save_item",
-      "slotId": "Root/CountingButton",
+      "entityId": "Root/CountingButton",
       "itemName": "CountingButton",
       "folder": null,
       "options": {
@@ -1772,8 +1772,8 @@
       }
     },
     {
-      "action": "set_slot_property",
-      "slotId": "Root/CountingButton/Count",
+      "action": "set_entity_property",
+      "entityId": "Root/CountingButton/Count",
       "property": "name",
       "newValue": "Counter",
       "options": {
@@ -1781,8 +1781,8 @@
       }
     },
     {
-      "action": "set_slot_property",
-      "slotId": "Root/CountingButton/Counter",
+      "action": "set_entity_property",
+      "entityId": "Root/CountingButton/Counter",
       "property": "name",
       "newValue": "Count",
       "options": {
@@ -1790,9 +1790,9 @@
       }
     },
     {
-      "action": "add_slot",
+      "action": "add_entity",
       "parentId": "Root/CountingButton",
-      "slotName": "NewSlot_34133",
+      "entityName": "NewEntity_34133",
       "options": {
         "source": "ui"
       }

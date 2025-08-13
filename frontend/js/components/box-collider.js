@@ -1,4 +1,4 @@
-const { SlotComponent } = await import(`${window.repoUrl}/components/slot-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class BoxColliderControls{
@@ -42,7 +42,7 @@ export class BoxColliderControls{
             let material = new BS.BanterMaterial()
             material.color = new BS.Vector4(0, 1, 0, .5);
             this.visual.AddComponent(material);
-            await this.visual.SetParent(this.component._slot._bs, true);
+            await this.visual.SetParent(this.component._entity._bs, true);
             this.controls['view'].label = "Hide";
         }else{
             if(this.visual){
@@ -58,7 +58,7 @@ export class BoxColliderControls{
     }
 }
 
-export class BoxColliderComponent extends SlotComponent {
+export class BoxColliderComponent extends EntityComponent {
     constructor() {
         super();
         this.bsRef = BS.BoxCollider;

@@ -18,6 +18,35 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
     
+    def do_GET(self):
+        if self.path == '/something-for-the-time':
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'10a5233475ee42a7a87f5e15ce23b688')
+        elif self.path.startswith('/docs'):
+            # Proxy /docs requests to localhost:4004
+            try:
+                # Ensure trailing slash for /docs root
+                proxy_path = self.path if self.path != '/docs' else '/docs/'
+                print(f"[DEBUG] Proxying {self.path} to http://localhost:4004{proxy_path}")
+                req = urllib.request.Request(f'http://localhost:4004{proxy_path}')
+                with urllib.request.urlopen(req) as response:
+                    content = response.read()
+                    content_type = response.headers.get('Content-Type', 'text/html')
+                    
+                self.send_response(200)
+                self.send_header('Content-Type', content_type)
+                self.end_headers()
+                self.wfile.write(content)
+            except Exception as e:
+                self.send_response(502)
+                self.send_header('Content-Type', 'text/plain')
+                self.end_headers()
+                self.wfile.write(f'Proxy error: {str(e)}'.encode())
+        else:
+            super().do_GET()
+    
     def do_POST(self):
         if self.path == '/api/process-text':
             try:
@@ -57,4 +86,5 @@ if __name__ == '__main__':
     os.chdir(directory)
     print(f"Serving {directory!r} on http://0.0.0.0:{port} with CORS enabled")
     print(f"Proxying /api/process-text to http://localhost:5000/process-text")
+    print(f"Proxying /docs/* to http://localhost:4004/docs/*")
     HTTPServer(('0.0.0.0', port), CORSRequestHandler).serve_forever()

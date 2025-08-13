@@ -1,4 +1,4 @@
-const { SaveSlotItemChange } = await import(`${window.repoUrl}/change-types.js`);
+const { SaveEntityItemChange } = await import(`${window.repoUrl}/change-types.js`);
 
 export class Navigation {
     constructor() {
@@ -104,10 +104,10 @@ export class Navigation {
             // Switch to inventory page
             this.switchPage('inventory');
             
-            // Get the slot data
-            const slotId = e.dataTransfer.getData('text/plain');
-            if (slotId && typeof SaveSlotItemChange !== 'undefined' && typeof changeManager !== 'undefined') {
-                let change = new SaveSlotItemChange(slotId, null, null, {source: 'ui'});
+            // Get the entity data
+            const entityId = e.dataTransfer.getData('text/plain');
+            if (entityId && typeof SaveEntityItemChange !== 'undefined' && typeof changeManager !== 'undefined') {
+                let change = new SaveEntityItemChange(entityId, null, null, {source: 'ui'});
                 changeManager.applyChange(change);
             }
         });

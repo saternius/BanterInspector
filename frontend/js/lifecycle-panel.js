@@ -62,14 +62,14 @@
         }
 
         /**
-         * Get slot information for a MonoBehavior
+         * Get entity information for a MonoBehavior
          */
-        getSlotInfo(monoBehavior) {
-            // MonoBehavior component has a direct reference to its slot
-            if (monoBehavior._slot) {
-                return [monoBehavior._slot.name || 'Unnamed Slot'];
+        getEntityInfo(monoBehavior) {
+            // MonoBehavior component has a direct reference to its entity
+            if (monoBehavior._entity) {
+                return [monoBehavior._entity.name || 'Unnamed Entity'];
             }
-            return ['No slot'];
+            return ['No entity'];
         }
 
         /**
@@ -162,13 +162,13 @@
             // Usage column
             const usageCell = document.createElement('td');
             usageCell.className = 'lifecycle-usage';
-            const slots = this.getSlotInfo(monoBehavior);
-            const slotsText = slots.join(', ') || 'No slots';
-            if (slotsText.length > 32) {
-                usageCell.textContent = slotsText.substring(0, 32) + '...';
-                usageCell.title = slotsText;
+            const entities = this.getEntityInfo(monoBehavior);
+            const entitiesText = entities.join(', ') || 'No entities';
+            if (entitiesText.length > 32) {
+                usageCell.textContent = entitiesText.substring(0, 32) + '...';
+                usageCell.title = entitiesText;
             } else {
-                usageCell.textContent = slotsText;
+                usageCell.textContent = entitiesText;
             }
             
             // Log checkbox column

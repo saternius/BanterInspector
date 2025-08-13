@@ -1,15 +1,15 @@
 this.speed = .05;
 this.started = false;
 this.scored = false;
-let deleteSlot = async (slot) =>{ 
-    if(typeof(slot) === "object"){
-        if(!slot.id){
-            console.log("ERROR: no slot id found in ", slot)
+let deleteEntity = async (entity) =>{ 
+    if(typeof(entity) === "object"){
+        if(!entity.id){
+            console.log("ERROR: no entity id found in ", entity)
             return
         }
-        slot = slot.id
+        entity = entity.id
     }
-    RemoveSlot(slot)
+    RemoveEntity(entity)
 }
 
 let getScriptByName = (scriptName)=>{
@@ -31,7 +31,7 @@ let score = ()=>{
 }
 
 this.onStart = async ()=>{
-    this.transform = this._slot.getTransform()
+    this.transform = this._entity.getTransform()
     await this.transform.Set("localPosition", {x:0,y:Math.random()*2.5,z:6})
     this.started = true;
 }
@@ -51,7 +51,7 @@ this.onUpdate = ()=>{
     }
     
     if(zPos < -6){
-        deleteSlot(this._slot)
+        deleteEntity(this._entity)
     }
     //console.log("[PIPE]", this.transform.properties.localPosition)
 }

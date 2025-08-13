@@ -1,5 +1,5 @@
 this.vars = {
-    "slotRef": {
+    "entityRef": {
         "type": "string",
         "value": ""
     }
@@ -13,37 +13,37 @@ let v = (str)=>{
 }
 
 let loadItem = async (itemRef, target) =>{
-    if(target === "_self") target = this._slot.id
+    if(target === "_self") target = this._entity.id
     if(target === undefined) target = "Root"
     return await LoadItemChange(itemRef, target).apply()
 }
 
-let deleteSlot = async (slot) =>{
-    if(typeof(slot) === "object"){
-        if(!slot.id){
-            console.log("ERROR: no slot id found in ", slot)
+let deleteEntity = async (entity) =>{
+    if(typeof(entity) === "object"){
+        if(!entity.id){
+            console.log("ERROR: no entity id found in ", entity)
             return
         }
-        slot = slot.id
+        entity = entity.id
     }
-    SlotRemoveChange(slot).apply()
+    EntityRemoveChange(entity).apply()
 }
 
-let getSlotByName = (slotName) =>{
-    return SM.getAllSlots().find(x=>x.name === slotName)
+let getEntityByName = (entityName) =>{
+    return SM.getAllEntities().find(x=>x.name === entityName)
 }
 
 
 function handleKey(e){
     if(e.code === "Numpad9"){
         console.log(e)
-        let boxYard = SM.getAllSlots().find(x=>x.name === "BoxSpawner")
-        boxYard.children.forEach(slot=>{
-            deleteSlot(slot.id)
+        let boxYard = SM.getAllEntities().find(x=>x.name === "BoxSpawner")
+        boxYard.children.forEach(entity=>{
+            deleteEntity(entity.id)
         })
     }
     if(e.code === "Numpad7"){
-        let box = getSlotByName("Box")
+        let box = getEntityByName("Box")
         console.log(box)
     }
 })
@@ -52,7 +52,7 @@ this.onStart = ()=>{
     console.log("onStart")
     document.addEventListener("keydown", handleKey)
     this.spawnerTimeout = setInterval(async ()=>{
-        let name = v('slotRef')
+        let name = v('entityRef')
         console.log(`Spawning [${name}]`)
 //         let item = await this.loadItem(name, "BoxYard")
 //         if(!item){

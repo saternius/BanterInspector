@@ -49,10 +49,10 @@ export class Change {
 }
 
 
-export class SlotPropertyChange extends Change{
-    constructor(slotId, property, newValue, options) {
+export class EntityPropertyChange extends Change{
+    constructor(entityId, property, newValue, options) {
         super();
-        this.slotId = slotId;
+        this.entityId = entityId;
         this.property = property;
         this.newValue = newValue;
         this.options = options || {};
@@ -60,8 +60,8 @@ export class SlotPropertyChange extends Change{
     }
 
     getOldValue() {
-        const slot = SM.getSlotById(this.slotId);
-        return slot[this.property];
+        const entity = SM.getEntityById(this.entityId);
+        return entity[this.property];
     }
 
     async apply(){
@@ -74,22 +74,22 @@ export class SlotPropertyChange extends Change{
     }
 
     async change(value){
-        const slot = SM?.getSlotById(this.slotId);
-        slot.Set(this.property, value);
+        const entity = SM?.getEntityById(this.entityId);
+        entity.Set(this.property, value);
     }
 
     getDescription() {
-        return `Changed slot ${this.slotId} ${this.property} to ${this.newValue}`;
+        return `Changed entity ${this.entityId} ${this.property} to ${this.newValue}`;
     }
 
     getUndoDescription() {
-        return `Changed slot ${this.slotId} ${this.property} to ${this.oldValue}`;
+        return `Changed entity ${this.entityId} ${this.property} to ${this.oldValue}`;
     }
 
     cmd(){
         return {
-            action: "set_slot_property",
-            slotId: this.slotId,
+            action: "set_entity_property",
+            entityId: this.entityId,
             property: this.property,
             newValue: this.newValue,
             options: this.options
@@ -105,7 +105,7 @@ export class ComponentPropertyChange extends Change{
         this.property = property;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.component = SM.getSlotComponentById(componentId);
+        this.component = SM.getEntityComponentById(componentId);
         this.oldValue = deepClone(this.options.oldValue || this.getOldValue());
        // console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
@@ -213,9 +213,9 @@ export class SpacePropertyChange extends Change{
 }
 
 export class ComponentAddChange extends Change{
-    constructor(slotId, componentType, options) {
+    constructor(entityId, componentType, options) {
         super();
-        this.slotId = slotId;
+        this.entityId = entityId;
         this.componentType = componentType;
         this.options = options || {};
         this.componentProperties = options.componentProperties || {};
@@ -227,7 +227,7 @@ export class ComponentAddChange extends Change{
             this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
         }
         let event = {
-            slotId: this.slotId,
+            entityId: this.entityId,
             componentType: this.componentType,
             componentProperties: this.componentProperties
         }
@@ -238,7 +238,7 @@ export class ComponentAddChange extends Change{
         const returnWhenComponentLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const component = SM.getSlotComponentById(this.componentProperties.id);
+                const component = SM.getEntityComponentById(this.componentProperties.id);
                 if (component !== undefined && component.initialized) {
                   resolve(component);
                 } else {
@@ -270,7 +270,7 @@ export class ComponentAddChange extends Change{
     cmd(){
         return {
             action: "add_component",
-            slotId: this.slotId,
+            entityId: this.entityId,
             componentType: this.componentType,
             componentProperties: this.componentProperties,
             options: this.options
@@ -279,9 +279,9 @@ export class ComponentAddChange extends Change{
 }
 
 export class ComponentReorderChange extends Change{
-    constructor(slotId, fromIndex, toIndex, options) {
+    constructor(entityId, fromIndex, toIndex, options) {
         super();
-        this.slotId = slotId;
+        this.entityId = entityId;
         this.fromIndex = fromIndex;
         this.toIndex = toIndex;
         this.options = options || {};
@@ -289,8 +289,8 @@ export class ComponentReorderChange extends Change{
 
     async apply() {
         super.apply();
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot || !slot.components) return;
+        const entity = SM.getEntityById(this.entityId);
+        if (!entity || !entity.components) return;
         
         // Don't allow moving Transform component (index 0)
         if (this.fromIndex === 0 || this.toIndex === 0) {
@@ -298,7 +298,7 @@ export class ComponentReorderChange extends Change{
             return;
         }
         
-        const components = slot.components;
+        const components = entity.components;
         if (this.fromIndex < 0 || this.fromIndex >= components.length ||
             this.toIndex < 0 || this.toIndex >= components.length) {
             console.error('Invalid component indices for reorder');
@@ -307,7 +307,7 @@ export class ComponentReorderChange extends Change{
         
         // Send the reorder command
         let event = {
-            slotId: this.slotId,
+            entityId: this.entityId,
             fromIndex: this.fromIndex,
             toIndex: this.toIndex
         };
@@ -320,7 +320,7 @@ export class ComponentReorderChange extends Change{
         super.undo();
         // Reverse the reorder
         let event = {
-            slotId: this.slotId,
+            entityId: this.entityId,
             fromIndex: this.toIndex,
             toIndex: this.fromIndex
         };
@@ -340,7 +340,7 @@ export class ComponentReorderChange extends Change{
     cmd() {
         return {
             action: "reorder_component",
-            slotId: this.slotId,
+            entityId: this.entityId,
             fromIndex: this.fromIndex,
             toIndex: this.toIndex,
             options: this.options
@@ -353,20 +353,20 @@ export class ComponentRemoveChange extends Change{
         super();
         this.componentId = componentId;
         this.componentData = this.captureComponentData();
-        this.slotId = null;
+        this.entityId = null;
         this.componentIndex = null;
         this.options = options || {};
     }
 
     captureComponentData() {
-        // Find the component and its slot
-        let component = SM.getSlotComponentById(this.componentId);
+        // Find the component and its entity
+        let component = SM.getEntityComponentById(this.componentId);
         if(!component){
             console.error(`Component ${this.componentId} not found`);
             return null;
         }
         return {
-            slotId: component._slot.id,
+            entityId: component._entity.id,
             id: component.id,
             type: component.type,
             properties: JSON.parse(JSON.stringify(component.properties || {}))
@@ -389,7 +389,7 @@ export class ComponentRemoveChange extends Change{
         if (!this.componentData) return;
         this.componentData.properties.id = this.componentData.id;
         let event = {
-            slotId: this.componentData.slotId,
+            entityId: this.componentData.entityId,
             componentType: this.componentData.type,
             componentProperties: this.componentData.properties
         }
@@ -415,28 +415,28 @@ export class ComponentRemoveChange extends Change{
     }
 }
 
-export class SlotAddChange extends Change{
-    constructor(parentId, slotName, options) {
+export class EntityAddChange extends Change{
+    constructor(parentId, entityName, options) {
         super();
         this.parentId = parentId;
-        this.slotName = slotName || `NewSlot_${Math.floor(Math.random() * 100000)}`;
-        this.newSlotId = null; // Will be set after creation
+        this.entityName = entityName || `NewEntity_${Math.floor(Math.random() * 100000)}`;
+        this.newEntityId = null; // Will be set after creation
         this.options = options || {};
     }
 
     async apply() {
         super.apply();
-        let data = `slot_added:${this.parentId}:${this.slotName}`
+        let data = `entity_added:${this.parentId}:${this.entityName}`
         networking.sendOneShot(data);
 
-        let expectedSlotId = `${this.parentId}/${this.slotName}`
+        let expectedEntityId = `${this.parentId}/${this.entityName}`
 
-        const returnWhenSlotLoaded = () => {
+        const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const slot = SM.getSlotById(expectedSlotId);
-                if (slot !== undefined && slot.initialized) {
-                  resolve(slot);
+                const entity = SM.getEntityById(expectedEntityId);
+                if (entity !== undefined && entity.initialized) {
+                  resolve(entity);
                 } else {
                   setTimeout(check, 50);
                 }
@@ -444,143 +444,143 @@ export class SlotAddChange extends Change{
               check();
             });
           };
-        return await returnWhenSlotLoaded();
+        return await returnWhenEntityLoaded();
     }
 
     async undo() {
         super.undo();
-        if (!this.newSlotId) return;
-        let slot_id = `${this.parentId}/${this.slotName}`
-        let data = `slot_removed:${slot_id}`
+        if (!this.newEntityId) return;
+        let entity_id = `${this.parentId}/${this.entityName}`
+        let data = `entity_removed:${entity_id}`
         networking.sendOneShot(data);
     }
 
     getDescription() {
-        return `Added new slot${this.parentId ? ' as child' : ' at root'}`;
+        return `Added new entity${this.parentId ? ' as child' : ' at root'}`;
     }
 
     getUndoDescription(){
-        return `Remove slot ${this.slotName}`;
+        return `Remove entity ${this.entityName}`;
     }
 
     cmd(){
         return {
-            action: "add_slot",
+            action: "add_entity",
             parentId: this.parentId,
-            slotName: this.slotName,
+            entityName: this.entityName,
             options: this.options
         }
     }
 }
 
-export class SlotRemoveChange extends Change{
-    constructor(slotId, options) {
+export class EntityRemoveChange extends Change{
+    constructor(entityId, options) {
         super();
-        console.log("SlotRemoveChange: ", slotId)
-        this.slot = SM.getSlotById(slotId);
-        this.slotExport = this.slot.export();
+        console.log("EntityRemoveChange: ", entityId)
+        this.entity = SM.getEntityById(entityId);
+        this.entityExport = this.entity.export();
         this.siblingIndex = null;
         this.options = options || {};
     }
 
-    captureSlotState() {
-        if (!this.slot) return null;
+    captureEntityState() {
+        if (!this.entity) return null;
 
-        let parentId = this.slot.parentId;
+        let parentId = this.entity.parentId;
 
         // Find sibling index
         if (parentId) {
-            const parent = SM.getSlotById(parentId);
+            const parent = SM.getEntityById(parentId);
             if (parent?.children) {
-                this.siblingIndex = parent.children.findIndex(child => child.id === this.slot.id);
+                this.siblingIndex = parent.children.findIndex(child => child.id === this.entity.id);
             }
         } else {
-            // Root level slot
-            this.siblingIndex = SM.slotData.slots.findIndex(s => s.id === this.slot.id);
+            // Root level entity
+            this.siblingIndex = SM.entityData.entities.findIndex(s => s.id === this.entity.id);
         }
 
-        return this.slot.export();
+        return this.entity.export();
     }
 
 
     async apply() {
         super.apply();
-        let data = `slot_removed:${this.slot.id}`
+        let data = `entity_removed:${this.entity.id}`
         networking.sendOneShot(data);
     }
 
     async undo() {
         super.undo();
-        if (!this.slotExport) return;
+        if (!this.entityExport) return;
 
-        // Recreate the slot hierarchy
-        let data = `load_slot:${this.slot.parentId}|${JSON.stringify(this.slotExport)}`
+        // Recreate the entity hierarchy
+        let data = `load_entity:${this.entity.parentId}|${JSON.stringify(this.entityExport)}`
         networking.sendOneShot(data);
     }
 
     getDescription() {
-        return `Remove slot ${this.slotData?.name || ''}`;
+        return `Remove entity ${this.entityData?.name || ''}`;
     }
 
     getUndoDescription(){
-        return `Add slot ${this.slotData?.name || ''}`;
+        return `Add entity ${this.entityData?.name || ''}`;
     }
 
     cmd(){
         return {
-            action: "remove_slot",
-            slotId: this.slot.id,
+            action: "remove_entity",
+            entityId: this.entity.id,
             options: this.options
         }
     }
 }
 
-export class SlotMoveChange extends Change{
-    constructor(slotId, newParentId, options) {
+export class EntityMoveChange extends Change{
+    constructor(entityId, newParentId, options) {
         super();
-        this.slotId = slotId;
+        this.entityId = entityId;
         this.newParentId = newParentId;
-        const slot = SM.getSlotById(slotId);
-        this.oldParentId = slot?.parentId || null;
-        this.oldSiblingIndex = this.getSiblingIndex(slotId, this.oldParentId);
+        const entity = SM.getEntityById(entityId);
+        this.oldParentId = entity?.parentId || null;
+        this.oldSiblingIndex = this.getSiblingIndex(entityId, this.oldParentId);
         this.options = options || {};
     }
 
-    getSiblingIndex(slotId, parentId) {
+    getSiblingIndex(entityId, parentId) {
         if (parentId) {
-            const parent = SM.getSlotById(parentId);
-            return parent?.children?.findIndex(child => child.id === slotId) ?? -1;
+            const parent = SM.getEntityById(parentId);
+            return parent?.children?.findIndex(child => child.id === entityId) ?? -1;
         } else {
-            return SM.slotData.slots.findIndex(s => s.id === slotId);
+            return SM.entityData.entities.findIndex(s => s.id === entityId);
         }
     }
 
     async apply() {
         super.apply();
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) return;
-        await slot.SetParent(this.newParentId);
+        const entity = SM.getEntityById(this.entityId);
+        if (!entity) return;
+        await entity.SetParent(this.newParentId);
     }
 
     async undo() {
         super.undo();
-        const slot = SM.getSlotById(this.slotId);
-        if (!slot) return;
-        await slot.SetParent(this.oldParentId);
+        const entity = SM.getEntityById(this.entityId);
+        if (!entity) return;
+        await entity.SetParent(this.oldParentId);
     }
 
     getDescription() {
-        return `Move slot`;
+        return `Move entity`;
     }
 
     getUndoDescription(){
-        return `Move slot`;
+        return `Move entity`;
     }
 
     cmd(){
         return {
-            action: "move_slot",
-            slotId: this.slotId,
+            action: "move_entity",
+            entityId: this.entityId,
             newParentId: this.newParentId,
             options: this.options
         }
@@ -594,7 +594,7 @@ export class MonoBehaviorVarChange extends Change{
         this.varName = varName;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.monobehavior = SM.getSlotComponentById(componentId);
+        this.monobehavior = SM.getEntityComponentById(componentId);
         this.oldValue = deepClone(options.oldValue || this.getOldValue());
     }
 
@@ -626,7 +626,7 @@ export class MonoBehaviorVarChange extends Change{
 
         // Refresh UI if needed
         if (inspector?.propertiesPanel) {
-            inspector.propertiesPanel.render(SM.selectedSlot);
+            inspector.propertiesPanel.render(SM.selectedEntity);
         }
     }
 
@@ -656,7 +656,7 @@ export class LoadItemChange extends Change{
         this.itemName = itemName;
         this.parentId = parentId || 'Root';
         this.options = options || {};
-        this.slotId = null;
+        this.entityId = null;
         this.itemData = itemData;
     }
 
@@ -668,19 +668,19 @@ export class LoadItemChange extends Change{
                 console.log("[ERROR] no item found =>", this.itemName)
                 return null;
             }
-            if(item.itemType !== "slot"){
-                console.log("[ERROR] item is not a slot =>", this.itemName)
+            if(item.itemType !== "entity"){
+                console.log("[ERROR] item is not a entity =>", this.itemName)
                 return null;
             }
     
-            let changeChildrenIds = (slot)=>{
-                slot.components.forEach(component=>{
+            let changeChildrenIds = (entity)=>{
+                entity.components.forEach(component=>{
                     component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
                 })
-                if(slot.children){
-                    slot.children.forEach(child=>{
-                        child.parentId = slot.id;
-                        child.id = slot.id+"/"+child.name;
+                if(entity.children){
+                    entity.children.forEach(child=>{
+                        child.parentId = entity.id;
+                        child.id = entity.id+"/"+child.name;
                         changeChildrenIds(child);
                     })
                 }
@@ -696,21 +696,21 @@ export class LoadItemChange extends Change{
             this.itemData = itemData;    
         }
        
-        let data = `load_slot:${this.parentId}|${JSON.stringify(this.itemData)}`
+        let data = `load_entity:${this.parentId}|${JSON.stringify(this.itemData)}`
         networking.sendOneShot(data);
 
-        //Additionally send all of the slot properties to space props
+        //Additionally send all of the entity properties to space props
         if(!this.options.ephemeral){
 
-            let getSlotSpaceProperties = (slot)=>{
+            let getEntitySpaceProperties = (entity)=>{
                 let props = {}
-                let getSubSlotProps = (slot)=>{
-                    props[`__${slot.id}/active:slot`] = slot.active
-                    props[`__${slot.id}/persistent:slot`] = slot.persistent
-                    props[`__${slot.id}/name:slot`] = slot.name
-                    props[`__${slot.id}/layer:slot`] = slot.layer
-                    if(slot.components){
-                        slot.components.forEach(component=>{
+                let getSubEntityProps = (entity)=>{
+                    props[`__${entity.id}/active:entity`] = entity.active
+                    props[`__${entity.id}/persistent:entity`] = entity.persistent
+                    props[`__${entity.id}/name:entity`] = entity.name
+                    props[`__${entity.id}/layer:entity`] = entity.layer
+                    if(entity.components){
+                        entity.components.forEach(component=>{
                             if(component.properties){   
                                 Object.keys(component.properties).forEach(prop=>{
                                     props[`__${component.id}/${prop}:component`] = component.properties[prop]
@@ -720,20 +720,20 @@ export class LoadItemChange extends Change{
                     }
                     
 
-                    if(slot.children){
-                        slot.children.forEach(child=>{
-                            getSubSlotProps(child)
+                    if(entity.children){
+                        entity.children.forEach(child=>{
+                            getSubEntityProps(child)
                         })
                     }
                     
                 }
     
-                getSubSlotProps(slot)
+                getSubEntityProps(entity)
                 return props
             }
 
 
-            let itemProps = getSlotSpaceProperties(this.itemData);
+            let itemProps = getEntitySpaceProperties(this.itemData);
             // console.log("[ITEM PROPS] =>", itemProps)
             // SM.scene.SetPublicSpaceProps(itemProps)
             Object.keys(itemProps).forEach(key=>{
@@ -742,13 +742,13 @@ export class LoadItemChange extends Change{
             })
         }
 
-        this.slotId = `${this.parentId}/${this.itemData.name}`
-        const returnWhenSlotLoaded = () => {
+        this.entityId = `${this.parentId}/${this.itemData.name}`
+        const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const slot = SM.getSlotById(this.slotId);
-                if (slot !== undefined && slot.finished_loading) {
-                  resolve(slot);
+                const entity = SM.getEntityById(this.entityId);
+                if (entity !== undefined && entity.finished_loading) {
+                  resolve(entity);
                 } else {
                   setTimeout(check, 50);
                 }
@@ -756,13 +756,13 @@ export class LoadItemChange extends Change{
               check();
             });
           };
-        return await returnWhenSlotLoaded();
+        return await returnWhenEntityLoaded();
     }
 
     async undo() {
         super.undo();
-        if(!this.slotId) return;
-        let data = `slot_removed:${this.slotId}`
+        if(!this.entityId) return;
+        let data = `entity_removed:${this.entityId}`
         networking.sendOneShot(data);
     }
 
@@ -785,70 +785,70 @@ export class LoadItemChange extends Change{
     }
 }
 
-export class CloneSlotChange extends Change{
-    constructor(slotId, options) {
+export class CloneEntityChange extends Change{
+    constructor(entityId, options) {
         super();
-        this.sourceSlot = SM.getSlotById(slotId);
-        if(!this.sourceSlot){
-            console.error(`Source slot ${slotId} not found`);
+        this.sourceEntity = SM.getEntityById(entityId);
+        if(!this.sourceEntity){
+            console.error(`Source entity ${entityId} not found`);
             return;
         }
-        this.slotData = this.sourceSlot.export();
-        this.slotId = `${this.sourceSlot.parentId}/${this.sourceSlot.name}_${Math.floor(Math.random() * 100000)}`;
+        this.entityData = this.sourceEntity.export();
+        this.entityId = `${this.sourceEntity.parentId}/${this.sourceEntity.name}_${Math.floor(Math.random() * 100000)}`;
         this.options = options || {};
     }
 
     async apply() {
         super.apply();
 
-        let changeChildrenIds = (slot)=>{
-            slot.components.forEach(component=>{
+        let changeChildrenIds = (entity)=>{
+            entity.components.forEach(component=>{
                 component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
             })
-            slot.children.forEach(child=>{
-                child.parentId = slot.id;
-                child.id = slot.id+"/"+child.name;
+            entity.children.forEach(child=>{
+                child.parentId = entity.id;
+                child.id = entity.id+"/"+child.name;
                 changeChildrenIds(child);
             })
         }
 
-        let itemData = this.slotData;
-        itemData.name = this.sourceSlot.name+"_"+Math.floor(Math.random() * 100000);
-        itemData.parentId = this.sourceSlot.parentId;
-        itemData.id = this.sourceSlot.parentId+"/"+itemData.name;
+        let itemData = this.entityData;
+        itemData.name = this.sourceEntity.name+"_"+Math.floor(Math.random() * 100000);
+        itemData.parentId = this.sourceEntity.parentId;
+        itemData.id = this.sourceEntity.parentId+"/"+itemData.name;
         changeChildrenIds(itemData);
 
-        let data = `load_slot:${this.sourceSlot.parentId}|${JSON.stringify(itemData)}`
+        let data = `load_entity:${this.sourceEntity.parentId}|${JSON.stringify(itemData)}`
         networking.sendOneShot(data);
 
-        //Additionally send all of the slot properties to space props
+        //Additionally send all of the entity properties to space props
         if(!this.options.ephemeral){
 
-            let getSlotSpaceProperties = (slot)=>{
+            let getEntitySpaceProperties = (entity)=>{
                 let props = {}
-                let getSubSlotProps = (slot)=>{
-                    props[`__${slot.id}/active:slot`] = slot.active
-                    props[`__${slot.id}/persistent:slot`] = slot.persistent
-                    props[`__${slot.id}/name:slot`] = slot.name
-                    props[`__${slot.id}/layer:slot`] = slot.layer
+                let getSubEntityProps = (entity)=>{
+                    props[`__${entity.id}/active:entity`] = entity.active
+                    props[`__${entity.id}/persistent:entity`] = entity.persistent
+                    props[`__${entity.id}/name:entity`] = entity.name
+                    props[`__${entity.id}/layer:entity`] = entity.layer
                     
-                    slot.components.forEach(component=>{
+                    entity.components.forEach(component=>{
                         Object.keys(component.properties).forEach(prop=>{
                             props[`__${component.id}/${prop}:component`] = component.properties[prop]
                         })
                     })
     
-                    slot.children.forEach(child=>{
-                        getSubSlotProps(child)
+                    entity.children.forEach(child=>{
+                        getSubEntityProps(child)
                     })
                 }
     
-                getSubSlotProps(slot)
+                getSubEntityProps(entity)
                 return props
             }
 
 
-            let itemProps = getSlotSpaceProperties(itemData);
+            let itemProps = getEntitySpaceProperties(itemData);
             // console.log("[ITEM PROPS] =>", itemProps)
             // SM.scene.SetPublicSpaceProps(itemProps)
             Object.keys(itemProps).forEach(key=>{
@@ -858,13 +858,13 @@ export class CloneSlotChange extends Change{
         }
 
 
-        this.slotId = `${this.sourceSlot.parentId}/${itemData.name}`
-        const returnWhenSlotLoaded = () => {
+        this.entityId = `${this.sourceEntity.parentId}/${itemData.name}`
+        const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const slot = SM.getSlotById(this.slotId);
-                if (slot !== undefined && slot.finished_loading) {
-                  resolve(slot);
+                const entity = SM.getEntityById(this.entityId);
+                if (entity !== undefined && entity.finished_loading) {
+                  resolve(entity);
                 } else {
                   setTimeout(check, 50);
                 }
@@ -872,57 +872,57 @@ export class CloneSlotChange extends Change{
               check();
             });
           };
-        return await returnWhenSlotLoaded();
+        return await returnWhenEntityLoaded();
     }
 
     async undo() {
         super.undo();
-        if(!this.slotId) return;
-        let data = `slot_removed:${this.slotId}`
+        if(!this.entityId) return;
+        let data = `entity_removed:${this.entityId}`
         networking.sendOneShot(data);
     }
 
     getDescription() {
-        return `Clone slot ${this.sourceSlot.name}`;
+        return `Clone entity ${this.sourceEntity.name}`;
     }
 
     getUndoDescription() {
-        return `Remove slot ${this.sourceSlot.name}`;
+        return `Remove entity ${this.sourceEntity.name}`;
     }
 
     cmd(){
         return {
-            action: "clone_slot",
-            slotId: this.slotId,
+            action: "clone_entity",
+            entityId: this.entityId,
             options: this.options
         }
     }
 }
 
-export class SaveSlotItemChange extends Change{
-    constructor(slotId, itemName, folder, options){
+export class SaveEntityItemChange extends Change{
+    constructor(entityId, itemName, folder, options){
         super();
-        this.slotId = slotId;
-        this.slot = SM.getSlotById(slotId);
-        this.itemName = itemName || this.slot.name;
+        this.entityId = entityId;
+        this.entity = SM.getEntityById(entityId);
+        this.itemName = itemName || this.entity.name;
         this.folder = folder || inventory.currentFolder;
         this.options = options || {};
     }
 
 
     finalizeAddItem(){
-        let data = this.slot.export();
+        let data = this.entity.export();
         const now = Date.now();
         const inventoryItem = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: this.itemName,
             created: now,
             last_used: now,
-            itemType: "slot",
+            itemType: "entity",
             description: '',  // Initialize with empty description
             data: data,
             folder: this.folder,
-            history: changeManager.gatherHistory(this.slot)
+            history: changeManager.gatherHistory(this.entity)
         };
         const storageKey = `inventory_${this.itemName}`;
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
@@ -931,7 +931,7 @@ export class SaveSlotItemChange extends Change{
 
     async apply(){
         super.apply();
-        console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.slotId, this.itemName, this.folder)
+        console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.entityId, this.itemName, this.folder)
         const existingKeys = Object.keys(inventory.items);
         if (existingKeys.includes(this.itemName)) {
             if(this.options.source === 'ui'){
@@ -973,7 +973,7 @@ export class SaveSlotItemChange extends Change{
     cmd(){
         return {
             action: "save_item",
-            slotId: this.slotId,
+            entityId: this.entityId,
             itemName: this.itemName,
             folder: this.folder,
             options: this.options
@@ -1326,17 +1326,17 @@ window.RunCommand = async (execString, options)=>{
     let change = null;
     options = options || {};
     switch(args[0]){
-        case "add_slot":
-            change = new SlotAddChange(args[1], args[2], options);
+        case "add_entity":
+            change = new EntityAddChange(args[1], args[2], options);
             break;
-        case "remove_slot":
-            change = new SlotRemoveChange(args[1], options);
+        case "remove_entity":
+            change = new EntityRemoveChange(args[1], options);
             break;
-        case "move_slot":
-            change = new SlotMoveChange(args[1], args[2], options);
+        case "move_entity":
+            change = new EntityMoveChange(args[1], args[2], options);
             break;
-        case "set_slot_property":
-            change = new SlotPropertyChange(args[1], args[2], args[3], options);
+        case "set_entity_property":
+            change = new EntityPropertyChange(args[1], args[2], args[3], options);
             break;
         case "add_component":
             options.componentProperties = args[3];
@@ -1357,11 +1357,11 @@ window.RunCommand = async (execString, options)=>{
         case "load_item":
             change = new LoadItemChange(args[1], args[2], args[3], options);
             break;
-        case "clone_slot":
-            change = new CloneSlotChange(args[1], options);
+        case "clone_entity":
+            change = new CloneEntityChange(args[1], options);
             break;
         case "save_item":
-            change = new SaveSlotItemChange(args[1], args[2], args[3], options);
+            change = new SaveEntityItemChange(args[1], args[2], args[3], options);
             break;
         case "delete_item":
             change = new DeleteItemChange(args[1], options);
@@ -1403,8 +1403,8 @@ commmandInputEl.addEventListener("keydown", (e)=>{
 })
 
 
-window.SetSlotProp = async (slotId, property, newValue, options)=>{
-    let change = new SlotPropertyChange(slotId, property, newValue, options);
+window.SetEntityProp = async (entityId, property, newValue, options)=>{
+    let change = new EntityPropertyChange(entityId, property, newValue, options);
     return await change.apply();
 }
 window.SetComponentProp = async (componentId, property, newValue, options)=>{
@@ -1415,24 +1415,24 @@ window.SetSpaceProp = async (property, newValue, protect, options)=>{
     let change = new SpacePropertyChange(property, newValue, protect, options);
     return await change.apply();
 }
-window.AddComponent = async (slotId, componentType, options)=>{
-    let change = new ComponentAddChange(slotId, componentType, options);
+window.AddComponent = async (entityId, componentType, options)=>{
+    let change = new ComponentAddChange(entityId, componentType, options);
     return await change.apply();
 }
 window.RemoveComponent = async (componentId, options)=>{
     let change = new ComponentRemoveChange(componentId, options);
     return await change.apply();
 }
-window.AddSlot = async (parentId, slotName, options)=>{
-    let change = new SlotAddChange(parentId, slotName, options);
+window.AddEntity = async (parentId, entityName, options)=>{
+    let change = new EntityAddChange(parentId, entityName, options);
     return await change.apply();
 }
-window.RemoveSlot = async (slotId, options)=>{
-    let change = new SlotRemoveChange(slotId, options);
+window.RemoveEntity = async (entityId, options)=>{
+    let change = new EntityRemoveChange(entityId, options);
     return await change.apply();
 }
-window.MoveSlot = async (slotId, newParentId, options)=>{
-    let change = new SlotMoveChange(slotId, newParentId, options);
+window.MoveEntity = async (entityId, newParentId, options)=>{
+    let change = new EntityMoveChange(entityId, newParentId, options);
     return await change.apply();
 }
 window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
@@ -1445,13 +1445,13 @@ window.LoadItem = async (itemName, parentId, options)=>{
     return await change.apply();
 }
 
-window.CloneSlot = async (slotId, options)=>{
-    let change = new CloneSlotChange(slotId, options);
+window.CloneEntity = async (entityId, options)=>{
+    let change = new CloneEntityChange(entityId, options);
     return await change.apply();
 }
 
-window.SaveSlotItem = async (slotId, itemName, folder, options)=>{
-    let change = new SaveSlotItemChange(slotId, itemName, folder, options);
+window.SaveEntityItem = async (entityId, itemName, folder, options)=>{
+    let change = new SaveEntityItemChange(entityId, itemName, folder, options);
     return await change.apply();
 }
 

@@ -3,20 +3,20 @@
  * Provides mock scene data for testing without Unity connection
  */
 
-const { Slot, componentTypeMap } = await import(`${window.repoUrl}/components/index.js`);
+const { Entity, componentTypeMap } = await import(`${window.repoUrl}/components/index.js`);
 
-export async function loadMockSlotData() {
-    // Create mock slot data using the new Slot classes
-    const slotMap = {};
+export async function loadMockEntityData() {
+    // Create mock entity data using the new Entity classes
+    const entityMap = {};
     const componentMap = {};
     
     // Helper function to create components
-    async function createComponents(slot, componentsData) {
+    async function createComponents(entity, componentsData) {
         const components = [];
         for (const compData of componentsData) {
             const ComponentClass = componentTypeMap[compData.type];
             if (ComponentClass) {
-                const component = await new ComponentClass().init(slot, null, compData.properties);
+                const component = await new ComponentClass().init(entity, null, compData.properties);
                 component.id = compData.id; // Use mock IDs
                 components.push(component);
                 componentMap[component.id] = component;
@@ -26,7 +26,7 @@ export async function loadMockSlotData() {
                     id: compData.id,
                     type: compData.type,
                     properties: compData.properties,
-                    _slot: slot,
+                    _entity: entity,
                     update: async function(property, value) {
                         this.properties[property] = value;
                     }
@@ -38,34 +38,34 @@ export async function loadMockSlotData() {
         return components;
     }
     
-    // Helper function to create slot hierarchy
-    async function createSlot(slotData, parent = null) {
-        // Create the slot instance
-        const slot = new Slot(slotData.id, slotData.name, parent?.id || null);
-        await new SlotPropertyChange(slot.id, 'active', slotData.active).apply();
-        await new SlotPropertyChange(slot.id, 'persistent', slotData.persistent).apply();
+    // Helper function to create entity hierarchy
+    async function createEntity(entityData, parent = null) {
+        // Create the entity instance
+        const entity = new Entity(entityData.id, entityData.name, parent?.id || null);
+        await new EntityPropertyChange(entity.id, 'active', entityData.active).apply();
+        await new EntityPropertyChange(entity.id, 'persistent', entityData.persistent).apply();
         
-        // Add to slotMap
-        slotMap[slot.id] = slot;
+        // Add to entityMap
+        entityMap[entity.id] = entity;
         
         // Create components
-        slot.components = await createComponents(slot, slotData.components || []);
+        entity.components = await createComponents(entity, entityData.components || []);
         
         // Create children recursively
-        if (slotData.children && slotData.children.length > 0) {
-            slot.children = [];
-            for (const childData of slotData.children) {
-                const childSlot = await createSlot(childData, slot);
-                slot.children.push(childSlot);
+        if (entityData.children && entityData.children.length > 0) {
+            entity.children = [];
+            for (const childData of entityData.children) {
+                const childEntity = await createEntity(childData, entity);
+                entity.children.push(childEntity);
             }
         }
         
-        return slot;
+        return entity;
     }
     
     // Mock data structure
     const mockData = {
-        slots: [
+        entities: [
             {
                 id: 'root_1',
                 name: 'World',
@@ -404,16 +404,16 @@ export async function loadMockSlotData() {
         ]
     };
     
-    // Create root slots
-    const slots = [];
-    for (const rootData of mockData.slots) {
-        const rootSlot = await createSlot(rootData);
-        slots.push(rootSlot);
+    // Create root entities
+    const entities = [];
+    for (const rootData of mockData.entities) {
+        const rootEntity = await createEntity(rootData);
+        entities.push(rootEntity);
     }
     
     return {
-        slots,
-        slotMap,
+        entities,
+        entityMap,
         componentMap
     };
 }

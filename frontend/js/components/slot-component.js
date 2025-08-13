@@ -1,16 +1,16 @@
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class SlotComponent{
+export class EntityComponent{
     constructor(){
         this.bsRef = null;
         this.lastUpdate = new Map();
         this.initialized = false;
     }
 
-    async init(slot, sceneComponent, properties){
+    async init(entity, sceneComponent, properties){
         //console.log("init component =>", properties)
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
-        this._slot = slot;
+        this._entity = entity;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
         
         if(sceneComponent){
@@ -18,13 +18,13 @@ export class SlotComponent{
             this._bs = sceneComponent;
         }else{
             if(this.bsRef){
-                let newComponent = await slot._bs.AddComponent(new this.bsRef());
+                let newComponent = await entity._bs.AddComponent(new this.bsRef());
                 this._bs = newComponent;
                 this._setMany(this.properties)
             }
         }
         
-        window.SM.slotData.componentMap[this.id] = this;
+        window.SM.entityData.componentMap[this.id] = this;
         this.initialized = true;
         return this;
     }
@@ -34,9 +34,9 @@ export class SlotComponent{
     }
 
     setId(id){
-        delete window.SM.slotData.componentMap[this.id];
+        delete window.SM.entityData.componentMap[this.id];
         this.id = id;
-        window.SM.slotData.componentMap[this.id] = this;
+        window.SM.entityData.componentMap[this.id] = this;
     }
 
     async defaultProperties(){
@@ -60,7 +60,7 @@ export class SlotComponent{
     
 
     async _setMany(properties){
-        //console.log(`(${this._slot.name})[${this.type}] setMany`, properties)
+        //console.log(`(${this._entity.name})[${this.type}] setMany`, properties)
         for(let property in properties){
             await this._set(property, properties[property]);
         }
@@ -87,8 +87,8 @@ export class SlotComponent{
             this._bs.Destroy();
         }
         //console.log("deleting component =>", this.id)
-        this._slot.components.splice(this._slot.components.indexOf(this), 1);
-        delete SM.slotData.componentMap[this.id];
+        this._entity.components.splice(this._entity.components.indexOf(this), 1);
+        delete SM.entityData.componentMap[this.id];
         
         // Remove any space properties associated with this component
         const propsToRemove = [];
@@ -104,7 +104,7 @@ export class SlotComponent{
         }
         
 
-        inspector.propertiesPanel.render(this._slot.id);
+        inspector.propertiesPanel.render(this._entity.id);
     }
 
     async Set(property, value){
