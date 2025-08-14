@@ -69,6 +69,7 @@ export class Networking {
                 
                 // Test the connection
                 //this.testConnection();
+                inventory.setupFirebaseListeners();
             } catch (error) {
                 console.error('Failed to initialize Firebase:', error);
             }

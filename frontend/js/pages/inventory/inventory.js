@@ -12,8 +12,280 @@ export class Inventory {
         this.isRemote = false;
         this.sortBy = 'alphabetical'; // alphabetical, date, last_used
         this.sortDirection = 'asc'; // asc or desc
+        this.firebaseListeners = new Map(); // Track active Firebase listeners
         this.setupDropZone();
         this.render();
+    }
+    
+    /**
+     * Setup Firebase listeners for remote folders
+     */
+    setupFirebaseListeners() {
+        // Clear any existing listeners
+        this.clearFirebaseListeners();
+        
+        if (!window.networking) {
+            console.log('Firebase not initialized, skipping listeners setup');
+            return;
+        }
+        
+        const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+        
+        // Check all folders for remote status and setup listeners
+        Object.entries(this.folders).forEach(([folderName, folder]) => {
+            if (folder.remote) {
+                this.setupFolderListener(folderName, folder);
+            }
+        });
+        
+        // Check if root is remote and setup listener
+        const rootRemoteKey = `inventory_root_remote_${userName}`;
+        if (localStorage.getItem(rootRemoteKey) === 'true') {
+            this.setupRootListener();
+        }
+    }
+    
+    /**
+     * Setup Firebase listener for a specific folder
+     */
+    setupFolderListener(folderName, folder) {
+        if (!window.networking || !window.networking.getDatabase) return;
+        
+        try {
+            const db = window.networking.getDatabase();
+            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            
+            // Build Firebase path for the folder
+            let firebasePath = `inventory/${userName}`;
+            if (folder.parent) {
+                const sanitizedParent = this.sanitizeFirebasePath(folder.parent);
+                firebasePath += `/${sanitizedParent}`;
+            }
+            const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
+            firebasePath += `/${sanitizedFolderName}`;
+            
+            // Setup listeners for child_added and child_removed
+            const folderRef = db.ref(firebasePath);
+            
+            const addedListener = folderRef.on('child_added', (snapshot) => {
+                this.handleFirebaseItemAdded(snapshot, folderName);
+            });
+            
+            const removedListener = folderRef.on('child_removed', (snapshot) => {
+                this.handleFirebaseItemRemoved(snapshot, folderName);
+            });
+            
+            const changedListener = folderRef.on('child_changed', (snapshot) => {
+                this.handleFirebaseItemChanged(snapshot, folderName);
+            });
+            
+            // Store listeners for cleanup
+            this.firebaseListeners.set(firebasePath, {
+                ref: folderRef,
+                listeners: { addedListener, removedListener, changedListener }
+            });
+            
+            console.log('Firebase listeners setup for folder:', firebasePath);
+        } catch (error) {
+            console.error('Failed to setup folder listener:', error);
+        }
+    }
+    
+    /**
+     * Setup Firebase listener for root inventory
+     */
+    setupRootListener() {
+        if (!window.networking || !window.networking.getDatabase) return;
+        
+        try {
+            const db = window.networking.getDatabase();
+            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const firebasePath = `inventory/${userName}`;
+            
+            const rootRef = db.ref(firebasePath);
+            
+            const addedListener = rootRef.on('child_added', (snapshot) => {
+                this.handleFirebaseItemAdded(snapshot, null);
+            });
+            
+            const removedListener = rootRef.on('child_removed', (snapshot) => {
+                this.handleFirebaseItemRemoved(snapshot, null);
+            });
+            
+            const changedListener = rootRef.on('child_changed', (snapshot) => {
+                this.handleFirebaseItemChanged(snapshot, null);
+            });
+            
+            // Store listeners for cleanup
+            this.firebaseListeners.set(firebasePath, {
+                ref: rootRef,
+                listeners: { addedListener, removedListener, changedListener }
+            });
+            
+            console.log('Firebase listeners setup for root:', firebasePath);
+        } catch (error) {
+            console.error('Failed to setup root listener:', error);
+        }
+    }
+    
+    /**
+     * Handle item added from Firebase
+     */
+    handleFirebaseItemAdded(snapshot, folderName) {
+        const key = snapshot.key;
+        const data = snapshot.val();
+        
+        // Skip folder metadata
+        if (key === '_folder') return;
+        
+        // Check if it's a subfolder
+        if (data._folder) {
+            const subfolderName = data._folder.name || key;
+            const fullFolderName = folderName ? `${folderName}/${subfolderName}` : subfolderName;
+            
+            // Check if folder already exists locally
+            if (!this.folders[fullFolderName]) {
+                const folder = {
+                    ...data._folder,
+                    name: subfolderName,
+                    parent: folderName,
+                    remote: true
+                };
+                
+                // Save to localStorage
+                const storageKey = `inventory_folder_${fullFolderName}`;
+                localStorage.setItem(storageKey, JSON.stringify(folder));
+                this.folders[fullFolderName] = folder;
+                
+                // Setup listener for the new remote folder
+                this.setupFolderListener(fullFolderName, folder);
+                
+                console.log('Remote folder added:', fullFolderName);
+                this.render();
+            }
+        } else if (data.itemType) {
+            // It's an item
+            const itemName = data.name || key;
+            
+            // Check if item already exists locally
+            if (!this.items[itemName]) {
+                const item = {
+                    ...data,
+                    folder: folderName
+                };
+                
+                // Save to localStorage
+                const storageKey = `inventory_${itemName}`;
+                localStorage.setItem(storageKey, JSON.stringify(item));
+                this.items[itemName] = item;
+                
+                console.log('Remote item added:', itemName);
+                this.showNotification(`New item "${itemName}" added from remote`);
+                this.render();
+            }
+        }
+    }
+    
+    /**
+     * Handle item removed from Firebase
+     */
+    handleFirebaseItemRemoved(snapshot, folderName) {
+        const key = snapshot.key;
+        const data = snapshot.val();
+        
+        // Skip folder metadata
+        if (key === '_folder') return;
+        
+        // Check if it's a subfolder
+        if (data && data._folder) {
+            const subfolderName = data._folder.name || key;
+            const fullFolderName = folderName ? `${folderName}/${subfolderName}` : subfolderName;
+            
+            // Remove folder locally if it exists
+            if (this.folders[fullFolderName]) {
+                // Remove all items in the folder
+                Object.entries(this.items).forEach(([itemKey, item]) => {
+                    if (item.folder === fullFolderName) {
+                        const storageKey = `inventory_${itemKey}`;
+                        localStorage.removeItem(storageKey);
+                        delete this.items[itemKey];
+                    }
+                });
+                
+                // Remove the folder
+                const storageKey = `inventory_folder_${fullFolderName}`;
+                localStorage.removeItem(storageKey);
+                delete this.folders[fullFolderName];
+                
+                console.log('Remote folder removed:', fullFolderName);
+                this.render();
+            }
+        } else if (data && data.itemType) {
+            // It's an item
+            const itemName = data.name || key;
+            
+            // Remove item locally if it exists
+            if (this.items[itemName]) {
+                const storageKey = `inventory_${itemName}`;
+                localStorage.removeItem(storageKey);
+                delete this.items[itemName];
+                
+                console.log('Remote item removed:', itemName);
+                this.showNotification(`Item "${itemName}" removed from remote`);
+                this.render();
+            }
+        }
+    }
+    
+    /**
+     * Handle item changed from Firebase
+     */
+    handleFirebaseItemChanged(snapshot, folderName) {
+        const key = snapshot.key;
+        const data = snapshot.val();
+        
+        // Skip folder metadata
+        if (key === '_folder') return;
+        
+        if (data && data.itemType) {
+            const itemName = data.name || key;
+            
+            // Update item locally if it exists
+            if (this.items[itemName]) {
+                const item = {
+                    ...data,
+                    folder: folderName
+                };
+                
+                // Save to localStorage
+                const storageKey = `inventory_${itemName}`;
+                localStorage.setItem(storageKey, JSON.stringify(item));
+                this.items[itemName] = item;
+                
+                console.log('Remote item updated:', itemName);
+                
+                // Update preview if this item is selected
+                if (this.selectedItem === itemName) {
+                    this.showPreview(itemName);
+                }
+                
+                this.render();
+            }
+        }
+    }
+    
+    /**
+     * Clear all Firebase listeners
+     */
+    clearFirebaseListeners() {
+        this.firebaseListeners.forEach(({ ref, listeners }) => {
+            // Remove all listeners
+            if (listeners.addedListener) ref.off('child_added');
+            if (listeners.removedListener) ref.off('child_removed');
+            if (listeners.changedListener) ref.off('child_changed');
+        });
+        this.firebaseListeners.clear();
+        console.log('Firebase listeners cleared');
     }
     
     /**
@@ -2288,6 +2560,9 @@ export class Inventory {
             // Re-render to show the new remote status
             this.render();
             
+            // Setup Firebase listeners for the newly remote folders
+            this.setupFirebaseListeners();
+            
         } catch (error) {
             console.error('Firebase upload error:', error);
             this.showNotification(`Upload failed: ${error.message}`);
@@ -2511,6 +2786,10 @@ export class Inventory {
                 // Reload and re-render
                 this.reload();
                 this.showNotification(`Successfully imported ${importedCount} item(s)`);
+                
+                // Setup Firebase listeners for imported remote folders
+                this.setupFirebaseListeners();
+                
                 return true;
             } else {
                 this.showNotification('No new items to import');

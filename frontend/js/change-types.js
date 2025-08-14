@@ -910,7 +910,7 @@ export class SaveEntityItemChange extends Change{
     }
 
 
-    finalizeAddItem(){
+    async finalizeAddItem(){
         let data = this.entity.export();
         const now = Date.now();
         const inventoryItem = {
@@ -926,7 +926,54 @@ export class SaveEntityItemChange extends Change{
         };
         const storageKey = `inventory_${this.itemName}`;
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
+        
+        // Sync to Firebase if in remote location
+        await this.syncToFirebase(inventoryItem);
+        
         inventory.reload();
+    }
+    
+    async syncToFirebase(inventoryItem) {
+        // Check if item is in a remote folder or root is remote
+        const isRemote = this.isItemInRemoteLocation();
+        if (!isRemote) return;
+
+        if (!window.networking) {
+            console.warn('Networking not initialized, skipping sync');
+            return;
+        }
+
+        try {
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            
+            // Build the Firebase path
+            let firebasePath = `inventory/${userName}`;
+            if (this.folder) {
+                const sanitizedFolder = inventory.sanitizeFirebasePath(this.folder);
+                firebasePath += `/${sanitizedFolder}`;
+            }
+            const sanitizedItemName = inventory.sanitizeFirebasePath(this.itemName);
+            firebasePath += `/${sanitizedItemName}`;
+            
+            // Save to Firebase
+            await networking.setData(firebasePath, inventoryItem);
+            console.log('Item synced to Firebase:', firebasePath);
+        } catch (error) {
+            console.error('Failed to sync item to Firebase:', error);
+        }
+    }
+
+    isItemInRemoteLocation() {
+        if (this.folder) {
+            // Check if folder is marked as remote
+            const folderData = inventory.folders[this.folder];
+            return folderData && folderData.remote === true;
+        } else {
+            // Check if root is marked as remote
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const rootRemoteKey = `inventory_root_remote_${userName}`;
+            return localStorage.getItem(rootRemoteKey) === 'true';
+        }
     }
 
     async apply(){
@@ -935,7 +982,7 @@ export class SaveEntityItemChange extends Change{
         const existingKeys = Object.keys(inventory.items);
         if (existingKeys.includes(this.itemName)) {
             if(this.options.source === 'ui'){
-                inventory.showRenameModal(this.itemName, (newName) => {
+                inventory.showRenameModal(this.itemName, async (newName) => {
                     if (!newName || newName.trim() === '') {
                         inventory.showNotification('Item not added - no name provided.');
                         return;
@@ -943,17 +990,32 @@ export class SaveEntityItemChange extends Change{
                     
                     const trimmedName = newName.trim();
                     if (existingKeys.includes(trimmedName)) {
-                        this.showNotification(`An item named "${trimmedName}" also exists.`);
+                        // Show second warning about overwriting
+                        inventory.showConfirmModal(
+                            `⚠️ WARNING: An item named "${trimmedName}" already exists.<br><br>` +
+                            `<strong style="color: #ff6b6b;">Clicking "Confirm" will DELETE the existing saved entity "${trimmedName}" and replace it with the new one.</strong><br><br>` +
+                            `This action cannot be undone. Are you sure you want to overwrite it?`,
+                            async () => {
+                                // User confirmed overwrite - delete existing and save new
+                                const deleteChange = new DeleteItemChange(trimmedName, {source: 'overwrite'});
+                                await deleteChange.apply();
+                                
+                                this.itemName = trimmedName;
+                                await this.finalizeAddItem();
+                                inventory.showNotification(`Overwrote existing item "${trimmedName}"`);
+                            },
+                            'Overwrite Existing Item'
+                        );
                         return;
                     }
                     this.itemName = trimmedName;
-                    this.finalizeAddItem();
+                    this.finalizeAddItem().then(() => {});
                     return true;
                 });
             }
             return false;
         }
-        this.finalizeAddItem();
+        await this.finalizeAddItem();
         return true;
     }
 
@@ -990,6 +1052,8 @@ export class DeleteItemChange extends Change{
         super();
         this.itemName = itemName;
         this.options = options || {};
+        // Store item data for Firebase sync
+        this.itemData = inventory.items[this.itemName];
     }
 
     async apply(){
@@ -997,7 +1061,58 @@ export class DeleteItemChange extends Change{
         const storageKey = `inventory_${this.itemName}`;
         localStorage.removeItem(storageKey);
         delete inventory.items[this.itemName];
+        
+        // Sync deletion to Firebase if in remote location
+        await this.syncDeleteToFirebase();
+        
         return true;
+    }
+    
+    async syncDeleteToFirebase() {
+        if (!this.itemData) return;
+        
+        // Check if item was in a remote folder or root is remote
+        const isRemote = this.isItemInRemoteLocation();
+        if (!isRemote) return;
+
+        if (!window.networking) {
+            console.warn('Networking not initialized, skipping sync');
+            return;
+        }
+
+        try {
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            
+            // Build the Firebase path
+            let firebasePath = `inventory/${userName}`;
+            if (this.itemData.folder) {
+                const sanitizedFolder = inventory.sanitizeFirebasePath(this.itemData.folder);
+                firebasePath += `/${sanitizedFolder}`;
+            }
+            const sanitizedItemName = inventory.sanitizeFirebasePath(this.itemName);
+            firebasePath += `/${sanitizedItemName}`;
+            
+            // Delete from Firebase
+            await networking.deleteData(firebasePath);
+            console.log('Item deleted from Firebase:', firebasePath);
+        } catch (error) {
+            console.error('Failed to delete item from Firebase:', error);
+        }
+    }
+
+    isItemInRemoteLocation() {
+        if (!this.itemData) return false;
+        
+        if (this.itemData.folder) {
+            // Check if folder is marked as remote
+            const folderData = inventory.folders[this.itemData.folder];
+            return folderData && folderData.remote === true;
+        } else {
+            // Check if root is marked as remote
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const rootRemoteKey = `inventory_root_remote_${userName}`;
+            return localStorage.getItem(rootRemoteKey) === 'true';
+        }
     }
 
     async undo(){

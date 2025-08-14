@@ -337,10 +337,20 @@
             if (SM.scene) {
 
                 let onLoad = ()=>{
-                    if(SM.scene.localUser === undefined){
-                        loadLocalUserSceneFromLocalStorage(SM.scene);
-                    }else{
-                        saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+                    // if(SM.scene.localUser === undefined){
+                    //     loadLocalUserSceneFromLocalStorage(SM.scene);
+                    // }else{
+                    //     saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+                    // }
+                    SM.scene.localUser = {
+                        name: "Technocrat",
+                        uid: "abcdefghi",
+                        id: "abcdefghi",
+                        isLocal: true,
+                        color: "#000000"
+                    }
+                    SM.scene.users = {
+                        [SM.scene.localUser.id]: SM.scene.localUser
                     }
                     SM.setup();
                     loadingScreen.updateStage('scene-connect', 100, 'Scene connected');
