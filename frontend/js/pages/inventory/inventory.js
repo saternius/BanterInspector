@@ -243,7 +243,7 @@ export class Inventory {
     handleFirebaseItemChanged(snapshot, folderName) {
         const key = snapshot.key;
         const data = snapshot.val();
-        
+        console.log("data: ", data)
         // Skip folder metadata
         if (key === '_folder') return;
         
@@ -264,6 +264,34 @@ export class Inventory {
                 
                 console.log('Remote item updated:', itemName);
                 
+
+
+                if(item.itemType === "script"){
+					// If a script editor is open for this script, update its text and save
+					try {
+						if (window.scriptEditors && window.scriptEditors.size > 0) {
+							for (const [key, editor] of window.scriptEditors) {
+								if (editor?.currentScript?.name === itemName) {
+									const newContent = item.data || data.data || '';
+									// Update editor content
+									if (editor.codemirror && typeof editor.codemirror.setValue === 'function') {
+										editor.codemirror.setValue(newContent);
+									}
+									// Keep ScriptEditor's model in sync
+									editor.currentScript.content = newContent;
+									// Persist changes via existing save flow
+									if (typeof editor.save === 'function') {
+										editor.save();
+									}
+									break;
+								}
+							}
+						}
+					} catch (e) {
+						console.warn('Failed to sync open script editor with remote update:', e);
+					}
+                }
+
                 // Update preview if this item is selected
                 if (this.selectedItem === itemName) {
                     this.showPreview(itemName);
