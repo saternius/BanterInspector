@@ -491,7 +491,7 @@ export class Inventory {
                             <span class="upload-icon">⬇️</span>
                             Import
                         </button>
-                        <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
+                        <input type="file" id="fileInput" accept=".js,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
                     </div>
                 </div>
                 <div class="inventory-empty">
@@ -587,7 +587,7 @@ export class Inventory {
                             Make Remote
                         </button>
                     `}
-                    <input type="file" id="fileInput" accept=".js,.json" style="display: none;">
+                    <input type="file" id="fileInput" accept=".js,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
                 </div>
             </div>
             ${this.currentFolder ? `
@@ -661,6 +661,32 @@ export class Inventory {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.loadEntityToSceneByName(itemName);
+            });
+        });
+        
+        // Add event listeners for view image buttons
+        inventoryContainer.querySelectorAll('.view-image-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                this.selectItem(itemName);
+            });
+        });
+        
+        // Add event listeners for copy URL buttons
+        inventoryContainer.querySelectorAll('.copy-url-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                const item = this.items[itemName];
+                if (item && item.itemType === 'image' && item.data.url) {
+                    navigator.clipboard.writeText(item.data.url).then(() => {
+                        this.showNotification('Image URL copied to clipboard');
+                    }).catch(err => {
+                        console.error('Failed to copy URL:', err);
+                        this.showNotification('Failed to copy URL');
+                    });
+                }
             });
         });
         
@@ -970,12 +996,93 @@ export class Inventory {
      * Render individual item
      */
     renderItem(key, item) {
-        const componentCount = item.data.components ? item.data.components.length : 0;
-        const childCount = item.data.children ? item.data.children.length : 0;
         const dateStr = new Date(item.created).toLocaleDateString();
         const itemType = item.itemType || 'entity'; // Default to 'entity' for backward compatibility
-        const itemIcon = itemType === 'script' ? '📜' : '📦';
+        const itemIcon = itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦';
         const isSelected = this.selectedItem === key;
+        
+        // Different info based on item type
+        let itemInfo = '';
+        if (itemType === 'image') {
+            const size = item.data.size ? (item.data.size / 1024).toFixed(2) + ' KB' : 'Unknown';
+            const dimensions = item.data.width && item.data.height ? 
+                `${item.data.width}×${item.data.height}` : 'Unknown';
+            itemInfo = `
+                <div class="info-row">
+                    <span class="info-label">Type:</span>
+                    <span class="info-value">${itemType}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Size:</span>
+                    <span class="info-value">${size}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Dimensions:</span>
+                    <span class="info-value">${dimensions}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Author:</span>
+                    <span class="info-value">${item.author}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Created:</span>
+                    <span class="info-value">${dateStr}</span>
+                </div>
+            `;
+        } else {
+            const componentCount = item.data.components ? item.data.components.length : 0;
+            const childCount = item.data.children ? item.data.children.length : 0;
+            itemInfo = `
+                <div class="info-row">
+                    <span class="info-label">Type:</span>
+                    <span class="info-value">${itemType}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Author:</span>
+                    <span class="info-value">${item.author}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Created:</span>
+                    <span class="info-value">${dateStr}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Components:</span>
+                    <span class="info-value">${componentCount}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Children:</span>
+                    <span class="info-value">${childCount}</span>
+                </div>
+            `;
+        }
+        
+        // Different actions based on item type
+        let itemActions = '';
+        if (itemType === 'script') {
+            itemActions = `
+                <div class="item-actions">
+                    <button class="action-btn edit-script-btn" data-item-name="${key}">
+                        ✏️ Edit
+                    </button>
+                </div>
+            `;
+        } else if (itemType === 'image') {
+            itemActions = `
+                <div class="item-actions">
+                    <button class="action-btn copy-url-btn" data-item-name="${key}">
+                        📋 Copy URL
+                    </button>
+                </div>
+            `;
+        } else {
+            itemActions = `
+                <div class="item-actions">
+                    <button class="action-btn add-to-scene-btn" data-item-name="${key}">
+                        ➕ Add to Scene
+                    </button>
+                </div>
+            `;
+        }
         
         return `
             <div class="inventory-item ${isSelected ? 'selected' : ''}" data-item-name="${key}">
@@ -987,40 +1094,9 @@ export class Inventory {
                     <button class="remove-item-btn" data-item-name="${key}">×</button>
                 </div>
                 <div class="item-info">
-                    <div class="info-row">
-                        <span class="info-label">Type:</span>
-                        <span class="info-value">${itemType}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Author:</span>
-                        <span class="info-value">${item.author}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Created:</span>
-                        <span class="info-value">${dateStr}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Components:</span>
-                        <span class="info-value">${componentCount}</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Children:</span>
-                        <span class="info-value">${childCount}</span>
-                    </div>
+                    ${itemInfo}
                 </div>
-                ${itemType === 'script' ? `
-                    <div class="item-actions">
-                        <button class="action-btn edit-script-btn" data-item-name="${key}">
-                            ✏️ Edit
-                        </button>
-                    </div>
-                ` : `
-                    <div class="item-actions">
-                        <button class="action-btn add-to-scene-btn" data-item-name="${key}">
-                            ➕ Add to Scene
-                        </button>
-                    </div>
-                `}
+                ${itemActions}
             </div>
         `;
     }
@@ -1058,16 +1134,19 @@ export class Inventory {
         const fileExt = fileName.split('.').pop().toLowerCase();
         
         try {
-            const fileContent = await this.readFile(file);
-            
             if (fileExt === 'js') {
                 // Handle JavaScript files
+                const fileContent = await this.readFile(file);
                 await this.handleScriptUpload(fileName, fileContent);
             } else if (fileExt === 'json') {
                 // Handle JSON files
+                const fileContent = await this.readFile(file);
                 await this.handleJsonUpload(fileName, fileContent);
+            } else if (['png', 'jpg', 'jpeg', 'bmp', 'gif'].includes(fileExt)) {
+                // Handle image files
+                await this.handleImageUpload(file);
             } else {
-                this.showNotification('Please upload a .js or .json file');
+                this.showNotification('Please upload a .js, .json, or image file (.png, .jpg, .jpeg, .bmp, .gif)');
             }
         } catch (error) {
             console.error('File upload error:', error);
@@ -1165,6 +1244,50 @@ export class Inventory {
         // Show success message
         this.showNotification(`Imported "${itemName}" to inventory`);
     }
+
+
+    async syncToFirebase(inventoryItem) {
+        // Check if item is in a remote folder or root is remote
+        const isRemote = this.isItemInRemoteLocation();
+        if (!isRemote) return;
+
+        if (!window.networking) {
+            console.warn('Networking not initialized, skipping sync');
+            return;
+        }
+
+        try {
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            
+            // Build the Firebase path
+            let firebasePath = `inventory/${userName}`;
+            if (this.currentFolder) {
+                const sanitizedFolder = inventory.sanitizeFirebasePath(this.currentFolder);
+                firebasePath += `/${sanitizedFolder}`;
+            }
+            const sanitizedItemName = inventory.sanitizeFirebasePath(this.itemName);
+            firebasePath += `/${sanitizedItemName}`;
+            
+            // Save to Firebase
+            await networking.setData(firebasePath, inventoryItem);
+            console.log('Item synced to Firebase:', firebasePath);
+        } catch (error) {
+            console.error('Failed to sync item to Firebase:', error);
+        }
+    }
+
+    isItemInRemoteLocation() {
+        if (this.folder) {
+            // Check if folder is marked as remote
+            const folderData = inventory.folders[this.folder];
+            return folderData && folderData.remote === true;
+        } else {
+            // Check if root is marked as remote
+            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const rootRemoteKey = `inventory_root_remote_${userName}`;
+            return localStorage.getItem(rootRemoteKey) === 'true';
+        }
+    }
     
     /**
      * Handle JSON file upload
@@ -1213,6 +1336,158 @@ export class Inventory {
                'created' in data &&
                'itemType' in data &&
                'data' in data;
+    }
+    
+    /**
+     * Handle image file upload
+     */
+    async handleImageUpload(file) {
+        const fileName = file.name;
+        const existingKeys = Object.keys(this.items);
+        
+        // Check for existing item
+        if (existingKeys.includes(fileName)) {
+            this.showConfirmModal(
+                `An item named "${fileName}" already exists. Do you want to overwrite it?`,
+                () => {
+                    // Continue with overwrite
+                    this.uploadImageToFirebase(file);
+                },
+                'Overwrite Image'
+            );
+            return;
+        }
+        
+        // No conflict, upload directly
+        this.uploadImageToFirebase(file);
+    }
+    
+    /**
+     * Upload image to Firebase Storage and save reference
+     */
+    async uploadImageToFirebase(file) {
+        try {
+            // Show upload notification
+            this.showNotification('Uploading image...');
+            
+            // Get Firebase Storage from networking module
+            if (!window.networking || !window.networking.getStorage) {
+                this.showNotification('Firebase Storage not initialized. Please wait and try again.');
+                return;
+            }
+            
+            const storage = window.networking.getStorage();
+            if (!storage) {
+                this.showNotification('Firebase Storage not available');
+                return;
+            }
+            
+            // Generate path similar to how entities would be stored
+            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const timestamp = Date.now();
+            const fileName = file.name;
+            const fileExt = fileName.split('.').pop().toLowerCase();
+            const baseName = fileName.substring(0, fileName.lastIndexOf('.'));
+            
+            // Create storage path: inventory/username/images/timestamp_filename
+            const storagePath = `inventory/${userName}/images/${fileName}`;
+            const storageRef = storage.ref(storagePath);
+            
+            // Upload file
+            const snapshot = await storageRef.put(file);
+            
+            // Get download URL
+            const downloadURL = await snapshot.ref.getDownloadURL();
+            
+            // Create image item
+            const now = Date.now();
+            const imageItem = {
+                author: SM.scene?.localUser?.name || 'Unknown',
+                name: fileName,
+                created: now,
+                last_used: now,
+                itemType: 'image',
+                description: '',
+                data: {
+                    url: downloadURL,
+                    storagePath: storagePath,
+                    size: file.size,
+                    type: file.type,
+                    width: 0,  // Will be updated when image loads
+                    height: 0
+                }
+            };
+            
+            // Load image to get dimensions
+            const img = new Image();
+            img.onload = () => {
+                imageItem.data.width = img.width;
+                imageItem.data.height = img.height;
+                
+                // Save to localStorage
+                this.saveImageItem(fileName, imageItem);
+            };
+            img.onerror = () => {
+                // Save anyway even if dimensions couldn't be loaded
+                this.saveImageItem(fileName, imageItem);
+            };
+            img.src = downloadURL;
+            
+        } catch (error) {
+            console.error('Image upload error:', error);
+            console.error('Error code:', error.code);
+            console.error('Error message:', error.message);
+            
+            if (error.serverResponse) {
+                console.error('Server response:', error.serverResponse);
+                try {
+                    const parsed = JSON.parse(error.serverResponse);
+                    console.error('Parsed server response:', parsed);
+                } catch (e) {
+                    // Not JSON
+                }
+            }
+            
+            // Provide more specific error messages
+            let errorMessage = 'Error uploading image: ';
+            if (error.code === 'storage/unauthorized') {
+                errorMessage += 'Permission denied. Check Firebase Storage rules.';
+            } else if (error.code === 'storage/unknown') {
+                errorMessage += 'Unknown error. Check Firebase Storage configuration and CORS settings.';
+                console.error('Tip: Run window.networking.testStorageConnection() in console to debug');
+            } else {
+                errorMessage += error.message;
+            }
+            
+            this.showNotification(errorMessage);
+        }
+    }
+    
+    /**
+     * Save image item to storage
+     */
+    saveImageItem(fileName, imageItem) {
+        // Only add folder property if we're in a folder
+        if (this.currentFolder) {
+            imageItem.folder = this.currentFolder;
+            let folder = this.folders[this.currentFolder];
+            if(folder.isRemote){
+                this.syncToFirebase(imageItem);
+            }
+        }
+        
+        // Save to localStorage
+        const storageKey = `inventory_${fileName}`;
+        localStorage.setItem(storageKey, JSON.stringify(imageItem));
+        
+        // Update items cache
+        this.items[fileName] = imageItem;
+
+        // Show success notification
+        this.showNotification(`Image "${fileName}" added to inventory`);
+        
+        // Re-render
+        this.render();
     }
     
     /**
@@ -1288,6 +1563,29 @@ export class Inventory {
         if (editBtn) {
             editBtn.addEventListener('click', () => {
                 this.openScriptEditor(itemName);
+            });
+        }
+        
+        // Add copy image URL button listener
+        const copyUrlBtn = this.previewPane.querySelector('.copy-image-url-btn');
+        if (copyUrlBtn) {
+            copyUrlBtn.addEventListener('click', () => {
+                const url = copyUrlBtn.dataset.url;
+                navigator.clipboard.writeText(url).then(() => {
+                    this.showNotification('Image URL copied to clipboard');
+                }).catch(err => {
+                    console.error('Failed to copy URL:', err);
+                    this.showNotification('Failed to copy URL');
+                });
+            });
+        }
+        
+        // Add open image button listener
+        const openImageBtn = this.previewPane.querySelector('.open-image-btn');
+        if (openImageBtn) {
+            openImageBtn.addEventListener('click', () => {
+                const url = openImageBtn.dataset.url;
+                window.open(url, '_blank');
             });
         }
         
@@ -1367,7 +1665,58 @@ export class Inventory {
         const itemType = item.itemType || 'entity';
         const description = item.description || '';
         
-        if (itemType === 'script') {
+        if (itemType === 'image') {
+            const size = item.data.size ? (item.data.size / 1024).toFixed(2) + ' KB' : 'Unknown';
+            const dimensions = item.data.width && item.data.height ? 
+                `${item.data.width}×${item.data.height}` : 'Unknown';
+            
+            return `
+                <div class="preview-header">
+                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
+                    <button class="preview-close-btn">×</button>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Type:</span>
+                        <span class="meta-value">Image</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Size:</span>
+                        <span class="meta-value">${size}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Dimensions:</span>
+                        <span class="meta-value">${dimensions}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Author:</span>
+                        <span class="meta-value">${item.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Created:</span>
+                        <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-label">Description:</div>
+                    <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
+                </div>
+                <div class="preview-content">
+                    <h3>Image Preview</h3>
+                    <div class="image-preview-container" style="text-align: center; margin: 20px 0;">
+                        <img src="${item.data.url}" alt="${item.name}" style="max-width: 100%; max-height: 400px; border: 1px solid #333; border-radius: 4px;">
+                    </div>
+                    <div class="preview-actions">
+                        <button class="action-btn copy-image-url-btn" data-url="${item.data.url}">
+                            📋 Copy URL
+                        </button>
+                        <button class="action-btn open-image-btn" data-url="${item.data.url}">
+                            🔗 Open in New Tab
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else if (itemType === 'script') {
             return `
                 <div class="preview-header">
                     <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>

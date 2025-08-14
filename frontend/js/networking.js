@@ -41,6 +41,7 @@ let renderProps = ()=>{
 export class Networking {
     constructor(){
         this.db = null;
+        this.storage = null;
         // Delay Firebase initialization to ensure all dependencies are loaded
         setTimeout(() => this.initFirebase(), 1000);
     }
@@ -64,8 +65,10 @@ export class Networking {
             try {
                 firebase.initializeApp(firebaseConfig);
                 this.db = firebase.database();
+                this.storage = firebase.storage();
                 
                 console.log('Firebase Realtime Database initialized');
+                console.log('Firebase Storage initialized');
                 
                 // Test the connection
                 //this.testConnection();
@@ -104,6 +107,95 @@ export class Networking {
             console.error('Realtime Database connection test failed:', error);
         }
     }
+    
+    async testStorageConnection() {
+        console.log('=== Starting Firebase Storage Test ===');
+        
+        try {
+            // Step 1: Check if storage is initialized
+            console.log('Step 1: Checking storage initialization...');
+            const storage = this.getStorage();
+            if (!storage) {
+                console.error('✗ Storage not initialized');
+                return;
+            }
+            console.log('✓ Storage initialized:', storage);
+            
+            // Step 2: Check storage bucket
+            console.log('Step 2: Checking storage bucket...');
+            const storageRef = storage.ref();
+            console.log('Storage root reference:', storageRef);
+            console.log('Storage bucket:', storageRef.bucket);
+            
+            // Step 3: Try to create a reference
+            console.log('Step 3: Creating test reference...');
+            const testPath = `test/storage-test-${Date.now()}.txt`;
+            const testRef = storage.ref(testPath);
+            console.log('Test reference created:', testRef.fullPath);
+            
+            // Step 4: Try to upload a simple text file
+            console.log('Step 4: Attempting to upload test text...');
+            const testContent = 'Firebase Storage test content';
+            const blob = new Blob([testContent], { type: 'text/plain' });
+            
+            try {
+                const snapshot = await testRef.put(blob);
+                console.log('✓ Upload successful:', snapshot);
+                console.log('Upload state:', snapshot.state);
+                console.log('Bytes transferred:', snapshot.bytesTransferred);
+                
+                // Step 5: Try to get download URL
+                console.log('Step 5: Getting download URL...');
+                const downloadURL = await snapshot.ref.getDownloadURL();
+                console.log('✓ Download URL obtained:', downloadURL);
+                
+                // Step 6: Try to delete the test file
+                console.log('Step 6: Cleaning up test file...');
+                await testRef.delete();
+                console.log('✓ Test file deleted successfully');
+                
+                console.log('=== Firebase Storage Test PASSED ===');
+                return true;
+                
+            } catch (uploadError) {
+                console.error('✗ Upload/Download failed:', uploadError);
+                console.error('Error code:', uploadError.code);
+                console.error('Error message:', uploadError.message);
+                if (uploadError.serverResponse) {
+                    console.error('Server response:', uploadError.serverResponse);
+                }
+                
+                // Check common issues
+                if (uploadError.code === 'storage/unauthorized') {
+                    console.error('Issue: Storage security rules may be blocking uploads');
+                    console.error('Solution: Check Firebase Console > Storage > Rules');
+                } else if (uploadError.code === 'storage/unknown') {
+                    console.error('Issue: Unknown storage error - check CORS and bucket configuration');
+                    console.error('Check: Firebase Console > Storage > Files tab to ensure bucket exists');
+                }
+            }
+            
+        } catch (error) {
+            console.error('✗ Storage test failed:', error);
+            console.error('Full error object:', error);
+            
+            // Additional debugging info
+            if (error.code) console.error('Error code:', error.code);
+            if (error.message) console.error('Error message:', error.message);
+            if (error.serverResponse) {
+                console.error('Server response:', error.serverResponse);
+                try {
+                    const parsed = JSON.parse(error.serverResponse);
+                    console.error('Parsed server response:', parsed);
+                } catch (e) {
+                    // Not JSON
+                }
+            }
+        }
+        
+        console.log('=== Firebase Storage Test FAILED ===');
+        return false;
+    }
 
     getUserId(){
         let userId = localStorage.getItem('inspector_user_id');
@@ -120,6 +212,14 @@ export class Networking {
             this.db = firebase.database();
         }
         return this.db;
+    }
+    
+    // Get the Firebase Storage reference
+    getStorage() {
+        if (!this.storage && typeof firebase !== 'undefined') {
+            this.storage = firebase.storage();
+        }
+        return this.storage;
     }
     
     // Generic Firebase Realtime Database operations
