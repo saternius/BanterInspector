@@ -1,3 +1,5 @@
+import { confirm } from '../../utils.js';
+
 export class StatementBlockEditor {
     constructor(options = {}) {
         this.blocks = [];
@@ -282,9 +284,9 @@ export class StatementBlockEditor {
         
         // Delete buttons
         blocksList.querySelectorAll('.block-delete').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 const index = parseInt(e.target.closest('.statement-block').dataset.blockIndex);
-                if (confirm('Delete this block?')) {
+                if (await confirm('Delete this block?')) {
                     this.deleteBlock(index);
                 }
             });

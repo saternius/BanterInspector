@@ -398,3 +398,119 @@ export function appendToConsole(tag, id, str){
         consoleEl.scrollTop = consoleEl.scrollHeight;
     }
 }
+
+/**
+ * Custom confirm modal to replace browser's confirm()
+ * Returns a promise that resolves to true/false based on user choice
+ */
+export function confirm(message) {
+    return new Promise((resolve) => {
+        // Create modal container
+        const modal = document.createElement('div');
+        modal.className = 'custom-confirm-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100000;
+        `;
+        
+        // Create modal content
+        const modalContent = document.createElement('div');
+        modalContent.style.cssText = `
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        `;
+        
+        // Add message
+        const messageDiv = document.createElement('div');
+        messageDiv.textContent = message;
+        messageDiv.style.cssText = `
+            color: #fff;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        `;
+        modalContent.appendChild(messageDiv);
+        
+        // Create button container
+        const buttonContainer = document.createElement('div');
+        buttonContainer.style.cssText = `
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        `;
+        
+        // Create Cancel button
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'Cancel';
+        cancelBtn.style.cssText = `
+            padding: 8px 16px;
+            background: #444;
+            color: #fff;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        `;
+        cancelBtn.onmouseover = () => cancelBtn.style.background = '#555';
+        cancelBtn.onmouseout = () => cancelBtn.style.background = '#444';
+        
+        // Create OK button
+        const okBtn = document.createElement('button');
+        okBtn.textContent = 'OK';
+        okBtn.style.cssText = `
+            padding: 8px 16px;
+            background: #0066cc;
+            color: #fff;
+            border: 1px solid #0077dd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        `;
+        okBtn.onmouseover = () => okBtn.style.background = '#0077dd';
+        okBtn.onmouseout = () => okBtn.style.background = '#0066cc';
+        
+        // Add click handlers
+        cancelBtn.onclick = () => {
+            document.body.removeChild(modal);
+            resolve(false);
+        };
+        
+        okBtn.onclick = () => {
+            document.body.removeChild(modal);
+            resolve(true);
+        };
+        
+        // Handle Escape key
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                document.body.removeChild(modal);
+                document.removeEventListener('keydown', handleEscape);
+                resolve(false);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+        
+        // Assemble modal
+        buttonContainer.appendChild(cancelBtn);
+        buttonContainer.appendChild(okBtn);
+        modalContent.appendChild(buttonContainer);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+        
+        // Focus OK button for keyboard navigation
+        okBtn.focus();
+    });
+}

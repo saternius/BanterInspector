@@ -251,7 +251,8 @@ console.log("It is 3:00")
         }
 
         async saveScene(){
-            await this.updateHierarchy();
+            console.log("Saving scene...")
+            await this.updateHierarchy(false);
             localStorage.setItem('lastProps', JSON.stringify(this.props));
         }
 
@@ -339,10 +340,12 @@ console.log("It is 3:00")
 
 
         // Updates the hierarchy of the scene from the root entity
-        async updateHierarchy(){  
+        async updateHierarchy(updateUI = true){  
             let h = await this.gatherSceneHierarchyByEntity();
             this.props.hierarchy = h;
-            this._updateUI();
+            if(updateUI){
+                this._updateUI();
+            }
         }
 
 
@@ -433,13 +436,6 @@ console.log("It is 3:00")
                     }
                 })
                 
-                // Update components progress
-                if (window.loadingScreen && h.components.length > 0) {
-                    window.loadingScreen.updateStage('components', 
-                        (processedEntities / totalEntities) * 100, 
-                        `Registered ${h.components.length} components for ${h.name}`);
-                }
-
                 for(let child of h.children){
                     let childEntity = await hierarchyToEntity(child, entity.id);
                     await childEntity._setParent(entity);

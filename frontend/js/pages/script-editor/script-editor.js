@@ -1,4 +1,5 @@
 const { EditScriptItemChange } = await import(`${window.repoUrl}/change-types.js`);
+const { confirm } = await import(`${window.repoUrl}/utils.js`);
 
 export class ScriptEditor {
     constructor(scriptData) {
@@ -514,9 +515,9 @@ export class ScriptEditor {
         }
     }
     
-    close() {
+    async close() {
         if (this.isModified) {
-            const confirmClose = confirm('You have unsaved changes. Are you sure you want to close?');
+            const confirmClose = await confirm('You have unsaved changes. Are you sure you want to close?');
             if (!confirmClose) return;
         }
         

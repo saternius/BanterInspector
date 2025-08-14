@@ -4,10 +4,9 @@
  */
 
 // (async () => {
-    const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber } = await import(`${window.repoUrl}/utils.js`);
+    const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber, deepClone, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
-    const { deepClone } = await import(`${window.repoUrl}/utils.js`);
     const { BanterLayers } = await import(`${window.repoUrl}/entity-components/index.js`);
 
     export class PropertiesPanel {
@@ -83,6 +82,7 @@
          * Render properties for a entity
          */
         render(entityId = null) {
+            console.log("Rendering properties for entity:", entityId);
             if (!this.propertiesContent) return;
             
             const entity = entityId ? SM.getEntityById(entityId) : null;
@@ -311,9 +311,9 @@
                 deleteBtn.className = 'component-delete-btn';
                 deleteBtn.innerHTML = '×';
                 deleteBtn.title = 'Delete component';
-                deleteBtn.onclick = (e) => {
+                deleteBtn.onclick = async (e) => {
                     e.stopPropagation();
-                    if (confirm(`Delete ${component.type} component?`)) {
+                    if (await confirm(`Delete ${component.type} component?`)) {
                         this.deleteComponent(component.id, component.type);
                     }
                 };
@@ -676,9 +676,9 @@
             deleteBtn.className = 'component-delete-btn';
             deleteBtn.innerHTML = '×';
             deleteBtn.title = 'Delete component';
-            deleteBtn.onclick = (e) => {
+            deleteBtn.onclick = async (e) => {
                 e.stopPropagation();
-                if (confirm(`Delete MonoBehavior component?`)) {
+                if (await confirm(`Delete MonoBehavior component?`)) {
                     this.deleteComponent(component.id, component.type);
                 }
             };
