@@ -928,53 +928,12 @@ export class SaveEntityItemChange extends Change{
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
         
         // Sync to Firebase if in remote location
-        await this.syncToFirebase(inventoryItem);
+        await inventory.syncToFirebase(inventoryItem);
         
         inventory.reload();
     }
     
-    async syncToFirebase(inventoryItem) {
-        // Check if item is in a remote folder or root is remote
-        const isRemote = this.isItemInRemoteLocation();
-        if (!isRemote) return;
-
-        if (!window.networking) {
-            console.warn('Networking not initialized, skipping sync');
-            return;
-        }
-
-        try {
-            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            
-            // Build the Firebase path
-            let firebasePath = `inventory/${userName}`;
-            if (this.folder) {
-                const sanitizedFolder = inventory.sanitizeFirebasePath(this.folder);
-                firebasePath += `/${sanitizedFolder}`;
-            }
-            const sanitizedItemName = inventory.sanitizeFirebasePath(this.itemName);
-            firebasePath += `/${sanitizedItemName}`;
-            
-            // Save to Firebase
-            await networking.setData(firebasePath, inventoryItem);
-            console.log('Item synced to Firebase:', firebasePath);
-        } catch (error) {
-            console.error('Failed to sync item to Firebase:', error);
-        }
-    }
-
-    isItemInRemoteLocation() {
-        if (this.folder) {
-            // Check if folder is marked as remote
-            const folderData = inventory.folders[this.folder];
-            return folderData && folderData.remote === true;
-        } else {
-            // Check if root is marked as remote
-            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            const rootRemoteKey = `inventory_root_remote_${userName}`;
-            return localStorage.getItem(rootRemoteKey) === 'true';
-        }
-    }
+    
 
     async apply(){
         super.apply();
