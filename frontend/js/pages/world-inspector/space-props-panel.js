@@ -4,7 +4,7 @@
  */
 
 // (async () => {
-    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${window.repoUrl}/utils.js`);
+    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { SpacePropertyChange } = await import(`${window.repoUrl}/change-types.js`);
 
@@ -330,8 +330,8 @@
         /**
          * Delete a property
          */
-        deleteProp(type, key) {
-            if (confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
+        async deleteProp(type, key) {
+            if (await confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
                 const change = new SpacePropertyChange(key, undefined, type === 'protected', { source: 'ui' });
                 changeManager.applyChange(change);
                 if (type === 'public') {

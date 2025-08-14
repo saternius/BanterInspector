@@ -1023,10 +1023,10 @@ export class DeleteItemChange extends Change{
 }
 
 export class CreateFolderChange extends Change{
-    constructor(folderName, parentFolder,options){
+    constructor(folderName, parentFolderName, options){
         super();
         this.folderName = folderName;
-        this.parentFolder = parentFolder || inventory.currentFolder;
+        this.parentFolderName = parentFolderName || inventory.currentFolder;
         this.options = options || {};
     }
 
@@ -1040,13 +1040,19 @@ export class CreateFolderChange extends Change{
             return false;
         }
         
+        let parentFolder = inventory.folders[this.parentFolderName];
+        let parentPath = "";
+        if(parentFolder && parentFolder.path){
+            parentPath = parentFolder.path;
+        }
         // Create folder object
         const now = Date.now();
         const folder = {
             name: trimmedName,
             created: now,
             last_used: now,
-            parent: this.parentFolder,
+            parent: this.parentFolderName,
+            path: `${parentPath}/${trimmedName}`,
             itemType: "folder",
             remote: false
         };
@@ -1100,25 +1106,26 @@ export class RemoveFolderChange extends Change{
 
     async apply(){
         super.apply();
-        Object.entries(this.items).forEach(([key, item]) => {
-            if (item.folder === folderName) {
+        Object.entries(inventory.items).forEach(([key, item]) => {
+            if (item.folder === this.folderName) {
                 const storageKey = `inventory_${key}`;
                 localStorage.removeItem(storageKey);
                 delete inventory.items[key];
             }
         });
         
-        Object.entries(this.folders).forEach(([key, subfolder]) => {
-            if (subfolder.parent === folderName) {
+        Object.entries(inventory.folders).forEach(([key, subfolder]) => {
+            if (subfolder.parent === this.folderName) {
                 const storageKey = `inventory_folder_${key}`;
                 localStorage.removeItem(storageKey);
-                delete inventory.folders[key];
+                let delChange = new RemoveFolderChange(key, this.options);
+                delChange.apply();
             }
         });
         
-        const storageKey = `inventory_folder_${folderName}`;
+        const storageKey = `inventory_folder_${this.folderName}`;
         localStorage.removeItem(storageKey);
-        delete this.folders[folderName];
+        delete inventory.folders[this.folderName];
     }
 
     async undo(){
@@ -1286,13 +1293,38 @@ export class EditScriptItemChange extends Change{
     async apply(){
         super.apply();
         // Send save event back to inventory
-        const event = new CustomEvent('save-script', {
-            detail: {
-                name: this.scriptName,
-                content: this.scriptContent
+        if (inventory) {
+            const item = inventory.items[this.scriptName];
+            if (item && item.itemType === 'script') {
+                item.data = this.scriptContent;
+                item.last_used = Date.now();
+                const storageKey = `inventory_${this.scriptName}`;
+                localStorage.setItem(storageKey, JSON.stringify(item));
+                // Refresh preview if selected
+                if (inventory.selectedItem === this.scriptName) {
+                    inventory.showPreview(this.scriptName);
+                }
+                inventory.showNotification(`Saved changes to "${this.scriptName}"`);
+                if(item.folder){
+                    let folder = inventory.folders[item.folder];
+                    if(folder){
+                        folder.last_used = Date.now();
+                        const storageKey = `inventory_folder_${folder.name}`;
+                        localStorage.setItem(storageKey, JSON.stringify(folder));
+                        let my_name = inventory.sanitizeFirebasePath(scene.localUser.name);
+                        let script_name = inventory.sanitizeFirebasePath(this.scriptName);
+                        if(folder.remote){
+                            let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}${folder.path}/${script_name}`;
+                            ref = ref;
+                            console.log("SAVING TO: ", ref)
+                            networking.setData(ref, item);
+                        }
+                    }
+                }
             }
-        });
-        window.dispatchEvent(event);
+        }
+
+
     }
 
     async undo(){

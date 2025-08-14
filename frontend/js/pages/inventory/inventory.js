@@ -2449,7 +2449,7 @@ export class Inventory {
                     created: Date.now(),
                     parent: this.currentFolder,
                     itemType: "folder",
-                    remote: false,
+                    remote: true,
                     imported: true,
                     importedFrom: firebaseRef
                 };
@@ -2494,6 +2494,7 @@ export class Inventory {
                             ...value,
                             folder: this.currentFolder,
                             imported: true,
+                            remote: true,
                             importedFrom: firebaseRef,
                             importedAt: Date.now()
                         };
@@ -2545,7 +2546,7 @@ export class Inventory {
                         ...folderData,
                         name: folderName,
                         parent: parentFolderName,
-                        remote: false,
+                        remote: true,
                         imported: true,
                         importedFrom: firebaseRef
                     };
@@ -2574,6 +2575,7 @@ export class Inventory {
                     name: finalItemName,
                     folder: parentFolderName,
                     imported: true,
+                    remote: true,
                     importedFrom: firebaseRef,
                     importedAt: Date.now()
                 };

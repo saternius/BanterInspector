@@ -333,25 +333,6 @@
                 };
             });
             
-            window.addEventListener('save-script', (event) => {
-                if (this.inventory) {
-                    const { name, content } = event.detail;
-                    const item = this.inventory.items[name];
-                    if (item && item.itemType === 'script') {
-                        item.data = content;
-                        const storageKey = `inventory_${name}`;
-                        localStorage.setItem(storageKey, JSON.stringify(item));
-                        
-                        // Refresh preview if selected
-                        if (this.inventory.selectedItem === name) {
-                            this.inventory.showPreview(name);
-                        }
-                        
-                        this.inventory.showNotification(`Saved changes to "${name}"`);
-                    }
-                }
-            });
-            
             // // Handle space state changes from Unity
             if (SM.scene) {
 

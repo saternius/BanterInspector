@@ -1996,8 +1996,8 @@ body {
 }
 
 .property-input.number {
-    width: 70px;
-    flex: 0 0 70px;
+    width: 40px;
+    flex: 0 0 40px;
     text-align: right;
 }
 

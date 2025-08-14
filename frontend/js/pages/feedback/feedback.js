@@ -1,4 +1,5 @@
 const { StatementBlockEditor } = await import(`${window.repoUrl}/pages/feedback/statement-block-editor.js`);
+const { confirm } = await import(`${window.repoUrl}/utils.js`);
 export class Feedback {
     constructor() {
         this.selectedType = 'feature';
@@ -617,8 +618,8 @@ export class Feedback {
         }
     }
     
-    clearDraft() {
-        if (confirm('Are you sure you want to clear your draft and start over?')) {
+    async clearDraft() {
+        if (await confirm('Are you sure you want to clear your draft and start over?')) {
             // Clear the block editor
             if (this.statementBlockEditor) {
                 this.statementBlockEditor.clear();
@@ -1293,7 +1294,7 @@ export class Feedback {
     }
     
     async deleteTicket(ticketId) {
-        if (!confirm('Are you sure you want to delete this ticket?')) return;
+        if (!await confirm('Are you sure you want to delete this ticket?')) return;
         
         const ticket = this.tickets.find(t => t.ticketId === ticketId);
         if (!ticket) return;
@@ -1389,7 +1390,7 @@ export class Feedback {
     }
     
     async deleteComment(commentIndex) {
-        if (!confirm('Are you sure you want to delete this comment?')) return;
+        if (!await confirm('Are you sure you want to delete this comment?')) return;
         
         if (!this.currentTicket) return;
         

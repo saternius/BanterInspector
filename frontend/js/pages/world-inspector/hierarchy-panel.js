@@ -6,6 +6,7 @@
 // (async () => {
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { EntityAddChange, EntityRemoveChange, EntityMoveChange, CloneEntityChange, SaveEntityItemChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { confirm } = await import(`${window.repoUrl}/utils.js`);
 
     export class HierarchyPanel {
         constructor() {
@@ -89,7 +90,7 @@
                 const entity = SM.getEntityById(SM.selectedEntity);
                 if (!entity) return;
                 
-                if (confirm(`Are you sure you want to delete "${entity.name}" and all its children?`)) {
+                if (await confirm(`Are you sure you want to delete "${entity.name}" and all its children?`)) {
                     // Queue entity deletion through change manager
                     console.log("deleting entity =>", SM.selectedEntity)
                     const change = new EntityRemoveChange(SM.selectedEntity, { source: 'ui' });
