@@ -1,6 +1,6 @@
 {
   "author": "Technocrat",
-  "created": 1755173311252,
+  "created": 1755256983331,
   "data": {
     "active": true,
     "components": [
@@ -9,7 +9,7 @@
         "properties": {
           "localPosition": {
             "x": 0,
-            "y": 0,
+            "y": 1,
             "z": 0
           },
           "localRotation": {
@@ -31,21 +31,34 @@
         "properties": {
           "color": {
             "a": 1,
-            "b": 0,
-            "g": 0,
-            "r": 0
+            "b": 1,
+            "g": 1,
+            "r": 1
           },
           "generateMipMaps": true,
-          "shaderName": "Standard",
-          "side": 0,
-          "texture": ""
+          "shaderName": [
+            "U",
+            "n",
+            "l",
+            "i",
+            "t",
+            "/",
+            "D",
+            "i",
+            "f",
+            "f",
+            "u",
+            "s",
+            "e"
+          ],
+          "side": 0
         },
         "type": "BanterMaterial"
       },
       {
         "initialized": true,
         "properties": {
-          "arc": 6.283185307179586,
+          "arc": 6.283185,
           "depth": 1,
           "depthSegments": 1,
           "geometryType": 0,
@@ -56,7 +69,7 @@
           "outerRadius": 0.5,
           "p": 2,
           "parametricType": 0,
-          "phiLength": 6.283185307179586,
+          "phiLength": 6.283185,
           "phiSegments": 8,
           "phiStart": 0,
           "q": 3,
@@ -65,7 +78,7 @@
           "radiusBottom": 0.5,
           "radiusTop": 0.5,
           "segments": 64,
-          "thetaLength": 6.283185307179586,
+          "thetaLength": 6.283185,
           "thetaSegments": 6,
           "thetaStart": 0,
           "tube": 0.4,
@@ -86,18 +99,13 @@
   "folder": "Tutorial",
   "history": [
     {
-      "action": "set_component_property",
-      "componentId": "BanterMaterial_97849",
-      "newValue": {
-        "a": 1,
-        "b": 0,
-        "g": 0,
-        "r": 0
-      },
+      "action": "save_item",
+      "entityId": "Root/Cube",
+      "folder": "Tutorial",
+      "itemName": "Cube",
       "options": {
         "source": "ui"
-      },
-      "property": "color"
+      }
     },
     {
       "action": "save_item",
@@ -110,6 +118,6 @@
     }
   ],
   "itemType": "entity",
-  "last_used": 1755173311252,
+  "last_used": 1755256983331,
   "name": "Cube"
 }

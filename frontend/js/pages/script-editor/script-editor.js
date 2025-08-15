@@ -1,5 +1,5 @@
 const { EditScriptItemChange } = await import(`${window.repoUrl}/change-types.js`);
-const { confirm } = await import(`${window.repoUrl}/utils.js`);
+const { confirm, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 export class ScriptEditor {
     constructor(scriptData) {
@@ -361,7 +361,7 @@ export class ScriptEditor {
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
         
         // Show save notification
-        this.showNotification('Script saved successfully');
+        showNotification('Script saved successfully');
         this.run('Refresh')
     }
     
@@ -538,23 +538,7 @@ export class ScriptEditor {
         navigation.removeDynamicPage(this.pageId);
     }
     
-    showNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'editor-notification';
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 10);
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 2000);
-    }
+    
     
     escapeHtml(text) {
         const map = {

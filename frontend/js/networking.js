@@ -72,7 +72,15 @@ export class Networking {
                 
                 // Test the connection
                 //this.testConnection();
-                inventory.setupFirebaseListeners();
+
+                let initFirebaseListeners = ()=>{
+                    if(inventory && inventory.firebase){
+                        inventory.firebase.setupFirebaseListeners()
+                    }else{
+                        setTimeout(initFirebaseListeners, 500)
+                    }
+                }
+                initFirebaseListeners()
             } catch (error) {
                 console.error('Failed to initialize Firebase:', error);
             }

@@ -225,6 +225,8 @@ console.log("It is 3:00")
         async Reset(){
             networking.sendOneShot('reset');
             await this._reset();
+            await this.saveScene();
+            window.location.reload();
         }
         
         async _reset(){

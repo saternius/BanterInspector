@@ -123,7 +123,7 @@
                 
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
-                window.inventory = this.inventory;
+                window.inventory = this.inventory; console.log("inventory", window.inventory)
                 window.navigation = this.navigation;
                 window.scriptEditors = this.scriptEditors;
                 window.lifecyclePanel = this.lifecyclePanel;
