@@ -276,6 +276,7 @@ export class Inventory {
             created: now,
             last_used: now,
             itemType: 'script',
+            icon:"📜",
             description: '',
             data: content
         };

@@ -820,7 +820,7 @@ body {
 
 .preview-header h2 {
     margin: 0;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
     color: #e8e8e8;
 }
@@ -869,6 +869,139 @@ body {
 .preview-meta {
     padding: 20px;
     border-bottom: 1px solid #2a2a2a;
+}
+
+.preview-icon-btn{
+    background: #101010;
+    border-radius: 4px;
+    font-size: 20px;
+    border-color: #080808;
+    cursor: pointer;
+    margin-right: 4px;
+    transition: all 0.2s ease;
+}
+
+.preview-icon-btn:hover{
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    transform: scale(1.1);
+}
+
+/* Emoji Picker Styles */
+.emoji-picker-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.emoji-search-container {
+    margin-bottom: 15px;
+}
+
+#emojiSearchInput {
+    width: 100%;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+}
+
+#emojiSearchInput:focus {
+    outline: none;
+    border-color: #00d4ff;
+}
+
+.emoji-categories {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.emoji-category {
+    margin-bottom: 20px;
+}
+
+.emoji-category-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 5px;
+}
+
+.emoji-btn {
+    width: 40px;
+    height: 40px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.emoji-btn:hover {
+    background: #2a2a2a;
+    border-color: #00d4ff;
+    transform: scale(1.1);
+}
+
+.custom-emoji-container {
+    padding-top: 15px;
+    border-top: 1px solid #333;
+}
+
+.custom-emoji-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.custom-emoji-row {
+    display: flex;
+    gap: 10px;
+}
+
+#customEmojiInput {
+    flex: 1;
+    padding: 8px 12px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 16px;
+}
+
+#customEmojiInput:focus {
+    outline: none;
+    border-color: #00d4ff;
+}
+
+.modal-apply-btn {
+    padding: 8px 20px;
+    background: #00a8cc;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.modal-apply-btn:hover {
+    background: #00c6ed;
+    border-color: #4de6ff;
 }
 
 .meta-item {

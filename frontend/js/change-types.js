@@ -1,5 +1,6 @@
 // Import required dependencies
 
+
 const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
@@ -920,6 +921,7 @@ export class SaveEntityItemChange extends Change{
             created: now,
             last_used: now,
             itemType: "entity",
+            icon:"📦",
             description: '',  // Initialize with empty description
             data: data,
             folder: this.folder,
@@ -1037,11 +1039,13 @@ export class RenameItemChange extends Change{
         
         const newKey = `inventory_${this.newName}`;
         localStorage.setItem(newKey, JSON.stringify(item));
+        inventory.items[this.newName] = item;
         
         // Sync to Firebase if in remote location
         await inventory.firebase.syncToFirebase(item);
         showNotification(`Item "${this.itemName}" renamed to "${this.newName}"`);
         inventory.reload();
+        inventory.selectItem(this.newName);
 
 
 
@@ -1278,6 +1282,7 @@ export class CreateFolderChange extends Change{
             parent: this.parentFolderName,
             path: `${parentPath}/${trimmedName}`,
             itemType: "folder",
+            icon:"📂",
             remote: false
         };
         
@@ -1466,6 +1471,7 @@ this.keyUp = (key)=>{
             created: now,
             last_used: now,
             itemType: 'script',
+            icon:"📜",
             description: '',  // Initialize with empty description
             data: defaultScript
         };

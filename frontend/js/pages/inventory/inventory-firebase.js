@@ -583,6 +583,7 @@ export class InventoryFirebase {
                     created: Date.now(),
                     parent: this.inventory.currentFolder,
                     itemType: "folder",
+                    icon:"📂",
                     remote: true,
                     imported: true,
                     importedFrom: firebaseRef
@@ -770,6 +771,7 @@ export class InventoryFirebase {
                 created: now,
                 last_used: now,
                 itemType: 'image',
+                icon:"🖼️",
                 description: '',
                 data: {
                     url: downloadURL,
