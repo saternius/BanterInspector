@@ -619,16 +619,6 @@ export class Inventory {
             });
         }
         
-        // Breadcrumb navigation
-        inventoryContainer.querySelectorAll('.breadcrumb-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const folder = item.dataset.folder;
-                this.navigateToFolder(folder);
-            });
-        });
-
-        
-        
         // Add event listeners for inventory items
         inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
             item.addEventListener('click', (e) => {

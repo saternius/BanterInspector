@@ -133,15 +133,16 @@ console.log("It is 3:00")
                 return;
             }
 
+
+
             let fileServer = localStorage.getItem('file_server');
             if(!fileServer){
                 localStorage.setItem('file_server', "stable");
                 fileServer = "stable";
             }
-            let fileServerEl = document.getElementById("fileServer");
-            if(fileServerEl){
-                fileServerEl.value = fileServer;
-            }
+            let fileServerEl = document.getElementById("custom-fileServer");
+            fileServerEl.children[0].innerHTML = fileServer;
+            
 
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {

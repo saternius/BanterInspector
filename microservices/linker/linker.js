@@ -145,6 +145,7 @@ const server = http.createServer((req, res) => {
             // Determine item type based on file extension
             const isJsonFile = path.extname(filePath).toLowerCase() === '.json';
             const itemType = isJsonFile ? 'entity' : 'script';
+            const icon = isJsonFile ? '📦' : '📜';
 
             let updateData;
             let updateRef = ref(database, relativePath);
@@ -166,6 +167,7 @@ const server = http.createServer((req, res) => {
                             success: true, 
                             message: 'Script updated in Firebase',
                             itemType: itemType,
+                            icon: icon,
                             firebasePath: relativePath
                         }));
                     })
@@ -189,6 +191,7 @@ const server = http.createServer((req, res) => {
                                 success: true, 
                                 message: 'Entity set in Firebase',
                                 itemType: itemType,
+                                icon: icon,
                                 firebasePath: relativePath
                             }));
                         })

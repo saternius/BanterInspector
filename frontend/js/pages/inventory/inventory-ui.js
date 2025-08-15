@@ -1,4 +1,5 @@
 const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
+const {emojiCategories} = await import(`${window.repoUrl}/pages/inventory/emoji_categories.js`);
 /**
  * InventoryUI - Handles all UI rendering, preview, drag-drop, and modal functions
  */
@@ -570,7 +571,8 @@ export class InventoryUI {
     renderItem(key, item, isInFolder = false) {
         const dateStr = new Date(item.created).toLocaleDateString();
         const itemType = item.itemType || 'entity';
-        const itemIcon = itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦';
+        // Use item's custom icon if available, otherwise use defaults
+        const itemIcon = item.icon || (itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦');
         const isSelected = this.inventory.selectedItem === key;
         
         
@@ -648,6 +650,14 @@ export class InventoryUI {
                 this.inventory.selectedItem = null;
                 this.hidePreview();
                 this.render();
+            });
+        }
+        
+        // Icon button
+        const iconBtn = this.previewPane.querySelector('.preview-icon-btn');
+        if (iconBtn) {
+            iconBtn.addEventListener('click', () => {
+                this.showEmojiPicker(itemName, item);
             });
         }
         
@@ -757,16 +767,23 @@ export class InventoryUI {
         const itemType = item.itemType || 'entity';
         const description = item.description || '';
         
+        // Use item's icon or fall back to default based on type
+        const displayIcon = item.icon || (itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦');
+        
+        let previewHeader = `<div class="preview-header">
+                    <div class="preview-title">
+                        <button class="preview-icon-btn" title="Click to change icon">${displayIcon}</button>
+                        <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
+                    </div>
+                    <button class="preview-close-btn">×</button>
+                </div>`
         if (itemType === 'image') {
             const size = item.data.size ? (item.data.size / 1024).toFixed(2) + ' KB' : 'Unknown';
             const dimensions = item.data.width && item.data.height ? 
                 `${item.data.width}×${item.data.height}` : 'Unknown';
             
             return `
-                <div class="preview-header">
-                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
-                    <button class="preview-close-btn">×</button>
-                </div>
+                ${previewHeader}
                 <div class="preview-meta">
                     <div class="meta-item">
                         <span class="meta-label">Type:</span>
@@ -813,10 +830,7 @@ export class InventoryUI {
             const preview = scriptContent.substring(0, 500) + (scriptContent.length > 500 ? '...' : '');
             
             return `
-                <div class="preview-header">
-                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
-                    <button class="preview-close-btn">×</button>
-                </div>
+                ${previewHeader}
                 <div class="preview-meta">
                     <div class="meta-item">
                         <span class="meta-label">Type:</span>
@@ -851,10 +865,7 @@ export class InventoryUI {
             const childCount = item.data.children ? item.data.children.length : 0;
             
             return `
-                <div class="preview-header">
-                    <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>
-                    <button class="preview-close-btn">×</button>
-                </div>
+                ${previewHeader}
                 <div class="preview-meta">
                     <div class="meta-item">
                         <span class="meta-label">Type:</span>
@@ -1335,6 +1346,123 @@ export class InventoryUI {
         modalContent.className = 'modal-content';
         modalContent.innerHTML = innerHTML;
         return modalContent;
+    }
+
+    /**
+     * Show emoji picker modal
+     */
+    showEmojiPicker(itemName, item) {
+        const modalOverlay = this.createModalOverlay();
+        
+        // Common emojis organized by category        
+        const modalContent = this.createModalContent(`
+            <div class="modal-header">
+                <h3>Choose an Icon</h3>
+                <button class="modal-close-btn" id="modalCloseBtn">×</button>
+            </div>
+            <div class="modal-body emoji-picker-body">
+                <div class="emoji-categories">
+                    ${Object.entries(emojiCategories).map(([category, emojis]) => `
+                        <div class="emoji-category">
+                            <h4 class="emoji-category-title">${category}</h4>
+                            <div class="emoji-grid">
+                                ${emojis.map(emoji => `
+                                    <button class="emoji-btn" data-emoji="${emoji}" title="${emoji}">
+                                        ${emoji}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="custom-emoji-container">
+                    <label for="customEmojiInput">Or enter custom emoji:</label>
+                    <div class="custom-emoji-row">
+                        <input type="text" id="customEmojiInput" placeholder="Enter any emoji..." maxlength="2" autocomplete="off">
+                        <button class="modal-apply-btn" id="applyCustomEmoji">Apply</button>
+                    </div>
+                </div>
+            </div>
+        `);
+        
+        modalOverlay.appendChild(modalContent);
+        document.body.appendChild(modalOverlay);
+        
+        const closeModal = () => modalOverlay.remove();
+        
+        // Handle emoji selection
+        const selectEmoji = async (emoji) => {
+            item.icon = emoji;
+            
+            // Update localStorage
+            const storageKey = `inventory_${itemName}`;
+            localStorage.setItem(storageKey, JSON.stringify(item));
+            
+            // Sync to Firebase if remote
+            if (this.inventory.isRemote || this.inventory.firebase.isItemInRemoteLocation(item)) {
+                await this.inventory.firebase.syncToFirebase(item);
+            }
+            
+            // Update preview
+            const iconBtn = this.previewPane.querySelector('.preview-icon-btn');
+            if (iconBtn) {
+                iconBtn.textContent = emoji;
+            }
+            
+            // Refresh inventory display
+            this.render();
+            
+            closeModal();
+            showNotification(`Icon updated to ${emoji}`);
+        };
+        
+        // Add event listeners
+        modalContent.querySelector('#modalCloseBtn').addEventListener('click', closeModal);
+        
+        // Emoji button clicks
+        modalContent.querySelectorAll('.emoji-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectEmoji(btn.dataset.emoji);
+            });
+        });
+        
+        // Custom emoji input
+        const customInput = modalContent.querySelector('#customEmojiInput');
+        const applyBtn = modalContent.querySelector('#applyCustomEmoji');
+        
+        const applyCustom = () => {
+            const customEmoji = customInput.value.trim();
+            if (customEmoji) {
+                selectEmoji(customEmoji);
+            }
+        };
+        
+        applyBtn.addEventListener('click', applyCustom);
+        customInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                applyCustom();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        // Search functionality
+        // const searchInput = modalContent.querySelector('#emojiSearchInput');
+        // searchInput.addEventListener('input', (e) => {
+        //     const searchTerm = e.target.value.toLowerCase();
+        //     modalContent.querySelectorAll('.emoji-category').forEach(category => {
+        //         const hasVisibleEmojis = Array.from(category.querySelectorAll('.emoji-btn')).some(btn => {
+        //             const matches = !searchTerm || btn.dataset.emoji.includes(searchTerm);
+        //             btn.style.display = matches ? '' : 'none';
+        //             return matches;
+        //         });
+        //         category.style.display = hasVisibleEmojis ? '' : 'none';
+        //     });
+        // });
+        
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
     }
 
     /**
