@@ -438,6 +438,54 @@ export class Inventory {
     }
     
     /**
+     * Move folder to another folder
+     */
+    async moveFolderToFolder(sourceFolderName, targetFolderName) {
+        const sourceFolder = this.folders[sourceFolderName];
+        if (!sourceFolder) return;
+        
+        // Prevent moving a folder into itself or its descendants
+        if (sourceFolderName === targetFolderName) return;
+        
+        // Check if target is a descendant of source
+        if (targetFolderName && this.isFolderDescendant(targetFolderName, sourceFolderName)) {
+            this.ui.notify(`Cannot move folder into its own subfolder`);
+            return;
+        }
+        
+        // Update the folder's parent
+        sourceFolder.parent = targetFolderName || null;
+        this.folders[sourceFolderName] = sourceFolder;
+        
+        // // Save to localStorage
+        // this.saveToLocalStorage();
+        
+        // // Sync with Firebase if enabled
+        // await this.firebase.syncFolder(sourceFolderName, sourceFolder);
+        
+        this.ui.render();
+        if (targetFolderName) {
+            showNotification(`Moved folder "${sourceFolder.name}" to "${this.folders[targetFolderName].name}"`);
+        } else {
+            showNotification(`Moved folder "${sourceFolder.name}" to root`);
+        }
+    }
+    
+    /**
+     * Check if a folder is a descendant of another folder
+     */
+    isFolderDescendant(childFolderName, parentFolderName) {
+        let current = this.folders[childFolderName];
+        while (current && current.parent) {
+            if (current.parent === parentFolderName) {
+                return true;
+            }
+            current = this.folders[current.parent];
+        }
+        return false;
+    }
+    
+    /**
      * Remove folder
      */
     removeFolder(folderName) {

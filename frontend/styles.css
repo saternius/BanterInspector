@@ -1310,7 +1310,8 @@ body {
     text-align: center;
 }
 
-.inventory-item.dragging {
+.inventory-item.dragging,
+.folder-item.dragging {
     opacity: 0.5;
 }
 
