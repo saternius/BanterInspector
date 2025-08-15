@@ -706,6 +706,7 @@ body {
     padding: 15px;
     transition: all 0.2s ease;
     cursor: pointer;
+    height: fit-content;
 }
 
 .inventory-item:hover {
@@ -723,7 +724,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
 }
 
 .item-title {
@@ -787,11 +787,13 @@ body {
 .item-actions {
     display: flex;
     gap: 8px;
+    width: 100%;
+    justify-content: flex-end;
+    padding: 0px 16px;
 }
 
 .action-btn {
-    flex: 1;
-    padding: 6px 12px;
+    padding: 6px 6px;
     background: #3e3e3e;
     color: white;
     border: none;
@@ -800,6 +802,7 @@ body {
     font-size: 13px;
     font-weight: 500;
     transition: all 0.2s ease;
+    width: fit-content;
 }
 
 .action-btn:hover {
@@ -1232,6 +1235,7 @@ body {
     border-radius: 8px;
     overflow: hidden;
     transition: all 0.2s ease;
+    height: fit-content;
 }
 
 .folder-item:hover {
@@ -1308,6 +1312,12 @@ body {
 
 .inventory-item.dragging {
     opacity: 0.5;
+}
+
+.inventory-grid.drag-over-grid {
+    background-color: rgba(100, 200, 100, 0.1);
+    border: 2px dashed #64c864;
+    transition: all 0.3s ease;
 }
 
 .inspector-container {

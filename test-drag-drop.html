@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Inventory Drag & Drop</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: Arial;
+            padding: 20px;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 8px;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success {
+            background: #2a4a2a;
+            color: #4a4;
+        }
+        .failure {
+            background: #4a2a2a;
+            color: #a44;
+        }
+        .info {
+            background: #2a2a4a;
+            color: #88f;
+        }
+        button {
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Inventory Drag & Drop Test</h1>
+        
+        <div class="test-section">
+            <h2>Test Instructions</h2>
+            <ol>
+                <li>Open the inspector application in a separate tab/window</li>
+                <li>Navigate to the Inventory page</li>
+                <li>Create or ensure you have some test items and folders</li>
+                <li>Follow the test scenarios below</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h2>Test Scenarios</h2>
+            
+            <h3>1. Drag Item Into Folder</h3>
+            <p>✅ Drag an item from the root level into a folder</p>
+            <ul>
+                <li>Item should disappear from root</li>
+                <li>Folder should show drag-over visual feedback</li>
+                <li>Item should appear in folder when expanded</li>
+            </ul>
+            
+            <h3>2. Drag Item Out of Folder</h3>
+            <p>✅ Expand a folder and drag an item out to the root</p>
+            <ul>
+                <li>Item should be draggable from within expanded folder</li>
+                <li>Dropping on empty grid area should move to root</li>
+                <li>Item should disappear from folder and appear in root</li>
+            </ul>
+            
+            <h3>3. Drag Item Between Folders</h3>
+            <p>✅ Drag an item from one folder to another</p>
+            <ul>
+                <li>Expand source folder</li>
+                <li>Drag item to target folder header</li>
+                <li>Item should move from source to target folder</li>
+            </ul>
+            
+            <h3>4. Nested Folder Support</h3>
+            <p>✅ Drag items in/out of nested folders</p>
+            <ul>
+                <li>Create folder inside another folder</li>
+                <li>Drag items into nested folder</li>
+                <li>Drag items out of nested folder to parent or root</li>
+            </ul>
+        </div>
+
+        <div class="test-section">
+            <h2>Expected Behavior</h2>
+            <div class="test-result info">
+                <strong>Visual Feedback:</strong>
+                <ul>
+                    <li>Dragged items should have reduced opacity (0.5)</li>
+                    <li>Drop zones should show dashed border on hover</li>
+                    <li>Folder headers should highlight when hovering with dragged item</li>
+                    <li>Empty grid areas should show green highlight when hovering</li>
+                </ul>
+            </div>
+            
+            <div class="test-result info">
+                <strong>Functional Requirements:</strong>
+                <ul>
+                    <li>Items are draggable from any location (root or folder)</li>
+                    <li>Items can be dropped on folder headers to move into folder</li>
+                    <li>Items can be dropped on empty grid space to move to current directory</li>
+                    <li>Dropping on expanded folder content area moves to that folder</li>
+                    <li>All moves should update localStorage and sync if Firebase is enabled</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>Manual Test Results</h2>
+            <p>Check off each test as you complete it:</p>
+            <label><input type="checkbox"> Item drags into folder successfully</label><br>
+            <label><input type="checkbox"> Item drags out of folder to root successfully</label><br>
+            <label><input type="checkbox"> Item drags between folders successfully</label><br>
+            <label><input type="checkbox"> Nested folder drag/drop works correctly</label><br>
+            <label><input type="checkbox"> Visual feedback appears correctly</label><br>
+            <label><input type="checkbox"> No console errors during drag/drop</label><br>
+            <label><input type="checkbox"> Changes persist after page refresh</label><br>
+        </div>
+
+        <div class="test-section">
+            <h2>Known Issues</h2>
+            <div class="test-result info">
+                If any issues are found during testing, document them here:
+                <ul>
+                    <li>Issue: [Description]</li>
+                    <li>Steps to reproduce: [Steps]</li>
+                    <li>Expected: [What should happen]</li>
+                    <li>Actual: [What actually happens]</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log('Test page loaded. Please open the inspector application to begin testing.');
+        console.log('Key changes implemented:');
+        console.log('1. Items in expanded folders now have draggable="true" attribute');
+        console.log('2. Drag event listeners attached to all inventory items including those in folders');
+        console.log('3. Folder headers accept drops to move items into folders');
+        console.log('4. Empty folder content areas accept drops');
+        console.log('5. Grid area accepts drops to move items to current directory or root');
+        console.log('6. Visual feedback added with drag-over-grid class');
+    </script>
+</body>
+</html>
