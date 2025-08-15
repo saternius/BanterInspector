@@ -307,36 +307,71 @@ export class InventoryUI {
         
         // Add event listeners for folder items
         inventoryContainer.querySelectorAll('.folder-item').forEach(folder => {
-            folder.addEventListener('click', (e) => {
-                if (!e.target.closest('.folder-expand-btn')) {
-                    const folderName = folder.dataset.folderName;
-                    this.inventory.openFolder(folderName);
-                }
-            });
+            // Only add click handler to the folder header, not the entire folder
+            const folderHeader = folder.querySelector('.folder-header');
+            if (folderHeader) {
+                folderHeader.addEventListener('click', (e) => {
+                    if (!e.target.closest('.folder-expand-btn') && !e.target.closest('.remove-folder-btn')) {
+                        const folderName = folder.dataset.folderName;
+                        this.inventory.openFolder(folderName);
+                    }
+                });
+            }
             
-            // Setup drag and drop for folders
-            folder.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                e.dataTransfer.dropEffect = 'move';
-                folder.classList.add('drag-over');
-            });
+            // Setup drag and drop for folders - only on the header to avoid conflicts
+            if (folderHeader) {
+                folderHeader.addEventListener('dragover', (e) => {
+                    if (this.draggedItem) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.dataTransfer.dropEffect = 'move';
+                        folder.classList.add('drag-over');
+                    }
+                });
+                
+                folderHeader.addEventListener('dragleave', (e) => {
+                    e.stopPropagation();
+                    folder.classList.remove('drag-over');
+                });
+                
+                folderHeader.addEventListener('drop', async(e) => {
+                    if (this.draggedItem) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        folder.classList.remove('drag-over');
+                        const itemName = e.dataTransfer.getData('text/inventory-item');
+                        const folderName = folder.dataset.folderName;
+                        if (itemName) {
+                            await this.inventory.moveItemToFolder(itemName, folderName);
+                        }
+                    }
+                });
+            }
             
-            folder.addEventListener('dragleave', (e) => {
-                e.stopPropagation();
-                folder.classList.remove('drag-over');
-            });
-            
-            folder.addEventListener('drop', async(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                folder.classList.remove('drag-over');
-                const itemName = e.dataTransfer.getData('text/inventory-item');
-                const folderName = folder.dataset.folderName;
-                if (itemName && this.draggedItem) {
-                    await this.inventory.moveItemToFolder(itemName, folderName);
-                }
-            });
+            // Add drop zone for folder contents area to move items to this folder
+            const folderContents = folder.querySelector('.folder-contents');
+            if (folderContents) {
+                folderContents.addEventListener('dragover', (e) => {
+                    // Only handle if dragging an inventory item and not over another item/folder
+                    if (this.draggedItem && e.target === folderContents) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                    }
+                });
+                
+                folderContents.addEventListener('drop', async (e) => {
+                    // Only handle drops on empty areas of the folder contents
+                    if (this.draggedItem && e.target === folderContents) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const itemName = e.dataTransfer.getData('text/inventory-item');
+                        const folderName = folder.dataset.folderName;
+                        if (itemName) {
+                            await this.inventory.moveItemToFolder(itemName, folderName);
+                        }
+                    }
+                });
+            }
         });
         
         // Add event listeners for expand/collapse buttons
@@ -348,17 +383,19 @@ export class InventoryUI {
             });
         });
         
-        // Make inventory items draggable
+        // Make inventory items draggable (including items in expanded folders)
         inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
-            item.draggable = true;
+            // The draggable attribute is already set in the HTML
             item.addEventListener('dragstart', (e) => {
+                e.stopPropagation(); // Prevent event bubbling
                 this.draggedItem = item.dataset.itemName;
                 e.dataTransfer.setData('text/inventory-item', this.draggedItem);
                 e.dataTransfer.effectAllowed = 'move';
                 item.classList.add('dragging');
             });
             
-            item.addEventListener('dragend', () => {
+            item.addEventListener('dragend', (e) => {
+                e.stopPropagation(); // Prevent event bubbling
                 item.classList.remove('dragging');
                 this.draggedItem = null;
             });
@@ -374,12 +411,25 @@ export class InventoryUI {
                 if (this.draggedItem) {
                     e.preventDefault();
                     e.dataTransfer.dropEffect = 'move';
+                    
+                    // Add visual feedback when dragging over empty grid area
+                    if (e.target === inventoryGrid || e.target.classList.contains('folder-empty')) {
+                        inventoryGrid.classList.add('drag-over-grid');
+                    }
+                }
+            });
+            
+            inventoryGrid.addEventListener('dragleave', (e) => {
+                if (e.target === inventoryGrid) {
+                    inventoryGrid.classList.remove('drag-over-grid');
                 }
             });
             
             inventoryGrid.addEventListener('drop', async (e) => {
-                // Only handle internal drops on empty areas
-                if (this.draggedItem && e.target === inventoryGrid) {
+                inventoryGrid.classList.remove('drag-over-grid');
+                
+                // Handle drops on empty areas or on the grid itself
+                if (this.draggedItem && (e.target === inventoryGrid || e.target.classList.contains('folder-empty'))) {
                     e.preventDefault();
                     e.stopPropagation();
                     const itemName = e.dataTransfer.getData('text/inventory-item');
@@ -485,7 +535,7 @@ export class InventoryUI {
         // Get items
         Object.entries(this.inventory.items).forEach(([key, item]) => {
             if (item.folder === folderKey) {
-                items.push(this.renderItem(key, item));
+                items.push(this.renderItem(key, item, true)); // Pass true to indicate item is in folder
             }
         });
         
@@ -499,84 +549,13 @@ export class InventoryUI {
     /**
      * Render a single item
      */
-    renderItem(key, item) {
+    renderItem(key, item, isInFolder = false) {
         const dateStr = new Date(item.created).toLocaleDateString();
         const itemType = item.itemType || 'entity';
         const itemIcon = itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦';
         const isSelected = this.inventory.selectedItem === key;
         
-        let itemInfo = '';
-        if (itemType === 'image') {
-            const size = item.data.size ? (item.data.size / 1024).toFixed(2) + ' KB' : 'Unknown';
-            const dimensions = item.data.width && item.data.height ? 
-                `${item.data.width}×${item.data.height}` : 'Unknown';
-            itemInfo = `
-                <div class="info-row">
-                    <span class="info-label">Type:</span>
-                    <span class="info-value">${itemType}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Size:</span>
-                    <span class="info-value">${size}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Dimensions:</span>
-                    <span class="info-value">${dimensions}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Author:</span>
-                    <span class="info-value">${item.author}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Created:</span>
-                    <span class="info-value">${dateStr}</span>
-                </div>
-            `;
-        } else if (itemType === 'script') {
-            itemInfo = `
-                <div class="info-row">
-                    <span class="info-label">Type:</span>
-                    <span class="info-value">Script</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Author:</span>
-                    <span class="info-value">${item.author}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Created:</span>
-                    <span class="info-value">${dateStr}</span>
-                </div>
-            `;
-        } else {
-            const componentCount = item.data.components ? item.data.components.length : 0;
-            const childCount = item.data.children ? item.data.children.length : 0;
-            itemInfo = `
-                <div class="info-row">
-                    <span class="info-label">Type:</span>
-                    <span class="info-value">${itemType}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Author:</span>
-                    <span class="info-value">${item.author}</span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Created:</span>
-                    <span class="info-value">${dateStr}</span>
-                </div>
-                ${componentCount > 0 ? `
-                    <div class="info-row">
-                        <span class="info-label">Components:</span>
-                        <span class="info-value">${componentCount}</span>
-                    </div>
-                ` : ''}
-                ${childCount > 0 ? `
-                    <div class="info-row">
-                        <span class="info-label">Children:</span>
-                        <span class="info-value">${childCount}</span>
-                    </div>
-                ` : ''}
-            `;
-        }
+        
 
 
         // Different actions based on item type
@@ -585,7 +564,7 @@ export class InventoryUI {
             itemActions = `
                 <div class="item-actions">
                     <button class="action-btn edit-script-btn" data-item-name="${key}">
-                        ✏️ Edit
+                        ✏️
                     </button>
                 </div>
             `;
@@ -593,7 +572,7 @@ export class InventoryUI {
             itemActions = `
                 <div class="item-actions">
                     <button class="action-btn copy-url-btn" data-item-name="${key}">
-                        📋 Copy URL
+                        📋
                     </button>
                 </div>
             `;
@@ -601,25 +580,25 @@ export class InventoryUI {
             itemActions = `
                 <div class="item-actions">
                     <button class="action-btn add-to-scene-btn" data-item-name="${key}">
-                        ➕ Add to Scene
+                        ➕
                     </button>
                 </div>
             `;
         }
         
+        // Add draggable attribute - items are draggable whether in folder or not
+        const draggableAttr = 'draggable="true"';
+        
         return `
-        <div class="inventory-item ${isSelected ? 'selected' : ''}" data-item-name="${key}">
+        <div class="inventory-item ${isSelected ? 'selected' : ''}" data-item-name="${key}" ${draggableAttr}>
             <div class="item-header">
                 <div class="item-title">
                     <span class="item-type-icon" title="${itemType}">${itemIcon}</span>
                     <h3 class="item-name">${item.name}</h3>
                 </div>
+                ${itemActions}
                 <button class="remove-item-btn" data-item-name="${key}">×</button>
             </div>
-            <div class="item-info">
-                ${itemInfo}
-            </div>
-            ${itemActions}
         </div>
     `;
     }

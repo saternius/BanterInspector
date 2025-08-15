@@ -58,7 +58,10 @@ Organized by feature area:
 - `loading-screen.js` - Application loading progress display
 
 **Inventory** (`inventory/`)
-- `inventory.js` - Persistent storage for reusable GameObjects and scripts
+- `inventory.js` - Main inventory module coordinating all inventory functionality
+- `inventory-ui.js` - UI rendering and interaction handling for inventory interface
+- `inventory-file-handler.js` - File upload, export, and processing operations
+- `inventory-firebase.js` - Firebase integration for cloud storage and synchronization
 
 **Script Editor** (`script-editor/`)
 - `script-editor.js` - CodeMirror-based JavaScript editor for BanterScript files
@@ -123,16 +126,14 @@ The ChangeManager tracks all modifications:
 
 ### Frontend Modules
 
-#### Inventory System (`frontend/js/pages/inventory/inventory.js`)
-The inventory provides persistent storage using localStorage for:
-- **Entity**: GameObject hierarchies exported from Unity scenes
-- **Scripts**: JavaScript files for use with MonoBehavior components
+#### Inventory System (`frontend/js/pages/inventory/`)
+Modularized persistent storage for GameObjects and scripts:
+- **`inventory.js`**: Main coordinator module
+- **`inventory-ui.js`**: UI rendering and interaction handling
+- **`inventory-file-handler.js`**: File upload/export operations
+- **`inventory-firebase.js`**: Firebase cloud storage integration
 
-Key features:
-- Drag & drop GameObjects from hierarchy to save them
-- Upload `.js` and `.json` files via file picker
-- Export items as JSON for sharing/backup
-- Script preview and editing integration
+Supports storing GameObject hierarchies and JavaScript files with drag & drop, file upload, and JSON export/import capabilities.
 
 #### Space Properties Panel (`frontend/js/pages/world-inspector/space-props-panel.js`)
 Manages Banter space-level properties that persist across sessions:
