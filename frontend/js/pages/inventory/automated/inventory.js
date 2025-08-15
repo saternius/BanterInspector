@@ -1,9 +1,9 @@
 const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
+const { showNotification } = await import(`${window.repoUrl}/utils.js`);
 // Import new modules
-const { InventoryFirebase } = await import(`${window.repoUrl}/pages/inventory/inventory-firebase.js`);
-const { InventoryUI } = await import(`${window.repoUrl}/pages/inventory/inventory-ui.js`);
-const { InventoryFileHandler } = await import(`${window.repoUrl}/pages/inventory/inventory-file-handler.js`);
-console.log('firebaseInventory', InventoryFirebase)
+import InventoryFirebase from './inventory-firebase.js';
+import InventoryUI from './inventory-ui.js';
+import InventoryFileHandler from './inventory-file-handler.js';
 
 /**
  * Main Inventory class - orchestrates inventory functionality through specialized modules
@@ -52,11 +52,14 @@ export class Inventory {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.startsWith('inventory_') && !key.startsWith('inventory_folder_')) {
+                const itemName = key.replace('inventory_', '');
                 try {
-                    const itemKey = key.replace('inventory_', '');
-                    items[itemKey] = JSON.parse(localStorage.getItem(key));
-                } catch (error) {
-                    console.error(`Failed to parse inventory item ${key}:`, error);
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if (data && data.itemType) {
+                        items[itemName] = data;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse inventory item:', key, e);
                 }
             }
         }
@@ -71,11 +74,14 @@ export class Inventory {
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.startsWith('inventory_folder_')) {
+                const folderName = key.replace('inventory_folder_', '');
                 try {
-                    const folderKey = key.replace('inventory_folder_', '');
-                    folders[folderKey] = JSON.parse(localStorage.getItem(key));
-                } catch (error) {
-                    console.error(`Failed to parse folder ${key}:`, error);
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if (data) {
+                        folders[folderName] = data;
+                    }
+                } catch (e) {
+                    console.error('Failed to parse folder:', key, e);
                 }
             }
         }
@@ -86,27 +92,15 @@ export class Inventory {
      * Remove an item from inventory
      */
     removeItem(itemName) {
-        this.ui.showConfirmModal(
-            `Are you sure you want to remove "${itemName}" from your inventory?`,
-            () => {
-                let change = new DeleteItemChange(itemName, {source: 'ui'});
-                changeManager.applyChange(change);
-                this.ui.render();
-                showNotification(`Removed "${itemName}" from inventory`);
-            },
-            'Remove Item'
-        );
-    }
-
-
-    syncItem(itemName, item){
-        this.items[itemName] = item;
-        item.last_used = Date.now();
         const storageKey = `inventory_${itemName}`;
-        localStorage.setItem(storageKey, JSON.stringify(item));
-        if (this.firebase.isItemInRemoteLocation(item)) {
-            this.firebase.syncToFirebase(item);
+        localStorage.removeItem(storageKey);
+        delete this.items[itemName];
+        
+        if (this.selectedItem === itemName) {
+            this.selectedItem = null;
+            this.ui.hidePreview();
         }
+        
         this.ui.render();
     }
     
@@ -114,16 +108,32 @@ export class Inventory {
      * Get available scripts in current folder
      */
     getAvailableScripts() {
-        return Object.values(this.items).filter(item => item.itemType === 'script');
+        const scripts = [];
+        
+        // Check current folder
+        if (this.currentFolder) {
+            Object.entries(this.items).forEach(([name, item]) => {
+                if (item.itemType === 'script' && item.folder === this.currentFolder) {
+                    scripts.push(name);
+                }
+            });
+        } else {
+            // Root level scripts
+            Object.entries(this.items).forEach(([name, item]) => {
+                if (item.itemType === 'script' && !item.folder) {
+                    scripts.push(name);
+                }
+            });
+        }
+        
+        return scripts;
     }
-
     
     /**
      * Select an item
      */
     selectItem(itemName) {
         if (this.selectedItem === itemName) {
-            // Deselect if clicking the same item
             this.selectedItem = null;
             this.ui.hidePreview();
         } else {
@@ -134,9 +144,9 @@ export class Inventory {
     }
     
     /**
-     * Export selected item as JSON
+     * Export selected item as JSON for download
      */
-    exportSelectedItem() {
+    downloadSelectedItem() {
         if (!this.selectedItem) return;
         
         const item = this.items[this.selectedItem];
@@ -161,7 +171,7 @@ export class Inventory {
         URL.revokeObjectURL(url);
         
         // Show notification
-        showNotification(`Exported "${item.name}" as JSON`);
+        this.ui.notify(`Exported "${item.name}" as JSON`);
     }
     
     /**
@@ -170,54 +180,194 @@ export class Inventory {
     updateLastUsed(itemName) {
         const item = this.items[itemName];
         if (item) {
-            item.lastUsed = Date.now();
+            item.last_used = Date.now();
+            const storageKey = `inventory_${itemName}`;
+            localStorage.setItem(storageKey, JSON.stringify(item));
+            this.items[itemName] = item;
+        }
+        this.ui.render();
+    }
+    
+    /**
+     * Update item description
+     */
+    updateItemDescription(itemName, description) {
+        const item = this.items[itemName];
+        if (item) {
+            item.description = description || '';
+            const storageKey = `inventory_${itemName}`;
+            localStorage.setItem(storageKey, JSON.stringify(item));
+            this.items[itemName] = item;
+            showNotification(`Description updated for "${itemName}"`);
         }
     }
     
-
+    /**
+     * Rename an item
+     */
+    renameItem(oldName, newName) {
+        const item = this.items[oldName];
+        if (!item) return;
+        
+        // Show warning about broken references for entities
+        const warningMessage = item.itemType === 'entity' 
+            ? `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may break existing references in scripts or other entities that depend on this name.<br><br>Any code using <code>SM.findEntityByName("${oldName}")</code> or similar references will need to be updated.<br><br>Do you want to continue?`
+            : `<strong>Warning:</strong> Renaming "${oldName}" to "${newName}" may affect other items that reference this script.<br><br>Do you want to continue?`;
+        
+        this.ui.showRenameWarningModal(
+            warningMessage,
+            () => {
+                // User confirmed, now check for naming conflicts
+                if (this.items[newName] && newName !== oldName) {
+                    this.ui.showConfirmModal(
+                        `An item named "${newName}" already exists. Do you want to overwrite it?`,
+                        () => {
+                            // Delete the existing item
+                            const existingStorageKey = `inventory_${newName}`;
+                            localStorage.removeItem(existingStorageKey);
+                            delete this.items[newName];
+                            
+                            // Proceed with rename
+                            this.finalizeRename(oldName, newName);
+                        },
+                        'Overwrite Item'
+                    );
+                } else {
+                    // No conflict, proceed with rename
+                    this.finalizeRename(oldName, newName);
+                }
+            },
+            () => {
+                // User cancelled, restore original name in the UI
+                const editableName = this.previewPane.querySelector('.editable-name');
+                if (editableName) {
+                    editableName.textContent = oldName;
+                }
+            }
+        );
+    }
+    
+    /**
+     * Finalize rename operation
+     */
+    finalizeRename(oldName, newName) {
+        const item = this.items[oldName];
+        if (!item) return;
+        
+        // For scripts, ensure .js extension
+        if (item.itemType === 'script' && !newName.endsWith('.js')) {
+            newName = newName + '.js';
+        }
+        
+        // Update item name
+        item.name = newName;
+        
+        // Remove old storage key
+        const oldStorageKey = `inventory_${oldName}`;
+        localStorage.removeItem(oldStorageKey);
+        
+        // Save with new key
+        const newStorageKey = `inventory_${newName}`;
+        localStorage.setItem(newStorageKey, JSON.stringify(item));
+        
+        // Update items object
+        delete this.items[oldName];
+        this.items[newName] = item;
+        
+        // Update selected item reference
+        if (this.selectedItem === oldName) {
+            this.selectedItem = newName;
+        }
+        
+        // If this is a script, update any open script editor tabs
+        if (item.itemType === 'script' && window.inspector && window.inspector.scriptEditors) {
+            // Find and update the script editor with the old name
+            for (const [key, editor] of window.inspector.scriptEditors) {
+                if (editor.currentScript.name === oldName) {
+                    // Update the script editor's internal reference
+                    editor.currentScript.name = newName;
+                    editor.currentScript.data = item.data;
+                    
+                    // Update the navigation tab text
+                    if (editor.navElement) {
+                        // Store the old close button handler before updating innerHTML
+                        const oldCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        
+                        editor.navElement.innerHTML = `
+                            <span class="nav-icon">📜</span>
+                            ${newName}
+                            <span class="close-tab-btn" data-close-script="${editor.pageId}">×</span>
+                        `;
+                        
+                        // Re-attach close button handler
+                        const newCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        if (newCloseBtn && editor.closeBtnHandler) {
+                            newCloseBtn.addEventListener('click', editor.closeBtnHandler);
+                        }
+                    }
+                    
+                    // Update the editor page title
+                    const editorTitle = document.querySelector(`#${editor.pageId}-page .editor-title h2`);
+                    if (editorTitle) {
+                        editorTitle.textContent = `Editing: ${newName}`;
+                    }
+                    
+                    // Update the scriptEditors map key
+                    window.inspector.scriptEditors.delete(key);
+                    window.inspector.scriptEditors.set(newName, editor);
+                    
+                    // Update localStorage for opened editors
+                    localStorage.setItem(`openedEditors`, Array.from(window.inspector.scriptEditors.keys()).join(","));
+                    
+                    break;
+                }
+            }
+        }
+        
+        // Re-render and show updated preview
+        this.ui.render();
+        this.ui.showPreview(newName);
+        showNotification(`Renamed "${oldName}" to "${newName}"`);
+    }
+    
     /**
      * Load entity to scene by name
      */
     async loadEntityToSceneByName(itemName) {
+        // Update last_used timestamp
         this.updateLastUsed(itemName);
-        let change = new LoadItemChange(itemName, SM.selectedEntity, null, {source: 'ui'});
-        await window.changeManager.applyChange(change);
+        let change = new LoadItemChange(itemName, SM.selectedEntity, null, {source: 'ui'})
+        await changeManager.applyChange(change);
+        showNotification(`Adding "${itemName}" to scene..`);
     }
     
     /**
      * Load by command
      */
     async loadByCMD(itemName) {
-        let data = localStorage.getItem("inventory_" + itemName);
-        if (!data) {
-            console.log("NO ITEM NAMED: ", itemName);
+        let data = localStorage.getItem("inventory_"+itemName)
+        if(!data){
+            console.log(" NO ITEM NAMED:  ", itemName)
             return;
         }
-        let item = JSON.parse(data);
-        if (!item.history || !item.history.length) {
-            console.log("Item has no history");
-            return;
-        }
-        
-        console.log(item.history, item.history.length);
-        for (let i = 0; i < item.history.length; i++) {
-            let h = item.history[i];
-            let command = "";
-            Object.entries(h).forEach(([k, v]) => {
-                if (k === "options") {
-                    return;
+        let item = JSON.parse(data)
+        console.log(item.history, item.history.length)
+        for(let i=0; i<item.history.length; i++){
+            let h = item.history[i]
+            let command = ""
+            Object.entries(h).forEach(([k,v])=>{
+                if(k === "options"){
+                    return
                 }
-                if (typeof(v) === "object") {
-                    command += JSON.stringify(v) + " ";
-                } else {
-                    command += v + " ";
+                if(typeof(v) === "object"){
+                    command += JSON.stringify(v)+" "
+                }else{
+                    command += v + " "
                 }
-            });
-            command = command.trim();
-            console.log(i, command);
-            if (window.RunCommand) {
-                await window.RunCommand(command);
-            }
+            })
+            command = command.trim()
+            console.log(i, command)
+            await RunCommand(command)
         }
     }
     
@@ -247,17 +397,16 @@ export class Inventory {
      * Create new script
      */
     async createNewScript() {
-        // Show modal for script name input
         this.ui.showScriptNameModal();
     }
-    
     
     /**
      * Finalize script creation
      */
     async finalizeScriptCreation(finalName) {
+        // Default script template
         let change = new CreateScriptItemChange(finalName, {source: 'ui'});
-        window.changeManager.applyChange(change);
+        changeManager.applyChange(change);
 
         this.ui.render();
         showNotification(`Created new script "${finalName}"`);
@@ -276,7 +425,7 @@ export class Inventory {
             created: now,
             last_used: now,
             itemType: 'script',
-            description: '',
+            description: '',  // Initialize with empty description
             data: content
         };
         
@@ -284,8 +433,23 @@ export class Inventory {
         if (this.currentFolder) {
             scriptItem.folder = this.currentFolder;
         }
+        
+        // Save to localStorage
+        const storageKey = `inventory_${fileName}`;
+        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
+        
+        // Update local items
+        this.items[fileName] = scriptItem;
+        
+        // Re-render
+        this.ui.render();
 
-        this.syncItem(fileName, scriptItem);
+        // Sync to Firebase if in remote location
+        if (this.firebase.isItemInRemoteLocation()) {
+            this.firebase.syncToFirebase(scriptItem);
+        }
+        
+        // Show success message
         showNotification(`Added script "${fileName}" to inventory`);
     }
     
@@ -314,60 +478,31 @@ export class Inventory {
         this.selectItem(itemName);
         
         // Show success message
-        this.ui.notify(`Imported "${itemName}" to inventory`);
-    }
-    
-    /**
-     * Save image item
-     */
-    saveImageItem(fileName, imageItem) {
-        // Only add folder property if we're in a folder
-        if (this.currentFolder) {
-            imageItem.folder = this.currentFolder;
-        }
-        
-        // Save to localStorage
-        const storageKey = `inventory_${fileName}`;
-        localStorage.setItem(storageKey, JSON.stringify(imageItem));
-        
-        // Update items cache
-        this.items[fileName] = imageItem;
-        
-        // Sync to Firebase if in remote location
-        if (this.firebase.isItemInRemoteLocation()) {
-            this.firebase.syncToFirebase(imageItem);
-        }
-        
-        // Show success notification
-        this.ui.notify(`Image "${fileName}" added to inventory`);
-        
-        // Re-render
+        showNotification(`Imported "${itemName}" to inventory`);
         this.ui.render();
     }
+    
     
     /**
      * Create new folder
      */
     createNewFolder() {
-        this.ui.showFolderNameModal(async (folderName) => {
+        this.ui.showFolderNameModal((folderName) => {
             if (!folderName || folderName.trim() === '') return;
-            
-            // Validate folder name for Firebase compliance
+     
             if (!this.firebase.isValidFirebasePath(folderName)) {
-                this.ui.notify('Folder name cannot contain: . $ # [ ] / or be empty');
+                showNotification('Folder name cannot contain: . $ # [ ] / or be empty');
                 return;
             }
             
-            // Sanitize the folder name
             const sanitizedName = this.firebase.sanitizeFirebasePath(folderName);
-            
             let change = new CreateFolderChange(sanitizedName, this.currentFolder, {source: 'ui'});
-            window.changeManager.applyChange(change);
+            changeManager.applyChange(change);
             
             // Re-render
             this.ui.render();
             
-            this.ui.notify(`Created folder "${sanitizedName}"`);
+            showNotification(`Created folder "${sanitizedName}"`);
         });
     }
     
@@ -375,10 +510,10 @@ export class Inventory {
      * Open folder
      */
     openFolder(folderName) {
+        this.updateFolderLastUsed(folderName);
         this.currentFolder = folderName;
         this.selectedItem = null;
         this.ui.hidePreview();
-        this.updateFolderLastUsed(folderName);
         this.ui.render();
     }
     
@@ -426,14 +561,13 @@ export class Inventory {
      */
     async moveItemToFolder(itemName, folderName) {
         let change = new MoveItemDirectoryChange(itemName, folderName, {source: 'ui'});
-        let outcome = await window.changeManager.applyChange(change);
-        if (!outcome) return;
-        
+        let outcome = await changeManager.applyChange(change);
+        if(!outcome) return;
         this.ui.render();
         if (folderName) {
-            this.ui.notify(`Moved "${itemName}" to folder "${folderName}"`);
+            showNotification(`Moved "${itemName}" to folder "${this.folders[folderName].name}"`);
         } else {
-            this.ui.notify(`Moved "${itemName}" to root`);
+            showNotification(`Moved "${itemName}" to root`);
         }
     }
     
@@ -468,27 +602,17 @@ export class Inventory {
      */
     async finalizeRemoveFolder(folderName, folder) {
         let change = new RemoveFolderChange(folderName, {source: 'ui'});
-        window.changeManager.applyChange(change);
+        changeManager.applyChange(change);
         this.ui.render();
-        this.ui.notify(`Removed folder "${folder.name}"`);
+        showNotification(`Removed folder "${folder.name}"`);
     }
     
     /**
      * Get current folder path
      */
     getCurrentFolderPath() {
-        if (!this.currentFolder) return '/';
-        
-        const parts = [];
-        let current = this.currentFolder;
-        
-        while (current) {
-            parts.unshift(current);
-            const folder = this.folders[current];
-            current = folder?.parent;
-        }
-        
-        return '/' + parts.join('/');
+        if (!this.currentFolder) return null;
+        return this.currentFolder;
     }
     
     /**
@@ -497,14 +621,16 @@ export class Inventory {
     getItemCountInFolder(folderKey) {
         let count = 0;
         
-        // Count items
+        // Count direct items
         Object.values(this.items).forEach(item => {
             if (item.folder === folderKey) count++;
         });
         
-        // Count subfolders
-        Object.values(this.folders).forEach(folder => {
-            if (folder.parent === folderKey) count++;
+        // Count items in subfolders
+        Object.entries(this.folders).forEach(([key, folder]) => {
+            if (folder.parent === folderKey) {
+                count += this.getItemCountInFolder(key);
+            }
         });
         
         return count;
@@ -526,8 +652,8 @@ export class Inventory {
                     break;
                 case 'last_used':
                     // If no last_used, fall back to created date
-                    const aTime = a.last_used || a.lastUsed || a.created || 0;
-                    const bTime = b.last_used || b.lastUsed || b.created || 0;
+                    const aTime = a.last_used || a.created || 0;
+                    const bTime = b.last_used || b.created || 0;
                     compareValue = aTime - bTime;
                     break;
             }

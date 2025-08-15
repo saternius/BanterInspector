@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Module Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .inventory-container {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            min-height: 400px;
+        }
+        #previewPane {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+        .test-results {
+            background: #222;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Inventory Module Test</h1>
+        
+        <div id="inventory-page">
+            <div class="inventory-container"></div>
+        </div>
+        
+        <div id="previewPane"></div>
+        
+        <div class="test-results" id="testResults">
+            <h3>Test Results:</h3>
+        </div>
+    </div>
+
+    <script type="module">
+        // Mock globals that inventory expects
+        window.SM = {
+            scene: {
+                localUser: {
+                    name: 'TestUser'
+                }
+            },
+            selectedEntity: null
+        };
+        
+        window.changeManager = {
+            applyChange: async (change) => {
+                console.log('Mock changeManager.applyChange called with:', change);
+                return true;
+            }
+        };
+        
+        window.repoUrl = '.';
+        
+        // Mock showNotification if it doesn't exist
+        if (!window.showNotification) {
+            window.showNotification = (message, type) => {
+                console.log(`Notification [${type}]: ${message}`);
+            };
+        }
+        
+        const testResults = document.getElementById('testResults');
+        
+        function log(message, type = 'info') {
+            const line = document.createElement('div');
+            line.className = type;
+            line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            testResults.appendChild(line);
+            console.log(message);
+        }
+        
+        async function runTests() {
+            try {
+                log('Starting inventory module tests...', 'info');
+                
+                // Test 1: Import main Inventory class
+                log('Test 1: Importing Inventory class...', 'info');
+                const { Inventory } = await import('./inventory.js');
+                log('✓ Inventory class imported successfully', 'success');
+                
+                // Test 2: Create Inventory instance
+                log('Test 2: Creating Inventory instance...', 'info');
+                const inventory = new Inventory();
+                log('✓ Inventory instance created', 'success');
+                
+                // Test 3: Check module initialization
+                log('Test 3: Checking module initialization...', 'info');
+                if (!inventory.firebase) {
+                    throw new Error('Firebase module not initialized');
+                }
+                if (!inventory.ui) {
+                    throw new Error('UI module not initialized');
+                }
+                if (!inventory.fileHandler) {
+                    throw new Error('FileHandler module not initialized');
+                }
+                log('✓ All modules initialized properly', 'success');
+                
+                // Test 4: Test basic methods
+                log('Test 4: Testing basic methods...', 'info');
+                
+                // Test loadItems
+                const items = inventory.loadItems();
+                log(`  - loadItems() returned ${Object.keys(items).length} items`, 'info');
+                
+                // Test loadFolders
+                const folders = inventory.loadFolders();
+                log(`  - loadFolders() returned ${Object.keys(folders).length} folders`, 'info');
+                
+                // Test getCurrentFolderPath
+                const path = inventory.getCurrentFolderPath();
+                log(`  - getCurrentFolderPath() returned: ${path}`, 'info');
+                
+                log('✓ Basic methods working', 'success');
+                
+                // Test 5: Test module delegation
+                log('Test 5: Testing module delegation...', 'info');
+                
+                // Test Firebase module
+                const isRemote = inventory.firebase.isItemInRemoteLocation();
+                log(`  - Firebase: isItemInRemoteLocation() = ${isRemote}`, 'info');
+                
+                // Test FileHandler module
+                const testData = {
+                    author: 'Test',
+                    name: 'TestItem',
+                    created: Date.now(),
+                    itemType: 'entity',
+                    data: {}
+                };
+                const isValid = inventory.fileHandler.isInventoryEntityFormat(testData);
+                log(`  - FileHandler: isInventoryEntityFormat() = ${isValid}`, 'info');
+                
+                log('✓ Module delegation working', 'success');
+                
+                // Test 6: Test UI rendering
+                log('Test 6: Testing UI rendering...', 'info');
+                await inventory.ui.render();
+                const container = document.querySelector('.inventory-container');
+                if (container.innerHTML.length > 0) {
+                    log('✓ UI rendered successfully', 'success');
+                } else {
+                    throw new Error('UI rendering failed');
+                }
+                
+                log('\n=== All tests passed! ===', 'success');
+                
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+                console.error(error);
+            }
+        }
+        
+        // Run tests when page loads
+        setTimeout(runTests, 500);
+    </script>
+</body>
+</html>

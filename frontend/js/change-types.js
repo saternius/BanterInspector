@@ -1,6 +1,6 @@
 // Import required dependencies
 
-const { deepClone, parseBest, appendToConsole } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -907,6 +907,7 @@ export class SaveEntityItemChange extends Change{
         this.itemName = itemName || this.entity.name;
         this.folder = folder || inventory.currentFolder;
         this.options = options || {};
+        this.itemName = this.itemName.trim();
     }
 
 
@@ -928,8 +929,9 @@ export class SaveEntityItemChange extends Change{
         localStorage.setItem(storageKey, JSON.stringify(inventoryItem));
         
         // Sync to Firebase if in remote location
-        await inventory.syncToFirebase(inventoryItem);
-        
+        await inventory.firebase.syncToFirebase(inventoryItem);
+        let folderName = this.folder? this.folder : "/";
+        showNotification(`Item "${this.itemName}" saved to ${folderName}`);
         inventory.reload();
     }
     
@@ -939,40 +941,35 @@ export class SaveEntityItemChange extends Change{
         super.apply();
         console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.entityId, this.itemName, this.folder)
         const existingKeys = Object.keys(inventory.items);
-        if (existingKeys.includes(this.itemName)) {
-            if(this.options.source === 'ui'){
-                inventory.showRenameModal(this.itemName, async (newName) => {
-                    if (!newName || newName.trim() === '') {
-                        inventory.showNotification('Item not added - no name provided.');
+        console.log("[SAVE SLOT ITEM CHANGE] existingKeys =>", existingKeys, this.itemName)
+        if (!this.itemName || this.itemName.trim() === ''){
+            showNotification('Item not added - no name provided.');
+            return;
+        }
+        if(this.options.source === 'ui'){
+            if (existingKeys.includes(this.itemName)) {
+                inventory.ui.showWarningConfirm(
+                    "Overwrite Existing Item",
+                    `WARNING: An item named "${this.itemName}" already exists.<br><br>` +
+                    `<strong style="color: #ff6b6b;">Clicking "Confirm" will DELETE the existing saved entity "${this.itemName}" and replace it with the new one.</strong><br><br>` +
+                    `This action cannot be undone. Are you sure you want to overwrite it?`,
+                    async () => {
+                        // User confirmed overwrite - delete existing and save new
+                        const deleteChange = new DeleteItemChange(this.itemName, {source: 'ui'});
+                        await deleteChange.apply();
+                        showNotification(`Overwriting existing item "${this.itemName}"`);
+                        let change = new SaveEntityItemChange(this.entityId, this.itemName, this.folder, this.options);
+                        change.apply();
                         return;
+                    },
+                    ()=>{
+                        showNotification(`canceled save"`);
                     }
-                    
-                    const trimmedName = newName.trim();
-                    if (existingKeys.includes(trimmedName)) {
-                        // Show second warning about overwriting
-                        inventory.showConfirmModal(
-                            `⚠️ WARNING: An item named "${trimmedName}" already exists.<br><br>` +
-                            `<strong style="color: #ff6b6b;">Clicking "Confirm" will DELETE the existing saved entity "${trimmedName}" and replace it with the new one.</strong><br><br>` +
-                            `This action cannot be undone. Are you sure you want to overwrite it?`,
-                            async () => {
-                                // User confirmed overwrite - delete existing and save new
-                                const deleteChange = new DeleteItemChange(trimmedName, {source: 'overwrite'});
-                                await deleteChange.apply();
-                                
-                                this.itemName = trimmedName;
-                                await this.finalizeAddItem();
-                                inventory.showNotification(`Overwrote existing item "${trimmedName}"`);
-                            },
-                            'Overwrite Existing Item'
-                        );
-                        return;
-                    }
-                    this.itemName = trimmedName;
-                    this.finalizeAddItem().then(() => {});
-                    return true;
-                });
+                );
+            }else{
+                this.finalizeAddItem().then(() => {});
             }
-            return false;
+            return true;
         }
         await this.finalizeAddItem();
         return true;
@@ -980,7 +977,7 @@ export class SaveEntityItemChange extends Change{
 
     async undo(){
         super.undo();
-        inventory.showNotification('[ NO UNDO FOR SAVE ITEM ]');
+        showNotification('[ NO UNDO FOR SAVE ITEM ]');
     }
 
     getDescription(){
@@ -1004,6 +1001,159 @@ export class SaveEntityItemChange extends Change{
 
 export class RenameItemChange extends Change{
     //TODO: Implement this
+    constructor(itemName, newName, options){
+        super();
+        this.itemName = itemName;
+        this.newName = newName;
+        this.options = options || {};
+    }
+
+    async finalizeRename(){
+
+        let item = inventory.items[this.itemName];
+        if(!item) return false;
+
+        if (item.itemType === 'script' && !this.newName.endsWith('.js')) {
+            this.newName = this.newName + '.js';
+        }
+
+        //DELETE OLD ITEM
+        const oldKey = `inventory_${this.itemName}`;
+        localStorage.removeItem(oldKey);
+        delete inventory.items[this.itemName];
+        let folder = item.folder;
+        if(folder && folder.remote){
+            let sAuth = inventory.firebase.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            let sFolder = inventory.firebase.sanitizeFirebasePath(folder);
+            let sItem = inventory.firebase.sanitizeFirebasePath(this.itemName);
+            let firebasePath = `inventory/${sAuth}/${sFolder}/${sItem}`;
+            await networking.deleteData(firebasePath);
+        }
+        
+        //ADD ITEM
+        item.name = this.newName;
+        item.last_used = Date.now();
+        item.folder = inventory.currentFolder;
+        
+        const newKey = `inventory_${this.newName}`;
+        localStorage.setItem(newKey, JSON.stringify(item));
+        
+        // Sync to Firebase if in remote location
+        await inventory.firebase.syncToFirebase(item);
+        showNotification(`Item "${this.itemName}" renamed to "${this.newName}"`);
+        inventory.reload();
+
+
+
+        // If this is a script, update any open script editor tabs
+        if (item.itemType === 'script' && window.inspector && window.inspector.scriptEditors) {
+            // Find and update the script editor with the old name
+            for (const [key, editor] of window.inspector.scriptEditors) {
+                if (editor.currentScript.name === this.itemName) {
+                    // Update the script editor's internal reference
+                    editor.currentScript.name = this.newName;
+                    editor.currentScript.data = item.data;
+                    
+                    // Update the navigation tab text
+                    if (editor.navElement) {
+                        // Store the old close button handler before updating innerHTML
+                        const oldCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        
+                        editor.navElement.innerHTML = `
+                            <span class="nav-icon">📜</span>
+                            ${this.newName}
+                            <span class="close-tab-btn" data-close-script="${editor.pageId}">×</span>
+                        `;
+                        
+                        // Re-attach close button handler
+                        const newCloseBtn = editor.navElement.querySelector('.close-tab-btn');
+                        if (newCloseBtn && editor.closeBtnHandler) {
+                            newCloseBtn.addEventListener('click', editor.closeBtnHandler);
+                        }
+                    }
+                    
+                    // Update the editor page title
+                    const editorTitle = document.querySelector(`#${editor.pageId}-page .editor-title h2`);
+                    if (editorTitle) {
+                        editorTitle.textContent = `Editing: ${this.newName}`;
+                    }
+                    
+                    // Update the scriptEditors map key
+                    window.inspector.scriptEditors.delete(key);
+                    window.inspector.scriptEditors.set(this.newName, editor);
+                    
+                    // Update localStorage for opened editors
+                    localStorage.setItem(`openedEditors`, Array.from(window.inspector.scriptEditors.keys()).join(","));
+                    
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
+    async apply(){
+        super.apply();
+        if(this.newName === this.itemName) return true;
+        if(inventory.items[this.newName]) return false;
+        if(this.options.source === 'ui'){
+            inventory.ui.showWarningConfirm(
+                "Renaming is Dangerous",
+                `WARNING: Renaming an item can break existing references in scripts or other entities that depend on this name.<br><br>` +
+                `This action cannot be undone. Are you sure you want to continue?`,
+                async () => {
+                    const existingKeys = Object.keys(inventory.items);
+                    if(existingKeys.includes(this.newName)){
+                        inventory.ui.showWarningConfirm(
+                            "Overwrite Existing Item",
+                            `WARNING: An item named "${this.newName}" already exists.<br><br>` +
+                            `<strong style="color: #ff6b6b;">Clicking "Confirm" will DELETE the existing saved entity "${this.newName}" and replace it with the new one.</strong><br><br>` +
+                            `This action cannot be undone. Are you sure you want to overwrite it?`,
+                            async () => {
+                                this.finalizeRename();
+                            },
+                            ()=>{
+                                showNotification(`canceled rename"`);
+                            }
+                        );
+                    }else{
+                        this.finalizeRename();
+                    }
+                    return;
+                },
+                ()=>{
+                    showNotification(`canceled rename"`);
+                }
+            );
+        
+        }else{
+            this.finalizeRename();
+        }
+       
+        return true;
+    }
+
+    async undo(){
+        super.undo();
+        console.log("[ NO UNDO FOR RENAME ITEM ]")
+    }
+
+    getDescription(){
+        return `Rename item ${this.itemName} to ${this.newName}`;
+    }
+
+    getUndoDescription(){
+        return `Rename item ${this.newName} to ${this.itemName}`;
+    }
+    
+    cmd(){
+        return {
+            action: "rename_item",
+            itemName: this.itemName,
+            newName: this.newName,
+            options: this.options
+        }
+    }
 }
 
 export class DeleteItemChange extends Change{
@@ -1040,15 +1190,15 @@ export class DeleteItemChange extends Change{
         }
 
         try {
-            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const userName = inventory.firebase.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
             
             // Build the Firebase path
             let firebasePath = `inventory/${userName}`;
             if (this.itemData.folder) {
-                const sanitizedFolder = inventory.sanitizeFirebasePath(this.itemData.folder);
+                const sanitizedFolder = inventory.firebase.sanitizeFirebasePath(this.itemData.folder);
                 firebasePath += `/${sanitizedFolder}`;
             }
-            const sanitizedItemName = inventory.sanitizeFirebasePath(this.itemName);
+            const sanitizedItemName = inventory.firebase.sanitizeFirebasePath(this.itemName);
             firebasePath += `/${sanitizedItemName}`;
             
             // Delete from Firebase
@@ -1068,7 +1218,7 @@ export class DeleteItemChange extends Change{
             return folderData && folderData.remote === true;
         } else {
             // Check if root is marked as remote
-            const userName = inventory.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            const userName = inventory.firebase.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
             const rootRemoteKey = `inventory_root_remote_${userName}`;
             return localStorage.getItem(rootRemoteKey) === 'true';
         }
@@ -1110,7 +1260,7 @@ export class CreateFolderChange extends Change{
             
         // Check if folder already exists
         if (inventory.folders[trimmedName]) {
-            inventory.showNotification(`A folder named "${trimmedName}" already exists.`);
+            showNotification(`A folder named "${trimmedName}" already exists.`);
             return false;
         }
         
@@ -1376,17 +1526,17 @@ export class EditScriptItemChange extends Change{
                 localStorage.setItem(storageKey, JSON.stringify(item));
                 // Refresh preview if selected
                 if (inventory.selectedItem === this.scriptName) {
-                    inventory.showPreview(this.scriptName);
+                    inventory.ui.showPreview(this.scriptName);
                 }
-                inventory.showNotification(`Saved changes to "${this.scriptName}"`);
+                showNotification(`Saved changes to "${this.scriptName}"`);
                 if(item.folder){
                     let folder = inventory.folders[item.folder];
                     if(folder){
                         folder.last_used = Date.now();
                         const storageKey = `inventory_folder_${folder.name}`;
                         localStorage.setItem(storageKey, JSON.stringify(folder));
-                        let my_name = inventory.sanitizeFirebasePath(scene.localUser.name);
-                        let script_name = inventory.sanitizeFirebasePath(this.scriptName);
+                        let my_name = inventory.firebase.sanitizeFirebasePath(scene.localUser.name);
+                        let script_name = inventory.firebase.sanitizeFirebasePath(this.scriptName);
                         if(folder.remote){
                             let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}${folder.path}/${script_name}`;
                             ref = ref;

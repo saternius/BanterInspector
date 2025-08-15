@@ -1,4 +1,4 @@
-//yeet
+//oi there
 this.default = {}
 
 Object.entries(this.default).forEach(([key, val])=>{
@@ -11,7 +11,7 @@ this.onStart = ()=>{
 }
 
 this.onUpdate = ()=>{
-    console.log("sir")
+    console.log("onUpdate")
 }
 
 this.onDestroy = ()=>{
