@@ -348,30 +348,8 @@ export class InventoryUI {
                 });
             }
             
-            // Add drop zone for folder contents area to move items to this folder
-            const folderContents = folder.querySelector('.folder-contents');
-            if (folderContents) {
-                folderContents.addEventListener('dragover', (e) => {
-                    // Only handle if dragging an inventory item and not over another item/folder
-                    if (this.draggedItem && e.target === folderContents) {
-                        e.preventDefault();
-                        e.dataTransfer.dropEffect = 'move';
-                    }
-                });
-                
-                folderContents.addEventListener('drop', async (e) => {
-                    // Only handle drops on empty areas of the folder contents
-                    if (this.draggedItem && e.target === folderContents) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const itemName = e.dataTransfer.getData('text/inventory-item');
-                        const folderName = folder.dataset.folderName;
-                        if (itemName) {
-                            await this.inventory.moveItemToFolder(itemName, folderName);
-                        }
-                    }
-                });
-            }
+            // Folder contents drops are handled by the main grid drop zone
+            // to ensure consistent behavior when dragging items out of folders
         });
         
         // Add event listeners for expand/collapse buttons
@@ -409,18 +387,23 @@ export class InventoryUI {
             inventoryGrid.addEventListener('dragover', (e) => {
                 // Only handle internal drags
                 if (this.draggedItem) {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'move';
+                    const isOverFolderHeader = e.target.closest('.folder-header');
                     
-                    // Add visual feedback when dragging over empty grid area
-                    if (e.target === inventoryGrid || e.target.classList.contains('folder-empty')) {
+                    // Always prevent default to allow dropping, unless over a folder header
+                    if (!isOverFolderHeader) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.dataTransfer.dropEffect = 'move';
                         inventoryGrid.classList.add('drag-over-grid');
+                    } else {
+                        inventoryGrid.classList.remove('drag-over-grid');
                     }
                 }
             });
             
             inventoryGrid.addEventListener('dragleave', (e) => {
-                if (e.target === inventoryGrid) {
+                // Only remove class if we're leaving the grid entirely
+                if (!inventoryGrid.contains(e.relatedTarget)) {
                     inventoryGrid.classList.remove('drag-over-grid');
                 }
             });
@@ -428,14 +411,18 @@ export class InventoryUI {
             inventoryGrid.addEventListener('drop', async (e) => {
                 inventoryGrid.classList.remove('drag-over-grid');
                 
-                // Handle drops on empty areas or on the grid itself
-                if (this.draggedItem && (e.target === inventoryGrid || e.target.classList.contains('folder-empty'))) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const itemName = e.dataTransfer.getData('text/inventory-item');
-                    if (itemName) {
-                        // Move to current folder (or root if no current folder)
-                        await this.inventory.moveItemToFolder(itemName, this.inventory.currentFolder);
+                // Handle drops anywhere except on folder headers
+                if (this.draggedItem) {
+                    const isOverFolderHeader = e.target.closest('.folder-header');
+                    
+                    if (!isOverFolderHeader) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const itemName = e.dataTransfer.getData('text/inventory-item');
+                        if (itemName) {
+                            // Move to current folder (or root if no current folder)
+                            await this.inventory.moveItemToFolder(itemName, this.inventory.currentFolder);
+                        }
                     }
                 }
             });
@@ -971,13 +958,11 @@ export class InventoryUI {
             if (!this.inventory.draggedItem) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'copy';
-                this.container.classList.add('drag-over');
             }
         });
         
         this.container.addEventListener('dragleave', (e) => {
             if (e.target === this.container) {
-                this.container.classList.remove('drag-over');
             }
         });
         
@@ -985,7 +970,6 @@ export class InventoryUI {
             // Only handle external drops (from hierarchy)
             if (!this.inventory.draggedItem) {
                 e.preventDefault();
-                this.container.classList.remove('drag-over');
                 
                 const entityId = e.dataTransfer.getData('text/plain');
                 let change = new SaveEntityItemChange(entityId, null, null, {source: 'ui'});
