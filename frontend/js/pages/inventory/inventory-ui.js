@@ -307,6 +307,23 @@ export class InventoryUI {
         
         // Add event listeners for folder items
         inventoryContainer.querySelectorAll('.folder-item').forEach(folder => {
+            const folderName = folder.dataset.folderName;
+            
+            // Add drag handlers for the folder itself
+            folder.addEventListener('dragstart', (e) => {
+                e.stopPropagation();
+                this.draggedFolder = folderName;
+                e.dataTransfer.setData('text/inventory-folder', folderName);
+                e.dataTransfer.effectAllowed = 'move';
+                folder.classList.add('dragging');
+            });
+            
+            folder.addEventListener('dragend', (e) => {
+                e.stopPropagation();
+                folder.classList.remove('dragging');
+                this.draggedFolder = null;
+            });
+            
             // Only add click handler to the folder header, not the entire folder
             const folderHeader = folder.querySelector('.folder-header');
             if (folderHeader) {
@@ -321,7 +338,8 @@ export class InventoryUI {
             // Setup drag and drop for folders - only on the header to avoid conflicts
             if (folderHeader) {
                 folderHeader.addEventListener('dragover', (e) => {
-                    if (this.draggedItem) {
+                    // Accept both items and folders (but not a folder into itself)
+                    if ((this.draggedItem || this.draggedFolder) && this.draggedFolder !== folderName) {
                         e.preventDefault();
                         e.stopPropagation();
                         e.dataTransfer.dropEffect = 'move';
@@ -335,14 +353,19 @@ export class InventoryUI {
                 });
                 
                 folderHeader.addEventListener('drop', async(e) => {
-                    if (this.draggedItem) {
+                    if ((this.draggedItem || this.draggedFolder) && this.draggedFolder !== folderName) {
                         e.preventDefault();
                         e.stopPropagation();
                         folder.classList.remove('drag-over');
+                        
+                        // Check if we're dropping an item or a folder
                         const itemName = e.dataTransfer.getData('text/inventory-item');
-                        const folderName = folder.dataset.folderName;
+                        const draggedFolderName = e.dataTransfer.getData('text/inventory-folder');
+                        
                         if (itemName) {
                             await this.inventory.moveItemToFolder(itemName, folderName);
+                        } else if (draggedFolderName) {
+                            await this.inventory.moveFolderToFolder(draggedFolderName, folderName);
                         }
                     }
                 });
@@ -385,12 +408,13 @@ export class InventoryUI {
         const inventoryGrid = inventoryContainer.querySelector('.inventory-grid');
         if (inventoryGrid) {
             inventoryGrid.addEventListener('dragover', (e) => {
-                // Only handle internal drags
-                if (this.draggedItem) {
+                // Handle internal drags (both items and folders)
+                if (this.draggedItem || this.draggedFolder) {
                     const isOverFolderHeader = e.target.closest('.folder-header');
+                    const isOverSameFolder = this.draggedFolder && e.target.closest(`.folder-item[data-folder-name="${this.draggedFolder}"]`);
                     
-                    // Always prevent default to allow dropping, unless over a folder header
-                    if (!isOverFolderHeader) {
+                    // Always prevent default to allow dropping, unless over a folder header or same folder
+                    if (!isOverFolderHeader && !isOverSameFolder) {
                         e.preventDefault();
                         e.stopPropagation();
                         e.dataTransfer.dropEffect = 'move';
@@ -412,16 +436,23 @@ export class InventoryUI {
                 inventoryGrid.classList.remove('drag-over-grid');
                 
                 // Handle drops anywhere except on folder headers
-                if (this.draggedItem) {
+                if (this.draggedItem || this.draggedFolder) {
                     const isOverFolderHeader = e.target.closest('.folder-header');
+                    const isOverSameFolder = this.draggedFolder && e.target.closest(`.folder-item[data-folder-name="${this.draggedFolder}"]`);
                     
-                    if (!isOverFolderHeader) {
+                    if (!isOverFolderHeader && !isOverSameFolder) {
                         e.preventDefault();
                         e.stopPropagation();
+                        
                         const itemName = e.dataTransfer.getData('text/inventory-item');
+                        const folderName = e.dataTransfer.getData('text/inventory-folder');
+                        
                         if (itemName) {
-                            // Move to current folder (or root if no current folder)
+                            // Move item to current folder (or root if no current folder)
                             await this.inventory.moveItemToFolder(itemName, this.inventory.currentFolder);
+                        } else if (folderName) {
+                            // Move folder to current folder (or root if no current folder)
+                            await this.inventory.moveFolderToFolder(folderName, this.inventory.currentFolder);
                         }
                     }
                 }
@@ -486,7 +517,7 @@ export class InventoryUI {
         const isExpanded = this.inventory.expandedFolders.has(key);
         
         return `
-            <div class="folder-item" data-folder-name="${key}">
+            <div class="folder-item" data-folder-name="${key}" draggable="true">
                 <div class="folder-header">
                     <button class="folder-expand-btn" data-folder-name="${key}">
                         ${isExpanded ? '▼' : '▶'}
