@@ -275,6 +275,11 @@ let tooltipContent = {
             "title": "File Server Selection",
             "description": "Choose where inspector files are loaded from",
             "tips": ["Stable: Production CDN", "Ngrok: Development tunnel", "Local: Local network server"]
+        },
+        "hardResetBtn":{
+            "title": "Hard Reset",
+            "description": "Resets the scene to an empty state",
+            "tips": ["Deletes all unsaved changes", "Returns to initial state", "Cannot be undone"]
         }
     },
     "data-panel": {

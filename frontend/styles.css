@@ -3898,7 +3898,7 @@ body {
     color: #fbbf24;
 }
 
-.file-server{
+.quick-settings{
     position: fixed;
     right: 0px;
     top: 4px;
@@ -3909,9 +3909,17 @@ body {
     width: 60px;
 }
 
-.file-server:focus {
-    outline: none;
-    border-color: #00d4ff;
+.reset-btn{
+    width: 100%;
+    font-size: 14px;
+    background: #ff00001f;
+    color: white;
+    border: none;
+    padding: 3px;
+    cursor: pointer;
+}
+.reset-btn:hover{
+    background: #ff000036;
 }
 
 /* Split Layout Styles */
