@@ -269,7 +269,7 @@ let tooltipContent = {
         "saveBtn": {
             "title": "Save Scene",
             "description": "Saves the current scene state",
-            "tips": ["Persists all changes", "Syncs with cloud storage", "Creates backup point"]
+            "tips": ["Saves all current changes to localStorage."]
         },
         "fileServer":{
             "title": "File Server Selection",
@@ -504,8 +504,8 @@ let tooltipContent = {
         },
         "lifecyclePanelCommandConsoleInput": {
             "title": "Command Input",
-            "description": "Execute JavaScript commands directly",
-            "tips": ["Access BS library functions", "Test code snippets", "Press Enter to execute"]
+            "description": "Execute actions directly",
+            "tips": ["Unix like cli to run commands to modify the scene.", "run 'help' to see available commands"]
         },
         "componentMenuSearchInput": {
             "title": "Component Search",

@@ -71,6 +71,7 @@
             // Initialize logger settings
             window.logger = {
                 include: {
+                    error: true,
                     command: true,
                     script: true,
                     oneShot: false,
