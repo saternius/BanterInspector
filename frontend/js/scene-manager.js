@@ -223,11 +223,26 @@ console.log("It is 3:00")
         }
 
         // Resets the SpaceProperties
-        async Reset(){
-            networking.sendOneShot('reset');
-            await this._reset();
-            await this.saveScene();
-            window.location.reload();
+        async Reset(ui){
+            let r = async ()=>{
+                networking.sendOneShot('reset');
+                await this._reset();
+                await this.saveScene();
+                window.location.reload();
+            }
+
+            if(ui){
+                inventory.ui.showWarningConfirm(
+                    "Reset Scene",
+                    `This will delete any unsaved changes, and return to an empty scene.`,
+                    r,
+                    ()=>{
+                        showNotification(`canceled reset"`);
+                    }
+                );
+            }else{
+                await r();
+            }
         }
         
         async _reset(){
