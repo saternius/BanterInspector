@@ -130,6 +130,9 @@
             
             // Update collapse all button visibility
             this.updateCollapseAllButtonVisibility();
+            window.dispatchEvent(new CustomEvent("ui-rendered", {
+                detail: { id: "propertiesPanel" }
+            }));
         }
 
         /**
@@ -138,6 +141,7 @@
         createEntityPropertiesSection(entity) {
             const section = document.createElement('div');
             section.className = 'component-section';
+            section.dataset.panel = 'propertyPanelComponent';
             
             const header = document.createElement('div');
             header.className = 'component-header';
@@ -252,6 +256,7 @@
             
             const section = document.createElement('div');
             section.className = 'component-section';
+            section.dataset.panel = 'propertyPanelComponent';
             section.dataset.componentId = component.id;
             section.dataset.componentIndex = index;
             
@@ -282,7 +287,7 @@
                 if (index > 1) {
                     const upBtn = document.createElement('button');
                     upBtn.className = 'component-reorder-btn';
-                    upBtn.innerHTML = '▲';
+                    upBtn.innerHTML = '↑';
                     upBtn.title = 'Move up';
                     upBtn.onclick = (e) => {
                         e.stopPropagation();
@@ -295,7 +300,7 @@
                 if (index < totalComponents - 1) {
                     const downBtn = document.createElement('button');
                     downBtn.className = 'component-reorder-btn';
-                    downBtn.innerHTML = '▼';
+                    downBtn.innerHTML = '↓';
                     downBtn.title = 'Move down';
                     downBtn.onclick = (e) => {
                         e.stopPropagation();
@@ -620,6 +625,7 @@
         renderMonoBehaviorComponent(component, index, totalComponents) {
             const section = document.createElement('div');
             section.className = 'component-section';
+            section.dataset.panel = 'propertyPanelComponent';
             section.dataset.componentId = component.id;
             section.dataset.componentIndex = index;
             

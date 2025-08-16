@@ -254,7 +254,7 @@ console.log("It is 3:00")
         }
 
         async saveScene(){
-            console.log("Saving scene...")
+            //console.log("Saving scene...")
             await this.updateHierarchy(false);
             localStorage.setItem('lastProps', JSON.stringify(this.props));
         }

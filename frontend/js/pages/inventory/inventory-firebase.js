@@ -12,6 +12,7 @@ export class InventoryFirebase {
      * Setup Firebase listeners for remote folders
      */
     setupFirebaseListeners() {
+
         // Clear any existing listeners
         this.clearFirebaseListeners();
         
@@ -40,20 +41,33 @@ export class InventoryFirebase {
      * Setup Firebase listener for a specific folder
      */
     setupFolderListener(folderName, folder) {
+        console.log("[SETUP FOLDER LISTENER for folder: ", folderName, "]")
         if (!window.networking || !window.networking.getDatabase) return;
         
         try {
             const db = window.networking.getDatabase();
-            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            
-            // Build Firebase path for the folder
-            let firebasePath = `inventory/${userName}`;
-            if (folder.parent) {
-                const sanitizedParent = this.sanitizeFirebasePath(folder.parent);
-                firebasePath += `/${sanitizedParent}`;
+            let firebasePath = null;
+            if(folder.importedFrom !== undefined){
+                firebasePath = folder.importedFrom;
+            }else{
+                let userName = SM.scene?.localUser?.name;
+                if(!userName){
+                    console.log("no user name found, waiting for 1 second")
+                    setTimeout(()=>{
+                        this.setupFolderListener(folderName, folder);
+                    }, 100);
+                    return;
+                }
+                userName = this.sanitizeFirebasePath(userName);
+                firebasePath = `inventory/${userName}`;
+                if (folder.parent) {
+                    const sanitizedParent = this.sanitizeFirebasePath(folder.parent);
+                    firebasePath += `/${sanitizedParent}`;
+                }
+                const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
+                firebasePath += `/${sanitizedFolderName}`;
             }
-            const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
-            firebasePath += `/${sanitizedFolderName}`;
+            
             
             // Setup listeners for child_added and child_removed
             const folderRef = db.ref(firebasePath);
@@ -171,7 +185,7 @@ export class InventoryFirebase {
                 this.inventory.items[itemName] = item;
                 
                 console.log('Remote item added:', itemName);
-                this.showNotification(`New item "${itemName}" added from remote`);
+                showNotification(`New item "${itemName}" added from remote`);
                 this.inventory.ui.render();
             }
         }
@@ -232,6 +246,7 @@ export class InventoryFirebase {
      * Handle Firebase item changed event
      */
     handleFirebaseItemChanged(snapshot, folderName) {
+        console.log("handleFirebaseItemChanged")
         const key = snapshot.key;
         const data = snapshot.val();
         console.log("data: ", data)
