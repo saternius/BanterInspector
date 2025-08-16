@@ -394,7 +394,16 @@ export function appendToConsole(tag, id, str){
             consoleEl.removeChild(children[0]);
         }
         
-        consoleEl.innerHTML += `<div class="change-item" id="${id}">${str}</div>`;
+        const div = document.createElement('div');
+        div.className = 'change-item';
+        div.id = id;
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontFamily = 'monospace';
+        div.textContent = str;
+        if(tag === "error"){
+            div.style.color = "red";
+        }
+        consoleEl.appendChild(div);
         consoleEl.scrollTop = consoleEl.scrollHeight;
     }
 }

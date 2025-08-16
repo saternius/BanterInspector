@@ -479,6 +479,11 @@ export class EntityRemoveChange extends Change{
         super();
         console.log("EntityRemoveChange: ", entityId)
         this.entity = SM.getEntityById(entityId);
+        if(!this.entity){
+            console.error("EntityRemoveChange: Entity not found =>", entityId)
+            appendToConsole("error", "error_"+Math.floor(Math.random()*1000000), `Entity not found: ${entityId}`);
+            return;
+        }
         this.entityExport = this.entity.export();
         this.siblingIndex = null;
         this.options = options || {};
@@ -1581,6 +1586,52 @@ export class EditScriptItemChange extends Change{
 }
 
 
+let getHelpText = ()=>{
+return `
+<span style="color: #00ff00; font-weight: bold;">Available Commands:</span>
+
+<span style="color: #ffaa00; font-weight: bold;">Entity Commands:</span>
+  <span style="color: #88ddff;">add_entity</span> <span style="color: #ff88ff;">$parentId $entityName</span>         - Add a new entity as child of parent
+  <span style="color: #88ddff;">remove_entity</span> <span style="color: #ff88ff;">$entityId</span>                   - Remove an entity and its children
+  <span style="color: #88ddff;">move_entity</span> <span style="color: #ff88ff;">$entityId $newParentId</span>       - Move entity to new parent
+  <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ff88ff;">$entityId $prop $val</span>- Set entity property value
+  <span style="color: #88ddff;">clone_entity</span> <span style="color: #ff88ff;">$entityId</span>                    - Clone an entity and its children
+
+<span style="color: #ffaa00; font-weight: bold;">Component Commands:</span>
+  <span style="color: #88ddff;">add_component</span> <span style="color: #ff88ff;">$entityId $componentType</span>   - Add component to entity
+  <span style="color: #88ddff;">remove_component</span> <span style="color: #ff88ff;">$componentId</span>              - Remove component from entity
+  <span style="color: #88ddff;">set_component_property</span> <span style="color: #ff88ff;">$compId $prop $val</span>- Set component property value
+
+<span style="color: #ffaa00; font-weight: bold;">Space Commands:</span>
+  <span style="color: #88ddff;">set_space_property</span> <span style="color: #ff88ff;">$prop $val $protect</span>  - Set space property (protect: true/false)
+
+<span style="color: #ffaa00; font-weight: bold;">MonoBehavior Commands:</span>
+  <span style="color: #88ddff;">set_mono_behavior_var</span> <span style="color: #ff88ff;">$compId $var $val</span> - Set MonoBehavior variable value
+
+<span style="color: #ffaa00; font-weight: bold;">Inventory Commands:</span>
+  <span style="color: #88ddff;">load_item</span> <span style="color: #ff88ff;">$itemName $parentId</span>            - Load item from inventory
+  <span style="color: #88ddff;">save_item</span> <span style="color: #ff88ff;">$entityId $itemName $desc</span>     - Save entity as inventory item
+  <span style="color: #88ddff;">delete_item</span> <span style="color: #ff88ff;">$itemName</span>                     - Delete item from inventory
+  <span style="color: #88ddff;">create_folder</span> <span style="color: #ff88ff;">$folderName $color</span>         - Create inventory folder
+  <span style="color: #88ddff;">remove_folder</span> <span style="color: #ff88ff;">$folderName</span>                 - Remove inventory folder
+  <span style="color: #88ddff;">move_item_directory</span> <span style="color: #ff88ff;">$itemName $folder</span>    - Move item to folder
+  <span style="color: #88ddff;">create_script_item</span> <span style="color: #ff88ff;">$scriptName</span>            - Create new script item
+
+<span style="color: #00ff00; font-weight: bold;">Usage Examples:</span>
+  <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Root MyEntity</span>                   - Add entity to root
+  <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">e_123 Cube</span>                   - Add Cube component to entity
+  <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ffff88;">e_123 name "New Name"</span>  - Rename entity
+  <span style="color: #88ddff;">load_item</span> <span style="color: #ffff88;">MyPrefab e_456</span>                   - Load prefab as child of e_456
+
+<span style="color: #00ff00; font-weight: bold;">Notes:</span>
+  <span style="color: #aaaaaa;">- Use 'Root' for root/no parent
+  - Entity IDs format: e_XXX
+  - Component IDs format: c_XXX
+  - Values are auto-parsed (strings, numbers, booleans, vectors, colors)
+  - Vectors: [1,2,3] or {x:1,y:2,z:3}
+  - Colors: #FF0000 or {r:1,g:0,b:0}</span>`
+}
+
 window.RunCommand = async (execString, options)=>{
 
     let args = execString.split(" ").map(arg=>parseBest(arg));
@@ -1588,6 +1639,29 @@ window.RunCommand = async (execString, options)=>{
     let change = null;
     options = options || {};
     switch(args[0]){
+        case "help":
+            // Create a colored help text div
+            const helpDiv = document.createElement('div');
+            helpDiv.style.fontFamily = 'monospace';
+            helpDiv.style.whiteSpace = 'pre-wrap';
+            helpDiv.innerHTML = getHelpText();
+            
+            // Append the colored help directly
+            const consoleEl = document.getElementById("lifecycleConsole");
+            if(consoleEl) {
+                const children = consoleEl.children;
+                if (children.length >= 500) {
+                    consoleEl.removeChild(children[0]);
+                }
+                
+                const wrapper = document.createElement('div');
+                wrapper.className = 'change-item';
+                wrapper.id = "help_"+Math.floor(Math.random()*1000000);
+                wrapper.appendChild(helpDiv);
+                consoleEl.appendChild(wrapper);
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+            return;
         case "add_entity":
             change = new EntityAddChange(args[1], args[2], options);
             break;
@@ -1655,12 +1729,114 @@ window.RunCommand = async (execString, options)=>{
     }
 }
 
+// Command history management
+const COMMAND_HISTORY_KEY = 'commandHistory';
+const MAX_HISTORY_SIZE = 100;
+
+class CommandHistory {
+    constructor() {
+        this.history = this.loadHistory();
+        this.currentIndex = this.history.length;
+        this.tempCommand = '';
+    }
+    
+    loadHistory() {
+        try {
+            const stored = localStorage.getItem(COMMAND_HISTORY_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            console.error('Failed to load command history:', e);
+            return [];
+        }
+    }
+    
+    saveHistory() {
+        try {
+            localStorage.setItem(COMMAND_HISTORY_KEY, JSON.stringify(this.history));
+        } catch (e) {
+            console.error('Failed to save command history:', e);
+        }
+    }
+    
+    add(command) {
+        if (!command || command.trim() === '') return;
+        
+        // Remove duplicate if exists
+        const index = this.history.indexOf(command);
+        if (index > -1) {
+            this.history.splice(index, 1);
+        }
+        
+        // Add to end of history
+        this.history.push(command);
+        
+        // Limit history size
+        if (this.history.length > MAX_HISTORY_SIZE) {
+            this.history.shift();
+        }
+        
+        this.currentIndex = this.history.length;
+        this.tempCommand = '';
+        this.saveHistory();
+    }
+    
+    navigateUp(currentValue) {
+        if (this.history.length === 0) return currentValue;
+        
+        if (this.currentIndex === this.history.length) {
+            this.tempCommand = currentValue;
+        }
+        
+        if (this.currentIndex > 0) {
+            this.currentIndex--;
+            return this.history[this.currentIndex];
+        }
+        
+        return this.history[0];
+    }
+    
+    navigateDown(currentValue) {
+        if (this.history.length === 0) return currentValue;
+        
+        if (this.currentIndex < this.history.length - 1) {
+            this.currentIndex++;
+            return this.history[this.currentIndex];
+        } else if (this.currentIndex === this.history.length - 1) {
+            this.currentIndex = this.history.length;
+            return this.tempCommand;
+        }
+        
+        return currentValue;
+    }
+    
+    reset() {
+        this.currentIndex = this.history.length;
+        this.tempCommand = '';
+    }
+}
+
+const commandHistory = new CommandHistory();
+
 let commmandInputEl = document.getElementById("commandConsoleInput");
 commmandInputEl.addEventListener("keydown", (e)=>{
     if(e.key === "Enter"){
         let execString = commmandInputEl.value;
-        window.RunCommand(execString);
+        if(execString.trim()) {
+            commandHistory.add(execString);
+            window.RunCommand(execString);
+        }
         commmandInputEl.value = "";
+        commandHistory.reset();
+    } else if(e.key === "ArrowUp") {
+        e.preventDefault();
+        commmandInputEl.value = commandHistory.navigateUp(commmandInputEl.value);
+        // Move cursor to end
+        commmandInputEl.setSelectionRange(commmandInputEl.value.length, commmandInputEl.value.length);
+    } else if(e.key === "ArrowDown") {
+        e.preventDefault();
+        commmandInputEl.value = commandHistory.navigateDown(commmandInputEl.value);
+        // Move cursor to end
+        commmandInputEl.setSelectionRange(commmandInputEl.value.length, commmandInputEl.value.length);
     }
 })
 
