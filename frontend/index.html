@@ -49,31 +49,83 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <meta http-equiv='pragma' content='no-cache'>
     <title>Unity Scene Inspector - Resonite Style</title>
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/gh/zoltantothcom/vanilla-js-dropdown/dist/vanilla-js-dropdown.min.js"></script>
+    
+    <script>
+    (function() {
+      document.addEventListener('DOMContentLoaded', () => {
+        function enhanceSelect(el) {
+          if (!el.dataset.vjsdInit) { // avoid double-init
+            var select = new CustomSelect({
+                elem: el,  // id of the original select element
+            });
+            el.dataset.vjsdInit = 'true';
+          }
+        }
+      
+        // Enhance all selects on initial load
+        document.querySelectorAll('select').forEach(enhanceSelect);
+      
+        // Watch for new selects being added
+        const observer = new MutationObserver(mutations => {
+          for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+              if (node.nodeType !== 1) continue; // skip non-elements
+              if (node.tagName === 'SELECT') {
+                enhanceSelect(node);
+              } else {
+                node.querySelectorAll?.('select').forEach(enhanceSelect);
+              }
+            }
+          }
+        });
+      
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    })();
+    </script>
+
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script>
-        
+        window.ngrokUrl = "https://14323af20a15.ngrok-free.app"        
         window.isLocalHost = window.location.hostname === 'localhost';
         window.repoUrl = '.'
         window.fileServer = localStorage.getItem('file_server');
-        if(window.fileServer === "github"){
-            window.repoUrl = 'https://saternius.github.io/BanterInspector'
+        if(!window.fileServer){
+            localStorage.setItem('file_server', "stable");
+            window.fileServer = "stable";
+        }
+        if(window.fileServer === "stable"){
+            window.repoUrl = 'https://saternius.github.io/BanterInspector/frontend'
+        }else if(window.fileServer === "ngrok"){
+            window.repoUrl = window.ngrokUrl;
         }else if(window.fileServer === "local"){
-            window.repoUrl = localStorage.getItem('ngrok_url');
+            window.repoUrl = "http://192.168.0.148:9909";
+        }else if(window.fileServer === "unity"){
+            if(window.isLocalHost){
+                window.repoUrl = "http://localhost:42069/frontend"
+            }else{
+                console.log("Unity is not running on localhost");
+            }
         }
+        window.blockServiceUrl = `${window.ngrokUrl}/api/process-text`;
         
-        window.blockServiceUrl = `${localStorage.getItem('ngrok_url')}/api/process-text`;
-        if(window.isLocalHost && window.fileServer === "unity"){
-            window.repoUrl = 'http://localhost:42069'
-        }
-
+        console.log("File Server: " + window.fileServer);
+        console.log("Ngrok URL: " + window.ngrokUrl);
+        console.log("Repo URL: " + window.repoUrl);
+        console.log("Block Service URL: " + window.blockServiceUrl);
         
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = window.isLocalHost ? './styles.css' : window.repoUrl + '/styles.css';
+        link.href = window.repoUrl + '/styles.css';
         document.head.appendChild(link);
       </script>
 </head>
@@ -95,13 +147,13 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </button>
         </div>
         <div class="nav-controls">
-            <button id="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" disabled>
+            <button data-toolbar-btn="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" disabled>
                 <span class="control-icon">↶</span>
             </button>
-            <button id="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" disabled>
+            <button data-toolbar-btn="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" disabled>
                 <span class="control-icon">↷</span>
             </button>
-            <button id="saveBtn" class="nav-control-btn" title="Save Scene">
+            <button data-toolbar-btn="saveBtn" class="nav-control-btn" title="Save Scene">
                 <span class="control-icon">💾</span>
             </button>
         </div>
@@ -113,44 +165,44 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         <div class="page active" id="world-inspector-page">
             <div class="inspector-container">
         <!-- Hierarchy Panel -->
-        <div class="panel hierarchy-panel">
+        <div data-panel="hierarchyPanel" class="panel hierarchy-panel">
             <div class="panel-header">
                 Scene Hierarchy
             </div>
             
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search entities...">
+                <input data-input="entitySearchInput" type="text" id="searchInput" class="search-input" placeholder="Search entities...">
             </div>
             
             <div class="entity-actions-container">
-                <button class="action-button" id="addChildEntityBtn" title="Add Child">
+                <button data-hierarchy-btn="addChildEntityBtn" class="action-button" id="addChildEntityBtn" title="Add Child">
                     <span class="button-icon">+</span>
                     
                 </button>
-                <button class="action-button" id="cloneEntityBtn" title="Clone">
+                <button data-hierarchy-btn="cloneEntityBtn" class="action-button" id="cloneEntityBtn" title="Clone">
                     <span class="button-icon">🧬</span>
                    
                 </button>
-                <button class="action-button delete-button" id="deleteEntityBtn" title="Delete">
+                <button data-hierarchy-btn="deleteEntityBtn" class="action-button delete-button" id="deleteEntityBtn" title="Delete">
                     <span class="button-icon">×</span>
                    
                 </button>
-                <button class="action-button save-button" id="saveEntityBtn" title="Save">
+                <button data-hierarchy-btn="saveEntityBtn" class="action-button save-button" id="saveEntityBtn" title="Save">
                     <span class="button-icon">💾</span>
                    
                 </button>
             </div>
             
-            <div class="hierarchy-tree" id="hierarchyTree">
+            <div data-section="hierarchyTree" class="hierarchy-tree" id="hierarchyTree">
                 <div class="loading-state">Loading scene hierarchy...</div>
             </div>
         </div>
         
         <!-- Properties Panel -->
-        <div class="panel properties-panel" id="propertiesPanel">
+        <div data-panel="propertiesPanel" class="panel properties-panel" id="propertiesPanel">
             <div class="panel-header">
                 <span id="selectedEntityName">Properties</span>
-                <button id="collapseAllBtn" class="collapse-all-btn" style="display: none;">Collapse All</button>
+                <button id="collapseAllBtn" class="collapse-all-btn" style="display: none;" data-panel="propertyPanelCollapseAllBtn">Collapse All</button>
             </div>
             
             <div class="properties-content" id="propertiesContent">
@@ -160,7 +212,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 </div>
             </div>
             
-            <div class="add-component-container" id="addComponentContainer" style="display: none;">
+            <div data-panel='propertyPanelAddComponent' class="add-component-container" id="addComponentContainer" style="display: none;">
                 <button class="add-component-button" id="addComponentBtn">
                     <span>+</span>
                     Add Component
@@ -169,19 +221,19 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         </div>
         
         <!-- Space Props Panel Container (Split Horizontally) -->
-        <div class="panel space-props-panel-container">
+        <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
             <!-- Original Space Props Panel -->
-            <div class="space-props-panel">
+            <div data-panel="spacePropsPanel" class="space-props-panel">
                 <div class="panel-header">
                     Space Properties
                     <div class="lifecycle-buttons">
-                        <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel">🔄</button>
+                        <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel" data-panel="spacePropsPanelRefreshBtn">🔄</button>
                     </div>
                 </div>
                 
                 <div class="properties-content">
                     <!-- Public Properties -->
-                    <div class="space-props-section">
+                    <div data-section="publicPropsSection" class="space-props-section">
                         <div class="space-props-header">
                             <h3>Public Properties</h3>
                             <span class="props-count" id="publicPropsCount">0</span>
@@ -190,14 +242,14 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <div class="empty-props">No public properties</div>
                         </div>
                         <div class="add-prop-container">
-                            <input type="text" id="addPublicKey" class="prop-input" placeholder="Key">
-                            <input type="text" id="addPublicValue" class="prop-input" placeholder="Value">
-                            <button onclick="addPublicProp()" class="add-prop-button">Add</button>
+                            <input data-input="propertyPanelAddPublicPropKey" type="text" id="addPublicKey" class="prop-input" placeholder="Key">
+                            <input data-input="propertyPanelAddPublicPropValue" type="text" id="addPublicValue" class="prop-input" placeholder="Value">
+                            <button data-panel="propertyPanelAddPublicProp" onclick="addPublicProp()" class="add-prop-button">Add</button>
                         </div>
                     </div>
                     
                     <!-- Protected Properties -->
-                    <div class="space-props-section">
+                    <div data-section="protectedPropsSection" class="space-props-section">
                         <div class="space-props-header">
                             <h3>Protected Properties</h3>
                             <span class="props-count" id="protectedPropsCount">0</span>
@@ -206,43 +258,44 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <div class="empty-props">No protected properties</div>
                         </div>
                         <div class="add-prop-container">
-                            <input type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
-                            <input type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
-                            <button onclick="addProtectedProp()" class="add-prop-button">Add</button>
+                            <input data-input="propertyPanelAddProtectedPropKey" type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
+                            <input data-input="propertyPanelAddProtectedPropValue" type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
+                            <button data-panel="propertyPanelAddProtectedProp" onclick="addProtectedProp()" class="add-prop-button">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Lifecycle Panel -->
-            <div class="lifecycle-panel">
+            <div data-panel="lifecyclePanel" class="lifecycle-panel">
                 <div class="panel-header">
                     <span>Lifecycle</span>
                     <div class="lifecycle-buttons">
-                        <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel">🔄</button>
+                        <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel" data-panel="lifecyclePanelRefreshBtn">🔄</button>
                     </div>
                 </div>
                 
                 <div class="lifecycle-content">
                     <!-- MonoBehavior List -->
-                    <div class="lifecycle-list" id="lifecycleList">
+                    <div data-section="lifecycleList" class="lifecycle-list" id="lifecycleList">
                         <div class="empty-lifecycle">No active MonoBehavior scripts</div>
                     </div>
                     
                     <!-- Console -->
-                    <div class="lifecycle-console-container">
+
+                    <div data-section="cmdConsole" class="lifecycle-console-container">
                         <div class="console-header">
                             <span>Console</span>
                             <div class="console-toggles">
                                 <button class="console-toggle active" data-toggle="command" title="Command">Command</button>
                                 <button class="console-toggle active" data-toggle="script" title="Scripts">Scripts</button>
-                                <button class="console-toggle active" data-toggle="oneShot" title="OneShot">OneShot</button>
-                                <button class="console-toggle active" data-toggle="spaceProps" title="SpaceProps">SpaceProps</button>
-                                <button class="console-clear-button" id="clearConsoleBtn2" title="Clear Console">🗑️</button>
+                                <button class="console-toggle" data-toggle="oneShot" title="OneShot">OneShot</button>
+                                <button class="console-toggle" data-toggle="spaceProps" title="SpaceProps">SpaceProps</button>
+                                <button class="console-clear-button" id="clearConsoleBtn2" title="Clear Console" data-panel="lifecyclePanelClearConsoleBtn">🗑️</button>
                             </div>
                         </div>
                         <div class="lifecycle-console" id="lifecycleConsole"></div>
-                        <input class="command-console-input" id="commandConsoleInput" placeholder="> cmd">
+                        <input class="command-console-input" id="commandConsoleInput" placeholder="> cmd" data-input="lifecyclePanelCommandConsoleInput">
                     </div>
                 </div>
             </div>
@@ -254,11 +307,11 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         <div class="component-menu">
             <div class="component-menu-header">
                 <h2>Add Component</h2>
-                <button class="close-button" id="closeComponentMenu">×</button>
+                <button class="close-button" id="closeComponentMenu" data-panel="componentMenuCloseBtn">×</button>
             </div>
             
             <div class="component-menu-search">
-                <input type="text" class="component-search-input" id="componentSearchInput" placeholder="Search components...">
+                <input data-input="componentMenuSearchInput" type="text" class="component-search-input" id="componentSearchInput" placeholder="Search components...">
             </div>
             
             <div class="component-menu-content">
@@ -517,8 +570,9 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <div class="feedback-section">
                                 <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
                                 <div class="feedback-input feedback-input-container">
-                                    <textarea id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
-                                    <button id="micButton" class="mic-button" title="Click to record feedback">
+                                    <textarea data-input="feedbackDetails" id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
+                                    <button data-feedback="feedbacMicButton" id="micButton" class="mic-button" title="Click to record feedback">
+                                        <span class="mic-status"></span>
                                         <span class="mic-icon">🎤</span>
                                         <span class="recording-indicator"></span>
                                     </button>
@@ -529,7 +583,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                                 <div id="blockEditorContainer" class="block-editor-container" style="display: none;">
                                     <div class="block-editor-header">
                                         <h3>Refined Feedback</h3>
-                                        <button id="clearDraftBtn" class="clear-draft-btn" title="Clear draft and start over" style="display: none;">
+                                        <button data-feedback="feedbackClearDraftBtn" id="clearDraftBtn" class="clear-draft-btn" title="Clear draft and start over" style="display: none;">
                                             <span class="btn-icon">🗑️</span>
                                             Clear Draft
                                         </button>
@@ -543,18 +597,22 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             </div>
                             
                             <div class="feedback-actions">
-                                <button id="submitFeedbackBtn" class="feedback-submit-btn">
+                                <button data-feedback="feedbackSubmitBtn" id="submitFeedbackBtn" class="feedback-submit-btn">
                                     <span class="btn-icon">📤</span>
                                     Submit Feedback
                                 </button>
                                 <div id="dualSubmitButtons" class="dual-submit-buttons" style="display: none;">
-                                    <button id="submitOriginalBtn" class="feedback-submit-btn submit-original">
+                                    <button data-feedback="feedbackSubmitOriginalBtn" id="submitOriginalBtn" class="feedback-submit-btn submit-original">
                                         <span class="btn-icon">📄</span>
                                         Submit Original
                                     </button>
-                                    <button id="submitRefinementBtn" class="feedback-submit-btn submit-original">
+                                    <button data-feedback="feedbackSubmitRefinementBtn" id="submitRefinementBtn" class="feedback-submit-btn submit-original">
                                         <span class="btn-icon">✨</span>
                                         Submit Refinement
+                                    </button>
+                                    <button data-feedback="feedbackFixWithVoiceBtn" id="fixWithVoice" class="feedback-submit-btn submit-original">
+                                        <span class="btn-icon">🎤</span>
+                                        Fix with Voice
                                     </button>
                                 </div>
                             </div>
@@ -573,22 +631,24 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                     <div class="tickets-container">
                         <div class="tickets-header">
                             <h2>Active Tickets</h2>
-                            <button id="refreshTicketsBtn" class="refresh-tickets-btn" title="Refresh tickets">
+                            <button data-feedback="feedbackRefreshTicketsBtn" id="refreshTicketsBtn" class="refresh-tickets-btn" title="Refresh tickets">
                                 <span class="btn-icon">🔄</span>
                             </button>
                         </div>
                         
                         <div class="tickets-filters">
-                            <select id="ticketFilterType" class="ticket-filter">
+                            <select data-feedback="feedbackTicketFilterType" id="ticketFilterType" class="ticket-filter">
                                 <option value="all">All Types</option>
                                 <option value="feature">Features</option>
                                 <option value="bug">Bugs</option>
                                 <option value="improvement">Improvements</option>
                             </select>
-                            <select id="ticketFilterStatus" class="ticket-filter">
+                            <select data-feedback="feedbackTicketFilterStatus" id="ticketFilterStatus" class="ticket-filter">
                                 <option value="all">All Status</option>
                                 <option value="open">Open</option>
-                                <option value="closed">Closed</option>
+                                <option value="qa">QA</option>                                
+                                <option value="postponed">Postponed</option>
+                                <option value="resolved">Resolved</option>
                             </select>
                         </div>
                         
@@ -604,7 +664,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modalTicketId"></h3>
-                        <button class="modal-close" onclick="closeTicketModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" onclick="closeTicketModal()">×</button>
                     </div>
                     <div id="modalTicketContent" class="modal-body"></div>
                 </div>
@@ -615,7 +675,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Edit Feedback</h3>
-                        <button class="modal-close" onclick="feedback.closeEditModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" onclick="feedback.closeEditModal()">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="edit-form-group">
@@ -623,38 +683,38 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
                         </div>
                         <div class="modal-actions">
-                            <button class="modal-save-btn" onclick="feedback.saveTicketEdit()">Save Changes</button>
-                            <button class="modal-cancel-btn" onclick="feedback.closeEditModal()">Cancel</button>
+                            <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" onclick="feedback.saveTicketEdit()">Save Changes</button>
+                            <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" onclick="feedback.closeEditModal()">Cancel</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
-            <option value="stable">Stable</option>
-            <option value="ngrok">Ngrok</option>
-            <option value="local">Local</option>
-        </select>
+
+        <div class="file-server">
+            <button data-toolbar-btn="hardResetBtn" class="hard-reset-btn">
+                ⏻
+            </button>
+            <div data-toolbar-btn="fileServer">
+                <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
+                    <option value="stable">Stable</option>
+                    <option value="ngrok">Ngrok</option>
+                    <option value="local">Local</option>
+                </select>
+            </div>
+        </div>
+        
     </div> <!-- End Page Container -->
 
     <!-- Load JavaScript modules -->
     <script>
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = window.isLocalHost ? './js/app.js' : window.repoUrl + '/js/app.js';
+        script.src = window.repoUrl + '/js/app.js';
     
         window.repoUrl += "/js"
-        console.log("window.repoUrl", window.repoUrl)
+        //console.log("window.repoUrl", window.repoUrl)
         document.body.appendChild(script);
-        
-        // Add debug script for testing (only in local development)
-        if (window.isLocalHost) {
-            setTimeout(() => {
-                const debugScript = document.createElement('script');
-                debugScript.src = './debug-history.js';
-                document.body.appendChild(debugScript);
-            }, 1000);
-        }
     </script>
     
 </body>

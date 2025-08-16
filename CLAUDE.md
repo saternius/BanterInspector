@@ -22,8 +22,9 @@ inspector/
 │   ├── styles.css     # Global stylesheet
 │   └── index.html     # Main application entry
 ├── microservices/     # Backend services
-│   ├── statement-block-service/  # Text processing service
-│   └── file_server/   # File serving utilities
+│   ├── statement-block-service/  # AI text processing service
+│   └── file_server/   # File serving utilities for hosting app
+│   └── linker/        # Syncs in-game code to vscode
 ├── docs/              # Documentation and examples
 │   ├── examples/      # Example scenes and scripts
 │   └── site/          # Docusaurus documentation site
@@ -77,6 +78,7 @@ Backend services are located in the `microservices/` directory:
   - Converts unstructured speech/text into organized statement blocks
   - General-purpose design for reuse across different contexts
 - `file_server/` - File serving utilities for development
+- `linker/` - Syncs in-game inventory and game-state data to a local file so that users can dev on their IDE of choice instead of the build in ScriptEditor
 
 ### Key Patterns
 1. **Module Loading**: ES6 modules with dynamic imports based on environment (CDN for prod, local for dev)
@@ -167,13 +169,3 @@ User feedback collection system with:
 - Firebase integration for ticket storage
 - Ticket tracking and comment system
 - Future integration with statement block microservice
-
-### Microservices
-
-#### Statement Blocks Service (`microservices/statement-block-service/`)
-Flask-based text processing service:
-- Uses Claude Sonnet 3.5 API for natural language processing
-- Converts stream-of-consciousness text into organized statements
-- General-purpose API design for reuse across contexts
-- Input: `{text: string, existing_blocks: string[]}`
-- Output: `{blocks: string[], processing_time_ms: number}`

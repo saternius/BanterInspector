@@ -25,7 +25,7 @@ export class InventoryUI {
         
         const totalItems = Object.keys(this.inventory.items).length;
         const folderPath = this.inventory.getCurrentFolderPath();
-        
+        let makeRemoteBtn = this.renderMakeRemoteBtn();
         inventoryContainer.innerHTML = `
             <div class="inventory-header">
                 <h2>${folderPath ? `📁 ${folderPath}` : `Saved Items (${totalItems})`}</h2>
@@ -62,20 +62,7 @@ export class InventoryUI {
                         <span class="import-firebase-icon">☁️⬇️</span>
                         Import Remote
                     </button>
-                    ${this.inventory.isRemote ? `
-                        <button class="make-remote-button remote-status" id="remoteStatusBtn" disabled>
-                            <span class="remote-icon">☁️</span>
-                            Remote
-                        </button>
-                        <button class="link-button" id="copyLinkBtn" title="Copy Firebase path">
-                            <span class="link-icon">🔗</span>
-                        </button>
-                    ` : `
-                        <button class="make-remote-button" id="makeRemoteBtn">
-                            <span class="remote-icon">☁️</span>
-                            Make Remote
-                        </button>
-                    `}
+                    ${makeRemoteBtn}
                     <input type="file" id="fileInput" accept=".js,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
                 </div>
             </div>
@@ -94,6 +81,30 @@ export class InventoryUI {
         // Add event listeners
         this.attachEventListeners(inventoryContainer);
     }
+
+    renderMakeRemoteBtn(){
+        if(!this.inventory.currentFolder){
+            return ``;
+        }
+
+        if(this.inventory.isRemote){
+            return `<button class="make-remote-button remote-status" id="remoteStatusBtn" disabled>
+                <span class="remote-icon">☁️</span>
+                Remote
+            </button>
+            <button class="link-button" id="copyLinkBtn" title="Copy Firebase path">
+                <span class="link-icon">🔗</span>
+            </button>`
+        }
+
+        return `
+            <button class="make-remote-button" id="makeRemoteBtn">
+                <span class="remote-icon">☁️</span>
+                Make Remote
+            </button>
+        `
+    }
+
 
 
     renderEmptyState(inventoryContainer) {

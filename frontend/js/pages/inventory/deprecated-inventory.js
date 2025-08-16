@@ -241,6 +241,7 @@ export class Inventory {
      * Handle item changed from Firebase
      */
     handleFirebaseItemChanged(snapshot, folderName) {
+        console.log("handleFirebaseItemChanged")
         const key = snapshot.key;
         const data = snapshot.val();
         console.log("data: ", data)
