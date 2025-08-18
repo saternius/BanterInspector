@@ -10,6 +10,7 @@ const { deepClone, parseBest, appendToConsole, showNotification } = await import
 export class Change {
     constructor(){
         this.id = `change_${Math.floor(Math.random() * 1000000)}`;
+        this.timeout = 1000;
     }
 
     async apply(){

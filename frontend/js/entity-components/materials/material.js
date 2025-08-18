@@ -18,6 +18,15 @@ export class BanterMaterialComponent extends EntityComponent {
         };
     }
 
+    enums(){
+        return {
+            shaderName: {
+                'Standard': 'Standard',
+                'Unlit/Diffuse': 'Unlit/Diffuse'
+            }
+        }
+    }
+
     extractProperties(sceneComponent) {
         const properties = {};
         

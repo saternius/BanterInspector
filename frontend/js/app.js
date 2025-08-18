@@ -14,7 +14,7 @@
     loadingScreen.updateStage('banterScene', 100, 'BS Library loaded');
     
     // Track module loading progress
-    const totalModules = 52;
+    const totalModules = 53;
     let loadedModules = 0;
     const updateModuleProgress = (moduleName) => {
         loadedModules++;
@@ -53,6 +53,8 @@
     updateModuleProgress("lifecycle-panel");
     const  { Feedback } = await import(`${window.repoUrl}/pages/feedback/feedback.js`);
     updateModuleProgress("feedback");
+    const  { InputHandler } = await import(`${window.repoUrl}/input-handler.js`);
+    updateModuleProgress("input-handler");
 
     // Global app instance
     class InspectorApp {
@@ -113,6 +115,7 @@
                 this.componentMenu = new ComponentMenu();
                 this.lifecyclePanel = new LifecyclePanel();
                 
+                
                 // Initialize inventory
                 this.inventory = new Inventory();
                 
@@ -121,7 +124,8 @@
                 
                 // Initialize script editors map
                 this.scriptEditors = new Map();
-                
+
+
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
                 window.inventory = this.inventory; console.log("inventory", window.inventory)
@@ -129,7 +133,6 @@
                 window.scriptEditors = this.scriptEditors;
                 window.lifecyclePanel = this.lifecyclePanel;
                 window.feedback = this.feedback;
-                
                 // Initial render
                 this.hierarchyPanel.render();
                 this.spacePropsPanel.render();
@@ -350,6 +353,7 @@
                             [SM.scene.localUser.id]: SM.scene.localUser
                         }
                     }
+                    saveLocalUserSceneToLocalStorage(SM.scene.localUser);
                     
                     SM.setup();
                     loadingScreen.updateStage('scene-connect', 100, 'Scene connected');
@@ -405,14 +409,20 @@
                     })
                 })
 
-                // setTimeout(()=>{
-                //     SM.setup();
-                // }, 15000)
-
-                if(SM.scene.unityLoaded){
-                    onLoad();
+                
+                let runWhenUnityLoaded = ()=>{
+                    if(SM.scene.unityLoaded){
+                        console.log("[UNITY LOADED] => starting onLoad()")
+                        if(!SM.scene.localUser){
+                            console.log("[UNITY LOADED] => no local user found, loading from localStorage")
+                            loadLocalUserSceneFromLocalStorage(SM.scene);
+                        }
+                        onLoad();
+                    }else{
+                        setTimeout(runWhenUnityLoaded, 500);
+                    }
                 }
-
+                runWhenUnityLoaded();
             }
             
             // Keyboard shortcuts

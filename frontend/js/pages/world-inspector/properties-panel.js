@@ -4,7 +4,7 @@
  */
 
 // (async () => {
-    const { formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber, deepClone, confirm } = await import(`${window.repoUrl}/utils.js`);
+    const { parseBest, formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber, deepClone, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
     const { BanterLayers } = await import(`${window.repoUrl}/entity-components/index.js`);
@@ -431,7 +431,7 @@
                     dropdown.appendChild(option);
                 });
                 dropdown.onchange = () => {
-                    const change = new ComponentPropertyChange(componentId, key, parseInt(dropdown.value), { source: 'ui' });
+                    const change = new ComponentPropertyChange(componentId, key, parseBest(dropdown.value), { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 valueContainer.appendChild(dropdown);
@@ -487,6 +487,12 @@
                         changeManager.applyChange(change);
                     }
                 };
+            
+                input.onclick = (e)=>{
+                    e.stopPropagation();
+                    inputHandler.inputFocusChanged(input, component, key);
+                }
+               
                 valueContainer.appendChild(input);
                 
             } else if (key.includes('otation') && isQuaternion(value)) {
@@ -506,7 +512,11 @@
                     input.value = formatNumber(eulerAngles[axis], 2);
                     input.step = 'any';
                     input.onchange = () => this.handleRotationChange(componentId, axis, input.value, componentIndex);
-                    
+                    input.onclick = (e)=>{
+                        e.stopPropagation();
+                        inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
+                    }
+
                     vectorGroup.appendChild(axisLabel);
                     vectorGroup.appendChild(input);
                 });
@@ -529,7 +539,10 @@
                     input.value = value[axis] || 0;
                     input.step = 'any';
                     input.onchange = () => this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
-                    
+                    input.onclick = (e)=>{
+                        e.stopPropagation();
+                        inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
+                    }
                     vectorGroup.appendChild(axisLabel);
                     vectorGroup.appendChild(input);
                 });
@@ -566,6 +579,11 @@
                     const change = new ComponentPropertyChange(componentId, key, newColor, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
+                colorInput.onclick = (e)=>{
+                    e.stopPropagation();
+                    inputHandler.inputFocusChanged(colorInput, component,`${key}`);
+                }
+                
                 
                 preview.onclick = () => colorInput.click();
                 
@@ -590,7 +608,10 @@
                             changeManager.applyChange(change);
                         }
                     };
-                    
+                    input.onclick = (e)=>{
+                        e.stopPropagation();
+                        inputHandler.inputFocusChanged(input, component,`${key}.${channel}`);
+                    }
                     rgbaContainer.appendChild(input);
                 });
                 

@@ -74,8 +74,8 @@ export class Networking {
                 //this.testConnection();
 
                 let initFirebaseListeners = ()=>{
-                    if(inventory && inventory.firebase){
-                        inventory.firebase.setupFirebaseListeners()
+                    if(window.inventory && window.inventory.firebase){
+                        window.inventory.firebase.setupFirebaseListeners()
                     }else{
                         setTimeout(initFirebaseListeners, 500)
                     }

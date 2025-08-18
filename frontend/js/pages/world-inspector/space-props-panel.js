@@ -268,6 +268,7 @@
                 if (isVector3Object(value)) {
                     // Focus the first Vector3 input (x)
                     const xInput = document.getElementById(`${type}_prop_${key}_x`);
+                    xInput.dataset.input = "propertyPanelEditProp";
                     if (xInput) {
                         xInput.focus();
                         xInput.select();
@@ -275,6 +276,7 @@
                 } else {
                     // Focus regular input
                     const input = document.getElementById(`${type}_prop_${key}`);
+                    input.dataset.input = "propertyPanelEditProp";
                     if (input) {
                         input.focus();
                         input.select();
