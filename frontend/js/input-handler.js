@@ -36,6 +36,7 @@ export class InputHandler{
             this.inputHelperInfo = document.getElementById("inputHelperInfo");
             this.inputHelperValue = document.getElementById("inputHelperValue");
             this.inputHelperSubject = document.getElementById("inputHelperSubject");
+            this.radialCrownTolDisplay = document.getElementById("radialCrownTolDisplay");
 
 
             // document.body.addEventListener("click", (e)=>{
@@ -46,7 +47,7 @@ export class InputHandler{
 
         this.setup();
         this.eventListeners = [];
-        this.turnLoopInterval = null;
+      
     }
 
     addEventListeners(element, event, callback){
@@ -75,7 +76,13 @@ export class InputHandler{
 
     helpInputElement(element, component, property){
 
-       
+        let turnLoopInterval = null;
+        let tolTurnLoopInterval = null;
+        let lastRadialRot = 0;
+        let currentRadialRot = 0;
+        let lastTolRot = 0;
+        let currentTolRot = 0;
+
 
         this.currentInput.style.backgroundColor = "#1e3764";
         this.currentInput.style.borderColor = "#326689";
@@ -88,18 +95,11 @@ export class InputHandler{
             <span >${property}</span>
         `;
         this.inputHelperValue.innerHTML = element.value;
-
-        
-
         // Clear any existing event listeners before adding new ones
         this.clearEventListeners();
         
-        
-
-       
-        
+    
         // interval is managed at the instance level
-
         this.addEventListeners(this.radialCrown, "mousedown", (e)=>{
             e.preventDefault();
             e.stopPropagation();
@@ -130,65 +130,122 @@ export class InputHandler{
                 let valueTarget = value + valueDelta;
                 element.value = valueTarget;
                 this.inputHelperInfo.innerHTML = (valueDelta > 0 ? "+" : "") + `${valueDelta.toFixed(4)}` //   :relInc: ${relInc}, :deltaX: ${deltaX}, :valueDelta: ${valueDelta}, :valueTarget: ${valueTarget}
-                this.radialCrown.style.transform = `rotateZ(${deltaX}deg)`;
+                this.radialCrown.style.transform = `rotateZ(${lastRadialRot + deltaX}deg)`;
+                currentRadialRot = lastRadialRot + deltaX;
                 this.inputHelperValue.innerHTML = valueTarget.toFixed(4);
                 this.setValue(component, property, valueTarget);
             }
             console.log("startTurnLoop", startRot)
-            if(this.turnLoopInterval){
-                clearInterval(this.turnLoopInterval);
-                this.turnLoopInterval = null;
+            if(turnLoopInterval){
+                clearInterval(turnLoopInterval);
+                turnLoopInterval = null;
             }
-            this.turnLoopInterval = setInterval(turnLoop, 100)
+            turnLoopInterval = setInterval(turnLoop, 100)
             this.radialCrown.style.boxShadow = "0px 0px 20px black";
         })
 
-        let stopTurnLoop = ()=>{
-            if(this.turnLoopInterval){
-                clearInterval(this.turnLoopInterval);
-                this.turnLoopInterval = null;
-                this.radialCrown.style.boxShadow = "none";
-            }
-        }
+        this.addEventListeners(this.radialCrownTol, "mousedown", (e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            let startRot = this.getRightControllerRot();
+            let signFlip = 1;
+            let lastRotX = -999999;
+            let minRot = -270;
+            let maxRot = 270;
+            let turnLoop = ()=>{
+                console.log("turnLoop")
+                let currentRot = this.getRightControllerRot();
+                let cX = currentRot.x;
+                if(lastRotX === -999999){
+                    lastRotX = cX;
+                }else{
+                    if(Math.abs(cX - lastRotX) > .8){
+                        signFlip *= -1;
+                    }
+                }
+                lastRotX = cX;
+                cX = cX * signFlip;
+                
+                let deltaX = -(Math.round((cX - startRot.x) * 180*100)/100);
+                let valueDelta = deltaX;
 
-        // this.addEventListeners(window, "mouseup", (e)=>{
-        //     console.log("mouseup on window")
-        //     stopTurnLoop();
-        // })
+                let targetRot = lastTolRot + deltaX;
+                if(targetRot < minRot){
+                    targetRot = minRot;
+                }
+                if(targetRot > maxRot){
+                    targetRot = maxRot;
+                }   
+                let value = Math.exp(targetRot/12);
+                console.log("targetRot", targetRot)
+                let displayVal = value.toFixed(12);
+                if(value < .000000001){
+                    displayVal = value.toFixed(11);
+                }else if(value < .00000001){
+                    displayVal = value.toFixed(10);
+                }else if(value < .0000001){
+                    displayVal = value.toFixed(9);
+                }else if(value < .000001){
+                    displayVal = value.toFixed(8);
+                }else if(value < .00001){
+                    displayVal = value.toFixed(7);
+                }else if(value < .0001){
+                    displayVal = value.toFixed(6);
+                }else if(value < .001){
+                    displayVal = value.toFixed(5);
+                }else if(value < .01){
+                    displayVal = value.toFixed(4);
+                }else if(value < .1){
+                    displayVal = value.toFixed(3);
+                }else if(value < 1){
+                    displayVal = value.toFixed(2);
+                }else if(value < 10){
+                    displayVal = value.toFixed(1);
+                }else{
+                    displayVal = value.toFixed(0);
+                }
+                this.radialCrownTolDisplay.innerHTML = `Tol +/- ${displayVal}` //   :relInc: ${relInc}, :deltaX: ${deltaX}, :valueDelta: ${valueDelta}, :valueTarget: ${valueTarget}
+                this.radialCrownTol.style.transform = `rotateZ(${targetRot}deg)`;
+                this.tolerance = value;
+                currentTolRot = targetRot;
+            }
+            console.log("startTolTurnLoop", startRot)
+            if(tolTurnLoopInterval){
+                clearInterval(tolTurnLoopInterval);
+                tolTurnLoopInterval = null;
+            }
+            tolTurnLoopInterval = setInterval(turnLoop, 100)
+            this.radialCrownTol.style.boxShadow = "0px 0px 20px black";
+        })
+
+        let stopTurnLoops = ()=>{
+
+            lastRadialRot = currentRadialRot;
+            lastTolRot = currentTolRot;
+            clearInterval(turnLoopInterval);
+            clearInterval(tolTurnLoopInterval);    
+            turnLoopInterval = null;
+            tolTurnLoopInterval = null;
+            this.radialCrown.style.boxShadow = "none";
+            this.radialCrownTol.style.boxShadow = "none";
+        }
 
         this.addEventListeners(this.inputHelper, "mouseleave", (e)=>{
             console.log("exited the INPUT HELPER")
-            stopTurnLoop();
+            stopTurnLoops();
         })
 
         this.addEventListeners(this.inputHelper, "mouseup", (e)=>{
             console.log("mouseup on the INPUT HELPER")
             e.preventDefault();
             e.stopPropagation();
-            stopTurnLoop();
+            stopTurnLoops();
         })
 
         this.addEventListeners(document.body, "mouseup", (e)=>{
-            stopTurnLoop();
+            stopTurnLoops();
             this.checkInputBlur();
         })
-
-        // this.addEventListeners(this.inputHelper, "mouseup", (e)=>{
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        //     console.log("mouseup on INPUT HELPER: clear turnLoopInterval")
-        //     if(this.turnLoopInterval){
-        //         clearInterval(this.turnLoopInterval);
-        //         this.turnLoopInterval = null;
-        //         this.radialCrown.style.boxShadow = "none";
-        //     }
-        // })
-
-        // this.addEventListeners(this.inputHelper, "mousedown", (e)=>{
-        //     e.preventDefault();
-        //     e.stopPropagation();
-        //     console.log("mousedown on INPUT HELPER")
-        // })
 
     }
    
@@ -239,10 +296,6 @@ export class InputHandler{
         }
         this.currentInput = null;
         this.clearEventListeners();
-        if(this.turnLoopInterval){
-            clearInterval(this.turnLoopInterval);
-            this.turnLoopInterval = null;
-        }
     }
 
     checkInputBlur(){
