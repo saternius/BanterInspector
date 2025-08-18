@@ -25,7 +25,7 @@ export class ComponentMenu {
         const categories = document.querySelectorAll('.component-category');
         categories.forEach((category, index) => {
             const categoryName = category.querySelector('.category-name')?.textContent || `category-${index}`;
-            this.categoryStates.set(categoryName, true); // All expanded by default
+            this.categoryStates.set(categoryName, false); // All expanded by default
             
             // Add expand/collapse indicator
             const header = category.querySelector('.category-header');

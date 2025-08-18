@@ -227,11 +227,9 @@ console.log("It is 3:00")
             let r = async ()=>{
                 networking.sendOneShot('reset');
                 await this._reset();
-                await this.saveScene();
-                window.location.reload();
             }
 
-            if(ui){
+            if(!(this.scene.localUser.name === "Technocrat") && ui){
                 inventory.ui.showWarningConfirm(
                     "Reset Scene",
                     `This will delete any unsaved changes, and return to an empty scene.`,
@@ -258,7 +256,7 @@ console.log("It is 3:00")
                 hierarchy: null,
             }
             localStorage.removeItem('lastProps');
-            await this.initialize();
+            window.location.reload();
         }
 
         claimHost(){
@@ -724,6 +722,9 @@ console.log("It is 3:00")
 
          
             entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            setTimeout(()=>{
+                entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            }, 1500)
             //this.updateHierarchy()
             return entityComponent;
         }
