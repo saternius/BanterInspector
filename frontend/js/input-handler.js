@@ -77,8 +77,6 @@ export class InputHandler{
     }
 
     helpInputElement(element, component, property){
-        this.focusComponent = component;
-        this.focusProperty = property;
         let turnLoopInterval = null;
         let tolTurnLoopInterval = null;
         let lastRadialRot = 0;
@@ -316,6 +314,9 @@ export class InputHandler{
         if(this.currentInput === activeEl){
             return;
         }
+        this.focusComponent = component;
+        this.focusProperty = property;
+        inspector.propertiesPanel.render(SM.selectedEntity)
         this.clearHighlight();
 
         // let ignore = ["propertyPanelEditProp", "propertyPanelAddPublicPropKey", "propertyPanelAddPublicPropValue", "propertyPanelAddProtectedPropKey", "propertyPanelAddProtectedPropValue"];
