@@ -45,6 +45,8 @@ export class InputHandler{
             // })
         }
 
+        this.focusComponent = "";
+        this.focusProperty = "";
         this.setup();
         this.eventListeners = [];
       
@@ -75,7 +77,8 @@ export class InputHandler{
     }
 
     helpInputElement(element, component, property){
-
+        this.focusComponent = component;
+        this.focusProperty = property;
         let turnLoopInterval = null;
         let tolTurnLoopInterval = null;
         let lastRadialRot = 0;
@@ -112,7 +115,7 @@ export class InputHandler{
             let signFlip = 1;
             let lastRotX = -999999;
             let turnLoop = ()=>{
-                console.log("turnLoop")
+                //console.log("turnLoop")
                 let currentRot = this.getRightControllerRot();
                 let cX = currentRot.x;
                 if(lastRotX === -999999){
@@ -153,7 +156,7 @@ export class InputHandler{
             let minRot = -270;
             let maxRot = 270;
             let turnLoop = ()=>{
-                console.log("turnLoop")
+                //console.log("turnLoop")
                 let currentRot = this.getRightControllerRot();
                 let cX = currentRot.x;
                 if(lastRotX === -999999){
@@ -291,6 +294,7 @@ export class InputHandler{
         this.spacePanel.style.display = "block";
         this.lifeCyclePanel.style.display = "block";
         if(this.currentInput && this.currentInput.style){
+            console.log("clearing highlight", this.currentInput)
             this.currentInput.style.backgroundColor = "#0f0f0f";
             this.currentInput.style.borderColor = "#2a2a2a";
         }

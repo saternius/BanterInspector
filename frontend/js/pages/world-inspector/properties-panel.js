@@ -492,6 +492,11 @@
                     e.stopPropagation();
                     inputHandler.inputFocusChanged(input, component, key);
                 }
+
+                if(inputHandler.focusComponent === component && inputHandler.focusProperty === key){
+                    input.style.backgroundColor = "#1e3764";
+                    input.style.borderColor = "#326689";
+                }   
                
                 valueContainer.appendChild(input);
                 
@@ -516,6 +521,11 @@
                         e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
                     }
+
+                    if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${axis}`){
+                        input.style.backgroundColor = "#1e3764";
+                        input.style.borderColor = "#326689";
+                    }   
 
                     vectorGroup.appendChild(axisLabel);
                     vectorGroup.appendChild(input);
@@ -543,6 +553,11 @@
                         e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
                     }
+                    if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${axis}`){
+                        input.style.backgroundColor = "#1e3764";
+                        input.style.borderColor = "#326689";
+                    }   
+
                     vectorGroup.appendChild(axisLabel);
                     vectorGroup.appendChild(input);
                 });
@@ -579,10 +594,16 @@
                     const change = new ComponentPropertyChange(componentId, key, newColor, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
-                colorInput.onclick = (e)=>{
-                    e.stopPropagation();
-                    inputHandler.inputFocusChanged(colorInput, component,`${key}`);
-                }
+                // TODO: Create a specdial input handler for color
+                // colorInput.onclick = (e)=>{
+                //     e.stopPropagation();
+                //     inputHandler.inputFocusChanged(colorInput, component,`${key}`);
+                // }
+
+                // if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}`){
+                //     colorInput.style.backgroundColor = "#1e3764";
+                //     colorInput.style.borderColor = "#326689";
+                // }   
                 
                 
                 preview.onclick = () => colorInput.click();
@@ -612,6 +633,11 @@
                         e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${channel}`);
                     }
+                    if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${channel}`){
+                        input.style.backgroundColor = "#1e3764";
+                        input.style.borderColor = "#326689";
+                    }   
+
                     rgbaContainer.appendChild(input);
                 });
                 
