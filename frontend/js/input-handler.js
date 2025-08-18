@@ -220,7 +220,7 @@ export class InputHandler{
         })
 
         let stopTurnLoops = ()=>{
-
+            this.inputHelperInfo.innerHTML = "";
             lastRadialRot = currentRadialRot;
             lastTolRot = currentTolRot;
             clearInterval(turnLoopInterval);
@@ -314,6 +314,7 @@ export class InputHandler{
         if(this.currentInput === activeEl){
             return;
         }
+       
         this.focusComponent = component;
         this.focusProperty = property;
         inspector.propertiesPanel.render(SM.selectedEntity)

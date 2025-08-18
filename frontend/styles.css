@@ -5271,3 +5271,8 @@ input:focus, textarea:focus, select:focus {
     width: 100%;
     flex-basis: content;
 }
+
+.input-helper-info{
+    height: 14px;
+    padding: 4px;
+}
