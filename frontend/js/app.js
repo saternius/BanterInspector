@@ -5,8 +5,6 @@
  * the inspector application.
  */
 (async () => {
-    console.log(window.repoUrl)
-    
     // Import and show loading screen first
     const { loadingScreen } = await import(`${window.repoUrl}/pages/world-inspector/loading-screen.js`);
     window.loadingScreen = loadingScreen; // Make globally accessible
@@ -69,17 +67,6 @@
             this.lifecyclePanel = null;
             this.feedback = null;
             this.initialized = false;
-            
-            // Initialize logger settings
-            window.logger = {
-                include: {
-                    error: true,
-                    command: true,
-                    script: true,
-                    oneShot: false,
-                    spaceProps: false
-                }
-            };
         }
 
         /**
@@ -90,7 +77,7 @@
 
             
             
-            console.log('Initializing Unity Scene Inspector...');
+            log('init', 'Initializing Unity Scene Inspector...');
             try {
                 // Initialize navigation
                 loadingScreen.updateStage('ui-panels', 10, 'Initializing navigation...');
@@ -128,7 +115,7 @@
 
                 // Set up global references for inline handlers
                 window.spacePropsPanel = this.spacePropsPanel;
-                window.inventory = this.inventory; console.log("inventory", window.inventory)
+                window.inventory = this.inventory; 
                 window.navigation = this.navigation;
                 window.scriptEditors = this.scriptEditors;
                 window.lifecyclePanel = this.lifecyclePanel;
@@ -178,13 +165,13 @@
 
 
                 this.initialized = true;
-                console.log('Inspector initialized successfully');
+                log('init', 'Inspector initialized successfully');
                 
                 // Hide loading screen
                 
                 
             } catch (error) {
-                console.error('Failed to initialize inspector:', error);
+                err('init', 'Failed to initialize inspector:', error);
                 
                 // Show error in loading screen if it's still visible
                 if (loadingScreen.element) {
@@ -285,7 +272,7 @@
          * Setup global event handlers
          */
         setupGlobalEventHandlers() {
-            console.log("setting up global event handlers")
+            log("init", "setting up global event handlers")
             // Handle hierarchy changes from change manager
             changeManager.addChangeListener((change) => {
                 // Update hierarchy panel if entity names or active state changed
@@ -341,6 +328,7 @@
             if (SM.scene) {
 
                 let onLoad = ()=>{
+                    log("init", "onLoad()");
                     if(window.isLocalHost){
                         SM.scene.localUser = {
                             name: "Technocrat",
@@ -366,29 +354,22 @@
                     networking.handleSpaceStateChange(event);
                 });
 
-                // SM.scene.On("unity-loaded", async () => {
-                //     console.log("unity-loaded fired")
-                //     onLoad();
-                // })
-
                 SM.scene.On("loaded", async () => {
-                    console.log('Loaded fired');
                     onLoad();
                 });
 
                 SM.scene.On("one-shot", async (event) => {
-                    //console.log("oneshot fired", event)
                     networking.handleOneShot(event);
                     document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
                 });
 
                 SM.scene.On("user-left", (event) => {
-                    console.log("[USER LEFT] fired", event)
+                    log('scene-event', "[USER LEFT] fired", event)
                     //SM.handleUserLeft(event);
                 })
 
                 SM.scene.On("user-joined", (event) => {
-                    console.log("[USER JOINED] fired", event)
+                    log('scene-event', "[USER JOINED] fired", event)
                     
                     //SM.handleUserJoined(event);
                 })
@@ -412,9 +393,8 @@
                 
                 let runWhenUnityLoaded = ()=>{
                     if(SM.scene.unityLoaded){
-                        console.log("[UNITY LOADED] => starting onLoad()")
                         if(!SM.scene.localUser){
-                            console.log("[UNITY LOADED] => no local user found, loading from localStorage")
+                            log('init', "No local user found, loading from localStorage")
                             loadLocalUserSceneFromLocalStorage(SM.scene);
                         }
                         onLoad();

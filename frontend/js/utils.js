@@ -542,4 +542,34 @@ export function showNotification(message) {
     }, 2000);
 }
 
+
+export class Logger{
+    constructor(){
+        this.include = {
+            error: true,
+            command: true,
+            script: true,
+            oneShot: false,
+            spaceProps: false
+        }
+    }
+
+    log(tag, ...args){
+        console.log("log", this)
+        console.log(`[${tag.toUpperCase()}]: `, ...args);
+        if(this.include[tag]){
+            appendToConsole(tag, generateId(), args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" "));
+        }
+    }
+
+    err(tag, ...args){
+        console.error(`[${tag.toUpperCase()}]: `, ...args);
+        if(this.include[tag]){
+            appendToConsole("error", "error_"+Math.floor(Math.random()*1000000), args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" "));
+        }
+    }
+}
+
+window.logger = new Logger();
+window.log = window.logger.log.bind(window.logger);
 window.showNotification = showNotification;

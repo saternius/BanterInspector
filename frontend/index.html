@@ -113,15 +113,15 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             if(window.isLocalHost){
                 window.repoUrl = "http://localhost:42069/frontend"
             }else{
-                console.log("Unity is not running on localhost");
+                log("init", "Unity is not running on localhost");
             }
         }
         window.blockServiceUrl = `${window.ngrokUrl}/api/process-text`;
         
-        console.log("File Server: " + window.fileServer);
-        console.log("Ngrok URL: " + window.ngrokUrl);
-        console.log("Repo URL: " + window.repoUrl);
-        console.log("Block Service URL: " + window.blockServiceUrl);
+        log("init", "File Server: " + window.fileServer);
+        log("init", "Ngrok URL: " + window.ngrokUrl);
+        log("init", "Repo URL: " + window.repoUrl);
+        log("init", "Block Service URL: " + window.blockServiceUrl);
         
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -713,7 +713,6 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         script.src = window.repoUrl + '/js/app.js';
     
         window.repoUrl += "/js"
-        //console.log("window.repoUrl", window.repoUrl)
         document.body.appendChild(script);
     </script>
     

@@ -24,7 +24,6 @@ export class LifecycleManager {
      * Register a MonoBehavior component
      */
     async registerMonoBehavior(monoBehavior) {
-        //console.log("[LIFECYCLE] registering monoBehavior =>", monoBehavior.id)
         this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
         // Start the lifecycle if this is the first component
         if (this.monoBehaviors.size === 1 && !this.isRunning) {
@@ -71,7 +70,7 @@ export class LifecycleManager {
             this.triggerUpdate();
         }, intervalMs);
         
-        console.log(`LifecycleManager started with ${this.fps} FPS`);
+        log('lifecycle', `LifecycleManager started with ${this.fps} FPS`);
         inspector.lifecyclePanel.render()
     }
     
@@ -89,7 +88,7 @@ export class LifecycleManager {
             this.updateInterval = null;
         }
         
-        console.log('LifecycleManager stopped');
+        log('lifecycle', 'LifecycleManager stopped');
         inspector.lifecyclePanel.render()
     }
     
@@ -126,7 +125,7 @@ export class LifecycleManager {
                     try {
                         monoBehavior.onKeyDown(event.key);
                     } catch (error) {
-                        console.error(`Error in onKeyDown for ${componentId}:`, error);
+                        err('lifecycle', `Error in onKeyDown for ${componentId}:`, error);
                     }
                 }
                 
@@ -135,7 +134,7 @@ export class LifecycleManager {
                     try {
                         monoBehavior.keyDown(event.key);
                     } catch (error) {
-                        console.error(`Error in keyDown for ${componentId}:`, error);
+                        err('lifecycle', `Error in keyDown for ${componentId}:`, error);
                     }
                 }
             });
@@ -148,7 +147,7 @@ export class LifecycleManager {
                     try {
                         monoBehavior.onKeyUp(event.key);
                     } catch (error) {
-                        console.error(`Error in onKeyUp for ${componentId}:`, error);
+                        err('lifecycle', `Error in onKeyUp for ${componentId}:`, error);
                     }
                 }
                 
@@ -157,7 +156,7 @@ export class LifecycleManager {
                     try {
                         monoBehavior.keyUp(event.key);
                     } catch (error) {
-                        console.error(`Error in keyUp for ${componentId}:`, error);
+                        err('lifecycle', `Error in keyUp for ${componentId}:`, error);
                     }
                 }
             });
@@ -170,7 +169,7 @@ export class LifecycleManager {
                     try {
                         monoBehavior.keyPress(event.key);
                     } catch (error) {
-                        console.error(`Error in keyPress for ${componentId}:`, error);
+                        err('lifecycle', `Error in keyPress for ${componentId}:`, error);
                     }
                 }
             });

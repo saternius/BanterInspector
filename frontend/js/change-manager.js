@@ -58,8 +58,9 @@ class ChangeManager {
             const isFromHistory = change.options?.source === 'history' || this.isApplying;
             const shouldRecord = !isFromHistory && change.options?.source === 'ui';
 
-            // Apply the change
-            outcome = await change.apply();
+            // Apply the change with timeout
+            const timeout = change.timeout || 5000; // Default 5 second timeout
+            outcome = await this.applyWithTimeout(change.apply.bind(change), timeout, change.id);
 
             // Record in history if applicable
             if (shouldRecord) {
@@ -78,6 +79,21 @@ class ChangeManager {
         return outcome;
     }
 
+    /**
+     * Apply a function with a timeout
+     */
+    async applyWithTimeout(fn, timeout, changeId) {
+        return Promise.race([
+            fn(),
+            new Promise((resolve) => {
+                setTimeout(() => {
+                    console.warn(`Change ${changeId || 'unknown'} timed out after ${timeout}ms`);
+                    resolve(null);
+                }, timeout);
+            })
+        ]);
+    }
+
 
     /**
      * Record a change in history
@@ -86,19 +102,19 @@ class ChangeManager {
     recordChange(change) {
         // Don't record if we're applying history
         if (this.isApplying) {
-            console.log('Skipping record - isApplying is true');
+            log('change-manager', 'Skipping record - isApplying is true');
             return;
         }
         
         // Don't record if not from UI
         if (change.options?.source !== 'ui') {
-            console.log('Skipping record - source is not ui:', change.options?.source);
+            log('change-manager', 'Skipping record - source is not ui:', change.options?.source);
             return;
         }
         
         // Validate change object
         if (!change || typeof change.apply !== 'function' || typeof change.undo !== 'function') {
-            console.error('Invalid change object for history - must have apply() and undo() methods');
+            err('change-manager', 'Invalid change object for history - must have apply() and undo() methods');
             return;
         }
         
@@ -118,7 +134,6 @@ class ChangeManager {
         }
         
         this.updateUI();
-        //console.log(`History recorded: ${entry.description}`);
     }
     
     /**
@@ -134,8 +149,9 @@ class ChangeManager {
         this.isApplying = true;
         
         try {
-            // Call the change object's undo method
-            await entry.change.undo();
+            // Call the change object's undo method with timeout
+            const timeout = entry.change.timeout || 5000;
+            await this.applyWithTimeout(entry.change.undo.bind(entry.change), timeout, entry.change.id);
             
             this.redoStack.push(entry);
             this.updateUI();
@@ -164,8 +180,9 @@ class ChangeManager {
         this.isApplying = true;
         
         try {
-            // Call the change object's apply method
-            await entry.change.apply();
+            // Call the change object's apply method with timeout
+            const timeout = entry.change.timeout || 5000;
+            await this.applyWithTimeout(entry.change.apply.bind(entry.change), timeout, entry.change.id);
             
             this.undoStack.push(entry);
             this.updateUI();
@@ -280,7 +297,6 @@ class ChangeManager {
         }
     
         let relevant = new Set(get_ids(entity))
-        console.log("Relevant: ", relevant)
         let history = []
         this.undoStack.map(u=>u.change.cmd()).forEach(command=>{
             if(command.action === "add_entity"){
