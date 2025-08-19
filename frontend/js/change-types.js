@@ -10,7 +10,7 @@ const { deepClone, parseBest, appendToConsole, showNotification } = await import
 export class Change {
     constructor(){
         this.id = `change_${Math.floor(Math.random() * 1000000)}`;
-        this.timeout = 1000;
+        this.timeout = 5000;
     }
 
     async apply(){
@@ -102,14 +102,12 @@ export class EntityPropertyChange extends Change{
 export class ComponentPropertyChange extends Change{
     constructor(componentId, property, newValue, options) {
         super();
-        //console.log("ComponentPropertyChange: ", componentId, property, newValue, options)
         this.componentId = componentId;
         this.property = property;
         this.newValue = deepClone(newValue);
         this.options = options || {};
         this.component = SM.getEntityComponentById(componentId);
         this.oldValue = deepClone(this.options.oldValue || this.getOldValue());
-       // console.log("ComponentPropertyChange: ", this.componentId, this.component, this.property, this.oldValue, this.newValue)
     }
 
     getOldValue() {        
@@ -478,11 +476,9 @@ export class EntityAddChange extends Change{
 export class EntityRemoveChange extends Change{
     constructor(entityId, options) {
         super();
-        console.log("EntityRemoveChange: ", entityId)
         this.entity = SM.getEntityById(entityId);
         if(!this.entity){
-            console.error("EntityRemoveChange: Entity not found =>", entityId)
-            appendToConsole("error", "error_"+Math.floor(Math.random()*1000000), `Entity not found: ${entityId}`);
+            err("command", "Entity not found =>", entityId)
             return;
         }
         this.entityExport = this.entity.export();
@@ -621,7 +617,7 @@ export class MonoBehaviorVarChange extends Change{
     }
 
     async change(value) {
-        console.log("[CHANGE] changing var =>", this.varName, value)
+        log("monobehavior", "changing var =>", this.monobehavior, this.varName, value)
         if (!this.monobehavior) return;
 
         // Update the properties.vars for persistence
@@ -672,11 +668,11 @@ export class LoadItemChange extends Change{
         if(!this.itemData){
             const item = inventory.items[this.itemName];
             if(!item){
-                console.log("[ERROR] no item found =>", this.itemName)
+                err("inventory", "No item found =>", this.itemName)
                 return null;
             }
             if(item.itemType !== "entity"){
-                console.log("[ERROR] item is not a entity =>", this.itemName)
+                err("inventory", "Item is not a entity =>", this.itemName)
                 return null;
             }
     
@@ -699,7 +695,7 @@ export class LoadItemChange extends Change{
             itemData.id = this.parentId+"/"+itemData.name;
             changeChildrenIds(itemData);
     
-            console.log("[ITEM DATA] =>", itemData)
+            log("inventory", "[ITEM DATA] =>", itemData)
             this.itemData = itemData;    
         }
        
@@ -741,10 +737,7 @@ export class LoadItemChange extends Change{
 
 
             let itemProps = getEntitySpaceProperties(this.itemData);
-            // console.log("[ITEM PROPS] =>", itemProps)
-            // SM.scene.SetPublicSpaceProps(itemProps)
             Object.keys(itemProps).forEach(key=>{
-                //SM.scene.spaceState.public[key] = itemProps[key]
                 SM.props[key] = itemProps[key]
             })
         }
@@ -856,10 +849,7 @@ export class CloneEntityChange extends Change{
 
 
             let itemProps = getEntitySpaceProperties(itemData);
-            // console.log("[ITEM PROPS] =>", itemProps)
-            // SM.scene.SetPublicSpaceProps(itemProps)
             Object.keys(itemProps).forEach(key=>{
-                //SM.scene.spaceState.public[key] = itemProps[key]
                 SM.props[key] = itemProps[key]
             })
         }
@@ -947,9 +937,7 @@ export class SaveEntityItemChange extends Change{
 
     async apply(){
         super.apply();
-        console.log("[SAVE SLOT ITEM CHANGE] applying =>", this.entityId, this.itemName, this.folder)
         const existingKeys = Object.keys(inventory.items);
-        console.log("[SAVE SLOT ITEM CHANGE] existingKeys =>", existingKeys, this.itemName)
         if (!this.itemName || this.itemName.trim() === ''){
             showNotification('Item not added - no name provided.');
             return;
@@ -1145,7 +1133,7 @@ export class RenameItemChange extends Change{
 
     async undo(){
         super.undo();
-        console.log("[ NO UNDO FOR RENAME ITEM ]")
+        log("command", "[ NO UNDO FOR RENAME ITEM ]")
     }
 
     getDescription(){
@@ -1213,9 +1201,9 @@ export class DeleteItemChange extends Change{
             
             // Delete from Firebase
             await networking.deleteData(firebasePath);
-            console.log('Item deleted from Firebase:', firebasePath);
+            log('inventory', 'Item deleted from Firebase:', firebasePath);
         } catch (error) {
-            console.error('Failed to delete item from Firebase:', error);
+            err('inventory', 'Failed to delete item from Firebase:', error);
         }
     }
 
@@ -1236,7 +1224,7 @@ export class DeleteItemChange extends Change{
 
     async undo(){
         super.undo();
-        console.log("[ NO UNDO FOR DELETE ITEM ]")
+        log("command", "[ NO UNDO FOR DELETE ITEM ]")
     }
 
     getDescription(){
@@ -1303,7 +1291,7 @@ export class CreateFolderChange extends Change{
 
     async undo(){
         super.undo();   
-        console.log("[ NO UNDO FOR CREATE FOLDER ]")
+        log("command", "[ NO UNDO FOR CREATE FOLDER ]")
     }
 
     getDescription(){
@@ -1365,7 +1353,7 @@ export class RemoveFolderChange extends Change{
 
     async undo(){
         super.undo();
-        console.log("[ NO UNDO FOR REMOVE FOLDER ]")
+        log("command", "[ NO UNDO FOR REMOVE FOLDER ]")
     }
 
     getDescription(){
@@ -1412,7 +1400,7 @@ export class MoveItemDirectoryChange extends Change{
 
     async undo(){
         super.undo();
-        console.log("[ NO UNDO FOR MOVE ITEM DIRECTORY ]")
+        log("command", "[ NO UNDO FOR MOVE ITEM DIRECTORY ]")
     }
 
     getDescription(){
@@ -1497,7 +1485,7 @@ this.keyUp = (key)=>{
     }
     async undo(){
         super.undo();
-        console.log("[ NO UNDO FOR SCRIPTS ]")
+        log("command", "[ NO UNDO FOR SCRIPTS ]")
     }
 
     getDescription(){
@@ -1552,7 +1540,7 @@ export class EditScriptItemChange extends Change{
                         if(folder.remote){
                             let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}${folder.path}/${script_name}`;
                             ref = ref;
-                            console.log("SAVING TO: ", ref)
+                            log("inventory", "SAVING TO: ", ref)
                             networking.setData(ref, item);
                         }
                     }
@@ -1565,7 +1553,7 @@ export class EditScriptItemChange extends Change{
 
     async undo(){
         super.undo();   
-        console.log("[ NO UNDO FOR EDIT SCRIPT ]")
+        log("command", "[ NO UNDO FOR EDIT SCRIPT ]")
     }
 
     getDescription(){
@@ -1636,7 +1624,6 @@ return `
 window.RunCommand = async (execString, options)=>{
 
     let args = execString.split(" ").map(arg=>parseBest(arg));
-    console.log(args)
     let change = null;
     options = options || {};
     switch(args[0]){

@@ -11,7 +11,6 @@ export class InputHandler{
                 setTimeout(this.setup, 400)
                 return;
             } 
-            console.log("Setting up input handler..")
 
             if(this.initialize){
                 return;
@@ -37,12 +36,6 @@ export class InputHandler{
             this.inputHelperValue = document.getElementById("inputHelperValue");
             this.inputHelperSubject = document.getElementById("inputHelperSubject");
             this.radialCrownTolDisplay = document.getElementById("radialCrownTolDisplay");
-
-
-            // document.body.addEventListener("click", (e)=>{
-            //     console.log("window click")
-            //     this.checkInputBlur();
-            // })
         }
 
         this.focusComponent = "";
@@ -113,7 +106,6 @@ export class InputHandler{
             let signFlip = 1;
             let lastRotX = -999999;
             let turnLoop = ()=>{
-                //console.log("turnLoop")
                 let currentRot = this.getRightControllerRot();
                 let cX = currentRot.x;
                 if(lastRotX === -999999){
@@ -136,7 +128,6 @@ export class InputHandler{
                 this.inputHelperValue.innerHTML = valueTarget.toFixed(4);
                 this.setValue(component, property, valueTarget);
             }
-            console.log("startTurnLoop", startRot)
             if(turnLoopInterval){
                 clearInterval(turnLoopInterval);
                 turnLoopInterval = null;
@@ -154,7 +145,6 @@ export class InputHandler{
             let minRot = -270;
             let maxRot = 270;
             let turnLoop = ()=>{
-                //console.log("turnLoop")
                 let currentRot = this.getRightControllerRot();
                 let cX = currentRot.x;
                 if(lastRotX === -999999){
@@ -178,7 +168,6 @@ export class InputHandler{
                     targetRot = maxRot;
                 }   
                 let value = Math.exp(targetRot/12);
-                console.log("targetRot", targetRot)
                 let displayVal = value.toFixed(12);
                 if(value < .000000001){
                     displayVal = value.toFixed(11);
@@ -210,7 +199,6 @@ export class InputHandler{
                 this.tolerance = value;
                 currentTolRot = targetRot;
             }
-            console.log("startTolTurnLoop", startRot)
             if(tolTurnLoopInterval){
                 clearInterval(tolTurnLoopInterval);
                 tolTurnLoopInterval = null;
@@ -232,12 +220,10 @@ export class InputHandler{
         }
 
         this.addEventListeners(this.inputHelper, "mouseleave", (e)=>{
-            console.log("exited the INPUT HELPER")
             stopTurnLoops();
         })
 
         this.addEventListeners(this.inputHelper, "mouseup", (e)=>{
-            console.log("mouseup on the INPUT HELPER")
             e.preventDefault();
             e.stopPropagation();
             stopTurnLoops();
@@ -280,36 +266,33 @@ export class InputHandler{
     syncWithActiveElement(){
         const active = this.getDeepActiveElement();
         this.currentInput = this.isInputElement(active) ? active : null;
-        console.log("syncWithActiveElement", this.currentInput)
     }
 
-    handleWindowBlur(){
-        this.currentInput = null;
-    }
 
     clearHighlight(){
         this.inputHelper.style.display = "none";
         this.spacePanel.style.display = "block";
         this.lifeCyclePanel.style.display = "block";
         if(this.currentInput && this.currentInput.style){
-            console.log("clearing highlight", this.currentInput)
             this.currentInput.style.backgroundColor = "#0f0f0f";
             this.currentInput.style.borderColor = "#2a2a2a";
         }
         this.currentInput = null;
+      
         this.clearEventListeners();
     }
 
     checkInputBlur(){
         const activeEl = this.getDeepActiveElement();
-        console.log("ACTIVE EL", activeEl)
         if(activeEl === document.body){
             this.clearHighlight();
+            this.focusComponent = null;
+            this.focusProperty = null;
+            inspector.propertiesPanel.render(SM.selectedEntity)
         }
     }
 
     inputFocusChanged(activeEl, component, property){
-        console.log("inputFocusChanged", activeEl, component, property)
         if(!this.initialized){ return; }
         if(this.currentInput === activeEl){
             return;
@@ -320,11 +303,6 @@ export class InputHandler{
         inspector.propertiesPanel.render(SM.selectedEntity)
         this.clearHighlight();
 
-        // let ignore = ["propertyPanelEditProp", "propertyPanelAddPublicPropKey", "propertyPanelAddPublicPropValue", "propertyPanelAddProtectedPropKey", "propertyPanelAddProtectedPropValue"];
-        // if(ignore.includes(activeEl.dataset?.input)){
-        //     return;
-        // }
-  
         this.currentInput = activeEl;
         this.helpInputElement(activeEl, component, property);
         

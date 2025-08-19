@@ -27,8 +27,8 @@ export class Entity{
                 await newGameObject.SetActive(true);
                 await newGameObject.SetLayer(this.layer);
             }catch(e){
-                console.log(this, this.parentId, parentEntity)
-                console.error(e);
+                err("entity", this, this.parentId, parentEntity)
+                err("entity", e);
             }
         }
         
@@ -55,13 +55,12 @@ export class Entity{
     reorderComponent(fromIndex, toIndex){
         if (fromIndex < 0 || fromIndex >= this.components.length ||
             toIndex < 0 || toIndex >= this.components.length) {
-            console.error('Invalid component indices for reorder');
+            err("entity", "Invalid component indices for reorder")
             return false;
         }
         
         // Don't allow moving Transform component (should always be at index 0)
         if (fromIndex === 0 || toIndex === 0) {
-            console.warn('Cannot reorder Transform component');
             return false;
         }
         
@@ -78,7 +77,7 @@ export class Entity{
         let visible_components = this.components.map(x=>x._bs)
         Object.values(this._bs.components).forEach(async bs_comp => {
             if(!visible_components.includes(bs_comp)){
-                console.log("ghost component", bs_comp)
+                log("entity", "ghost component found: ", componentTextMap[bs_comp.type])
                 let component_ref = `${componentTextMap[bs_comp.type]}_${id}`
                 let props = {
                     id: component_ref
@@ -88,7 +87,6 @@ export class Entity{
                 entityComponent.setId(component_ref);
                 this.components.push(entityComponent);
                 SM.entityData.componentMap[component_ref] = entityComponent;
-                //SM.updateHierarchy();
                 inspector.propertiesPanel.render(this.id);
             }
         })
@@ -140,14 +138,11 @@ export class Entity{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
             let component = SM.getEntityComponentById(compID);
-            //console.log(compID, "=>", component)
             if(!component) return;
-            //console.log(`${component._entity.id} => ${this.id}`)
             if(component._entity.id === this.id){
                 toDelete.push(key);
             }
         })
-        //console.log(` deleting [${toDelete.length}] space properties..`)
 
         for(let key of toDelete){
             delete SM.props[key];
@@ -166,7 +161,7 @@ export class Entity{
     }
 
     rename(newName, localUpdate){
-        //console.log(`renaming ${this.id} to ${newName} : ${localUpdate}`)
+        log("entity", `renaming ${this.id} to ${newName} : ${localUpdate}`)
         if(!localUpdate) this._deleteOldSpaceProperties();
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
@@ -181,7 +176,7 @@ export class Entity{
     }
 
     _set(prop, newValue){
-        //console.log(`(${this.name}) update ${prop} =>`, newValue)
+        log("entity", `(${this.name}) update ${prop} =>`, newValue)
         newValue = parseBest(newValue);
         if(prop == "name"){
             this.rename(newValue, true);
@@ -227,7 +222,6 @@ export class Entity{
 
     async SetParent(newParentId){
         let data = `entity_moved:${this.id}:${newParentId}:0`
-        //await this._setParent(SM.getEntityOrRoot(newParentId), true);
         networking.sendOneShot(data);
     }
 }
