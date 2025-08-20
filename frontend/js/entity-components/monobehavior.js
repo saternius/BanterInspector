@@ -31,7 +31,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _set(property, value){
-        console.log("[MONO] updating property =>", property, value)
+        log("mono", "[MONO] updating property =>", property, value)
         value = parseBest(value);
         if(property === 'file'){
             this._loadScript(value);
@@ -61,7 +61,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(!this._entity.active) return;
         const inventoryItem = window.inventory?.items?.[fileName];
         if (!inventoryItem || inventoryItem.itemType !== 'script') {
-            console.error(`Script "${fileName}" not found in inventory`);
+            err("mono", `Script "${fileName}" not found in inventory`);
             return;
         }
 
@@ -119,7 +119,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         this.scriptInstance = this.ctx;
         await lifecycle.registerMonoBehavior(this);  
         this._start();  
-        console.log(`Script "${fileName}" loaded successfully for ${this.properties.name}`);
+        log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name}`);
     }
 
     _start(){
@@ -154,7 +154,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     _refresh(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this._entity.active) return;
-        console.log("refreshing script [", this.ctx._running, "]..")
+        log("mono", "refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){
             this.ctx._running = false;
             this.ctx.onDestroy();
@@ -211,7 +211,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async updateVar(varName, value) {
-        console.log("[MONO] updating var =>", varName, value)
+        log("mono", "[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
         if(typeof value === "object"){
             value = JSON.stringify(value);

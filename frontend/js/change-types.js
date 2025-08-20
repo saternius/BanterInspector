@@ -54,6 +54,7 @@ export class Change {
 export class EntityPropertyChange extends Change{
     constructor(entityId, property, newValue, options) {
         super();
+        this.timeout = 500;
         this.entityId = entityId;
         this.property = property;
         this.newValue = newValue;
@@ -102,6 +103,7 @@ export class EntityPropertyChange extends Change{
 export class ComponentPropertyChange extends Change{
     constructor(componentId, property, newValue, options) {
         super();
+        this.timeout = 500;
         this.componentId = componentId;
         this.property = property;
         this.newValue = deepClone(newValue);
@@ -157,6 +159,7 @@ export class ComponentPropertyChange extends Change{
 export class SpacePropertyChange extends Change{
     constructor(property, newValue, protect, options) {
         super();
+        this.timeout = 500;
         this.property = property;
         this.newValue = newValue;
         this.protected = protect;
@@ -215,6 +218,7 @@ export class SpacePropertyChange extends Change{
 export class ComponentAddChange extends Change{
     constructor(entityId, componentType, options) {
         super();
+        this.timeout = 3000;
         this.entityId = entityId;
         this.componentType = componentType;
         this.options = options || {};
@@ -281,6 +285,7 @@ export class ComponentAddChange extends Change{
 export class ComponentReorderChange extends Change{
     constructor(entityId, fromIndex, toIndex, options) {
         super();
+        this.timeout = 1000;
         this.entityId = entityId;
         this.fromIndex = fromIndex;
         this.toIndex = toIndex;
@@ -351,6 +356,7 @@ export class ComponentReorderChange extends Change{
 export class ComponentRemoveChange extends Change{
     constructor(componentId, options) {
         super();
+        this.timeout = 3000;
         this.componentId = componentId;
         this.componentData = this.captureComponentData();
         this.entityId = null;
@@ -418,6 +424,7 @@ export class ComponentRemoveChange extends Change{
 export class EntityAddChange extends Change{
     constructor(parentId, entityName, options) {
         super();
+        this.timeout = 1000;
         this.parentId = parentId;
         this.entityName = entityName || `NewEntity_${Math.floor(Math.random() * 100000)}`;
         this.newEntityId = null; // Will be set after creation
@@ -476,6 +483,7 @@ export class EntityAddChange extends Change{
 export class EntityRemoveChange extends Change{
     constructor(entityId, options) {
         super();
+        this.timeout = 5000;
         this.entity = SM.getEntityById(entityId);
         if(!this.entity){
             err("command", "Entity not found =>", entityId)
@@ -541,6 +549,7 @@ export class EntityRemoveChange extends Change{
 export class EntityMoveChange extends Change{
     constructor(entityId, newParentId, options) {
         super();
+        this.timeout = 500;
         this.entityId = entityId;
         this.newParentId = newParentId;
         const entity = SM.getEntityById(entityId);
@@ -593,6 +602,7 @@ export class EntityMoveChange extends Change{
 export class MonoBehaviorVarChange extends Change{
     constructor(componentId, varName, newValue, options) {
         super();
+        this.timeout = 500;
         this.componentId = componentId;
         this.varName = varName;
         this.newValue = deepClone(newValue);
@@ -656,6 +666,7 @@ export class MonoBehaviorVarChange extends Change{
 export class LoadItemChange extends Change{
     constructor(itemName, parentId, itemData, options) {
         super();
+        this.timeout = 10000;
         this.itemName = itemName;
         this.parentId = parentId || 'Root';
         this.options = options || {};
@@ -788,6 +799,7 @@ export class LoadItemChange extends Change{
 export class CloneEntityChange extends Change{
     constructor(entityId, options) {
         super();
+        this.timeout = 10000;
         this.sourceEntity = SM.getEntityById(entityId);
         if(!this.sourceEntity){
             console.error(`Source entity ${entityId} not found`);
@@ -899,6 +911,7 @@ export class CloneEntityChange extends Change{
 export class SaveEntityItemChange extends Change{
     constructor(entityId, itemName, folder, options){
         super();
+        this.timeout = 10000;
         this.entityId = entityId;
         this.entity = SM.getEntityById(entityId);
         this.itemName = itemName || this.entity.name;
@@ -999,6 +1012,7 @@ export class RenameItemChange extends Change{
     //TODO: Implement this
     constructor(itemName, newName, options){
         super();
+        this.timeout = 1000;
         this.itemName = itemName;
         this.newName = newName;
         this.options = options || {};
@@ -1157,6 +1171,7 @@ export class RenameItemChange extends Change{
 export class DeleteItemChange extends Change{
     constructor(itemName, options){
         super();
+        this.timeout = 1000;
         this.itemName = itemName;
         this.options = options || {};
         // Store item data for Firebase sync
@@ -1247,6 +1262,7 @@ export class DeleteItemChange extends Change{
 export class CreateFolderChange extends Change{
     constructor(folderName, parentFolderName, options){
         super();
+        this.timeout = 500;
         this.folderName = folderName;
         this.parentFolderName = parentFolderName || inventory.currentFolder;
         this.options = options || {};
@@ -1323,6 +1339,7 @@ export class MoveFolderChange extends Change{
 export class RemoveFolderChange extends Change{
     constructor(folderName, options){
         super();
+        this.timeout = 500;
         this.folderName = folderName;
         this.options = options || {};
     }
@@ -1376,6 +1393,7 @@ export class RemoveFolderChange extends Change{
 export class MoveItemDirectoryChange extends Change{
     constructor(itemName, folderName, options){
         super();
+        this.timeout = 500;
         this.itemName = itemName;
         this.folderName = folderName;
         this.options = options || {};
@@ -1424,6 +1442,7 @@ export class MoveItemDirectoryChange extends Change{
 export class CreateScriptItemChange extends Change{
     constructor(scriptName, options){
         super();
+        this.timeout = 500;
         this.scriptName = scriptName;
         this.options = options || {};
     }
@@ -1509,6 +1528,7 @@ this.keyUp = (key)=>{
 export class EditScriptItemChange extends Change{
     constructor(scriptName, scriptContent, options){
         super();
+        this.timeout = 1000;
         this.scriptName = scriptName;
         this.scriptContent = scriptContent;
         this.options = options || {};

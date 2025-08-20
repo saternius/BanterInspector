@@ -92,7 +92,7 @@
                 
                 if (await confirm(`Are you sure you want to delete "${entity.name}" and all its children?`)) {
                     // Queue entity deletion through change manager
-                    console.log("deleting entity =>", SM.selectedEntity)
+                    log("scene", "deleting entity =>", SM.selectedEntity)
                     const change = new EntityRemoveChange(SM.selectedEntity, { source: 'ui' });
                     changeManager.applyChange(change);
                     SM.selectEntity('Root');
@@ -119,7 +119,6 @@
             if (!this.treeContainer) return;
             
             this.treeContainer.innerHTML = '';
-            //console.log("SM.entityData.entities =>", SM.entityData.entities)
             if (SM.entityData.entities.length === 0) {
                 this.treeContainer.innerHTML = '<div class="loading-state">No scene data available</div>';
                 return;
@@ -141,7 +140,6 @@
          * Render a single entity node
          */
         renderEntityNode(entity, searchTerm, level) {
-            //console.log("rendering entity node", entity)
             // Check if this node or any children match the search
             if (searchTerm && !this.matchesSearch(entity, searchTerm)) {
                 return null;
@@ -293,12 +291,6 @@
             this.draggedEntityId = entity.id;
             e.dataTransfer.effectAllowed = 'copyMove';
             e.dataTransfer.setData('text/plain', entity.id);
-            
-            // console.log("entity", entity)
-            // let copy = entity.export()
-
-            // // Store the full entity data for inventory
-            // e.dataTransfer.setData('application/json', JSON.stringify(copy));
             
             // Add dragging class
             e.target.classList.add('dragging');

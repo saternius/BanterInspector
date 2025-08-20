@@ -17,7 +17,7 @@ export class InventoryFirebase {
         this.clearFirebaseListeners();
         
         if (!window.networking) {
-            console.log('Firebase not initialized, skipping listeners setup');
+            log('net', 'Firebase not initialized, skipping listeners setup');
             return;
         }
         
@@ -41,7 +41,7 @@ export class InventoryFirebase {
      * Setup Firebase listener for a specific folder
      */
     setupFolderListener(folderName, folder) {
-        console.log("[SETUP FOLDER LISTENER for folder: ", folderName, "]")
+        log("net", "[SETUP FOLDER LISTENER for folder: ", folderName, "]")
         if (!window.networking || !window.networking.getDatabase) return;
         
         try {
@@ -52,7 +52,7 @@ export class InventoryFirebase {
             }else{
                 let userName = SM.scene?.localUser?.name;
                 if(!userName){
-                    console.log("no user name found, waiting for 1 second")
+                    log("net", "no user name found, waiting for 1 second")
                     setTimeout(()=>{
                         this.setupFolderListener(folderName, folder);
                     }, 100);
@@ -90,9 +90,9 @@ export class InventoryFirebase {
                 listeners: { addedListener, removedListener, changedListener }
             });
             
-            console.log('Firebase listeners setup for folder:', firebasePath);
+            log("net", 'Firebase listeners setup for folder:', firebasePath);
         } catch (error) {
-            console.error('Failed to setup folder listener:', error);
+            err("net", 'Failed to setup folder listener:', error);
         }
     }
 
@@ -127,9 +127,9 @@ export class InventoryFirebase {
                 listeners: { addedListener, removedListener, changedListener }
             });
             
-            console.log('Firebase listeners setup for root:', firebasePath);
+            log("net", 'Firebase listeners setup for root:', firebasePath);
         } catch (error) {
-            console.error('Failed to setup root listener:', error);
+            err("net", 'Failed to setup root listener:', error);
         }
     }
 
@@ -165,7 +165,7 @@ export class InventoryFirebase {
                 // Setup listener for the new remote folder
                 this.setupFolderListener(fullFolderName, folder);
                 
-                console.log('Remote folder added:', fullFolderName);
+                log("net", 'Remote folder added:', fullFolderName);
                 this.inventory.ui.render();
             }
         } else if (data.itemType) {
@@ -184,7 +184,7 @@ export class InventoryFirebase {
                 localStorage.setItem(storageKey, JSON.stringify(item));
                 this.inventory.items[itemName] = item;
                 
-                console.log('Remote item added:', itemName);
+                log("inspector", 'Remote item added:', itemName);
                 showNotification(`New item "${itemName}" added from remote`);
                 this.inventory.ui.render();
             }
@@ -222,7 +222,7 @@ export class InventoryFirebase {
                 localStorage.removeItem(storageKey);
                 delete this.inventory.folders[fullFolderName];
                 
-                console.log('Remote folder removed:', fullFolderName);
+                log('inspector', 'Remote folder removed:', fullFolderName);
                 this.inventory.ui.render();
             }
         } else if (data && data.itemType) {
@@ -235,7 +235,7 @@ export class InventoryFirebase {
                 localStorage.removeItem(storageKey);
                 delete this.inventory.items[itemName];
                 
-                console.log('Remote item removed:', itemName);
+                log('inspector', 'Remote item removed:', itemName);
                 showNotification(`Item "${itemName}" removed from remote`);
                 this.inventory.ui.render();
             }
@@ -246,10 +246,10 @@ export class InventoryFirebase {
      * Handle Firebase item changed event
      */
     handleFirebaseItemChanged(snapshot, folderName) {
-        console.log("handleFirebaseItemChanged")
+        log("net", "handleFirebaseItemChanged")
         const key = snapshot.key;
         const data = snapshot.val();
-        console.log("data: ", data)
+        log("net", "data: ", data)
         // Skip folder metadata
         if (key === '_folder') return;
         
@@ -268,7 +268,7 @@ export class InventoryFirebase {
                 localStorage.setItem(storageKey, JSON.stringify(item));
                 this.inventory.items[itemName] = item;
                 
-                console.log('Remote item updated:', itemName);
+                log('inspector', 'Remote item updated:', itemName);
                 
 
 
@@ -294,7 +294,7 @@ export class InventoryFirebase {
 							}
 						}
 					} catch (e) {
-						console.warn('Failed to sync open script editor with remote update:', e);
+						err('inspector', 'Failed to sync open script editor with remote update:', e);
 					}
                 }
 
@@ -319,7 +319,7 @@ export class InventoryFirebase {
             if (listeners.changedListener) ref.off('child_changed');
         });
         this.firebaseListeners.clear();
-        console.log('Firebase listeners cleared');
+        log('net', 'Firebase listeners cleared');
     }
 
     /**
@@ -351,7 +351,7 @@ export class InventoryFirebase {
             await navigator.clipboard.writeText(firebasePath);
             showNotification('Firebase path copied to clipboard!');
         } catch (error) {
-            console.error('Failed to copy to clipboard:', error);
+            err('net', 'Failed to copy to clipboard:', error);
             showNotification('Failed to copy path');
         }
     }
@@ -382,7 +382,7 @@ export class InventoryFirebase {
         if (!isRemote) return;
 
         if (!window.networking) {
-            console.warn('Networking not initialized, skipping sync');
+            err('net', 'Networking not initialized, skipping sync');
             return;
         }
 
@@ -400,9 +400,9 @@ export class InventoryFirebase {
             
             // Save to Firebase
             await window.networking.setData(firebasePath, inventoryItem);
-            console.log('Item synced to Firebase:', firebasePath);
+            log('net', 'Item synced to Firebase:', firebasePath);
         } catch (error) {
-            console.error('Failed to sync item to Firebase:', error);
+            err('net', 'Failed to sync item to Firebase:', error);
         }
     }
 

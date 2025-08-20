@@ -43,9 +43,6 @@ export class LifecycleManager {
      */
     unregisterMonoBehavior(monoBehavior) {
         if(!monoBehavior) return;
-        //console.log("[LIFECYCLE] unregistering monoBehavior =>", monoBehavior.id)
-
-       
         // Call onDestroy before removing
         this.monoBehaviors.delete(monoBehavior.id);
         // Stop the lifecycle if no components remain

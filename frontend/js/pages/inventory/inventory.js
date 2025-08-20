@@ -3,7 +3,6 @@ const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChan
 const { InventoryFirebase } = await import(`${window.repoUrl}/pages/inventory/inventory-firebase.js`);
 const { InventoryUI } = await import(`${window.repoUrl}/pages/inventory/inventory-ui.js`);
 const { InventoryFileHandler } = await import(`${window.repoUrl}/pages/inventory/inventory-file-handler.js`);
-console.log('firebaseInventory', InventoryFirebase)
 
 /**
  * Main Inventory class - orchestrates inventory functionality through specialized modules
@@ -190,16 +189,15 @@ export class Inventory {
     async loadByCMD(itemName) {
         let data = localStorage.getItem("inventory_" + itemName);
         if (!data) {
-            console.log("NO ITEM NAMED: ", itemName);
+            log("inventory", "NO ITEM NAMED: ", itemName);
             return;
         }
         let item = JSON.parse(data);
         if (!item.history || !item.history.length) {
-            console.log("Item has no history");
+            log("inventory", "Item has no history");
             return;
         }
         
-        console.log(item.history, item.history.length);
         for (let i = 0; i < item.history.length; i++) {
             let h = item.history[i];
             let command = "";
@@ -214,7 +212,6 @@ export class Inventory {
                 }
             });
             command = command.trim();
-            console.log(i, command);
             if (window.RunCommand) {
                 await window.RunCommand(command);
             }

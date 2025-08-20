@@ -72,7 +72,7 @@ export class BanterAttachedObjectComponent extends EntityComponent {
         value = parseBest(value);
 
         if(property === "uid" && value === "" && this.properties.uid !== ""){
-            console.log("Detaching Object", this.properties)
+            log("scene", "Detaching Object", this.properties)
             SM.scene.LegacyAttachObject(this._entity._bs, null, null);
         }
 
@@ -100,11 +100,11 @@ export class BanterAttachedObjectComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterAttachedObject:`, e);
+            err("scene", `Failed to update ${property} on BanterAttachedObject:`, e);
         }
         
         if(this.properties.uid){
-            console.log("Attaching Object", this._entity._bs, this.properties.uid, this.properties.attachmentPoint)
+            log("scene", "Attaching Object", this._entity._bs, this.properties.uid, this.properties.attachmentPoint)
             SM.scene.LegacyAttachObject(this._entity._bs, this.properties.uid, this.properties.attachmentPoint);
         }
     }

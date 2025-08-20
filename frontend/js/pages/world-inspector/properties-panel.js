@@ -82,7 +82,6 @@
          * Render properties for a entity
          */
         render(entityId = null) {
-            console.log("Rendering properties for entity:", entityId);
             if (!this.propertiesContent) return;
             
             const entity = entityId ? SM.getEntityById(entityId) : null;
@@ -844,7 +843,6 @@
                 editButton.innerHTML = '📝 Edit Script';
                 
                 editButton.onclick = () => {
-                    console.log("editButton clicked =>", component.properties.file)
                     const scriptItem = window.inventory.items[component.properties.file];
                     if (scriptItem && scriptItem.itemType === 'script') {
                         const event = new CustomEvent('open-script-editor', {
@@ -921,7 +919,6 @@
             
             const valueContainer = document.createElement('div');
             valueContainer.className = 'property-value';
-            //console.log("varValue =>", varValue)
             // Determine type and render appropriate input
             if (varValue.type === 'boolean') {
                 const input = document.createElement('input');
