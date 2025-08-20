@@ -37,7 +37,6 @@ export class ScriptEditor {
         }, 0);
         
         this.pageSwitchHandler = (e) => {
-            //console.log("page-switched", e.detail.pageId);
             if(e.detail.pageId === this.pageId){
                 this.renderFooter();
                 if (this.codemirror) {
@@ -50,7 +49,6 @@ export class ScriptEditor {
 
     renderFooter(){
         this.findMonoBehaviorEntities();
-        //console.log("Rendering footer...");
         const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
             footer.innerHTML = `
@@ -440,7 +438,6 @@ export class ScriptEditor {
     }
 
     run(action){
-        console.log("running=>", action);
         let components = Array.from(this.selectedEntities)
         .map(entityId => this.monoBehaviorEntities.get(entityId))
 
@@ -489,7 +486,7 @@ export class ScriptEditor {
     }
     
     log(type, message, entityName) {
-        console.log("logging=>", type, message, entityName);
+        log("mono", type, message, entityName);
         const consoleContent = document.getElementById(`consoleContent-${this.pageId}`);
         if (!consoleContent) return;
         

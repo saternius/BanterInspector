@@ -47,7 +47,7 @@ export class Networking {
     }
     
     initFirebase() {
-        console.log("INITIALIZING FIREBASE")
+        log("init", "initializing firebase")
         // Firebase configuration
         const firebaseConfig = window.FIREBASE_CONFIG || {
             apiKey: "AIzaSyBrWGOkEJ6YjFmhXqvujbtDjWII3udLpWs",
@@ -66,9 +66,6 @@ export class Networking {
                 firebase.initializeApp(firebaseConfig);
                 this.db = firebase.database();
                 this.storage = firebase.storage();
-                
-                console.log('Firebase Realtime Database initialized');
-                console.log('Firebase Storage initialized');
                 
                 // Test the connection
                 //this.testConnection();
@@ -89,7 +86,7 @@ export class Networking {
     
     async testConnection() {
         try {
-            console.log('Testing Firebase Realtime Database connection...');
+            log('net', 'Testing Firebase Realtime Database connection...');
             
             // Try a simple write operation
             const testRef = this.db.ref('test/connection-test');
@@ -99,109 +96,106 @@ export class Networking {
                 message: 'Realtime Database connection test'
             });
             
-            console.log('Realtime Database write successful');
+            log('net', 'Realtime Database write successful');
             
             // Try to read it back
             const snapshot = await testRef.once('value');
-            console.log('Realtime Database read successful:', snapshot.val());
+            log('net', 'Realtime Database read successful:', snapshot.val());
             
-            // Clean up - commented out to preserve test data
-            // await testRef.remove();
-            // console.log('Realtime Database delete successful');
-            
-            console.log('✅ Firebase Realtime Database is working correctly!');
+            // Clean up - commented out to preserve test data  
+            log('net', '✅ Firebase Realtime Database is working correctly!');
             
         } catch (error) {
-            console.error('Realtime Database connection test failed:', error);
+            err('net', 'Realtime Database connection test failed:', error);
         }
     }
     
     async testStorageConnection() {
-        console.log('=== Starting Firebase Storage Test ===');
+        log('net', '=== Starting Firebase Storage Test ===');
         
         try {
             // Step 1: Check if storage is initialized
-            console.log('Step 1: Checking storage initialization...');
+            log('net', 'Step 1: Checking storage initialization...');
             const storage = this.getStorage();
             if (!storage) {
-                console.error('✗ Storage not initialized');
+                err('net', '✗ Storage not initialized');
                 return;
             }
-            console.log('✓ Storage initialized:', storage);
+            log('net', '✓ Storage initialized:', storage);
             
             // Step 2: Check storage bucket
-            console.log('Step 2: Checking storage bucket...');
+            log('net', 'Step 2: Checking storage bucket...');
             const storageRef = storage.ref();
-            console.log('Storage root reference:', storageRef);
-            console.log('Storage bucket:', storageRef.bucket);
+            log('net', 'Storage root reference:', storageRef);
+            log('net', 'Storage bucket:', storageRef.bucket);
             
             // Step 3: Try to create a reference
-            console.log('Step 3: Creating test reference...');
+            log('net', 'Step 3: Creating test reference...');
             const testPath = `test/storage-test-${Date.now()}.txt`;
             const testRef = storage.ref(testPath);
-            console.log('Test reference created:', testRef.fullPath);
+            log('net', 'Test reference created:', testRef.fullPath);
             
             // Step 4: Try to upload a simple text file
-            console.log('Step 4: Attempting to upload test text...');
+            log('net', 'Step 4: Attempting to upload test text...');
             const testContent = 'Firebase Storage test content';
             const blob = new Blob([testContent], { type: 'text/plain' });
             
             try {
                 const snapshot = await testRef.put(blob);
-                console.log('✓ Upload successful:', snapshot);
-                console.log('Upload state:', snapshot.state);
-                console.log('Bytes transferred:', snapshot.bytesTransferred);
+                log('net', '✓ Upload successful:', snapshot);
+                log('net', 'Upload state:', snapshot.state);
+                log('net', 'Bytes transferred:', snapshot.bytesTransferred);
                 
                 // Step 5: Try to get download URL
-                console.log('Step 5: Getting download URL...');
+                log('net', 'Step 5: Getting download URL...');
                 const downloadURL = await snapshot.ref.getDownloadURL();
-                console.log('✓ Download URL obtained:', downloadURL);
-                
+                log('net', '✓ Download URL obtained:', downloadURL);
+
                 // Step 6: Try to delete the test file
-                console.log('Step 6: Cleaning up test file...');
+                log('net', 'Step 6: Cleaning up test file...');
                 await testRef.delete();
-                console.log('✓ Test file deleted successfully');
+                log('net', '✓ Test file deleted successfully');
                 
-                console.log('=== Firebase Storage Test PASSED ===');
+                log('net', '=== Firebase Storage Test PASSED ===');
                 return true;
                 
             } catch (uploadError) {
-                console.error('✗ Upload/Download failed:', uploadError);
-                console.error('Error code:', uploadError.code);
-                console.error('Error message:', uploadError.message);
+                err('net', '✗ Upload/Download failed:', uploadError);
+                err('net', 'Error code:', uploadError.code);
+                err('net', 'Error message:', uploadError.message);
                 if (uploadError.serverResponse) {
-                    console.error('Server response:', uploadError.serverResponse);
+                    err('net', 'Server response:', uploadError.serverResponse);
                 }
                 
                 // Check common issues
                 if (uploadError.code === 'storage/unauthorized') {
-                    console.error('Issue: Storage security rules may be blocking uploads');
-                    console.error('Solution: Check Firebase Console > Storage > Rules');
+                    err('net', 'Issue: Storage security rules may be blocking uploads');
+                    err('net', 'Solution: Check Firebase Console > Storage > Rules');
                 } else if (uploadError.code === 'storage/unknown') {
-                    console.error('Issue: Unknown storage error - check CORS and bucket configuration');
-                    console.error('Check: Firebase Console > Storage > Files tab to ensure bucket exists');
+                    err('net', 'Issue: Unknown storage error - check CORS and bucket configuration');
+                    err('net', 'Check: Firebase Console > Storage > Files tab to ensure bucket exists');
                 }
             }
             
         } catch (error) {
-            console.error('✗ Storage test failed:', error);
-            console.error('Full error object:', error);
+            err('net', '✗ Storage test failed:', error);
+            err('net', 'Full error object:', error);
             
             // Additional debugging info
-            if (error.code) console.error('Error code:', error.code);
-            if (error.message) console.error('Error message:', error.message);
+            if (error.code) err('net', 'Error code:', error.code);
+            if (error.message) err('net', 'Error message:', error.message);
             if (error.serverResponse) {
-                console.error('Server response:', error.serverResponse);
+                err('net', 'Server response:', error.serverResponse);
                 try {
                     const parsed = JSON.parse(error.serverResponse);
-                    console.error('Parsed server response:', parsed);
+                    err('net', 'Parsed server response:', parsed);
                 } catch (e) {
                     // Not JSON
                 }
             }
         }
         
-        console.log('=== Firebase Storage Test FAILED ===');
+        log('net', '=== Firebase Storage Test FAILED ===');
         return false;
     }
 
@@ -233,21 +227,21 @@ export class Networking {
     // Generic Firebase Realtime Database operations
     async addData(path, data) {
         if (!this.db) {
-            console.error('Firebase Database not initialized');
+            err('net', 'Firebase Database not initialized');
             throw new Error('Firebase Database not initialized');
         }
         
         try {
-            console.log(`Adding data to path: ${path}`, data);
+            log('net', `Adding data to path: ${path}`, data);
             const newRef = this.db.ref(path).push();
             await newRef.set({
                 ...data,
                 createdAt: firebase.database.ServerValue.TIMESTAMP
             });
-            console.log('Data added successfully with key:', newRef.key);
+            log('net', 'Data added successfully with key:', newRef.key);
             return { id: newRef.key, ref: newRef };
         } catch (error) {
-            console.error(`Failed to add data to ${path}:`, error);
+            err('net', `Failed to add data to ${path}:`, error);
             throw error;
         }
     }
@@ -348,7 +342,7 @@ export class Networking {
                     }
                 }
             } catch(e) {
-                console.error("Failed to parse component_reordered event:", e);
+                err('net', "Failed to parse component_reordered event:", e);
             }
         }
 
@@ -564,7 +558,6 @@ export class Networking {
 
 
     async sendOneShot(data){
-        //console.log("sending one shot =>", data)
         let now = Date.now();
         let remote_message = `${now}:${SM.myName()}:${data}`
         SM.scene.OneShot(remote_message);
@@ -578,7 +571,7 @@ window.networking = networking;
 
 // Debug function for testing Firebase Realtime Database
 window.testFirebaseDB = async () => {
-    console.log('Testing Firebase Realtime Database...');
+    log('net', 'Testing Firebase Realtime Database...');
     try {
         const db = networking.getDatabase();
         
@@ -593,37 +586,37 @@ window.testFirebaseDB = async () => {
             nested: { key: 'value' }
         };
         
-        console.log('Adding test data...');
+        log('net', 'Adding test data...');
         const newRef = db.ref('test').push();
         await newRef.set(testData);
-        console.log('✅ Data added with key:', newRef.key);
+        log('net', '✅ Data added with key:', newRef.key);
         
         // Test 2: Read it back
-        console.log('Reading data...');
+        log('net', 'Reading data...');
         const snapshot = await newRef.once('value');
-        console.log('✅ Retrieved data:', snapshot.val());
+        log('net', '✅ Retrieved data:', snapshot.val());
         
         // Test 3: Update it
-        console.log('Updating data...');
+        log('net', 'Updating data...');
         await newRef.update({
             updated: true,
             updateTime: firebase.database.ServerValue.TIMESTAMP
         });
-        console.log('✅ Data updated');
+        log('net', '✅ Data updated');
         
         // Test 4: List data
-        console.log('Listing data...');
+        log('net', 'Listing data...');
         const listSnapshot = await db.ref('test').limitToFirst(10).once('value');
-        console.log('✅ Listed data:', listSnapshot.val());
+        log('net', '✅ Listed data:', listSnapshot.val());
         
         // Test 5: Delete
-        console.log('Deleting data...');
+        log('net', 'Deleting data...');
         await newRef.remove();
-        console.log('✅ Data deleted');
+        log('net', '✅ Data deleted');
         
         return '✅ All Realtime Database tests passed!';
     } catch (error) {
-        console.error('❌ Realtime Database test failed:', error);
+        err('net', '❌ Realtime Database test failed:', error);
         return error;
     }
 };

@@ -37,14 +37,14 @@ export class StatementBlockEditor {
             }
             
             const result = await response.json();
-            console.log("[block] result: ", result)
+            log("inspector", "[block] result: ", result)
             this.blocks = result.blocks || [];
             this.onBlocksChanged(this.blocks);
             
             return this.blocks;
             
         } catch (error) {
-            console.error('Block processing failed:', error);
+            err("inspector", 'Block processing failed:', error);
             throw error;
         } finally {
             this.isProcessing = false;
@@ -468,7 +468,7 @@ export class StatementBlockEditor {
             this.blocks = draft.blocks || [];
             return draft;
         } catch (error) {
-            console.error('Failed to load draft:', error);
+            err("inspector", 'Failed to load draft:', error);
             return null;
         }
     }

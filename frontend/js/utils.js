@@ -555,7 +555,6 @@ export class Logger{
     }
 
     log(tag, ...args){
-        console.log("log", this)
         console.log(`[${tag.toUpperCase()}]: `, ...args);
         if(this.include[tag]){
             appendToConsole(tag, generateId(), args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" "));

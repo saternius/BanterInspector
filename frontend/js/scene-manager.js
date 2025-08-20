@@ -3,7 +3,6 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-console.log("It is 3:00")
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
@@ -146,7 +145,7 @@ console.log("It is 3:00")
 
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
-                    console.error('BS library not available');
+                    err('init', 'BS library not available');
                     return;
                 }
                 this.scene = window.BS.BanterScene.GetInstance();
@@ -154,7 +153,7 @@ console.log("It is 3:00")
                 this.setup = async ()=>{
                     if(this.loaded) return;
                     
-                    console.log("setting up inspector")
+                    log('init', "setting up inspector")
                     if(window.isLocalHost){
                         let lastSpaceState = localStorage.getItem('lastSpaceState');
                         if(lastSpaceState){
@@ -168,18 +167,18 @@ console.log("It is 3:00")
                     }
 
                     if(!this.scene.spaceState.public.hostUser){
-                        console.log("No host user found, setting to local user =>", this.myName())
+                        log('init', "No host user found, setting to local user =>", this.myName())
                         networking.setSpaceProperty("hostUser", this.myName(), false);
                     }else{
                         let hostHere = Object.values(this.scene.users).map(x=>`${x.name}_${x.id.slice(0,3)}`).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
-                            console.log("Host user not here, setting to local user =>", this.myName())
+                            log('init', "Host user not here, setting to local user =>", this.myName())
                             networking.setSpaceProperty("hostUser", this.myName(), false);
                         }
                     }
 
                     try {
-                        console.log('Gathering scene hierarchy...');
+                        log('init', 'Gathering scene hierarchy...');
                         let hierarchy = null;
                         if(!this.props.hierarchy){
                             // Update loading screen progress for hierarchy gathering
@@ -200,7 +199,7 @@ console.log("It is 3:00")
                                 window.loadingScreen.updateStage('hierarchy', 100, 'Using cached hierarchy');
                             }
                         }
-                        console.log("hierarchy =>", hierarchy)
+                        log('init', "hierarchy =>", hierarchy)
                         
                         // Start entity generation
                         if (window.loadingScreen) {
@@ -208,7 +207,7 @@ console.log("It is 3:00")
                         }
                         await this.loadHierarchy(hierarchy);
                     } catch (error) {
-                        console.error('Error gathering scene hierarchy:', error);
+                        err('init', 'Error gathering scene hierarchy:', error);
                     }
                     this.loaded = true;
                     inspector.hierarchyPanel.render()
@@ -217,7 +216,7 @@ console.log("It is 3:00")
                     }, 100)
                 }
             } catch (error) {
-                console.error('Failed to connect to Unity:', error);
+                err('init', 'Failed to connect to Unity:', error);
             }
             window.scene = this.scene
         }
@@ -267,14 +266,13 @@ console.log("It is 3:00")
         }
 
         async saveScene(){
-            //console.log("Saving scene...")
             await this.updateHierarchy(false);
             localStorage.setItem('lastProps', JSON.stringify(this.props));
         }
 
         // This gathers the hierarchy of the scene via Unity GameObjects
         async gatherSceneHierarchy(){
-            console.log("gathering SceneHierarchy")
+            log('init', "gathering SceneHierarchy")
             
             // Update progress: finding root
             if (window.loadingScreen) {
@@ -283,7 +281,7 @@ console.log("It is 3:00")
             
             let rootObj = await this.scene.Find("Root");
             if(!rootObj){
-                console.log("no root object found")
+                log('init', "no root object found")
                 return null;
             }
             
@@ -330,7 +328,7 @@ console.log("It is 3:00")
             }
 
             let rootEntity = await createEntityHierarchy(rootObj, null);
-            console.log("rootEntity =>", rootEntity)
+            log('init', "rootEntity =>", rootEntity)
             return rootEntity;
         }
 
@@ -367,7 +365,7 @@ console.log("It is 3:00")
 
         // Loads all the Entities on initialization
         async loadHierarchy(hierarchy){
-            console.log("loading hierarchy =>", hierarchy)
+            log('init', "loading hierarchy =>", hierarchy)
             if(!hierarchy){ return null}
             this.props.hierarchy = hierarchy;
             
@@ -424,17 +422,14 @@ console.log("It is 3:00")
                     let component_ref = h.components[ref_idx]
                     ref_idx++;
                     if(!component_ref){
-                        console.log("no component ref found for", component, h.components, ref_idx)
+                        log('init', "no component ref found for", component, h.components, ref_idx)
                         continue;
                     }
 
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        //console.log("component =>", component)
                         let componentClass = componentBSTypeMap[component.type]
-                        //console.log("componentClass =>", componentClass)
                         let props = this.getHistoricalProps(component_ref).props
                         let entityComponent = await new componentClass().init(entity, component, props);
-                        //console.log("entityComponent =>", entityComponent)
                         entityComponent.setId(component_ref);
                         entity.components.push(entityComponent);
                     }
@@ -442,9 +437,7 @@ console.log("It is 3:00")
 
                 //Add any MonoBehaviors
                 h.components.forEach(async component_ref=>{
-                    //console.log("component_ref =>", component_ref)
                     if(component_ref.startsWith("MonoBehavior")){
-                        //console.log("MonoBehavior Spotted =>", component_ref)
                         let props = this.getHistoricalProps(component_ref).props
                         props.id = component_ref;
                         let entityComponent = await new MonoBehaviorComponent().init(entity, null, props)
@@ -475,7 +468,6 @@ console.log("It is 3:00")
 
         //Creates a entity from the inventory schema
         async _loadEntity(entityData, parentId){
-            //console.log("loading entity =>", entityData)
             let loadSubEntity = async (item, parentId)=>{ 
                 const newEntity = await new Entity().init({
                     name: item.name,
@@ -486,7 +478,6 @@ console.log("It is 3:00")
                 
                 if(item.components){
                     for(let component of item.components){
-                        //console.log("adding component =>", component)
                         if(component.properties){
                             component.properties.id = component.id;
                         }else{
@@ -500,7 +491,6 @@ console.log("It is 3:00")
 
                 if(item.children){
                     for(let i=0; i<item.children.length; i++){
-                        //console.log("adding child =>", item.children[i])
                         let child = item.children[i];
                         let childEntity = await loadSubEntity(child, newEntity.id);
                         await childEntity._setParent(newEntity);
@@ -527,10 +517,8 @@ console.log("It is 3:00")
             let space_keys = Object.keys(this.props)
             let props = {}
             space_keys.forEach(key=>{
-                // console.log("key =>", key, component_ref)
                 if(key.startsWith(`__${component_ref}/`)){
                     let path = key.split(":")[0].split("/")
-                    //console.log("path =>", path)
                     let prop = path[path.length-1]
                     props[prop] = this.props[key]
                 }
@@ -545,7 +533,7 @@ console.log("It is 3:00")
         // Creates and hydrates a entity using the SpaceProperties
         async loadHistoricalEntity(hierarchy, parentId){
             
-            console.log("loading historical entity =>", hierarchy)
+            log('init', "loading historical entity =>", hierarchy)
             const entity = await new Entity().init({
                 name: hierarchy.name,
                 parentId: parentId,
@@ -555,7 +543,7 @@ console.log("It is 3:00")
             for(let i=0; i<hierarchy.components.length; i++){
                 let component_ref = hierarchy.components[i]
                 let hist = this.getHistoricalProps(component_ref)
-                console.log(`historical props for [${component_ref}] =>`, hist)
+                log('init', `historical props for [${component_ref}] =>`, hist)
                 let componentClass = componentTypeMap[hist.type]
                 let props = hist.props
                 props.id = component_ref;
@@ -649,7 +637,7 @@ console.log("It is 3:00")
 
         async _addNewEntity(entityName, parentId = null) {
             if(!this.scene || !window.BS){
-                console.log("NO SCENE AVAILABLE")
+                log('init', "NO SCENE AVAILABLE")
                 return null;
             }
 
@@ -659,7 +647,7 @@ console.log("It is 3:00")
 
             let parentEntity = this.getEntityById(parentId);
             if(!parentEntity){
-                console.log("no parent entity found")
+                log("scene","no parent entity found")
                 return null;
             }
           
@@ -669,7 +657,7 @@ console.log("It is 3:00")
                 name: entityName
             });
 
-            console.log("NEW SLOT:", newEntity)
+            log("scene", "NEW SLOT:", newEntity)
 
             function stringTo8DigitNumber(str) {
                 let hash = 0x811c9dc5; // FNV offset basis
@@ -698,7 +686,7 @@ console.log("It is 3:00")
             if (uniqueComponents.includes(componentType)) {
                 const exists = entity.components.some(c => c.type === componentType);
                 if (exists) {
-                    console.warn(`A ${componentType} component already exists on this entity`);
+                    log("scene", `A ${componentType} component already exists on this entity`);
                     return;
                 }
             }
@@ -707,7 +695,7 @@ console.log("It is 3:00")
             const ComponentClass = componentTypeMap[componentType];
             
             if (!ComponentClass) {
-                console.error(`Component class not found for type: ${componentType}`);
+                log("scene", `Component class not found for type: ${componentType}`);
                 return;
             }
             

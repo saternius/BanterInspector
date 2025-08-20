@@ -69,7 +69,6 @@ export class BanterGeometryComponent extends EntityComponent {
 
     _set(property, value) {
         if (!this._bs) return;
-        //console.log("updating geometry =>", property, value)
 
         value = parseBest(value);
         this.properties[property] = value;

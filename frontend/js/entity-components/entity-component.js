@@ -8,7 +8,6 @@ export class EntityComponent{
     }
 
     async init(entity, sceneComponent, properties){
-        //console.log("init component =>", properties)
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._entity = entity;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
@@ -60,7 +59,6 @@ export class EntityComponent{
     
 
     async _setMany(properties){
-        //console.log(`(${this._entity.name})[${this.type}] setMany`, properties)
         for(let property in properties){
             await this._set(property, properties[property]);
         }
@@ -86,7 +84,6 @@ export class EntityComponent{
         if(this._bs){
             this._bs.Destroy();
         }
-        //console.log("deleting component =>", this.id)
         this._entity.components.splice(this._entity.components.indexOf(this), 1);
         delete SM.entityData.componentMap[this.id];
         

@@ -29,7 +29,7 @@ export class Feedback {
         this.setupBlockEditor();
         
         window.addEventListener('page-switched', (e)=>{
-            console.log("page-switched", e.detail.pageId)
+            log("inspector", "page-switched", e.detail.pageId)
             if(e.detail.pageId === 'feedback'){
                 this.loadAllTickets();
             }
@@ -75,7 +75,7 @@ export class Feedback {
         this.blockEditorContainer = document.getElementById('blockEditorContainer');
         
         if (!this.blockEditorContainer) {
-            console.warn('Block editor container not found in DOM');
+            log("inspector", 'Block editor container not found in DOM');
             return;
         }
         
@@ -136,7 +136,7 @@ export class Feedback {
         if (this.micInited) return;
         
         try {
-            console.log("[mic] initializing..")
+            log("inspector", "[mic] initializing..")
             // You'll need to provide your Azure subscription key and region
             if (!this.key) {
                 this.showSpeechStatus('Speech recognition not configured', 'error');
@@ -153,7 +153,7 @@ export class Feedback {
                 const recognizingText = e.result.text;
                 const delta = recognizingText.length - this.rlen;
                 const newText = recognizingText.slice(this.rlen);
-                console.log("[mic] recognizing..", newText)
+                log("inspector", "[mic] recognizing..", newText)
                 this.speechBuffer += newText;
                 this.updateTextarea();
                 this.rlen = recognizingText.length;
@@ -167,14 +167,14 @@ export class Feedback {
             
             this.speechRecognizer.recognized = (s, e) => {
                 if (e.result.reason === window.SpeechSDK.ResultReason.RecognizedSpeech) {
-                    console.log("[mic] recognized: ", e.result.text)
+                    log("inspector", "[mic] recognized: ", e.result.text)
                     this.completeRecognition();
                     this.rlen = 0;
                 }
             };
             
             this.speechRecognizer.canceled = (s, e) => {
-                console.error('Speech recognition canceled:', e.reason);
+                err("inspector", 'Speech recognition canceled:', e.reason);
                 if (e.reason === window.SpeechSDK.CancellationReason.Error) {
                     this.showSpeechStatus('Speech recognition error: ' + e.errorDetails, 'error');
                 }
@@ -182,14 +182,14 @@ export class Feedback {
             };
             
             this.speechRecognizer.sessionStopped = (s, e) => {
-                console.log("[mic] session stopped")
+                log("inspector", "[mic] session stopped")
                 this.stopRecording();
             };
             this.micInited = true;
             this.toggleRecording();
             
         } catch (error) {
-            console.error('Failed to initialize speech recognition:', error);
+            err("inspector", 'Failed to initialize speech recognition:', error);
             this.showSpeechStatus('Failed to initialize microphone', 'error');
         }
     }
@@ -222,7 +222,7 @@ export class Feedback {
                 this.animateRecording();
             },
             (error) => {
-                console.error('Failed to start recording:', error);
+                err("inspector", 'Failed to start recording:', error);
                 this.showSpeechStatus('Failed to start recording', 'error');
             }
         );
@@ -238,7 +238,7 @@ export class Feedback {
                 micButton.classList.remove('recording');
                 this.hideSpeechStatus();
                 clearTimeout(this.timeoutId);
-                console.log("[mic] stopped recording")
+                log("inspector", "[mic] stopped recording")
                 
                 // Update button icon back to "Add More" if in block mode
                 if (this.blockEditorContainer && this.blockEditorContainer.style.display !== 'none') {
@@ -268,7 +268,7 @@ export class Feedback {
                 }
             },
             (error) => {
-                console.error('Failed to stop recording:', error);
+                err("inspector", 'Failed to stop recording:', error);
             }
         );
     }
@@ -315,7 +315,7 @@ export class Feedback {
     }
     
     async processTranscriptWithBlocks(transcript) {
-        console.log("[block] processing transcript..", transcript)
+        log("inspector", "[block] processing transcript..", transcript)
         try {
             this.showProcessingUI();
             const blocks = await this.statementBlockEditor.processTranscript(transcript);
@@ -328,14 +328,14 @@ export class Feedback {
                 this.showFallbackOption(transcript);
             }
         } catch (error) {
-            console.error('Block processing failed:', error);
+                err("inspector", 'Block processing failed:', error);
             this.hideProcessingUI();
             this.showFallbackOption(transcript);
         }
     }
     
     async processAdditionalTranscript(transcript) {
-        console.log("[block] processing additional transcript..", transcript)
+        log("inspector", "[block] processing additional transcript..", transcript)
         try {
             this.showProcessingUI();
             // Get existing blocks to send as context
@@ -355,7 +355,7 @@ export class Feedback {
                 }
             }
         } catch (error) {
-            console.error('Failed to add additional content:', error);
+            err("inspector", 'Failed to add additional content:', error);
             this.hideProcessingUI();
             this.showStatus('Failed to process additional content', 'error');
         }
@@ -720,7 +720,7 @@ export class Feedback {
     
     
     async saveFeedbackToFirebase(feedback) {
-        console.log("saving feedback to firebase =>", feedback)
+        log("net","saving feedback to firebase =>", feedback)
         try {
             // Get networking instance to access Firebase
             const networking = window.networking;
@@ -736,9 +736,9 @@ export class Feedback {
                 createdAt: firebase.database.ServerValue.TIMESTAMP
             });
             
-            console.log('Feedback saved to Firebase:', `feedback/tickets/${feedback.ticketId}`);
+            log("net", 'Feedback saved to Firebase:', `feedback/tickets/${feedback.ticketId}`);
         } catch (error) {
-            console.error('Error saving to Firebase:', error);
+            err("net", 'Error saving to Firebase:', error);
             // Don't throw - we'll still save locally
         }
     }
@@ -760,7 +760,7 @@ export class Feedback {
             return null;
             
         } catch (error) {
-            console.error('Error fetching feedback:', error);
+            err("net", 'Error fetching feedback:', error);
             return null;
         }
     }
@@ -842,7 +842,7 @@ export class Feedback {
                 this.showTicketResult('Ticket not found. Please check the ID and try again.', 'error');
             }
         } catch (error) {
-            console.error('Error looking up ticket:', error);
+            err("net", 'Error looking up ticket:', error);
             this.showTicketResult('Failed to lookup ticket. Please try again later.', 'error');
         }
     }
@@ -916,7 +916,7 @@ export class Feedback {
             this.displayTickets(allTickets);
             
         } catch (error) {
-            console.error('Error loading tickets:', error);
+            err("net", 'Error loading tickets:', error);
             ticketsList.innerHTML = '<div class="error-loading">Failed to load tickets</div>';
         }
     }
@@ -1009,7 +1009,7 @@ export class Feedback {
                 }
             }
         } catch (error) {
-            console.error('Error fetching latest ticket data:', error);
+            err("net", 'Error fetching latest ticket data:', error);
         }
         
         this.currentTicket = ticket;
@@ -1144,7 +1144,7 @@ export class Feedback {
             commentsList.innerHTML = commentsHtml;
             
         } catch (error) {
-            console.error('Error loading comments:', error);
+            err("net", 'Error loading comments:', error);
             commentsList.innerHTML = '<div class="error-loading">Failed to load comments</div>';
         }
     }
@@ -1199,7 +1199,7 @@ export class Feedback {
             this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
             
         } catch (error) {
-            console.error('Error adding comment:', error);
+            err("net", 'Error adding comment:', error);
             alert('Failed to add comment. Please try again.');
         }
     }

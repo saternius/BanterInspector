@@ -90,7 +90,7 @@ export class LoadingScreen {
         if (!this.element) return;
         
         const totalTime = Date.now() - this.startTime;
-        console.log(`Total load time: ${(totalTime / 1000).toFixed(2)}s`);
+        log("init", `Total load time: ${(totalTime / 1000).toFixed(2)}s`);
         
         // Animate out
         this.element.classList.add('hiding');
@@ -113,7 +113,7 @@ export class LoadingScreen {
     updateStage(stageId, subProgress = 0, subText = '') {
         const stageIndex = this.stages.findIndex(s => s.id === stageId);
         if (stageIndex === -1) {
-            console.warn(`Unknown loading stage: ${stageId}`);
+            log("init", `Unknown loading stage: ${stageId}`);
             return;
         }
         
@@ -121,7 +121,7 @@ export class LoadingScreen {
         if (stageIndex !== this.currentStageIndex) {
             if (this.currentStageIndex >= 0) {
                 const stageDuration = Date.now() - this.stageStartTime;
-                console.log(`Stage '${this.stages[this.currentStageIndex].id}' completed in ${(stageDuration / 1000).toFixed(2)}s`);
+                log("init", `Stage '${this.stages[this.currentStageIndex].id}' completed in ${(stageDuration / 1000).toFixed(2)}s`);
             }
             this.stageStartTime = Date.now();
             this.currentStageIndex = stageIndex;
