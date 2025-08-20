@@ -144,12 +144,12 @@ export class InventoryUI {
         const sortDirectionBtn = inventoryContainer.querySelector('#sortDirectionBtn');
         
         if (uploadBtn && fileInput) {
-            uploadBtn.addEventListener('click', () => fileInput.click());
+            uploadBtn.addEventListener('mousedown', () => fileInput.click());
             fileInput.addEventListener('change', (e) => this.inventory.fileHandler.handleFileUpload(e));
         }
 
         if (newFolderBtn) {
-            newFolderBtn.addEventListener('click', () => this.createNewFolder());
+            newFolderBtn.addEventListener('mousedown', () => this.createNewFolder());
         }
         
         if (sortDropdown) {
@@ -160,7 +160,7 @@ export class InventoryUI {
         }
         
         if (sortDirectionBtn) {
-            sortDirectionBtn.addEventListener('click', () => {
+            sortDirectionBtn.addEventListener('mousedown', () => {
                 this.inventory.sortDirection = this.inventory.sortDirection === 'asc' ? 'desc' : 'asc';
                 this.render();
             });
@@ -185,7 +185,7 @@ export class InventoryUI {
         }
         
         if (sortDirectionBtn) {
-            sortDirectionBtn.addEventListener('click', () => {
+            sortDirectionBtn.addEventListener('mousedown', () => {
                 this.inventory.sortDirection = this.inventory.sortDirection === 'asc' ? 'desc' : 'asc';
                 this.render();
             });
@@ -193,7 +193,7 @@ export class InventoryUI {
         
         // Breadcrumb navigation
         inventoryContainer.querySelectorAll('.breadcrumb-item').forEach(item => {
-            item.addEventListener('click', () => {
+            item.addEventListener('mousedown', () => {
                 const folder = item.dataset.folder;
                 this.inventory.navigateToFolder(folder);
             });
@@ -203,7 +203,7 @@ export class InventoryUI {
         
         // Add event listeners for inventory items
         inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
-            item.addEventListener('click', (e) => {
+            item.addEventListener('mousedown', (e) => {
                 if (!e.target.closest('.remove-item-btn') && !e.target.closest('.action-btn')) {
                     this.inventory.selectItem(item.dataset.itemName);
                 }
@@ -212,7 +212,7 @@ export class InventoryUI {
         
         // Add event listeners for remove buttons
         inventoryContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.inventory.removeItem(itemName);
@@ -221,7 +221,7 @@ export class InventoryUI {
         
         // Add event listeners for remove folder buttons
         inventoryContainer.querySelectorAll('.remove-folder-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const folderName = btn.dataset.folderName;
                 this.inventory.removeFolder(folderName);
@@ -230,7 +230,7 @@ export class InventoryUI {
         
         // Add event listeners for edit script buttons
         inventoryContainer.querySelectorAll('.edit-script-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.inventory.openScriptEditor(itemName);
@@ -239,7 +239,7 @@ export class InventoryUI {
         
         // Add event listeners for add to scene buttons
         inventoryContainer.querySelectorAll('.add-to-scene-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.inventory.loadEntityToSceneByName(itemName);
@@ -248,7 +248,7 @@ export class InventoryUI {
         
         // Add event listeners for view image buttons
         inventoryContainer.querySelectorAll('.view-image-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.inventory.selectItem(itemName);
@@ -257,7 +257,7 @@ export class InventoryUI {
         
         // Add event listeners for copy URL buttons
         inventoryContainer.querySelectorAll('.copy-url-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 const item = this.inventory.items[itemName];
@@ -277,44 +277,44 @@ export class InventoryUI {
         const fileInput = inventoryContainer.querySelector('#fileInput');
         
         if (uploadBtn && fileInput) {
-            uploadBtn.addEventListener('click', () => fileInput.click());
+            uploadBtn.addEventListener('mousedown', () => fileInput.click());
             fileInput.addEventListener('change', (e) => this.inventory.fileHandler.handleFileUpload(e));
         }
         
         // Add event listener for export button
         const exportBtn = inventoryContainer.querySelector('#exportBtn');
         if (exportBtn) {
-            exportBtn.addEventListener('click', () => this.inventory.downloadSelectedItem());
+            exportBtn.addEventListener('mousedown', () => this.inventory.downloadSelectedItem());
         }
         
         // Add event listener for new script button
         const newScriptBtn = inventoryContainer.querySelector('#newScriptBtn');
         if (newScriptBtn) {
-            newScriptBtn.addEventListener('click', () => this.inventory.createNewScript());
+            newScriptBtn.addEventListener('mousedown', () => this.inventory.createNewScript());
         }
         
         // Add event listener for new folder button
         const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
         if (newFolderBtn) {
-            newFolderBtn.addEventListener('click', () => this.inventory.createNewFolder());
+            newFolderBtn.addEventListener('mousedown', () => this.inventory.createNewFolder());
         }
         
         // Add event listener for make remote button
         const makeRemoteBtn = inventoryContainer.querySelector('#makeRemoteBtn');
         if (makeRemoteBtn) {
-            makeRemoteBtn.addEventListener('click', () => this.inventory.firebase.makeRemote());
+            makeRemoteBtn.addEventListener('mousedown', () => this.inventory.firebase.makeRemote());
         }
         
         // Add event listener for copy link button
         const copyLinkBtn = inventoryContainer.querySelector('#copyLinkBtn');
         if (copyLinkBtn) {
-            copyLinkBtn.addEventListener('click', () => this.inventory.firebase.copyFirebaseRef());
+            copyLinkBtn.addEventListener('mousedown', () => this.inventory.firebase.copyFirebaseRef());
         }
         
         // Add event listener for import from Firebase button
         const importFirebaseBtn = inventoryContainer.querySelector('#importFirebaseBtn');
         if (importFirebaseBtn) {
-            importFirebaseBtn.addEventListener('click', () => this.showImportFirebaseModal());
+            importFirebaseBtn.addEventListener('mousedown', () => this.showImportFirebaseModal());
         }
         
         // Add event listeners for folder items
@@ -339,7 +339,7 @@ export class InventoryUI {
             // Only add click handler to the folder header, not the entire folder
             const folderHeader = folder.querySelector('.folder-header');
             if (folderHeader) {
-                folderHeader.addEventListener('click', (e) => {
+                folderHeader.addEventListener('mousedown', (e) => {
                     if (!e.target.closest('.folder-expand-btn') && !e.target.closest('.remove-folder-btn')) {
                         const folderName = folder.dataset.folderName;
                         this.inventory.openFolder(folderName);
@@ -389,7 +389,7 @@ export class InventoryUI {
         
         // Add event listeners for expand/collapse buttons
         inventoryContainer.querySelectorAll('.folder-expand-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const folderName = btn.dataset.folderName;
                 this.inventory.toggleFolderExpansion(folderName);
@@ -657,7 +657,7 @@ export class InventoryUI {
         // Close button
         const closeBtn = this.previewPane.querySelector('.preview-close-btn');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
+            closeBtn.addEventListener('mousedown', () => {
                 this.inventory.selectedItem = null;
                 this.hidePreview();
                 this.render();
@@ -667,7 +667,7 @@ export class InventoryUI {
         // Icon button
         const iconBtn = this.previewPane.querySelector('.preview-icon-btn');
         if (iconBtn) {
-            iconBtn.addEventListener('click', () => {
+            iconBtn.addEventListener('mousedown', () => {
                 this.showEmojiPicker(itemName, item);
             });
         }
@@ -675,7 +675,7 @@ export class InventoryUI {
         // Edit script button
         const editBtn = this.previewPane.querySelector('.edit-script-preview-btn');
         if (editBtn) {
-            editBtn.addEventListener('click', () => {
+            editBtn.addEventListener('mousedown', () => {
                 this.inventory.openScriptEditor(itemName);
             });
         }
@@ -683,7 +683,7 @@ export class InventoryUI {
         // Copy image URL button
         const copyUrlBtn = this.previewPane.querySelector('.copy-image-url-btn');
         if (copyUrlBtn) {
-            copyUrlBtn.addEventListener('click', () => {
+            copyUrlBtn.addEventListener('mousedown', () => {
                 const url = copyUrlBtn.dataset.url;
                 navigator.clipboard.writeText(url).then(() => {
                     this.notify('Image URL copied to clipboard');
@@ -697,7 +697,7 @@ export class InventoryUI {
         // Open image button
         const openImageBtn = this.previewPane.querySelector('.open-image-btn');
         if (openImageBtn) {
-            openImageBtn.addEventListener('click', () => {
+            openImageBtn.addEventListener('mousedown', () => {
                 const url = openImageBtn.dataset.url;
                 window.open(url, '_blank');
             });
@@ -1111,13 +1111,13 @@ export class InventoryUI {
         
         const closeModal = () => modalOverlay.remove();
         
-        modalContent.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
-        modalContent.querySelector('#modalOverwriteBtn').addEventListener('click', () => {
+        modalContent.querySelector('#modalCancelBtn').addEventListener('mousedown', closeModal);
+        modalContent.querySelector('#modalOverwriteBtn').addEventListener('mousedown', () => {
             closeModal();
             onConfirm();
         });
         
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) closeModal();
         });
     }
@@ -1206,18 +1206,18 @@ export class InventoryUI {
             modalOverlay.remove();
         };
         
-        cancelBtn.addEventListener('click', () => {
+        cancelBtn.addEventListener('mousedown', () => {
             closeModal();
             if (onCancel) onCancel();
         });
         
-        confirmBtn.addEventListener('click', () => {
+        confirmBtn.addEventListener('mousedown', () => {
             closeModal();
             if (onConfirm) onConfirm();
         });
         
         // Click outside to close (and cancel)
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
                 if (onCancel) onCancel();
@@ -1258,13 +1258,13 @@ export class InventoryUI {
         
         const closeModal = () => modalOverlay.remove();
         
-        modalContent.querySelector('#modalCancelBtn').addEventListener('click', closeModal);
-        modalContent.querySelector('#modalConfirmBtn').addEventListener('click', () => {
+        modalContent.querySelector('#modalCancelBtn').addEventListener('mousedown', closeModal);
+        modalContent.querySelector('#modalConfirmBtn').addEventListener('mousedown', () => {
             closeModal();
             onConfirm();
         });
         
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) closeModal();
         });
     }
@@ -1428,11 +1428,11 @@ export class InventoryUI {
         };
         
         // Add event listeners
-        modalContent.querySelector('#modalCloseBtn').addEventListener('click', closeModal);
+        modalContent.querySelector('#modalCloseBtn').addEventListener('mousedown', closeModal);
         
         // Emoji button clicks
         modalContent.querySelectorAll('.emoji-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('mousedown', () => {
                 selectEmoji(btn.dataset.emoji);
             });
         });
@@ -1448,7 +1448,7 @@ export class InventoryUI {
             }
         };
         
-        applyBtn.addEventListener('click', applyCustom);
+        applyBtn.addEventListener('mousedown', applyCustom);
         customInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 applyCustom();
@@ -1471,7 +1471,7 @@ export class InventoryUI {
         //     });
         // });
         
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) closeModal();
         });
     }
@@ -1485,9 +1485,9 @@ export class InventoryUI {
         const actionBtn = modalContent.querySelector('#modalCreateBtn, #modalImportBtn, #modalRenameBtn');
         const input = modalContent.querySelector('input');
         
-        if (closeBtn) closeBtn.addEventListener('click', closeModal);
-        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
-        if (actionBtn) actionBtn.addEventListener('click', handleAction);
+        if (closeBtn) closeBtn.addEventListener('mousedown', closeModal);
+        if (cancelBtn) cancelBtn.addEventListener('mousedown', closeModal);
+        if (actionBtn) actionBtn.addEventListener('mousedown', handleAction);
         
         if (input) {
             input.addEventListener('keydown', (e) => {
@@ -1499,7 +1499,7 @@ export class InventoryUI {
             });
         }
         
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) closeModal();
         });
     }

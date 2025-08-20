@@ -244,7 +244,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                         <div class="add-prop-container">
                             <input data-input="propertyPanelAddPublicPropKey" type="text" id="addPublicKey" class="prop-input" placeholder="Key">
                             <input data-input="propertyPanelAddPublicPropValue" type="text" id="addPublicValue" class="prop-input" placeholder="Value">
-                            <button data-panel="propertyPanelAddPublicProp" onclick="addPublicProp()" class="add-prop-button">Add</button>
+                            <button data-panel="propertyPanelAddPublicProp" onmousedown="addPublicProp()" class="add-prop-button">Add</button>
                         </div>
                     </div>
                     
@@ -260,7 +260,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                         <div class="add-prop-container">
                             <input data-input="propertyPanelAddProtectedPropKey" type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
                             <input data-input="propertyPanelAddProtectedPropValue" type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
-                            <button data-panel="propertyPanelAddProtectedProp" onclick="addProtectedProp()" class="add-prop-button">Add</button>
+                            <button data-panel="propertyPanelAddProtectedProp" onmousedown="addProtectedProp()" class="add-prop-button">Add</button>
                         </div>
                     </div>
                 </div>
@@ -664,7 +664,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modalTicketId"></h3>
-                        <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" onclick="closeTicketModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" onmousedown="closeTicketModal()">×</button>
                     </div>
                     <div id="modalTicketContent" class="modal-body"></div>
                 </div>
@@ -675,7 +675,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Edit Feedback</h3>
-                        <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" onclick="feedback.closeEditModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" onmousedown="feedback.closeEditModal()">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="edit-form-group">
@@ -683,8 +683,8 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
                         </div>
                         <div class="modal-actions">
-                            <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" onclick="feedback.saveTicketEdit()">Save Changes</button>
-                            <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" onclick="feedback.closeEditModal()">Cancel</button>
+                            <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" onmousedown="feedback.saveTicketEdit()">Save Changes</button>
+                            <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" onmousedown="feedback.closeEditModal()">Cancel</button>
                         </div>
                     </div>
                 </div>

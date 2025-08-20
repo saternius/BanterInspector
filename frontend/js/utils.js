@@ -492,12 +492,12 @@ export function confirm(message) {
         okBtn.onmouseout = () => okBtn.style.background = '#0066cc';
         
         // Add click handlers
-        cancelBtn.onclick = () => {
+        cancelBtn.onmousedown = () => {
             document.body.removeChild(modal);
             resolve(false);
         };
         
-        okBtn.onclick = () => {
+        okBtn.onmousedown = () => {
             document.body.removeChild(modal);
             resolve(true);
         };

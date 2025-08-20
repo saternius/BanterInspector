@@ -78,6 +78,9 @@
             log("init", "Ngrok URL: " + window.ngrokUrl);
             log("init", "Repo URL: " + window.repoUrl);
             log("init", "Block Service URL: " + window.blockServiceUrl);
+            document.body.style.height = "100vh";
+
+
 
             if (this.initialized) return;
 
@@ -138,7 +141,7 @@
                 // Setup console toggle buttons
                 const toggleButtons = document.querySelectorAll('.console-toggle');
                 toggleButtons.forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    btn.addEventListener('mousedown', () => {
                         const toggleType = btn.dataset.toggle;
                         window.logger.include[toggleType] = !window.logger.include[toggleType];
                         btn.classList.toggle('active', window.logger.include[toggleType]);
@@ -148,14 +151,14 @@
                 // Setup clear console button (moved to console header)
                 const clearConsoleBtn = document.getElementById('clearConsoleBtn2');
                 if (clearConsoleBtn) {
-                    clearConsoleBtn.addEventListener('click', () => {
+                    clearConsoleBtn.addEventListener('mousedown', () => {
                         this.lifecyclePanel.clearConsole();
                     });
                 }
 
                 const refreshPanelBtn = document.getElementById('refreshPanelBtn');
                 if (refreshPanelBtn) {
-                    refreshPanelBtn.addEventListener('click', () => {
+                    refreshPanelBtn.addEventListener('mousedown', () => {
                         this.lifecyclePanel.render();
                     });
                 }
@@ -205,7 +208,7 @@
             const redoBtn = document.getElementById('redoBtn');
             
             if (undoBtn) {
-                undoBtn.addEventListener('click', () => {
+                undoBtn.addEventListener('mousedown', () => {
                     if (changeManager) {
                         changeManager.undo();
                     }
@@ -213,7 +216,7 @@
             }
             
             if (redoBtn) {
-                redoBtn.addEventListener('click', () => {
+                redoBtn.addEventListener('mousedown', () => {
                     if (changeManager) {
                         changeManager.redo();
                     }
@@ -223,7 +226,7 @@
             // Wire up save button
             const saveBtn = document.getElementById('saveBtn');
             if (saveBtn) {
-                saveBtn.addEventListener('click', () => {
+                saveBtn.addEventListener('mousedown', () => {
                     SM.saveScene();
                     this.showNotification('Scene saved', 'success');
                     saveBtn.style.opacity = 0.5;
@@ -550,7 +553,7 @@
                         <h2 style="color: #ff6b6b; margin-bottom: 20px;">Initialization Error</h2>
                         <p style="color: #888; margin-bottom: 10px;">Failed to initialize the Scene Inspector</p>
                         <p style="color: #666; font-size: 14px; max-width: 600px;">${error.message}</p>
-                        <button onclick="location.reload()" style="
+                        <button onmousedown="location.reload()" style="
                             margin-top: 30px;
                             padding: 10px 20px;
                             background: #2a2a2a;

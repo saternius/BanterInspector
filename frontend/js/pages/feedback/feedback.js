@@ -58,7 +58,7 @@ export class Feedback {
     setupTypeButtons() {
         const typeButtons = document.querySelectorAll('.feedback-type-btn');
         typeButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('mousedown', () => {
                 typeButtons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 this.selectedType = btn.getAttribute('data-type');
@@ -68,7 +68,7 @@ export class Feedback {
     
     setupSubmitButton() {
         const submitBtn = document.getElementById('submitFeedbackBtn');
-        submitBtn.addEventListener('click', () => this.submitFeedback());
+        submitBtn.addEventListener('mousedown', () => this.submitFeedback());
     }
     
     setupBlockEditor() {
@@ -102,17 +102,17 @@ export class Feedback {
         const submitRefinementBtn = document.getElementById('submitRefinementBtn');
         
         if (submitOriginalBtn) {
-            submitOriginalBtn.addEventListener('click', () => this.submitOriginal());
+            submitOriginalBtn.addEventListener('mousedown', () => this.submitOriginal());
         }
         
         if (submitRefinementBtn) {
-            submitRefinementBtn.addEventListener('click', () => this.submitRefinement());
+            submitRefinementBtn.addEventListener('mousedown', () => this.submitRefinement());
         }
         
         // Setup clear draft button
         const clearDraftBtn = document.getElementById('clearDraftBtn');
         if (clearDraftBtn) {
-            clearDraftBtn.addEventListener('click', () => this.clearDraft());
+            clearDraftBtn.addEventListener('mousedown', () => this.clearDraft());
         }
     }
     
@@ -129,7 +129,7 @@ export class Feedback {
             }
         };
         
-        micButton.addEventListener('click', this.originalMicHandler);
+        micButton.addEventListener('mousedown', this.originalMicHandler);
     }
     
     initializeMic() {
@@ -463,8 +463,8 @@ export class Feedback {
         const message = `
             <div>Unable to process into blocks. Would you like to:</div>
             <div class="fallback-options">
-                <button onclick="feedback.useOriginalTranscript()">Use Original Text</button>
-                <button onclick="feedback.retryBlockProcessing()">Try Again</button>
+                <button onmousedown="feedback.useOriginalTranscript()">Use Original Text</button>
+                <button onmousedown="feedback.retryBlockProcessing()">Try Again</button>
             </div>
         `;
         this.showStatus(message, 'warning');
@@ -536,11 +536,11 @@ export class Feedback {
             micButton.title = this.recording ? 'Stop recording' : 'Add more content';
             
             // Update click handler for add more functionality
-            micButton.removeEventListener('click', this.originalMicHandler);
-            micButton.addEventListener('click', this.addMoreHandler);
+            micButton.removeEventListener('mousedown', this.originalMicHandler);
+            micButton.addEventListener('mousedown', this.addMoreHandler);
         }
         if(fixWithVoice){
-            fixWithVoice.addEventListener('click', this.addMoreHandler);
+            fixWithVoice.addEventListener('mousedown', this.addMoreHandler);
         }
     }
     
@@ -564,9 +564,9 @@ export class Feedback {
             
             // Restore original click handler
             if (this.addMoreHandler) {
-                micButton.removeEventListener('click', this.addMoreHandler);
+                micButton.removeEventListener('mousedown', this.addMoreHandler);
             }
-            micButton.addEventListener('click', this.originalMicHandler);
+            micButton.addEventListener('mousedown', this.originalMicHandler);
         }
         
         // Clear blocks
@@ -791,7 +791,7 @@ export class Feedback {
         
         if (!lookupBtn || !lookupInput) return;
         
-        lookupBtn.addEventListener('click', () => this.lookupTicket());
+        lookupBtn.addEventListener('mousedown', () => this.lookupTicket());
         lookupInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.lookupTicket();
@@ -867,7 +867,7 @@ export class Feedback {
         const statusFilter = document.getElementById('ticketFilterStatus');
         
         if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => this.loadAllTickets());
+            refreshBtn.addEventListener('mousedown', () => this.loadAllTickets());
         }
         
         if (typeFilter) {
@@ -955,8 +955,8 @@ export class Feedback {
                     </div>
                     ${isOwner ? `
                         <div class="ticket-item-actions">
-                            <button class="ticket-action-btn edit" onclick="feedback.editTicket('${ticket.ticketId}')">Edit</button>
-                            <button class="ticket-action-btn delete" onclick="feedback.deleteTicket('${ticket.ticketId}')">Delete</button>
+                            <button class="ticket-action-btn edit" onmousedown="feedback.editTicket('${ticket.ticketId}')">Edit</button>
+                            <button class="ticket-action-btn delete" onmousedown="feedback.deleteTicket('${ticket.ticketId}')">Delete</button>
                         </div>
                     ` : ''}
                 </div>
@@ -967,7 +967,7 @@ export class Feedback {
         
         // Add click handlers to open ticket details
         ticketsList.querySelectorAll('.ticket-item').forEach(item => {
-            item.addEventListener('click', (e) => {
+            item.addEventListener('mousedown', (e) => {
                 if (!e.target.classList.contains('ticket-action-btn')) {
                     const ticketId = item.getAttribute('data-ticket-id');
                     this.openTicketDetail(ticketId);
@@ -1069,7 +1069,7 @@ export class Feedback {
                             <span class="mic-icon">🎤</span>
                         </button>
                     </div>
-                    <button class="comment-submit-btn" onclick="feedback.addComment()">Post</button>
+                    <button class="comment-submit-btn" onmousedown="feedback.addComment()">Post</button>
                 </div>
             </div>
         `;
@@ -1124,8 +1124,8 @@ export class Feedback {
                             <span class="comment-time">${date.toLocaleString()}${comment.editedAt ? ' (edited)' : ''}</span>
                             ${isAuthor ? `
                                 <div class="comment-actions">
-                                    <button class="comment-edit-btn" onclick="feedback.editComment(${index})">Edit</button>
-                                    <button class="comment-delete-btn" onclick="feedback.deleteComment(${index})">Delete</button>
+                                    <button class="comment-edit-btn" onmousedown="feedback.editComment(${index})">Edit</button>
+                                    <button class="comment-delete-btn" onmousedown="feedback.deleteComment(${index})">Delete</button>
                                 </div>
                             ` : ''}
                         </div>
@@ -1133,8 +1133,8 @@ export class Feedback {
                         <div class="comment-edit-form" id="comment-edit-${index}" style="display: none;">
                             <textarea class="comment-edit-textarea" id="comment-edit-textarea-${index}">${this.escapeHtml(comment.content)}</textarea>
                             <div class="comment-edit-actions">
-                                <button class="comment-save-btn" onclick="feedback.saveEditedComment(${index})">Save</button>
-                                <button class="comment-cancel-btn" onclick="feedback.cancelEditComment(${index})">Cancel</button>
+                                <button class="comment-save-btn" onmousedown="feedback.saveEditedComment(${index})">Save</button>
+                                <button class="comment-cancel-btn" onmousedown="feedback.cancelEditComment(${index})">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -1465,7 +1465,7 @@ export class Feedback {
         // Create a simple recording state for comments
         let isRecordingComment = false;
         
-        commentMicBtn.addEventListener('click', () => {
+        commentMicBtn.addEventListener('mousedown', () => {
             if (!this.micInited) {
                 // Initialize mic if not already done
                 this.initializeMic();

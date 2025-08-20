@@ -76,7 +76,7 @@ export class LoadingScreen {
         const retryBtn = this.element.querySelector('.loading-retry-btn');
         
         if (retryBtn) {
-            retryBtn.addEventListener('click', () => {
+            retryBtn.addEventListener('mousedown', () => {
                 this.clearError();
                 window.location.reload();
             });

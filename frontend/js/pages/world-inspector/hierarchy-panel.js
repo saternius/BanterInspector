@@ -65,7 +65,7 @@
             });
 
             // Add child button
-            this.addChildBtn.addEventListener('click', async () => {
+            this.addChildBtn.addEventListener('mousedown', async () => {
                 const parentId = SM.selectedEntity;
                 
                 // Queue entity addition through change manager
@@ -74,14 +74,14 @@
             });
 
             // Clone button
-            this.cloneBtn.addEventListener('click', async () => {
+            this.cloneBtn.addEventListener('mousedown', async () => {
                 const change = new CloneEntityChange(SM.selectedEntity, { source: 'ui' });
                 changeManager.applyChange(change);
                 SM.selectEntity(change.entityId);
             });
 
             // Delete button
-            this.deleteBtn.addEventListener('click', async () => {
+            this.deleteBtn.addEventListener('mousedown', async () => {
                 if (!SM.selectedEntity) {
                     alert('Please select a entity to delete');
                     return;
@@ -100,7 +100,7 @@
             });
 
             // Save button
-            this.saveBtn.addEventListener('click', async () => {
+            this.saveBtn.addEventListener('mousedown', async () => {
                 if (!SM.selectedEntity) {
                     alert('Please select a entity to save');
                     return;
@@ -180,7 +180,7 @@
             if (hasChildren) {
                 toggle.classList.add('has-children');
                 toggle.textContent = isExpanded ? '▼' : '▶';
-                toggle.onclick = (e) => {
+                toggle.onmousedown = (e) => {
                     e.stopPropagation();
                     this.toggleNode(entity.id);
                 };
@@ -209,7 +209,7 @@
             node.appendChild(content);
             
             // Click handler
-            node.onclick = () => SM.selectEntity(entity.id);
+            node.onmousedown = () => SM.selectEntity(entity.id);
             
             nodeDiv.appendChild(node);
             

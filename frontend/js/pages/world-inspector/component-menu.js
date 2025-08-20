@@ -51,12 +51,12 @@ export class ComponentMenu {
         });
 
         // Close button
-        this.closeBtn?.addEventListener('click', () => {
+        this.closeBtn?.addEventListener('mousedown', () => {
             this.hide();
         });
 
         // Overlay click (close on background click)
-        this.overlay?.addEventListener('click', (e) => {
+        this.overlay?.addEventListener('mousedown', (e) => {
             if (e.target === this.overlay) {
                 this.hide();
             }
@@ -68,7 +68,7 @@ export class ComponentMenu {
         });
 
         // Category header clicks
-        document.addEventListener('click', (e) => {
+        document.addEventListener('mousedown', (e) => {
             const header = e.target.closest('.category-header');
             if (header && this.overlay?.contains(header)) {
                 e.stopPropagation();
@@ -77,7 +77,7 @@ export class ComponentMenu {
         });
 
         // Component item clicks
-        document.addEventListener('click', (e) => {
+        document.addEventListener('mousedown', (e) => {
             const item = e.target.closest('.component-item');
             if (item && this.overlay?.contains(item)) {
                 const componentType = item.dataset.component;
