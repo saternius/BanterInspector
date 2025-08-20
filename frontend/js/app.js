@@ -6,6 +6,7 @@
  */
 (async () => {
     // Import and show loading screen first
+    const { logger } = await import(`${window.repoUrl}/utils.js`);
     const { loadingScreen } = await import(`${window.repoUrl}/pages/world-inspector/loading-screen.js`);
     window.loadingScreen = loadingScreen; // Make globally accessible
     loadingScreen.show();
@@ -73,6 +74,11 @@
          * Initialize the inspector application
          */
         async initialize() {
+            log("init", "File Server: " + window.fileServer);
+            log("init", "Ngrok URL: " + window.ngrokUrl);
+            log("init", "Repo URL: " + window.repoUrl);
+            log("init", "Block Service URL: " + window.blockServiceUrl);
+
             if (this.initialized) return;
 
             

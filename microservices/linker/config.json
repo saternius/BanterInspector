@@ -1,5 +1,5 @@
 {
     "uid": "",
-    "inventory_dirs": ["Technocrat/Tutorial"],
+    "inventory_dirs": ["Technocrat/Tutorial", "Technocrat/Tooltip"],
     "password":""
 }

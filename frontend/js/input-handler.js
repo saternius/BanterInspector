@@ -16,9 +16,9 @@ export class InputHandler{
                 return;
             }
             this.initialized = true;
-            scene.LegacyEnableQuaternionPose()
-            scene.LegacyEnableControllerExtras()
-            scene.EnableLegacy()
+            // scene.LegacyEnableQuaternionPose()
+            // scene.LegacyEnableControllerExtras()
+            // scene.EnableLegacy()
 
             this.getRightControllerRot = ()=>{
                 return {

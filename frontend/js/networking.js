@@ -421,7 +421,7 @@ export class Networking {
         if(data.startsWith("load_entity")){
             let [parentId, entity_data] = data.slice(12).split("|");
             await SM._loadEntity(JSON.parse(entity_data), parentId);
-            await SM.updateHierarchy(this.selectedEntity);
+            await SM.updateHierarchy();
         }
 
         if(data.startsWith("component_added")){
@@ -429,7 +429,7 @@ export class Networking {
             let entity = SM.getEntityById(event.entityId);
             if(entity){
                 await SM._addComponent(entity, event.componentType, event.componentProperties);
-                await SM.updateHierarchy(this.selectedEntity);
+                await SM.updateHierarchy();
             }
         }
 
@@ -438,14 +438,14 @@ export class Networking {
             let component = SM.getEntityComponentById(componentId);
             if(component){
                 await component._destroy();
-                await SM.updateHierarchy(this.selectedEntity);
+                await SM.updateHierarchy();
             }
         }
 
         if(data.startsWith("entity_added")){
             let [parentId, entityName] = data.slice(13).split(":");
             await SM._addNewEntity(entityName, parentId);
-            await SM.updateHierarchy(SM.selectedEntity);
+            await SM.updateHierarchy();
         }
 
         if(data.startsWith("entity_removed")){
@@ -453,7 +453,7 @@ export class Networking {
             let entity = SM.getEntityById(entityId);
             if(entity){
                 await entity._destroy();
-                await SM.updateHierarchy(this.selectedEntity);
+                await SM.updateHierarchy();
             }
         }
 
@@ -464,7 +464,7 @@ export class Networking {
             if (!entity) return;
             if(!newParentId) newParentId = SM.entityData.entities[0].id;
             await entity._setParent(SM.getEntityById(newParentId));
-            await SM.updateHierarchy(SM.selectedEntity);
+            await SM.updateHierarchy();
         }
 
         if(data.startsWith("monobehavior_start")){

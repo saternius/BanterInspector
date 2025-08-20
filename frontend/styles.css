@@ -15,6 +15,9 @@ body {
     flex-direction: column;
 }
 
+div{
+    user-select: none;
+}
 /* input:focus{
     background: #1e3764 !important;
     border-color: #326689 !important;
