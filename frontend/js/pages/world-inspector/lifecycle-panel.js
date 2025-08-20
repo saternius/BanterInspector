@@ -129,7 +129,7 @@
             nameCell.textContent = scriptName;
             nameCell.title = `Script: ${monoBehavior.properties?.file || 'No script'}`;
             nameCell.style.cursor = 'pointer';
-            nameCell.onclick = () => {
+            nameCell.onmousedown = () => {
                 const scriptItem = window.inventory.items[monoBehavior.properties.file];
                 if (scriptItem && scriptItem.itemType === 'script') {
                     const event = new CustomEvent('open-script-editor', {
@@ -151,7 +151,7 @@
             ownerCell.textContent = monoBehavior.properties?._owner || 'Unknown Owner';
             ownerCell.title = `Owner: ${monoBehavior.properties?._owner || 'No owner'}`;
             ownerCell.style.cursor = 'pointer';
-            ownerCell.onclick = () => {
+            ownerCell.onmousedown = () => {
                 SetComponentProp(monoBehavior.id, "_owner", SM.myName());
                 setTimeout(()=>{
                     this.render();
@@ -189,7 +189,7 @@
             stopBtn.innerHTML = '⏹';
             stopBtn.title = 'Stop';
             if(monoBehavior.ctx._running){
-                stopBtn.onclick = () => {
+                stopBtn.onmousedown = () => {
                     monoBehavior.Stop();
                     this.addConsoleOutput(scriptName, '[Stopped]', monoBehavior.id);
                     this.render();
@@ -206,7 +206,7 @@
             refreshBtn.className = 'lifecycle-button refresh';
             refreshBtn.innerHTML = '🔄';
             refreshBtn.title = 'Refresh';
-            refreshBtn.onclick = () => {
+            refreshBtn.onmousedown = () => {
                 monoBehavior.Refresh();
                 this.addConsoleOutput(scriptName, '[Refreshed]', monoBehavior.id);
                 this.render();

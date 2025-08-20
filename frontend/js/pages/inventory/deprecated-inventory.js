@@ -510,12 +510,12 @@ export class Inventory {
             const sortDirectionBtn = inventoryContainer.querySelector('#sortDirectionBtn');
             
             if (uploadBtn && fileInput) {
-                uploadBtn.addEventListener('click', () => fileInput.click());
+                uploadBtn.addEventListener('mousedown', () => fileInput.click());
                 fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
             }
             
             if (newFolderBtn) {
-                newFolderBtn.addEventListener('click', () => this.createNewFolder());
+                newFolderBtn.addEventListener('mousedown', () => this.createNewFolder());
             }
             
             if (sortDropdown) {
@@ -526,7 +526,7 @@ export class Inventory {
             }
             
             if (sortDirectionBtn) {
-                sortDirectionBtn.addEventListener('click', () => {
+                sortDirectionBtn.addEventListener('mousedown', () => {
                     this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
                     this.render();
                 });
@@ -614,7 +614,7 @@ export class Inventory {
         }
         
         if (sortDirectionBtn) {
-            sortDirectionBtn.addEventListener('click', () => {
+            sortDirectionBtn.addEventListener('mousedown', () => {
                 this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
                 this.render();
             });
@@ -622,7 +622,7 @@ export class Inventory {
         
         // Add event listeners for inventory items
         inventoryContainer.querySelectorAll('.inventory-item').forEach(item => {
-            item.addEventListener('click', (e) => {
+            item.addEventListener('mousedown', (e) => {
                 if (!e.target.closest('.remove-item-btn') && !e.target.closest('.action-btn')) {
                     this.selectItem(item.dataset.itemName);
                 }
@@ -631,7 +631,7 @@ export class Inventory {
         
         // Add event listeners for remove buttons
         inventoryContainer.querySelectorAll('.remove-item-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.removeItem(itemName);
@@ -640,7 +640,7 @@ export class Inventory {
         
         // Add event listeners for remove folder buttons
         inventoryContainer.querySelectorAll('.remove-folder-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const folderName = btn.dataset.folderName;
                 this.removeFolder(folderName);
@@ -649,7 +649,7 @@ export class Inventory {
         
         // Add event listeners for edit script buttons
         inventoryContainer.querySelectorAll('.edit-script-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.openScriptEditor(itemName);
@@ -658,7 +658,7 @@ export class Inventory {
         
         // Add event listeners for add to scene buttons
         inventoryContainer.querySelectorAll('.add-to-scene-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.loadEntityToSceneByName(itemName);
@@ -667,7 +667,7 @@ export class Inventory {
         
         // Add event listeners for view image buttons
         inventoryContainer.querySelectorAll('.view-image-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 this.selectItem(itemName);
@@ -676,7 +676,7 @@ export class Inventory {
         
         // Add event listeners for copy URL buttons
         inventoryContainer.querySelectorAll('.copy-url-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
                 const item = this.items[itemName];
@@ -696,49 +696,49 @@ export class Inventory {
         const fileInput = inventoryContainer.querySelector('#fileInput');
         
         if (uploadBtn && fileInput) {
-            uploadBtn.addEventListener('click', () => fileInput.click());
+            uploadBtn.addEventListener('mousedown', () => fileInput.click());
             fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
         }
         
         // Add event listener for export button
         const exportBtn = inventoryContainer.querySelector('#exportBtn');
         if (exportBtn) {
-            exportBtn.addEventListener('click', () => this.downloadSelectedItem());
+            exportBtn.addEventListener('mousedown', () => this.downloadSelectedItem());
         }
         
         // Add event listener for new script button
         const newScriptBtn = inventoryContainer.querySelector('#newScriptBtn');
         if (newScriptBtn) {
-            newScriptBtn.addEventListener('click', () => this.createNewScript());
+            newScriptBtn.addEventListener('mousedown', () => this.createNewScript());
         }
         
         // Add event listener for new folder button
         const newFolderBtn = inventoryContainer.querySelector('#newFolderBtn');
         if (newFolderBtn) {
-            newFolderBtn.addEventListener('click', () => this.createNewFolder());
+            newFolderBtn.addEventListener('mousedown', () => this.createNewFolder());
         }
         
         // Add event listener for make remote button
         const makeRemoteBtn = inventoryContainer.querySelector('#makeRemoteBtn');
         if (makeRemoteBtn) {
-            makeRemoteBtn.addEventListener('click', () => this.makeRemote());
+            makeRemoteBtn.addEventListener('mousedown', () => this.makeRemote());
         }
         
         // Add event listener for copy link button
         const copyLinkBtn = inventoryContainer.querySelector('#copyLinkBtn');
         if (copyLinkBtn) {
-            copyLinkBtn.addEventListener('click', () => this.copyFirebaseRef());
+            copyLinkBtn.addEventListener('mousedown', () => this.copyFirebaseRef());
         }
         
         // Add event listener for import from Firebase button
         const importFirebaseBtn = inventoryContainer.querySelector('#importFirebaseBtn');
         if (importFirebaseBtn) {
-            importFirebaseBtn.addEventListener('click', () => this.showImportFirebaseModal());
+            importFirebaseBtn.addEventListener('mousedown', () => this.showImportFirebaseModal());
         }
         
         // Add event listeners for folder items
         inventoryContainer.querySelectorAll('.folder-item').forEach(folder => {
-            folder.addEventListener('click', (e) => {
+            folder.addEventListener('mousedown', (e) => {
                 if (!e.target.closest('.folder-expand-btn')) {
                     const folderName = folder.dataset.folderName;
                     this.openFolder(folderName);
@@ -772,7 +772,7 @@ export class Inventory {
         
         // Add event listeners for expand/collapse buttons
         inventoryContainer.querySelectorAll('.folder-expand-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const folderName = btn.dataset.folderName;
                 this.toggleFolderExpansion(folderName);
@@ -1544,7 +1544,7 @@ export class Inventory {
         // Add close button listener
         const closeBtn = this.previewPane.querySelector('.preview-close-btn');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => {
+            closeBtn.addEventListener('mousedown', () => {
                 this.selectedItem = null;
                 this.hidePreview();
                 this.render();
@@ -1554,7 +1554,7 @@ export class Inventory {
         // Add edit button listener for scripts
         const editBtn = this.previewPane.querySelector('.edit-script-preview-btn');
         if (editBtn) {
-            editBtn.addEventListener('click', () => {
+            editBtn.addEventListener('mousedown', () => {
                 this.openScriptEditor(itemName);
             });
         }
@@ -1562,7 +1562,7 @@ export class Inventory {
         // Add copy image URL button listener
         const copyUrlBtn = this.previewPane.querySelector('.copy-image-url-btn');
         if (copyUrlBtn) {
-            copyUrlBtn.addEventListener('click', () => {
+            copyUrlBtn.addEventListener('mousedown', () => {
                 const url = copyUrlBtn.dataset.url;
                 navigator.clipboard.writeText(url).then(() => {
                     this.showNotification('Image URL copied to clipboard');
@@ -1576,7 +1576,7 @@ export class Inventory {
         // Add open image button listener
         const openImageBtn = this.previewPane.querySelector('.open-image-btn');
         if (openImageBtn) {
-            openImageBtn.addEventListener('click', () => {
+            openImageBtn.addEventListener('mousedown', () => {
                 const url = openImageBtn.dataset.url;
                 window.open(url, '_blank');
             });
@@ -2021,7 +2021,7 @@ export class Inventory {
                         // Re-attach close button handler
                         const newCloseBtn = editor.navElement.querySelector('.close-tab-btn');
                         if (newCloseBtn && editor.closeBtnHandler) {
-                            newCloseBtn.addEventListener('click', editor.closeBtnHandler);
+                            newCloseBtn.addEventListener('mousedown', editor.closeBtnHandler);
                         }
                     }
                     
@@ -2179,9 +2179,9 @@ export class Inventory {
         };
         
         // Event listeners
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        createBtn.addEventListener('click', handleCreate);
+        closeBtn.addEventListener('mousedown', closeModal);
+        cancelBtn.addEventListener('mousedown', closeModal);
+        createBtn.addEventListener('mousedown', handleCreate);
         
         // Enter key to create
         input.addEventListener('keydown', (e) => {
@@ -2193,7 +2193,7 @@ export class Inventory {
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
@@ -2237,14 +2237,14 @@ export class Inventory {
             modalOverlay.remove();
         };
         
-        cancelBtn.addEventListener('click', closeModal);
-        overwriteBtn.addEventListener('click', () => {
+        cancelBtn.addEventListener('mousedown', closeModal);
+        overwriteBtn.addEventListener('mousedown', () => {
             closeModal();
             onConfirm();
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
@@ -2449,9 +2449,9 @@ export class Inventory {
         };
         
         // Event listeners
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        confirmBtn.addEventListener('click', handleConfirm);
+        closeBtn.addEventListener('mousedown', closeModal);
+        cancelBtn.addEventListener('mousedown', closeModal);
+        confirmBtn.addEventListener('mousedown', handleConfirm);
         
         // Enter key to confirm
         input.addEventListener('keydown', (e) => {
@@ -2463,7 +2463,7 @@ export class Inventory {
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
@@ -2539,9 +2539,9 @@ export class Inventory {
         };
         
         // Event listeners
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        createBtn.addEventListener('click', handleCreate);
+        closeBtn.addEventListener('mousedown', closeModal);
+        cancelBtn.addEventListener('mousedown', closeModal);
+        createBtn.addEventListener('mousedown', handleCreate);
         
         // Enter key to create
         input.addEventListener('keydown', (e) => {
@@ -2553,7 +2553,7 @@ export class Inventory {
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
@@ -2596,18 +2596,18 @@ export class Inventory {
             modalOverlay.remove();
         };
         
-        cancelBtn.addEventListener('click', () => {
+        cancelBtn.addEventListener('mousedown', () => {
             closeModal();
             if (onCancel) onCancel();
         });
         
-        confirmBtn.addEventListener('click', () => {
+        confirmBtn.addEventListener('mousedown', () => {
             closeModal();
             if (onConfirm) onConfirm();
         });
         
         // Click outside to close (and cancel)
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
                 if (onCancel) onCancel();
@@ -2661,14 +2661,14 @@ export class Inventory {
             modalOverlay.remove();
         };
         
-        cancelBtn.addEventListener('click', closeModal);
-        confirmBtn.addEventListener('click', () => {
+        cancelBtn.addEventListener('mousedown', closeModal);
+        confirmBtn.addEventListener('mousedown', () => {
             closeModal();
             onConfirm();
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }
@@ -3024,9 +3024,9 @@ export class Inventory {
         };
         
         // Event listeners
-        closeBtn.addEventListener('click', closeModal);
-        cancelBtn.addEventListener('click', closeModal);
-        importBtn.addEventListener('click', handleImport);
+        closeBtn.addEventListener('mousedown', closeModal);
+        cancelBtn.addEventListener('mousedown', closeModal);
+        importBtn.addEventListener('mousedown', handleImport);
         
         // Enter key to import
         input.addEventListener('keydown', (e) => {
@@ -3038,7 +3038,7 @@ export class Inventory {
         });
         
         // Click outside to close
-        modalOverlay.addEventListener('click', (e) => {
+        modalOverlay.addEventListener('mousedown', (e) => {
             if (e.target === modalOverlay) {
                 closeModal();
             }

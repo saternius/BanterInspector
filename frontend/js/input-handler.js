@@ -300,7 +300,7 @@ export class InputHandler{
        
         this.focusComponent = component;
         this.focusProperty = property;
-        inspector.propertiesPanel.render(SM.selectedEntity)
+        //inspector.propertiesPanel.render(SM.selectedEntity)
         this.clearHighlight();
 
         this.currentInput = activeEl;

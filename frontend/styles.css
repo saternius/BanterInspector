@@ -263,10 +263,10 @@ input[type=number] {
     color: #00d4ff;
 }
 
-/* Tab dragging styles */
+/* Tab dragging styles */0
 .nav-item.dragging {
-    opacity: 0.4;
-    cursor: grabbing;
+    /* opacity: 0.4;
+    cursor: grabbing; */
 }
 
 .nav-items {

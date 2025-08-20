@@ -237,7 +237,7 @@ export class ScriptEditor {
         if (this.saveBtnHandler) {
             const saveBtn = document.getElementById(`saveBtn-${this.pageId}`);
             if (saveBtn) {
-                saveBtn.removeEventListener('click', this.saveBtnHandler);
+                saveBtn.removeEventListener('mousedown', this.saveBtnHandler);
             }
             this.saveBtnHandler = null;
         }
@@ -246,7 +246,7 @@ export class ScriptEditor {
         if (this.playBtnHandler) {
             const playBtn = document.getElementById(`playBtn-${this.pageId}`);
             if (playBtn) {
-                playBtn.removeEventListener('click', this.playBtnHandler);
+                playBtn.removeEventListener('mousedown', this.playBtnHandler);
             }
             this.playBtnHandler = null;
         }
@@ -254,7 +254,7 @@ export class ScriptEditor {
         if (this.stopBtnHandler) {
             const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
             if (stopBtn) {
-                stopBtn.removeEventListener('click', this.stopBtnHandler);
+                stopBtn.removeEventListener('mousedown', this.stopBtnHandler);
             }
             this.stopBtnHandler = null;
         }
@@ -263,7 +263,7 @@ export class ScriptEditor {
         if (this.closeBtnHandler && this.navElement) {
             const closeBtn = this.navElement.querySelector(`[data-close-script="${this.pageId}"]`);
             if (closeBtn) {
-                closeBtn.removeEventListener('click', this.closeBtnHandler);
+                closeBtn.removeEventListener('mousedown', this.closeBtnHandler);
             }
             this.closeBtnHandler = null;
         }
@@ -276,7 +276,7 @@ export class ScriptEditor {
         
         // Remove entity button listeners
         this.entityButtonHandlers.forEach((handler, btn) => {
-            btn.removeEventListener('click', handler);
+            btn.removeEventListener('mousedown', handler);
         });
         this.entityButtonHandlers.clear();
     }
@@ -291,7 +291,7 @@ export class ScriptEditor {
         const saveBtn = document.getElementById(`saveBtn-${this.pageId}`);
         if (saveBtn) {
             this.saveBtnHandler = () => this.save();
-            saveBtn.addEventListener('click', this.saveBtnHandler);
+            saveBtn.addEventListener('mousedown', this.saveBtnHandler);
         }
         
         // Playback controls
@@ -300,12 +300,12 @@ export class ScriptEditor {
         
         if (playBtn) {
             this.playBtnHandler = () => this.play();
-            playBtn.addEventListener('click', this.playBtnHandler);
+            playBtn.addEventListener('mousedown', this.playBtnHandler);
         }
         
         if (stopBtn) {
             this.stopBtnHandler = () => this.stop();
-            stopBtn.addEventListener('click', this.stopBtnHandler);
+            stopBtn.addEventListener('mousedown', this.stopBtnHandler);
         }
         
         // Close button
@@ -316,7 +316,7 @@ export class ScriptEditor {
                     e.stopPropagation();
                     this.close();
                 };
-                closeBtn.addEventListener('click', this.closeBtnHandler);
+                closeBtn.addEventListener('mousedown', this.closeBtnHandler);
             }
         }
         
@@ -342,7 +342,7 @@ export class ScriptEditor {
                 this.selectEntity(entityId);
             };
             this.entityButtonHandlers.set(btn, handler);
-            btn.addEventListener('click', handler);
+            btn.addEventListener('mousedown', handler);
         });
     }
     

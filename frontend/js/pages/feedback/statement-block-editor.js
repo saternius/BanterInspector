@@ -215,16 +215,16 @@ export class StatementBlockEditor {
         document.body.appendChild(modal);
         
         // Add event listeners
-        document.getElementById('confirmMergeBtn').addEventListener('click', () => {
+        document.getElementById('confirmMergeBtn').addEventListener('mousedown', () => {
             this._confirmMerge();
         });
         
-        document.getElementById('cancelMergeBtn').addEventListener('click', () => {
+        document.getElementById('cancelMergeBtn').addEventListener('mousedown', () => {
             this._cancelMerge();
         });
         
         // Close on outside click
-        modal.addEventListener('click', (e) => {
+        modal.addEventListener('mousedown', (e) => {
             if (e.target === modal) {
                 this._cancelMerge();
             }
@@ -284,7 +284,7 @@ export class StatementBlockEditor {
         
         // Delete buttons
         blocksList.querySelectorAll('.block-delete').forEach(btn => {
-            btn.addEventListener('click', async (e) => {
+            btn.addEventListener('mousedown', async (e) => {
                 const index = parseInt(e.target.closest('.statement-block').dataset.blockIndex);
                 if (await confirm('Delete this block?')) {
                     this.deleteBlock(index);

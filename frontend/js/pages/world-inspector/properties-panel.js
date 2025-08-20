@@ -28,14 +28,14 @@
          */
         setupEventListeners() {
             // Add component button
-            this.addComponentBtn?.addEventListener('click', () => {
+            this.addComponentBtn?.addEventListener('mousedown', () => {
                 document.dispatchEvent(new CustomEvent('showComponentMenu', {
                     detail: { entityId: SM.selectedEntity }
                 }));
             });
             
             // Collapse all button
-            this.collapseAllBtn?.addEventListener('click', () => {
+            this.collapseAllBtn?.addEventListener('mousedown', () => {
                 this.collapseAllComponents();
             });
         }
@@ -288,7 +288,7 @@
                     upBtn.className = 'component-reorder-btn';
                     upBtn.innerHTML = '↑';
                     upBtn.title = 'Move up';
-                    upBtn.onclick = (e) => {
+                    upBtn.onmousedown = (e) => {
                         e.stopPropagation();
                         this.moveComponentUp(index);
                     };
@@ -301,7 +301,7 @@
                     downBtn.className = 'component-reorder-btn';
                     downBtn.innerHTML = '↓';
                     downBtn.title = 'Move down';
-                    downBtn.onclick = (e) => {
+                    downBtn.onmousedown = (e) => {
                         e.stopPropagation();
                         this.moveComponentDown(index, totalComponents);
                     };
@@ -315,7 +315,7 @@
                 deleteBtn.className = 'component-delete-btn';
                 deleteBtn.innerHTML = '×';
                 deleteBtn.title = 'Delete component';
-                deleteBtn.onclick = async (e) => {
+                deleteBtn.onmousedown = async (e) => {
                     e.stopPropagation();
                     if (await confirm(`Delete ${component.type} component?`)) {
                         this.deleteComponent(component.id, component.type);
@@ -346,7 +346,7 @@
                         button.className = 'property-button prop-control-btn';
                         button.textContent = control.label;
                         button.id = `${component.id}_${control.id}`;
-                        button.onclick = control.callback;
+                        button.onmousedown = control.callback;
                         body.appendChild(button);
                     }
                 })
@@ -371,7 +371,7 @@
             body.style.display = isExpanded ? 'block' : 'none';
             header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
             
-            header.onclick = () => {
+            header.onmousedown = () => {
                 isExpanded = !isExpanded;
                 body.style.display = isExpanded ? 'block' : 'none';
                 header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
@@ -488,7 +488,6 @@
                 };
             
                 input.onclick = (e)=>{
-                    e.stopPropagation();
                     inputHandler.inputFocusChanged(input, component, key);
                 }
 
@@ -517,7 +516,6 @@
                     input.step = 'any';
                     input.onchange = () => this.handleRotationChange(componentId, axis, input.value, componentIndex);
                     input.onclick = (e)=>{
-                        e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
                     }
 
@@ -549,7 +547,6 @@
                     input.step = 'any';
                     input.onchange = () => this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
                     input.onclick = (e)=>{
-                        e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
                     }
                     if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${axis}`){
@@ -594,7 +591,7 @@
                     changeManager.applyChange(change);
                 };
                 // TODO: Create a specdial input handler for color
-                // colorInput.onclick = (e)=>{
+                // colorInput.onmousedown = (e)=>{
                 //     e.stopPropagation();
                 //     inputHandler.inputFocusChanged(colorInput, component,`${key}`);
                 // }
@@ -605,7 +602,7 @@
                 // }   
                 
                 
-                preview.onclick = () => colorInput.click();
+                preview.onmousedown = () => colorInput.click();
                 
                 // RGBA inputs
                 const rgbaContainer = document.createElement('div');
@@ -629,7 +626,6 @@
                         }
                     };
                     input.onclick = (e)=>{
-                        e.stopPropagation();
                         inputHandler.inputFocusChanged(input, component,`${key}.${channel}`);
                     }
                     if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${channel}`){
@@ -703,7 +699,7 @@
                 upBtn.className = 'component-reorder-btn';
                 upBtn.innerHTML = '▲';
                 upBtn.title = 'Move up';
-                upBtn.onclick = (e) => {
+                upBtn.onmousedown = (e) => {
                     e.stopPropagation();
                     this.moveComponentUp(index);
                 };
@@ -716,7 +712,7 @@
                 downBtn.className = 'component-reorder-btn';
                 downBtn.innerHTML = '▼';
                 downBtn.title = 'Move down';
-                downBtn.onclick = (e) => {
+                downBtn.onmousedown = (e) => {
                     e.stopPropagation();
                     this.moveComponentDown(index, totalComponents);
                 };
@@ -728,7 +724,7 @@
             deleteBtn.className = 'component-delete-btn';
             deleteBtn.innerHTML = '×';
             deleteBtn.title = 'Delete component';
-            deleteBtn.onclick = async (e) => {
+            deleteBtn.onmousedown = async (e) => {
                 e.stopPropagation();
                 if (await confirm(`Delete MonoBehavior component?`)) {
                     this.deleteComponent(component.id, component.type);
@@ -842,7 +838,7 @@
                 editButton.style.cursor = 'pointer';
                 editButton.innerHTML = '📝 Edit Script';
                 
-                editButton.onclick = () => {
+                editButton.onmousedown = () => {
                     const scriptItem = window.inventory.items[component.properties.file];
                     if (scriptItem && scriptItem.itemType === 'script') {
                         const event = new CustomEvent('open-script-editor', {
@@ -886,7 +882,7 @@
             body.style.display = isExpanded ? 'block' : 'none';
             header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
             
-            header.onclick = () => {
+            header.onmousedown = () => {
                 isExpanded = !isExpanded;
                 body.style.display = isExpanded ? 'block' : 'none';
                 header.querySelector('.component-toggle').textContent = isExpanded ? '▼' : '▶';
@@ -1002,7 +998,7 @@
                     changeManager.applyChange(change);
                 };
                 
-                preview.onclick = () => colorInput.click();
+                preview.onmousedown = () => colorInput.click();
                 
                 colorGroup.appendChild(preview);
                 colorGroup.appendChild(colorInput);

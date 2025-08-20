@@ -26,7 +26,7 @@ export class Navigation {
             this.navItems.set(pageId, navItem);
             this.tabOrder.push(pageId);
             
-            navItem.addEventListener('click', () => this.switchPage(pageId));
+            navItem.addEventListener('mousedown', () => this.switchPage(pageId));
             
             // Setup tab dragging
             this.setupTabDragging(navItem, pageId);
@@ -130,7 +130,7 @@ export class Navigation {
         this.tabOrder.push(pageId);
         
         // Setup click handler
-        navElement.addEventListener('click', (e) => {
+        navElement.addEventListener('mousedown', (e) => {
             if (!e.target.closest('.close-tab-btn')) {
                 this.switchPage(pageId);
             }

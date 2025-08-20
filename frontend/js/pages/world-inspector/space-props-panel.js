@@ -31,7 +31,7 @@
             const protectedValueInput = document.getElementById('addProtectedValue');
             const refreshSpacePropsBtn = document.getElementById('refreshSpacePropsBtn');
             if(refreshSpacePropsBtn){
-                refreshSpacePropsBtn.addEventListener('click', () => {
+                refreshSpacePropsBtn.addEventListener('mousedown', () => {
                     this.render();
                 });
             }
@@ -86,6 +86,8 @@
             
             propKeys.forEach(key => {
                 const value = props[key];
+                
+                if(value === "null" || value === "undefined") return;
                 const propItem = this.createPropItem(type, key, value);
                 listElement.appendChild(propItem);
             });
@@ -127,7 +129,7 @@
                 deleteBtn.className = 'prop-button delete';
                 deleteBtn.innerHTML = '×';
                 deleteBtn.title = 'Delete';
-                deleteBtn.onclick = () => this.deleteProp(type, key);
+                deleteBtn.onmousedown = () => this.deleteProp(type, key);
                 
                 actions.appendChild(deleteBtn);
                 valueContainer.appendChild(actions);
@@ -176,7 +178,7 @@
                 deleteBtn.className = 'prop-button delete';
                 deleteBtn.innerHTML = '×';
                 deleteBtn.title = 'Delete';
-                deleteBtn.onclick = () => this.deleteProp(type, key);
+                deleteBtn.onmousedown = () => this.deleteProp(type, key);
                 
                 actions.appendChild(deleteBtn);
                 valueContainer.appendChild(actions);
@@ -201,13 +203,13 @@
                 saveBtn.className = 'prop-button save';
                 saveBtn.innerHTML = '✓';
                 saveBtn.title = 'Save';
-                saveBtn.onclick = () => this.saveProp(type, key);
+                saveBtn.onmousedown = () => this.saveProp(type, key);
                 
                 const cancelBtn = document.createElement('button');
                 cancelBtn.className = 'prop-button';
                 cancelBtn.innerHTML = '×';
                 cancelBtn.title = 'Cancel';
-                cancelBtn.onclick = () => this.cancelEditProp(type, key);
+                cancelBtn.onmousedown = () => this.cancelEditProp(type, key);
                 
                 actions.appendChild(saveBtn);
                 actions.appendChild(cancelBtn);
@@ -234,13 +236,13 @@
                 editBtn.className = 'prop-button';
                 editBtn.innerHTML = '✎';
                 editBtn.title = 'Edit';
-                editBtn.onclick = () => this.editProp(type, key);
+                editBtn.onmousedown = () => this.editProp(type, key);
                 
                 const deleteBtn = document.createElement('button');
                 deleteBtn.className = 'prop-button delete';
                 deleteBtn.innerHTML = '×';
                 deleteBtn.title = 'Delete';
-                deleteBtn.onclick = () => this.deleteProp(type, key);
+                deleteBtn.onmousedown = () => this.deleteProp(type, key);
                 
                 actions.appendChild(editBtn);
                 actions.appendChild(deleteBtn);
@@ -466,7 +468,7 @@
         }
     }
 
-    // Make functions globally available for inline onclick handlers
+    // Make functions globally available for inline onmousedown handlers
     window.addPublicProp = () => {
         const panel = window.spacePropsPanel;
         if (panel) panel.addPublicProp();

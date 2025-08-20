@@ -1080,7 +1080,7 @@ export class RenameItemChange extends Change{
                         // Re-attach close button handler
                         const newCloseBtn = editor.navElement.querySelector('.close-tab-btn');
                         if (newCloseBtn && editor.closeBtnHandler) {
-                            newCloseBtn.addEventListener('click', editor.closeBtnHandler);
+                            newCloseBtn.addEventListener('mousedown', editor.closeBtnHandler);
                         }
                     }
                     
