@@ -268,6 +268,7 @@
         async saveScene(){
             await this.updateHierarchy(false);
             localStorage.setItem('lastProps', JSON.stringify(this.props));
+            //showNotification("Scene saved")
         }
 
         // This gathers the hierarchy of the scene via Unity GameObjects

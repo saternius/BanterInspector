@@ -84,8 +84,6 @@
 
             if (this.initialized) return;
 
-            
-            
             log('init', 'Initializing Unity Scene Inspector...');
             try {
                 // Initialize navigation

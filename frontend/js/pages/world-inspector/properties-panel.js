@@ -590,17 +590,12 @@
                     const change = new ComponentPropertyChange(componentId, key, newColor, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
-                // TODO: Create a specdial input handler for color
-                // colorInput.onmousedown = (e)=>{
-                //     e.stopPropagation();
-                //     inputHandler.inputFocusChanged(colorInput, component,`${key}`);
-                // }
+                // Enable color input handler for VR
+                preview.onclick = (e) => {
+                    e.stopPropagation();
+                    inputHandler.inputFocusChanged(colorInput, component, key);
+                };
 
-                // if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}`){
-                //     colorInput.style.backgroundColor = "#1e3764";
-                //     colorInput.style.borderColor = "#326689";
-                // }   
-                
                 
                 preview.onmousedown = () => colorInput.click();
                 

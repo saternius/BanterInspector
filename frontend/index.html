@@ -221,53 +221,96 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         </div>
         
         <!-- Space Props Panel Container (Split Horizontally) -->
-        <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
+         <!-- Space Props Panel Container (Split Horizontally) -->
+         <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
             <!-- Original Space Props Panel -->
             <div data-panel="spacePropsPanel" class="space-props-panel">
-                <div class="panel-header">
-                    Space Properties
-                    <div class="lifecycle-buttons">
-                        <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel" data-panel="spacePropsPanelRefreshBtn">🔄</button>
+
+                <!-- Input Handler Overlay -->
+                 <div id="inputHelper" data-section="inputHelper" class="input-helper">
+
+                    <div class="panel-header">
+                        Input Helper
+                        <span id="inputHelperSubject">Unknown Subject</span>
                     </div>
-                </div>
-                
-                <div class="properties-content">
-                    <!-- Public Properties -->
-                    <div data-section="publicPropsSection" class="space-props-section">
-                        <div class="space-props-header">
-                            <h3>Public Properties</h3>
-                            <span class="props-count" id="publicPropsCount">0</span>
+
+                    <div class="properties-content">
+                        <div class="input-value-display" id="inputHelperValue">
+                            0
                         </div>
-                        <div class="props-list" id="publicPropsList">
-                            <div class="empty-props">No public properties</div>
+                        <div class="input-helper-info" id="inputHelperInfo"></div>
+                        <div class="radial-crown-container">
+                            <div class="radial-crown-ridge" id="radialCrown">
+                                <div class="radial-crown">
+                                    <div class="radial-crown-slit"></div>
+                                </div>
+                            </div>
+                            <div style="transform: scale(.5, .5); margin-top: -40px; justify-items: center;">
+                                <div class="radial-crown-ridge" id="radialCrownTol">
+                                    <div class="radial-crown">
+                                        <div class="radial-crown-slit"></div>
+                                    </div>
+                                </div>
+                                <div class="radial-crown-tol-display" id="radialCrownTolDisplay">
+                                    Tol: +/- 1
+                                </div>
+                            </div>
+
                         </div>
-                        <div class="add-prop-container">
-                            <input data-input="propertyPanelAddPublicPropKey" type="text" id="addPublicKey" class="prop-input" placeholder="Key">
-                            <input data-input="propertyPanelAddPublicPropValue" type="text" id="addPublicValue" class="prop-input" placeholder="Value">
-                            <button data-panel="propertyPanelAddPublicProp" onmousedown="addPublicProp()" class="add-prop-button">Add</button>
+                        
+                        
+                    </div>
+
+                 </div>
+
+                <!-- Space Props Panel Container -->
+                <div id="spacePropsContent" data-section="spacePropsContent" class="space-props-content">
+                    <div class="panel-header">
+                        Space Properties
+                        <div class="lifecycle-buttons">
+                            <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel" data-panel="spacePropsPanelRefreshBtn">🔄</button>
                         </div>
                     </div>
                     
-                    <!-- Protected Properties -->
-                    <div data-section="protectedPropsSection" class="space-props-section">
-                        <div class="space-props-header">
-                            <h3>Protected Properties</h3>
-                            <span class="props-count" id="protectedPropsCount">0</span>
+                    <div class="properties-content">
+                        <!-- Public Properties -->
+                        <div data-section="publicPropsSection" class="space-props-section">
+                            <div class="space-props-header">
+                                <h3>Public Properties</h3>
+                                <span class="props-count" id="publicPropsCount">0</span>
+                            </div>
+                            <div class="props-list" id="publicPropsList">
+                                <div class="empty-props">No public properties</div>
+                            </div>
+                            <div class="add-prop-container">
+                                <input data-input="propertyPanelAddPublicPropKey" type="text" id="addPublicKey" class="prop-input" placeholder="Key">
+                                <input data-input="propertyPanelAddPublicPropValue" type="text" id="addPublicValue" class="prop-input" placeholder="Value">
+                                <button data-panel="propertyPanelAddPublicProp" onclick="addPublicProp()" class="add-prop-button">Add</button>
+                            </div>
                         </div>
-                        <div class="props-list" id="protectedPropsList">
-                            <div class="empty-props">No protected properties</div>
-                        </div>
-                        <div class="add-prop-container">
-                            <input data-input="propertyPanelAddProtectedPropKey" type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
-                            <input data-input="propertyPanelAddProtectedPropValue" type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
-                            <button data-panel="propertyPanelAddProtectedProp" onmousedown="addProtectedProp()" class="add-prop-button">Add</button>
+                        
+                        <!-- Protected Properties -->
+                        <div data-section="protectedPropsSection" class="space-props-section">
+                            <div class="space-props-header">
+                                <h3>Protected Properties</h3>
+                                <span class="props-count" id="protectedPropsCount">0</span>
+                            </div>
+                            <div class="props-list" id="protectedPropsList">
+                                <div class="empty-props">No protected properties</div>
+                            </div>
+                            <div class="add-prop-container">
+                                <input data-input="propertyPanelAddProtectedPropKey" type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
+                                <input data-input="propertyPanelAddProtectedPropValue" type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
+                                <button data-panel="propertyPanelAddProtectedProp" onclick="addProtectedProp()" class="add-prop-button">Add</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+           
             </div>
             
             <!-- Lifecycle Panel -->
-            <div data-panel="lifecyclePanel" class="lifecycle-panel">
+            <div data-panel="lifecyclePanel" class="lifecycle-panel" id="lifecyclePanel">
                 <div class="panel-header">
                     <span>Lifecycle</span>
                     <div class="lifecycle-buttons">
