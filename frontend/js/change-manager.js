@@ -60,7 +60,7 @@ class ChangeManager {
 
             // Apply the change with timeout
             const timeout = change.timeout || 5000; // Default 5 second timeout
-            outcome = await this.applyWithTimeout(change.apply.bind(change), timeout, change.id);
+            outcome = await this.applyWithTimeout(change.apply.bind(change), timeout, change);
 
             // Record in history if applicable
             if (shouldRecord) {
@@ -82,12 +82,12 @@ class ChangeManager {
     /**
      * Apply a function with a timeout
      */
-    async applyWithTimeout(fn, timeout, changeId) {
+    async applyWithTimeout(fn, timeout, change) {
         return Promise.race([
             fn(),
             new Promise((resolve) => {
                 setTimeout(() => {
-                    console.warn(`Change ${changeId || 'unknown'} timed out after ${timeout}ms`);
+                    console.warn(`Change ${change.constructor.name || 'unknown'} timed out after ${timeout}ms`);
                     resolve(null);
                 }, timeout);
             })

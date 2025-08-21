@@ -10,7 +10,6 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     async init(entity, sceneComponent, properties){
         await super.init(entity, sceneComponent, properties);
-        this.scriptInstance = null;
         this.ctx = this.newScriptContext();
         this.scriptFunction = null;
         this.type = "MonoBehavior";
@@ -116,7 +115,6 @@ export class MonoBehaviorComponent extends EntityComponent {
         }
 
         this.scriptFunction.call(this.ctx);
-        this.scriptInstance = this.ctx;
         await lifecycle.registerMonoBehavior(this);  
         this._start();  
         log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name}`);

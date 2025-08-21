@@ -29,7 +29,7 @@
         
 
         myName(){
-            return `${this.scene.localUser.name}_${this.scene.localUser.id.slice(0,3)}`
+            return this.scene.localUser.name ///`${}_${this.scene.localUser.id.slice(0,3)}`
         }
 
         changeFileServer(value){
@@ -170,7 +170,7 @@
                         log('init', "No host user found, setting to local user =>", this.myName())
                         networking.setSpaceProperty("hostUser", this.myName(), false);
                     }else{
-                        let hostHere = Object.values(this.scene.users).map(x=>`${x.name}_${x.id.slice(0,3)}`).includes(this.scene.spaceState.public.hostUser);
+                        let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
                             log('init', "Host user not here, setting to local user =>", this.myName())
                             networking.setSpaceProperty("hostUser", this.myName(), false);
@@ -315,8 +315,8 @@
                 if (obj.Traverse) {
                     const childPromises = [];
                     obj.Traverse((child) => {
-                        if (child && child.id !== obj.id) {
-                            if (child.parent == obj.id) {
+                        if (child && child.id !== obj.unityId) {
+                            if (child.parent == obj.unityId) {
                                 childPromises.push(createEntityHierarchy(child));
                             }
                         }

@@ -46,14 +46,11 @@ export class InputHandler{
     }
 
     addEventListeners(element, event, callback){
-        console.log("🎨 Adding event listener:", event, "to element:", element);
         if(!element) {
-            console.error("🎨 Cannot add event listener - element is null/undefined");
             return;
         }
         element.addEventListener(event, callback);
         this.eventListeners.push({element, event, callback});
-        console.log("🎨 Event listener added successfully");
     }
     
     clearEventListeners(){
@@ -242,15 +239,12 @@ export class InputHandler{
     }
 
     helpColorInputElement(element, component, property){
-        console.log("🎨 helpColorInputElement called", {element, component, property});
         // Clear any existing event listeners
-        console.log("🎨 Clearing existing event listeners, count:", this.eventListeners.length);
         this.clearEventListeners();
 
 
         // Hide numeric input UI and show color selector UI
         if(!this.colorSelectorContainer){
-            console.log("🎨 Creating color selector for first time");
             this.setupColorSelector();
         }
         
@@ -267,7 +261,6 @@ export class InputHandler{
             numericContainer.style.display = "none";
         }
         this.colorSelectorContainer.style.display = "block";
-        console.log("🎨 Color selector container displayed");
         
         // Set subject
         this.inputHelperSubject.innerHTML = `
@@ -278,11 +271,9 @@ export class InputHandler{
         
         // Get current color value
         let currentColor = this.getColorValue(component, property);
-        console.log("🎨 Current color value:", currentColor);
         
         // Initialize color selector with current value
         this.initColorSelector(currentColor, (newColor) => {
-            console.log("🎨 Color changed:", newColor);
             this.setColorValue(component, property, newColor);
             this.updateColorDisplay(newColor);
         });
@@ -291,18 +282,15 @@ export class InputHandler{
         
 
         this.addEventListeners(this.inputHelper, "mouseup", (e)=>{
-            console.log("🎨 inputHelper mouseup");
             e.preventDefault();
             e.stopPropagation();
         })
 
         // Add cleanup handlers
         this.addEventListeners(document.body, "mouseup", () => {
-            console.log("🎨 document.body mouseup - checking blur");
             this.checkInputBlur();
         });
         
-        console.log("🎨 Event listeners after setup:", this.eventListeners.length);
     }
     
     setupColorSelector(){
@@ -402,39 +390,32 @@ export class InputHandler{
     
     
     initColorSelector(color, onChange){
-        console.log("🎨 initColorSelector called with color:", color);
         this.colorChangeCallback = onChange;
         this.currentHSV = this.rgbToHsv(color.r * 255, color.g * 255, color.b * 255);
         this.currentAlpha = color.a || 1;
-        console.log("🎨 Initial HSV:", this.currentHSV, "Alpha:", this.currentAlpha);
         
         // Update displays
         this.updateColorDisplay(color);
         this.updatePickerVisuals();
         
         // Setup interactions
-        console.log("🎨 Setting up picker interactions...");
         this.setupSaturationBrightnessPicker();
         this.setupHuePicker();
         this.setupAlphaPicker();
-        console.log("🎨 Picker interactions setup complete");
     }
     
     setupSaturationBrightnessPicker(){
         const square = document.getElementById('colorSbSquare');
         const cursor = document.getElementById('sbCursor');
         
-        console.log("🎨 setupSaturationBrightnessPicker - square:", square, "cursor:", cursor);
         
         if(!square || !cursor) {
-            console.error('🎨 Color picker elements not found - square:', square, 'cursor:', cursor);
             return;
         }
         
         let isDragging = false;
         
         const updateSB = (e) => {
-            console.log("🎨 updateSB called", e.type);
             const rect = square.getBoundingClientRect();
             const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
             const y = Math.max(0, Math.min(rect.height, e.clientY - rect.top));
@@ -445,12 +426,10 @@ export class InputHandler{
             cursor.style.left = `${x}px`;
             cursor.style.top = `${y}px`;
             
-            console.log("🎨 SB updated - S:", this.currentHSV.s, "V:", this.currentHSV.v);
             this.updateFromHSV();
         };
         
         const mouseDownHandler = (e) => {
-            console.log("🎨 SB square mousedown", e);
             e.preventDefault();
             e.stopPropagation();
             isDragging = true;
@@ -459,7 +438,6 @@ export class InputHandler{
         
         const mouseMoveHandler = (e) => {
             // if(isDragging) {
-            //     console.log("🎨 SB square mousemove while dragging");
             //     e.preventDefault();
             //     updateSB(e);
             // }
@@ -467,17 +445,14 @@ export class InputHandler{
         
         const mouseUpHandler = (e) => {
             // if(isDragging) {
-            //     console.log("🎨 SB square mouseup - stopping drag");
             //     e.preventDefault();
             //     isDragging = false;
             // }
         };
         
-        console.log("🎨 Adding SB event listeners...");
         this.addEventListeners(square, 'mousedown', mouseDownHandler);
         this.addEventListeners(document, 'mousemove', mouseMoveHandler);
         this.addEventListeners(document, 'mouseup', mouseUpHandler);
-        console.log("🎨 SB event listeners added");
     }
     
     setupHuePicker(){
@@ -510,17 +485,17 @@ export class InputHandler{
         });
         
         this.addEventListeners(document, 'mousemove', (e) => {
-            if(isDragging) {
-                e.preventDefault();
-                updateHue(e);
-            }
+            // if(isDragging) {
+            //     e.preventDefault();
+            //     updateHue(e);
+            // }
         });
         
         this.addEventListeners(document, 'mouseup', (e) => {
-            if(isDragging) {
-                e.preventDefault();
-                isDragging = false;
-            }
+            // if(isDragging) {
+            //     e.preventDefault();
+            //     isDragging = false;
+            // }
         });
     }
     
@@ -555,17 +530,17 @@ export class InputHandler{
         });
         
         this.addEventListeners(document, 'mousemove', (e) => {
-            if(isDragging) {
-                e.preventDefault();
-                updateAlpha(e);
-            }
+            // if(isDragging) {
+            //     e.preventDefault();
+            //     updateAlpha(e);
+            // }
         });
         
         this.addEventListeners(document, 'mouseup', (e) => {
-            if(isDragging) {
-                e.preventDefault();
-                isDragging = false;
-            }
+            // if(isDragging) {
+            //     e.preventDefault();
+            //     isDragging = false;
+            // }
         });
     }
     
@@ -816,20 +791,10 @@ export class InputHandler{
     }
 
     inputFocusChanged(activeEl, component, property){
-        console.log("🎨 inputFocusChanged called", {
-            activeEl, 
-            component: component?.type, 
-            property,
-            initialized: this.initialized,
-            elementType: activeEl?.type
-        });
-        
         if(!this.initialized){ 
-            console.log("🎨 Not initialized, returning");
             return; 
         }
         if(this.currentInput === activeEl){
-            console.log("🎨 Same input already active, returning");
             return;
         }
        
@@ -840,11 +805,9 @@ export class InputHandler{
 
         this.currentInput = activeEl;
         if(activeEl.type === "number"){
-            console.log("🎨 Handling numeric input");
             this.helpNumericInputElement(activeEl, component, property);
         }
         if(activeEl.type === "color"){
-            console.log("🎨 Handling color input");
             this.helpColorInputElement(activeEl, component, property);
         }
         
