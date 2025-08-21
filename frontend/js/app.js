@@ -78,7 +78,7 @@
             log("init", "Ngrok URL: " + window.ngrokUrl);
             log("init", "Repo URL: " + window.repoUrl);
             log("init", "Block Service URL: " + window.blockServiceUrl);
-            document.body.style.height = "100vh";
+            document.body.style.height = "150vh";
 
 
 
@@ -585,7 +585,6 @@
         var luser = JSON.parse(localStorage.getItem("localUser"));
         if(luser){
             scene.localUser = luser
-            scene.localUser.id = "abcdefghi"
             scene.users = {
                 [luser.uid]: luser
             }

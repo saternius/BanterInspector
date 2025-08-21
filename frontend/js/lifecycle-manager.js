@@ -110,6 +110,18 @@ export class LifecycleManager {
             monoBehavior._update();
         });
     }
+
+    relayEventToMonoBehaviors(event, key){
+        this.monoBehaviors.forEach((monoBehavior, componentId) => {
+            if (monoBehavior.ctx[event] && typeof monoBehavior.ctx[event] === 'function') {
+                try {
+                    monoBehavior.ctx[event](key);
+                } catch (error) {
+                    err('lifecycle', `Error in ${event} for ${componentId}:`, error);
+                }
+            }
+        });
+    }
     
     /**
      * Setup keyboard event listeners
@@ -117,60 +129,30 @@ export class LifecycleManager {
     setupKeyboardListeners() {
         // KeyDown event
         document.addEventListener('keydown', (event) => {
-            this.monoBehaviors.forEach((monoBehavior, componentId) => {
-                if (monoBehavior.onKeyDown && typeof monoBehavior.onKeyDown === 'function') {
-                    try {
-                        monoBehavior.onKeyDown(event.key);
-                    } catch (error) {
-                        err('lifecycle', `Error in onKeyDown for ${componentId}:`, error);
-                    }
-                }
-                
-                // Also trigger keyDown for backward compatibility
-                if (monoBehavior.keyDown && typeof monoBehavior.keyDown === 'function') {
-                    try {
-                        monoBehavior.keyDown(event.key);
-                    } catch (error) {
-                        err('lifecycle', `Error in keyDown for ${componentId}:`, error);
-                    }
-                }
-            });
+            this.relayEventToMonoBehaviors('onKeyDown', event.key);
         });
         
         // KeyUp event
         document.addEventListener('keyup', (event) => {
-            this.monoBehaviors.forEach((monoBehavior, componentId) => {
-                if (monoBehavior.onKeyUp && typeof monoBehavior.onKeyUp === 'function') {
-                    try {
-                        monoBehavior.onKeyUp(event.key);
-                    } catch (error) {
-                        err('lifecycle', `Error in onKeyUp for ${componentId}:`, error);
-                    }
-                }
-                
-                // Also trigger keyUp for backward compatibility
-                if (monoBehavior.keyUp && typeof monoBehavior.keyUp === 'function') {
-                    try {
-                        monoBehavior.keyUp(event.key);
-                    } catch (error) {
-                        err('lifecycle', `Error in keyUp for ${componentId}:`, error);
-                    }
-                }
-            });
+            this.relayEventToMonoBehaviors('onKeyUp', event.key);
         });
         
         // KeyPress event (deprecated but included for compatibility)
         document.addEventListener('keypress', (event) => {
-            this.monoBehaviors.forEach((monoBehavior, componentId) => {
-                if (monoBehavior.keyPress && typeof monoBehavior.keyPress === 'function') {
-                    try {
-                        monoBehavior.keyPress(event.key);
-                    } catch (error) {
-                        err('lifecycle', `Error in keyPress for ${componentId}:`, error);
-                    }
-                }
-            });
+            this.relayEventToMonoBehaviors('keyPress', event.key);
         });
+    }
+
+    keyDown(key){
+        this.relayEventToMonoBehaviors('onKeyDown', key);
+    }
+
+    keyUp(key){
+        this.relayEventToMonoBehaviors('onKeyUp', key);
+    }
+
+    keyPress(key){
+        this.relayEventToMonoBehaviors('keyPress', key);
     }
 
 }

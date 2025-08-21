@@ -1,0 +1,88 @@
+{
+  "author": "Technocrat",
+  "created": 1755735542471,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "initialized": true,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "name": "nothing",
+    "parentId": "Root",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "demo",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_49704",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/NewEntity_49704",
+      "newValue": "NewEntit_49704",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/NewEntit_49704",
+      "newValue": "other-box",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Root/other-box",
+      "folder": "demo",
+      "itemName": "other-box",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/other-box",
+      "newValue": "nothing",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1755735542471,
+  "name": "nothing"
+}

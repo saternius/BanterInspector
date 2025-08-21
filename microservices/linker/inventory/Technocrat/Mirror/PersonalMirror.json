@@ -1,0 +1,457 @@
+{
+  "author": "Technocrat",
+  "created": 1755793319176,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "initialized": true,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "backgroundColor": "#000000",
+          "cameraClear": 1,
+          "renderTextureSize": 1024
+        },
+        "type": "BanterMirror"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 2.5,
+            "y": 2.5,
+            "z": 0.05
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "initialized": true,
+        "type": "BanterColliderEvents"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "name": "PersonalMirror",
+    "parentId": "Root",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Mirror",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_94558",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/NewEntity_94558",
+      "newValue": "PersonalMirror",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMirror_3657"
+      },
+      "componentType": "BanterMirror",
+      "entityId": "Root/PersonalMirror",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_20137969",
+      "newValue": {
+        "x": 0.5,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_20137969",
+      "newValue": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.5,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_20137969",
+      "newValue": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.5
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_20137969",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BoxCollider_9079"
+      },
+      "componentType": "BoxCollider",
+      "entityId": "Root/PersonalMirror",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterColliderEvents_723"
+      },
+      "componentType": "BanterColliderEvents",
+      "entityId": "Root/PersonalMirror",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.25,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.45,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.25,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.4,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.45,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.42,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.4,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.44,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.42,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.44,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.48,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.48,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 2.5,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_9079",
+      "newValue": {
+        "x": 2.5,
+        "y": 2.5,
+        "z": 0.05
+      },
+      "options": {
+        "oldValue": {
+          "x": 2.5,
+          "y": 2.5,
+          "z": 0.1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/PersonalMirror",
+      "newValue": "5",
+      "options": {
+        "source": "ui"
+      },
+      "property": "layer"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1755793319176,
+  "name": "PersonalMirror"
+}

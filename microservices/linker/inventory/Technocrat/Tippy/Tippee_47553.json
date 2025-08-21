@@ -1,0 +1,812 @@
+{
+  "author": "Technocrat",
+  "created": 1755809191574,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "name": "Holder",
+        "parentId": "Root/Tippee_47553",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "initialized": true,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.05,
+            "y": 0.05,
+            "z": 0.05
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "arc": 6.283185307179586,
+          "depth": 1,
+          "depthSegments": 1,
+          "geometryType": 0,
+          "height": 1,
+          "heightSegments": 1,
+          "innerRadius": 0.2,
+          "openEnded": false,
+          "outerRadius": 0.5,
+          "p": 2,
+          "parametricType": 0,
+          "phiLength": 6.283185307179586,
+          "phiSegments": 8,
+          "phiStart": 0,
+          "q": 3,
+          "radialSegments": 32,
+          "radius": 0.5,
+          "radiusBottom": 0.5,
+          "radiusTop": 0.5,
+          "segments": 64,
+          "thetaLength": 6.283185307179586,
+          "thetaSegments": 6,
+          "thetaStart": 0,
+          "tube": 0.4,
+          "tubularSegments": 64,
+          "width": 1,
+          "widthSegments": 1
+        },
+        "type": "BanterGeometry"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0.01568627450980392,
+            "g": 0.9764705882352941,
+            "r": 0.9568627450980393
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "file": "Tippy.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "initialized": true,
+        "type": "BanterColliderEvents"
+      }
+    ],
+    "finished_loading": true,
+    "initialized": true,
+    "layer": 5,
+    "name": "Tippee_47553",
+    "parentId": "Root",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Tippy",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_4798",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_1274",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_52231",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.01568627450980392,
+                "g": 0.9764705882352941,
+                "r": 0.9568627450980393
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "MonoBehavior_92926",
+            "initialized": true,
+            "properties": {
+              "file": "Tippy.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BoxCollider_99469",
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_89955",
+            "initialized": true,
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "finished_loading": true,
+        "id": "Root/Tippee_47553",
+        "initialized": true,
+        "layer": 5,
+        "name": "Tippee_47553",
+        "parentId": "Root",
+        "persistent": true
+      },
+      "itemName": "Tippee",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_4798",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_1274",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_52231",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.01568627450980392,
+                "g": 0.9764705882352941,
+                "r": 0.9568627450980393
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "MonoBehavior_92926",
+            "initialized": true,
+            "properties": {
+              "file": "Tippy.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BoxCollider_99469",
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_89955",
+            "initialized": true,
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "finished_loading": true,
+        "id": "Root/Tippee_47553",
+        "initialized": true,
+        "layer": 5,
+        "name": "Tippee_47553",
+        "parentId": "Root",
+        "persistent": true
+      },
+      "itemName": "Tippee",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_4798",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_1274",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_52231",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.01568627450980392,
+                "g": 0.9764705882352941,
+                "r": 0.9568627450980393
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "MonoBehavior_92926",
+            "initialized": true,
+            "properties": {
+              "file": "Tippy.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BoxCollider_99469",
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_89955",
+            "initialized": true,
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "finished_loading": true,
+        "id": "Root/Tippee_47553",
+        "initialized": true,
+        "layer": 5,
+        "name": "Tippee_47553",
+        "parentId": "Root",
+        "persistent": true
+      },
+      "itemName": "Tippee",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root/NewEntity_36670"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_4798",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_1274",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_52231",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.01568627450980392,
+                "g": 0.9764705882352941,
+                "r": 0.9568627450980393
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "MonoBehavior_92926",
+            "initialized": true,
+            "properties": {
+              "file": "Tippy.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BoxCollider_99469",
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_89955",
+            "initialized": true,
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "finished_loading": true,
+        "id": "Root/Tippee_47553",
+        "initialized": true,
+        "layer": 5,
+        "name": "Tippee_47553",
+        "parentId": "Root",
+        "persistent": true
+      },
+      "itemName": "Tippee",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_4798",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_1274",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_52231",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.01568627450980392,
+                "g": 0.9764705882352941,
+                "r": 0.9568627450980393
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "MonoBehavior_92926",
+            "initialized": true,
+            "properties": {
+              "file": "Tippy.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BoxCollider_99469",
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_89955",
+            "initialized": true,
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "finished_loading": true,
+        "id": "Root/Tippee_47553",
+        "initialized": true,
+        "layer": 5,
+        "name": "Tippee_47553",
+        "parentId": "Root",
+        "persistent": true
+      },
+      "itemName": "Tippee",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_36773",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root/Tippee_47553"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_36773",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root/Tippee_47553"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Root/Tippee_47553/NewEntity_36773",
+      "newValue": "Holder",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1755809191574,
+  "name": "Tippee_47553"
+}

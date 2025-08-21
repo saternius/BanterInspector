@@ -205,7 +205,7 @@ export class Entity{
     }
 
     export(){
-        return deepClone(this, ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', 'id', '_controls']);
+        return deepClone(this, ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction']);
     }
 
     async Set(property, value){

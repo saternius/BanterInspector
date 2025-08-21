@@ -571,4 +571,5 @@ export class Logger{
 
 window.logger = new Logger();
 window.log = window.logger.log.bind(window.logger);
+window.err = window.logger.err.bind(window.logger);
 window.showNotification = showNotification;
