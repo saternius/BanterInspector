@@ -92,7 +92,7 @@
     "initialized": true,
     "layer": 0,
     "name": "Cube",
-    "parentId": "Root",
+    "parentId": "Scene",
     "persistent": true
   },
   "description": "",
@@ -100,7 +100,7 @@
   "history": [
     {
       "action": "save_item",
-      "entityId": "Root/Cube",
+      "entityId": "Scene/Cube",
       "folder": "Tutorial",
       "itemName": "Cube",
       "options": {
@@ -109,7 +109,7 @@
     },
     {
       "action": "save_item",
-      "entityId": "Root/Cube",
+      "entityId": "Scene/Cube",
       "folder": "Tutorial",
       "itemName": "Cube",
       "options": {

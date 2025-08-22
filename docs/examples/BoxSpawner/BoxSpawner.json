@@ -7,7 +7,7 @@
   "description": "",
   "data": {
     "name": "BoxSpawner2",
-    "parentId": "Root",
+    "parentId": "Scene",
     "components": [
       {
         "lastUpdate": {},
@@ -36,7 +36,7 @@
     "children": [
       {
         "name": "Box",
-        "parentId": "Root/BoxSpawner2",
+        "parentId": "Scene/BoxSpawner2",
         "components": [
           {
             "lastUpdate": {},
@@ -207,7 +207,7 @@
       },
       {
         "name": "BoxSpawner",
-        "parentId": "Root/BoxSpawner2",
+        "parentId": "Scene/BoxSpawner2",
         "components": [
           {
             "lastUpdate": {},
@@ -298,10 +298,10 @@
     {
       "action": "load_item",
       "itemName": "BoxSpawner",
-      "parentId": "Root",
+      "parentId": "Scene",
       "itemData": {
         "name": "BoxSpawner_57869",
-        "parentId": "Root",
+        "parentId": "Scene",
         "components": [
           {
             "id": "Transform_36500",
@@ -329,7 +329,7 @@
         "children": [
           {
             "name": "Box",
-            "parentId": "Root/BoxSpawner_57869",
+            "parentId": "Scene/BoxSpawner_57869",
             "components": [
               {
                 "id": "Transform_34306",
@@ -431,7 +431,7 @@
                     }
                   },
                   "transform": {
-                    "id": "Transform_Root/Box",
+                    "id": "Transform_Scene/Box",
                     "properties": {
                       "localPosition": {
                         "x": 0,
@@ -461,7 +461,7 @@
                     }
                   },
                   "transform": {
-                    "id": "Transform_Root/Box",
+                    "id": "Transform_Scene/Box",
                     "properties": {
                       "localPosition": {
                         "x": 0,
@@ -489,11 +489,11 @@
             "children": [],
             "active": true,
             "persistent": true,
-            "id": "Root/BoxSpawner_57869/Box"
+            "id": "Scene/BoxSpawner_57869/Box"
           },
           {
             "name": "BoxSpawner",
-            "parentId": "Root/BoxSpawner_57869",
+            "parentId": "Scene/BoxSpawner_57869",
             "components": [
               {
                 "id": "Transform_80537",
@@ -566,12 +566,12 @@
             "children": [],
             "active": true,
             "persistent": true,
-            "id": "Root/BoxSpawner_57869/BoxSpawner"
+            "id": "Scene/BoxSpawner_57869/BoxSpawner"
           }
         ],
         "active": true,
         "persistent": true,
-        "id": "Root/BoxSpawner_57869"
+        "id": "Scene/BoxSpawner_57869"
       },
       "options": {
         "source": "ui"
@@ -600,7 +600,7 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Root/BoxSpawner_57869",
+      "entityId": "Scene/BoxSpawner_57869",
       "property": "name",
       "newValue": "BoxSpawner2",
       "options": {

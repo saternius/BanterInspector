@@ -78,7 +78,7 @@
             log("init", "Ngrok URL: " + window.ngrokUrl);
             log("init", "Repo URL: " + window.repoUrl);
             log("init", "Block Service URL: " + window.blockServiceUrl);
-            document.body.style.height = "150vh";
+            document.body.style.height = "100vh";
 
 
 

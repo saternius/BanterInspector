@@ -1,5 +1,13 @@
 {
     "uid": "",
-    "inventory_dirs": ["Technocrat/Tutorial", "Technocrat/Tooltip", "Technocrat/demo", "Technocrat/Mirror", "Technocrat/Tippy"],
+    "inventory_dirs": [
+        "Technocrat/Tutorial",
+        "Technocrat/Tooltip",
+        "Technocrat/demo",
+        "Technocrat/Mirror",
+        "Technocrat/Tippy",
+        "Technocrat/PersonalMirror",
+        "Technocrat/Passthrough"
+    ],
     "password":""
 }

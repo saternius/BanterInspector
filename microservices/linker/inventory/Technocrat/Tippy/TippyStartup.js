@@ -6,10 +6,10 @@ tooltipBtn.innerHTML = "<span>🟨</span>"
 navControls.appendChild(tooltipBtn)
 
 tooltipBtn.addEventListener("click", ()=>{
-    let tippyExists = SM.getEntityById("Root/Tippy(Open)")
+    let tippyExists = SM.getEntityById("Scene/Tippy(Open)")
     if(!tippyExists){
         showNotification("Spawning Tippy")
-        LoadItem("Tippy", "Root")
+        LoadItem("Tippy", "Scene")
     }else{
         showNotification("Tippy already in scene")
     }

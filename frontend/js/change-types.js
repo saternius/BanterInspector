@@ -506,7 +506,7 @@ export class EntityRemoveChange extends Change{
                 this.siblingIndex = parent.children.findIndex(child => child.id === this.entity.id);
             }
         } else {
-            // Root level entity
+            // Scene level entity
             this.siblingIndex = SM.entityData.entities.findIndex(s => s.id === this.entity.id);
         }
 
@@ -570,7 +570,8 @@ export class EntityMoveChange extends Change{
     async apply() {
         super.apply();
         const entity = SM.getEntityById(this.entityId);
-        if (!entity) return;
+        const parent = SM.getEntityById(this.newParentId);
+        if (!entity || !parent) return;
         await entity.SetParent(this.newParentId);
     }
 
@@ -668,7 +669,7 @@ export class LoadItemChange extends Change{
         super();
         this.timeout = 10000;
         this.itemName = itemName;
-        this.parentId = parentId || 'Root';
+        this.parentId = parentId || 'Scene';
         this.options = options || {};
         this.entityId = null;
         this.itemData = itemData;
@@ -913,6 +914,10 @@ export class SaveEntityItemChange extends Change{
         super();
         this.timeout = 10000;
         this.entityId = entityId;
+        if(this.entityId.length === 0){
+            showNotification('No entity selected');
+            return;
+        }
         this.entity = SM.getEntityById(entityId);
         this.itemName = itemName || this.entity.name;
         this.folder = folder || inventory.currentFolder;
@@ -949,6 +954,8 @@ export class SaveEntityItemChange extends Change{
     
 
     async apply(){
+        if(this.entityId.length === 0){return;}
+
         super.apply();
         const existingKeys = Object.keys(inventory.items);
         if (!this.itemName || this.itemName.trim() === ''){
@@ -1629,13 +1636,13 @@ return `
   <span style="color: #88ddff;">create_script_item</span> <span style="color: #ff88ff;">$scriptName</span>            - Create new script item
 
 <span style="color: #00ff00; font-weight: bold;">Usage Examples:</span>
-  <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Root MyEntity</span>                   - Add entity to root
+  <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Scene MyEntity</span>                   - Add entity to root
   <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">e_123 Cube</span>                   - Add Cube component to entity
   <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ffff88;">e_123 name "New Name"</span>  - Rename entity
   <span style="color: #88ddff;">load_item</span> <span style="color: #ffff88;">MyPrefab e_456</span>                   - Load prefab as child of e_456
 
 <span style="color: #00ff00; font-weight: bold;">Notes:</span>
-  <span style="color: #aaaaaa;">- Use 'Root' for root/no parent
+  <span style="color: #aaaaaa;">- Use 'Scene' for root/no parent
   - Entity IDs format: e_XXX
   - Component IDs format: c_XXX
   - Values are auto-parsed (strings, numbers, booleans, vectors, colors)

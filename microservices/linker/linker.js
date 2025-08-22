@@ -59,11 +59,14 @@ inventoryDirs.forEach(dir => {
     let refPath = 'inventory/'+dir;
     console.log(`Listening to inventory: ${refPath}`);
     const inventoryRef = ref(database, refPath);
+    console.log(refPath)
     onValue(inventoryRef, (snapshot) => {
+        console.log("onValue", refPath)
         const data = snapshot.val();
         console.log(`Inventory updated: ${refPath}: ${data}`);
+        if(!data) return;
         Object.values(data).forEach((update) => {
-            //console.log(update)
+            console.log(update)
             if(update.itemType === "script"){
                 let content = update.data;
                 let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
@@ -88,6 +91,7 @@ inventoryDirs.forEach(dir => {
                 fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf8');
                 console.log(`updated entity (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
             }
+            console.log("\n\n\n")
         });
         
     }, (error) => {

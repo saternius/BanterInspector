@@ -18,7 +18,7 @@ export class Entity{
         if(!entityData._bs){
             let newGameObject = new BS.GameObject(this.name);
             this._bs = newGameObject;
-            let parentEntity = SM.getEntityOrRoot(this.parentId);
+            let parentEntity = SM.getEntityOrScene(this.parentId);
             try{
                 let parentGameObject = parentEntity._bs;
                 if(parentGameObject){
@@ -93,6 +93,7 @@ export class Entity{
 
     async _setParent(newParent){
         if (newParent === this) return;
+        if(!newParent) return;
         if (this.parentId) {
             const oldParent = SM.getEntityById(this.parentId);
             if(oldParent){

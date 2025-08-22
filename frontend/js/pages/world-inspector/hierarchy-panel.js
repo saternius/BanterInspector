@@ -95,7 +95,7 @@
                     log("scene", "deleting entity =>", SM.selectedEntity)
                     const change = new EntityRemoveChange(SM.selectedEntity, { source: 'ui' });
                     changeManager.applyChange(change);
-                    SM.selectEntity('Root');
+                    SM.selectEntity('Scene');
                 }
             });
 

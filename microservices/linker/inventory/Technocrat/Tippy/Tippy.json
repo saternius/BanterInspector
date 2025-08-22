@@ -8,6 +8,7 @@
         "active": true,
         "components": [
           {
+            "id": "Transform_82245",
             "initialized": true,
             "properties": {
               "localPosition": {
@@ -30,15 +31,17 @@
             "type": "Transform"
           }
         ],
+        "id": "Scene/Tippy_76220/Holder",
         "initialized": true,
         "layer": 0,
         "name": "Holder",
-        "parentId": "Root/Tippee_47553",
+        "parentId": "Scene/Tippy_76220",
         "persistent": true
       }
     ],
     "components": [
       {
+        "id": "Transform_18922",
         "initialized": true,
         "properties": {
           "localPosition": {
@@ -61,6 +64,7 @@
         "type": "Transform"
       },
       {
+        "id": "BanterGeometry_5540",
         "initialized": true,
         "properties": {
           "arc": 6.283185307179586,
@@ -94,6 +98,7 @@
         "type": "BanterGeometry"
       },
       {
+        "id": "BanterMaterial_52942",
         "initialized": true,
         "properties": {
           "color": {
@@ -110,6 +115,7 @@
         "type": "BanterMaterial"
       },
       {
+        "id": "MonoBehavior_50033",
         "initialized": true,
         "properties": {
           "file": "Tippy.js",
@@ -118,6 +124,7 @@
         "type": "MonoBehavior"
       },
       {
+        "id": "BoxCollider_50124",
         "initialized": true,
         "properties": {
           "center": {
@@ -135,15 +142,17 @@
         "type": "BoxCollider"
       },
       {
+        "id": "BanterColliderEvents_8918",
         "initialized": true,
         "type": "BanterColliderEvents"
       }
     ],
     "finished_loading": true,
+    "id": "Scene/Tippy_76220",
     "initialized": true,
     "layer": 5,
-    "name": "Tippee_47553",
-    "parentId": "Root",
+    "name": "Tippy_76220",
+    "parentId": "Scene",
     "persistent": true
   },
   "description": "",
@@ -262,18 +271,18 @@
           }
         ],
         "finished_loading": true,
-        "id": "Root/Tippee_47553",
+        "id": "Scene/Tippee_47553",
         "initialized": true,
         "layer": 5,
         "name": "Tippee_47553",
-        "parentId": "Root",
+        "parentId": "Scene",
         "persistent": true
       },
       "itemName": "Tippee",
       "options": {
         "source": "ui"
       },
-      "parentId": "Root"
+      "parentId": "Scene"
     },
     {
       "action": "load_item",
@@ -388,18 +397,18 @@
           }
         ],
         "finished_loading": true,
-        "id": "Root/Tippee_47553",
+        "id": "Scene/Tippee_47553",
         "initialized": true,
         "layer": 5,
         "name": "Tippee_47553",
-        "parentId": "Root",
+        "parentId": "Scene",
         "persistent": true
       },
       "itemName": "Tippee",
       "options": {
         "source": "ui"
       },
-      "parentId": "Root"
+      "parentId": "Scene"
     },
     {
       "action": "load_item",
@@ -514,18 +523,18 @@
           }
         ],
         "finished_loading": true,
-        "id": "Root/Tippee_47553",
+        "id": "Scene/Tippee_47553",
         "initialized": true,
         "layer": 5,
         "name": "Tippee_47553",
-        "parentId": "Root",
+        "parentId": "Scene",
         "persistent": true
       },
       "itemName": "Tippee",
       "options": {
         "source": "ui"
       },
-      "parentId": "Root/NewEntity_36670"
+      "parentId": "Scene/NewEntity_36670"
     },
     {
       "action": "load_item",
@@ -640,18 +649,18 @@
           }
         ],
         "finished_loading": true,
-        "id": "Root/Tippee_47553",
+        "id": "Scene/Tippee_47553",
         "initialized": true,
         "layer": 5,
         "name": "Tippee_47553",
-        "parentId": "Root",
+        "parentId": "Scene",
         "persistent": true
       },
       "itemName": "Tippee",
       "options": {
         "source": "ui"
       },
-      "parentId": "Root"
+      "parentId": "Scene"
     },
     {
       "action": "load_item",
@@ -766,18 +775,18 @@
           }
         ],
         "finished_loading": true,
-        "id": "Root/Tippee_47553",
+        "id": "Scene/Tippee_47553",
         "initialized": true,
         "layer": 5,
         "name": "Tippee_47553",
-        "parentId": "Root",
+        "parentId": "Scene",
         "persistent": true
       },
       "itemName": "Tippee",
       "options": {
         "source": "ui"
       },
-      "parentId": "Root"
+      "parentId": "Scene"
     },
     {
       "action": "add_entity",
@@ -785,7 +794,7 @@
       "options": {
         "source": "ui"
       },
-      "parentId": "Root/Tippee_47553"
+      "parentId": "Scene/Tippee_47553"
     },
     {
       "action": "add_entity",
@@ -793,11 +802,11 @@
       "options": {
         "source": "ui"
       },
-      "parentId": "Root/Tippee_47553"
+      "parentId": "Scene/Tippee_47553"
     },
     {
       "action": "set_entity_property",
-      "entityId": "Root/Tippee_47553/NewEntity_36773",
+      "entityId": "Scene/Tippee_47553/NewEntity_36773",
       "newValue": "Holder",
       "options": {
         "source": "ui"
@@ -805,7 +814,7 @@
       "property": "name"
     }
   ],
-  "icon": "📦",
+  "icon": "🟨",
   "itemType": "entity",
   "last_used": 1755826785239,
   "name": "Tippy"

@@ -25,7 +25,7 @@ export class InputHandler{
             this.getRightControllerRot = ()=>{
                 //console.log("todo: set with tippy")
 
-                let tippyPath = "Root/Tippy_"+scene.localUser.name;
+                let tippyPath = "Scene/Tippy_"+scene.localUser.name;
                 let tippy = SM.getEntityById(tippyPath)
                 if(!tippy){
                     showNotification("Error: Tippy not found")
@@ -36,18 +36,14 @@ export class InputHandler{
                     }
                 }
 
-                let tippyScript = tippy.getComponent("MonoBehavior").ctx;
+                let pos = tippy.getTransform()._bs._localRotation;
 
                 return {
-                    x: tippyScript.globalRot.x,
-                    y: tippyScript.globalRot.y,
-                    z: tippyScript.globalRot.z,
+                    x: pos.x,
+                    y: pos.y,
+                    z: pos.z,
                 }
-                // return {
-                //     x: userinputs.righthand.rotation.x,
-                //     y: userinputs.righthand.rotation.y,
-                //     z: userinputs.righthand.rotation.z,
-                // }
+               
             }
             this.radialCrown = document.getElementById("radialCrown");
             this.radialCrownTol = document.getElementById("radialCrownTol");
