@@ -1,26 +1,16 @@
-this.default = {}
+console.log("TippyStartup")
+let navControls = document.querySelector(".nav-controls")
+let tooltipBtn = document.createElement("button")
+tooltipBtn.classList.add("nav-control-btn")
+tooltipBtn.innerHTML = "<span>🟨</span>"
+navControls.appendChild(tooltipBtn)
 
-Object.entries(this.default).forEach(([key, val])=>{
-    if(!this.vars[key]) this.vars[key] = val
+tooltipBtn.addEventListener("click", ()=>{
+    let tippyExists = SM.getEntityById("Root/Tippy(Open)")
+    if(!tippyExists){
+        showNotification("Spawning Tippy")
+        LoadItem("Tippy", "Root")
+    }else{
+        showNotification("Tippy already in scene")
+    }
 })
-
-
-this.onStart = ()=>{
-    console.log("onStart")
-}
-
-this.onUpdate = ()=>{
-    console.log("onUpdate")
-}
-
-this.onDestroy = ()=>{
-    console.log("onDestroy")
-}
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}

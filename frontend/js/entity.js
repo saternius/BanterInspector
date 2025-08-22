@@ -43,9 +43,8 @@ export class Entity{
         return this.components.find(component => component.type === "Transform");
     }
 
-    getComponent(componentType, index){
-        index = index || 0;
-        return this.components.find(component => component.type === componentType);
+    getComponent(componentType, index = 0){
+        return this.components.filter(component => component.type === componentType)[index];
     }
 
     getComponents(componentType){

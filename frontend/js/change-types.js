@@ -1486,7 +1486,9 @@ this.keyUp = (key)=>{
             itemType: 'script',
             icon:"📜",
             description: '',  // Initialize with empty description
-            data: defaultScript
+            data: defaultScript,
+            startup: false,  // Script runs on scene startup
+            active: false    // Script is active even without being attached to GameObject
         };
         
         // Only add folder property if we're in a folder

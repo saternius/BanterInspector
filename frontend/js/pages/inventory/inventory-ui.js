@@ -703,6 +703,32 @@ export class InventoryUI {
             });
         }
         
+        // Script startup toggle
+        const startupToggle = this.previewPane.querySelector('.script-startup-toggle');
+        if (startupToggle) {
+            startupToggle.addEventListener('change', () => {
+                const item = this.inventory.items[itemName];
+                if(item){
+                    item.startup = startupToggle.checked;
+                    this.inventory.syncItem(itemName, item);
+                    showNotification(`Updated startup setting for "${itemName}"`);
+                }
+            });
+        }
+        
+        // Script active toggle
+        const activeToggle = this.previewPane.querySelector('.script-active-toggle');
+        if (activeToggle) {
+            activeToggle.addEventListener('change', () => {
+                const item = this.inventory.items[itemName];
+                if(item){
+                    item.active = activeToggle.checked;
+                    this.inventory.syncItem(itemName, item);
+                    showNotification(`Updated active setting for "${itemName}"`);
+                }
+            });
+        }
+        
         // Description textarea
         const descriptionTextarea = this.previewPane.querySelector('.description-textarea');
         if (descriptionTextarea) {
@@ -854,6 +880,24 @@ export class InventoryUI {
                     <div class="meta-item">
                         <span class="meta-label">Created:</span>
                         <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-label">Script Options:</div>
+                    <div style="display: flex; gap: 20px; padding: 10px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" class="script-startup-toggle" data-item-name="${item.name}" 
+                                ${item.startup ? 'checked' : ''} style="cursor: pointer;">
+                            <span>Startup Script</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" class="script-active-toggle" data-item-name="${item.name}" 
+                                ${item.active ? 'checked' : ''} style="cursor: pointer;">
+                            <span>Always Active</span>
+                        </label>
+                    </div>
+                    <div style="padding: 5px 10px; font-size: 0.9em; color: #888;">
+                        <em>Note: Both must be enabled for script to run on startup</em>
                     </div>
                 </div>
                 <div class="preview-meta">
