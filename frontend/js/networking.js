@@ -569,6 +569,50 @@ export class Networking {
 export const networking = new Networking();
 window.networking = networking;
 
+
+//This should eventually be deprecated
+function quaternionToEuler(quaternion) {
+    const x = quaternion.x;
+    const y = quaternion.y;
+    const z = quaternion.z;
+    const w = quaternion.w;
+    
+    const t0 = 2.0 * (w * x + y * z);
+    const t1 = 1.0 - 2.0 * (x * x + y * y);
+    const roll = Math.atan2(t0, t1);
+    
+    const t2 = 2.0 * (w * y - z * x);
+    
+    const t3 = 1.0 - 2.0 * (y * y + z * z);
+    const pitch = Math.asin(t2);
+    
+    const t4 = 2.0 * (w * z + x * y);
+    const t5 = 1.0 - 2.0 * (y * y + z * z);
+    const yaw = Math.atan2(t4, t5);
+
+    return {
+        x: roll,
+        y: pitch,
+        z: yaw
+    }
+}
+
+window.networking.globalProps = (name, globalPos, globalRot) =>{
+    //console.log("globalProps", name, globalPos, globalRot)
+    let p_arr = globalPos.split(",").map(x=>parseFloat(x))
+    let r_arr = globalRot.split(",").map(x=>parseFloat(x))
+    let pos_vec = {x:p_arr[0], y:p_arr[1], z:p_arr[2]}
+    let quaternion = {x:r_arr[0], y:r_arr[1], z:r_arr[2], w:r_arr[3]}
+    let euler = quaternionToEuler(quaternion)
+    SM.getAllMonoBehaviors().forEach(monobehavior => {
+        if(monobehavior.ctx.globalProps){
+            monobehavior.ctx.globalProps(name, pos_vec, euler)
+        }
+    })
+}
+
+
+
 // Debug function for testing Firebase Realtime Database
 window.testFirebaseDB = async () => {
     log('net', 'Testing Firebase Realtime Database...');
