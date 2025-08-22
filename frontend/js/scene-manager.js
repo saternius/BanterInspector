@@ -181,31 +181,30 @@
                         log('init', 'Gathering scene hierarchy...');
                         let hierarchy = null;
                         if(!this.props.hierarchy){
-                            // Update loading screen progress for hierarchy gathering
-                            if (window.loadingScreen) {
-                                window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
-                            }
+                            window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
                             hierarchy = await this.gatherSceneHierarchy();
-                            if (window.loadingScreen) {
-                                window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
-                            }
+                            log('init', "gathered Scene's hierarchy =>", hierarchy)
                         }else{
                             let h = this.props.hierarchy;
                             if(typeof h == "string"){
                                 h = JSON.parse(h);
                             }
                             hierarchy = h;
-                            if (window.loadingScreen) {
-                                window.loadingScreen.updateStage('hierarchy', 100, 'Using cached hierarchy');
-                            }
+                            log('init', "using cached hierarchy =>", hierarchy)
                         }
-                        log('init', "hierarchy =>", hierarchy)
+                        window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+                        window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+                        this.props.hierarchy = hierarchy;
+                        let scene_entity = await this.loadHierarchy("Scene", hierarchy);
+                        this.entityData.entities = [scene_entity];
+                        this.loadPeopleHierarchy();
+                        this.initializeExpandedNodes();
                         
-                        // Start entity generation
+                        // Entities generation complete
                         if (window.loadingScreen) {
-                            window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+                            window.loadingScreen.updateStage('entities', 100, 'All entities generated');
                         }
-                        await this.loadHierarchy(hierarchy);
+                        inspector?.hierarchyPanel?.render()
                     } catch (error) {
                         err('init', 'Error gathering scene hierarchy:', error);
                     }
@@ -368,10 +367,9 @@
 
 
         // Loads all the Entities on initialization
-        async loadHierarchy(hierarchy){
-            log('init', "loading hierarchy =>", hierarchy)
+        async loadHierarchy(destination, hierarchy){
+            log('init', "loading hierarchy for", destination, "=>", hierarchy)
             if(!hierarchy){ return null}
-            this.props.hierarchy = hierarchy;
             
             // Count total entities for progress tracking
             let totalEntities = 0;
@@ -403,7 +401,7 @@
                 if (window.loadingScreen) {
                     const progress = (processedEntities / totalEntities) * 100;
                     window.loadingScreen.updateStage('entities', progress, 
-                        `Processing entity ${processedEntities} of ${totalEntities}: ${h.name}`);
+                        `Processing [${destination}] entities: ${processedEntities} of ${totalEntities} (${h.name})`);
                 }
 
                 //Make transform the top component
@@ -455,18 +453,12 @@
                 }
                 return entity;
             }
+            return await hierarchyToEntity(hierarchy, null);
+        }
 
-            const entity = await hierarchyToEntity(hierarchy, null);
 
-            this.entityData.entities = [entity];
-            this.initializeExpandedNodes();
-            
-            // Entities generation complete
-            if (window.loadingScreen) {
-                window.loadingScreen.updateStage('entities', 100, 'All entities generated');
-            }
-            
-            inspector?.hierarchyPanel?.render()
+        async loadPeopleHierarchy(){
+            console.log("TODO")
         }
 
 

@@ -218,6 +218,9 @@ export class Feedback {
                 micButton.classList.add('recording');
                 this.showSpeechStatus('Listening...', 'recording');
                 
+                // Disable submit buttons while recording
+                this.disableSubmitButtons();
+                
                 // Visual feedback
                 this.animateRecording();
             },
@@ -239,6 +242,9 @@ export class Feedback {
                 this.hideSpeechStatus();
                 clearTimeout(this.timeoutId);
                 log("inspector", "[mic] stopped recording")
+                
+                // Re-enable submit buttons after recording stops
+                this.enableSubmitButtons();
                 
                 // Update button icon back to "Add More" if in block mode
                 if (this.blockEditorContainer && this.blockEditorContainer.style.display !== 'none') {
@@ -269,6 +275,8 @@ export class Feedback {
             },
             (error) => {
                 err("inspector", 'Failed to stop recording:', error);
+                // Re-enable submit buttons even on error
+                this.enableSubmitButtons();
             }
         );
     }
@@ -1571,6 +1579,60 @@ export class Feedback {
                 this.rlen = 0;
             }
         };
+    }
+    
+    disableSubmitButtons() {
+        // Disable single submit button
+        const singleSubmit = document.getElementById('submitFeedbackBtn');
+        if (singleSubmit) {
+            singleSubmit.disabled = true;
+            singleSubmit.style.opacity = '0.5';
+            singleSubmit.style.cursor = 'not-allowed';
+            singleSubmit.innerHTML = "Stop Recording to Submit"
+        }
+        
+        // Disable dual submit buttons (for block mode)
+        const submitOriginalBtn = document.getElementById('submitOriginalBtn');
+        const submitRefinementBtn = document.getElementById('submitRefinementBtn');
+        
+        if (submitOriginalBtn) {
+            submitOriginalBtn.disabled = true;
+            submitOriginalBtn.style.opacity = '0.5';
+            submitOriginalBtn.style.cursor = 'not-allowed';
+        }
+        
+        if (submitRefinementBtn) {
+            submitRefinementBtn.disabled = true;
+            submitRefinementBtn.style.opacity = '0.5';
+            submitRefinementBtn.style.cursor = 'not-allowed';
+        }
+    }
+    
+    enableSubmitButtons() {
+        // Enable single submit button
+        const singleSubmit = document.getElementById('submitFeedbackBtn');
+        if (singleSubmit) {
+            singleSubmit.disabled = false;
+            singleSubmit.style.opacity = '1';
+            singleSubmit.style.cursor = 'pointer';
+            singleSubmit.innerHTML = "Submit Feedback";
+        }
+        
+        // Enable dual submit buttons (for block mode)
+        const submitOriginalBtn = document.getElementById('submitOriginalBtn');
+        const submitRefinementBtn = document.getElementById('submitRefinementBtn');
+        
+        if (submitOriginalBtn) {
+            submitOriginalBtn.disabled = false;
+            submitOriginalBtn.style.opacity = '1';
+            submitOriginalBtn.style.cursor = 'pointer';
+        }
+        
+        if (submitRefinementBtn) {
+            submitRefinementBtn.disabled = false;
+            submitRefinementBtn.style.opacity = '1';
+            submitRefinementBtn.style.cursor = 'pointer';
+        }
     }
 }
 

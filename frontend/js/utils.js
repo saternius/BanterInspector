@@ -386,8 +386,9 @@ export function parseBest(str) {
 }
 
 export function appendToConsole(tag, id, str){
-    if(window.logger.include[tag]){
+    if(window.logger && window.logger.include[tag]){
         let consoleEl = document.getElementById("lifecycleConsole");
+        if(!consoleEl) return;
         
         const children = consoleEl.children;
         if (children.length >= 500) {
@@ -399,10 +400,17 @@ export function appendToConsole(tag, id, str){
         div.id = id;
         div.style.whiteSpace = 'pre-wrap';
         div.style.fontFamily = 'monospace';
-        div.textContent = str;
-        if(tag === "error"){
-            div.style.color = "red";
+        
+        if(window.logger && window.logger.getTagColor){
+            const color = tag === "error" ? "red" : window.logger.getTagColor(tag);
+            div.innerHTML = `<span style="color: ${color}; font-weight: bold">[${tag.toUpperCase()}]:</span> ${str}`;
+        } else {
+            div.textContent = str;
+            if(tag === "error"){
+                div.style.color = "red";
+            }
         }
+        
         consoleEl.appendChild(div);
         consoleEl.scrollTop = consoleEl.scrollHeight;
     }
@@ -552,19 +560,44 @@ export class Logger{
             oneShot: false,
             spaceProps: false
         }
+        this.tagColors = {};
+    }
+
+    hashStringToColor(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        
+        const hue = Math.abs(hash % 360);
+        const saturation = 60 + (Math.abs(hash >> 8) % 30);
+        const lightness = 50 + (Math.abs(hash >> 16) % 30);
+        
+        return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    }
+
+    getTagColor(tag) {
+        if (!this.tagColors[tag]) {
+            this.tagColors[tag] = this.hashStringToColor(tag);
+        }
+        return this.tagColors[tag];
     }
 
     log(tag, ...args){
-        console.log(`[${tag.toUpperCase()}]: `, ...args);
+        const color = this.getTagColor(tag);
+        console.log(`%c[${tag.toUpperCase()}]:%c `, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
         if(this.include[tag]){
-            appendToConsole(tag, generateId(), args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" "));
+            const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+            appendToConsole(tag, generateId('log'), message);
         }
     }
 
     err(tag, ...args){
-        console.error(`[${tag.toUpperCase()}]: `, ...args);
+        const color = this.getTagColor(tag);
+        console.error(`%c[${tag.toUpperCase()}]:%c `, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
         if(this.include[tag]){
-            appendToConsole("error", "error_"+Math.floor(Math.random()*1000000), args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" "));
+            const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+            appendToConsole("error", "error_" + Math.floor(Math.random()*1000000), message);
         }
     }
 }
