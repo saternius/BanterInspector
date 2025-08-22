@@ -20,12 +20,34 @@ export class InputHandler{
             // scene.LegacyEnableControllerExtras()
             // scene.EnableLegacy()
 
+           
+
             this.getRightControllerRot = ()=>{
-                return {
-                    x: userinputs.righthand.rotation.x,
-                    y: userinputs.righthand.rotation.y,
-                    z: userinputs.righthand.rotation.z,
+                console.log("todo: set with tippy")
+
+                let tippyPath = "Root/Tippy_"+scene.localUser.name;
+                let tippy = SM.getEntityById(tippyPath)
+                if(!tippy){
+                    showNotification("Error: Tippy not found")
+                    return {
+                        x: 0,
+                        y: 0,
+                        z: 0,
+                    }
                 }
+
+                let tippyTransform = tippy.getTransform();
+
+                return {
+                    x: 0,
+                    y: 0,
+                    z: 0,
+                }
+                // return {
+                //     x: userinputs.righthand.rotation.x,
+                //     y: userinputs.righthand.rotation.y,
+                //     z: userinputs.righthand.rotation.z,
+                // }
             }
             this.radialCrown = document.getElementById("radialCrown");
             this.radialCrownTol = document.getElementById("radialCrownTol");

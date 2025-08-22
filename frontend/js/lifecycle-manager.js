@@ -6,7 +6,7 @@ let localhost = window.location.hostname === 'localhost'
 export class LifecycleManager {
     constructor() {
         this.monoBehaviors = new Map(); // Map of componentId -> MonoBehavior instance
-        this.fps = 30; // Default 30 FPS for onUpdate
+        this.fps = 45; // Default 45 FPS for onUpdate
         this.updateInterval = null;
         this.isRunning = false;
         this.contexts = []

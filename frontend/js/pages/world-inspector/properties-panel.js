@@ -143,7 +143,7 @@
             section.dataset.panel = 'propertyPanelComponent';
             
             const header = document.createElement('div');
-            header.className = 'component-header';
+            header.className = 'component-header perm';
             header.innerHTML = `
                 <div>
                     <span class="component-name">Entity</span>
@@ -262,6 +262,9 @@
             // Header
             const header = document.createElement('div');
             header.className = 'component-header';
+            if(component.type === "Transform"){
+                header.classList.add('perm');
+            }
             
             const headerContent = document.createElement('div');
             headerContent.style.display = 'flex';

@@ -166,6 +166,7 @@ export class Entity{
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
+        this._bs.SetName(newName);
         SM.entityData.entityMap[this.id] = this;
         if(!localUpdate) this.saveSpaceProperties();
         this.children.forEach(child=>{

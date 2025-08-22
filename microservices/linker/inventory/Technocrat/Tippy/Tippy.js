@@ -1,5 +1,12 @@
 this.default = {}
 
+
+
+
+let GetObjectGlobalTransform = (objectName)=>{
+    scene.SendToVisualScripting('globalTransform', objectName);
+}
+
 let attached = false;
 this.onStart = async ()=>{
     if(!attached){
@@ -21,8 +28,16 @@ this.onStart = async ()=>{
     }
 }
 
+
+this.globalProps = (name, globalPos, globalRot) =>{
+    if(name === this._entity.name){
+        console.log("globalProps", name, globalPos, globalRot)
+    }
+}
+
 this.onUpdate = ()=>{
     //console.log("onUpdate")
+    GetObjectGlobalTransform(this._entity.name)
 }
 
 this.onDestroy = ()=>{
