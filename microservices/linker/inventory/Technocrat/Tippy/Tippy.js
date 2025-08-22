@@ -8,7 +8,7 @@ let attached = this._entity.components.map(x=>x.type).includes("BanterAttachedOb
 this.onStart = async ()=>{
     if(attached) return;
     console.log("Tippy onStart")
-    let tippyExists = SM.getEntityById("Root/Tippy(Open)")
+    let tippyExists = SM.getEntityById("Scene/Tippy(Open)")
     if(tippyExists){
         console.log("Tippy already in scene, removing")
         showNotification("Tippy already in scene, removing")
@@ -44,9 +44,12 @@ this.globalProps = (name, globalPos, globalRot) =>{
     }
 }
 
+let tippyTransform = this._entity.getTransform()
 this.onUpdate = ()=>{
     //console.log("onUpdate")
-    GetObjectGlobalTransform(this._entity.name)
+    //GetObjectGlobalTransform(this._entity.name)
+    tippyTransform._bs.Q([13])
+    //console.log(tippyTransform._bs._localRotation)
 }
 
 this.onDestroy = ()=>{

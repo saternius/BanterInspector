@@ -7,7 +7,7 @@ let v = (str)=>{
 
 let loadItem = async (itemRef, target) =>{
     if(target === "_self") target = this._entity.id
-    if(target === undefined) target = "Root"
+    if(target === undefined) target = "Scene"
     return await LoadItem(itemRef, target)
 }
 

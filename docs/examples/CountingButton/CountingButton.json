@@ -7,7 +7,7 @@
   "description": "A simple button with a number that increments by 1 if you click it.",
   "data": {
     "name": "CountingButton",
-    "parentId": "Root",
+    "parentId": "Scene",
     "components": [
       {
         "lastUpdate": {},
@@ -78,7 +78,7 @@
     "children": [
       {
         "name": "ButtonMesh",
-        "parentId": "Root/CountingButton",
+        "parentId": "Scene/CountingButton",
         "components": [
           {
             "lastUpdate": {},
@@ -164,7 +164,7 @@
       },
       {
         "name": "Count",
-        "parentId": "Root/CountingButton",
+        "parentId": "Scene/CountingButton",
         "components": [
           {
             "lastUpdate": {},
@@ -1755,7 +1755,7 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Root/Button",
+      "entityId": "Scene/Button",
       "property": "name",
       "newValue": "CountingButton",
       "options": {
@@ -1764,7 +1764,7 @@
     },
     {
       "action": "save_item",
-      "entityId": "Root/CountingButton",
+      "entityId": "Scene/CountingButton",
       "itemName": "CountingButton",
       "folder": null,
       "options": {
@@ -1773,7 +1773,7 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Root/CountingButton/Count",
+      "entityId": "Scene/CountingButton/Count",
       "property": "name",
       "newValue": "Counter",
       "options": {
@@ -1782,7 +1782,7 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Root/CountingButton/Counter",
+      "entityId": "Scene/CountingButton/Counter",
       "property": "name",
       "newValue": "Count",
       "options": {
@@ -1791,7 +1791,7 @@
     },
     {
       "action": "add_entity",
-      "parentId": "Root/CountingButton",
+      "parentId": "Scene/CountingButton",
       "entityName": "NewEntity_34133",
       "options": {
         "source": "ui"

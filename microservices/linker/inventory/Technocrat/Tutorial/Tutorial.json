@@ -1,6 +1,6 @@
 {
   "author": "Technocrat",
-  "created": 1755735542471,
+  "created": 1755617659252,
   "data": {
     "active": true,
     "components": [
@@ -25,20 +25,28 @@
           }
         },
         "type": "Transform"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "file": "Tutorial.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
       }
     ],
     "initialized": true,
     "layer": 0,
-    "name": "nothing",
+    "name": "Tutorial",
     "parentId": "Scene",
     "persistent": true
   },
   "description": "",
-  "folder": "demo",
+  "folder": "Tutorial",
   "history": [
     {
       "action": "add_entity",
-      "entityName": "NewEntity_49704",
+      "entityName": "NewEntity_89719",
       "options": {
         "source": "ui"
       },
@@ -46,43 +54,36 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Scene/NewEntity_49704",
-      "newValue": "NewEntit_49704",
+      "entityId": "Scene/NewEntity_89719",
+      "newValue": "Tutorial",
       "options": {
         "source": "ui"
       },
       "property": "name"
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/NewEntit_49704",
-      "newValue": "other-box",
-      "options": {
-        "source": "ui"
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_798"
       },
-      "property": "name"
-    },
-    {
-      "action": "save_item",
-      "entityId": "Scene/other-box",
-      "folder": "demo",
-      "itemName": "other-box",
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Tutorial",
       "options": {
         "source": "ui"
       }
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/other-box",
-      "newValue": "nothing",
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_798",
+      "newValue": "Tutorial.js",
       "options": {
         "source": "ui"
       },
-      "property": "name"
+      "property": "file"
     }
   ],
-  "icon": "📦",
+  "icon": "❔",
   "itemType": "entity",
-  "last_used": 1755735542471,
-  "name": "nothing"
+  "last_used": 1755617659252,
+  "name": "Tutorial"
 }

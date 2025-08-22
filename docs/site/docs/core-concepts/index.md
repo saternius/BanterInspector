@@ -23,7 +23,7 @@ The scene hierarchy represents all GameObjects (called "Entities" in BanterScrip
     <p><strong>📊 Diagram Placeholder</strong></p>
     <p>Interactive diagram showing:</p>
     <ul style={{textAlign: 'left', maxWidth: '400px', margin: '0 auto'}}>
-      <li>Root scene object</li>
+      <li>Scene scene object</li>
       <li>Parent-child relationships</li>
       <li>Transform inheritance flow</li>
       <li>Component attachment points</li>

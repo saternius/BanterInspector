@@ -10,10 +10,10 @@ let held = false;
 this.onStart = ()=>{
     this._entity._bs.On("click", async (e) => {
         if(held){
-            this._entity.SetParent("Root")
+            this._entity.SetParent("Scene")
         }else{
             console.log("click", e.detail.point)
-            let tippyHolderPath = "Root/Tippy_"+scene.localUser.name+"/Holder";
+            let tippyHolderPath = "Scene/Tippy_"+scene.localUser.name+"/Holder";
             let tippyHolder = SM.getEntityById(tippyHolderPath)
             console.log(`tippy => ${tippyHolderPath}`, tippyHolder)
             if(!tippyHolder){

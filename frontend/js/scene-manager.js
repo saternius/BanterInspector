@@ -75,7 +75,7 @@
             }
             this.props = {
                 hierarchy:{
-                    "name": "Root",
+                    "name": "Scene",
                     "layer": 0,
                     "components": [
                         "Transform_5523"
@@ -110,9 +110,9 @@
                     ]
                 }
             }
-            let root = new BS.GameObject("Root");
+            let root = new BS.GameObject("Scene");
             let entity = new Entity().init({
-                name: "Root",
+                name: "Scene",
                 parentId: null,
                 layer: 0,
                 _bs: root
@@ -228,7 +228,9 @@
         async Reset(ui){
             let r = async ()=>{
                 networking.sendOneShot('reset');
-                await this._reset();
+                setTimeout(async ()=>{
+                    await this._reset();
+                }, 1000)
             }
 
             if(!(this.scene.localUser.name === "Technocrat") && ui){
@@ -280,18 +282,18 @@
             
             // Update progress: finding root
             if (window.loadingScreen) {
-                window.loadingScreen.updateStage('hierarchy', 10, 'Finding root object...');
+                window.loadingScreen.updateStage('hierarchy', 10, 'Finding scene object...');
             }
             
-            let rootObj = await this.scene.Find("Root");
-            if(!rootObj){
-                log('init', "no root object found")
+            let sceneObj = await this.scene.Find("Scene");
+            if(!sceneObj){
+                log('init', "no scene object found")
                 return null;
             }
             
             // Update progress: found root
             if (window.loadingScreen) {
-                window.loadingScreen.updateStage('hierarchy', 20, 'Root object found');
+                window.loadingScreen.updateStage('hierarchy', 20, 'Scene object found');
             }
 
             let createEntityHierarchy = async (obj)=>{
@@ -331,9 +333,9 @@
                 return entity;
             }
 
-            let rootEntity = await createEntityHierarchy(rootObj, null);
-            log('init', "rootEntity =>", rootEntity)
-            return rootEntity;
+            let sceneEntity = await createEntityHierarchy(sceneObj, null);
+            log('init', "sceneEntity =>", sceneEntity)
+            return sceneEntity;
         }
 
         // This gathers the hierarchy of the scene from the root entity
@@ -341,7 +343,7 @@
             if(!this.entityData.entities.length){
                 return null;
             }
-            let rootEntity = this.getRootEntity();
+            let sceneEntity = this.getSceneEntity();
             let createEntityHierarchy = (entity)=>{
                 let h = {
                     name: entity.name,
@@ -351,11 +353,9 @@
                 }
                 return h;
             }
-            let hierarchy = createEntityHierarchy(rootEntity);
+            let hierarchy = createEntityHierarchy(sceneEntity);
             return hierarchy;
         }
-
-
 
         // Updates the hierarchy of the scene from the root entity
         async updateHierarchy(updateUI = true){  
@@ -505,7 +505,7 @@
             }
 
 
-            let parentEntity = (parentId)? this.getEntityOrRoot(parentId) : this.getEntityOrRoot(entityData.parentId);
+            let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
             let entity = await loadSubEntity(entityData, parentId);
             await entity._setParent(parentEntity);
 
@@ -611,21 +611,21 @@
             return Object.values(this.entityData.entityMap || {});
         }
 
-        getRootEntity(){
+        getSceneEntity(){
             return this.entityData.entities[0];
         }
 
-        getEntityOrRoot(entityId){
+        getEntityOrScene(entityId){
             let entity = this.getEntityById(entityId);
             if(!entity){
-                entity = this.getRootEntity();
+                entity = this.getSceneEntity();
             }
             return entity;
         }
 
-        getSelectedEntity(rootFallback){
-            if(rootFallback){
-                return this.getEntityOrRoot(this.selectedEntity);
+        getSelectedEntity(sceneFallback){
+            if(sceneFallback){
+                return this.getEntityOrScene(this.selectedEntity);
             }
             return this.getEntityById(this.selectedEntity);
         }
