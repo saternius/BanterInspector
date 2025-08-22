@@ -53,7 +53,15 @@ export class Inventory {
             if (key.startsWith('inventory_') && !key.startsWith('inventory_folder_')) {
                 try {
                     const itemKey = key.replace('inventory_', '');
-                    items[itemKey] = JSON.parse(localStorage.getItem(key));
+                    const item = JSON.parse(localStorage.getItem(key));
+                    
+                    // Migrate script items to have startup and active properties
+                    if (item.itemType === 'script') {
+                        if (item.startup === undefined) item.startup = false;
+                        if (item.active === undefined) item.active = false;
+                    }
+                    
+                    items[itemKey] = item;
                 } catch (error) {
                     console.error(`Failed to parse inventory item ${key}:`, error);
                 }
@@ -275,7 +283,9 @@ export class Inventory {
             itemType: 'script',
             icon:"📜",
             description: '',
-            data: content
+            data: content,
+            startup: false,  // Script runs on scene startup
+            active: false    // Script is active even without being attached to GameObject
         };
         
         // Only add folder property if we're in a folder

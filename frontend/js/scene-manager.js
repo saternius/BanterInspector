@@ -214,6 +214,9 @@
                     setTimeout(()=>{
                         inspector.lifecyclePanel.render()
                     }, 100)
+                    
+                    // Execute startup scripts
+                    await this.executeStartupScripts();
                 }
             } catch (error) {
                 err('init', 'Failed to connect to Unity:', error);
@@ -716,6 +719,65 @@
             }, 1500)
             //this.updateHierarchy()
             return entityComponent;
+        }
+
+        /**
+         * Execute startup scripts from inventory
+         * Scripts must have both startup and active flags set to true
+         */
+        async executeStartupScripts() {
+            try {
+                if (!window.inventory) {
+                    log('startup', 'Inventory not initialized, skipping startup scripts');
+                    return;
+                }
+                
+                const startupScripts = Object.values(window.inventory.items).filter(item => 
+                    item.itemType === 'script' && 
+                    item.startup === true && 
+                    item.active === true
+                );
+                
+                if (startupScripts.length === 0) {
+                    log('startup', 'No startup scripts found');
+                    return;
+                }
+                
+                log('startup', `Found ${startupScripts.length} startup scripts to execute`);
+                
+                for (const script of startupScripts) {
+                    try {
+                        log('startup', `Executing startup script: ${script.name}`);
+                        
+                        // Create a script context similar to MonoBehavior
+                        const scriptContext = {
+                            vars: {},
+                            _scene: this.scene,
+                            _BS: window.BS,
+                            _entity: null, // No entity for startup scripts
+                            _component: null // No component for startup scripts
+                        };
+                        
+                        // Execute the script
+                        const scriptFunction = new Function('console', script.data);
+                        scriptFunction.call(scriptContext, console);
+                        
+                        // Call onStart if it exists
+                        if (typeof scriptContext.onStart === 'function') {
+                            scriptContext.onStart();
+                        }
+                        
+                        showNotification(`Startup script "${script.name}" executed`);
+                    } catch (error) {
+                        err('startup', `Error executing startup script "${script.name}":`, error);
+                        showNotification(`Failed to execute startup script "${script.name}"`, 'error');
+                    }
+                }
+                
+                log('startup', 'All startup scripts executed');
+            } catch (error) {
+                err('startup', 'Error in executeStartupScripts:', error);
+            }
         }
     }
 
