@@ -18,6 +18,11 @@ export class InventoryUI {
         await this.inventory.firebase.checkRemoteStatus();
         const inventoryContainer = this.container.querySelector('.inventory-container');
         
+        // Show empty preview if no item is selected
+        if (!this.inventory.selectedItem && this.previewPane) {
+            this.showEmptyPreview();
+        }
+        
         if (Object.keys(this.inventory.items).length === 0 && Object.keys(this.inventory.folders).length === 0) {
             this.renderEmptyState(inventoryContainer);    
             return;
@@ -80,6 +85,13 @@ export class InventoryUI {
         
         // Add event listeners
         this.attachEventListeners(inventoryContainer);
+    }
+
+    trailName(name){
+        if(name.length > 15){
+            return name.slice(0, 14) + "...";
+        }
+        return name;
     }
 
     renderMakeRemoteBtn(){
@@ -527,7 +539,7 @@ export class InventoryUI {
     renderFolder(key, folder) {
         const itemCount = this.inventory.getItemCountInFolder(key);
         const isExpanded = this.inventory.expandedFolders.has(key);
-        
+        // <span class="folder-count">${itemCount} items</span>
         return `
             <div class="folder-item" data-folder-name="${key}" draggable="true">
                 <div class="folder-header">
@@ -535,8 +547,7 @@ export class InventoryUI {
                         ${isExpanded ? '▼' : '▶'}
                     </button>
                     <span class="folder-icon">📁</span>
-                    <h3 class="folder-name">${folder.name}</h3>
-                    <span class="folder-count">${itemCount} items</span>
+                    <h3 class="folder-name">${this.trailName(folder.name)}</h3>
                     <button class="remove-folder-btn" data-folder-name="${key}">×</button>
                 </div>
                 ${isExpanded ? `
@@ -625,7 +636,7 @@ export class InventoryUI {
             <div class="item-header">
                 <div class="item-title">
                     <span class="item-type-icon" title="${itemType}">${itemIcon}</span>
-                    <h3 class="item-name">${item.name}</h3>
+                    <h3 class="item-name">${this.trailName(item.name)}</h3>
                 </div>
                 ${itemActions}
                 <button class="remove-item-btn" data-item-name="${key}">×</button>
@@ -642,7 +653,7 @@ export class InventoryUI {
         if (!item || !this.previewPane) return;
         
         // Generate preview content
-        const previewContent = this.generatePreviewContent(item);
+        const previewContent = this.generatePreviewContent(item, itemName);
         this.previewPane.innerHTML = previewContent;
         this.previewPane.style.display = 'block';
         
@@ -654,12 +665,22 @@ export class InventoryUI {
      * Attach event listeners for preview pane
      */
     attachPreviewEventListeners(itemName, item) {
+        // Move here button
+        const moveHereBtn = this.previewPane.querySelector('.move-here-btn');
+        if (moveHereBtn) {
+            moveHereBtn.addEventListener('mousedown', async () => {
+                await this.inventory.moveItemToFolder(itemName, this.inventory.currentFolder);
+                // Re-show the preview to update the button visibility
+                this.showPreview(itemName);
+            });
+        }
+        
         // Close button
         const closeBtn = this.previewPane.querySelector('.preview-close-btn');
         if (closeBtn) {
             closeBtn.addEventListener('mousedown', () => {
                 this.inventory.selectedItem = null;
-                this.hidePreview();
+                this.showEmptyPreview();
                 this.render();
             });
         }
@@ -795,11 +816,30 @@ export class InventoryUI {
             this.previewPane.innerHTML = '';
         }
     }
+    
+    /**
+     * Show empty preview pane
+     */
+    showEmptyPreview() {
+        if (this.previewPane) {
+            this.previewPane.innerHTML = `
+                <div class="preview-header">
+                    <div class="preview-title">
+                        <h2>No Item Selected</h2>
+                    </div>
+                </div>
+                <div class="preview-content" style="padding: 20px; text-align: center; color: #888;">
+                    <p>Select an item from the inventory to see its details here.</p>
+                </div>
+            `;
+            this.previewPane.style.display = 'block';
+        }
+    }
 
     /**
      * Generate preview content for an item
      */
-    generatePreviewContent(item) {
+    generatePreviewContent(item, itemName) {
         const dateStr = new Date(item.created).toLocaleString();
         const itemType = item.itemType || 'entity';
         const description = item.description || '';
@@ -807,7 +847,16 @@ export class InventoryUI {
         // Use item's icon or fall back to default based on type
         const displayIcon = item.icon || (itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦');
         
+        // Check if the item is in a different folder than the current folder
+        const itemFolder = item.folder || null;
+        const showMoveButton = itemFolder !== this.inventory.currentFolder;
+        
         let previewHeader = `<div class="preview-header">
+                    ${showMoveButton ? `
+                        <button class="move-here-btn" data-item-name="${itemName}">
+                            📁 Move
+                        </button>
+                    ` : ''}
                     <div class="preview-title">
                         <button class="preview-icon-btn" title="Click to change icon">${displayIcon}</button>
                         <h2 contenteditable="true" class="editable-name" data-item-name="${item.name}">${item.name}</h2>

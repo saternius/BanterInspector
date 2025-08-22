@@ -18,6 +18,26 @@ export class Inventory {
         this.folders = this.loadFolders();
         this.selectedItem = null;
         this.currentFolder = null;
+        
+        // Always show preview pane on initialization
+        if (this.previewPane) {
+            this.previewPane.style.display = 'block';
+        }
+        
+        // Listen for page switches to ensure preview pane is visible
+        window.addEventListener('page-switched', (e) => {
+            if (e.detail.pageId === 'inventory') {
+                // Ensure preview pane is visible when switching to inventory
+                if (this.previewPane) {
+                    this.previewPane.style.display = 'block';
+                }
+                // Show empty preview if no item selected
+                if (!this.selectedItem) {
+                    this.ui.showEmptyPreview();
+                }
+                this.ui.render();
+            }
+        });
         this.expandedFolders = new Set();
         this.draggedItem = null;
         this.isRemote = false;
@@ -32,6 +52,7 @@ export class Inventory {
         // Setup initial UI
         this.ui.setupDropZone();
         this.ui.render();
+        this.ui.showEmptyPreview();
     }
     
     /**
@@ -132,7 +153,7 @@ export class Inventory {
         if (this.selectedItem === itemName) {
             // Deselect if clicking the same item
             this.selectedItem = null;
-            this.ui.hidePreview();
+            this.ui.showEmptyPreview();
         } else {
             this.selectedItem = itemName;
             this.ui.showPreview(itemName);
@@ -384,10 +405,15 @@ export class Inventory {
      */
     openFolder(folderName) {
         this.currentFolder = folderName;
-        this.selectedItem = null;
-        this.ui.hidePreview();
+        // Don't deselect item when navigating folders
+        // this.selectedItem = null;
+        // this.ui.showEmptyPreview();
         this.updateFolderLastUsed(folderName);
         this.ui.render();
+        // Re-show preview if item was selected
+        if (this.selectedItem) {
+            this.ui.showPreview(this.selectedItem);
+        }
     }
     
     /**
@@ -412,9 +438,14 @@ export class Inventory {
         } else {
             this.currentFolder = folderPath;
         }
-        this.selectedItem = null;
-        this.ui.hidePreview();
+        // Don't deselect item when navigating folders
+        // this.selectedItem = null;
+        // this.ui.showEmptyPreview();
         this.ui.render();
+        // Re-show preview if item was selected
+        if (this.selectedItem) {
+            this.ui.showPreview(this.selectedItem);
+        }
     }
     
     /**
