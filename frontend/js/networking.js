@@ -319,7 +319,7 @@ export class Networking {
         });
     }
 
-    async routeOneShot(data, timestamp){
+    async routeOneShot(data, timestamp, sender){
 
         if(data.startsWith("component_reordered:")){ // `component_reordered:${event_str}`;
             let eventData = data.slice(20); // Remove "component_reordered:" prefix
@@ -408,6 +408,19 @@ export class Networking {
         if(data === "reset"){
             await SM._reset();
         }
+
+        if(data === "hierarchy_plz"){
+            await SM.provideHierarchy();
+        }
+        if(data.startsWith("hierarchy_entity")){
+            let items = data.split("¶")
+            let path = items[1]
+            let entity_data = items[2]
+            await SM.onRecievedHierarchyEntity(path, JSON.parse(entity_data));
+            await SM.updateHierarchy();
+        }
+
+
        
         if(data.startsWith("load_entity")){
             let [parentId, entity_data] = data.slice(12).split("|");
@@ -510,7 +523,7 @@ export class Networking {
         }
       
         let data = message.slice(secondColon+1);
-        await this.routeOneShot(data, timestamp)
+        await this.routeOneShot(data, timestamp, sender)
     }
 
 
@@ -552,7 +565,7 @@ export class Networking {
         let now = Date.now();
         let remote_message = `${now}:${SM.myName()}:${data}`
         SM.scene.OneShot(remote_message);
-        await this.routeOneShot(data, now)
+        await this.routeOneShot(data, now, SM.myName())
     }
 
 }
