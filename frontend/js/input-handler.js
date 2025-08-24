@@ -80,6 +80,13 @@ export class InputHandler{
 
 
     setValue(component, property, value){
+        let sections = property.split(".");
+        let lockkey = component.id+"_"+sections[0];
+        if(inspector.propertiesPanel.scaleLockStates.get(lockkey)){
+            inspector.propertiesPanel.handleProportionalScaleChange(component.type, component.id, sections[0], sections[1], value, component.properties[sections[0]], 0);
+            return;
+        }
+
         if(!property.includes(".")){
             component.Set(property, value);
             return;

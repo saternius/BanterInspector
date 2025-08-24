@@ -581,6 +581,9 @@
         selectEntity(entityId) {
             this.selectedEntity = entityId;
             this._updateUI();
+            window.dispatchEvent(new CustomEvent('entitySelected', {
+                detail: { entityId }
+            }));
         }
 
         _updateUI(){

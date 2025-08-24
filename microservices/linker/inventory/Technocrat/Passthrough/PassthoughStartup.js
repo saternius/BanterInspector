@@ -7,16 +7,16 @@ navControls.appendChild(passthroughBtn)
 
 
 let cooledDown = true;
-let spawned = false;
+let passthrough = null;
 passthroughBtn.addEventListener("click", async ()=>{
-    if(spawned){
-        if(this._entity.active){
+    if(passthrough){
+        if(passthrough.active){
             passthroughBtn.style.opacity = 0.5;
-            this._entity.Set("active", false)
+            passthrough.Set("active", false)
             showNotification("Passthrough deactivated")
         }else{
             passthroughBtn.style.opacity = 1;
-            this._entity.Set("active", true)
+            passthrough.Set("active", true)
             showNotification("Passthrough activated")
         }
         return;
@@ -24,11 +24,10 @@ passthroughBtn.addEventListener("click", async ()=>{
     if(!cooledDown) return;
     cooledDown = false;
     showNotification("Spawning Passthrough")
-    await LoadItem("Passthrough", "Scene")
-    let attachmentComponent = this._entity.getComponent("BanterAttachedObject")
+    passthrough = await LoadItem("t712", "Scene")
+    let attachmentComponent = passthrough.getComponent("BanterAttachedObject")
     await attachmentComponent.Set("uid", scene.localUser.uid)
-    await this._entity.Set("name", "Passthrough_"+scene.localUser.name);
-    spawned = true;
+    await passthrough.Set("name", "Passthrough_"+scene.localUser.name);
     passthroughBtn.disabled = true;
     setTimeout(()=>{
         cooledDown = true;

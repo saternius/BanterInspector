@@ -1452,11 +1452,29 @@ export class CreateScriptItemChange extends Change{
         this.timeout = 500;
         this.scriptName = scriptName;
         this.options = options || {};
+        this.fileType = options.fileType || 'script'; // 'script' or 'markdown'
     }
 
     async apply(){
         super.apply();
-        const defaultScript = `this.default = {}
+        
+        let defaultContent, itemType, icon;
+        
+        if (this.fileType === 'markdown') {
+            defaultContent = `# ${this.scriptName.replace('.md', '')}
+
+## Description
+Enter your documentation here...
+
+## Usage
+Describe how to use this...
+
+## Notes
+Additional notes...`;
+            itemType = 'markdown';
+            icon = '📝';
+        } else {
+            defaultContent = `this.default = {}
 
 Object.entries(this.default).forEach(([key, val])=>{
     if(!this.vars[key]) this.vars[key] = val
@@ -1482,33 +1500,36 @@ this.keyDown = (key)=>{
 this.keyUp = (key)=>{
     console.log("keyUp", key)
 }`;
+            itemType = 'script';
+            icon = '📜';
+        }
                 
-        // Create script item
+        // Create item
         const now = Date.now();
-        const scriptItem = {
+        const item = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: this.scriptName,
             created: now,
             last_used: now,
-            itemType: 'script',
-            icon:"📜",
+            itemType: itemType,
+            icon: icon,
             description: '',  // Initialize with empty description
-            data: defaultScript,
-            startup: false,  // Script runs on scene startup
-            active: false    // Script is active even without being attached to GameObject
+            data: defaultContent,
+            startup: false,  // Script runs on scene startup (only for scripts)
+            active: false    // Script is active even without being attached to GameObject (only for scripts)
         };
         
         // Only add folder property if we're in a folder
         if (inventory.currentFolder) {
-            scriptItem.folder = inventory.currentFolder;
+            item.folder = inventory.currentFolder;
         }
 
         // Save to localStorage
         const storageKey = `inventory_${this.scriptName}`;
-        localStorage.setItem(storageKey, JSON.stringify(scriptItem));
+        localStorage.setItem(storageKey, JSON.stringify(item));
         
         // Update local items
-        inventory.items[this.scriptName] = scriptItem;
+        inventory.items[this.scriptName] = item;
         return true;
     }
     async undo(){
@@ -1517,11 +1538,11 @@ this.keyUp = (key)=>{
     }
 
     getDescription(){
-        return `Create script ${this.scriptName}`;
+        return `Create ${this.fileType} ${this.scriptName}`;
     }
 
     getUndoDescription(){
-        return `Delete script ${this.scriptName}`;
+        return `Delete ${this.fileType} ${this.scriptName}`;
     }
 
     cmd(){
@@ -1548,7 +1569,7 @@ export class EditScriptItemChange extends Change{
         // Send save event back to inventory
         if (inventory) {
             const item = inventory.items[this.scriptName];
-            if (item && item.itemType === 'script') {
+            if (item && (item.itemType === 'script' || item.itemType === 'markdown')) {
                 item.data = this.scriptContent;
                 item.last_used = Date.now();
                 const storageKey = `inventory_${this.scriptName}`;

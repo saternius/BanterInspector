@@ -79,6 +79,18 @@ inventoryDirs.forEach(dir => {
                 console.log(`updated script (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
             }
 
+            if(update.itemType === "markdown"){
+                let content = update.data;
+                let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
+                let name = update.name;
+                if(!name.endsWith(".md")){
+                    name = name+".md";
+                }
+                const filePath = path.join('./', dir, name);
+                fs.writeFileSync(filePath, content, 'utf8');
+                console.log(`updated markdown (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
+            }
+
             if(update.itemType === "entity"){
                 console.log(update)
                 let content = update;
@@ -147,16 +159,26 @@ const server = http.createServer((req, res) => {
             const relativePath = path.relative('./', filePath).split("/").map(sanitizeFirebasePath).join("/");
 
             // Determine item type based on file extension
-            const isJsonFile = path.extname(filePath).toLowerCase() === '.json';
-            const itemType = isJsonFile ? 'entity' : 'script';
-            const icon = isJsonFile ? '📦' : '📜';
+            const fileExt = path.extname(filePath).toLowerCase();
+            let itemType, icon;
+            
+            if (fileExt === '.json') {
+                itemType = 'entity';
+                icon = '📦';
+            } else if (fileExt === '.md') {
+                itemType = 'markdown';
+                icon = '📝';
+            } else {
+                itemType = 'script';
+                icon = '📜';
+            }
 
             let updateData;
             let updateRef = ref(database, relativePath);
            
 
-            if (itemType === 'script') {
-                // For scripts, update last_used timestamp and data
+            if (itemType === 'script' || itemType === 'markdown') {
+                // For scripts and markdown, update last_used timestamp and data
                 updateData = {
                     last_used: Date.now(),
                     data: content
@@ -165,20 +187,22 @@ const server = http.createServer((req, res) => {
                 // Use update() to preserve existing fields
                 update(updateRef, updateData)
                     .then(() => {
-                        console.log(`Script updated in Firebase: ${relativePath}`);
+                        const typeLabel = itemType === 'markdown' ? 'Markdown' : 'Script';
+                        console.log(`${typeLabel} updated in Firebase: ${relativePath}`);
                         res.writeHead(200, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ 
                             success: true, 
-                            message: 'Script updated in Firebase',
+                            message: `${typeLabel} updated in Firebase`,
                             itemType: itemType,
                             icon: icon,
                             firebasePath: relativePath
                         }));
                     })
                     .catch((error) => {
-                        console.error('Error updating script in Firebase:', error);
+                        const typeLabel = itemType === 'markdown' ? 'markdown' : 'script';
+                        console.error(`Error updating ${typeLabel} in Firebase:`, error);
                         res.writeHead(500, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ error: 'Failed to update script in Firebase', details: error.message }));
+                        res.end(JSON.stringify({ error: `Failed to update ${typeLabel} in Firebase`, details: error.message }));
                     });
             } else {
                 // For entities, parse JSON and set the entire reference

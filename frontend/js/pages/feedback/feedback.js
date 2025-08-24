@@ -673,7 +673,7 @@ export class Feedback {
             timestamp: new Date().toISOString(),
             inspector_version: '1.0.0',
             user_agent: navigator.userAgent,
-            createdBy: networking.getUserId()
+            createdBy: SM.myName()
         };
         
         try {
@@ -938,13 +938,13 @@ export class Feedback {
             return;
         }
         
-        const currentUserId = networking.getUserId();
+        const currentUserId = SM.myName();
         const ticketsHtml = tickets.map(ticket => {
             const isOwner = ticket.createdBy === currentUserId;
             const date = new Date(ticket.timestamp || ticket.createdAt);
             
             return `
-                <div class="ticket-item" data-ticket-id="${ticket.ticketId}">
+                <div class="ticket-item ${isOwner ? 'ticket-item-owner' : ''}" data-ticket-id="${ticket.ticketId}">
                     <div class="ticket-item-header">
                         <span class="ticket-item-id">#${ticket.ticketId}</span>
                         <div class="ticket-item-meta">
@@ -1029,7 +1029,7 @@ export class Feedback {
         modalTitle.textContent = `Ticket #${ticket.ticketId}`;
         
         const date = new Date(ticket.timestamp || ticket.createdAt);
-        const isOwner = ticket.createdBy === networking.getUserId();
+        const isOwner = ticket.createdBy === SM.myName();
         
         modalContent.innerHTML = `
             <div class="ticket-detail-content">
@@ -1119,7 +1119,7 @@ export class Feedback {
                 return;
             }
             
-            const currentUser = (SM.scene?.localUser?.name) || networking.getUserId() || 'Anonymous';
+            const currentUser = (SM.scene?.localUser?.name) || SM.myName() || 'Anonymous';
             
             const commentsHtml = comments.map((comment, index) => {
                 const date = new Date(comment.timestamp);
@@ -1172,7 +1172,7 @@ export class Feedback {
             }
             
             const comment = {
-                author: (SM.scene?.localUser?.name) || networking.getUserId() || 'Anonymous',
+                author: (SM.scene?.localUser?.name) || SM.myName() || 'Anonymous',
                 content: content,
                 timestamp: new Date().toISOString()
             };

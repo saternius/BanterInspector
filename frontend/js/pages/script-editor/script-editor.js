@@ -357,9 +357,6 @@ export class ScriptEditor {
         this.currentScript.content = newContent;
         this.isModified = false;
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
-        
-        // Show save notification
-        showNotification('Script saved successfully');
         this.run('Refresh')
     }
     

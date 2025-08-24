@@ -20,7 +20,11 @@ export class InventoryFileHandler {
             if (fileExt === 'js') {
                 // Handle JavaScript files
                 const fileContent = await this.readFile(file);
-                await this.handleScriptUpload(fileName, fileContent);
+                await this.handleScriptUpload(fileName, fileContent, 'script');
+            } else if (fileExt === 'md') {
+                // Handle Markdown files
+                const fileContent = await this.readFile(file);
+                await this.handleScriptUpload(fileName, fileContent, 'markdown');
             } else if (fileExt === 'json') {
                 // Handle JSON files
                 const fileContent = await this.readFile(file);
@@ -29,7 +33,7 @@ export class InventoryFileHandler {
                 // Handle image files
                 await this.handleImageUpload(file);
             } else {
-                showNotification('Please upload a .js, .json, or image file (.png, .jpg, .jpeg, .bmp, .gif)');
+                showNotification('Please upload a .js, .md, .json, or image file (.png, .jpg, .jpeg, .bmp, .gif)');
             }
         } catch (error) {
             console.error('File upload error:', error);
@@ -55,24 +59,25 @@ export class InventoryFileHandler {
     /**
      * Handle script file upload
      */
-    async handleScriptUpload(fileName, content) {
+    async handleScriptUpload(fileName, content, fileType = 'script') {
         const existingKeys = Object.keys(this.inventory.items);
         
         // Check for existing item
         if (existingKeys.includes(fileName)) {
+            const itemType = fileType === 'markdown' ? 'Markdown' : 'Script';
             this.inventory.ui.showConfirmModal(
                 `An item named "${fileName}" already exists. Do you want to overwrite it?`,
                 () => {
                     // Continue with overwrite
-                    this.inventory.saveScriptFromUpload(fileName, content);
+                    this.inventory.saveScriptFromUpload(fileName, content, fileType);
                 },
-                'Overwrite Script'
+                `Overwrite ${itemType}`
             );
             return;
         }
         
         // No conflict, save directly
-        this.inventory.saveScriptFromUpload(fileName, content);
+        this.inventory.saveScriptFromUpload(fileName, content, fileType);
     }
 
     /**

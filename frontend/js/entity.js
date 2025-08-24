@@ -140,7 +140,9 @@ export class Entity{
             let component = SM.getEntityComponentById(compID);
             if(!component) return;
             if(component._entity.id === this.id){
-                toDelete.push(key);
+                if(!key.endsWith(":component")){
+                    toDelete.push(key);
+                }
             }
         })
 
