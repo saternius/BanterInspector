@@ -68,7 +68,7 @@ export class InventoryUI {
                         Import Remote
                     </button>
                     ${makeRemoteBtn}
-                    <input type="file" id="fileInput" accept=".js,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
+                    <input type="file" id="fileInput" accept=".js,.md,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
                 </div>
             </div>
             ${this.inventory.currentFolder ? `
@@ -138,7 +138,7 @@ export class InventoryUI {
                         <span class="upload-icon">⬇️</span>
                         Import
                     </button>
-                    <input type="file" id="fileInput" accept=".js,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
+                    <input type="file" id="fileInput" accept=".js,.md,.json,.png,.jpg,.jpeg,.bmp,.gif" style="display: none;">
                 </div>
             </div>
             <div class="inventory-empty">
@@ -245,7 +245,12 @@ export class InventoryUI {
             btn.addEventListener('mousedown', (e) => {
                 e.stopPropagation();
                 const itemName = btn.dataset.itemName;
-                this.inventory.openScriptEditor(itemName);
+                const item = this.inventory.items[itemName];
+                if (item && item.itemType === 'markdown') {
+                    this.inventory.openMarkdownEditor(itemName);
+                } else {
+                    this.inventory.openScriptEditor(itemName);
+                }
             });
         });
         
@@ -594,7 +599,7 @@ export class InventoryUI {
         const dateStr = new Date(item.created).toLocaleDateString();
         const itemType = item.itemType || 'entity';
         // Use item's custom icon if available, otherwise use defaults
-        const itemIcon = item.icon || (itemType === 'script' ? '📜' : itemType === 'image' ? '🖼️' : '📦');
+        const itemIcon = item.icon || (itemType === 'script' ? '📜' : itemType === 'markdown' ? '📝' : itemType === 'image' ? '🖼️' : '📦');
         const isSelected = this.inventory.selectedItem === key;
         
         
@@ -602,7 +607,7 @@ export class InventoryUI {
 
         // Different actions based on item type
         let itemActions = '';
-        if (itemType === 'script') {
+        if (itemType === 'script' || itemType === 'markdown') {
             itemActions = `
                 <div class="item-actions">
                     <button class="action-btn edit-script-btn" data-item-name="${key}">
@@ -697,7 +702,11 @@ export class InventoryUI {
         const editBtn = this.previewPane.querySelector('.edit-script-preview-btn');
         if (editBtn) {
             editBtn.addEventListener('mousedown', () => {
-                this.inventory.openScriptEditor(itemName);
+                if (item.itemType === 'markdown') {
+                    this.inventory.openMarkdownEditor(itemName);
+                } else {
+                    this.inventory.openScriptEditor(itemName);
+                }
             });
         }
         
@@ -907,6 +916,39 @@ export class InventoryUI {
                         </button>
                         <button class="action-btn open-image-btn" data-url="${item.data.url}">
                             🔗 Open in New Tab
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else if (itemType === 'markdown') {
+            const markdownContent = item.data || '';
+            
+            return `
+                ${previewHeader}
+                <div class="preview-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Type:</span>
+                        <span class="meta-value">Markdown</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Author:</span>
+                        <span class="meta-value">${item.author}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Created:</span>
+                        <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                <div class="preview-meta">
+                    <div class="meta-label">Description:</div>
+                    <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
+                </div>
+                <div class="preview-content">
+                    <h3>Markdown Content</h3>
+                    <pre class="script-preview"><code>${this.escapeHtml(item.data)}</code></pre>
+                    <div class="preview-actions">
+                        <button class="action-btn edit-script-preview-btn" data-item-name="${item.name}">
+                            ✏️ Edit Markdown
                         </button>
                     </div>
                 </div>
@@ -1131,18 +1173,24 @@ export class InventoryUI {
         const modalOverlay = this.createModalOverlay();
         const modalContent = this.createModalContent(`
             <div class="modal-header">
-                <h3>Create New Script</h3>
+                <h3>Create New File</h3>
                 <button class="modal-close-btn" id="modalCloseBtn">×</button>
             </div>
             <div class="modal-body">
-                <label for="scriptNameInput">Script Name:</label>
-                <input type="text" id="scriptNameInput" placeholder="MyScript.js" autocomplete="off">
-                <div class="modal-hint">Enter a name for your script (e.g., PlayerController.js)</div>
+                <label for="fileTypeSelect">File Type:</label>
+                <select id="fileTypeSelect" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #333; background: #1e1e1e; color: #ccc; border-radius: 4px;">
+                    <option value="script" selected>JavaScript (.js)</option>
+                    <option value="markdown">Markdown (.md)</option>
+                </select>
+                
+                <label for="scriptNameInput">File Name:</label>
+                <input type="text" id="scriptNameInput" placeholder="MyScript" autocomplete="off">
+                <div class="modal-hint" id="fileHint">Enter a name for your script (e.g., PlayerController)</div>
                 <div class="modal-error" id="modalError" style="display: none;"></div>
             </div>
             <div class="modal-footer">
                 <button class="modal-cancel-btn" id="modalCancelBtn">Cancel</button>
-                <button class="modal-create-btn" id="modalCreateBtn">Create Script</button>
+                <button class="modal-create-btn" id="modalCreateBtn">Create File</button>
             </div>
         `);
         
@@ -1150,30 +1198,52 @@ export class InventoryUI {
         document.body.appendChild(modalOverlay);
         
         const input = modalContent.querySelector('#scriptNameInput');
+        const fileTypeSelect = modalContent.querySelector('#fileTypeSelect');
+        const fileHint = modalContent.querySelector('#fileHint');
+        const createBtn = modalContent.querySelector('#modalCreateBtn');
+        
+        // Update hint and button text based on file type
+        fileTypeSelect.addEventListener('change', () => {
+            if (fileTypeSelect.value === 'markdown') {
+                fileHint.textContent = 'Enter a name for your markdown file (e.g., README)';
+                createBtn.textContent = 'Create Markdown';
+            } else {
+                fileHint.textContent = 'Enter a name for your script (e.g., PlayerController)';
+                createBtn.textContent = 'Create Script';
+            }
+        });
+        
         setTimeout(() => input.focus(), 100);
         
         const closeModal = () => modalOverlay.remove();
         
         const handleCreate = () => {
-            const scriptName = input.value.trim();
+            const fileName = input.value.trim();
+            const fileType = fileTypeSelect.value;
             const errorDiv = modalContent.querySelector('#modalError');
             
-            if (!scriptName) {
-                errorDiv.textContent = 'Please enter a script name';
+            if (!fileName) {
+                errorDiv.textContent = 'Please enter a file name';
                 errorDiv.style.display = 'block';
                 return;
             }
             
-            const finalName = scriptName.endsWith('.js') ? scriptName : scriptName + '.js';
+            // Add appropriate extension based on file type
+            let finalName;
+            if (fileType === 'markdown') {
+                finalName = fileName.endsWith('.md') ? fileName : fileName + '.md';
+            } else {
+                finalName = fileName.endsWith('.js') ? fileName : fileName + '.js';
+            }
             
             if (this.inventory.items[finalName]) {
                 this.showOverwriteModal(finalName, () => {
                     closeModal();
-                    this.inventory.finalizeScriptCreation(finalName);
+                    this.inventory.finalizeScriptCreation(finalName, fileType);
                 });
             } else {
                 closeModal();
-                this.inventory.finalizeScriptCreation(finalName);
+                this.inventory.finalizeScriptCreation(finalName, fileType);
             }
         };
         

@@ -7,7 +7,8 @@
         "Technocrat/Mirror",
         "Technocrat/Tippy",
         "Technocrat/PersonalMirror",
-        "Technocrat/Passthrough"
+        "Technocrat/Passthrough",
+        "Technocrat/Transform"
     ],
     "password":""
 }

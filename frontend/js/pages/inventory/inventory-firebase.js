@@ -272,7 +272,7 @@ export class InventoryFirebase {
                 
 
 
-                if(item.itemType === "script"){
+                if(item.itemType === "script" || item.itemType === "markdown"){
 					// If a script editor is open for this script, update its text and save
 					try {
 						if (window.scriptEditors && window.scriptEditors.size > 0) {

@@ -4104,10 +4104,20 @@ input:hover{
     position: relative;
 }
 
+.ticket-item-owner {
+    background: #2a2438;
+    border: 1px solid #453a52;
+}
+
 .ticket-item:hover {
     background: #2a2a2a;
     border-color: #4a4a4a;
     transform: translateX(2px);
+}
+
+.ticket-item-owner:hover {
+    background: #322842;
+    border-color: #5a4a66;
 }
 
 .ticket-item-header {

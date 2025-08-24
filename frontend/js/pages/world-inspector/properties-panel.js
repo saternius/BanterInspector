@@ -20,6 +20,10 @@
             // Store collapsed state of components
             this.collapsedComponents = new Set();
             
+            // Store proportional scaling lock state for scale properties
+            this.scaleLockStates = new Map(); // Key: componentId_propertyKey, Value: boolean
+            this.scaleRatios = new Map(); // Key: componentId_propertyKey, Value: {x: number, y: number, z: number}
+            
             this.setupEventListeners();
         }
 
@@ -535,6 +539,14 @@
                 
             } else if (isVector3Object(value)) {
                 // Vector3 properties
+                const isScaleProperty = key.toLowerCase().includes('scale');
+                const scaleLockKey = `${componentId}_${key}`;
+                
+                const vectorContainer = document.createElement('div');
+                vectorContainer.style.display = 'flex';
+                vectorContainer.style.alignItems = 'center';
+                vectorContainer.style.width = '100%';
+                
                 const vectorGroup = document.createElement('div');
                 vectorGroup.className = 'vector-group';
                 
@@ -548,7 +560,13 @@
                     input.className = 'property-input number';
                     input.value = value[axis] || 0;
                     input.step = 'any';
-                    input.onchange = () => this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
+                    input.onchange = () => {
+                        if (isScaleProperty && this.scaleLockStates.get(scaleLockKey)) {
+                            this.handleProportionalScaleChange(componentType, componentId, key, axis, input.value, value, componentIndex);
+                        } else {
+                            this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
+                        }
+                    };
                     input.onclick = (e)=>{
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
                     }
@@ -561,7 +579,49 @@
                     vectorGroup.appendChild(input);
                 });
                 
-                valueContainer.appendChild(vectorGroup);
+                vectorContainer.appendChild(vectorGroup);
+                
+                // Add lock button for scale properties
+                if (isScaleProperty) {
+                    const lockButton = document.createElement('button');
+                    lockButton.className = 'scale-lock-btn';
+                    lockButton.style.marginLeft = '8px';
+                    lockButton.style.padding = '4px 4px';
+                    lockButton.style.background = this.scaleLockStates.get(scaleLockKey) ? '#4a90e2' : '#2a2a2a';
+                    lockButton.style.border = '1px solid #3a3a3a';
+                    lockButton.style.borderRadius = '4px';
+                    lockButton.style.color = this.scaleLockStates.get(scaleLockKey) ? '#fff' : '#999';
+                    lockButton.style.cursor = 'pointer';
+                    lockButton.style.fontSize = '12px';
+                    lockButton.innerHTML = this.scaleLockStates.get(scaleLockKey) ? '🔒' : '🔓';
+                    lockButton.title = this.scaleLockStates.get(scaleLockKey) ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                    
+                    lockButton.onmousedown = (e) => {
+                        e.stopPropagation();
+                        const isLocked = !this.scaleLockStates.get(scaleLockKey);
+                        this.scaleLockStates.set(scaleLockKey, isLocked);
+                        
+                        if (isLocked) {
+                            // Store current ratios when locking
+                            const baseValue = value.x || 1;
+                            this.scaleRatios.set(scaleLockKey, {
+                                x: (value.x || 0) / baseValue,
+                                y: (value.y || 0) / baseValue,
+                                z: (value.z || 0) / baseValue
+                            });
+                        }
+                        
+                        // Update button appearance
+                        lockButton.style.background = isLocked ? '#4a90e2' : '#2a2a2a';
+                        lockButton.style.color = isLocked ? '#fff' : '#999';
+                        lockButton.innerHTML = isLocked ? '🔒' : '🔓';
+                        lockButton.title = isLocked ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                    };
+                    
+                    vectorGroup.appendChild(lockButton);
+                }
+                
+                valueContainer.appendChild(vectorContainer);
                 
             } else if (key === 'color' && typeof value === 'object' && 'r' in value) {
                 // Color property
@@ -1092,6 +1152,69 @@
                 const change = new ComponentPropertyChange(componentId, key, vector, { source: 'ui', oldValue: oldValue });
                 changeManager.applyChange(change);
             }
+        }
+
+        /**
+         * Handle proportional scale changes when lock is active
+         */
+        handleProportionalScaleChange(componentType, componentId, key, changedAxis, newValue, currentVector, componentIndex) {
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity) return;
+            
+            const component = entity.components.find(c => c.id === componentId);
+            if (!component || !component.properties[key]) return;
+            
+            const numValue = parseFloat(newValue);
+            if (isNaN(numValue)) return;
+            
+            const scaleLockKey = `${componentId}_${key}`;
+            let ratios = this.scaleRatios.get(scaleLockKey);
+            
+            // If no ratios stored, calculate them from current values
+            if (!ratios) {
+                const baseValue = currentVector[changedAxis] || 1;
+                ratios = {
+                    x: (currentVector.x || 0) / baseValue,
+                    y: (currentVector.y || 0) / baseValue,
+                    z: (currentVector.z || 0) / baseValue
+                };
+                this.scaleRatios.set(scaleLockKey, ratios);
+            }
+            
+            // Calculate the scale factor based on the changed axis
+            const oldValue = currentVector[changedAxis] || 1;
+            const scaleFactor = numValue / oldValue;
+            
+            // Apply proportional scaling to all axes
+            const oldVector = deepClone(currentVector);
+            const newVector = {
+                x: currentVector.x * scaleFactor,
+                y: currentVector.y * scaleFactor,
+                z: currentVector.z * scaleFactor
+            };
+            
+            // Apply the change
+            const change = new ComponentPropertyChange(componentId, key, newVector, { source: 'ui', oldValue: oldVector });
+            changeManager.applyChange(change);
+            
+            // Update the inputs to reflect the new values
+            setTimeout(() => {
+                const propertyRow = this.propertiesContent.querySelector(`.component-section[data-component-id="${componentId}"]`);
+                if (propertyRow) {
+                    const inputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
+                    const vectorInputs = Array.from(inputs).filter(input => {
+                        const container = input.closest('.property-row');
+                        const label = container?.querySelector('.property-label');
+                        return label && label.textContent === formatPropertyName(key);
+                    });
+                    
+                    if (vectorInputs.length === 3) {
+                        vectorInputs[0].value = formatNumber(newVector.x, 6);
+                        vectorInputs[1].value = formatNumber(newVector.y, 6);
+                        vectorInputs[2].value = formatNumber(newVector.z, 6);
+                    }
+                }
+            }, 50);
         }
 
         /**

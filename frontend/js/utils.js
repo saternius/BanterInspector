@@ -561,6 +561,9 @@ export class Logger{
             spaceProps: false
         }
         this.tagColors = {};
+        // Store original console methods
+        this.originalLog = console.log.bind(console);
+        this.originalError = console.error.bind(console);
     }
 
     hashStringToColor(str) {
@@ -583,26 +586,127 @@ export class Logger{
         return this.tagColors[tag];
     }
 
-    log(tag, ...args){
-        const color = this.getTagColor(tag);
-        console.log(`%c[${tag.toUpperCase()}]:%c `, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
-        if(this.include[tag]){
-            const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
-            appendToConsole(tag, generateId('log'), message);
+    getCallerInfo() {
+        const stack = new Error().stack;
+        const stackLines = stack.split('\n');
+        // Skip lines until we find one that's not part of the logger
+        for (let i = 2; i < stackLines.length; i++) {
+            const line = stackLines[i];
+            // Skip internal logger methods, window.log/err bindings, and getCallerInfo
+            if (!line.includes('Logger.') && 
+                !line.includes('bound ') && 
+                !line.includes('getCallerInfo') &&
+                !line.includes('window.log') &&
+                !line.includes('window.err')) {
+                // Extract file path and line number
+                const match = line.match(/(?:at\s+)?(?:.*?\s+\()?(.+?):(\d+):(\d+)\)?$/);
+                if (match) {
+                    const filePath = match[1];
+                    const lineNum = match[2];
+                    const colNum = match[3];
+                    // Get just the filename from the path
+                    const fileName = filePath.split('/').pop();
+                    return { fileName, lineNum, colNum, fullPath: filePath };
+                }
+            }
         }
+        return null;
+    }
+
+    // Create a proxy function that preserves the caller's stack
+    createLogProxy(tag, isError = false) {
+        const color = this.getTagColor(tag);
+        const logger = this;
+        
+        // Return a function that will be called directly from the caller's context
+        return function(...args) {
+            // Direct console call preserves the stack trace
+            if (isError) {
+                console.error(`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
+            } else {
+                console.log(`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
+            }
+            
+            // Handle lifecycle console separately
+            if(logger.include[tag]){
+                const callerInfo = logger.getCallerInfo();
+                const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+                const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
+                appendToConsole(isError ? "error" : tag, generateId(isError ? 'error' : 'log'), message + locationInfo);
+            }
+        };
+    }
+
+    log(tag, ...args){
+        // Create and immediately call the proxy to preserve stack
+        this.createLogProxy(tag, false)(...args);
     }
 
     err(tag, ...args){
-        const color = this.getTagColor(tag);
-        console.error(`%c[${tag.toUpperCase()}]:%c `, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
-        if(this.include[tag]){
-            const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
-            appendToConsole("error", "error_" + Math.floor(Math.random()*1000000), message);
-        }
+        // Create and immediately call the proxy to preserve stack
+        this.createLogProxy(tag, true)(...args);
     }
 }
 
 window.logger = new Logger();
-window.log = window.logger.log.bind(window.logger);
-window.err = window.logger.err.bind(window.logger);
+
+// Store original console methods
+const _originalLog = console.log;
+const _originalError = console.error;
+
+// Create custom log that shows correct source location
+window.log = function(tag, ...args) {
+    const color = window.logger.getTagColor(tag);
+    const callerInfo = window.logger.getCallerInfo();
+    
+    // Create nicely formatted output with inline location
+    if (callerInfo) {
+        console.groupCollapsed(
+            `%c[${tag.toUpperCase()}]%c @ ${callerInfo.fileName}:${callerInfo.lineNum}%c`,
+            `color: ${color}; font-weight: bold`,
+            'color: #888; font-size: 0.9em',
+            'color: inherit',
+            ...args
+        );
+        console.trace('Stack trace');
+        console.groupEnd();
+    } else {
+        _originalLog.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args]);
+    }
+    
+    // Handle lifecycle console
+    if(window.logger.include[tag]){
+        const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+        const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
+        appendToConsole(tag, generateId('log'), message + locationInfo);
+    }
+};
+
+window.err = function(tag, ...args) {
+    const color = window.logger.getTagColor(tag);
+    const callerInfo = window.logger.getCallerInfo();
+    
+    // Create nicely formatted output with inline location
+    if (callerInfo) {
+        console.groupCollapsed(
+            `%c[${tag.toUpperCase()}]%c @ ${callerInfo.fileName}:${callerInfo.lineNum}%c`,
+            `color: ${color}; font-weight: bold`,
+            'color: #f88; font-size: 0.9em',
+            'color: inherit',
+            ...args
+        );
+        console.trace('Stack trace');
+        console.groupEnd();
+    } else {
+        _originalError.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args]);
+    }
+    
+    // Handle lifecycle console
+    if(window.logger.include[tag]){
+        const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+        const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
+        appendToConsole("error", generateId('error'), message + locationInfo);
+    }
+};
+
 window.showNotification = showNotification;

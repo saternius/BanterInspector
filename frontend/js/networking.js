@@ -198,15 +198,6 @@ export class Networking {
         log('net', '=== Firebase Storage Test FAILED ===');
         return false;
     }
-
-    getUserId(){
-        let userId = localStorage.getItem('inspector_user_id');
-        if (!userId) {
-            userId = SM.myName();
-            localStorage.setItem('inspector_user_id', userId);
-        }
-        return userId;
-    }
     
     // Get the Firebase Realtime Database reference
     getDatabase() {

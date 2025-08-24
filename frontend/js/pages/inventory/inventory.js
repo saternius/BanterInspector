@@ -162,23 +162,40 @@ export class Inventory {
     }
     
     /**
-     * Export selected item as JSON
+     * Download selected item
      */
-    exportSelectedItem() {
+    downloadSelectedItem() {
         if (!this.selectedItem) return;
         
         const item = this.items[this.selectedItem];
         if (!item) return;
         
-        // Create a blob with the JSON data
-        const jsonStr = JSON.stringify(item, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
+        let blob, fileName, message;
+        
+        // Export based on item type
+        if (item.itemType === 'script') {
+            // Export as JavaScript file
+            blob = new Blob([item.data], { type: 'text/javascript' });
+            fileName = item.name;
+            message = `Exported script "${item.name}"`;
+        } else if (item.itemType === 'markdown') {
+            // Export as Markdown file
+            blob = new Blob([item.data], { type: 'text/markdown' });
+            fileName = item.name;
+            message = `Exported markdown "${item.name}"`;
+        } else {
+            // Export as JSON for entities and other types
+            const jsonStr = JSON.stringify(item, null, 2);
+            blob = new Blob([jsonStr], { type: 'application/json' });
+            fileName = `${item.name}.json`;
+            message = `Exported "${item.name}" as JSON`;
+        }
         
         // Create download link
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${item.name}.json`;
+        a.download = fileName;
         
         // Trigger download
         document.body.appendChild(a);
@@ -189,7 +206,14 @@ export class Inventory {
         URL.revokeObjectURL(url);
         
         // Show notification
-        showNotification(`Exported "${item.name}" as JSON`);
+        showNotification(message);
+    }
+    
+    /**
+     * Export selected item as JSON (legacy method for compatibility)
+     */
+    exportSelectedItem() {
+        this.downloadSelectedItem();
     }
     
     /**
@@ -270,6 +294,29 @@ export class Inventory {
     }
     
     /**
+     * Open markdown editor
+     */
+    openMarkdownEditor(itemName) {
+        const item = this.items[itemName];
+        if (!item || item.itemType !== 'markdown') return;
+        
+        // Update last_used timestamp
+        this.updateLastUsed(itemName);
+        
+        // Create a custom event to open the script editor with markdown mode
+        const event = new CustomEvent('open-script-editor', {
+            detail: {
+                name: itemName,
+                content: item.data,
+                author: item.author,
+                created: item.created,
+                isMarkdown: true
+            }
+        });
+        window.dispatchEvent(event);
+    }
+    
+    /**
      * Create new script
      */
     async createNewScript() {
@@ -281,41 +328,49 @@ export class Inventory {
     /**
      * Finalize script creation
      */
-    async finalizeScriptCreation(finalName) {
-        let change = new CreateScriptItemChange(finalName, {source: 'ui'});
+    async finalizeScriptCreation(finalName, fileType = 'script') {
+        let change = new CreateScriptItemChange(finalName, {source: 'ui', fileType: fileType});
         window.changeManager.applyChange(change);
 
         this.ui.render();
-        showNotification(`Created new script "${finalName}"`);
-        this.openScriptEditor(finalName);
+        const itemType = fileType === 'markdown' ? 'markdown file' : 'script';
+        showNotification(`Created new ${itemType} "${finalName}"`);
+        
+        // Open appropriate editor based on file type
+        if (fileType === 'markdown') {
+            this.openMarkdownEditor(finalName);
+        } else {
+            this.openScriptEditor(finalName);
+        }
     }
     
     /**
      * Save script item
      */
-    saveScriptFromUpload(fileName, content) {
-        // Create script item
+    saveScriptFromUpload(fileName, content, fileType = 'script') {
+        // Create item based on type
         const now = Date.now();
-        const scriptItem = {
+        const item = {
             author: SM.scene?.localUser?.name || 'Unknown',
             name: fileName,
             created: now,
             last_used: now,
-            itemType: 'script',
-            icon:"📜",
+            itemType: fileType,
+            icon: fileType === 'markdown' ? '📝' : '📜',
             description: '',
             data: content,
-            startup: false,  // Script runs on scene startup
-            active: false    // Script is active even without being attached to GameObject
+            startup: false,  // Script runs on scene startup (only relevant for scripts)
+            active: false    // Script is active even without being attached to GameObject (only relevant for scripts)
         };
         
         // Only add folder property if we're in a folder
         if (this.currentFolder) {
-            scriptItem.folder = this.currentFolder;
+            item.folder = this.currentFolder;
         }
 
-        this.syncItem(fileName, scriptItem);
-        showNotification(`Added script "${fileName}" to inventory`);
+        this.syncItem(fileName, item);
+        const itemTypeDisplay = fileType === 'markdown' ? 'markdown' : 'script';
+        showNotification(`Added ${itemTypeDisplay} "${fileName}" to inventory`);
     }
     
     /**
