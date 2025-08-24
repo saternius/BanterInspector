@@ -20,9 +20,11 @@ export class Entity{
             this._bs = newGameObject;
             let parentEntity = SM.getEntityOrScene(this.parentId);
             try{
-                let parentGameObject = parentEntity._bs;
-                if(parentGameObject){
-                    await newGameObject.SetParent(parentGameObject, true);
+                if(parentEntity){
+                    let parentGameObject = parentEntity._bs;
+                    if(parentGameObject){
+                        await newGameObject.SetParent(parentGameObject, true);
+                    }
                 }
                 await newGameObject.SetActive(true);
                 await newGameObject.SetLayer(this.layer);
@@ -207,8 +209,12 @@ export class Entity{
         }
     }
 
-    export(){
-        return deepClone(this, ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction']);
+    export(keep){
+        let ignore = ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction']
+        if(keep){
+            ignore = ignore.filter(x=>!keep.includes(x));
+        }
+        return deepClone(this, ignore);
     }
 
     async Set(property, value){

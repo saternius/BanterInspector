@@ -3,12 +3,15 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
+import { log } from "console";
+
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
 
     export class SceneManager {
         constructor() {
+            this.iamHost = false;
             this.scene = null;
             this.entityData = {
                 entities: [],
@@ -152,33 +155,75 @@
 
                 this.setup = async ()=>{
                     if(this.loaded) return;
-                    
+
                     log('init', "setting up inspector")
+
+
+                    log("init", "Lets create people hierarchy and fetch info from those here")
+                    networking.sendOneShot(`hierarchy_plz`)
+                    let people_hier = {
+                        name: "People",
+                        layer: 0,
+                        components: ["Transform_People"],
+                        children: [
+                            {
+                                name: this.myName(),
+                                layer: 0,
+                                components: ["Transform_People_"+this.myName()],
+                                children: []
+                            }
+                        ]
+                    }
+
+                    let people_entity = await this.loadHierarchy("People", people_hier);
+                    this.entityData.entities = [people_entity];
+
+                    this.finalizeSceneLoad = async (scene_entity)=>{
+                        log('init', "finalizing scene load =>", scene_entity)
+                        this.entityData.entities.unshift(scene_entity);
+                        this.initializeExpandedNodes();
+                        window.loadingScreen.updateStage('entities', 100, 'All entities generated');
+                        inspector?.hierarchyPanel?.render()
+                        inspector?.lifecyclePanel?.render()
+                        this.loaded = true;
+                        await this.executeStartupScripts();
+                    }
+
+       
+
+
+                    log('init', "Lets find out who the host is")
                     if(window.isLocalHost){
+                        log('init', "I am running locally so I must be the host")
                         let lastSpaceState = localStorage.getItem('lastSpaceState');
                         if(lastSpaceState){
                             this.scene.spaceState = JSON.parse(lastSpaceState);
                         }
-                    }
-
-                    let lastProps = localStorage.getItem('lastProps');
-                    if(lastProps){
-                        this.props = JSON.parse(lastProps);
-                    }
-
+                        this.iamHost = true;
+                    }            
                     if(!this.scene.spaceState.public.hostUser){
-                        log('init', "No host user found, setting to local user =>", this.myName())
+                        log('init', "Server has no host user, so I guess it's me", this.myName())
                         networking.setSpaceProperty("hostUser", this.myName(), false);
+                        this.iamHost = true;
                     }else{
                         let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
-                            log('init', "Host user not here, setting to local user =>", this.myName())
+                            log('init', "Host user not here, so I'll make myself the host", this.myName())
                             networking.setSpaceProperty("hostUser", this.myName(), false);
+                            this.iamHost = true;
+                        }
+                        if(this.scene.spaceState.public.hostUser === this.myName()){
+                            log('init', "I am the host ( according to the server )")
+                            this.iamHost = true;
                         }
                     }
 
-                    try {
-                        log('init', 'Gathering scene hierarchy...');
+                    if(this.iamHost){
+                        log('init', "I am the host, so I'll load the scene hierarchy")
+                        let lastProps = localStorage.getItem('lastProps');
+                        if(lastProps){
+                            this.props = JSON.parse(lastProps);
+                        }
                         let hierarchy = null;
                         if(!this.props.hierarchy){
                             window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
@@ -192,30 +237,22 @@
                             hierarchy = h;
                             log('init', "using cached hierarchy =>", hierarchy)
                         }
+                        
+                        log('init', "loading scene hierarchy =>", hierarchy)
+                        this.props.hierarchy = hierarchy;
                         window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
                         window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                        this.props.hierarchy = hierarchy;
                         let scene_entity = await this.loadHierarchy("Scene", hierarchy);
-                        this.entityData.entities = [scene_entity];
-                        this.loadPeopleHierarchy();
-                        this.initializeExpandedNodes();
-                        
-                        // Entities generation complete
-                        if (window.loadingScreen) {
-                            window.loadingScreen.updateStage('entities', 100, 'All entities generated');
-                        }
-                        inspector?.hierarchyPanel?.render()
-                    } catch (error) {
-                        err('init', 'Error gathering scene hierarchy:', error);
+                        this.finalizeSceneLoad(scene_entity);
+                    }else{
+                        log('init', "I am not the host, so I'll wait for the host to provide the scene hierarchy")
+                        // this.onRecievedSceneHierarchy = async (hierarchy)=>{
+                        //     this.props.hierarchy = hierarchy;
+                        //     let scene_entity = await this.loadHierarchy("Scene", hierarchy);
+                        //     this.entityData.entities.unshift(scene_entity);
+                        //     this.loadSceneHierarchy(hierarchy);
+                        // }
                     }
-                    this.loaded = true;
-                    inspector.hierarchyPanel.render()
-                    setTimeout(()=>{
-                        inspector.lifecyclePanel.render()
-                    }, 100)
-                    
-                    // Execute startup scripts
-                    await this.executeStartupScripts();
                 }
             } catch (error) {
                 err('init', 'Failed to connect to Unity:', error);
@@ -338,11 +375,10 @@
         }
 
         // This gathers the hierarchy of the scene from the root entity
-        async gatherSceneHierarchyByEntity(){
-            if(!this.entityData.entities.length){
+        async gatherEntityHierarchy(entity){
+            if(!entity){
                 return null;
             }
-            let sceneEntity = this.getSceneEntity();
             let createEntityHierarchy = (entity)=>{
                 let h = {
                     name: entity.name,
@@ -352,13 +388,13 @@
                 }
                 return h;
             }
-            let hierarchy = createEntityHierarchy(sceneEntity);
+            let hierarchy = createEntityHierarchy(entity);
             return hierarchy;
         }
 
         // Updates the hierarchy of the scene from the root entity
         async updateHierarchy(updateUI = true){  
-            let h = await this.gatherSceneHierarchyByEntity();
+            let h = await this.gatherEntityHierarchy(this.getSceneEntity());
             this.props.hierarchy = h;
             if(updateUI){
                 this._updateUI();
@@ -369,18 +405,7 @@
         // Loads all the Entities on initialization
         async loadHierarchy(destination, hierarchy){
             log('init', "loading hierarchy for", destination, "=>", hierarchy)
-            if(!hierarchy){ return null}
-            
-            // Count total entities for progress tracking
-            let totalEntities = 0;
-            let processedEntities = 0;
-            const countEntities = (h) => {
-                totalEntities++;
-                if (h.children) {
-                    h.children.forEach(child => countEntities(child));
-                }
-            };
-            countEntities(hierarchy);
+            if(!hierarchy){ return null}            
             
             let hierarchyToEntity = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
@@ -396,14 +421,6 @@
                     layer: gO.layer
                 });
                 
-                // Update entity generation progress
-                processedEntities++;
-                if (window.loadingScreen) {
-                    const progress = (processedEntities / totalEntities) * 100;
-                    window.loadingScreen.updateStage('entities', progress, 
-                        `Processing [${destination}] entities: ${processedEntities} of ${totalEntities} (${h.name})`);
-                }
-
                 //Make transform the top component
                 let ref_idx = 0;
                 let transform = gO.GetComponent(BS.ComponentType.Transform)
@@ -457,8 +474,37 @@
         }
 
 
-        async loadPeopleHierarchy(){
-            console.log("TODO")
+        async provideHierarchyEntity(){
+            let sendHier = async (path)=>{
+                let entity = SM.getEntityById(path)
+                if(!entity){
+                    log("init", "I don't have a hier for: ", path)
+                    return
+                }
+                networking.sendOneShot(`hierarchy_entity¶${path}¶${JSON.stringify(entity.export(['id']))}`)
+            }
+            sendHier("People/"+this.myName())
+            if(this.iamHost){
+                sendHier("Scene")
+            }
+        }
+
+        async onRecievedHierarchyEntity(path, entityData){
+            if(this.loaded){ return }
+            log("init", "recieved hierarchy for: ", path, "=>", hierarchy)
+            if(path == "Scene" && !this.iamHost){
+                window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+                window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+                log('init', "loading scene...", entityData)
+                let scene_entity = await this._loadEntity(entityData, "Scene")
+                this.finalizeSceneLoad(scene_entity);
+            }else{
+                if(path.startsWith("People/")){
+                    let userName = path.split("/")[1]
+                    let entity = await this._loadEntity(hierarchy, "People")
+                    await entity._setParent(this.getEntityById("People"))
+                }
+            }
         }
 
 
@@ -673,8 +719,6 @@
 
             let transform = await new TransformComponent().init(newEntity, null, properties);
             newEntity.components.push(transform);
-
-            //this.updateHierarchy()
             await newEntity._setParent(parentEntity);
         }
 
@@ -712,7 +756,6 @@
             setTimeout(()=>{
                 entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
             }, 1500)
-            //this.updateHierarchy()
             return entityComponent;
         }
 
