@@ -320,9 +320,18 @@ export class Networking {
     }
 
     async routeOneShot(data, timestamp, sender){
+        let items = data.split("¶")
 
-        if(data.startsWith("component_reordered:")){ // `component_reordered:${event_str}`;
-            let eventData = data.slice(20); // Remove "component_reordered:" prefix
+        if(data === "reset"){
+            await SM._reset();
+        }
+
+        if(data === "hierarchy_plz"){
+            await SM.provideHierarchyEntity();
+        }
+
+        if(items[0] === "component_reordered"){ // `component_reordered:${event_str}`;
+            let eventData = items[1];
             try {
                 let event = JSON.parse(eventData);
                 let entity = SM.getEntityById(event.entityId);
@@ -337,16 +346,8 @@ export class Networking {
             }
         }
 
-        if(data.startsWith("update_entity")){ //`update_entity:${this.id}:${property}:${value}`;
-            let str = data.slice(14)
-            let nxtColon = str.indexOf(":")
-            let entityId = str.slice(0, nxtColon)
-            str = str.slice(nxtColon+1)
-            nxtColon = str.indexOf(":")
-            let prop = str.slice(0, nxtColon)
-            str = str.slice(nxtColon+1)
-            nxtColon = str.indexOf(":")
-            let value = str.slice(nxtColon+1)
+        if(items[0] === "update_entity"){ //`update_entity:${this.id}:${property}:${value}`;
+            let [entityId, prop, value] = items.slice(1)
             let entity = SM.getEntityById(entityId);
             if(entity){
                 await entity._set(prop, safeParse(value));
@@ -359,14 +360,8 @@ export class Networking {
         }
 
 
-        if(data.startsWith("update_component")){ // `update_component:${this.id}:${property}:${value}`;
-            let str = data.slice(17)
-            let nxtColon = str.indexOf(":")
-            let componentId = str.slice(0, nxtColon)
-            str = str.slice(nxtColon+1)
-            nxtColon = str.indexOf(":")
-            let prop = str.slice(0, nxtColon)
-            let value = str.slice(nxtColon+1)
+        if(items[0] === "update_component"){ // `update_component:${this.id}:${property}:${value}`;
+            let [componentId, prop, value] = items.slice(1)
             let component = SM.getEntityComponentById(componentId);
             if(component){
                 await component._setWithTimestamp(prop, safeParse(value), timestamp);
@@ -378,58 +373,40 @@ export class Networking {
         }
 
         //update_monobehavior, update_component, update_entity
-        if(data.startsWith("update_monobehavior")){
-            let str = data.slice(20)
-            let nxtColon = str.indexOf(":")
-            let componentId = str.slice(0, nxtColon)
-            str = str.slice(nxtColon+1)
-            nxtColon = str.indexOf(":")
-            let op = str.slice(0, nxtColon)
-            str = str.slice(nxtColon+1)
-            nxtColon = str.indexOf(":")
-            let prop = str.slice(0, nxtColon)
-            let value = str.slice(nxtColon+1)
+        if(items[0] === "update_monobehavior"){
+            let [componentId, op, arg1, arg2] = items.slice(1)
             let monobehavior = SM.getEntityComponentById(componentId);
             if(op === "vars"){
-                monobehavior.ctx.vars[prop] = safeParse(value);
+                monobehavior.ctx.vars[arg1] = safeParse(arg2);
                 if(SM.selectedEntity === monobehavior._entity.id){
                     renderProps()
                 }
+                SM.props[`__${componentId}/${arg1}:component`] = arg2
             }else if(op === "_running"){
                 if(monobehavior){
-                    monobehavior.ctx._running = safeParse(value);
+                    monobehavior.ctx._running = safeParse(arg1);
                     inspector.lifecyclePanel.render()
                 }
             }
-
-            SM.props[`__${componentId}/${prop}:component`] = value
         }
 
-        if(data === "reset"){
-            await SM._reset();
-        }
-
-        if(data === "hierarchy_plz"){
-            await SM.provideHierarchy();
-        }
-        if(data.startsWith("hierarchy_entity")){
-            let items = data.split("¶")
-            let path = items[1]
-            let entity_data = items[2]
+        
+        if(items[0] === "hierarchy_entity"){
+            let [path, entity_data] = items.slice(1)
             await SM.onRecievedHierarchyEntity(path, JSON.parse(entity_data));
             await SM.updateHierarchy();
         }
 
 
        
-        if(data.startsWith("load_entity")){
-            let [parentId, entity_data] = data.slice(12).split("|");
+        if(items[0] === "load_entity"){
+            let [parentId, entity_data] = items.slice(1)
             await SM._loadEntity(JSON.parse(entity_data), parentId);
             await SM.updateHierarchy();
         }
 
-        if(data.startsWith("component_added")){
-            let event = JSON.parse(data.slice(16));
+        if(items[0] === "component_added"){
+            let event = JSON.parse(items[1]);
             let entity = SM.getEntityById(event.entityId);
             if(entity){
                 await SM._addComponent(entity, event.componentType, event.componentProperties);
@@ -437,8 +414,8 @@ export class Networking {
             }
         }
 
-        if(data.startsWith("component_removed")){
-            let componentId = data.slice(18);
+        if(items[0] === "component_removed"){
+            let componentId = items[1];
             let component = SM.getEntityComponentById(componentId);
             if(component){
                 await component._destroy();
@@ -446,14 +423,14 @@ export class Networking {
             }
         }
 
-        if(data.startsWith("entity_added")){
-            let [parentId, entityName] = data.slice(13).split(":");
+        if(items[0] === "entity_added"){
+            let [parentId, entityName] = items.slice(1)
             await SM._addNewEntity(entityName, parentId);
             await SM.updateHierarchy();
         }
 
-        if(data.startsWith("entity_removed")){
-            let entityId = data.slice(15);
+        if(items[0] === "entity_removed"){
+            let entityId = items[1];
             let entity = SM.getEntityById(entityId);
             if(entity){
                 await entity._destroy();
@@ -461,9 +438,8 @@ export class Networking {
             }
         }
 
-        if(data.startsWith("entity_moved")){
-            let [entityId, newParentId, newSiblingIndex] = data.slice(13).split(":");
-            //newSiblingIndex = (newSiblingIndex)? parseInt(newSiblingIndex) : null;
+        if(items[0] === "entity_moved"){
+            let [entityId, newParentId, newSiblingIndex] = items.slice(1)
             const entity = SM.getEntityById(entityId);
             if (!entity) return;
             if(!newParentId) newParentId = SM.entityData.entities[0].id;
@@ -471,24 +447,24 @@ export class Networking {
             await SM.updateHierarchy();
         }
 
-        if(data.startsWith("monobehavior_start")){
-            let componentId = data.slice(19);
+        if(items[0] === "monobehavior_start"){
+            let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._start();
             }
         }
 
-        if(data.startsWith("monobehavior_stop")){
-            let componentId = data.slice(18);
+        if(items[0] === "monobehavior_stop"){
+            let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._stop();
             }
         }
 
-        if(data.startsWith("monobehavior_refresh")){
-            let componentId = data.slice(21);
+        if(items[0] === "monobehavior_refresh"){
+            let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
                 monobehavior._refresh();

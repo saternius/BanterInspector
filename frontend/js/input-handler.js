@@ -24,8 +24,8 @@ export class InputHandler{
 
             this.getRightControllerRot = ()=>{
                 //console.log("todo: set with tippy")
-
-                let tippyPath = "Scene/Tippy_"+scene.localUser.name;
+                let user = SM.myName()
+                let tippyPath = "People/"+user+"/Tippy_"+user;
                 let tippy = SM.getEntityById(tippyPath)
                 if(!tippy){
                     showNotification("Error: Tippy not found")

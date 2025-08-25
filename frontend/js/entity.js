@@ -154,13 +154,13 @@ export class Entity{
     }
 
     saveSpaceProperties(){
-        let message = `update_entity:${this.id}:active:${this.active}`;
+        let message = `update_entity¶${this.id}¶active¶${this.active}`;
         networking.sendOneShot(message);
-        message = `update_entity:${this.id}:persistent:${this.persistent}`;
+        message = `update_entity¶${this.id}¶persistent¶${this.persistent}`;
         networking.sendOneShot(message);
-        message = `update_entity:${this.id}:name:${this.name}`;
+        message = `update_entity¶${this.id}¶name¶${this.name}`;
         networking.sendOneShot(message);
-        message = `update_entity:${this.id}:layer:${this.layer}`;
+        message = `update_entity¶${this.id}¶layer¶${this.layer}`;
         networking.sendOneShot(message);
     }
 
@@ -222,7 +222,7 @@ export class Entity{
             value = JSON.stringify(value);
         }
         SM.props[`__${this.id}/${property}:entity`] = value;
-        let message = `update_entity:${this.id}:${property}:${value}`;
+        let message = `update_entity¶${this.id}¶${property}¶${value}`;
         networking.sendOneShot(message);
         if(property == "name"){
             this.rename(value, false);
@@ -230,7 +230,7 @@ export class Entity{
     }
 
     async SetParent(newParentId){
-        let data = `entity_moved:${this.id}:${newParentId}:0`
+        let data = `entity_moved¶${this.id}¶${newParentId}¶0`
         networking.sendOneShot(data);
     }
 }

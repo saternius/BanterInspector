@@ -236,7 +236,7 @@ export class ComponentAddChange extends Change{
             componentProperties: this.componentProperties
         }
         let event_str = JSON.stringify(event);
-        let data = `component_added:${event_str}`
+        let data = `component_added¶${event_str}`
         networking.sendOneShot(data);
 
         const returnWhenComponentLoaded = () => {
@@ -258,7 +258,7 @@ export class ComponentAddChange extends Change{
     async undo() {
         super.undo();
         if (!this.componentProperties.id) return;
-        let data = `component_removed:${this.componentProperties.id}`
+        let data = `component_removed¶${this.componentProperties.id}`
         networking.sendOneShot(data);
     }
 
@@ -317,7 +317,7 @@ export class ComponentReorderChange extends Change{
             toIndex: this.toIndex
         };
         let event_str = JSON.stringify(event);
-        let data = `component_reordered:${event_str}`;
+        let data = `component_reordered¶${event_str}`;
         networking.sendOneShot(data);
     }
 
@@ -330,7 +330,7 @@ export class ComponentReorderChange extends Change{
             toIndex: this.fromIndex
         };
         let event_str = JSON.stringify(event);
-        let data = `component_reordered:${event_str}`;
+        let data = `component_reordered¶${event_str}`;
         networking.sendOneShot(data);
     }
 
@@ -386,7 +386,7 @@ export class ComponentRemoveChange extends Change{
             return;
         }
 
-        let data = `component_removed:${this.componentId}`
+        let data = `component_removed¶${this.componentId}`
         networking.sendOneShot(data);
     }
 
@@ -400,7 +400,7 @@ export class ComponentRemoveChange extends Change{
             componentProperties: this.componentData.properties
         }
         let event_str = JSON.stringify(event);
-        let data = `component_added:${event_str}`
+        let data = `component_added¶${event_str}`
         networking.sendOneShot(data);
     }
 
@@ -433,7 +433,7 @@ export class EntityAddChange extends Change{
 
     async apply() {
         super.apply();
-        let data = `entity_added:${this.parentId}:${this.entityName}`
+        let data = `entity_added¶${this.parentId}¶${this.entityName}`
         networking.sendOneShot(data);
 
         let expectedEntityId = `${this.parentId}/${this.entityName}`
@@ -458,7 +458,7 @@ export class EntityAddChange extends Change{
         super.undo();
         if (!this.newEntityId) return;
         let entity_id = `${this.parentId}/${this.entityName}`
-        let data = `entity_removed:${entity_id}`
+        let data = `entity_removed¶${entity_id}`
         networking.sendOneShot(data);
     }
 
@@ -516,7 +516,7 @@ export class EntityRemoveChange extends Change{
 
     async apply() {
         super.apply();
-        let data = `entity_removed:${this.entity.id}`
+        let data = `entity_removed¶${this.entity.id}`
         networking.sendOneShot(data);
     }
 
@@ -525,7 +525,7 @@ export class EntityRemoveChange extends Change{
         if (!this.entityExport) return;
 
         // Recreate the entity hierarchy
-        let data = `load_entity:${this.entity.parentId}|${JSON.stringify(this.entityExport)}`
+        let data = `load_entity¶${this.entity.parentId}¶${JSON.stringify(this.entityExport)}`
         networking.sendOneShot(data);
     }
 
@@ -711,7 +711,7 @@ export class LoadItemChange extends Change{
             this.itemData = itemData;    
         }
        
-        let data = `load_entity:${this.parentId}|${JSON.stringify(this.itemData)}`
+        let data = `load_entity¶${this.parentId}¶${JSON.stringify(this.itemData)}`
         networking.sendOneShot(data);
 
         //Additionally send all of the entity properties to space props
@@ -774,7 +774,7 @@ export class LoadItemChange extends Change{
     async undo() {
         super.undo();
         if(!this.entityId) return;
-        let data = `entity_removed:${this.entityId}`
+        let data = `entity_removed¶${this.entityId}`
         networking.sendOneShot(data);
     }
 
@@ -831,7 +831,7 @@ export class CloneEntityChange extends Change{
         itemData.id = this.sourceEntity.parentId+"/"+itemData.name;
         changeChildrenIds(itemData);
 
-        let data = `load_entity:${this.sourceEntity.parentId}|${JSON.stringify(itemData)}`
+        let data = `load_entity¶${this.sourceEntity.parentId}¶${JSON.stringify(itemData)}`
         networking.sendOneShot(data);
 
         //Additionally send all of the entity properties to space props
@@ -888,7 +888,7 @@ export class CloneEntityChange extends Change{
     async undo() {
         super.undo();
         if(!this.entityId) return;
-        let data = `entity_removed:${this.entityId}`
+        let data = `entity_removed¶${this.entityId}`
         networking.sendOneShot(data);
     }
 

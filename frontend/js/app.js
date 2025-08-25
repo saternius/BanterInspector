@@ -400,6 +400,7 @@
                 
                 let runWhenUnityLoaded = ()=>{
                     if(SM.scene.unityLoaded){
+                        log('init', "localUser =>", SM.scene.localUser)
                         if(!SM.scene.localUser){
                             log('init', "No local user found, loading from localStorage")
                             loadLocalUserSceneFromLocalStorage(SM.scene);

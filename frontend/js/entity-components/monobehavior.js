@@ -16,7 +16,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         this.setId(this.id.replace("undefined","MonoBehavior"));
         if(this.properties.file && this.properties.file.length > 0){
             if(SM.props["__" + this.id + "/_running:component"] !== false){
-                this._loadScript(this.properties.file);
+                await this._loadScript(this.properties.file);
             }else{
                 this.ctx._running = false;
             }
@@ -33,7 +33,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         log("mono", "[MONO] updating property =>", property, value)
         value = parseBest(value);
         if(property === 'file'){
-            this._loadScript(value);
+            await this._loadScript(value);
         }
         this.properties[property] = value;
     }
@@ -126,7 +126,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(!this._entity.active) return;
         this.ctx._running = true;
         this.ctx.onStart();
-        let message = `update_monobehavior:${this.id}:_running:true`;
+        let message = `update_monobehavior¶${this.id}¶_running¶true`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
@@ -137,7 +137,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(!this._entity.active) return;
         this.ctx._running = false;
         this.ctx.onDestroy();
-        let message = `update_monobehavior:${this.id}:_running:false`;
+        let message = `update_monobehavior¶${this.id}¶_running¶false`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
@@ -171,17 +171,17 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     Start(){
-        const oneShot = 'monobehavior_start:' + this.id;
+        const oneShot = 'monobehavior_start¶' + this.id;
         networking.sendOneShot(oneShot);
     }
 
     Stop(){
-        const oneShot = 'monobehavior_stop:' + this.id;
+        const oneShot = 'monobehavior_stop¶' + this.id;
         networking.sendOneShot(oneShot);
     }
 
     Refresh(){
-        const oneShot = 'monobehavior_refresh:' + this.id;
+        const oneShot = 'monobehavior_refresh¶' + this.id;
         networking.sendOneShot(oneShot);
     }
 
@@ -190,6 +190,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     newScriptContext(){
         let newContext =  {
             vars: {},
+            _running: false, // Initialize _running to prevent undefined
             onStart: ()=>{},
             onUpdate: ()=>{},
             onDestroy: ()=>{},
@@ -214,7 +215,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
-        let message = `update_monobehavior:${this.id}:vars:${varName}:${value}`;
+        let message = `update_monobehavior¶${this.id}¶vars¶${varName}¶${value}`;
         networking.sendOneShot(message);
         // this.scriptContext.vars[varName] = value;
     }
