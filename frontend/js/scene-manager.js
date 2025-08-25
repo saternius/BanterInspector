@@ -3,7 +3,6 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 
-import { log } from "console";
 
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
@@ -200,7 +199,8 @@ import { log } from "console";
                             this.scene.spaceState = JSON.parse(lastSpaceState);
                         }
                         this.iamHost = true;
-                    }            
+                    }
+                    log('init', "spaceState =>", this.scene.spaceState)            
                     if(!this.scene.spaceState.public.hostUser){
                         log('init', "Server has no host user, so I guess it's me", this.myName())
                         networking.setSpaceProperty("hostUser", this.myName(), false);
@@ -490,18 +490,18 @@ import { log } from "console";
         }
 
         async onRecievedHierarchyEntity(path, entityData){
-            if(this.loaded){ return }
-            log("init", "recieved hierarchy for: ", path, "=>", hierarchy)
+            if(this.getEntityById(path)){ return }
+            log("init", "recieved hierarchy for: ", path, "=>", entityData)
             if(path == "Scene" && !this.iamHost){
                 window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
                 window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                log('init', "loading scene...", entityData)
-                let scene_entity = await this._loadEntity(entityData, "Scene")
+                log('init', "loading scene...")
+                let scene_entity = await this._loadEntity(entityData, null)
                 this.finalizeSceneLoad(scene_entity);
             }else{
                 if(path.startsWith("People/")){
                     let userName = path.split("/")[1]
-                    let entity = await this._loadEntity(hierarchy, "People")
+                    let entity = await this._loadEntity(entityData, "People")
                     await entity._setParent(this.getEntityById("People"))
                 }
             }
@@ -543,9 +543,11 @@ import { log } from "console";
             }
 
 
-            let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
             let entity = await loadSubEntity(entityData, parentId);
-            await entity._setParent(parentEntity);
+            if(parentId !==null){
+                let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
+                await entity._setParent(parentEntity);
+            }
 
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);

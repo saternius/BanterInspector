@@ -108,7 +108,7 @@ export class EntityComponent{
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
-        let message = `update_component:${this.id}:${property}:${value}`;
+        let message = `update_component¶${this.id}¶${property}¶${value}`;
         SM.props[`__${this.id}/${property}:component`] = value;
         await networking.sendOneShot(message);
     }

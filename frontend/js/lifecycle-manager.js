@@ -106,6 +106,7 @@ export class LifecycleManager {
      * Trigger onUpdate for all registered behaviors
      */
     triggerUpdate() {
+        //console.log("triggerUpdate", this.monoBehaviors)
         this.monoBehaviors.forEach((monoBehavior, componentId) => {
             monoBehavior._update();
         });
