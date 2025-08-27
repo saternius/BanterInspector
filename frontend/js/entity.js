@@ -210,7 +210,7 @@ export class Entity{
     }
 
     export(keep){
-        let ignore = ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction']
+        let ignore = ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction', 'finished_loading']
         if(keep){
             ignore = ignore.filter(x=>!keep.includes(x));
         }

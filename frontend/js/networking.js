@@ -409,7 +409,7 @@ export class Networking {
             let event = JSON.parse(items[1]);
             let entity = SM.getEntityById(event.entityId);
             if(entity){
-                await SM._addComponent(entity, event.componentType, event.componentProperties);
+                await SM._addComponent(entity, event.componentType, event.componentProperties, {context: "new"});
                 await SM.updateHierarchy();
             }
         }

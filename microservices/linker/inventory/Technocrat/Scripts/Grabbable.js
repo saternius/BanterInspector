@@ -2,28 +2,27 @@ this.default = {}
 
 let getEntity = (entityPath)=>{
     let rel_path = this._entity.parentId+"/"+entityPath
-    //console.log("rel_path => ", rel_path)
     return SM.getEntityById(rel_path)
 }
 
 
 let user = SM.myName()
 let held = false;
-let holdingBarHack = ()=>{
-    let barHack = SM.getEntityById("People/"+user+"/BarHack")
-    if(barHack){
-        let heldEvents = barHack.getComponent("BanterHeldEvents")
-        log("mirror", "heldEvents => ", heldEvents)
-        heldEvents.Set("blockRightThumbstick", held)
-    }
-}
+// let holdingBarHack = ()=>{
+//     let barHack = SM.getEntityById("People/"+user+"/BarHack")
+//     if(barHack){
+//         let heldEvents = barHack.getComponent("BanterHeldEvents")
+//         log("mirror", "heldEvents => ", heldEvents)
+//         heldEvents.Set("blockRightThumbstick", held)
+//     }
+// }
 
-
+let lastParent = "Scene";
 this.onStart = ()=>{
     let user = SM.myName()
     this._entity._bs.On("click", async (e) => {
         if(held){
-            this._entity.SetParent("Scene")
+            this._entity.SetParent(lastParent)
         }else{
             console.log("click", e.detail.point)
             let tippyHolderPath = "People/"+user+"/Tippy_"+user+"/Holder";
@@ -34,26 +33,17 @@ this.onStart = ()=>{
                 return;
             }
             tippyHolder.getTransform().Set("position", e.detail.point)
+            lastParent = this._entity.parentId;
             this._entity.SetParent(tippyHolderPath)
         }
         held = !held;
-        holdingBarHack()
+        // holdingBarHack()
     })
 }
 
 this.onUpdate = ()=>{
-    //console.log("onUpdate")
 }
 
 this.onDestroy = ()=>{
-    console.log("onDestroy")
     this._entity._bs.listeners.get("click").clear();
-}
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
 }

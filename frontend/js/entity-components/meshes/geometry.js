@@ -1,7 +1,7 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
+const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterGeometryComponent extends EntityComponent {
+export class BanterGeometryComponent extends BanterMeshComponent {
     constructor() {
         super();
         this.bsRef = BS.BanterGeometry;
