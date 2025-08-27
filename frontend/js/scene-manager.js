@@ -510,7 +510,9 @@
 
         //Creates a entity from the inventory schema
         async _loadEntity(entityData, parentId){
+            //TODO: add a param for await req for sync/async component/entity
             let loadSubEntity = async (item, parentId)=>{ 
+            
                 const newEntity = await new Entity().init({
                     name: item.name,
                     parentId: parentId,
@@ -527,7 +529,7 @@
                                 id: component.id
                             }
                         }
-                        await this._addComponent(newEntity, component.type, component.properties);
+                        await this._addComponent(newEntity, component.type, component.properties, {context: "item"});
                     }
                 }
 
@@ -552,6 +554,12 @@
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);
             entity.finished_loading = true;
+            let scripts = entity.components.filter(c=>c.type === "MonoBehavior");
+            scripts.forEach(async script=>{
+                if(script.ctx.onLoaded){
+                    await script.ctx.onLoaded();
+                }
+            })
             return entity;
         }
 
@@ -725,7 +733,7 @@
         }
 
        
-        async _addComponent(entity, componentType, componentProperties){
+        async _addComponent(entity, componentType, componentProperties, options){
             // Check if component already exists (for unique components)
             const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
             if (uniqueComponents.includes(componentType)) {
@@ -744,7 +752,7 @@
                 return;
             }
             
-            let entityComponent = await new ComponentClass().init(entity, null, componentProperties);
+            let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
             entity.components.push(entityComponent);
             this.entityData.componentMap[entityComponent.id] = entityComponent;
 

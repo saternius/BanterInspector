@@ -30,13 +30,14 @@ this.onStart = async ()=>{
         this._entity._bs.listeners.get("click").clear();
         await this._entity.Set("name", "Tippy_"+user);
         attached = true;
+        await LoadItem("BarHack", "Scene")
     })
 }
 
 
 let tippyTransform = this._entity.getTransform()
 this.onUpdate = ()=>{
-    console.log("Updating tippyTransform", tippyTransform, tippyTransform._bs._localRotation)
+    //console.log("Updating tippyTransform", tippyTransform, tippyTransform._bs._localRotation)
     tippyTransform._bs.Q([13])
 }
 

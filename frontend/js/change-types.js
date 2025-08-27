@@ -222,7 +222,7 @@ export class ComponentAddChange extends Change{
         this.entityId = entityId;
         this.componentType = componentType;
         this.options = options || {};
-        this.componentProperties = options.componentProperties || {};
+        this.componentProperties = this.options.componentProperties || {};
     }
 
     async apply() {
@@ -760,9 +760,10 @@ export class LoadItemChange extends Change{
               const check = () => {
                 const entity = SM.getEntityById(this.entityId);
                 if (entity !== undefined && entity.finished_loading) {
-                  resolve(entity);
+                  
+                    resolve(entity);
                 } else {
-                  setTimeout(check, 50);
+                    setTimeout(check, 50);
                 }
               };
               check();

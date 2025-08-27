@@ -5,13 +5,14 @@ export class EntityComponent{
         this.bsRef = null;
         this.lastUpdate = new Map();
         this.initialized = false;
+        this.options = {};
     }
 
-    async init(entity, sceneComponent, properties){
+    async init(entity, sceneComponent, properties, options){
         this.id = properties?.id || `${this.type}_${Math.floor(Math.random()*99999)}`;
         this._entity = entity;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
-        
+        this.options = options || {};
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
@@ -19,7 +20,7 @@ export class EntityComponent{
             if(this.bsRef){
                 let newComponent = await entity._bs.AddComponent(new this.bsRef());
                 this._bs = newComponent;
-                this._setMany(this.properties)
+                await this._setMany(this.properties)
             }
         }
         

@@ -53,5 +53,14 @@ export class BanterGLTFComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on BanterGLTF:`, e);
         }
+
+       
+        if(this.initialized){
+            log('gltf', 'setting',  this.properties)
+            let newBS = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
+            this._entity._bs.AddComponent(newBS);
+            this._bs.Destroy();
+            this._bs = newBS;
+        }
     }
 }

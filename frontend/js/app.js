@@ -373,6 +373,7 @@
                 SM.scene.On("user-left", (event) => {
                     log('scene-event', "[USER LEFT] fired", event)
                     //SM.handleUserLeft(event);
+                    
                 })
 
                 SM.scene.On("user-joined", (event) => {
