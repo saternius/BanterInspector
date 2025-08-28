@@ -1289,27 +1289,29 @@ export class CreateFolderChange extends Change{
         let parentFolder = inventory.folders[this.parentFolderName];
         let parentPath = "";
         if(parentFolder && parentFolder.path){
-            parentPath = parentFolder.path;
+            parentPath = parentFolder.path+"/";
         }
         // Create folder object
         const now = Date.now();
+        let path = `${parentPath}${trimmedName}`
         const folder = {
             name: trimmedName,
             created: now,
             last_used: now,
             parent: this.parentFolderName,
-            path: `${parentPath}/${trimmedName}`,
+            path: path,
             itemType: "folder",
             icon:"📂",
-            remote: false
+            remote: false,
+            public: false
         };
         
         // Save to localStorage
-        const storageKey = `inventory_folder_${trimmedName}`;
+        const storageKey = `inventory_folder_${path}`;
         localStorage.setItem(storageKey, JSON.stringify(folder));
         
         // Update local folders
-        inventory.folders[trimmedName] = folder;
+        inventory.folders[path] = folder;
         return true;
     }
 
@@ -1337,7 +1339,40 @@ export class CreateFolderChange extends Change{
 }
 
 export class RenameFolderChange extends Change{
-    //TODO: Implement this
+    constructor(originalName, newName, options){
+        super();
+        this.timeout = 500;
+        this.originalName = originalName;
+        this.newName = newName;
+        this.options = options || {};
+    }
+
+    async apply(){
+        super.apply();
+        inventory._renameFolder(this.originalName, this.newName);
+    }
+
+    async undo(){
+        super.undo();
+        inventory._renameFolder(this.newName, this.originalName);
+    }
+
+    getDescription(){
+        return `Rename folder ${this.originalName} to ${this.newName}`;
+    }
+
+    getUndoDescription(){
+        return `Rename folder ${this.newName} to ${this.originalName}`;
+    }
+
+    cmd(){
+        return {
+            action: "rename_folder",
+            originalName: this.originalName,
+            newName: this.newName,
+            options: this.options
+        }
+    }
 }
 
 export class MoveFolderChange extends Change{
@@ -1345,17 +1380,17 @@ export class MoveFolderChange extends Change{
 }
 
 export class RemoveFolderChange extends Change{
-    constructor(folderName, options){
+    constructor(folderPath, options){
         super();
         this.timeout = 500;
-        this.folderName = folderName;
+        this.folderPath = folderPath;
         this.options = options || {};
     }
 
     async apply(){
         super.apply();
         Object.entries(inventory.items).forEach(([key, item]) => {
-            if (item.folder === this.folderName) {
+            if (item.folder === this.folderPath) {
                 const storageKey = `inventory_${key}`;
                 localStorage.removeItem(storageKey);
                 delete inventory.items[key];
@@ -1363,7 +1398,7 @@ export class RemoveFolderChange extends Change{
         });
         
         Object.entries(inventory.folders).forEach(([key, subfolder]) => {
-            if (subfolder.parent === this.folderName) {
+            if (subfolder.parent === this.folderPath) {
                 const storageKey = `inventory_folder_${key}`;
                 localStorage.removeItem(storageKey);
                 let delChange = new RemoveFolderChange(key, this.options);
@@ -1371,9 +1406,9 @@ export class RemoveFolderChange extends Change{
             }
         });
         
-        const storageKey = `inventory_folder_${this.folderName}`;
+        const storageKey = `inventory_folder_${this.folderPath}`;
         localStorage.removeItem(storageKey);
-        delete inventory.folders[this.folderName];
+        delete inventory.folders[this.folderPath];
     }
 
     async undo(){
@@ -1382,17 +1417,17 @@ export class RemoveFolderChange extends Change{
     }
 
     getDescription(){
-        return `Remove folder ${this.folderName}`;
+        return `Remove folder ${this.folderPath}`;
     }
 
     getUndoDescription(){
-        return `Restore folder ${this.folderName}`;
+        return `Restore folder ${this.folderPath}`;
     }
 
     cmd(){
         return {
             action: "remove_folder",
-            folderName: this.folderName,
+            folderPath: this.folderPath,
             options: this.options
         }
     }
@@ -1589,7 +1624,7 @@ export class EditScriptItemChange extends Change{
                         let my_name = inventory.firebase.sanitizeFirebasePath(scene.localUser.name);
                         let script_name = inventory.firebase.sanitizeFirebasePath(this.scriptName);
                         if(folder.remote){
-                            let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}${folder.path}/${script_name}`;
+                            let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}/${folder.path}/${script_name}`;
                             ref = ref;
                             log("inventory", "SAVING TO: ", ref)
                             networking.setData(ref, item);

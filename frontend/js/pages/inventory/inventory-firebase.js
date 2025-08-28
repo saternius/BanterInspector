@@ -8,6 +8,27 @@ export class InventoryFirebase {
         this.firebaseListeners = new Map();
     }
 
+    folderIsMine(folder){
+        if(!folder.imported) return true;
+        if(folder.importedFrom){
+            let origin = folder.importedFrom.split('/');
+            return origin[1] === SM.myName()
+        }
+        return false;
+    }
+
+    
+    folderLinkable(folder){
+        if(!folder.remote) return false;
+        if(folder.importedFrom){
+            let origin = folder.importedFrom.split('/');
+            if(origin[1] !== SM.myName()){
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Setup Firebase listeners for remote folders
      */
@@ -25,7 +46,7 @@ export class InventoryFirebase {
         
         // Check all folders for remote status and setup listeners
         Object.entries(this.inventory.folders).forEach(([folderName, folder]) => {
-            if (folder.remote) {
+            if (this.folderLinkable(folder)) {
                 this.setupFolderListener(folderName, folder);
             }
         });
@@ -405,6 +426,47 @@ export class InventoryFirebase {
             err('net', 'Failed to sync item to Firebase:', error);
         }
     }
+    
+    /**
+     * Sync folder to Firebase (including description)
+     */
+    async syncFolderToFirebase(folderKey, folder) {
+        // Only sync if folder is marked as remote
+        if (!folder.remote) return;
+        
+        if (!window.networking) {
+            err('net', 'Networking not initialized, skipping folder sync');
+            return;
+        }
+        
+        try {
+            const userName = this.sanitizeFirebasePath(SM.myName());
+            if (!userName) {
+                err('net', 'No username available for Firebase sync');
+                return;
+            }
+            
+            const sanitizedFolderKey = this.sanitizeFirebasePath(folderKey);
+            const firebasePath = `inventory/${userName}/${sanitizedFolderKey}/_folder_metadata`;
+            
+            // Create folder metadata object with description and public status
+            const folderMetadata = {
+                author: SM.myName(),
+                name: folder.name,
+                created: folder.created || Date.now(),
+                remote: true,
+                parent: folder.parent || null,
+                _description: folder._description || '',
+                public: folder.public || false
+            };
+            
+            // Save folder metadata to Firebase
+            await window.networking.setData(firebasePath, folderMetadata);
+            log('net', 'Folder metadata synced to Firebase:', firebasePath);
+        } catch (error) {
+            err('net', 'Failed to sync folder to Firebase:', error);
+        }
+    }
 
     /**
      * Check if item is in remote location
@@ -558,20 +620,24 @@ export class InventoryFirebase {
     /**
      * Import from Firebase reference
      */
-    async importFromFirebase(firebaseRef) {
+    async importFromFirebase(firebaseRef, parentFolder) {
         if (!window.firebase || !window.firebase.database) {
             showNotification('Firebase not initialized');
             return false;
         }
-        
+
+        let subjectName = firebaseRef.split('/').pop();
+        parentFolder = parentFolder || this.inventory.currentFolder;
+        let parentPath = parentFolder?parentFolder+"/":""
+        let path = `${parentPath}${subjectName}`
+
         try {
             const data = await networking.getData(firebaseRef);
             if(!data) return false;
             let importedCount = 0;
             
             // Extract the folder name from the Firebase path
-            const pathParts = firebaseRef.split('/');
-            const importedFolderName = pathParts[pathParts.length - 1];
+            
             
             // Check if we're importing a single folder with _folder metadata
             const isSingleFolder = data._folder && typeof data._folder === 'object';
@@ -583,12 +649,12 @@ export class InventoryFirebase {
             
             if (isSingleFolder || hasInventoryContent) {
                 // We're importing a folder - create it first
-                let containerFolderName = importedFolderName;
+                let containerFolderName = subjectName;
                 let counter = 1;
                 
                 // Generate unique folder name if conflict exists
                 while (this.inventory.folders[containerFolderName]) {
-                    containerFolderName = `${importedFolderName}_imported_${counter}`;
+                    containerFolderName = `${subjectName}_imported_${counter}`;
                     counter++;
                 }
                 
@@ -596,7 +662,9 @@ export class InventoryFirebase {
                 const containerFolder = {
                     name: containerFolderName,
                     created: Date.now(),
-                    parent: this.inventory.currentFolder,
+                    last_used: Date.now(),
+                    path: path,
+                    parent: parentFolder,
                     itemType: "folder",
                     icon:"📂",
                     remote: true,
@@ -605,23 +673,24 @@ export class InventoryFirebase {
                 };
                 
                 // Save container folder to localStorage
-                const folderStorageKey = `inventory_folder_${containerFolderName}`;
+                
+                const folderStorageKey = `inventory_folder_${path}`;
                 localStorage.setItem(folderStorageKey, JSON.stringify(containerFolder));
-                this.inventory.folders[containerFolderName] = containerFolder;
+                this.inventory.folders[path] = containerFolder;
                 importedCount++;
                 
                 // Now import all contents into this folder
-                await this.importFolderContents(data, containerFolderName, firebaseRef);
+                await this.importFolderContents(data, path, firebaseRef);
                 
                 // Count imported items
                 const itemsInFolder = Object.values(this.inventory.items).filter(item => 
-                    item.folder === containerFolderName || 
-                    (item.folder && item.folder.startsWith(containerFolderName + '/'))
+                    item.folder === path || 
+                    (item.folder && item.folder.startsWith(path + '/'))
                 ).length;
                 
                 const foldersInFolder = Object.values(this.inventory.folders).filter(folder => 
-                    folder.parent === containerFolderName ||
-                    (folder.parent && folder.parent.startsWith(containerFolderName + '/'))
+                    folder.parent === path ||
+                    (folder.parent && folder.parent.startsWith(path + '/'))
                 ).length;
                 
                 importedCount += itemsInFolder + foldersInFolder;
@@ -642,7 +711,7 @@ export class InventoryFirebase {
                         
                         const item = {
                             ...value,
-                            folder: this.inventory.currentFolder,
+                            folder: parentFolder,
                             imported: true,
                             remote: true,
                             importedFrom: firebaseRef,

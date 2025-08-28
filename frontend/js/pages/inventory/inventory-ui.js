@@ -187,6 +187,24 @@ export class InventoryUI {
         const sortDropdown = container.querySelector('#sortDropdown');
         const sortDirectionBtn = container.querySelector('#sortDirectionBtn');
         const inventoryContainer = this.container.querySelector('.inventory-container');
+        
+        // Add click handler to inventory container for deselecting items
+        inventoryContainer.addEventListener('mousedown', (e) => {
+            // Check if click is on empty space (not on items, folders, or buttons)
+            const clickedOnItem = e.target.closest('.inventory-item');
+            const clickedOnFolder = e.target.closest('.folder-item');
+            const clickedOnButton = e.target.closest('button');
+            const clickedOnInput = e.target.closest('input, select');
+            const clickedOnBreadcrumb = e.target.closest('.folder-breadcrumb');
+            if (!clickedOnItem && !clickedOnFolder && !clickedOnButton && !clickedOnInput && !clickedOnBreadcrumb) {
+                // Clicked on empty space - deselect item
+                if (this.inventory.selectedItem) {
+                    this.inventory.selectedItem = null;
+                    this.showEmptyPreview();
+                    this.render();
+                }
+            }
+        });
 
         
         if (sortDropdown) {
@@ -827,21 +845,285 @@ export class InventoryUI {
     }
     
     /**
-     * Show empty preview pane
+     * Show empty preview pane or folder details
      */
     showEmptyPreview() {
-        if (this.previewPane) {
-            this.previewPane.innerHTML = `
-                <div class="preview-header">
-                    <div class="preview-title">
-                        <h2>No Item Selected</h2>
+        if (!this.previewPane) return;
+        
+        // If we're in a folder, show folder details
+        if (this.inventory.currentFolder) {
+            const folder = this.inventory.folders[this.inventory.currentFolder];
+            if (folder) {
+                this.showFolderDetails(this.inventory.currentFolder, folder);
+                return;
+            }
+        }
+        
+        // Show root inventory overview
+        this.showInventoryOverview();
+    }
+    
+    /**
+     * Show inventory overview when at root level with no selection
+     */
+    showInventoryOverview() {
+        if (!this.previewPane) return;
+        
+        const totalItems = Object.keys(this.inventory.items).length;
+        const totalFolders = Object.keys(this.inventory.folders).length;
+        
+        // Count items by type
+        let scripts = 0, entities = 0, images = 0, markdown = 0;
+        Object.values(this.inventory.items).forEach(item => {
+            switch(item.itemType) {
+                case 'script': scripts++; break;
+                case 'image': images++; break;
+                case 'markdown': markdown++; break;
+                default: entities++; break;
+            }
+        });
+        
+        // Count remote vs local items
+        let remoteItems = 0;
+        Object.values(this.inventory.items).forEach(item => {
+            if (this.inventory.firebase.isItemInRemoteLocation(item)) {
+                remoteItems++;
+            }
+        });
+        
+        this.previewPane.innerHTML = `
+            <div class="preview-header">
+                <div class="preview-title">
+                    <span class="preview-icon-btn" style="cursor: default;">📦</span>
+                    <h2>Inventory Overview</h2>
+                </div>
+            </div>
+            <div class="preview-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Total Items:</span>
+                    <span class="meta-value">${totalItems}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Total Folders:</span>
+                    <span class="meta-value">${totalFolders}</span>
+                </div>
+            </div>
+            <div class="preview-content" style="padding: 20px;">
+                <h3>Item Breakdown</h3>
+                <div style="margin: 15px 0;">
+                    ${entities > 0 ? `<div style="margin: 5px 0;">📦 Entities: ${entities}</div>` : ''}
+                    ${scripts > 0 ? `<div style="margin: 5px 0;">📜 Scripts: ${scripts}</div>` : ''}
+                    ${images > 0 ? `<div style="margin: 5px 0;">🖼️ Images: ${images}</div>` : ''}
+                    ${markdown > 0 ? `<div style="margin: 5px 0;">📝 Markdown: ${markdown}</div>` : ''}
+                </div>
+                <h3>Storage</h3>
+                <div style="margin: 15px 0;">
+                    <div style="margin: 5px 0;">💾 Local Items: ${totalItems - remoteItems}</div>
+                    ${remoteItems > 0 ? `<div style="margin: 5px 0;">☁️ Remote Items: ${remoteItems}</div>` : ''}
+                </div>
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #333;">
+                    <p style="color: #888; font-size: 0.9em;">Select an item to view its details, or navigate into a folder to see folder information.</p>
+                </div>
+            </div>
+        `;
+        this.previewPane.style.display = 'block';
+    }
+    
+    /**
+     * Show folder details in preview pane
+     */
+    showFolderDetails(folderKey, folder) {
+        if (!this.previewPane) return;
+        
+        const itemCount = this.inventory.getItemCountInFolder(folderKey);
+        const dateStr = folder.created ? new Date(folder.created).toLocaleString() : 'Unknown';
+        const isRemote = folder.remote || false;
+        const folderPath = this.inventory.getCurrentFolderPath();
+        const description = folder._description || '';
+        const isPublic = folder.public || false;
+        
+        // Count subfolders
+        let subfolderCount = 0;
+        Object.entries(this.inventory.folders).forEach(([key, subfolder]) => {
+            if (subfolder.parent === folderKey) {
+                subfolderCount++;
+            }
+        });
+        
+        this.previewPane.innerHTML = `
+            <div class="preview-header">
+                <div class="preview-title">
+                    <span class="preview-icon-btn" style="cursor: default;">📁</span>
+                    <h2 ${this.inventory.firebase.folderIsMine(folder) ? `contenteditable="true" class="editable-folder-name"` : `class="folder-name-readonly"`} data-folder-key="${folderKey}">${folder.name}</h2>
+                </div>
+            </div>
+            <div class="preview-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Type:</span>
+                    <span class="meta-value">Folder</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Path:</span>
+                    <span class="meta-value">${folderPath}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Items:</span>
+                    <span class="meta-value">${itemCount}</span>
+                </div>
+                ${subfolderCount > 0 ? `
+                    <div class="meta-item">
+                        <span class="meta-label">Subfolders:</span>
+                        <span class="meta-value">${subfolderCount}</span>
+                    </div>
+                ` : ''}
+                <div class="meta-item">
+                    <span class="meta-label">Storage:</span>
+                    <span class="meta-value">${isRemote ? '☁️ Remote' : '💾 Local'}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Created:</span>
+                    <span class="meta-value">${dateStr}</span>
+                </div>
+            </div>
+            ${this.inventory.firebase.folderIsMine(folder) ? `
+                <div class="preview-meta">
+                    <div class="meta-item" style="display: flex; align-items: center; justify-content: space-between;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="folder-public-checkbox" class="folder-public-checkbox" data-folder-key="${folderKey}" 
+                                ${isPublic ? 'checked' : ''} style="cursor: pointer;">
+                            <label for="folder-public-checkbox" style="cursor: pointer;">Public Folder</label>
+                        </div>
+                        <span style="color: #888; font-size: 0.9em;">${isPublic ? 'Contents in this folder are public' : 'Contents in this folder are private'}</span>
                     </div>
                 </div>
-                <div class="preview-content" style="padding: 20px; text-align: center; color: #888;">
-                    <p>Select an item from the inventory to see its details here.</p>
-                </div>
-            `;
-            this.previewPane.style.display = 'block';
+            ` : ''}
+            <div class="preview-meta">
+                <div class="meta-label">Description:</div>
+                ${this.inventory.firebase.folderIsMine(folder) ? 
+                    `<textarea class="description-textarea" data-folder-key="${folderKey}" placeholder="Enter a description for this folder...">${this.escapeHtml(description)}</textarea>` :
+                    `<div class="description-readonly" style="padding: 8px; background: #2a2a2a; border: 1px solid #333; border-radius: 4px; color: #ccc; min-height: 60px; white-space: pre-wrap;">${this.escapeHtml(description) || '<span style="color: #666;">No description provided</span>'}</div>`
+                }
+            </div>
+            <div class="preview-content" style="padding: 20px;">
+                <h3>Folder Information</h3>
+                <p style="color: #888; margin: 10px 0;">This folder contains ${itemCount} item${itemCount !== 1 ? 's' : ''} and ${subfolderCount} subfolder${subfolderCount !== 1 ? 's' : ''}.</p>
+                ${isRemote ? `
+                    <p style="color: #6bb6ff; margin: 10px 0;" onclick="inventory.firebase.copyFirebaseRef()">🔗 Synced</p>
+                ` : `
+                    <p style="color: #888; margin: 10px 0;">This folder is stored locally.</p>
+                `}
+            </div>
+        `;
+        this.previewPane.style.display = 'block';
+        
+        // Add event listeners for folder renaming
+        this.attachFolderPreviewEventListeners(folderKey, folder);
+    }
+    
+    /**
+     * Attach event listeners for folder preview
+     */
+    attachFolderPreviewEventListeners(folderKey, folder) {
+        // Only allow editing folder name if user owns it
+        if (this.inventory.firebase.folderIsMine(folder)) {
+            const editableName = this.previewPane.querySelector('.editable-folder-name');
+            if (editableName) {
+                const originalName = folder.name;
+                
+                editableName.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        editableName.blur();
+                    }
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        editableName.textContent = originalName;
+                        editableName.blur();
+                    }
+                });
+                
+                editableName.addEventListener('blur', () => {
+                    const newName = editableName.textContent.trim();
+                    if (newName && newName !== originalName) {
+                        // Show warning about renaming consequences
+                        const isRemote = folder.remote || false;
+                        let warningMessage = `<strong>Warning:</strong> Renaming this folder may break existing references and scripts that depend on it.`;
+                        
+                        if (isRemote) {
+                            warningMessage += `<br><br><strong>Important:</strong> This folder is currently synchronized with Firebase. After renaming, it will become a local-only folder and lose its remote connection.`;
+                        }
+                        
+                        warningMessage += `<br><br>Are you sure you want to rename "${originalName}" to "${newName}"?`;
+                        
+                        this.showWarningConfirm(
+                            'Folder Rename Warning',
+                            warningMessage,
+                            () => {
+                                // User confirmed - proceed with rename
+                                this.inventory.handleFolderRename(folderKey, newName);
+                            },
+                            () => {
+                                // User cancelled - revert name
+                                editableName.textContent = originalName;
+                            }
+                        );
+                    } else if (!newName) {
+                        editableName.textContent = originalName;
+                    }
+                });
+                
+                editableName.addEventListener('focus', () => {
+                    const range = document.createRange();
+                    range.selectNodeContents(editableName);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                });
+            }
+        }
+        
+        // Description textarea - only if user owns the folder
+        if (this.inventory.firebase.folderIsMine(folder)) {
+            const descriptionTextarea = this.previewPane.querySelector('.description-textarea');
+            if (descriptionTextarea) {
+                descriptionTextarea.addEventListener('blur', () => {
+                    const updatedFolder = this.inventory.folders[folderKey];
+                    if (updatedFolder) {
+                        updatedFolder._description = descriptionTextarea.value;
+                        this.inventory.syncFolder(folderKey, updatedFolder);
+                        showNotification(`Updated description for folder "${folder.name}"`);
+                    }
+                });
+                
+                descriptionTextarea.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        descriptionTextarea.blur();
+                    }
+                });
+            }
+        }
+        
+        // Public checkbox - only if user owns the folder
+        const publicCheckbox = this.previewPane.querySelector('.folder-public-checkbox');
+        if (publicCheckbox) {
+            publicCheckbox.addEventListener('change', () => {
+                const updatedFolder = this.inventory.folders[folderKey];
+                if (updatedFolder) {
+                    updatedFolder.public = publicCheckbox.checked;
+                    this.inventory.syncFolder(folderKey, updatedFolder);
+                    
+                    // Update the status text
+                    const statusText = publicCheckbox.parentElement.parentElement.querySelector('span');
+                    if (statusText) {
+                        statusText.textContent = publicCheckbox.checked ? 
+                            'Contents in this folder are public' : 
+                            'Contents in this folder are private';
+                    }
+                    
+                    showNotification(`Folder "${folder.name}" is now ${publicCheckbox.checked ? 'public' : 'private'}`);
+                }
+            });
         }
     }
 
@@ -1141,6 +1423,29 @@ export class InventoryUI {
      * Setup drop zone for drag and drop
      */
     setupDropZone() {
+        // Add click handler to preview pane for deselecting when clicking in empty areas
+        if (this.previewPane) {
+            this.previewPane.addEventListener('mousedown', (e) => {
+                // Only deselect if clicking the preview pane background itself, not content
+                if (e.target === this.previewPane || 
+                    e.target.classList.contains('preview-content') ||
+                    e.target.classList.contains('preview-meta')) {
+                    // But not if clicking interactive elements
+                    const clickedOnButton = e.target.closest('button');
+                    const clickedOnInput = e.target.closest('input, textarea, select');
+                    const clickedOnEditable = e.target.closest('[contenteditable]');
+                    
+                    if (!clickedOnButton && !clickedOnInput && !clickedOnEditable) {
+                        if (this.inventory.selectedItem) {
+                            this.inventory.selectedItem = null;
+                            this.showEmptyPreview();
+                            this.inventory.ui.render();
+                        }
+                    }
+                }
+            });
+        }
+        
         this.container.addEventListener('dragover', (e) => {
             // Only handle external drags (from hierarchy)
             if (!this.inventory.draggedItem) {

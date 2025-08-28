@@ -401,3 +401,179 @@ export default class DeskLampController {
 ## Conclusion
 
 While Resonite's node-based logic cannot be perfectly preserved in exports, the **ASSXML format combined with pattern recognition** provides the best path for conversion. The generated JavaScript will require manual review but can automate 60-80% of common logic patterns, significantly reducing migration effort.
+
+
+
+
+
+
+
+ASKS:
+Essential Export Features Needed
+
+  1. Logic Graph Serialization
+
+  Ask for a new export format or extension that includes:
+  {
+    "logicNodes": [
+      {
+        "id": "node_001",
+        "type": "Dynamic Impulse Receiver",
+        "position": [x, y, z],
+        "properties": {
+          "tag": "onOffToggle",
+          "enabled": true
+        }
+      }
+    ],
+    "connections": [
+      {
+        "from": { "nodeId": "node_001", "output": "Impulse" },
+        "to": { "nodeId": "node_002", "input": "Trigger" },
+        "dataType": "impulse"
+      }
+    ]
+  }
+
+  2. ProtoFlux Script Export
+
+  Export ProtoFlux visual scripts as structured data:
+  - Node types and configurations
+  - Input/output connections
+  - Variable bindings
+  - Execution flow paths
+
+  3. Component State Serialization
+
+  Full component data including:
+  - Dynamic variables and their bindings
+  - Value/Reference field connections
+  - Driver relationships
+  - Component-specific settings
+
+  4. GLTF Extensions for Logic
+
+  Propose Resonite-specific GLTF extensions:
+  {
+    "extensions": {
+      "RESONITE_logic_nodes": {
+        "version": "1.0",
+        "nodes": [...],
+        "connections": [...],
+        "variables": [...]
+      },
+      "RESONITE_interactions": {
+        "grabbable": true,
+        "triggers": [...],
+        "colliders": [...]
+      }
+    }
+  }
+
+  5. Event System Mapping
+
+  Export event configurations:
+  - Collision events and handlers
+  - User interaction mappings
+  - Networked event definitions
+  - Custom event triggers
+
+  6. Hierarchical Logic Preservation
+
+  Maintain parent-child relationships for:
+  - Logic node groups
+  - Variable scoping
+  - Component references
+  - Slot hierarchies
+
+  Specific Technical Requests
+
+  A. Connection Data Format
+
+  {
+    "connectionType": "data|impulse|reference",
+    "sourceNode": "uuid",
+    "sourcePort": "portName",
+    "targetNode": "uuid",
+    "targetPort": "portName",
+    "dataTransform": "direct|cast|convert"
+  }
+
+  B. Variable Context Export
+
+  {
+    "variables": {
+      "local": {...},
+      "user": {...},
+      "world": {...},
+      "cloud": {...}
+    },
+    "bindings": [
+      {
+        "variable": "varName",
+        "target": "nodeId.property",
+        "mode": "read|write|bidirectional"
+      }
+    ]
+  }
+
+  C. Timing and Execution Order
+
+  {
+    "executionGroups": [
+      {
+        "priority": 0,
+        "nodes": ["node1", "node2"],
+        "trigger": "onStart|onUpdate|onEvent"
+      }
+    ]
+  }
+
+  Ideal Implementation
+
+  Option 1: Extended ResonitePackage Format
+
+  Enhance the .resonitepackage to include:
+  - /Logic/ directory with node graphs
+  - /Scripts/ directory with ProtoFlux exports
+  - /Mappings/ directory with connection data
+  - manifest.json with complete metadata
+
+  Option 2: New Developer Export Mode
+
+  A special "Developer Export" that creates:
+  - Human-readable logic representation
+  - Asset dependency graph
+  - Component serialization
+  - Interaction mappings
+
+  Option 3: API/SDK Access
+
+  Provide programmatic access to:
+  - Scene graph with full component data
+  - Logic node introspection
+  - Runtime state serialization
+  - Asset reference resolution
+
+  Minimum Viable Request
+
+  If you can only ask for one thing, request:
+
+  "Export ProtoFlux/Logic connections as JSON metadata"
+
+  This would include:
+  1. Node IDs and types
+  2. Input/output connections
+  3. Property values
+  4. Basic execution flow
+
+  Even just having the connection graph would increase conversion accuracy from 60-80% to 95%+.
+
+  Example Request Message
+
+  "Hi Frooxius, I'm working on tools to help creators migrate content between platforms. Would it be possible to add an 
+  export option that preserves ProtoFlux logic connections? Even a simple JSON file mapping node IDs to their connections 
+  would be incredibly valuable. This would help preserve the interactive behaviors that creators have built, not just the 
+  static geometry."
+
+  This positions it as helping the Resonite community while being technically achievable.

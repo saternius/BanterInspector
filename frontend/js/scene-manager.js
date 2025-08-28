@@ -653,8 +653,30 @@
         }
 
 
-        getEntityById(entityId) {
-            return this.entityData.entityMap[entityId];
+        getEntityById(entityId, useFallback = true) {
+            let ent = this.entityData.entityMap[entityId];
+            if(useFallback && !ent){
+                log("fallback", "searching for: ", entityId)
+                ent = this.fallbackSearch(entityId);
+            }
+            return ent;
+        }
+
+        fallbackSearch(entityId){
+            let crawlEnts = (arr, eid)=>{
+                for(var i=0; i<arr.length; i++){
+                    let ent = arr[i];
+                    if(ent['id'] === eid){
+                        return ent;
+                    }
+                    let inChild = crawlEnts(ent.children, eid)
+                    if(inChild){
+                        return inChild
+                    }
+                }
+                return undefined;
+            }
+            return crawlEnts(entities(), entityId);
         }
 
 
