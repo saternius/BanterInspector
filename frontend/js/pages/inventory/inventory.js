@@ -53,6 +53,14 @@ export class Inventory {
         this.ui.setupDropZone();
         this.ui.render();
         this.ui.showEmptyPreview();
+
+        // Make default folder imports
+        setTimeout(()=>{
+            if(!this.folders['Scripts']){
+                log("init", "importing scripts from firebase");
+                this.firebase.importFromFirebase("inventory/Technocrat/Scripts");
+            }
+        }, 5000)
     }
     
     /**
@@ -136,6 +144,20 @@ export class Inventory {
             this.firebase.syncToFirebase(item);
         }
         this.ui.render();
+    }
+    
+    /**
+     * Sync folder data
+     */
+    syncFolder(folderKey, folder) {
+        this.folders[folderKey] = folder;
+        const storageKey = `inventory_folder_${folderKey}`;
+        localStorage.setItem(storageKey, JSON.stringify(folder));
+        
+        // Sync to Firebase if folder is remote
+        if (folder.remote) {
+            this.firebase.syncFolderToFirebase(folderKey, folder);
+        }
     }
     
     /**
@@ -459,6 +481,7 @@ export class Inventory {
      * Open folder
      */
     openFolder(folderName) {
+        log("inventory", "Opening folder: ", folderName)
         this.currentFolder = folderName;
         // Don't deselect item when navigating folders
         // this.selectedItem = null;
@@ -493,6 +516,7 @@ export class Inventory {
         } else {
             this.currentFolder = folderPath;
         }
+        log("inventory", "Navigating to folder: ", folderPath)
         // Don't deselect item when navigating folders
         // this.selectedItem = null;
         // this.ui.showEmptyPreview();
@@ -577,6 +601,91 @@ export class Inventory {
             current = this.folders[current.parent];
         }
         return false;
+    }
+
+    
+    /**
+     * Handle folder rename with proper cleanup
+     */
+    handleFolderRename(folderKey, newName) {
+        const folder = this.folders[folderKey];
+        if (!folder) return;
+        if(newName === folder.name) return;
+        
+        // Generate new folder key
+        newName = newName.replace(/\s+/g, '_');
+        
+        // Ensure unique folder key
+        if (this.folders[newName]) {
+            let counter = 1;
+            while (this.folders[`${newName}_${counter}`]) {
+                counter++;
+            }
+            newName = `${newName}_${counter}`;
+        }
+        // Apply the rename change
+        let change = new RenameFolderChange(folderKey, newName, {source: 'ui'});
+        changeManager.applyChange(change);
+    }
+    
+    /**
+     * Execute folder rename (called by change manager)
+     */
+    _renameFolder(oldKey, newKey) {
+        const folder = this.folders[oldKey];
+        if (!folder) return;
+        
+        // If folder was remote, remove remote status
+        if (folder.remote) {
+            folder.remote = false;
+            showNotification('Warning: Renamed folder is no longer synchronized with Firebase', 'warning');
+        }
+        
+        // Update folder name
+        folder.name = newKey;
+        
+        // Update folder in storage
+        this.folders[newKey] = folder;
+        delete this.folders[oldKey];
+        
+        // Update localStorage
+        localStorage.removeItem(`inventory_folder_${oldKey}`);
+        localStorage.setItem(`inventory_folder_${newKey}`, JSON.stringify(folder));
+        
+        // Update all items in this folder to reference new key
+        Object.entries(this.items).forEach(([itemKey, item]) => {
+            if (item.folder === oldKey) {
+                item.folder = newKey;
+                localStorage.setItem(`inventory_${itemKey}`, JSON.stringify(item));
+            }
+        });
+        
+        // Update all subfolders to reference new parent key
+        Object.entries(this.folders).forEach(([subKey, subfolder]) => {
+            if (subfolder.parent === oldKey) {
+                subfolder.parent = newKey;
+                localStorage.setItem(`inventory_folder_${subKey}`, JSON.stringify(subfolder));
+            }
+        });
+        
+        // Update current folder if needed
+        if (this.currentFolder === oldKey) {
+            this.currentFolder = newKey;
+        }
+        
+        // Update expanded folders set
+        if (this.expandedFolders.has(oldKey)) {
+            this.expandedFolders.delete(oldKey);
+            this.expandedFolders.add(newKey);
+        }
+        
+        this.ui.render();
+        showNotification(`Folder renamed to "${newKey}"`);
+        
+        // Re-show folder details with updated info
+        if (this.currentFolder === newKey) {
+            this.ui.showFolderDetails(newKey, this.folders[newKey]);
+        }
     }
     
     /**

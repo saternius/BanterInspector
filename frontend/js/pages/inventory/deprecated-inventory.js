@@ -2281,6 +2281,7 @@ export class Inventory {
      * Open a folder
      */
     openFolder(folderName) {
+        log("inventory", "Opening folder: ", folderName)
         // Update last_used timestamp for folder
         this.updateFolderLastUsed(folderName);
         
