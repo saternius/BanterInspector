@@ -618,6 +618,104 @@ export class InventoryFirebase {
     }
 
     /**
+     * Import public folders from a username
+     */
+    async importPublicUserFolders(username) {
+        if (!window.networking) {
+            showNotification('Networking not initialized');
+            return false;
+        }
+        
+        // Check if a folder with this username already exists at root level
+        if (this.inventory.folders[username]) {
+            showNotification(`A folder named "${username}" already exists`);
+            return false;
+        }
+        
+        try {
+            // Check if user exists in Firebase
+            const userInventoryRef = `inventory/${username}`;
+            const userData = await networking.getData(userInventoryRef);
+            
+            if (!userData) {
+                return false; // User doesn't exist
+            }
+            
+            // Create the public user folder
+            const now = Date.now();
+            const userFolder = {
+                name: username,
+                created: now,
+                last_used: now,
+                path: username,
+                parent: null,
+                itemType: "folder",
+                icon: "👤",
+                remote: true,
+                importedFrom: userInventoryRef,
+                author: username,
+                public: true,
+                userFolder: true
+            };
+            
+            // Save user folder to localStorage
+            const folderStorageKey = `inventory_folder_${username}`;
+            localStorage.setItem(folderStorageKey, JSON.stringify(userFolder));
+            this.inventory.folders[username] = userFolder;
+            
+            // Find all public folders for this user
+            let folderRefsCreated = 0;
+            
+            for (const [folderKey, folderData] of Object.entries(userData)) {
+                // Check if this is a folder with public metadata
+                if (folderData && typeof folderData === 'object') {
+                    const metadataPath = `${userInventoryRef}/${folderKey}/_folder_metadata`;
+                    const metadata = await networking.getData(metadataPath);
+                    
+                    if (metadata && metadata.public === true) {
+                        // Create a folderRef item for this public folder
+                        const folderRefKey = `${username}/${folderKey}`;
+                        const folderRef = {
+                            itemType: "folderRef",
+                            author: username,
+                            public: true,
+                            name: folderKey,
+                            folder: username, // Parent folder is the user folder
+                            path: folderRefKey,
+                            importedFrom: `${userInventoryRef}/${folderKey}`,
+                            created: now,
+                            last_used: now,
+                            icon: "📁",
+                            _description: metadata._description || ''
+                        };
+                        
+                        // Save folderRef to localStorage
+                        const itemStorageKey = `inventory_${folderRefKey}`;
+                        localStorage.setItem(itemStorageKey, JSON.stringify(folderRef));
+                        this.inventory.items[folderRefKey] = folderRef;
+                        folderRefsCreated++;
+                    }
+                }
+            }
+            
+            // Update UI
+            this.inventory.ui.render();
+            
+            if (folderRefsCreated > 0) {
+                showNotification(`Created folder for user "${username}" with ${folderRefsCreated} public folder${folderRefsCreated > 1 ? 's' : ''}`);
+            } else {
+                showNotification(`Created folder for user "${username}" (no public folders found)`);
+            }
+            
+            return true;
+            
+        } catch (error) {
+            console.error('Error importing public user folders:', error);
+            return false;
+        }
+    }
+    
+    /**
      * Import from Firebase reference
      */
     async importFromFirebase(firebaseRef, parentFolder) {

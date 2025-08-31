@@ -83,7 +83,7 @@
             // Delete button
             this.deleteBtn.addEventListener('mousedown', async () => {
                 if (!SM.selectedEntity) {
-                    alert('Please select a entity to delete');
+                    showNotification('Please select a entity to delete');
                     return;
                 }
                 
@@ -102,7 +102,7 @@
             // Save button
             this.saveBtn.addEventListener('mousedown', async () => {
                 if (!SM.selectedEntity) {
-                    alert('Please select a entity to save');
+                    showNotification('Please select a entity to save');
                     return;
                 }
 
@@ -368,7 +368,7 @@
             
             // Check if we can drop here
             if (this.isDescendant(this.draggedEntityId, targetEntityId)) {
-                alert('Cannot move a entity into one of its descendants');
+                showNotification('Cannot move a entity into one of its descendants');
                 return;
             }
             
