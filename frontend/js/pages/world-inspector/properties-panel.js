@@ -16,6 +16,7 @@
             this.addComponentBtn = document.getElementById('addComponentBtn');
             this.selectedEntityNameElement = document.getElementById('selectedEntityName');
             this.collapseAllBtn = document.getElementById('collapseAllBtn');
+            this.loadSettingsBtn = document.getElementById('loadSettingsBtn');
             
             // Store collapsed state of components
             this.collapsedComponents = new Set();
@@ -24,7 +25,30 @@
             this.scaleLockStates = new Map(); // Key: componentId_propertyKey, Value: boolean
             this.scaleRatios = new Map(); // Key: componentId_propertyKey, Value: {x: number, y: number, z: number}
             
+            // Load settings toggle state
+            this.showLoadSettings = false;
+            
             this.setupEventListeners();
+        }
+
+      
+        
+        /**
+         * Toggle Load Settings mode
+         */
+        toggleLoadSettings() {
+            this.showLoadSettings = !this.showLoadSettings;
+            
+            // Update button appearance
+            if (this.loadSettingsBtn) {
+                this.loadSettingsBtn.style.backgroundColor = this.showLoadSettings ? '#4a90e2' : '';
+                this.loadSettingsBtn.style.color = this.showLoadSettings ? '#fff' : '';
+            }
+            
+            // Re-render to show/hide async toggles
+            if (SM.selectedEntity) {
+                this.render(SM.selectedEntity);
+            }
         }
 
         /**
@@ -41,6 +65,10 @@
             // Collapse all button
             this.collapseAllBtn?.addEventListener('mousedown', () => {
                 this.collapseAllComponents();
+            });
+
+            this.loadSettingsBtn?.addEventListener('mousedown', () => {
+                this.toggleLoadSettings();
             });
         }
 
@@ -210,6 +238,11 @@
                 changeManager.applyChange(change);
             });
             
+            if (this.showLoadSettings) {
+                const asyncRow = this.createAsyncToggleRow(entity);
+                body.appendChild(asyncRow);
+            }
+
             body.appendChild(nameRow);
             body.appendChild(layerRow);
             body.appendChild(activeRow);
@@ -344,6 +377,11 @@
             const body = document.createElement('div');
             body.className = 'component-body';
 
+            // Add async loading toggle if Load Settings is enabled
+            if (this.showLoadSettings) {
+                const asyncRow = this.createAsyncToggleRow(component);
+                body.appendChild(asyncRow);
+            }
 
             if(component._controls){
                 let controls = component._controls;
@@ -1074,6 +1112,44 @@
                 };
                 valueContainer.appendChild(input);
             }
+            
+            row.appendChild(document.createElement('span')); // Empty space for button
+            row.appendChild(label);
+            row.appendChild(valueContainer);
+            
+            return row;
+        }
+
+        /**
+         * Create async toggle row for component
+         */
+        createAsyncToggleRow(componentOrEntity) {
+            const row = document.createElement('div');
+            row.className = 'async-toggle-row';
+            
+            const label = document.createElement('span');
+            label.className = 'property-label';
+            label.textContent = 'Async';
+            label.style.fontWeight = 'bold';
+            label.style.flex = "none"
+
+            const valueContainer = document.createElement('div');
+            valueContainer.className = 'property-value';
+            
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.className = 'checkbox-input';
+            input.style.flex = "none"
+            
+            // Check both component.loadAsync and entity.loadAsync
+            input.checked = componentOrEntity.loadAsync;
+            
+            input.onchange = () => {
+                console.log("loadAsync changed", input.checked)
+                componentOrEntity.loadAsync = input.checked;
+            };
+            
+            valueContainer.appendChild(input);
             
             row.appendChild(document.createElement('span')); // Empty space for button
             row.appendChild(label);

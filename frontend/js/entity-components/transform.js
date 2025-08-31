@@ -8,8 +8,8 @@ export class TransformComponent extends EntityComponent {
         this.type = "Transform";
     }
 
-    async init(entity, sceneComponent, properties){
-        await super.init(entity, sceneComponent, properties);
+    async init(entity, sceneComponent, properties, options){
+        await super.init(entity, sceneComponent, properties, options);
         return this;
     }
 

@@ -8,6 +8,7 @@ export class InventoryUI {
         this.inventory = inventory;
         this.container = inventory.container;
         this.previewPane = inventory.previewPane;
+
     }
 
     /**
@@ -196,7 +197,9 @@ export class InventoryUI {
             const clickedOnButton = e.target.closest('button');
             const clickedOnInput = e.target.closest('input, select');
             const clickedOnBreadcrumb = e.target.closest('.folder-breadcrumb');
-            if (!clickedOnItem && !clickedOnFolder && !clickedOnButton && !clickedOnInput && !clickedOnBreadcrumb) {
+            const clickedOnPreviewPane = e.target.closest('.inventory-preview-pane')
+            log("inventory", "clickedOn", e.target)
+            if (!clickedOnItem && !clickedOnFolder && !clickedOnButton && !clickedOnInput && !clickedOnBreadcrumb && !clickedOnPreviewPane) {
                 // Clicked on empty space - deselect item
                 if (this.inventory.selectedItem) {
                     this.inventory.selectedItem = null;
@@ -303,6 +306,47 @@ export class InventoryUI {
                         console.error('Failed to copy URL:', err);
                         showNotification('Failed to copy URL');
                     });
+                }
+            });
+        });
+        
+        // Add event listeners for import folderRef buttons
+        inventoryContainer.querySelectorAll('.import-folderref-btn').forEach(btn => {
+            btn.addEventListener('mousedown', async (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                const folderRef = this.inventory.items[itemName];
+                
+                if (folderRef && folderRef.itemType === 'folderRef' && folderRef.importedFrom) {
+                    btn.disabled = true;
+                    btn.textContent = '⏳';
+                    
+                    try {
+                        // Import the actual folder from Firebase
+                        const success = await this.inventory.firebase.importFromFirebase(
+                            folderRef.importedFrom,
+                            folderRef.folder // Import into the same parent folder
+                        );
+                        
+                        if (success) {
+                            // Remove the folderRef item now that it's been imported
+                            delete this.inventory.items[itemName];
+                            localStorage.removeItem(`inventory_${itemName}`);
+                            
+                            // Re-render
+                            this.render();
+                            showNotification(`Imported folder "${folderRef.name}"`);
+                        } else {
+                            btn.disabled = false;
+                            btn.textContent = '📥';
+                            showNotification('Failed to import folder');
+                        }
+                    } catch (error) {
+                        console.error('Error importing folderRef:', error);
+                        btn.disabled = false;
+                        btn.textContent = '📥';
+                        showNotification('Error importing folder');
+                    }
                 }
             });
         });
@@ -625,7 +669,16 @@ export class InventoryUI {
 
         // Different actions based on item type
         let itemActions = '';
-        if (itemType === 'script' || itemType === 'markdown') {
+        if (itemType === 'folderRef') {
+            // Special handling for folder references
+            itemActions = `
+                <div class="item-actions">
+                    <button class="action-btn import-folderref-btn" data-item-name="${key}" title="Import this folder">
+                        📥
+                    </button>
+                </div>
+            `;
+        } else if (itemType === 'script' || itemType === 'markdown') {
             itemActions = `
                 <div class="item-actions">
                     <button class="action-btn edit-script-btn" data-item-name="${key}">
@@ -793,6 +846,42 @@ export class InventoryUI {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     descriptionTextarea.blur();
+                }
+            });
+        }
+        
+        // Handle import button for folderRef in preview
+        const importFolderRefBtn = this.previewPane.querySelector('.import-folderref-preview-btn');
+        if (importFolderRefBtn) {
+            importFolderRefBtn.addEventListener('click', async () => {
+                const folderRef = item;
+                if (folderRef && folderRef.itemType === 'folderRef' && folderRef.importedFrom) {
+                    importFolderRefBtn.disabled = true;
+                    importFolderRefBtn.textContent = '⏳ Importing...';
+                    
+                    try {
+                        const success = await this.inventory.firebase.importFromFirebase(
+                            folderRef.importedFrom,
+                            folderRef.folder
+                        );
+                        
+                        if (success) {
+                            delete this.inventory.items[itemName];
+                            localStorage.removeItem(`inventory_${itemName}`);
+                            this.render();
+                            this.showEmptyPreview();
+                            showNotification(`Imported folder "${folderRef.name}"`);
+                        } else {
+                            importFolderRefBtn.disabled = false;
+                            importFolderRefBtn.textContent = '📥 Import Folder';
+                            showNotification('Failed to import folder');
+                        }
+                    } catch (error) {
+                        console.error('Error importing folderRef from preview:', error);
+                        importFolderRefBtn.disabled = false;
+                        importFolderRefBtn.textContent = '📥 Import Folder';
+                        showNotification('Error importing folder');
+                    }
                 }
             });
         }
@@ -1154,6 +1243,58 @@ export class InventoryUI {
                     </div>
                     <button class="preview-close-btn">×</button>
                 </div>`
+        
+        // Special handling for folderRef items
+        if (itemType === 'folderRef') {
+            return `
+                ${previewHeader}
+                <div class="preview-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Type:</span>
+                        <span class="meta-value">Public Folder Reference</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Author:</span>
+                        <span class="meta-value">${item.author || 'Unknown'}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Source:</span>
+                        <span class="meta-value" style="font-size: 0.9em; word-break: break-all;">${item.importedFrom || 'Unknown'}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Created:</span>
+                        <span class="meta-value">${dateStr}</span>
+                    </div>
+                </div>
+                ${item._description ? `
+                    <div class="preview-meta">
+                        <div class="meta-label">Description:</div>
+                        <div class="description-readonly" style="padding: 8px; background: #2a2a2a; border: 1px solid #333; border-radius: 4px; color: #ccc; min-height: 60px; white-space: pre-wrap;">
+                            ${this.escapeHtml(item._description)}
+                        </div>
+                    </div>
+                ` : ''}
+                <div class="preview-content" style="padding: 20px;">
+                    <h3>Public Folder</h3>
+                    <p style="color: #888; margin: 10px 0;">This is a reference to a public folder shared by ${item.author}.</p>
+                    <p style="color: #6bb6ff; margin: 10px 0;">Click the 📥 import button to download this folder to your inventory.</p>
+                    <div style="margin-top: 20px; padding: 15px; background: #2a2a2a; border-radius: 4px;">
+                        <button class="import-folderref-preview-btn" data-item-name="${itemName}" style="
+                            padding: 10px 20px;
+                            background: #4CAF50;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 14px;
+                        ">
+                            📥 Import Folder
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
         if (itemType === 'image') {
             const size = item.data.size ? (item.data.size / 1024).toFixed(2) + ' KB' : 'Unknown';
             const dimensions = item.data.width && item.data.height ? 
@@ -1434,8 +1575,9 @@ export class InventoryUI {
                     const clickedOnButton = e.target.closest('button');
                     const clickedOnInput = e.target.closest('input, textarea, select');
                     const clickedOnEditable = e.target.closest('[contenteditable]');
-                    
-                    if (!clickedOnButton && !clickedOnInput && !clickedOnEditable) {
+                    const clickedOnPreviewPane = e.target.closest('.inventory-preview-pane')
+                    log("inventory", "clickedOn [dropZone]", e.target)
+                    if (!clickedOnButton && !clickedOnInput && !clickedOnEditable && !clickedOnPreviewPane) {
                         if (this.inventory.selectedItem) {
                             this.inventory.selectedItem = null;
                             this.showEmptyPreview();
@@ -1768,16 +1910,44 @@ export class InventoryUI {
         const closeModal = () => modalOverlay.remove();
         
         const handleImport = async () => {
-            const firebaseRef = input.value.trim();
+            let firebaseRef = input.value.trim();
             const errorDiv = modalContent.querySelector('#modalError');
             const importBtn = modalContent.querySelector('#modalImportBtn');
             
             if (!firebaseRef) {
-                errorDiv.textContent = 'Please enter a Firebase reference';
+                errorDiv.textContent = 'Please enter a Firebase reference or username';
                 errorDiv.style.display = 'block';
                 return;
             }
             
+            // Check if input is just a username (no slashes)
+            if (!firebaseRef.includes('/')) {
+                // Treat as username - attempt to import public folders
+                importBtn.textContent = 'Checking user...';
+                importBtn.disabled = true;
+                
+                try {
+                    const success = await this.inventory.firebase.importPublicUserFolders(firebaseRef);
+                    if (success) {
+                        closeModal();
+                        this.inventory.ui.render();
+                        showNotification(`Imported public folders from user "${firebaseRef}"`);
+                    } else {
+                        errorDiv.textContent = `User "${firebaseRef}" not found or has no public folders`;
+                        errorDiv.style.display = 'block';
+                        importBtn.textContent = 'Import';
+                        importBtn.disabled = false;
+                    }
+                } catch (error) {
+                    errorDiv.textContent = `Error: ${error.message}`;
+                    errorDiv.style.display = 'block';
+                    importBtn.textContent = 'Import';
+                    importBtn.disabled = false;
+                }
+                return;
+            }
+            
+            // Regular Firebase reference import
             if (!firebaseRef.startsWith('inventory/')) {
                 errorDiv.textContent = 'Reference must start with "inventory/"';
                 errorDiv.style.display = 'block';

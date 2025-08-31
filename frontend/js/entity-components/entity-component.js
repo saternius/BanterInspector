@@ -13,6 +13,7 @@ export class EntityComponent{
         this._entity = entity;
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
         this.options = options || {};
+        this.loadAsync = options?.loadAsync || false;
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;

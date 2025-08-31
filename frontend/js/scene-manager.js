@@ -511,7 +511,7 @@
         //Creates a entity from the inventory schema
         async _loadEntity(entityData, parentId){
             //TODO: add a param for await req for sync/async component/entity
-            let loadSubEntity = async (item, parentId)=>{ 
+            let loadSubEntity = async (item, parentId, parentEnt)=>{ 
             
                 const newEntity = await new Entity().init({
                     name: item.name,
@@ -529,27 +529,35 @@
                                 id: component.id
                             }
                         }
-                        await this._addComponent(newEntity, component.type, component.properties, {context: "item"});
+                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync});
+                        if(!component.loadAsync){
+                            log("loadEntity", "component [AWAIT]", component.type, item.name+"/"+component.type+":"+component.id)
+                            await result;
+                        }else{
+                            log("loadEntity", "component [ASYNC]", component.type, item.name+"/"+component.type+":"+component.id)
+                        }
                     }
                 }
 
                 if(item.children){
                     for(let i=0; i<item.children.length; i++){
                         let child = item.children[i];
-                        let childEntity = await loadSubEntity(child, newEntity.id);
-                        await childEntity._setParent(newEntity);
+                        let childEntity = loadSubEntity(child, newEntity.id, newEntity);
+                        if(!childEntity.loadAsync){
+                            console.log("LoadEntity", "Entity [AWAIT]", childEntity.id)
+                            await childEntity;
+                        }else{
+                            console.log("LoadEntity", "Entity [ASYNC]", childEntity.id)
+                        }
                     }
                 }
-    
+                await newEntity._setParent(parentEnt);
                 return newEntity;
             }
 
 
-            let entity = await loadSubEntity(entityData, parentId);
-            if(parentId !==null){
-                let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
-                await entity._setParent(parentEntity);
-            }
+            let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
+            let entity = await loadSubEntity(entityData, parentId, parentEntity);
 
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);
@@ -620,8 +628,38 @@
         }
 
     
-        getEntityComponentById(componentId){
-            return this.entityData.componentMap[componentId];
+        getEntityComponentById(componentId, useFallback = true){
+            let component = this.entityData.componentMap[componentId];
+            if(useFallback && !component){
+                log("fallback", "searching for: ", componentId)
+                component = this.fallbackComponentSearch(componentId);
+                log("fallback", "found: ", component)
+            }
+            return component;
+        }
+
+        fallbackComponentSearch(componentId){
+            let crawlEnts = (arr, cid)=>{
+                for(var i=0; i<arr.length; i++){
+                    let ent = arr[i];
+                    for(var j=0; j<ent.components.length; j++){
+                        let comp = ent.components[j];
+                        if(comp.id === cid){
+                            return comp;
+                        }
+                    }
+                    let inChild = crawlEnts(ent.children, cid)
+                    if(inChild){
+                        return inChild
+                    }
+                }
+                return undefined;
+            }
+            let fallback = crawlEnts(entities(), componentId);
+            if(fallback){
+                this.entityData.componentMap[componentId] = fallback;
+            }
+            return fallback;
         }
 
         
@@ -657,12 +695,13 @@
             let ent = this.entityData.entityMap[entityId];
             if(useFallback && !ent){
                 log("fallback", "searching for: ", entityId)
-                ent = this.fallbackSearch(entityId);
+                ent = this.fallbackEntitySearch(entityId);
+                log("fallback", "found: ", ent)
             }
             return ent;
         }
 
-        fallbackSearch(entityId){
+        fallbackEntitySearch(entityId){
             let crawlEnts = (arr, eid)=>{
                 for(var i=0; i<arr.length; i++){
                     let ent = arr[i];
@@ -676,7 +715,11 @@
                 }
                 return undefined;
             }
-            return crawlEnts(entities(), entityId);
+            let fallback = crawlEnts(entities(), entityId);
+            if(fallback){
+                this.entityData.entityMap[entityId] = fallback;
+            }
+            return fallback;
         }
 
 
@@ -783,11 +826,11 @@
                 inspector.propertiesPanel.render(entity.id);
             }
 
-         
-            entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            setTimeout(()=>{
-                entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            }, 1500)
+            
+            // entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            // setTimeout(()=>{
+            //     entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            // }, 1500)
             return entityComponent;
         }
 

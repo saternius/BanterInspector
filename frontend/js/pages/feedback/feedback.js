@@ -1208,7 +1208,7 @@ export class Feedback {
             
         } catch (error) {
             err("net", 'Error adding comment:', error);
-            alert('Failed to add comment. Please try again.');
+            showNotification('Failed to add comment. Please try again.');
         }
     }
     
@@ -1242,7 +1242,7 @@ export class Feedback {
         const newContent = contentTextarea.value.trim();
         
         if (!newContent) {
-            alert('Feedback content cannot be empty.');
+            showNotification('Feedback content cannot be empty.');
             return;
         }
         
@@ -1297,7 +1297,7 @@ export class Feedback {
             
         } catch (error) {
             console.error('Error updating ticket:', error);
-            alert('Failed to update ticket. Please try again.');
+            showNotification('Failed to update ticket. Please try again.');
         }
     }
     
@@ -1323,7 +1323,7 @@ export class Feedback {
             
         } catch (error) {
             console.error('Error deleting ticket:', error);
-            alert('Failed to delete ticket. Please try again.');
+            showNotification('Failed to delete ticket. Please try again.');
         }
     }
     
@@ -1393,7 +1393,7 @@ export class Feedback {
             
         } catch (error) {
             console.error('Error saving edited comment:', error);
-            alert('Failed to save comment. Please try again.');
+            showNotification('Failed to save comment. Please try again.');
         }
     }
     
@@ -1439,7 +1439,7 @@ export class Feedback {
             
         } catch (error) {
             console.error('Error deleting comment:', error);
-            alert('Failed to delete comment. Please try again.');
+            showNotification('Failed to delete comment. Please try again.');
         }
     }
     

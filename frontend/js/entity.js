@@ -8,6 +8,7 @@ export class Entity{
         this.components = entityData.components || [];
         this.children = entityData.children || [];
         this._bs = entityData._bs;
+        this.loadAsync = entityData.loadAsync || false;
         this.active = true;
         this.layer = parseInt(entityData.layer) || 0;
         this.persistent = true;
