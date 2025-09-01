@@ -1,0 +1,68 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    
+    "inventory": {
+      "$username": {
+        ".read": true,
+        ".write": true,
+        
+        "$folder": {
+          "_folder_metadata": {
+            ".read": true,
+            ".validate": "newData.hasChildren(['author', 'name', 'created']) && newData.child('author').isString() && newData.child('name').isString() && newData.child('created').isNumber()"
+          },
+          
+          "$item": {
+            ".read": true,
+            ".write": true,
+            ".validate": "newData.hasChildren(['author', 'name', 'created', 'data']) && newData.child('author').isString() && newData.child('name').isString() && newData.child('created').isNumber()"
+          }
+        }
+      }
+    },
+    
+    "spaceState": {
+      "$spaceId": {
+        "public": {
+          ".read": true,
+          ".write": true
+        },
+        
+        "protected": {
+          ".read": true,
+          ".write": true
+        }
+      }
+    },
+    
+    "secrets": {
+      "$secretHash": {
+        ".read": true,
+        ".write": "!data.exists()",
+        ".validate": "newData.hasChildren(['username', 'created']) && newData.child('username').isString() && newData.child('created').isNumber()"
+      }
+    },
+    
+    "test": {
+      ".read": true,
+      ".write": true,
+      
+      "connection-test": {
+        ".validate": "newData.hasChildren(['timestamp', 'test', 'message'])"
+      }
+    },
+    
+    "feedback": {
+      ".read": true,
+      
+      "tickets": {
+        "$ticketId": {
+          ".write": true,
+          ".validate": "newData.hasChildren(['author', 'content', 'timestamp', 'type']) && newData.child('author').isString() && newData.child('content').isString() && newData.child('timestamp').isNumber() && newData.child('type').isString()"
+        }
+      }
+    }
+  }
+}

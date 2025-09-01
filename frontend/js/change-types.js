@@ -441,7 +441,7 @@ export class EntityAddChange extends Change{
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const entity = SM.getEntityById(expectedEntityId);
+                const entity = SM.getEntityById(expectedEntityId, false);
                 if (entity !== undefined && entity.initialized) {
                   resolve(entity);
                 } else {
@@ -755,12 +755,20 @@ export class LoadItemChange extends Change{
         }
 
         this.entityId = `${this.parentId}/${this.itemData.name}`
+        let checks = 0;
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const entity = SM.getEntityById(this.entityId);
-                if (entity !== undefined && entity.finished_loading) {
-                  
+                const entity = SM.getEntityById(this.entityId, false);
+                checks++;
+                
+                if(checks > 100){
+                    err("loadItem", "Entity could not be loaded/found =>", this.entityId)
+                    resolve(null);
+                    return;
+                }
+
+                if (entity !== undefined && entity.finished_loading) {  
                     resolve(entity);
                 } else {
                     setTimeout(check, 50);
@@ -873,7 +881,7 @@ export class CloneEntityChange extends Change{
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const entity = SM.getEntityById(this.entityId);
+                const entity = SM.getEntityById(this.entityId, false);
                 if (entity !== undefined && entity.finished_loading) {
                   resolve(entity);
                 } else {

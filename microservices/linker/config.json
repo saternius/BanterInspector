@@ -11,5 +11,7 @@
         "Technocrat/Transform",
         "Technocrat/Scripts"
     ],
-    "password":""
+    "secret":"oj5kkjg6e7d",
+    "username":"Technocrat",
+    "auth_server_url":"http://192.168.0.148:9909"
 }

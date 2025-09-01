@@ -1,0 +1,2864 @@
+{
+  "author": "Technocrat",
+  "created": 1756652248260,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.04,
+                        "y": 1,
+                        "z": 0.04
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 2,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1.3,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 1,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "shaft",
+                "parentId": "People/Technocrat/Glizzmo/Translate/Y",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.05,
+                        "y": 0.05,
+                        "z": 0.05
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 3,
+                      "height": 3,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 0.5,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 1,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "tip",
+                "parentId": "People/Technocrat/Glizzmo/Translate/Y",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "height": 2,
+                  "isTrigger": false,
+                  "radius": 0.5
+                },
+                "type": "CapsuleCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "direction": 1,
+                  "height": 1.65,
+                  "isTrigger": false,
+                  "radius": 0.05
+                },
+                "type": "CapsuleCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Y",
+            "parentId": "People/Technocrat/Glizzmo/Translate",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.04,
+                        "y": 1,
+                        "z": 0.04
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 2,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1.3,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 0,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "shaft",
+                "parentId": "People/Technocrat/Glizzmo/Translate/X",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.05,
+                        "y": 0.05,
+                        "z": 0.05
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 3,
+                      "height": 3,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 0.5,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 0,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "tip",
+                "parentId": "People/Technocrat/Glizzmo/Translate/X",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -0.75,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.7071067811865475
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "height": 2,
+                  "isTrigger": false,
+                  "radius": 0.5
+                },
+                "type": "CapsuleCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -0.75,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.7071067811865475
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "direction": 1,
+                  "height": 1.65,
+                  "isTrigger": false,
+                  "radius": 0.05
+                },
+                "type": "CapsuleCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "X",
+            "parentId": "People/Technocrat/Glizzmo/Translate",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.04,
+                        "y": 1,
+                        "z": 0.04
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 2,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1.3,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 0,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "shaft",
+                "parentId": "People/Technocrat/Glizzmo/Translate/Z",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.05,
+                        "y": 0.05,
+                        "z": 0.05
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 3,
+                      "height": 3,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 0.5,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 0,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "tip",
+                "parentId": "People/Technocrat/Glizzmo/Translate/Z",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.75
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0.7071067811865475,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "height": 2,
+                  "isTrigger": false,
+                  "radius": 0.5
+                },
+                "type": "CapsuleCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.75
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0.7071067811865475,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "direction": 1,
+                  "height": 1.65,
+                  "isTrigger": false,
+                  "radius": 0.05
+                },
+                "type": "CapsuleCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Z",
+            "parentId": "People/Technocrat/Glizzmo/Translate",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "loadAsync": true,
+            "options": {
+              "context": "item",
+              "loadAsync": true
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Translate",
+        "parentId": "People/Technocrat/Glizzmo",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0,
+                    "y": 0.7071067811865475,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 7,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.95,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.025,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "BanterGeometry"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0,
+                    "g": 0,
+                    "r": 1
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "type": "BanterColliderEvents"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "X-Ring",
+            "parentId": "People/Technocrat/Glizzmo/Rotation",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0.7071067811865475,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 7,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.9,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.025,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "BanterGeometry"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 1,
+                    "g": 0,
+                    "r": 0
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "type": "BanterColliderEvents"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Z-Ring",
+            "parentId": "People/Technocrat/Glizzmo/Rotation",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 7,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 1,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.025,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "BanterGeometry"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0,
+                    "g": 1,
+                    "r": 0
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "type": "BanterColliderEvents"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Y-Ring",
+            "parentId": "People/Technocrat/Glizzmo/Rotation",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "loadAsync": true,
+            "options": {
+              "context": "item",
+              "loadAsync": true
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Rotation",
+        "parentId": "People/Technocrat/Glizzmo",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.03,
+                        "y": 1,
+                        "z": 0.03
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 1,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "line",
+                "parentId": "People/Technocrat/Glizzmo/Scale/Y",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.15,
+                        "y": 0.15,
+                        "z": 0.15
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 1,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "cube",
+                "parentId": "People/Technocrat/Glizzmo/Scale/Y",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 0.2,
+                    "y": 0.2,
+                    "z": 0.2
+                  }
+                },
+                "type": "BoxCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Y",
+            "parentId": "People/Technocrat/Glizzmo/Scale",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.03,
+                        "y": 1,
+                        "z": 0.03
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 0,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "line",
+                "parentId": "People/Technocrat/Glizzmo/Scale/X",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.15,
+                        "y": 0.15,
+                        "z": 0.15
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0,
+                        "g": 0,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "cube",
+                "parentId": "People/Technocrat/Glizzmo/Scale/X",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -0.75,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.7071067811865475
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -0.75,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.7071067811865475
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 0.2,
+                    "y": 0.2,
+                    "z": 0.2
+                  }
+                },
+                "type": "BoxCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "X",
+            "parentId": "People/Technocrat/Glizzmo/Scale",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.03,
+                        "y": 1,
+                        "z": 0.03
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1.5,
+                      "heightSegments": 1,
+                      "innerRadius": 0.2,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.05,
+                      "radiusBottom": 0.5,
+                      "radiusTop": 0.5,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 0,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "line",
+                "parentId": "People/Technocrat/Glizzmo/Scale/Z",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.75,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 0.15,
+                        "y": 0.15,
+                        "z": 0.15
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "arc": 6.283185307179586,
+                      "depth": 1,
+                      "depthSegments": 1,
+                      "geometryType": 0,
+                      "height": 1,
+                      "heightSegments": 1,
+                      "innerRadius": 0.12,
+                      "openEnded": false,
+                      "outerRadius": 0.5,
+                      "p": 2,
+                      "parametricType": 0,
+                      "phiLength": 6.283185307179586,
+                      "phiSegments": 8,
+                      "phiStart": 0,
+                      "q": 3,
+                      "radialSegments": 32,
+                      "radius": 0.5,
+                      "radiusBottom": 1,
+                      "radiusTop": 0,
+                      "segments": 64,
+                      "thetaLength": 6.283185307179586,
+                      "thetaSegments": 6,
+                      "thetaStart": 0,
+                      "tube": 0.4,
+                      "tubularSegments": 64,
+                      "width": 1,
+                      "widthSegments": 1
+                    },
+                    "type": "BanterGeometry"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": false,
+                    "options": {
+                      "context": "ghost"
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 1,
+                        "r": 1
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "initialized": true,
+                    "loadAsync": true,
+                    "options": {
+                      "context": "item",
+                      "loadAsync": true
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 1,
+                        "g": 0,
+                        "r": 0
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": "Standard",
+                      "side": 0,
+                      "texture": ""
+                    },
+                    "type": "BanterMaterial"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": true,
+                "name": "cube",
+                "parentId": "People/Technocrat/Glizzmo/Scale/Z",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.75
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0.7071067811865475,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0.75
+                  },
+                  "localRotation": {
+                    "w": 0.7071067811865476,
+                    "x": 0.7071067811865475,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 0.2,
+                    "y": 0.2,
+                    "z": 0.2
+                  }
+                },
+                "type": "BoxCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "Z",
+            "parentId": "People/Technocrat/Glizzmo/Scale",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.5,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "BanterGeometry"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "type": "BanterColliderEvents"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "initialized": true,
+                "loadAsync": false,
+                "options": {
+                  "context": "ghost"
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "initialized": true,
+                "loadAsync": true,
+                "options": {
+                  "context": "item",
+                  "loadAsync": true
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "BoxCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": true,
+            "name": "UniformScale",
+            "parentId": "People/Technocrat/Glizzmo/Scale",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "loadAsync": true,
+            "options": {
+              "context": "item",
+              "loadAsync": true
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Scale",
+        "parentId": "People/Technocrat/Glizzmo",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "initialized": true,
+        "loadAsync": true,
+        "options": {
+          "context": "item",
+          "loadAsync": true
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.75,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "initialized": true,
+        "loadAsync": false,
+        "properties": {
+          "file": "Gizmo.js",
+          "name": "gizmo"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Glizzmo",
+    "parentId": "People/Technocrat",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Transform",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "People/Technocrat/Gizmo/Rotation",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "People/Technocrat/Gizmo/Scale",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "remove_entity",
+      "entityId": "People/Technocrat/Gizmo",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "People/Technocrat/Gizmo",
+      "newValue": "Glizzmo",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1756652248260,
+  "name": "Glizzmo"
+}

@@ -1,0 +1,10 @@
+{
+  "username": "your_username_here",
+  "secret": "your_secret_from_localstorage",
+  "uid": "optional_uid_for_scene_sync",
+  "inventory_dirs": [
+    "scripts",
+    "entities", 
+    "markdown"
+  ]
+}

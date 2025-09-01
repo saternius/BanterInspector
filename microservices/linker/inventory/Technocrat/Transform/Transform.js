@@ -1,7 +1,7 @@
 this.default = {}
 
 let user = SM.myName()
-let gizmoItemName = "Gizmo"
+let gizmoItemName = "Glizzmo"
 async function onEntitySelected(e){
     if(e.detail.entityId.startsWith(`People/${user}/${gizmoItemName}`)){
         return;

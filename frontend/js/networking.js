@@ -1,4 +1,5 @@
 const { appendToConsole } = await import(`${window.repoUrl}/utils.js`);
+const {attachAuthToDatabase} = await import(`${window.repoUrl}/firebase-auth-helper.js`);
 
 function safeParse(value) {
     // Only operate on strings
@@ -42,8 +43,18 @@ export class Networking {
     constructor(){
         this.db = null;
         this.storage = null;
+        this.secret = this.getSecret();
         // Delay Firebase initialization to ensure all dependencies are loaded
         setTimeout(() => this.initFirebase(), 1000);
+    }
+
+    getSecret(){
+        let secret = localStorage.getItem("secret");
+        if(!secret){
+            secret = Math.random().toString(36).substring(2, 15);
+            localStorage.setItem("secret", secret);
+        }
+        return secret;
     }
     
     initFirebase() {
@@ -73,6 +84,7 @@ export class Networking {
                 let initFirebaseListeners = ()=>{
                     if(window.inventory && window.inventory.firebase){
                         window.inventory.firebase.setupFirebaseListeners()
+                        attachAuthToDatabase(this)
                     }else{
                         setTimeout(initFirebaseListeners, 500)
                     }

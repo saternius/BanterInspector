@@ -1,15 +1,40 @@
 const { initializeApp } = require('firebase/app');
-const { getDatabase, ref, onValue, set, update } = require('firebase/database');
+const { getDatabase, ref, onValue, set } = require('firebase/database');
+const { getAuth, signInAnonymously } = require('firebase/auth');
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const url = require('url');
 
+// Helper for making HTTP requests (for Node versions without fetch)
+async function makeRequest(url, options) {
+    if (globalThis.fetch) {
+        return globalThis.fetch(url, options);
+    }
+    
+    // Fallback for older Node versions
+    return new Promise((resolve, reject) => {
+        const data = options.body;
+        const req = http.request(url, {
+            method: options.method,
+            headers: options.headers
+        }, (res) => {
+            let body = '';
+            res.on('data', chunk => body += chunk);
+            res.on('end', () => resolve({ ok: res.statusCode === 200 }));
+        });
+        req.on('error', reject);
+        if (data) req.write(data);
+        req.end();
+    });
+}
+
 const config = require('./config.json');
 
 const inventoryDirs = config.inventory_dirs;
-const uid = config.uid;
-const password = config.password;
+const username = config.username;
+const secret = config.secret;
+const uid = config.uid || username; // Fallback to username if uid not provided
 
 // Ensure all inventory directories exist
 const inventoryBasePath = './inventory';
@@ -41,76 +66,156 @@ const firebaseConfig = {
 // --- INIT ---
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 
+// Authentication state
+let currentUser = null;
+let isAuthenticated = false;
 
+// Sanitize username for Firebase paths
+function sanitizeUsername(str) {
+    if (!str) return '';
+    return str
+        .trim()
+        .replace(/[\.$#\[\]\/]/g, '_')
+        .replace(/\s+/g, '_')
+        .replace(/_{2,}/g, '_')
+        .replace(/^_|_$/g, '');
+}
 
-// SCENE SYNC
-const sceneRef = ref(database, 'scenes/'+uid);
-onValue(sceneRef, (snapshot) => {
-    const data = snapshot.val();
-    console.log('Scene updated:', data);
-}, (error) => {
-    console.error('Error listening to database:', error);
-});
-
-
-// INVENTORY SYNC
-inventoryDirs.forEach(dir => {
-    let refPath = 'inventory/'+dir;
-    console.log(`Listening to inventory: ${refPath}`);
-    const inventoryRef = ref(database, refPath);
-    console.log(refPath)
-    onValue(inventoryRef, (snapshot) => {
-        console.log("onValue", refPath)
-        const data = snapshot.val();
-        console.log(`Inventory updated: ${refPath}: ${data}`);
-        if(!data) return;
-        Object.values(data).forEach((update) => {
-            console.log(update)
-            if(update.itemType === "script"){
-                let content = update.data;
-                let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
-                let name = update.name;
-                if(!name.endsWith(".js")){
-                    name = name+".js";
-                }
-                const filePath = path.join('./', dir, name);
-                fs.writeFileSync(filePath, content, 'utf8');
-                console.log(`updated script (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
-            }
-
-            if(update.itemType === "markdown"){
-                let content = update.data;
-                let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
-                let name = update.name;
-                if(!name.endsWith(".md")){
-                    name = name+".md";
-                }
-                const filePath = path.join('./', dir, name);
-                fs.writeFileSync(filePath, content, 'utf8');
-                console.log(`updated markdown (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
-            }
-
-            if(update.itemType === "entity"){
-                console.log(update)
-                let content = update;
-                let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
-                let name = update.name;
-                if(!name.endsWith(".json")){
-                    name = name+".json";
-                }
-                const filePath = path.join('./', dir, name);
-                fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf8');
-                console.log(`updated entity (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
-            }
-            console.log("\n\n\n")
-        });
+// Authenticate with Firebase using anonymous auth
+async function authenticate() {
+    try {
+        console.log('Authenticating with Firebase...');
+        const userCredential = await signInAnonymously(auth);
+        currentUser = userCredential.user;
+        console.log(currentUser)
+        isAuthenticated = true;
+        console.log('✓ Authenticated successfully with UID:', currentUser.uid);
+        console.log('✓ Using username:', username);
+        console.log('✓ Secret configured:', secret ? 'Yes' : 'No');
         
-    }, (error) => {
-        console.error('Error listening to database:', error);
-    });
+        // Register custom claims with auth server
+        await registerCustomClaims(currentUser.uid, username, secret);
+        
+        return currentUser;
+    } catch (error) {
+        console.error('✗ Authentication failed:', error.message);
+        console.log('⚠ Running in read-only mode - writes will fail');
+        return null;
+    }
+}
+
+// Register custom claims with the auth server
+async function registerCustomClaims(uid, username, secret) {
+    try {
+        console.log('Registering custom claims with auth server...');
+        const response = await makeRequest(`${config.auth_server_url}/setclaims`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                uid: uid,
+                username: username,
+                secret: secret
+            })
+        });
+
+        if (response.ok) {
+            console.log('✓ Custom claims registered for:', username);
+        } else {
+            console.log('⚠ Could not register custom claims (auth server may not be running)');
+        }
+    } catch (error) {
+        console.log('⚠ Auth server not available - running without custom claims');
+    }
+}
+
+// Initialize authentication before starting listeners
+authenticate().then(() => {
+    startListeners();
+}).catch(err => {
+    console.error('Failed to authenticate:', err);
+    startListeners(); // Still start listeners for read operations
 });
 
+
+
+// Function to start all listeners after authentication
+function startListeners() {
+    console.log('Starting Firebase listeners...');
+    
+    // SCENE SYNC [TODO]
+    // const sceneRef = ref(database, 'scenes/'+uid);
+    // onValue(sceneRef, (snapshot) => {
+    //     const data = snapshot.val();
+    //     console.log('Scene updated:', data);
+    // }, (error) => {
+    //     console.error('Error listening to database:', error);
+    // });
+
+
+    // INVENTORY SYNC
+    // Use sanitized username for inventory paths
+    const sanitizedUsername = sanitizeUsername(username);
+    
+    inventoryDirs.forEach(dir => {
+        let refPath = `inventory/${dir}`;
+        console.log(`Listening to inventory: ${refPath}`);
+        const inventoryRef = ref(database, refPath);
+        console.log(refPath)
+        onValue(inventoryRef, (snapshot) => {
+            console.log("onValue", refPath)
+            const data = snapshot.val();
+            console.log(`Inventory updated: ${refPath}: ${data}`);
+            if(!data) return;
+            Object.values(data).forEach((update) => {
+                console.log(update)
+                if(update.itemType === "script"){
+                    let content = update.data;
+                    let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
+                    let name = update.name;
+                    if(!name.endsWith(".js")){
+                        name = name+".js";
+                    }
+                    const filePath = path.join('./', dir, name);
+                    fs.writeFileSync(filePath, content, 'utf8');
+                    console.log(`updated script (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
+                }
+
+                if(update.itemType === "markdown"){
+                    let content = update.data;
+                    let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
+                    let name = update.name;
+                    if(!name.endsWith(".md")){
+                        name = name+".md";
+                    }
+                    const filePath = path.join('./', dir, name);
+                    fs.writeFileSync(filePath, content, 'utf8');
+                    console.log(`updated markdown (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
+                }
+
+                if(update.itemType === "entity"){
+                    console.log(update)
+                    let content = update;
+                    let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
+                    let name = update.name;
+                    if(!name.endsWith(".json")){
+                        name = name+".json";
+                    }
+                    const filePath = path.join('./', dir, name);
+                    fs.writeFileSync(filePath, JSON.stringify(content, null, 2), 'utf8');
+                    console.log(`updated entity (firebase)=>: ${filePath}: at ${new Date().toISOString()}`)
+                }
+                console.log("\n\n\n")
+            });
+            
+        }, (error) => {
+            console.error('Error listening to database:', error);
+        });
+    });
+} // End of startListeners function
 
 function sanitizeFirebasePath(str) {
     if (!str) return '';
@@ -125,7 +230,11 @@ function sanitizeFirebasePath(str) {
 }
 
 
-console.log('Linker service started, listening for database changes...');
+console.log('Linker service started');
+console.log('Configuration loaded:');
+console.log('  - Username:', username || 'Not set');
+console.log('  - Secret:', secret ? 'Configured' : 'Not configured');
+console.log('  - Inventory dirs:', inventoryDirs.join(', '));
 
 // --- WEBSERVER ---
 const server = http.createServer((req, res) => {
@@ -150,13 +259,24 @@ const server = http.createServer((req, res) => {
                 return;
             }
 
+            // Check authentication before writing
+            if (!isAuthenticated) {
+                res.writeHead(401, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ 
+                    error: 'Not authenticated', 
+                    message: 'Linker is not authenticated with Firebase. Check config.json for username/secret.'
+                }));
+                return;
+            }
+
             // Read file content
             const content = fs.readFileSync(filePath, 'utf8');
             const fileName = path.basename(filePath);
-            const dirName = path.dirname(filePath);
 
-            // Determine the inventory directory this file belongs to
-            const relativePath = path.relative('./', filePath).split("/").map(sanitizeFirebasePath).join("/");
+            // Build the correct Firebase path using authenticated username
+            const sanitizedUsername = sanitizeUsername(username);
+            const filePathParts = path.relative('./inventory', filePath).split(path.sep);
+            const firebasePath = `inventory/${sanitizedUsername}/${filePathParts.map(sanitizeFirebasePath).join('/')}`;
 
             // Determine item type based on file extension
             const fileExt = path.extname(filePath).toLowerCase();
@@ -174,28 +294,32 @@ const server = http.createServer((req, res) => {
             }
 
             let updateData;
-            let updateRef = ref(database, relativePath);
+            let updateRef = ref(database, firebasePath);
            
 
             if (itemType === 'script' || itemType === 'markdown') {
-                // For scripts and markdown, update last_used timestamp and data
+                // For scripts and markdown, preserve item structure and update data
                 updateData = {
+                    author: username,
+                    name: fileName.replace(/\.(js|md)$/, ''),
+                    created: Date.now(),
                     last_used: Date.now(),
-                    data: content
+                    data: content,
+                    itemType: itemType
                 };
                 
-                // Use update() to preserve existing fields
-                update(updateRef, updateData)
+                // Use set() to replace the entire item with new data
+                set(updateRef, updateData)
                     .then(() => {
                         const typeLabel = itemType === 'markdown' ? 'Markdown' : 'Script';
-                        console.log(`${typeLabel} updated in Firebase: ${relativePath}`);
+                        console.log(`${typeLabel} updated in Firebase: ${firebasePath}`);
                         res.writeHead(200, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ 
                             success: true, 
                             message: `${typeLabel} updated in Firebase`,
                             itemType: itemType,
                             icon: icon,
-                            firebasePath: relativePath
+                            firebasePath: firebasePath
                         }));
                     })
                     .catch((error) => {
@@ -213,14 +337,14 @@ const server = http.createServer((req, res) => {
                     // Use set() to completely replace the reference
                     set(updateRef, updateData)
                         .then(() => {
-                            console.log(`Entity set in Firebase: ${relativePath}`);
+                            console.log(`Entity set in Firebase: ${firebasePath}`);
                             res.writeHead(200, { 'Content-Type': 'application/json' });
                             res.end(JSON.stringify({ 
                                 success: true, 
                                 message: 'Entity set in Firebase',
                                 itemType: itemType,
                                 icon: icon,
-                                firebasePath: relativePath
+                                firebasePath: firebasePath
                             }));
                         })
                         .catch((error) => {
