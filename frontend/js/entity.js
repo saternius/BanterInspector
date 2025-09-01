@@ -85,7 +85,7 @@ export class Entity{
                     id: component_ref
                 }
                 let componentClass = componentBSTypeMap[bs_comp.type];
-                let entityComponent = await new componentClass().init(this, bs_comp, props);
+                let entityComponent = await new componentClass().init(this, bs_comp, props, {context: "ghost"});
                 entityComponent.setId(component_ref);
                 this.components.push(entityComponent);
                 SM.entityData.componentMap[component_ref] = entityComponent;
@@ -140,7 +140,7 @@ export class Entity{
         Object.keys(SM.props).forEach(key=>{
             let lastSlash = key.lastIndexOf("/");
             let compID = key.slice(2, lastSlash).trim();
-            let component = SM.getEntityComponentById(compID);
+            let component = SM.getEntityComponentById(compID, false);
             if(!component) return;
             if(component._entity.id === this.id){
                 if(!key.endsWith(":component")){

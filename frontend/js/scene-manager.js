@@ -516,7 +516,8 @@
                 const newEntity = await new Entity().init({
                     name: item.name,
                     parentId: parentId,
-                    layer: item.layer
+                    layer: item.layer,
+                    loadAsync: item.loadAsync
                 });
     
                 
@@ -543,11 +544,11 @@
                     for(let i=0; i<item.children.length; i++){
                         let child = item.children[i];
                         let childEntity = loadSubEntity(child, newEntity.id, newEntity);
-                        if(!childEntity.loadAsync){
-                            console.log("LoadEntity", "Entity [AWAIT]", childEntity.id)
+                        if(!child.loadAsync){
+                            console.log("LoadEntity", "Entity [AWAIT]", child.name)
                             await childEntity;
                         }else{
-                            console.log("LoadEntity", "Entity [ASYNC]", childEntity.id)
+                            console.log("LoadEntity", "Entity [ASYNC]", child.name)
                         }
                     }
                 }
@@ -631,7 +632,7 @@
         getEntityComponentById(componentId, useFallback = true){
             let component = this.entityData.componentMap[componentId];
             if(useFallback && !component){
-                log("fallback", "searching for: ", componentId)
+                log("fallback", "searching for component: ", componentId)
                 component = this.fallbackComponentSearch(componentId);
                 log("fallback", "found: ", component)
             }
@@ -818,7 +819,12 @@
             }
             
             let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
-            entity.components.push(entityComponent);
+
+            if(componentType === "Transform"){
+                entity.components.unshift(entityComponent);
+            }else{
+                entity.components.push(entityComponent);
+            }
             this.entityData.componentMap[entityComponent.id] = entityComponent;
 
             // Refresh properties panel
@@ -826,11 +832,27 @@
                 inspector.propertiesPanel.render(entity.id);
             }
 
-            
-            // entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            // setTimeout(()=>{
-            //     entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            // }, 1500)
+
+            // Check for ghost if new, if item delete ghosts.
+            entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            setTimeout(()=>{
+                entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+            }, 1500)
+
+            if(options.context === "item"){
+                setTimeout(()=>{
+                    let toBust = []
+                    entity.components.forEach(c=>{
+                        if(c.options.context === "ghost"){
+                            toBust.push(c);
+                        }
+                    })
+                    toBust.forEach(c=>{
+                        // log("loadEntity", `destroying ghost: ${entity.id}/${c.type}/${c.id}`)
+                        // c._destroy();
+                    })
+                }, 3000)
+            }
             return entityComponent;
         }
 

@@ -1,0 +1,13 @@
+{
+  "name": "auth-server",
+  "version": "1.0.0",
+  "description": "Simple Firebase auth server for setting custom claims",
+  "main": "auth-server.js",
+  "scripts": {
+    "start": "node auth-server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "firebase-admin": "^11.0.0"
+  }
+}
