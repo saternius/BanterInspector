@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+</head>
+<body>
+    <h1>Auth Server Test</h1>
+    <button id="testBtn">Test Auth Server</button>
+    <pre id="output"></pre>
+    
+    <script>
+        document.getElementById('testBtn').addEventListener('click', async () => {
+            const output = document.getElementById('output');
+            output.textContent = 'Testing...\n';
+            
+            try {
+                const response = await fetch('https://suitable-bulldog-flying.ngrok-free.app/setclaims', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': 'true'
+                    },
+                    body: JSON.stringify({
+                        uid: 'testuid',
+                        username: 'testuser',
+                        secret: '12345678'
+                    })
+                });
+                
+                const text = await response.text();
+                output.textContent += `Status: ${response.status}\n`;
+                output.textContent += `Response: ${text}\n`;
+                
+                if (!response.ok) {
+                    try {
+                        const json = JSON.parse(text);
+                        output.textContent += `Error: ${json.error}\n`;
+                    } catch (e) {
+                        output.textContent += `Raw response: ${text}\n`;
+                    }
+                }
+            } catch (error) {
+                output.textContent += `Network Error: ${error.message}\n`;
+                output.textContent += `Error Type: ${error.name}\n`;
+                console.error('Full error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

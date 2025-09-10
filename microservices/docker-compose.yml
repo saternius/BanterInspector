@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Statement Block Service - AI text processing
+  statement-block-service:
+    build: 
+      context: ./statement-block-service
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=${FLASK_ENV:-development}
+      - CLAUDE_API_KEY=${CLAUDE_API_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - MODEL_PROVIDER=${MODEL_PROVIDER:-gemini}
+    restart: unless-stopped
+    networks:
+      - inspector-network
+
+  # File Server - serves frontend files
+  file-server:
+    build:
+      context: ./file-server
+      dockerfile: Dockerfile
+    ports:
+      - "9909:9909"
+    volumes:
+      - ../frontend:/app/frontend:ro
+      - ./:/app/microservices:ro
+    restart: unless-stopped
+    networks:
+      - inspector-network
+
+  # Auth Server - handles authentication
+  auth-server:
+    build:
+      context: ./auth-server
+      dockerfile: Dockerfile
+    ports:
+      - "3303:3303"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - PORT=3303
+    volumes:
+      - ./auth-server/firebase-service.json:/app/firebase-service.json:ro
+    restart: unless-stopped
+    networks:
+      - inspector-network
+
+  # Linker Service - syncs game data to local files
+  linker:
+    build:
+      context: ./linker
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+    volumes:
+      - ./linker/inventory:/app/inventory
+      - ./auth-server/firebase-service.json:/app/firebase-service.json:ro
+    restart: unless-stopped
+    networks:
+      - inspector-network
+
+  # Ngrok tunnel (optional - comment out if not needed)
+  # ngrok:
+  #   image: ngrok/ngrok:latest
+  #   command: http file-server:9909
+  #   environment:
+  #     - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+  #   ports:
+  #     - "4040:4040" # Web interface
+  #   depends_on:
+  #     - file-server
+  #   networks:
+  #     - inspector-network
+
+networks:
+  inspector-network:
+    driver: bridge

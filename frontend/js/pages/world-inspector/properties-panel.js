@@ -95,7 +95,7 @@
         updateCollapseAllButtonVisibility() {
             if (!this.collapseAllBtn) return;
             
-            const entity = SM.getEntityById(SM.selectedEntity);
+            const entity = SM.getEntityById(SM.selectedEntity, false);
             if (!entity || !entity.components || entity.components.length === 0) {
                 this.collapseAllBtn.style.display = 'none';
                 return;

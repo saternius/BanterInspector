@@ -73,7 +73,8 @@ export class FirebaseAuthHelper {
             const response = await fetch(`${window.repoUrl.slice(0,-3)}/setclaims`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
                 },
                 body: JSON.stringify({
                     uid: uid,

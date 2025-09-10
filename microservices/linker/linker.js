@@ -166,12 +166,11 @@ function startListeners() {
         const inventoryRef = ref(database, refPath);
         console.log(refPath)
         onValue(inventoryRef, (snapshot) => {
-            console.log("onValue", refPath)
             const data = snapshot.val();
             console.log(`Inventory updated: ${refPath}: ${data}`);
             if(!data) return;
             Object.values(data).forEach((update) => {
-                console.log(update)
+                console.log('update', update)
                 if(update.itemType === "script"){
                     let content = update.data;
                     let dir = update.importedFrom || `inventory/${update.author}/${update.folder}`;
@@ -276,7 +275,7 @@ const server = http.createServer((req, res) => {
             // Build the correct Firebase path using authenticated username
             const sanitizedUsername = sanitizeUsername(username);
             const filePathParts = path.relative('./inventory', filePath).split(path.sep);
-            const firebasePath = `inventory/${sanitizedUsername}/${filePathParts.map(sanitizeFirebasePath).join('/')}`;
+            const firebasePath = `inventory/${filePathParts.map(sanitizeFirebasePath).join('/')}`;
 
             // Determine item type based on file extension
             const fileExt = path.extname(filePath).toLowerCase();
@@ -301,7 +300,7 @@ const server = http.createServer((req, res) => {
                 // For scripts and markdown, preserve item structure and update data
                 updateData = {
                     author: username,
-                    name: fileName.replace(/\.(js|md)$/, ''),
+                    name: fileName,
                     created: Date.now(),
                     last_used: Date.now(),
                     data: content,
@@ -310,7 +309,7 @@ const server = http.createServer((req, res) => {
                 
                 // Use set() to replace the entire item with new data
                 set(updateRef, updateData)
-                    .then(() => {
+                    .then((event) => {
                         const typeLabel = itemType === 'markdown' ? 'Markdown' : 'Script';
                         console.log(`${typeLabel} updated in Firebase: ${firebasePath}`);
                         res.writeHead(200, { 'Content-Type': 'application/json' });
