@@ -19,6 +19,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
         self.end_headers()
     
     def do_GET(self):
+        print(f"[DEBUG] GET request for {self.path}")
         if self.path == '/something-for-the-time':
             self.send_response(200)
             self.send_header('Content-Type', 'text/plain')
@@ -48,6 +49,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
             super().do_GET()
     
     def do_POST(self):
+        print(f"[DEBUG] POST request for {self.path}")
         if self.path == '/api/process-text':
             try:
                 content_length = int(self.headers['Content-Length'])
@@ -77,6 +79,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 self.wfile.write(error_response.encode())
         elif self.path == '/setclaims':
             # Proxy /setclaims requests to auth server on port 3303
+            print(f"[DEBUG] Proxying {self.path} to http://localhost:3303")
             try:
                 content_length = int(self.headers['Content-Length'])
                 post_data = self.rfile.read(content_length)
@@ -97,6 +100,13 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(proxy_response)
                 
+            except urllib.error.HTTPError as e:
+                # Pass through the status code and response from auth server
+                proxy_response = e.read()
+                self.send_response(e.code)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(proxy_response)
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
@@ -110,7 +120,12 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
 
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 9909
-    directory = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'frontend')
+    # Check if running in Docker (frontend mounted at /app/frontend)
+    if os.path.exists('/app/frontend'):
+        directory = '/app/frontend'
+    else:
+        # Local development path
+        directory = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'frontend')
     os.chdir(directory)
     print(f"Serving {directory!r} on http://0.0.0.0:{port} with CORS enabled")
     print(f"Proxying /api/process-text to http://localhost:5000/process-text")

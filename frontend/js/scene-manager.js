@@ -287,14 +287,14 @@
             if(window.isLocalHost){
                 localStorage.removeItem('lastSpaceState');
             }
-            this.loaded = false;
-            this.scene.spaceState = {
-                public: {},
-                protected: {}
-            }
-            this.props = {
-                hierarchy: null,
-            }
+            // this.loaded = false;
+            // this.scene.spaceState = {
+            //     public: {},
+            //     protected: {}
+            // }
+            // this.props = {
+            //     hierarchy: null,
+            // }
             localStorage.removeItem('lastProps');
             window.location.reload();
         }
@@ -456,6 +456,10 @@
 
                 //Add any MonoBehaviors
                 h.components.forEach(async component_ref=>{
+                    if(!component_ref){
+                        log("init", "[SUS SITUATION]: component_ref is not defined", component_ref, h, h.components)
+                        return;
+                    }
                     if(component_ref.startsWith("MonoBehavior")){
                         let props = this.getHistoricalProps(component_ref).props
                         props.id = component_ref;

@@ -7,6 +7,7 @@
     "start": "node auth-server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.0",
     "firebase-admin": "^11.0.0"
   }

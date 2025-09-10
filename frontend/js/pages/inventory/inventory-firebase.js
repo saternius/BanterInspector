@@ -270,13 +270,13 @@ export class InventoryFirebase {
         log("net", "handleFirebaseItemChanged")
         const key = snapshot.key;
         const data = snapshot.val();
-        log("net", "data: ", data)
         // Skip folder metadata
         if (key === '_folder') return;
         
         if (data && data.itemType) {
             const itemName = data.name || key;
-            
+            log("net", `${itemName}`, data)
+
             // Update item locally if it exists
             if (this.inventory.items[itemName]) {
                 const item = {
@@ -299,6 +299,7 @@ export class InventoryFirebase {
 						if (window.scriptEditors && window.scriptEditors.size > 0) {
 							for (const [key, editor] of window.scriptEditors) {
 								if (editor?.currentScript?.name === itemName) {
+                                    log("script", "updating script editor", itemName)
 									const newContent = item.data || data.data || '';
 									// Update editor content
 									if (editor.codemirror && typeof editor.codemirror.setValue === 'function') {

@@ -21,8 +21,8 @@ export class EntityComponent{
             if(this.bsRef){
                 let newComponent = await entity._bs.AddComponent(new this.bsRef());
                 this._bs = newComponent;
-                await this._setMany(this.properties)
             }
+            await this._setMany(this.properties)
         }
         
         window.SM.entityData.componentMap[this.id] = this;
