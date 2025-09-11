@@ -115,16 +115,16 @@ class BANTER_OT_export_upload(Operator):
             # Get hash from response
             asset_hash = result.get('hash', result.get('id', 'unknown'))
             
-            # Store in scene for history
-            if not hasattr(context.scene, 'banter_upload_history'):
-                context.scene.banter_upload_history = []
+            # Store in scene for history using proper Blender properties
+            history_item = context.scene.banter_upload_history.add()
+            history_item.hash = asset_hash
+            history_item.name = selected_objects[0].name if len(selected_objects) == 1 else f"{len(selected_objects)} objects"
+            history_item.size = size_mb
+            history_item.preset = self.export_preset
             
-            context.scene.banter_upload_history.append({
-                'hash': asset_hash,
-                'name': selected_objects[0].name if len(selected_objects) == 1 else f"{len(selected_objects)} objects",
-                'size': size_mb,
-                'preset': self.export_preset
-            })
+            # Keep history limited to last 20 items
+            while len(context.scene.banter_upload_history) > 20:
+                context.scene.banter_upload_history.remove(0)
             
             # Copy to clipboard if enabled
             if self.auto_copy_hash:

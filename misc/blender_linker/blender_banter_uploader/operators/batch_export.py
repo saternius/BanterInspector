@@ -165,11 +165,16 @@ class BANTER_OT_batch_export(Operator):
             # Report results
             self.report({'INFO'}, f"Batch export complete: {len(successful)} successful, {len(failed)} failed")
             
-            # Store results in scene
-            if not hasattr(context.scene, 'banter_batch_results'):
-                context.scene.banter_batch_results = []
+            # Store results in scene using proper Blender properties
+            # Clear previous results
+            context.scene.banter_batch_results.clear()
             
-            context.scene.banter_batch_results = successful
+            # Add new results
+            for item in successful:
+                result_item = context.scene.banter_batch_results.add()
+                result_item.name = item['name']
+                result_item.hash = item['hash']
+                result_item.size = item['size']
             
             # Copy all hashes to clipboard
             if successful:
