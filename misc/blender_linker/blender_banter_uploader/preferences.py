@@ -1,17 +1,38 @@
 import bpy
 from bpy.types import AddonPreferences
 from bpy.props import StringProperty, EnumProperty, BoolProperty, IntProperty, FloatProperty
-from . import config
+import traceback
+
+# Debug function
+def debug_print(msg):
+    print(f"[BANTER PREFS DEBUG] {msg}")
+
+debug_print("Preferences module loading...")
+
+try:
+    from . import config
+    debug_print(f"Config imported successfully")
+    DEFAULT_SERVER_URL = config.DEFAULT_SERVER_URL
+    DEFAULT_EXPORT_PRESET = config.DEFAULT_EXPORT_PRESET
+    MAX_FILE_SIZE_MB = config.MAX_FILE_SIZE_MB
+except Exception as e:
+    debug_print(f"ERROR importing config: {e}")
+    debug_print(traceback.format_exc())
+    # Fallback values
+    DEFAULT_SERVER_URL = "https://suitable-bulldog-flying.ngrok-free.app"
+    DEFAULT_EXPORT_PRESET = "mobile_vr"
+    MAX_FILE_SIZE_MB = 20
+
+debug_print(f"Using DEFAULT_SERVER_URL: {DEFAULT_SERVER_URL}")
 
 class BanterUploaderPreferences(AddonPreferences):
     bl_idname = "blender_banter_uploader"
     
-    # Server settings
+    # Server settings - try without subtype first
     server_url: StringProperty(
         name="Server URL",
         description="URL of the Banter microservice",
-        default=config.DEFAULT_SERVER_URL,
-        subtype='URL'
+        default=DEFAULT_SERVER_URL
     )
     
     # Default export settings
@@ -24,7 +45,7 @@ class BanterUploaderPreferences(AddonPreferences):
             ('high_quality', "High Quality", "Maximum quality for hero assets"),
             ('custom', "Custom", "Use custom settings below"),
         ],
-        default=config.DEFAULT_EXPORT_PRESET
+        default=DEFAULT_EXPORT_PRESET
     )
     
     # UI settings
@@ -143,6 +164,12 @@ class BanterUploaderPreferences(AddonPreferences):
     
     def get_custom_export_settings(self):
         """Get custom export settings as dictionary"""
+        try:
+            from . import config
+            base_settings = config.EXPORT_PRESETS.get('mobile_vr', {}).copy()
+        except:
+            base_settings = {}
+        
         return {
             'export_format': 'GLB',
             'export_image_format': 'AUTO',
@@ -169,21 +196,50 @@ class BANTER_OT_test_connection(bpy.types.Operator):
     bl_label = "Test Connection"
     
     def execute(self, context):
-        prefs = context.preferences.addons["blender_banter_uploader"].preferences
-        from .utils import BanterUploader
-        
-        if BanterUploader.check_server_status(prefs.server_url):
-            self.report({'INFO'}, f"Successfully connected to {prefs.server_url}")
-        else:
-            self.report({'ERROR'}, f"Cannot connect to {prefs.server_url}")
+        try:
+            prefs = context.preferences.addons["blender_banter_uploader"].preferences
+            from .utils import BanterUploader
+            
+            if BanterUploader.check_server_status(prefs.server_url):
+                self.report({'INFO'}, f"Successfully connected to {prefs.server_url}")
+            else:
+                self.report({'ERROR'}, f"Cannot connect to {prefs.server_url}")
+        except Exception as e:
+            self.report({'ERROR'}, f"Error testing connection: {str(e)}")
+            debug_print(f"Connection test error: {e}")
+            debug_print(traceback.format_exc())
         
         return {'FINISHED'}
 
 
 def register():
-    bpy.utils.register_class(BanterUploaderPreferences)
-    bpy.utils.register_class(BANTER_OT_test_connection)
+    debug_print("Registering preferences classes...")
+    try:
+        bpy.utils.register_class(BanterUploaderPreferences)
+        debug_print("  ✓ BanterUploaderPreferences registered")
+    except Exception as e:
+        debug_print(f"  ERROR registering BanterUploaderPreferences: {e}")
+        debug_print(f"  Error type: {type(e).__name__}")
+        debug_print(traceback.format_exc())
+        raise
+    
+    try:
+        bpy.utils.register_class(BANTER_OT_test_connection)
+        debug_print("  ✓ BANTER_OT_test_connection registered")
+    except Exception as e:
+        debug_print(f"  ERROR registering BANTER_OT_test_connection: {e}")
+        raise
 
 def unregister():
-    bpy.utils.unregister_class(BANTER_OT_test_connection)
-    bpy.utils.unregister_class(BanterUploaderPreferences)
+    debug_print("Unregistering preferences classes...")
+    try:
+        bpy.utils.unregister_class(BANTER_OT_test_connection)
+        debug_print("  ✓ BANTER_OT_test_connection unregistered")
+    except Exception as e:
+        debug_print(f"  ERROR unregistering BANTER_OT_test_connection: {e}")
+    
+    try:
+        bpy.utils.unregister_class(BanterUploaderPreferences)
+        debug_print("  ✓ BanterUploaderPreferences unregistered")
+    except Exception as e:
+        debug_print(f"  ERROR unregistering BanterUploaderPreferences: {e}")
