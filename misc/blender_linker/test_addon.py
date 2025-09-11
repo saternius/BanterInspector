@@ -185,7 +185,7 @@ def test_server_connection():
             prefs = bpy.context.preferences.addons[addon_name].preferences
             server_url = prefs.server_url
         else:
-            server_url = "http://localhost:9909"
+            server_url = "https://suitable-bulldog-flying.ngrok-free.app"
         
         print(f"  Testing connection to: {server_url}")
         
