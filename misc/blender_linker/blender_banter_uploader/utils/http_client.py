@@ -7,13 +7,15 @@ from .. import config
 class BanterUploader:
     
     @staticmethod
-    def upload_glb(glb_data, server_url=None, progress_callback=None):
+    def upload_glb(glb_data, server_url=None, username=None, secret=None, progress_callback=None):
         """
         Upload GLB data to Banter microservice.
         
         Args:
             glb_data: Bytes data of GLB file
             server_url: Optional server URL override
+            username: Username for authentication
+            secret: Secret key for authentication
             progress_callback: Optional callback for progress updates
             
         Returns:
@@ -32,6 +34,13 @@ class BanterUploader:
             # Prepare multipart form data
             files = {'file': ('model.glb', glb_data, 'model/gltf-binary')}
             
+            # Add authentication data if provided
+            data = {}
+            if username:
+                data['username'] = username
+            if secret:
+                data['secret'] = secret
+            
             # Make the upload request
             if progress_callback:
                 progress_callback(0, "Starting upload...")
@@ -39,6 +48,7 @@ class BanterUploader:
             response = requests.post(
                 upload_url,
                 files=files,
+                data=data,  # Add form data with username and secret
                 timeout=60  # 60 second timeout for large files
             )
             
@@ -92,13 +102,15 @@ class BanterUploader:
             return False
     
     @staticmethod
-    def upload_with_retry(glb_data, server_url=None, max_retries=3, progress_callback=None):
+    def upload_with_retry(glb_data, server_url=None, username=None, secret=None, max_retries=3, progress_callback=None):
         """
         Upload with automatic retry on failure.
         
         Args:
             glb_data: Bytes data of GLB file
             server_url: Optional server URL override
+            username: Username for authentication
+            secret: Secret key for authentication
             max_retries: Maximum number of retry attempts
             progress_callback: Optional callback for progress updates
             
@@ -114,7 +126,9 @@ class BanterUploader:
                 
                 return BanterUploader.upload_glb(
                     glb_data, 
-                    server_url, 
+                    server_url,
+                    username,
+                    secret,
                     progress_callback
                 )
                 

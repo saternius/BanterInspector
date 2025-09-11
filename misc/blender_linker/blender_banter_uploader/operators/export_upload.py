@@ -36,6 +36,20 @@ class BANTER_OT_export_upload(Operator):
         default=True
     )
     
+    # Optional override credentials (if not using preferences)
+    override_username: StringProperty(
+        name="Username",
+        description="Override username (leave blank to use preferences)",
+        default=""
+    )
+    
+    override_secret: StringProperty(
+        name="Secret",
+        description="Override secret (leave blank to use preferences)",
+        default="",
+        subtype='PASSWORD'
+    )
+    
     # Runtime properties (not shown in UI)
     _timer = None
     _uploading = False
@@ -95,9 +109,13 @@ class BANTER_OT_export_upload(Operator):
             
             self.report({'INFO'}, f"Exported GLB ({size_mb:.2f}MB)")
             
-            # Get server URL from preferences
+            # Get server URL and credentials from preferences
             prefs = context.preferences.addons["blender_banter_uploader"].preferences
             server_url = prefs.server_url
+            
+            # Use override credentials if provided, otherwise use preferences
+            username = self.override_username if self.override_username else prefs.username
+            secret = self.override_secret if self.override_secret else prefs.secret
             
             # Upload to server
             self.report({'INFO'}, f"Uploading to {server_url}...")
@@ -106,6 +124,8 @@ class BANTER_OT_export_upload(Operator):
                 result = BanterUploader.upload_with_retry(
                     glb_data,
                     server_url=server_url,
+                    username=username,
+                    secret=secret,
                     max_retries=3
                 )
             except Exception as e:
@@ -152,11 +172,16 @@ class BANTER_OT_export_upload(Operator):
             self.report({'ERROR'}, f"Cannot connect to server at {server_url}")
             return {'CANCELLED'}
         
+        # Warn if no credentials are set
+        if not prefs.username and not self.override_username:
+            self.report({'WARNING'}, "No username configured - upload may fail without authentication")
+        
         # Show dialog with options
-        return context.window_manager.invoke_props_dialog(self)
+        return context.window_manager.invoke_props_dialog(self, width=400)
     
     def draw(self, context):
         layout = self.layout
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
         
         # Export preset selection
         layout.prop(self, "export_preset")
@@ -165,7 +190,25 @@ class BANTER_OT_export_upload(Operator):
         layout.prop(self, "combine_objects")
         layout.prop(self, "auto_copy_hash")
         
+        # Authentication section
+        layout.separator()
+        box = layout.box()
+        box.label(text="Authentication", icon='LOCKED')
+        
+        # Show current credentials status
+        if prefs.username:
+            box.label(text=f"Using: {prefs.username}", icon='USER')
+        else:
+            box.label(text="No username set in preferences", icon='ERROR')
+        
+        # Optional override fields
+        row = box.row()
+        row.prop(self, "override_username", text="Override Username")
+        row = box.row()
+        row.prop(self, "override_secret", text="Override Secret")
+        
         # Selection info
+        layout.separator()
         selected_count = len(context.selected_objects)
         if selected_count > 0:
             layout.separator()

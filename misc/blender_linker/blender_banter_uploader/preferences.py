@@ -35,6 +35,20 @@ class BanterUploaderPreferences(AddonPreferences):
         default=DEFAULT_SERVER_URL
     )
     
+    # Authentication settings
+    username: StringProperty(
+        name="Username",
+        description="Your Banter username for authentication",
+        default=""
+    )
+    
+    secret: StringProperty(
+        name="Secret",
+        description="Your secret key for authentication",
+        default="",
+        subtype='PASSWORD'  # Makes it display as password field
+    )
+    
     # Default export settings
     default_preset: EnumProperty(
         name="Default Export Preset",
@@ -128,6 +142,12 @@ class BanterUploaderPreferences(AddonPreferences):
         box = layout.box()
         box.label(text="Server Settings", icon='URL')
         box.prop(self, "server_url")
+        
+        # Authentication
+        box.separator()
+        box.label(text="Authentication", icon='LOCKED')
+        box.prop(self, "username")
+        box.prop(self, "secret")
         
         # Test connection button
         row = box.row()

@@ -90,6 +90,8 @@ class BANTER_OT_batch_export(Operator):
             settings = config.EXPORT_PRESETS[self.export_preset].copy()
             prefs = context.preferences.addons["blender_banter_uploader"].preferences
             server_url = prefs.server_url
+            username = prefs.username
+            secret = prefs.secret
             
             # Check server
             if not BanterUploader.check_server_status(server_url):
@@ -141,6 +143,8 @@ class BANTER_OT_batch_export(Operator):
                     result = BanterUploader.upload_with_retry(
                         glb_data,
                         server_url=server_url,
+                        username=username,
+                        secret=secret,
                         max_retries=2
                     )
                     
