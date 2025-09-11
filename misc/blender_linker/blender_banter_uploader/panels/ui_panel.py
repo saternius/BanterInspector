@@ -74,7 +74,7 @@ class BANTER_PT_upload_panel(Panel):
             batch_btn.export_preset = prefs.default_preset
         
         # Last upload info
-        if hasattr(scene, 'banter_last_upload_hash'):
+        if scene.banter_last_upload_hash:
             layout.separator()
             layout.label(text="Last Upload:", icon='CHECKMARK')
             
@@ -83,12 +83,6 @@ class BANTER_PT_upload_panel(Panel):
             hash_row.label(text=scene.banter_last_upload_hash[:16] + "...")
             
             # Copy hash button
-            copy_op = hash_row.operator(
-                "wm.clipboard",
-                text="",
-                icon='COPYDOWN'
-            )
-            # Note: wm.clipboard operator doesn't exist, we handle this differently
             hash_row.operator(
                 "banter.copy_hash",
                 text="",
@@ -110,29 +104,35 @@ class BANTER_PT_history_panel(Panel):
         scene = context.scene
         
         # Check for batch results
-        if hasattr(scene, 'banter_batch_results') and scene.banter_batch_results:
+        if scene.banter_batch_results:
             layout.label(text="Recent Batch Upload:", icon='COPY_ID')
             
             box = layout.box()
-            for item in scene.banter_batch_results[:5]:  # Show last 5
+            # Show last 5 batch results
+            count = min(5, len(scene.banter_batch_results))
+            for i in range(count):
+                item = scene.banter_batch_results[-(i+1)]  # Show most recent first
                 row = box.row()
-                row.label(text=item['name'])
-                row.label(text=f"{item['size']:.1f}MB")
-                row.label(text=item['hash'][:8] + "...")
+                row.label(text=item.name)
+                row.label(text=f"{item.size:.1f}MB")
+                row.label(text=item.hash[:8] + "...")
         
         # Show upload history if available
-        if hasattr(scene, 'banter_upload_history') and scene.banter_upload_history:
-            if hasattr(scene, 'banter_batch_results') and scene.banter_batch_results:
+        if scene.banter_upload_history:
+            if scene.banter_batch_results:
                 layout.separator()
             
             layout.label(text="Recent Uploads:", icon='TIME')
             
             box = layout.box()
-            for item in scene.banter_upload_history[-5:]:  # Show last 5
+            # Show last 5 history items
+            count = min(5, len(scene.banter_upload_history))
+            for i in range(count):
+                item = scene.banter_upload_history[-(i+1)]  # Show most recent first
                 row = box.row()
-                row.label(text=item['name'])
-                row.label(text=f"{item['size']:.1f}MB")
-                row.label(text=item['preset'])
+                row.label(text=item.name)
+                row.label(text=f"{item.size:.1f}MB")
+                row.label(text=item.preset)
         else:
             layout.label(text="No upload history", icon='INFO')
 
@@ -181,7 +181,7 @@ class BANTER_OT_copy_hash(bpy.types.Operator):
         if self.hash_value:
             context.window_manager.clipboard = self.hash_value
             self.report({'INFO'}, f"Copied: {self.hash_value}")
-        elif hasattr(context.scene, 'banter_last_upload_hash'):
+        elif context.scene.banter_last_upload_hash:
             context.window_manager.clipboard = context.scene.banter_last_upload_hash
             self.report({'INFO'}, f"Copied: {context.scene.banter_last_upload_hash}")
         else:

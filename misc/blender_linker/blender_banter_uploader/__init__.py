@@ -31,25 +31,34 @@ def register():
     debug_print(f"Package: {__package__}")
     
     try:
-        debug_print("Importing preferences module...")
+        debug_print("Importing modules...")
         from . import preferences
         debug_print(f"  Preferences module: {preferences}")
         
-        debug_print("Importing operators module...")
+        from . import scene_properties
+        debug_print(f"  Scene properties module: {scene_properties}")
+        
         from . import operators
         debug_print(f"  Operators module: {operators}")
         
-        debug_print("Importing panels module...")
         from . import panels
         debug_print(f"  Panels module: {panels}")
         
-        debug_print("Importing config module...")
         from . import config
         debug_print(f"  Config module: {config}")
         debug_print(f"  Default server URL: {config.DEFAULT_SERVER_URL}")
         
     except Exception as e:
         debug_print(f"ERROR during imports: {e}")
+        debug_print(traceback.format_exc())
+        raise
+    
+    try:
+        debug_print("Registering scene properties...")
+        scene_properties.register()
+        debug_print("  ✓ Scene properties registered")
+    except Exception as e:
+        debug_print(f"ERROR registering scene properties: {e}")
         debug_print(traceback.format_exc())
         raise
     
@@ -88,7 +97,7 @@ def unregister():
     debug_print("Unregistering Banter GLB Uploader...")
     
     try:
-        from . import panels, operators, preferences
+        from . import panels, operators, preferences, scene_properties
         
         panels.unregister()
         debug_print("  ✓ Panels unregistered")
@@ -98,6 +107,9 @@ def unregister():
         
         preferences.unregister()
         debug_print("  ✓ Preferences unregistered")
+        
+        scene_properties.unregister()
+        debug_print("  ✓ Scene properties unregistered")
         
     except Exception as e:
         debug_print(f"ERROR during unregister: {e}")
