@@ -3,6 +3,7 @@ import os
 import tempfile
 from pathlib import Path
 from .. import config
+from .blender_compat import get_gltf_export_params
 
 class GLBExporter:
     
@@ -47,30 +48,22 @@ class GLBExporter:
             if objects:
                 bpy.context.view_layer.objects.active = objects[0]
             
-            # Configure export settings
-            export_params = {
-                'filepath': filepath,
-                'export_format': settings.get('export_format', 'GLB'),
-                'export_selected': True,
-                'export_apply': settings.get('export_apply', True),
-                'export_texcoords': settings.get('export_texcoords', True),
-                'export_normals': settings.get('export_normals', True),
-                'export_materials': settings.get('export_materials', 'EXPORT'),
-                'export_colors': settings.get('export_colors', True),
-                'export_animations': settings.get('export_animations', True),
-                'export_cameras': settings.get('export_cameras', False),
-                'export_lights': settings.get('export_lights', False),
-            }
-            
-            # Add compression settings if enabled
-            if settings.get('export_draco_mesh_compression_enable', False):
-                export_params['export_draco_mesh_compression_enable'] = True
-                export_params['export_draco_mesh_compression_level'] = settings.get(
-                    'export_draco_mesh_compression_level', 6
-                )
+            # Get version-compatible export parameters
+            export_params = get_gltf_export_params(settings, filepath)
             
             # Export the GLB
-            bpy.ops.export_scene.gltf(**export_params)
+            try:
+                bpy.ops.export_scene.gltf(**export_params)
+            except TypeError as e:
+                # If parameters fail, try with minimal params
+                print(f"Export with full params failed: {e}")
+                print("Trying with minimal parameters...")
+                minimal_params = {
+                    'filepath': filepath,
+                    'export_format': 'GLB',
+                    'use_selection': True,
+                }
+                bpy.ops.export_scene.gltf(**minimal_params)
             
             # Read file data
             with open(filepath, 'rb') as f:
