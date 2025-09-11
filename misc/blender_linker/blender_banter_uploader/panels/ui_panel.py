@@ -53,6 +53,18 @@ class BANTER_PT_upload_panel(Panel):
         
         layout.separator()
         
+        # Show authentication status
+        auth_box = layout.box()
+        auth_row = auth_box.row()
+        auth_row.label(text="Auth:", icon='LOCKED')
+        if prefs.username:
+            auth_row.label(text=f"{prefs.username}", icon='CHECKMARK')
+        else:
+            auth_row.label(text="Not set", icon='INFO')
+        auth_row.operator("preferences.addon_show", text="", icon='PREFERENCES').module = "blender_banter_uploader"
+        
+        layout.separator()
+        
         # Export buttons
         col = layout.column(align=True)
         
