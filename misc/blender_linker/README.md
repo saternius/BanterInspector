@@ -58,7 +58,7 @@ A Blender add-on that enables artists to directly export selected objects as GLB
 Access preferences via Edit → Preferences → Add-ons → Banter GLB Uploader
 
 ### Server Settings
-- **Server URL**: Microservice endpoint (default: http://localhost:9909)
+- **Server URL**: Microservice endpoint (default: https://suitable-bulldog-flying.ngrok-free.app)
 - **Test Connection**: Verify server availability
 
 ### Export Settings
@@ -116,7 +116,7 @@ blender_banter_uploader/
 ### Cannot Connect to Server
 - Verify server is running on specified port
 - Check firewall settings
-- Test with `curl http://localhost:9909`
+- Test with `curl https://suitable-bulldog-flying.ngrok-free.app`
 
 ### Export Fails
 - Check console for detailed error messages

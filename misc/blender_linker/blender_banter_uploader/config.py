@@ -1,4 +1,4 @@
-DEFAULT_SERVER_URL = "http://localhost:9909"
+DEFAULT_SERVER_URL = "https://suitable-bulldog-flying.ngrok-free.app"
 MAX_FILE_SIZE_MB = 20
 TEMP_DIR = None  # Use system temp
 

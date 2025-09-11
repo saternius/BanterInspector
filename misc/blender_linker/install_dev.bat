@@ -16,16 +16,7 @@ echo Addon source: %ADDON_DIR%
 echo.
 
 REM Common Blender addon paths for Windows
-set BLENDER_PATHS[0]=%APPDATA%\Blender Foundation\Blender\4.2\scripts\addons
-set BLENDER_PATHS[1]=%APPDATA%\Blender Foundation\Blender\4.1\scripts\addons
-set BLENDER_PATHS[2]=%APPDATA%\Blender Foundation\Blender\4.0\scripts\addons
-set BLENDER_PATHS[3]=%APPDATA%\Blender Foundation\Blender\3.6\scripts\addons
-set BLENDER_PATHS[4]=%APPDATA%\Blender Foundation\Blender\3.5\scripts\addons
-set BLENDER_PATHS[5]=%APPDATA%\Blender Foundation\Blender\3.4\scripts\addons
-set BLENDER_PATHS[6]=%APPDATA%\Blender Foundation\Blender\3.3\scripts\addons
-set BLENDER_PATHS[7]=%APPDATA%\Blender Foundation\Blender\3.2\scripts\addons
-set BLENDER_PATHS[8]=%APPDATA%\Blender Foundation\Blender\3.1\scripts\addons
-set BLENDER_PATHS[9]=%APPDATA%\Blender Foundation\Blender\3.0\scripts\addons
+set BLENDER_PATHS[0]=%APPDATA%\Roaming\Blender Foundation\Blender\4.5\scripts\addons
 
 REM Find existing Blender installation
 set FOUND_PATH=

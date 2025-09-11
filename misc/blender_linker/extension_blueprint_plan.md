@@ -7,7 +7,7 @@ A Blender add-on that enables artists to directly export selected objects as GLB
 
 ### 1. Object Export & Upload
 - Export selected object(s) as GLB format
-- Automatic upload to microservice at `http://localhost:9909/api/store_glb`
+- Automatic upload to microservice at `https://suitable-bulldog-flying.ngrok-free.app/api/store_glb`
 - Return hash identifier for uploaded asset
 - Copy hash to clipboard for easy reference
 
@@ -272,7 +272,7 @@ export_settings = {
 
 ```python
 # config.py
-DEFAULT_SERVER_URL = "http://localhost:9909"
+DEFAULT_SERVER_URL = "https://suitable-bulldog-flying.ngrok-free.app"
 MAX_FILE_SIZE_MB = 20
 TEMP_DIR = None  # Use system temp
 DEFAULT_EXPORT_PRESET = "mobile_vr"
