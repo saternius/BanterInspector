@@ -238,15 +238,20 @@ export class ComponentAddChange extends Change{
         let event_str = JSON.stringify(event);
         let data = `component_added¶${event_str}`
         networking.sendOneShot(data);
-
+        let checks = 0;
         const returnWhenComponentLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const component = SM.getEntityComponentById(this.componentProperties.id);
+                const component = SM.getEntityComponentById(this.componentProperties.id, false);
                 if (component !== undefined && component.initialized) {
                   resolve(component);
                 } else {
-                  setTimeout(check, 50);
+                  checks++;
+                  if(checks > 100){
+                    resolve(null);
+                  }else{
+                    setTimeout(check, 50);
+                  }
                 }
               };
               check();

@@ -70,7 +70,7 @@ class BANTER_OT_export_upload(Operator):
             # Get export settings
             if self.export_preset == 'custom':
                 # Use addon preferences for custom settings
-                prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+                prefs = context.preferences.addons["blender_banter_uploader"].preferences
                 settings = prefs.get_custom_export_settings()
             else:
                 settings = config.EXPORT_PRESETS[self.export_preset].copy()
@@ -96,7 +96,7 @@ class BANTER_OT_export_upload(Operator):
             self.report({'INFO'}, f"Exported GLB ({size_mb:.2f}MB)")
             
             # Get server URL from preferences
-            prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+            prefs = context.preferences.addons["blender_banter_uploader"].preferences
             server_url = prefs.server_url
             
             # Upload to server
@@ -145,7 +145,7 @@ class BANTER_OT_export_upload(Operator):
     
     def invoke(self, context, event):
         # Check server availability first
-        prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
         server_url = prefs.server_url
         
         if not BanterUploader.check_server_status(server_url):

@@ -15,7 +15,7 @@ class BANTER_PT_upload_panel(Panel):
         scene = context.scene
         
         # Server status
-        prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
         server_url = prefs.server_url
         
         status_row = layout.row()
@@ -148,7 +148,7 @@ class BANTER_PT_settings_panel(Panel):
     
     def draw(self, context):
         layout = self.layout
-        prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
         
         # Default preset
         layout.prop(prefs, "default_preset")
@@ -166,7 +166,7 @@ class BANTER_PT_settings_panel(Panel):
             "preferences.addon_show",
             text="Open Preferences",
             icon='PREFERENCES'
-        ).module = __package__.split('.')[0]
+        ).module = "blender_banter_uploader"
 
 
 # Utility operator for copying hash

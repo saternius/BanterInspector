@@ -65,7 +65,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         }
 
         
-        if(this.ctx._running){
+        if(this.ctx && this.ctx._running){
             await this.ctx.onDestroy();
         }
 
