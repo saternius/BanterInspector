@@ -4,7 +4,7 @@ from bpy.props import StringProperty, EnumProperty, BoolProperty, IntProperty, F
 from . import config
 
 class BanterUploaderPreferences(AddonPreferences):
-    bl_idname = __package__
+    bl_idname = "blender_banter_uploader"
     
     # Server settings
     server_url: StringProperty(
@@ -169,7 +169,7 @@ class BANTER_OT_test_connection(bpy.types.Operator):
     bl_label = "Test Connection"
     
     def execute(self, context):
-        prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
         from .utils import BanterUploader
         
         if BanterUploader.check_server_status(prefs.server_url):

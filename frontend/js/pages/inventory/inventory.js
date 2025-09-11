@@ -60,7 +60,7 @@ export class Inventory {
                 log("init", "importing scripts from firebase");
                 this.firebase.importFromFirebase("inventory/Technocrat/Scripts");
             }
-        }, 5000)
+        }, 10000)
     }
     
     /**

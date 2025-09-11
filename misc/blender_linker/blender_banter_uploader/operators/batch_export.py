@@ -88,7 +88,7 @@ class BANTER_OT_batch_export(Operator):
             
             # Get settings
             settings = config.EXPORT_PRESETS[self.export_preset].copy()
-            prefs = context.preferences.addons[__package__.split('.')[0]].preferences
+            prefs = context.preferences.addons["blender_banter_uploader"].preferences
             server_url = prefs.server_url
             
             # Check server
