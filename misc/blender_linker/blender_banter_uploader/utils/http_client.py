@@ -7,39 +7,42 @@ from .. import config
 class BanterUploader:
     
     @staticmethod
-    def upload_glb(glb_data, server_url=None, username=None, secret=None, progress_callback=None):
+    def upload_glb(glb_data, server_url=None, username=None, secret=None, mesh_name=None, progress_callback=None):
         """
         Upload GLB data to Banter microservice.
-        
+
         Args:
             glb_data: Bytes data of GLB file
             server_url: Optional server URL override
             username: Username for authentication
             secret: Secret key for authentication
+            mesh_name: Name of the mesh/object being uploaded
             progress_callback: Optional callback for progress updates
-            
+
         Returns:
             dict: Response from server containing hash and other metadata
         """
         if server_url is None:
             server_url = config.DEFAULT_SERVER_URL
-        
+
         # Construct upload URL
         upload_url = f"{server_url}/api/store_glb"
-        
+
         # Calculate hash for reference
         local_hash = hashlib.sha256(glb_data).hexdigest()
-        
+
         try:
             # Prepare multipart form data
             files = {'file': ('model.glb', glb_data, 'model/gltf-binary')}
-            
-            # Add authentication data if provided
+
+            # Add authentication and metadata if provided
             data = {}
             if username:
                 data['username'] = username
             if secret:
                 data['secret'] = secret
+            if mesh_name:
+                data['mesh_name'] = mesh_name
             
             # Make the upload request
             if progress_callback:
@@ -102,33 +105,35 @@ class BanterUploader:
             return False
     
     @staticmethod
-    def upload_with_retry(glb_data, server_url=None, username=None, secret=None, max_retries=3, progress_callback=None):
+    def upload_with_retry(glb_data, server_url=None, username=None, secret=None, mesh_name=None, max_retries=3, progress_callback=None):
         """
         Upload with automatic retry on failure.
-        
+
         Args:
             glb_data: Bytes data of GLB file
             server_url: Optional server URL override
             username: Username for authentication
             secret: Secret key for authentication
+            mesh_name: Name of the mesh/object being uploaded
             max_retries: Maximum number of retry attempts
             progress_callback: Optional callback for progress updates
-            
+
         Returns:
             dict: Response from server
         """
         last_error = None
-        
+
         for attempt in range(max_retries):
             try:
                 if attempt > 0 and progress_callback:
                     progress_callback(0, f"Retry attempt {attempt + 1}...")
-                
+
                 return BanterUploader.upload_glb(
-                    glb_data, 
+                    glb_data,
                     server_url,
                     username,
                     secret,
+                    mesh_name,
                     progress_callback
                 )
                 

@@ -139,12 +139,13 @@ class BANTER_OT_batch_export(Operator):
                             self.report({'WARNING'}, f"{item['name']}: File too large ({size_mb:.1f}MB)")
                             continue
                     
-                    # Upload
+                    # Upload with mesh name
                     result = BanterUploader.upload_with_retry(
                         glb_data,
                         server_url=server_url,
                         username=username,
                         secret=secret,
+                        mesh_name=item['name'],  # Use the item name as mesh name
                         max_retries=2
                     )
                     
