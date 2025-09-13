@@ -116,16 +116,23 @@ class BANTER_OT_export_upload(Operator):
             # Use override credentials if provided, otherwise use preferences
             username = self.override_username if self.override_username else prefs.username
             secret = self.override_secret if self.override_secret else prefs.secret
-            
+
+            # Determine mesh name - use single object name or generic name for multiple
+            if len(selected_objects) == 1:
+                mesh_name = selected_objects[0].name
+            else:
+                mesh_name = f"Combined_{len(selected_objects)}_objects"
+
             # Upload to server
-            self.report({'INFO'}, f"Uploading to {server_url}...")
-            
+            self.report({'INFO'}, f"Uploading '{mesh_name}' to {server_url}...")
+
             try:
                 result = BanterUploader.upload_with_retry(
                     glb_data,
                     server_url=server_url,
                     username=username,
                     secret=secret,
+                    mesh_name=mesh_name,
                     max_retries=3
                 )
             except Exception as e:
