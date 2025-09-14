@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterRigidbodyComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterRigidbody;
+        this._bsRef = BS.BanterRigidbody;
         this.type = 'BanterRigidbody';
     }
 

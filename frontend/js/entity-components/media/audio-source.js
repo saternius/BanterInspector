@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterAudioSourceComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterAudioSource;
+        this._bsRef = BS.BanterAudioSource;
         this.type = 'BanterAudioSource';
     }
 

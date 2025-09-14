@@ -161,10 +161,34 @@ export class Inventory {
     }
     
     /**
-     * Get available scripts in current folder
+     * Get available scripts in current folder and all child subfolders recursively
      */
     getAvailableScripts() {
-        return Object.values(this.items).filter(item => item.itemType === 'script');
+        const scripts = [];
+
+        // Helper function to get all scripts in a folder and its subfolders
+        const getScriptsInFolder = (folderPath) => {
+            // Get scripts directly in this folder
+            const scriptsInFolder = Object.values(this.items).filter(item =>
+                item.itemType === 'script' && item.folder === folderPath
+            );
+            scripts.push(...scriptsInFolder);
+
+            // Get all subfolders of this folder
+            const subfolders = Object.entries(this.folders).filter(([name, folder]) =>
+                folder.parent === folderPath
+            );
+
+            // Recursively get scripts from each subfolder
+            for (const [subfolderName] of subfolders) {
+                getScriptsInFolder(subfolderName);
+            }
+        };
+
+        // Start from current folder
+        getScriptsInFolder(this.currentFolder);
+
+        return scripts;
     }
 
     

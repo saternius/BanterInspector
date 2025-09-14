@@ -566,7 +566,7 @@
 
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);
-            entity.finished_loading = true;
+            entity._finished_loading = true;
             let scripts = entity.components.filter(c=>c.type === "MonoBehavior");
             scripts.forEach(async script=>{
                 if(script.ctx.onLoaded){

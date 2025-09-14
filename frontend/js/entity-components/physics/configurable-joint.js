@@ -3,7 +3,7 @@ const { EntityComponent } = await import(`${window.repoUrl}/entity-components/en
 export class ConfigurableJointComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.ConfigurableJoint;
+        this._bsRef = BS.ConfigurableJoint;
         this.type = 'ConfigurableJoint';
     }
 

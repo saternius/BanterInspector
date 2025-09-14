@@ -3,7 +3,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterHeldEventsComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterHeldEvents;
+        this._bsRef = BS.BanterHeldEvents;
         this.type = 'BanterHeldEvents';
     }
 

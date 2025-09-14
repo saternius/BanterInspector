@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterPortalComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterPortal;
+        this._bsRef = BS.BanterPortal;
         this.type = 'BanterPortal';
     }
 

@@ -153,7 +153,7 @@ export function isColorObject(value) {
 /**
  * Deep clone an object
  */
-export function deepClone(obj, exclude=[]) {
+export function deepClone(obj, exclude=[], remove_all_underscores=true) {
     if (obj === null || typeof obj !== 'object') {
         return obj;
     }
@@ -169,6 +169,7 @@ export function deepClone(obj, exclude=[]) {
     const clonedObj = {};
     for (const key in obj) {
         if(exclude.includes(key)) continue;
+        if(remove_all_underscores && key.startsWith("_")) continue;
         if (obj.hasOwnProperty(key)) {
             clonedObj[key] = deepClone(obj[key], exclude);
         }

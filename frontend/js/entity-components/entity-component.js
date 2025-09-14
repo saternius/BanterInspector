@@ -2,9 +2,9 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class EntityComponent{
     constructor(){
-        this.bsRef = null;
-        this.lastUpdate = new Map();
-        this.initialized = false;
+        this._bsRef = null;
+        this._lastUpdate = new Map();
+        this._initialized = false;
         this.options = {};
     }
 
@@ -18,15 +18,15 @@ export class EntityComponent{
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
         }else{
-            if(this.bsRef){
-                let newComponent = await entity._bs.AddComponent(new this.bsRef());
+            if(this._bsRef){
+                let newComponent = await entity._bs.AddComponent(new this._bsRef());
                 this._bs = newComponent;
             }
             await this._setMany(this.properties)
         }
         
         window.SM.entityData.componentMap[this.id] = this;
-        this.initialized = true;
+        this._initialized = true;
         return this;
     }
 
@@ -67,12 +67,12 @@ export class EntityComponent{
     }
 
     async _setWithTimestamp(property, value, timestamp){
-        if(this.lastUpdate.has(property)){
-            if(this.lastUpdate.get(property) >= timestamp){
+        if(this._lastUpdate.has(property)){
+            if(this._lastUpdate.get(property) >= timestamp){
                 return;
             }
         }
-        this.lastUpdate.set(property, timestamp);
+        this._lastUpdate.set(property, timestamp);
         this._set(property, value);
     }
 

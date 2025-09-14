@@ -1,0 +1,146 @@
+{
+  "author": "Technocrat",
+  "created": 1757859659546,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": -1.67,
+            "y": 1.345,
+            "z": -2.47
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "properties": {
+          "file": "UndoStack.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "NewEntity_51095_31827",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "UIs",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_48935",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              }
+            ],
+            "id": "Scene/NewEntity_51095_31827/UI",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "UI",
+            "parentId": "Scene/NewEntity_51095_31827",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "id": "Transform_94717",
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": -1.67,
+                "y": 1.345,
+                "z": -2.47
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "MonoBehavior_70339",
+            "loadAsync": false,
+            "properties": {
+              "file": "UndoStack.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/NewEntity_51095_31827",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "NewEntity_51095_31827",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "NewEntity_51095",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1757859659546,
+  "name": "NewEntity_51095_31827"
+}

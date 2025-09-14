@@ -243,7 +243,7 @@ export class ComponentAddChange extends Change{
             return new Promise(resolve => {
               const check = () => {
                 const component = SM.getEntityComponentById(this.componentProperties.id, false);
-                if (component !== undefined && component.initialized) {
+                if (component !== undefined && component._initialized) {
                   resolve(component);
                 } else {
                   checks++;
@@ -494,33 +494,31 @@ export class EntityRemoveChange extends Change{
             err("command", "Entity not found =>", entityId)
             return;
         }
+        this.entityId = entityId;
         this.entityExport = this.entity.export();
         this.siblingIndex = null;
         this.options = options || {};
     }
 
-    captureEntityState() {
-        if (!this.entity) return null;
-
-        let parentId = this.entity.parentId;
-
-        // Find sibling index
-        if (parentId) {
-            const parent = SM.getEntityById(parentId);
-            if (parent?.children) {
-                this.siblingIndex = parent.children.findIndex(child => child.id === this.entity.id);
-            }
-        } else {
-            // Scene level entity
-            this.siblingIndex = SM.entityData.entities.findIndex(s => s.id === this.entity.id);
-        }
-
-        return this.entity.export();
-    }
-
-
     async apply() {
         super.apply();
+
+        // Check if any parent entity is staged for destruction
+        let currentEntity = this.entity;
+        while (currentEntity) {
+            if (currentEntity._stagedForDestruction) {
+                // Parent is being destroyed, suppress the oneShot
+                return;
+            }
+            // Move to parent entity
+            if (currentEntity.parentId && (currentEntity.parentId !== 'Scene' || currentEntity.parentId !== 'People')) {
+                currentEntity = SM.getEntityById(currentEntity.parentId);
+            } else {
+                currentEntity = null;
+            }
+        }
+
+        // No parent is being destroyed, send the oneShot
         let data = `entity_removed¶${this.entity.id}`
         networking.sendOneShot(data);
     }
@@ -545,7 +543,7 @@ export class EntityRemoveChange extends Change{
     cmd(){
         return {
             action: "remove_entity",
-            entityId: this.entity.id,
+            entityId: this.entityId,
             options: this.options
         }
     }
@@ -773,7 +771,7 @@ export class LoadItemChange extends Change{
                     return;
                 }
 
-                if (entity !== undefined && entity.finished_loading) {  
+                if (entity !== undefined && entity._finished_loading) {  
                     resolve(entity);
                 } else {
                     setTimeout(check, 50);
@@ -887,7 +885,7 @@ export class CloneEntityChange extends Change{
             return new Promise(resolve => {
               const check = () => {
                 const entity = SM.getEntityById(this.entityId, false);
-                if (entity !== undefined && entity.finished_loading) {
+                if (entity !== undefined && entity._finished_loading) {
                   resolve(entity);
                 } else {
                   setTimeout(check, 50);
@@ -1252,9 +1250,9 @@ export class DeleteItemChange extends Change{
             return folderData && folderData.remote === true;
         } else {
             // Check if root is marked as remote
-            const userName = inventory.firebase.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            const rootRemoteKey = `inventory_root_remote_${userName}`;
-            return localStorage.getItem(rootRemoteKey) === 'true';
+            // const userName = inventory.firebase.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+            // const rootRemoteKey = `inventory_root_remote_${userName}`;
+            // return localStorage.getItem(rootRemoteKey) === 'true';
         }
     }
 
@@ -1628,7 +1626,7 @@ export class EditScriptItemChange extends Change{
                     inventory.ui.showPreview(this.scriptName);
                 }
                 showNotification(`Saved changes to "${this.scriptName}"`);
-                if(item.folder){
+                if(this.options.source === 'ui' && item.folder){
                     let folder = inventory.folders[item.folder];
                     if(folder){
                         folder.last_used = Date.now();

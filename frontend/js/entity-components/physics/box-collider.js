@@ -61,7 +61,7 @@ export class BoxColliderControls{
 export class BoxColliderComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BoxCollider;
+        this._bsRef = BS.BoxCollider;
         this.type = 'BoxCollider';
         this._controls = new BoxColliderControls(this);
     }

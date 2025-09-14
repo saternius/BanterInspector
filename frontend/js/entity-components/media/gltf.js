@@ -4,12 +4,12 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterGLTFComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = false;
+        this._bsRef = false;
         this.type = 'BanterGLTF';
-        this.generationTimeout = null;
-        this.gltfObject = null;
-        this.gltfComponent = null;
-        this.gltfTransform = null;
+        this._generationTimeout = null;
+        this._gltfObject = null;
+        this._gltfComponent = null;
+        this._gltfTransform = null;
     }
 
     defaultProperties() {
@@ -51,22 +51,22 @@ export class BanterGLTFComponent extends EntityComponent {
         }
 
         log('gltf', 'generating', this.properties)
-        if(this.gltfObject){
+        if(this._gltfObject){
             log('gltf', 'destroying old gltf object..')
-            await this.gltfObject.Destroy();
+            await this._gltfObject.Destroy();
         }
         log('gltf', 'creating new gltf object..')
-        this.gltfObject = new BS.GameObject();
+        this._gltfObject = new BS.GameObject();
         log('gltf', 'creating new gltf component..')
-        this.gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
+        this._gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
         log('gltf', 'adding component..')
-        await this.gltfObject.AddComponent(this.gltfComponent);
+        await this._gltfObject.AddComponent(this._gltfComponent);
         log('gltf', 'added component..')
-        this.gltfTransform = await this.gltfObject.AddComponent(new BS.Transform());
-        log('gltf', 'adding transform..')
-        this.gltfTransform.localScale = new BS.Vector3(0.01, 0.01, 0.01);
-        log('gltf', 'set scale..')
-        await this.gltfObject.SetParent(this._entity._bs, true);
+        // this._gltfTransform = await this._gltfObject.AddComponent(new BS.Transform());
+        // log('gltf', 'adding transform..')
+        // this._gltfTransform.localScale = new BS.Vector3(0.01, 0.01, 0.01);
+        // log('gltf', 'set scale..')
+        await this._gltfObject.SetParent(this._entity._bs, true);
         log('gltf', 'set parent..')
 
        
@@ -92,9 +92,9 @@ export class BanterGLTFComponent extends EntityComponent {
         //     console.error(`Failed to update ${property} on BanterGLTF:`, e);
         // }
 
-        if(this.generationTimeout){
-            clearTimeout(this.generationTimeout);
+        if(this._generationTimeout){
+            clearTimeout(this._generationTimeout);
         }
-        this.generationTimeout = setTimeout(this.generate.bind(this), 500)
+        this._generationTimeout = setTimeout(this.generate.bind(this), 500)
     }
 }

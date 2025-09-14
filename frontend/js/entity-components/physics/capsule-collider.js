@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class CapsuleColliderComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.CapsuleCollider;
+        this._bsRef = BS.CapsuleCollider;
         this.type = 'CapsuleCollider';
     }
 
