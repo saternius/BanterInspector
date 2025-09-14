@@ -4,14 +4,14 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class MonoBehaviorComponent extends EntityComponent {
     constructor(){
         super();
-        this.bsRef = null;
+        this._bsRef = null;
         
     }
 
     async init(entity, sceneComponent, properties){
         await super.init(entity, sceneComponent, properties);
         this.ctx = this.newScriptContext();
-        this.scriptFunction = null;
+        this._scriptFunction = null;
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
         if(this.properties.file && this.properties.file.length > 0){
@@ -70,7 +70,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         }
 
         this.ctx = this.newScriptContext();
-        this.scriptFunction = new Function(`
+        this._scriptFunction = new Function(`
             ${inventoryItem.data}
         `);
         
@@ -114,51 +114,51 @@ export class MonoBehaviorComponent extends EntityComponent {
             this.ctx.vars = {...this.ctx.vars, ...initializedVars};
         }
 
-        this.scriptFunction.call(this.ctx);
+        this._scriptFunction.call(this.ctx);
         await lifecycle.registerMonoBehavior(this);  
         this._start();  
         log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name}`);
     }
 
-    _start(){
+    async _start(){
         if(this.properties._owner !== SM.myName()) return;
         if(this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = true;
-        this.ctx.onStart();
+        await this.ctx.onStart();
         let message = `update_monobehavior¶${this.id}¶_running¶true`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
-    _stop(){
+    async _stop(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = false;
-        this.ctx.onDestroy();
+        await this.ctx.onDestroy();
         let message = `update_monobehavior¶${this.id}¶_running¶false`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
     }
 
-    _update(){
+    async _update(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
-        this.ctx.onUpdate();
+        await this.ctx.onUpdate();
     }
 
-    _refresh(){
+    async _refresh(){
         if(this.properties._owner !== SM.myName()) return;
         if(!this._entity.active) return;
         log("mono", "refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){
             this.ctx._running = false;
-            this.ctx.onDestroy();
+            await this.ctx.onDestroy();
         }
         
-        this._loadScript(this.properties.file);
+        await this._loadScript(this.properties.file);
         const event = new CustomEvent('script-refreshed', {
             detail: {
                 componentId: this.id,
@@ -191,9 +191,9 @@ export class MonoBehaviorComponent extends EntityComponent {
         let newContext =  {
             vars: {},
             _running: false, // Initialize _running to prevent undefined
-            onStart: ()=>{},
-            onUpdate: ()=>{},
-            onDestroy: ()=>{},
+            onStart: async ()=>{},
+            onUpdate: async ()=>{},
+            onDestroy: async ()=>{},
             onKeyDown: ()=>{},
             onKeyUp: ()=>{},
             keyDown: ()=>{},

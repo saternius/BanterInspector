@@ -463,7 +463,7 @@ export class Networking {
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
-                monobehavior._start();
+                await monobehavior._start();
             }
         }
 
@@ -471,7 +471,7 @@ export class Networking {
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
-                monobehavior._stop();
+                await monobehavior._stop();
             }
         }
 
@@ -479,7 +479,7 @@ export class Networking {
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
             if(monobehavior){
-                monobehavior._refresh();
+                await monobehavior._refresh();
             }
         }
 

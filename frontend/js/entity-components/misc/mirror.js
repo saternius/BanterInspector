@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterMirrorComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterMirror;
+        this._bsRef = BS.BanterMirror;
         this.type = 'BanterMirror';
     }
 

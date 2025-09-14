@@ -9,7 +9,8 @@
         "Technocrat/PersonalMirror",
         "Technocrat/Passthrough",
         "Technocrat/Transform",
-        "Technocrat/Scripts"
+        "Technocrat/Scripts",
+        "Technocrat/UIs"
     ],
     "secret":"oj5kkjg6e7d",
     "username":"Technocrat",

@@ -1,0 +1,116 @@
+{
+  "author": "Technocrat",
+  "created": 1757859287179,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "UI",
+        "parentId": "Scene/NewEntity_51095",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": -1.67,
+            "y": 1.345,
+            "z": -2.47
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "properties": {
+          "file": "UndoStack.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "NewEntity_51095",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "UIs",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_51095",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_4322"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/NewEntity_51095",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_4322",
+      "newValue": "UndoStack.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1757859287179,
+  "name": "NewEntity_51095"
+}

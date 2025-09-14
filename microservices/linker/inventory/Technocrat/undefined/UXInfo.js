@@ -670,13 +670,13 @@ let Reset = ()=>{
     clearEventListeners();
     hideTooltip();
     setupHoverListeners();
-    console.log("Tutorial reset due to UI re-render");
+    //console.log("Tutorial reset due to UI re-render");
 }
 
 // UI re-render event handler
 let uiRenderedHandler = (event) => {
     if (event.detail && event.detail.id === "propertiesPanel") {
-        console.log("Properties panel re-rendered, resetting tutorial");
+        //console.log("Properties panel re-rendered, resetting tutorial");
         Reset();
     }
 }

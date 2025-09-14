@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterRingComponent extends BanterMeshComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterRing;
+        this._bsRef = BS.BanterRing;
         this.type = 'BanterRing';
     }
 

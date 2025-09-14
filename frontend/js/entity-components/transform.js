@@ -4,7 +4,7 @@ const { eulerToQuaternion, parseBest } = await import(`${window.repoUrl}/utils.j
 export class TransformComponent extends EntityComponent {
     constructor(){
         super();
-        this.bsRef = BS.Transform;
+        this._bsRef = BS.Transform;
         this.type = "Transform";
     }
 

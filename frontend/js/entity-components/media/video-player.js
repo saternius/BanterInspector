@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterVideoPlayerComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterVideoPlayer;
+        this._bsRef = BS.BanterVideoPlayer;
         this.type = 'BanterVideoPlayer';
     }
 

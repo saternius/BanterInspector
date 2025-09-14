@@ -346,11 +346,11 @@ export class ScriptEditor {
         });
     }
     
-    save() {
+    save(source="ui") {
         if (!this.codemirror) return;
         
         const newContent = this.codemirror.getValue();
-        let change = new EditScriptItemChange(this.currentScript.name, newContent, {source: 'ui'});
+        let change = new EditScriptItemChange(this.currentScript.name, newContent, {source: source});
         changeManager.applyChange(change);
         
         // Update local content

@@ -52,16 +52,39 @@ export class InventoryFirebase {
         });
         
         // Check if root is remote and setup listener
-        const rootRemoteKey = `inventory_root_remote_${userName}`;
-        if (localStorage.getItem(rootRemoteKey) === 'true') {
-            this.setupRootListener();
-        }
+        // const rootRemoteKey = `inventory_root_remote_${userName}`;
+        // if (localStorage.getItem(rootRemoteKey) === 'true') {
+        //     this.setupRootListener();
+        // }
+
+        const glbLoaderKey = `glb_loader/${userName}_${networking.secret}`;
+        log("glb_loader", "setting up listener for", glbLoaderKey);
+        const glbLoaderRef = window.networking.getDatabase().ref(glbLoaderKey);
+        let firstcall = true;
+        glbLoaderRef.on('value', async (snapshot) => {
+            if(firstcall){
+                firstcall = false;
+                return;
+            }
+            let value = snapshot.val();
+            let glb_url = value.url;
+            let mesh_name = value.mesh_name;
+            log("glb_loader", "change", snapshot.key, glb_url, mesh_name);
+            let entity = await AddEntity("Scene", mesh_name);
+            await AddComponent(entity.id, "BanterGLTF", {
+                componentProperties:{
+                    url: `${window.ngrokUrl}${glb_url}`
+                }
+            })
+
+        });
     }
 
     /**
      * Setup Firebase listener for a specific folder
      */
     setupFolderListener(folderName, folder) {
+        
         log("net", "[SETUP FOLDER LISTENER for folder: ", folderName, "]")
         if (!window.networking || !window.networking.getDatabase) return;
         
@@ -87,6 +110,11 @@ export class InventoryFirebase {
                 }
                 const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
                 firebasePath += `/${sanitizedFolderName}`;
+            }
+
+            if(this.firebaseListeners.has(firebasePath)){
+                log("net", "[FOLDER LISTENER ALREADY SETUP for folder: ", folderName, "]")
+                return;
             }
             
             
@@ -120,39 +148,39 @@ export class InventoryFirebase {
     /**
      * Setup Firebase listener for root inventory
      */
-    setupRootListener() {
-        if (!window.networking || !window.networking.getDatabase) return;
+    // setupRootListener() {
+    //     if (!window.networking || !window.networking.getDatabase) return;
         
-        try {
-            const db = window.networking.getDatabase();
-            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            const firebasePath = `inventory/${userName}`;
+    //     try {
+    //         const db = window.networking.getDatabase();
+    //         const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
+    //         const firebasePath = `inventory/${userName}`;
             
-            const rootRef = db.ref(firebasePath);
+    //         const rootRef = db.ref(firebasePath);
             
-            const addedListener = rootRef.on('child_added', (snapshot) => {
-                this.handleFirebaseItemAdded(snapshot, null);
-            });
+    //         const addedListener = rootRef.on('child_added', (snapshot) => {
+    //             this.handleFirebaseItemAdded(snapshot, null);
+    //         });
             
-            const removedListener = rootRef.on('child_removed', (snapshot) => {
-                this.handleFirebaseItemRemoved(snapshot, null);
-            });
+    //         const removedListener = rootRef.on('child_removed', (snapshot) => {
+    //             this.handleFirebaseItemRemoved(snapshot, null);
+    //         });
             
-            const changedListener = rootRef.on('child_changed', (snapshot) => {
-                this.handleFirebaseItemChanged(snapshot, null);
-            });
+    //         const changedListener = rootRef.on('child_changed', (snapshot) => {
+    //             this.handleFirebaseItemChanged(snapshot, null);
+    //         });
             
-            // Store listeners for cleanup
-            this.firebaseListeners.set(firebasePath, {
-                ref: rootRef,
-                listeners: { addedListener, removedListener, changedListener }
-            });
+    //         // Store listeners for cleanup
+    //         this.firebaseListeners.set(firebasePath, {
+    //             ref: rootRef,
+    //             listeners: { addedListener, removedListener, changedListener }
+    //         });
             
-            log("net", 'Firebase listeners setup for root:', firebasePath);
-        } catch (error) {
-            err("net", 'Failed to setup root listener:', error);
-        }
-    }
+    //         log("net", 'Firebase listeners setup for root:', firebasePath);
+    //     } catch (error) {
+    //         err("net", 'Failed to setup root listener:', error);
+    //     }
+    // }
 
     /**
      * Handle Firebase item added event
@@ -309,7 +337,7 @@ export class InventoryFirebase {
 									editor.currentScript.content = newContent;
 									// Persist changes via existing save flow
 									if (typeof editor.save === 'function') {
-										editor.save();
+										editor.save('firebaseHandler');
 									}
 									break;
 								}
@@ -353,9 +381,9 @@ export class InventoryFirebase {
             const folder = this.inventory.folders[this.inventory.currentFolder];
             this.inventory.isRemote = folder && folder.remote;
         } else {
-            // For root directory, check localStorage flag
-            const rootRemoteKey = `inventory_root_remote_${this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default')}`;
-            this.inventory.isRemote = localStorage.getItem(rootRemoteKey) === 'true';
+            // // For root directory, check localStorage flag
+            // const rootRemoteKey = `inventory_root_remote_${this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default')}`;
+            // this.inventory.isRemote = localStorage.getItem(rootRemoteKey) === 'true';
         }
     }
 
@@ -604,8 +632,8 @@ export class InventoryFirebase {
                 localStorage.setItem(storageKey, JSON.stringify(this.inventory.folders[this.inventory.currentFolder]));
             } else {
                 // Mark root as remote
-                const rootRemoteKey = `inventory_root_remote_${userName}`;
-                localStorage.setItem(rootRemoteKey, 'true');
+                // const rootRemoteKey = `inventory_root_remote_${userName}`;
+                // localStorage.setItem(rootRemoteKey, 'true');
             }
             
             showNotification('Successfully uploaded to Firebase!');

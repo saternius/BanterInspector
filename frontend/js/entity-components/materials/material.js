@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterMaterialComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterMaterial;
+        this._bsRef = BS.BanterMaterial;
         this.type = 'BanterMaterial';
     }
 

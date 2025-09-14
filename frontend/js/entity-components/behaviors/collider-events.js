@@ -3,7 +3,7 @@ const { EntityComponent } = await import(`${window.repoUrl}/entity-components/en
 export class BanterColliderEventsComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterColliderEvents;
+        this.bsRe_bsReff = BS.BanterColliderEvents;
         this.type = 'BanterColliderEvents';
     }
 

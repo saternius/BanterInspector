@@ -110,6 +110,12 @@ export class Entity{
     }
 
     async _destroy(){
+        this._stagedForDestruction = true;
+        let monobehaviors = [...this.components.filter(component => component.type === "MonoBehavior")];
+        for(let monobehavior of monobehaviors){
+            await monobehavior._destroy();
+        }
+
         let children = [...this.children];
         for(let child of children){
             await child._destroy();
@@ -117,6 +123,7 @@ export class Entity{
 
         let components = [...this.components];
         for(let component of components){
+            if(component.type === "MonoBehavior") continue;
             await component._destroy();
         }
 
@@ -211,11 +218,11 @@ export class Entity{
     }
 
     export(keep){
-        let ignore = ['_bs', '_entity', 'bsRef','_component','_scene','_BS','_running', '_owner', '_controls', 'id', 'ctx', 'scriptFunction', 'finished_loading']
+        let ignore = ['id', 'ctx']
         if(keep){
             ignore = ignore.filter(x=>!keep.includes(x));
         }
-        return deepClone(this, ignore);
+        return deepClone(this, ignore, true);
     }
 
     async Set(property, value){

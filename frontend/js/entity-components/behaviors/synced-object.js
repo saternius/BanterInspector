@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterSyncedObjectComponent extends EntityComponent {
     constructor() {
         super();
-        this.bsRef = BS.BanterSyncedObject;
+        this._bsRef = BS.BanterSyncedObject;
         this.type = 'BanterSyncedObject';
     }
 
