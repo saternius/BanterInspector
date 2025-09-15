@@ -323,10 +323,12 @@ export class InventoryFirebase {
 
                 if(item.itemType === "script" || item.itemType === "markdown"){
 					// If a script editor is open for this script, update its text and save
+                    let hasEditorOpened = false;
 					try {
 						if (window.scriptEditors && window.scriptEditors.size > 0) {
 							for (const [key, editor] of window.scriptEditors) {
 								if (editor?.currentScript?.name === itemName) {
+                                    hasEditorOpened = true;
                                     log("script", "updating script editor", itemName)
 									const newContent = item.data || data.data || '';
 									// Update editor content
@@ -343,6 +345,20 @@ export class InventoryFirebase {
 								}
 							}
 						}
+                        if(!hasEditorOpened){
+                            (async ()=>{
+                                await EditScript(itemName, item.data, {source: 'firebaseHandler'});
+                                let monobehaviors = SM.getAllMonoBehaviors();
+                                let targets = [];
+                                monobehaviors.forEach(async (monoBehavior)=>{
+                                    if(monoBehavior.properties.file === itemName){
+                                        targets.push(monoBehavior._entity.id);
+                                        monoBehavior._refresh();
+                                    }
+                                });
+                                log("script", `no editor opened for ${itemName}, updating all instances: `, targets)
+                            })();
+                        }
 					} catch (e) {
 						err('inspector', 'Failed to sync open script editor with remote update:', e);
 					}
