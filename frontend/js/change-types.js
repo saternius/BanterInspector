@@ -503,6 +503,11 @@ export class EntityRemoveChange extends Change{
     async apply() {
         super.apply();
 
+        if(this.entity.parentId === "People"){
+            showNotification("People entities cannot be removed");
+            return;
+        }
+
         // Check if any parent entity is staged for destruction
         let currentEntity = this.entity;
         while (currentEntity) {
@@ -572,6 +577,11 @@ export class EntityMoveChange extends Change{
 
     async apply() {
         super.apply();
+        if(this.oldParentId === this.newParentId) return;
+        if(this.oldParentId === "People"){
+            showNotification("People entities cannot be moved");
+            return;
+        }
         const entity = SM.getEntityById(this.entityId);
         const parent = SM.getEntityById(this.newParentId);
         if (!entity || !parent) return;

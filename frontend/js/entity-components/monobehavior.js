@@ -10,13 +10,15 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     async init(entity, sceneComponent, properties){
         await super.init(entity, sceneComponent, properties);
-        this.ctx = this.newScriptContext();
-        this._scriptFunction = null;
+        this.ctx = (this.ctx) ? this.ctx : this.newScriptContext();
+        this._scriptFunction = (this._scriptFunction) ? this._scriptFunction : null;
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
         if(this.properties.file && this.properties.file.length > 0){
             if(SM.props["__" + this.id + "/_running:component"] !== false){
-                await this._loadScript(this.properties.file);
+                if(!this.ctx._running){
+                    await this._loadScript(this.properties.file);
+                }
             }else{
                 this.ctx._running = false;
             }
@@ -129,6 +131,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         let message = `update_monobehavior¶${this.id}¶_running¶true`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
+        log("mono", "started", this.id)
     }
 
     async _stop(){
@@ -140,6 +143,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         let message = `update_monobehavior¶${this.id}¶_running¶false`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
+        console.log("monobehavior", "stopped", this.id)
     }
 
     async _update(){
@@ -147,6 +151,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         await this.ctx.onUpdate();
+        // log("mono", "updated", this.id)
     }
 
     async _refresh(){
@@ -168,6 +173,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             
         });
         window.dispatchEvent(event);
+        log("mono", "refreshed", this.id)
     }
 
     Start(){

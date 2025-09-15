@@ -19,6 +19,7 @@ export class ScriptEditor {
         this.stopBtnHandler = null;
         this.closeBtnHandler = null;
         this.entityButtonHandlers = new Map();
+        this.lastSave = scriptData.created;
     }
     
     async open(openInBackground) {
@@ -80,11 +81,12 @@ export class ScriptEditor {
                     </div>
                 </div>
                 ` : ''}
-                <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorEntities.size > 0 ? 'block' : 'none'};">
-                    <div class="console-header">Console Output</div>
-                    <div class="console-content" id="consoleContent-${this.pageId}"></div>
-                </div>
             `;
+
+            // <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorEntities.size > 0 ? 'block' : 'none'};">
+            //     <div class="console-header">Console Output</div>
+            //     <div class="console-content" id="consoleContent-${this.pageId}"></div>
+            // </div>
         }
         this.setupEventListeners();
         this.updatePlaybackButtons();
@@ -102,6 +104,7 @@ export class ScriptEditor {
                     <div class="editor-title">
                         <span class="editor-icon">📜</span>
                         <h2>Editing: ${this.currentScript.name}</h2>
+                        <span class="last-save" id="lastSave-${this.pageId}">Last saved: ${new Date(this.lastSave).toLocaleString()}</span>
                         <span class="modified-indicator" id="modifiedIndicator-${this.pageId}" style="display: none;">●</span>
                     </div>
                     <div class="editor-controls">
@@ -356,7 +359,10 @@ export class ScriptEditor {
         // Update local content
         this.currentScript.content = newContent;
         this.isModified = false;
+        this.lastSave = Date.now();
+        document.getElementById(`lastSave-${this.pageId}`).textContent = `Last saved: ${new Date(this.lastSave).toLocaleString()}`;
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
+
         this.run('Refresh')
     }
     
@@ -370,7 +376,7 @@ export class ScriptEditor {
                     if (component.type === 'MonoBehavior' && 
                         component.properties?.file === this.currentScript.name) {
                         this.monoBehaviorEntities.set(entity.id, component);
-                        this.wrapConsoleForComponent(component, entity.name);
+                        // this.wrapConsoleForComponent(component, entity.name);
                     }
                 });
             }
@@ -419,20 +425,20 @@ export class ScriptEditor {
     }
     
     
-    wrapConsoleForComponent(component, entityName) {
-        // Create a console wrapper that logs to our console
-        const consoleWrapper = {
-            log: (...args) => this.log('log', args.join(' '), entityName),
-            error: (...args) => this.log('error', args.join(' '), entityName),
-            warn: (...args) => this.log('warn', args.join(' '), entityName),
-            info: (...args) => this.log('info', args.join(' '), entityName)
-        };
+    // wrapConsoleForComponent(component, entityName) {
+    //     // Create a console wrapper that logs to our console
+    //     const consoleWrapper = {
+    //         log: (...args) => this.log('log', args.join(' '), entityName),
+    //         error: (...args) => this.log('error', args.join(' '), entityName),
+    //         warn: (...args) => this.log('warn', args.join(' '), entityName),
+    //         info: (...args) => this.log('info', args.join(' '), entityName)
+    //     };
         
-        // Override the console in the script context
-        if (component.ctx) {
-            component.ctx.log = consoleWrapper.log;
-        }
-    }
+    //     // Override the console in the script context
+    //     if (component.ctx) {
+    //         component.ctx.log = consoleWrapper.log;
+    //     }
+    // }
 
     run(action){
         let components = Array.from(this.selectedEntities)
@@ -451,7 +457,7 @@ export class ScriptEditor {
             try {
                 
                 component[action]();
-                this.wrapConsoleForComponent(component, entityName);
+                // this.wrapConsoleForComponent(component, entityName);
             } catch (error) {
                 this.log('error', `Script error: ${error.message}`, entityName);
             }

@@ -3996,6 +3996,10 @@ input:hover{
     width: 60px;
 }
 
+.reset-buttons{
+    display: flex;
+}
+
 .reset-btn{
     width: 100%;
     font-size: 14px;
@@ -4005,6 +4009,7 @@ input:hover{
     padding: 3px;
     cursor: pointer;
 }
+
 .reset-btn:hover{
     background: #ff000036;
 }

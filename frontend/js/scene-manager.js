@@ -287,17 +287,10 @@
             if(window.isLocalHost){
                 localStorage.removeItem('lastSpaceState');
             }
-            // this.loaded = false;
-            // this.scene.spaceState = {
-            //     public: {},
-            //     protected: {}
-            // }
-            // this.props = {
-            //     hierarchy: null,
-            // }
             localStorage.removeItem('lastProps');
             window.location.reload();
         }
+
 
         claimHost(){
             networking.setSpaceProperty("hostUser", this.myName(), false);
