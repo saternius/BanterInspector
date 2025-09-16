@@ -150,12 +150,13 @@ class ChangeManager {
         
         try {
             // Call the change object's undo method with timeout
-            const timeout = entry.change.timeout || 5000;
+            const timeout = 50000000 // entry.change.timeout || 5000;
             await this.applyWithTimeout(entry.change.undo.bind(entry.change), timeout, entry.change.id);
             
             this.redoStack.push(entry);
             this.updateUI();
             this.showNotification(`Undone: ${entry.description}`);
+            log("UNDO/REDO", `Undone: ${entry.description}`);
         } catch (error) {
             console.error('Undo failed:', error);
             this.showNotification('Undo failed: ' + error.message, 'error');
@@ -181,12 +182,14 @@ class ChangeManager {
         
         try {
             // Call the change object's apply method with timeout
-            const timeout = entry.change.timeout || 5000;
+            //const timeout = entry.change.timeout || 5000;
+            const timeout = 50000000
             await this.applyWithTimeout(entry.change.apply.bind(entry.change), timeout, entry.change.id);
             
             this.undoStack.push(entry);
             this.updateUI();
             this.showNotification(`Redone: ${entry.description}`);
+            log("UNDO/REDO", `Redone: ${entry.description}`);
         } catch (error) {
             console.error('Redo failed:', error);
             this.showNotification('Redo failed: ' + error.message, 'error');

@@ -112,7 +112,6 @@ export class Entity{
     async _destroy(){
         this._stagedForDestruction = true;
         let monobehaviors = [...this.components.filter(component => component.type === "MonoBehavior")];
-        console.log("entity", "destroying monobehaviors", monobehaviors)
         for(let monobehavior of monobehaviors){
             await monobehavior._destroy();
         }

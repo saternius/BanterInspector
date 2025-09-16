@@ -498,6 +498,7 @@
             }else{
                 if(path.startsWith("People/")){
                     let userName = path.split("/")[1]
+                    
                     let entity = await this._loadEntity(entityData, "People")
                     await entity._setParent(this.getEntityById("People"))
                 }
