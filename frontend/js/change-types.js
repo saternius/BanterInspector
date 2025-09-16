@@ -438,15 +438,20 @@ export class EntityAddChange extends Change{
 
     async apply() {
         super.apply();
+        this.newEntityId = `${this.parentId}/${this.entityName}`
+        let exists = SM.getEntityById(this.newEntityId, false);
+        if(exists){
+            showNotification("Entity with that name already exists");
+            return exists;
+        }
+
         let data = `entity_added¶${this.parentId}¶${this.entityName}`
         networking.sendOneShot(data);
-
-        let expectedEntityId = `${this.parentId}/${this.entityName}`
 
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const entity = SM.getEntityById(expectedEntityId, false);
+                const entity = SM.getEntityById(this.newEntityId, false);
                 if (entity !== undefined && entity.initialized) {
                   resolve(entity);
                 } else {
@@ -462,17 +467,17 @@ export class EntityAddChange extends Change{
     async undo() {
         super.undo();
         if (!this.newEntityId) return;
-        let entity_id = `${this.parentId}/${this.entityName}`
+        let entity_id = this.newEntityId
         let data = `entity_removed¶${entity_id}`
         networking.sendOneShot(data);
     }
 
     getDescription() {
-        return `Added new entity${this.parentId ? ' as child' : ' at root'}`;
+        return `New Entity: ${this.entityName} @ ${this.parentId}`;
     }
 
     getUndoDescription(){
-        return `Remove entity ${this.entityName}`;
+        return `Remove Entity: ${this.entityName} @ ${this.parentId}`;
     }
 
     cmd(){
@@ -508,20 +513,20 @@ export class EntityRemoveChange extends Change{
             return;
         }
 
-        // Check if any parent entity is staged for destruction
-        let currentEntity = this.entity;
-        while (currentEntity) {
-            if (currentEntity._stagedForDestruction) {
-                // Parent is being destroyed, suppress the oneShot
-                return;
-            }
-            // Move to parent entity
-            if (currentEntity.parentId && (currentEntity.parentId !== 'Scene' || currentEntity.parentId !== 'People')) {
-                currentEntity = SM.getEntityById(currentEntity.parentId);
-            } else {
-                currentEntity = null;
-            }
-        }
+        // // Check if any parent entity is staged for destruction
+        // let currentEntity = this.entity;
+        // while (currentEntity) {
+        //     if (currentEntity._stagedForDestruction) {
+        //         // Parent is being destroyed, suppress the oneShot
+        //         return;
+        //     }
+        //     // Move to parent entity
+        //     if (currentEntity.parentId && (currentEntity.parentId !== 'Scene' || currentEntity.parentId !== 'People')) {
+        //         currentEntity = SM.getEntityById(currentEntity.parentId);
+        //     } else {
+        //         currentEntity = null;
+        //     }
+        // }
 
         // No parent is being destroyed, send the oneShot
         let data = `entity_removed¶${this.entity.id}`
@@ -538,11 +543,11 @@ export class EntityRemoveChange extends Change{
     }
 
     getDescription() {
-        return `Remove entity ${this.entityData?.name || ''}`;
+        return `Remove Entity: ${this.entityId}`;
     }
 
     getUndoDescription(){
-        return `Add entity ${this.entityData?.name || ''}`;
+        return `Restore Entity: ${this.entityId}`;
     }
 
     cmd(){
@@ -578,7 +583,7 @@ export class EntityMoveChange extends Change{
     async apply() {
         super.apply();
         if(this.oldParentId === this.newParentId) return;
-        if(this.oldParentId === "People"){
+        if(this.oldParentId === "People" || this.newParentId === "People" || this.entityId === "People"){
             showNotification("People entities cannot be moved");
             return;
         }
@@ -715,7 +720,7 @@ export class LoadItemChange extends Change{
             }
     
             let itemData = item.data;
-            itemData.name = this.itemName+"_"+Math.floor(Math.random() * 100000);
+            itemData.name = this.options.name || this.itemName+"_"+Math.floor(Math.random() * 100000);
             itemData.parentId = this.parentId;
             itemData.id = this.parentId+"/"+itemData.name;
             changeChildrenIds(itemData);

@@ -73,9 +73,16 @@ export class InventoryFirebase {
             let entity = await AddEntity("Scene", mesh_name);
             await AddComponent(entity.id, "BanterGLTF", {
                 componentProperties:{
-                    url: `${window.ngrokUrl}${glb_url}`
+                    url: `${window.ngrokUrl}${glb_url}`,
+                    addColliders: true
                 }
             })
+            await AddComponent(entity.id, "MonoBehavior", {
+                componentProperties:{
+                    file: "GLTFGrabbable.js"
+                }
+            })
+            
 
         });
     }

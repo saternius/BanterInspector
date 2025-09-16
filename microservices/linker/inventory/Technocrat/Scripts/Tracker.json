@@ -1,0 +1,338 @@
+{
+  "author": "Technocrat",
+  "created": 1758008958455,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Holder",
+        "parentId": "Scene/Tracker",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "arc": 6.283185307179586,
+          "depth": 0.05,
+          "depthSegments": 1,
+          "geometryType": 0,
+          "height": 0.05,
+          "heightSegments": 1,
+          "innerRadius": 0.2,
+          "openEnded": false,
+          "outerRadius": 0.5,
+          "p": 2,
+          "parametricType": 0,
+          "phiLength": 6.283185307179586,
+          "phiSegments": 8,
+          "phiStart": 0,
+          "q": 3,
+          "radialSegments": 32,
+          "radius": 0.5,
+          "radiusBottom": 0.5,
+          "radiusTop": 0.5,
+          "segments": 64,
+          "thetaLength": 6.283185307179586,
+          "thetaSegments": 6,
+          "thetaStart": 0,
+          "tube": 0.4,
+          "tubularSegments": 64,
+          "width": 0.05,
+          "widthSegments": 1
+        },
+        "type": "BanterGeometry"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "attachmentPoint": 0,
+          "uid": ""
+        },
+        "type": "BanterAttachedObject"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Tracker",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Scripts",
+  "history": [
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/Tracker",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_74771",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              }
+            ],
+            "id": "Scene/Tracker_1695/Holder",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "Holder",
+            "parentId": "Scene/Tracker_1695",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "id": "Transform_44974",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_45968",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 0.05,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 0.05,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 0.05,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_22293",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BanterAttachedObject_75011",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "attachmentPoint": 0,
+              "uid": ""
+            },
+            "type": "BanterAttachedObject"
+          }
+        ],
+        "id": "Scene/Tracker_1695",
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "Tracker_1695",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "Tracker",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Tracker_1695",
+      "newValue": "0",
+      "options": {
+        "source": "ui"
+      },
+      "property": "layer"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Tracker_1695",
+      "newValue": "Tracker",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1758008958455,
+  "name": "Tracker"
+}

@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getDatabase, ref, onValue, set } = require('firebase/database');
+const { getDatabase, ref, onValue, set, update } = require('firebase/database');
 const { getAuth, signInAnonymously } = require('firebase/auth');
 const fs = require('fs');
 const path = require('path');
@@ -301,14 +301,13 @@ const server = http.createServer((req, res) => {
                 updateData = {
                     author: username,
                     name: fileName,
-                    created: Date.now(),
                     last_used: Date.now(),
                     data: content,
                     itemType: itemType
                 };
                 
-                // Use set() to replace the entire item with new data
-                set(updateRef, updateData)
+                // Use update() to merge only the provided fields
+                update(updateRef, updateData)
                     .then((event) => {
                         const typeLabel = itemType === 'markdown' ? 'Markdown' : 'Script';
                         console.log(`${typeLabel} updated in Firebase: ${firebasePath}`);
@@ -333,23 +332,23 @@ const server = http.createServer((req, res) => {
                     const jsonData = JSON.parse(content);
                     updateData = jsonData;
                     
-                    // Use set() to completely replace the reference
-                    set(updateRef, updateData)
+                    // Use update() to merge only the provided fields
+                    update(updateRef, updateData)
                         .then(() => {
-                            console.log(`Entity set in Firebase: ${firebasePath}`);
+                            console.log(`Entity updated in Firebase: ${firebasePath}`);
                             res.writeHead(200, { 'Content-Type': 'application/json' });
                             res.end(JSON.stringify({ 
                                 success: true, 
-                                message: 'Entity set in Firebase',
+                                message: 'Entity updated in Firebase',
                                 itemType: itemType,
                                 icon: icon,
                                 firebasePath: firebasePath
                             }));
                         })
                         .catch((error) => {
-                            console.error('Error setting entity in Firebase:', error);
+                            console.error('Error updating entity in Firebase:', error);
                             res.writeHead(500, { 'Content-Type': 'application/json' });
-                            res.end(JSON.stringify({ error: 'Failed to set entity in Firebase', details: error.message }));
+                            res.end(JSON.stringify({ error: 'Failed to update entity in Firebase', details: error.message }));
                         });
                 } catch (jsonError) {
                     res.writeHead(400, { 'Content-Type': 'application/json' });

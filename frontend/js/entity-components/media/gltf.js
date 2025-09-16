@@ -57,6 +57,7 @@ export class BanterGLTFComponent extends EntityComponent {
         }
         log('gltf', 'creating new gltf object..')
         this._gltfObject = new BS.GameObject();
+        
         log('gltf', 'creating new gltf component..')
         this._gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
         log('gltf', 'adding component..')
@@ -67,6 +68,7 @@ export class BanterGLTFComponent extends EntityComponent {
         // this._gltfTransform.localScale = new BS.Vector3(0.01, 0.01, 0.01);
         // log('gltf', 'set scale..')
         await this._gltfObject.SetParent(this._entity._bs, true);
+        this._gltfObject.SetLayer(5);
         log('gltf', 'set parent..')
 
        

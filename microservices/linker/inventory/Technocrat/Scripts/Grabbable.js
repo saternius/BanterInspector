@@ -15,12 +15,12 @@ this.onStart = ()=>{
         if(held){
             this._entity.SetParent(lastParent)
         }else{
-            console.log("click", e.detail.point)
-            let tippyHolderPath = "People/"+user+"/Tippy_"+user+"/Holder";
+            console.log("click", e.detail)
+            let tippyHolderPath = "People/"+user+"/Trackers/RIGHT_HAND/Holder";
             let tippyHolder = SM.getEntityById(tippyHolderPath)
-            console.log(`tippy => ${tippyHolderPath}`, tippyHolder)
+            console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)
             if(!tippyHolder){
-                showNotification("Error: Tippy not found")
+                showNotification("Error: RIGHT_HAND Holder not found")
                 return;
             }
             tippyHolder.getTransform().Set("position", e.detail.point)
