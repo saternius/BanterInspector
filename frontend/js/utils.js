@@ -711,3 +711,69 @@ window.err = function(tag, ...args) {
 };
 
 window.showNotification = showNotification;
+
+window.TransformOps = {
+    Add: (vec1, vec2)=>{
+        return {
+            x: vec1.x + vec2.x,
+            y: vec1.y + vec2.y,
+            z: vec1.z + vec2.z
+        }
+    },
+    Subtract: (vec1, vec2)=>{
+        return {
+            x: vec1.x - vec2.x,
+            y: vec1.y - vec2.y,
+            z: vec1.z - vec2.z
+        }
+    },
+    Multiply: (vec1, vec2)=>{
+        if(typeof vec2 === "number"){
+            return {
+                x: vec1.x * vec2,
+                y: vec1.y * vec2,
+                z: vec1.z * vec2
+            }
+        }
+        if(typeof vec1 === "number"){
+            return {
+                x: vec1 * vec2.x,
+                y: vec1 * vec2.y,
+                z: vec1 * vec2.z
+            }
+        }
+        
+        return {
+            x: vec1.x * vec2.x,
+            y: vec1.y * vec2.y,
+            z: vec1.z * vec2.z
+        }
+    },
+    Divide: (vec1, vec2)=>{
+        if(typeof vec2 === "number"){
+            return {
+                x: vec1.x / vec2,
+                y: vec1.y / vec2,
+                z: vec1.z / vec2
+            }
+        }
+        if(typeof vec1 === "number"){
+            return {
+                x: vec1 / vec2.x,
+                y: vec1 / vec2.y,
+                z: vec1 / vec2.z
+            }
+        }
+        return {
+            x: vec1.x / vec2.x,
+            y: vec1.y / vec2.y,
+            z: vec1.z / vec2.z
+        }
+    }
+}
+
+let u_pos = headTransform._bs._localPosition
+let u_forward = headTransform._bs.forward
+let u_rotation = headTransform._bs._rotation
+undoTransform.Set("localPosition", TransformOps.Add(u_pos, u_forward))
+undoTransform.Set("localRotation", u_rotation)

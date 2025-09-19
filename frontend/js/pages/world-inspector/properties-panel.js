@@ -443,6 +443,7 @@
             const componentId = component.id;
             const row = document.createElement('div');
             row.className = 'property-row';
+            row.id = `prop_${componentId}_${key}`;
             
             // Property button (for actions like reset)
             const button = document.createElement('button');
@@ -1338,6 +1339,99 @@
             // The actual deletion will be handled by the change manager
             // Re-render will happen after the change is processed
             setTimeout(() => this.render(entityId), 100);
+        }
+
+        /**
+         * Update a property value programmatically
+         * @param {string} componentId - The ID of the component
+         * @param {string} propertyKey - The key of the property to update
+         * @param {*} newValue - The new value to set
+         */
+        updateProperty(componentId, propertyKey, newValue) {
+            const propertyRowId = `prop_${componentId}_${propertyKey}`;
+            const propertyRow = document.getElementById(propertyRowId);
+            if (!propertyRow) {
+                //console.warn(`Property row not found: ${propertyRowId}`);
+                return;
+            }
+
+            // Find the component
+            const entity = SM.getEntityById(SM.selectedEntity);
+            if (!entity) return;
+
+            const component = entity.components.find(c => c.id === componentId);
+            if (!component) {
+                console.warn(`Component not found: ${componentId}`);
+                return;
+            }
+
+            // Update based on value type
+            if (typeof newValue === 'boolean') {
+                const checkbox = propertyRow.querySelector('input[type="checkbox"]');
+                if (checkbox) checkbox.checked = newValue;
+
+            } else if (typeof newValue === 'number') {
+                const numberInput = propertyRow.querySelector('input[type="number"]:not(.vector-group input)');
+                if (numberInput) numberInput.value = newValue;
+
+            } else if (typeof newValue === 'string') {
+                // Check for dropdowns first
+                const dropdown = propertyRow.querySelector('select');
+                if (dropdown) {
+                    dropdown.value = newValue;
+                } else {
+                    // Text input
+                    const textInput = propertyRow.querySelector('input[type="text"]');
+                    if (textInput) textInput.value = newValue;
+                }
+
+            } else if (typeof newValue === 'object') {
+                // Handle Vector3 objects
+                if (newValue && 'x' in newValue && 'y' in newValue && 'z' in newValue) {
+                    const vectorInputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
+                    if (vectorInputs.length >= 3) {
+                        vectorInputs[0].value = newValue.x || 0;
+                        vectorInputs[1].value = newValue.y || 0;
+                        vectorInputs[2].value = newValue.z || 0;
+                    }
+                }
+                // Handle Color objects
+                else if (newValue && 'r' in newValue && 'g' in newValue && 'b' in newValue) {
+                    const colorSwatch = propertyRow.querySelector('.color-swatch');
+                    if (colorSwatch) {
+                        colorSwatch.style.backgroundColor = `rgba(${newValue.r * 255}, ${newValue.g * 255}, ${newValue.b * 255}, ${newValue.a || 1})`;
+                    }
+
+                    const rgbaInputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
+                    if (rgbaInputs.length >= 3) {
+                        rgbaInputs[0].value = newValue.r || 0;
+                        rgbaInputs[1].value = newValue.g || 0;
+                        rgbaInputs[2].value = newValue.b || 0;
+                        if (rgbaInputs[3]) rgbaInputs[3].value = newValue.a || 1;
+                    }
+
+                    const colorInput = propertyRow.querySelector('input[type="color"]');
+                    if (colorInput) {
+                        const { rgbToHex } = window.utils || {};
+                        if (rgbToHex) {
+                            colorInput.value = rgbToHex(newValue.r * 255, newValue.g * 255, newValue.b * 255);
+                        }
+                    }
+                }
+                // Handle Quaternion (rotation)
+                else if (newValue && 'x' in newValue && 'y' in newValue && 'z' in newValue && 'w' in newValue) {
+                    const { quaternionToEuler, formatNumber } = window.utils || {};
+                    if (quaternionToEuler) {
+                        const eulerAngles = quaternionToEuler(newValue);
+                        const vectorInputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
+                        if (vectorInputs.length >= 3) {
+                            vectorInputs[0].value = formatNumber ? formatNumber(eulerAngles.x, 2) : eulerAngles.x;
+                            vectorInputs[1].value = formatNumber ? formatNumber(eulerAngles.y, 2) : eulerAngles.y;
+                            vectorInputs[2].value = formatNumber ? formatNumber(eulerAngles.z, 2) : eulerAngles.z;
+                        }
+                    }
+                }
+            }
         }
     }
 // })()

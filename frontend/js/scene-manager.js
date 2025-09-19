@@ -126,6 +126,7 @@
         }
 
         async initialize() {
+            
             if(window.useMock){
                 await this.initializeMock();
                 this.setup = async ()=>{
@@ -154,6 +155,7 @@
 
                 this.setup = async ()=>{
                     if(this.loaded) return;
+                    networking.initFirebase()
 
                     log('init', "setting up inspector")
 
@@ -175,6 +177,7 @@
                     }
 
                     let people_entity = await this.loadHierarchy("People", people_hier);
+                    log("init", "loaded default people entity =>", people_entity)
                     this.entityData.entities = [people_entity];
 
                     this.finalizeSceneLoad = async (scene_entity)=>{
