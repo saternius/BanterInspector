@@ -45,7 +45,7 @@ export class Networking {
         this.storage = null;
         this.secret = this.getSecret();
         // Delay Firebase initialization to ensure all dependencies are loaded
-        setTimeout(() => this.initFirebase(), 1000);
+      
     }
 
     getSecret(){

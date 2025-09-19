@@ -1,10 +1,3 @@
-//hey
-this.default = {}
-
-Object.entries(this.default).forEach(([key, val])=>{
-    if(!this.vars[key]) this.vars[key] = val
-})
-
 let timestamp2Time = (timestamp)=>{
     return new Date(timestamp).toUTCString().substr(-12,8)
 }
@@ -55,7 +48,12 @@ this.onStart = async ()=>{
     let curTime = new Date().toUTCString();
     log("UNDO UI", `making UI [${curTime}]`)
     let transform = this._entity.getTransform();
-    let startingPosition = {x: -1.67, y: 1.345, z: -2.47};
+    let headTracker = await GetTracker("HEAD");
+    let headTransform = headTracker.getTransform();
+    let headPosition = headTransform._bs._localPosition;
+    let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);
+    let startingPosition = TransformOps.Add(headPosition, headForward);
+    let startingRotation = headTransform._bs._rotation;
     transform.Set("localPosition", {x: 0, y: 0, z: 0});
     PaneEntity = await AddEntity(this._entity.id, "UI")
  
@@ -88,6 +86,7 @@ this.onStart = async ()=>{
     // panel.SetBackgroundColor(new BS.Vector4(.12,.18,.24,1))
 
     transform.Set("localPosition", startingPosition);
+    transform.Set("localRotation", startingRotation);
 
     generateUI();
     changeListener = (change)=>{
@@ -98,9 +97,6 @@ this.onStart = async ()=>{
     
 }
 
-this.onUpdate = ()=>{
-    //console.log("onUpdate")
-}
 
 this.onDestroy = async()=>{
     log("UNDO UI", "onDestroy")
@@ -108,12 +104,4 @@ this.onDestroy = async()=>{
         await RemoveEntity(PaneEntity.id)
     }
     changeManager.removeChangeListener(changeListener)
-}
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
 }

@@ -1,5 +1,17 @@
 
-log("Trackers", "Trackers script loadesd");
+log("Trackers", "Trackers scsript loaded");
+
+window.GetTracker = async (name)=>{
+    let tracker = SM.getEntityById(`People/${me}/Trackers/${name}`, false);
+    if(!tracker){
+        log("Trackers", "Tracker not found: ", name, "waiting..");
+        await new Promise(resolve => setTimeout(resolve, 500));
+        return await GetTracker(name);
+    }else{
+        return tracker;
+    }
+}
+
 const attachmentPoints = {
     HEAD: 0,
     BODY: 1,
@@ -35,18 +47,59 @@ let getOrMakeTracker = async (name)=>{
     return tracker;
 }
 
+let headTracker = null;
+let bodyTracker = null;
+let leftHandTracker = null;
+let rightHandTracker = null;
+let cockpitTracker = null;
 
 (async ()=>{
     let trackers = SM.getEntityById(`People/${me}/Trackers`, false);
     if(!trackers){
         await AddEntity("People/"+me, "Trackers");
     }
-    let headTracker = await getOrMakeTracker("HEAD");
-    let bodyTracker = await getOrMakeTracker("BODY");
-    let leftHandTracker = await getOrMakeTracker("LEFT_HAND");
-    let rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
-    let cockpitTracker = await getOrMakeTracker("COCKPIT");
+    headTracker = await getOrMakeTracker("HEAD");
+    // bodyTracker = await getOrMakeTracker("BODY");
+    leftHandTracker = await getOrMakeTracker("LEFT_HAND");
+    rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
+    // cockpitTracker = await getOrMakeTracker("COCKPIT");
 })()
+
+
+let onUpdate = async ()=>{
+    if(headTracker){
+        let headTransform = headTracker.getTransform();
+        await headTransform._bs.Q([13])
+        headTransform._update("localPosition", headTransform._bs._localPosition);
+        headTransform._update("localRotation", headTransform._bs._localRotation);
+    }
+    if(bodyTracker){
+        let bodyTransform = bodyTracker.getTransform();
+        await bodyTransform._bs.Q([13])
+        bodyTransform._update("localPosition", bodyTransform._bs._localPosition);
+        bodyTransform._update("localRotation", bodyTransform._bs._localRotation);
+    }
+    if(leftHandTracker){
+        let leftHandTransform = leftHandTracker.getTransform();
+        await leftHandTransform._bs.Q([13])
+        leftHandTransform._update("localPosition", leftHandTransform._bs._localPosition);
+        leftHandTransform._update("localRotation", leftHandTransform._bs._localRotation);
+    }
+    if(rightHandTracker){
+        let rightHandTransform = rightHandTracker.getTransform();
+        await rightHandTransform._bs.Q([13])
+        rightHandTransform._update("localPosition", rightHandTransform._bs._localPosition);
+        rightHandTransform._update("localRotation", rightHandTransform._bs._localRotation);
+    }
+    if(cockpitTracker){
+        let cockpitTransform = cockpitTracker.getTransform();
+        await cockpitTransform._bs.Q([13])
+        cockpitTransform._update("localPosition", cockpitTransform._bs._localPosition);
+        cockpitTransform._update("localRotation", cockpitTransform._bs._localRotation);
+    }
+}
+
+setInterval(onUpdate, (1000/lifecycle.fps));
 
 // let loadTrackers = async ()=>{
 //     let trackersEnt = SM.getEntityById("People/Technocrat/Trackers", false);

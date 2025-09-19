@@ -13,6 +13,12 @@ export class TransformComponent extends EntityComponent {
         return this;
     }
 
+    async _update(property, value){
+        value = parseBest(value);
+        this.properties[property] = value;
+        inspector.propertiesPanel.updateProperty(this.id, property, value);
+    }
+
     async _set(property, value){
         value = parseBest(value);
         this.properties[property] = value;
