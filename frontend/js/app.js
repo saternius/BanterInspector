@@ -173,6 +173,7 @@
 
                 this.initialized = true;
                 log('init', 'Inspector initialized successfully');
+                await SM.executeStartupScripts("onInspectorLoaded");
                 
                 // Hide loading screen
                 

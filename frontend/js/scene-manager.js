@@ -23,6 +23,7 @@
             this.selectedEntity = null;
             this.expandedNodes = new Set();
             this.loaded = false;
+            
 
             setInterval(()=>{
                 this.saveScene();
@@ -135,8 +136,6 @@
                 return;
             }
 
-
-
             let fileServer = localStorage.getItem('file_server');
             if(!fileServer){
                 localStorage.setItem('file_server', "stable");
@@ -188,7 +187,7 @@
                         inspector?.hierarchyPanel?.render()
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
-                        await this.executeStartupScripts();
+                        await this.executeStartupScripts("onSceneLoaded");
                     }
 
        
@@ -861,7 +860,19 @@
          * Execute startup scripts from inventory
          * Scripts must have both startup and active flags set to true
          */
-        async executeStartupScripts() {
+        async executeStartupScripts(stage) {
+            if(!lifecycle){
+                log('startup', 'Lifecycle not initialized, delaying..');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return await this.executeStartupScripts(stage);
+            }
+           
+            if(stage === "onSceneLoaded" && !lifecycle.startupExecutionCheckpoints.onInspectorLoaded){
+                log('startup', 'Inspector startup has not completed yet, delaying..');
+                await new Promise(resolve => setTimeout(resolve, 500));
+                return await this.executeStartupScripts(stage);
+            }
+
             try {
                 if (!window.inventory) {
                     log('startup', 'Inventory not initialized, skipping startup scripts');
@@ -914,6 +925,9 @@
             } catch (error) {
                 err('startup', 'Error in executeStartupScripts:', error);
             }
+
+            lifecycle.startupExecutionCheckpoints[stage] = true;
+            log('startup', `[${stage}] COMPLETED`);
         }
     }
 

@@ -62,34 +62,83 @@ let generateUI = () => {
     container = doc.createElement();
     container.style.display = "flex";
     container.style.flexDirection = "column";
-    container.style.padding = "15px";
-    container.style.gap = "20px";
+    container.style.height = "100%";
+    container.style.width = "100%";
+
+    // Windows-style title bar
+    const titleBar = doc.createElement();
+    titleBar.style.display = "flex";
+    titleBar.style.flexDirection = "row";
+    titleBar.style.justifyContent = "space-between";
+    titleBar.style.alignItems = "center";
+    titleBar.style.backgroundColor = "#1a1a2e";
+    titleBar.style.padding = "8px 12px";
+    titleBar.style.borderBottom = "2px solid #333";
 
     // Title
     const title = doc.createElement();
     title.text = "Space Properties";
-    title.style.fontSize = "24px";
+    title.style.fontSize = "16px";
     title.style.fontWeight = "bold";
     title.style.color = "#ffffff";
-    title.style.marginBottom = "10px";
-    container.appendChild(title);
+    title.style.flex = "1";
+
+    // Close button
+    const closeButton = doc.CreateButton();
+    closeButton.text = "✕";
+    closeButton.style.backgroundColor = "transparent";
+    closeButton.style.color = "#ffffff";
+    closeButton.style.fontSize = "18px";
+    closeButton.style.fontWeight = "bold";
+    closeButton.style.padding = "4px 8px";
+    closeButton.style.borderRadius = "4px";
+    closeButton.style.border = "none";
+    closeButton.style.cursor = "pointer";
+
+    // Hover effect for close button
+    closeButton.OnMouseEnter(() => {
+        closeButton.style.backgroundColor = "#e74c3c";
+    });
+
+    closeButton.OnMouseLeave(() => {
+        closeButton.style.backgroundColor = "transparent";
+    });
+
+    closeButton.OnClick(() => {
+        DestroySelf();
+    });
+
+    titleBar.appendChild(title);
+    titleBar.appendChild(closeButton);
+    container.appendChild(titleBar);
+
+    // Content area
+    const contentArea = doc.createElement();
+    contentArea.style.display = "flex";
+    contentArea.style.flexDirection = "column";
+    contentArea.style.flex = "1";
+    contentArea.style.padding = "15px";
+    contentArea.style.gap = "20px";
+    contentArea.style.overflow = "auto";
 
     // Get space state
     const spaceState = SM.scene?.spaceState || { public: {}, protected: {} };
 
     // Public Properties Section
-    renderPropertiesSection("Public", spaceState.public, "#4a9eff");
+    renderPropertiesSection("Public", spaceState.public, "#4a9eff", contentArea);
 
     // Protected Properties Section
-    renderPropertiesSection("Protected", spaceState.protected, "#ff9a4a");
+    renderPropertiesSection("Protected", spaceState.protected, "#ff9a4a", contentArea);
 
-    // Update info
+    // Update info at bottom
     const updateInfo = doc.createElement();
     updateInfo.text = "Updates on space state changes";
     updateInfo.style.fontSize = "10px";
     updateInfo.style.color = "#666666";
     updateInfo.style.marginTop = "10px";
-    container.appendChild(updateInfo);
+    contentArea.appendChild(updateInfo);
+
+    container.appendChild(contentArea);
 };
 
 let renderPropertiesSection = (type, props, color) => {
@@ -293,3 +342,8 @@ this.onDestroy = async () => {
         await RemoveEntity(PaneEntity.id);
     }
 };
+
+let DestroySelf = async ()=>{
+    log("SPACE PROPS UI", "Destroying Space Properties UI");
+    await RemoveEntity(this._entity.id);
+}

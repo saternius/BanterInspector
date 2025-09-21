@@ -803,6 +803,8 @@ export class InventoryUI {
                 window.open(url, '_blank');
             });
         }
+
+
         
         // Script startup toggle
         const startupToggle = this.previewPane.querySelector('.script-startup-toggle');
@@ -813,7 +815,56 @@ export class InventoryUI {
                     item.startup = startupToggle.checked;
                     this.inventory.syncItem(itemName, item);
                     showNotification(`Updated startup setting for "${itemName}"`);
+                    // Re-render preview to show/hide startup sequence dropdown
+                    this.showPreview(itemName);
                 }
+            });
+        }
+
+        // Startup sequence dropdown
+        const startupSequenceSelect = this.previewPane.querySelector('.script-startup-sequence');
+        if (startupSequenceSelect) {
+            startupSequenceSelect.addEventListener('change', () => {
+                const item = this.inventory.items[itemName];
+                if (!item) return;
+
+                const value = startupSequenceSelect.value;
+                const afterInput = this.previewPane.querySelector('.script-after-input');
+
+                if (value === 'after') {
+                    // Show the input field
+                    if (afterInput) {
+                        afterInput.style.display = 'inline-block';
+                        const scriptName = afterInput.value || 'ScriptName';
+                        item.startupSequence = `after:${scriptName}`;
+                    }
+                } else {
+                    // Hide the input field and set the simple value
+                    if (afterInput) {
+                        afterInput.style.display = 'none';
+                    }
+                    item.startupSequence = value;
+                }
+
+                this.inventory.syncItem(itemName, item);
+                showNotification(`Updated startup sequence for "${itemName}"`);
+            });
+        }
+
+        // After script input field
+        const afterInput = this.previewPane.querySelector('.script-after-input');
+        if (afterInput) {
+            afterInput.addEventListener('input', () => {
+                const item = this.inventory.items[itemName];
+                if (!item) return;
+
+                const scriptName = afterInput.value || 'ScriptName';
+                item.startupSequence = `after:${scriptName}`;
+                this.inventory.syncItem(itemName, item);
+            });
+
+            afterInput.addEventListener('blur', () => {
+                showNotification(`Updated startup sequence for "${itemName}"`);
             });
         }
         
@@ -826,6 +877,19 @@ export class InventoryUI {
                     item.active = activeToggle.checked;
                     this.inventory.syncItem(itemName, item);
                     showNotification(`Updated active setting for "${itemName}"`);
+                }
+            });
+        }
+
+        // Script global toggle
+        const globalToggle = this.previewPane.querySelector('.script-global-toggle');
+        if (globalToggle) {
+            globalToggle.addEventListener('change', () => {
+                const item = this.inventory.items[itemName];
+                if(item){
+                    item.global = globalToggle.checked;
+                    this.inventory.syncItem(itemName, item);
+                    showNotification(`Updated global setting for "${itemName}"`);
                 }
             });
         }
@@ -1400,18 +1464,47 @@ export class InventoryUI {
                     <div class="meta-label">Script Options:</div>
                     <div style="display: flex; gap: 20px; padding: 10px;">
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" class="script-startup-toggle" data-item-name="${item.name}" 
-                                ${item.startup ? 'checked' : ''} style="cursor: pointer;">
-                            <span>Startup Script</span>
+                            <input type="checkbox" class="script-global-toggle" data-item-name="${item.name}"
+                                ${item.global ? 'checked' : ''} style="cursor: pointer;">
+                            <span>Global</span>
                         </label>
                         <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                            <input type="checkbox" class="script-active-toggle" data-item-name="${item.name}" 
+                            <input type="checkbox" class="script-startup-toggle" data-item-name="${item.name}"
+                                ${item.startup ? 'checked' : ''} style="cursor: pointer;">
+                            <span>Startup</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" class="script-active-toggle" data-item-name="${item.name}"
                                 ${item.active ? 'checked' : ''} style="cursor: pointer;">
-                            <span>Always Active</span>
+                            <span>Active</span>
                         </label>
                     </div>
+                    ${item.startup ? `
+                        <div style="padding: 10px; border-top: 1px solid #333;">
+                            <label style="display: flex; align-items: center; gap: 8px;">
+                                <span>Startup Sequence:</span>
+                                <select class="script-startup-sequence" data-item-name="${itemName}" style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px;">
+                                    <option value="onInspectorLoaded" ${(!item.startupSequence || item.startupSequence === 'onInspectorLoaded') ? 'selected' : ''}>onInspectorLoaded</option>
+                                    <option value="onSceneLoaded" ${item.startupSequence === 'onSceneLoaded' ? 'selected' : ''}>onSceneLoaded</option>
+                                    <option value="after" ${item.startupSequence && item.startupSequence.startsWith('after:') ? 'selected' : ''}>after</option>
+                                </select>
+                                ${item.startupSequence && item.startupSequence.startsWith('after:') ? `
+                                    <input type="text" class="script-after-input" data-item-name="${itemName}"
+                                        value="${item.startupSequence.split(':')[1]}"
+                                        placeholder="ScriptName"
+                                        style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; margin-left: 8px;">
+                                ` : `
+                                    <input type="text" class="script-after-input" data-item-name="${itemName}"
+                                        value="ScriptName"
+                                        placeholder="ScriptName"
+                                        style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px; margin-left: 8px; display: none;">
+                                `}
+                            </label>
+                        </div>
+                    ` : ''}
                     <div style="padding: 5px 10px; font-size: 0.9em; color: #888;">
-                        <em>Note: Both must be enabled for script to run on startup</em>
+                        <em>Note: Both startup and active must be enabled for script to run on startup</em>
+                        <em>Note: Global requires all other players to have the script in their inventory to run</em>
                     </div>
                 </div>
                 <div class="preview-meta">
