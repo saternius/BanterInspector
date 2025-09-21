@@ -1,6 +1,7 @@
 class WindowUI {
-    constructor(ctx){
+    constructor(ctx, windowName){
         this.ctx = ctx;
+        this.windowName = windowName;
         this.held = false;
         this.lastParent = "Scene";
         this.user = SM.myName();
@@ -8,8 +9,6 @@ class WindowUI {
         this.contentArea = null;
         this.PaneEntity = null;
         this.doc = null;
-
-        
 
         this.ctx.onStart = async ()=>{
             let {startingPosition, startingRotation} = await this.getStartingSpot();
@@ -25,7 +24,7 @@ class WindowUI {
         }
 
         this.ctx.onDestroy = async()=>{
-            log("BLANK UI", "onDestroy")
+            log(`${this.windowName} UI`, "onDestroy")
             if(this.PaneEntity){
                 await RemoveEntity(this.PaneEntity.id)
             }
@@ -36,7 +35,7 @@ class WindowUI {
         if(this.container){
             this.container.Destroy();
         }
-        log("BLANK UI", "generating UI")
+        log(`${this.windowName} UI`, "generating UI")
         this.container = this.doc.CreateVisualElement();
         this.container.style.display = "flex";
         this.container.style.flexDirection = "column";
@@ -57,7 +56,7 @@ class WindowUI {
         
     
         const title = this.doc.CreateLabel();
-        title.text = "Blank UI";
+        title.text = this.windowName;
         title.style.color = "#ffffff";
         title.style.fontSize = "14px";
         title.style.fontWeight = "bold";
@@ -141,11 +140,11 @@ class WindowUI {
     }
 
     async DestroySelf(){
-        log("BLANK UI", "Destroying Blank UI");
+        log(`${this.windowName} UI`, "Destroying Blank UI");
         await RemoveEntity(this.ctx._entity.id);
     }
 }
 
-this.UI = new WindowUI(this);
+this.UI = new WindowUI(this, "Blank");
 
 

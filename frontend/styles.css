@@ -1549,6 +1549,58 @@ input:hover{
     justify-content: space-between;
 }
 
+.panel-collapse-btn {
+    background: none;
+    border: none;
+    color: #b8b8b8;
+    cursor: pointer;
+    padding: 0 8px 0 0;
+    font-size: 12px;
+    transition: transform 0.3s ease, color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.panel-collapse-btn:hover {
+    color: #e8e8e8;
+}
+
+.panel-collapse-btn.collapsed {
+    transform: rotate(-90deg);
+}
+
+.space-props-content.collapsed .properties-content,
+.lifecycle-panel.collapsed .lifecycle-content {
+    display: none;
+}
+
+.space-props-content.collapsed,
+.lifecycle-panel.collapsed {
+    flex: 0 0 auto;
+    min-height: auto;
+}
+
+/* When space props is collapsed, lifecycle takes full height */
+.space-props-panel-container:has(.space-props-content.collapsed) .lifecycle-panel:not(.collapsed) {
+    flex: 1 1 100%;
+}
+
+/* When lifecycle is collapsed, space props takes full height */
+.space-props-panel-container:has(.lifecycle-panel.collapsed) .space-props-content:not(.collapsed) {
+    flex: 1 1 100%;
+}
+
+/* When lifecycle is collapsed, space props sections can expand more */
+.space-props-panel-container:has(.lifecycle-panel.collapsed) .space-props-section {
+    flex: 1 1 50%;
+    max-height: none;
+}
+
+/* When space props is collapsed and lifecycle is expanded, give lifecycle more room */
+.space-props-panel-container:has(.space-props-content.collapsed) .lifecycle-content {
+    max-height: calc(100vh - 200px);
+}
+
 
 
 /* Hierarchy Panel */
@@ -1813,6 +1865,13 @@ input:hover{
     flex-direction: column;
 }
 
+/* Space Props Content */
+.space-props-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 /* Lifecycle Panel (Bottom Half) */
 .lifecycle-panel {
     flex: 1;
@@ -2015,6 +2074,9 @@ input:hover{
     overflow-y: auto;
     overflow-x: hidden;
     padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 /* Component Styles */
@@ -2774,9 +2836,11 @@ input:hover{
     background: #1f1f1f;
     border: 1px solid #2a2a2a;
     border-radius: 6px;
-    margin-bottom: 12px;
     overflow: hidden;
-    max-height: 140px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
 }
 
 .space-props-header {
@@ -2807,8 +2871,9 @@ input:hover{
 }
 
 .props-list {
-    max-height: min(300px, 8vh);
+    flex: 1;
     overflow-y: auto;
+    min-height: 60px;
 }
 
 .empty-props {

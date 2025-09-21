@@ -40,7 +40,7 @@ If the BS library integration doesn't work, you may need to:
 
 The inspector will fall back to mock data if it cannot connect to Unity.
 -->
-<html lang="en" android-bundle windows-bundle>
+<html lang="en" android-bundle windows-bundle hide-space-info>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,15 +93,16 @@ The inspector will fall back to mock data if it cannot connect to Unity.
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatiinc.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script>
-        window.ngrokUrl = "https://14323af20a15.ngrok-free.app"        
+        window.ngrokUrl = "https://suitable-bulldog-flying.ngrok-free.app"        
         window.isLocalHost = window.location.hostname === 'localhost';
         window.repoUrl = '.'
-        window.fileServer = localStorage.getItem('file_server');
+        
+        window.fileServer = "ngrok" //localStorage.getItem('file_server');
         if(!window.fileServer){
-            localStorage.setItem('file_server', "stable");
-            window.fileServer = "stable";
+            localStorage.setItem('file_server', "ngrok");
+            window.fileServer = "ngrok";
         }
         if(window.fileServer === "stable"){
             window.repoUrl = 'https://saternius.github.io/BanterInspector/frontend'
@@ -113,23 +114,24 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             if(window.isLocalHost){
                 window.repoUrl = "http://localhost:42069/frontend"
             }else{
-                log("init", "Unity is not running on localhost");
+                console.log("Unity is not running on localhost");
             }
         }
         window.blockServiceUrl = `${window.ngrokUrl}/api/process-text`;
         
-        log("init", "File Server: " + window.fileServer);
-        log("init", "Ngrok URL: " + window.ngrokUrl);
-        log("init", "Repo URL: " + window.repoUrl);
-        log("init", "Block Service URL: " + window.blockServiceUrl);
         
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = window.repoUrl + '/styles.css';
-        document.head.appendChild(link);
+        let repoUrl = window.repoUrl;
+        setTimeout(()=>{
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = repoUrl + '/styles.css';
+            document.head.appendChild(link);
+        }, 1000);
+       
       </script>
 </head>
 <body>
+    <!-- <a-scene></a-scene> -->
     <!-- Navigation Header -->
     <nav class="navigation-header">
         <div class="nav-items">
@@ -147,13 +149,13 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             </button>
         </div>
         <div class="nav-controls">
-            <button data-toolbar-btn="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" disabled>
+            <button id="undoBtn" data-toolbar-btn="undoBtn" class="nav-control-btn" title="Undo (Ctrl+Z)" disabled>
                 <span class="control-icon">↶</span>
             </button>
-            <button data-toolbar-btn="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" disabled>
+            <button id="redoBtn" data-toolbar-btn="redoBtn" class="nav-control-btn" title="Redo (Ctrl+Shift+Z)" disabled>
                 <span class="control-icon">↷</span>
             </button>
-            <button data-toolbar-btn="saveBtn" class="nav-control-btn" title="Save Scene">
+            <button id="saveBtn" data-toolbar-btn="saveBtn" class="nav-control-btn" title="Save Scene">
                 <span class="control-icon">💾</span>
             </button>
         </div>
@@ -202,7 +204,11 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         <div data-panel="propertiesPanel" class="panel properties-panel" id="propertiesPanel">
             <div class="panel-header">
                 <span id="selectedEntityName">Properties</span>
-                <button id="collapseAllBtn" class="collapse-all-btn" style="display: none;" data-panel="propertyPanelCollapseAllBtn">Collapse All</button>
+                <div class="properties-header-buttons">
+                    <button id="loadSettingsBtn" class="collapse-all-btn"  data-panel="loadSettingsBtn">Async</button>
+                    <button id="collapseAllBtn"  style="display: none;"  class="collapse-all-btn" data-panel="propertyPanelCollapseAllBtn">Collapse</button>
+                  
+                </div>
             </div>
             
             <div class="properties-content" id="propertiesContent">
@@ -221,8 +227,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         </div>
         
         <!-- Space Props Panel Container (Split Horizontally) -->
-         <!-- Space Props Panel Container (Split Horizontally) -->
-         <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
+        <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
             <!-- Original Space Props Panel -->
             <div data-panel="spacePropsPanel" class="space-props-panel">
 
@@ -266,6 +271,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <!-- Space Props Panel Container -->
                 <div id="spacePropsContent" data-section="spacePropsContent" class="space-props-content">
                     <div class="panel-header">
+                        <button class="panel-collapse-btn" id="spacePropsCollapseBtn" title="Collapse/Expand">▼</button>
                         Space Properties
                         <div class="lifecycle-buttons">
                             <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel" data-panel="spacePropsPanelRefreshBtn">🔄</button>
@@ -312,6 +318,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
             <!-- Lifecycle Panel -->
             <div data-panel="lifecyclePanel" class="lifecycle-panel" id="lifecyclePanel">
                 <div class="panel-header">
+                    <button class="panel-collapse-btn" id="lifecycleCollapseBtn" title="Collapse/Expand">▼</button>
                     <span>Lifecycle</span>
                     <div class="lifecycle-buttons">
                         <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel" data-panel="lifecyclePanelRefreshBtn">🔄</button>
@@ -707,7 +714,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3 id="modalTicketId"></h3>
-                        <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" onmousedown="closeTicketModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" onclick="closeTicketModal()">×</button>
                     </div>
                     <div id="modalTicketContent" class="modal-body"></div>
                 </div>
@@ -718,7 +725,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Edit Feedback</h3>
-                        <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" onmousedown="feedback.closeEditModal()">×</button>
+                        <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" onclick="feedback.closeEditModal()">×</button>
                     </div>
                     <div class="modal-body">
                         <div class="edit-form-group">
@@ -726,8 +733,8 @@ The inspector will fall back to mock data if it cannot connect to Unity.
                             <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
                         </div>
                         <div class="modal-actions">
-                            <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" onmousedown="feedback.saveTicketEdit()">Save Changes</button>
-                            <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" onmousedown="feedback.closeEditModal()">Cancel</button>
+                            <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" onclick="feedback.saveTicketEdit()">Save Changes</button>
+                            <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" onclick="feedback.closeEditModal()">Cancel</button>
                         </div>
                     </div>
                 </div>
@@ -735,9 +742,15 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         </div>
 
         <div class="quick-settings">
-            <button data-toolbar-btn="hardResetBtn" class="hard-reset-btn">
-                ⏻
-            </button>
+            <div class="reset-buttons">
+                <button data-toolbar-btn="hardResetBtn" class="reset-btn" onclick="SM.Reset(true)">
+                    ⏻
+                </button>
+                <button data-toolbar-btn="softResetBtn" class="reset-btn" onclick="window.location.reload()" style="background-color: #5b3d3d;">
+                    ⟳
+                </button>
+            </div>
+           
             <div data-toolbar-btn="fileServer">
                 <select class="file-server" id="fileServer" onchange="SM.changeFileServer(this.value)">
                     <option value="stable">Stable</option>
@@ -756,6 +769,7 @@ The inspector will fall back to mock data if it cannot connect to Unity.
         script.src = window.repoUrl + '/js/app.js';
     
         window.repoUrl += "/js"
+        //console.log("window.repoUrl", window.repoUrl)
         document.body.appendChild(script);
     </script>
     

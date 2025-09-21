@@ -12,7 +12,39 @@
         constructor() {
             this.editingProps = new Map();
             this.setupEventListeners();
+            this.setupCollapsible();
             this.render();
+        }
+
+        /**
+         * Setup collapsible functionality
+         */
+        setupCollapsible() {
+            const collapseBtn = document.getElementById('spacePropsCollapseBtn');
+            const panel = document.getElementById('spacePropsContent');
+
+            if (collapseBtn && panel) {
+                // Load saved state from localStorage
+                const isCollapsed = localStorage.getItem('spacePropsCollapsed') === 'true';
+                if (isCollapsed) {
+                    panel.classList.add('collapsed');
+                    collapseBtn.classList.add('collapsed');
+                }
+
+                // Add click handler
+                collapseBtn.addEventListener('click', () => {
+                    const isCurrentlyCollapsed = panel.classList.contains('collapsed');
+                    if (isCurrentlyCollapsed) {
+                        panel.classList.remove('collapsed');
+                        collapseBtn.classList.remove('collapsed');
+                        localStorage.setItem('spacePropsCollapsed', 'false');
+                    } else {
+                        panel.classList.add('collapsed');
+                        collapseBtn.classList.add('collapsed');
+                        localStorage.setItem('spacePropsCollapsed', 'true');
+                    }
+                });
+            }
         }
 
         /**
