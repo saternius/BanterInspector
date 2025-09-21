@@ -1578,7 +1578,9 @@ this.keyUp = (key)=>{
             description: '',  // Initialize with empty description
             data: defaultContent,
             startup: false,  // Script runs on scene startup (only for scripts)
-            active: false    // Script is active even without being attached to GameObject (only for scripts)
+            startupSequence: "onSceneLoaded",
+            active: false,    // Script is active even without being attached to GameObject (only for scripts)
+            global: false    // Script is global (only for scripts)
         };
         
         // Only add folder property if we're in a folder

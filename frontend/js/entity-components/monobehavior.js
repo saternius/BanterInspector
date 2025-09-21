@@ -1,11 +1,11 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
+const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`); 
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 export class MonoBehaviorComponent extends EntityComponent {
     constructor(){
         super();
         this._bsRef = null;
-        
+        this.inventoryItem = null;
     }
 
     async init(entity, sceneComponent, properties){
@@ -57,12 +57,22 @@ export class MonoBehaviorComponent extends EntityComponent {
         }
     }
 
+    hasOwnership(){
+        if(!this.inventoryItem) return false;
+        if(this.inventoryItem.global) return true;
+        return this.properties._owner === SM.myName()
+    }
+
     async _loadScript(fileName) {        
-        if(this.properties._owner !== SM.myName()) return;
         if(!this._entity.active) return;
-        const inventoryItem = window.inventory?.items?.[fileName];
-        if (!inventoryItem || inventoryItem.itemType !== 'script') {
-            err("mono", `Script "${fileName}" not found in inventory`);
+        this.inventoryItem = window.inventory?.items?.[fileName];
+        if (!this.inventoryItem || this.inventoryItem.itemType !== 'script') {
+            log("mono", `Script "${fileName}" not found in inventory`);
+            return;
+        }
+
+        if(!this.hasOwnership()){
+            log("mono", `Script "${fileName}" is not owned by ${SM.myName()}`);
             return;
         }
 
@@ -73,7 +83,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
         this.ctx = this.newScriptContext();
         this._scriptFunction = new Function(`
-            ${inventoryItem.data}
+            ${this.inventoryItem.data}
         `);
         
         // Extract vars definition if present
@@ -123,7 +133,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _start(){
-        if(this.properties._owner !== SM.myName()) return;
+        if(!this.hasOwnership()) return;
         if(this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = true;
@@ -135,7 +145,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _stop(){
-        if(this.properties._owner !== SM.myName()) return;
+        if(!this.hasOwnership()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = false;
@@ -147,7 +157,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _update(){
-        if(this.properties._owner !== SM.myName()) return;
+        if(!this.hasOwnership()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         await this.ctx.onUpdate();
@@ -155,7 +165,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _refresh(){
-        if(this.properties._owner !== SM.myName()) return;
+        if(!this.hasOwnership()) return;
         if(!this._entity.active) return;
         log("mono", "refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){

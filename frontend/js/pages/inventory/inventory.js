@@ -406,7 +406,9 @@ export class Inventory {
             description: '',
             data: content,
             startup: false,  // Script runs on scene startup (only relevant for scripts)
-            active: false    // Script is active even without being attached to GameObject (only relevant for scripts)
+            startupSequence: "onSceneLoaded",
+            active: false,    // Script is active even without being attached to GameObject (only relevant for scripts)
+            global: false    // Script is global (only relevant for scripts)
         };
         
         // Only add folder property if we're in a folder
@@ -895,14 +897,14 @@ export class Inventory {
             items: {},
             folders: {}
         };
-        
+
         // Get all items in this folder
         Object.entries(this.items).forEach(([key, item]) => {
             if (item.folder === folderName) {
                 contents.items[key] = item;
             }
         });
-        
+
         // Get all subfolders and their contents
         Object.entries(this.folders).forEach(([key, folder]) => {
             if (folder.parent === folderName) {
@@ -913,7 +915,64 @@ export class Inventory {
                 Object.assign(contents.folders, subContents.folders);
             }
         });
-        
+
         return contents;
+    }
+
+    /**
+     * Update all existing scripts to include new schema parameters
+     */
+    updateScriptSchema() {
+        let updatedCount = 0;
+
+        // Iterate through all items
+        Object.entries(this.items).forEach(([itemKey, item]) => {
+            // Only process script items
+            if (item.itemType === 'script') {
+                let needsUpdate = false;
+
+                // Add global parameter if missing
+                if (item.global === undefined) {
+                    item.global = false;
+                    needsUpdate = true;
+                }
+
+                // Add global parameter if missing
+                if (item.startup === undefined) {
+                    item.startup = false;
+                    needsUpdate = true;
+                }
+
+                // Add global parameter if missing
+                if (item.active === undefined) {
+                    item.active = false;
+                    needsUpdate = true;
+                }
+
+                // Add startupSequence parameter if missing
+                if (item.startupSequence === undefined) {
+                    item.startupSequence = "onSceneLoaded";
+                    needsUpdate = true;
+                }
+
+                // Save updated item if changes were made
+                if (needsUpdate) {
+                    const storageKey = `inventory_${itemKey}`;
+                    localStorage.setItem(storageKey, JSON.stringify(item));
+                    updatedCount++;
+                }
+            }
+        });
+
+        // Reload items from localStorage to ensure consistency
+        if (updatedCount > 0) {
+            this.items = this.loadItems();
+            this.ui.render();
+            showNotification(`Updated ${updatedCount} script${updatedCount > 1 ? 's' : ''} with new schema parameters`);
+        } else {
+            showNotification('All scripts are already up to date');
+        }
+
+        return updatedCount;
     }
 }

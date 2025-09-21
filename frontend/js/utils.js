@@ -113,7 +113,7 @@ export function quaternionToEuler(q) {
         z: roll * 180 / Math.PI
     };
 }
-
+window.quaternionToEuler = quaternionToEuler;
 /**
  * Convert Euler angles (in degrees) to Quaternion
  */
@@ -138,7 +138,7 @@ export function eulerToQuaternion(euler) {
         z: cr * cp * sy - sr * sp * cy
     };
 }
-
+window.eulerToQuaternion = eulerToQuaternion;
 /**
  * Check if value is a Color object (RGBA)
  */
@@ -772,8 +772,61 @@ window.TransformOps = {
     }
 }
 
-let u_pos = headTransform._bs._localPosition
-let u_forward = headTransform._bs.forward
-let u_rotation = headTransform._bs._rotation
-undoTransform.Set("localPosition", TransformOps.Add(u_pos, u_forward))
-undoTransform.Set("localRotation", u_rotation)
+
+
+function qNormalize(q) {
+    const n = Math.hypot(q.x, q.y, q.z, q.w) || 1;
+    return { x: q.x / n, y: q.y / n, z: q.z / n, w: q.w / n };
+}
+function qConjugate(q) {
+    return { x: -q.x, y: -q.y, z: -q.z, w: q.w };
+}
+function qMul(a, b) {
+    return {
+        w: a.w*b.w - a.x*b.x - a.y*b.y - a.z*b.z,
+        x: a.w*b.x + a.x*b.w + a.y*b.z - a.z*b.y,
+        y: a.w*b.y - a.x*b.z + a.y*b.w + a.z*b.x,
+        z: a.w*b.z + a.x*b.y - a.y*b.x + a.z*b.w,
+    };
+}
+
+function normalizeVec3(v){
+    const n = Math.hypot(v.x, v.y, v.z) || 1;
+    return { x: v.x/n, y: v.y/n, z: v.z/n };
+}
+
+function qTwistAroundAxis(qIn, axis) {
+    const q = qNormalize(qIn);
+    const a = normalizeVec3(axis);
+    // project vector part of q onto axis
+    const dot = q.x*a.x + q.y*a.y + q.z*a.z;
+    const vProj = { x: a.x*dot, y: a.y*dot, z: a.z*dot };
+    const twist = qNormalize({ x: vProj.x, y: vProj.y, z: vProj.z, w: q.w });
+    // If twist became degenerate (can happen for 180° with opposite sign), fix sign
+    // so it represents the shortest-arc rotation about axis:
+    if (twist.w < 0) {
+      return { x: -twist.x, y: -twist.y, z: -twist.z, w: -twist.w };
+    }
+    return twist;
+}
+
+function qLockAxis(qIn, axis) {
+    const twist = qTwistAroundAxis(qIn, axis);
+    return qNormalize(qMul(qIn, qConjugate(twist)));
+}
+
+function qKeepOnlyAxis(qIn, axis) {
+    return qTwistAroundAxis(qIn, axis);
+}
+
+const X_AXIS = { x: 1, y: 0, z: 0 };
+const Y_AXIS = { x: 0, y: 1, z: 0 };
+const Z_AXIS = { x: 0, y: 0, z: 1 };
+
+window.lockQuaternionAxes = (q, lockX = false, lockY = false, lockZ = false) =>{
+    q = qNormalize(q);
+    if (lockX) q = qLockAxis(q, X_AXIS);
+    if (lockY) q = qLockAxis(q, Y_AXIS);
+    if (lockZ) q = qLockAxis(q, Z_AXIS);
+    return qNormalize(q);
+}

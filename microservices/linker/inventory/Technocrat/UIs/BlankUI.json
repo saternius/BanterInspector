@@ -1,0 +1,150 @@
+{
+  "author": "Technocrat",
+  "created": 1758477842744,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 2.3453648,
+            "y": 1.3443090199999999,
+            "z": 0.6859100250000001
+          },
+          "localRotation": {
+            "w": 0.9835216782839067,
+            "x": 0.002266396317113861,
+            "y": -0.18077602660015912,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1758477548068,
+          "data": "\nlet held = false;\nlet lastParent = \"Scene\";\nlet user = SM.myName();\n\nlet grabHandler = (e)=>{\n    console.log(\"grabHandler\", e.detail)\n    if(held){\n        this._entity.SetParent(lastParent)\n    }else{\n        console.log(\"click\", e.detail)\n        let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n        let tippyHolder = SM.getEntityById(tippyHolderPath)\n        console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n        if(!tippyHolder){\n            showNotification(\"Error: RIGHT_HAND Holder not found\")\n            return;\n        }\n        tippyHolder.getTransform().Set(\"position\", e.detail.point)\n        lastParent = this._entity.parentId;\n        this._entity.SetParent(tippyHolderPath)\n    }\n    held = !held;\n}\n\n\nlet fetchTracker = async (name)=>{\n    try{\n        let tracker = await GetTracker(name);\n        return tracker;\n    }catch(e){\n        await new Promise(resolve => setTimeout(resolve, 500));\n        return await fetchTracker(name);\n    }\n}\n\nlet getStartingSpot = async ()=>{\n    let headTracker = await fetchTracker(\"HEAD\");\n    let headTransform = headTracker.getTransform();\n    let headPosition = headTransform._bs._localPosition;\n    let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);\n    let startingPosition = TransformOps.Add(headPosition, headForward);\n    startingPosition.y -= 0.5;\n    let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);\n    return {startingPosition, startingRotation};\n}\n\n\nlet container = null;\nlet contentArea = null;\nlet generateUI = ()=>{\n    if(container){\n        container.Destroy();\n    }\n    log(\"BLANK UI\", \"generating UI\")\n    container = doc.CreateVisualElement();\n    container.style.display = \"flex\";\n    container.style.flexDirection = \"column\";\n    container.style.width = \"100%\";\n    container.style.height = \"100%\";\n\n    // Create Windows-style header\n    const header = doc.CreateVisualElement();\n    header.style.display = \"flex\";\n    header.style.flexDirection = \"row\";\n    header.style.justifyContent = \"space-between\";\n    header.style.alignItems = \"center\";\n    header.style.backgroundColor = \"grey\";\n    header.style.padding = \"8px\";\n    header.style.borderBottom = \"1px solid #333\";\n\n    header.OnClick(grabHandler)\n    \n\n    const title = doc.CreateLabel();\n    title.text = \"Undo/Redo Stack\";\n    title.style.color = \"#ffffff\";\n    title.style.fontSize = \"14px\";\n    title.style.fontWeight = \"bold\";\n\n    const closeButton = doc.CreateButton();\n    closeButton.text = \"✕\";\n    closeButton.style.backgroundColor = \"transparent\";\n    closeButton.style.color = \"#ffffff\";\n    closeButton.style.border = \"none\";\n    closeButton.style.fontSize = \"16px\";\n    closeButton.style.padding = \"4px 8px\";\n    closeButton.style.cursor = \"pointer\";\n    closeButton.OnClick(() => {\n        DestroySelf();\n    });\n    closeButton.OnMouseEnter(() => {\n        closeButton.style.backgroundColor = \"#e81123\";\n    });\n    closeButton.OnMouseLeave(() => {\n        closeButton.style.backgroundColor = \"transparent\";\n    });\n\n    header.AppendChild(title);\n    header.AppendChild(closeButton);\n    container.AppendChild(header);\n\n    // Create content area for undo/redo items\n    contentArea = doc.CreateVisualElement();\n    contentArea.style.flex = \"1\";\n    contentArea.style.overflowY = \"auto\";\n    contentArea.style.padding = \"8px\";\n    contentArea.style.backgroundColor = \"rgba(31,46,61,1)\";\n    container.AppendChild(contentArea);\n}\n\n\n\nlet PaneEntity = null;\nlet changeListener = null;\nlet doc = null;\n\nthis.onStart = async ()=>{\n    // let {startingPosition, startingRotation} = await getStartingSpot();\n    // let transform = this._entity.getTransform();    \n    // transform.Set(\"localPosition\", {x: 0, y: 0, z: 0});\n    // PaneEntity = await AddEntity(this._entity.id, \"UI\")\n    // doc = await PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));\n    // transform.Set(\"localPosition\", startingPosition);\n    // transform.Set(\"localRotation\", startingRotation);\n    // generateUI();\n}\n\nthis.onDestroy = async()=>{\n    log(\"BLANK UI\", \"onDestroy\")\n    if(PaneEntity){\n        await RemoveEntity(PaneEntity.id)\n    }\n}\n\n\nlet DestroySelf = async ()=>{\n    log(\"BLANK UI\", \"Destroying Blank UI\");\n    await RemoveEntity(this._entity.id);\n}",
+          "description": "",
+          "folder": "UIs",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1758477548068,
+          "last_used": 1758477791995,
+          "name": "BlankUI.js",
+          "startup": false
+        },
+        "loadAsync": false,
+        "properties": {
+          "file": "BlankUI.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "BlankUI",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "UIs",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_96677",
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": -1.67,
+                "y": 3.345,
+                "z": -2.47
+              },
+              "localRotation": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "MonoBehavior_46746",
+            "loadAsync": false,
+            "properties": {
+              "file": "UndoStack.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/UndoStack_36155",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "UndoStack_36155",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "UndoStack",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_46746",
+      "newValue": "BlankUI.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/UndoStack_36155",
+      "folder": "UIs",
+      "itemName": "UndoStack_36155",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/UndoStack_36155",
+      "newValue": "BlankUI",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1758477842744,
+  "name": "BlankUI"
+}

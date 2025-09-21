@@ -11,7 +11,9 @@
         "Technocrat/Transform",
         "Technocrat/Scripts",
         "Technocrat/UIs",
-        "Technocrat/Misc"
+        "Technocrat/Misc",
+        "Technocrat/BoxSpawner",
+        "Technocrat/CountingButton"
     ],
     "secret":"oj5kkjg6e7d",
     "username":"Technocrat",

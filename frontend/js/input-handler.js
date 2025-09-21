@@ -25,10 +25,10 @@ export class InputHandler{
             this.getRightControllerRot = ()=>{
                 //console.log("todo: set with tippy")
                 let user = SM.myName()
-                let tippyPath = "People/"+user+"/Tippy_"+user;
-                let tippy = SM.getEntityById(tippyPath)
-                if(!tippy){
-                    showNotification("Error: Tippy not found")
+                let rightHandPath = `People/${user}/Trackers/RIGHT_HAND`
+                let rightHand = SM.getEntityById(rightHandPath)
+                if(!rightHand){
+                    showNotification("Error: RIGHT_HAND Tracker not found")
                     return {
                         x: 0,
                         y: 0,
@@ -36,7 +36,7 @@ export class InputHandler{
                     }
                 }
 
-                let pos = tippy.getTransform()._bs._localRotation;
+                let pos = rightHand.getTransform()._bs._localRotation;
 
                 return {
                     x: pos.x,
