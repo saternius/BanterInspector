@@ -882,7 +882,8 @@
                 const startupScripts = Object.values(window.inventory.items).filter(item => 
                     item.itemType === 'script' && 
                     item.startup === true && 
-                    item.active === true
+                    item.active === true &&
+                    item.startupSequence === stage
                 );
                 
                 if (startupScripts.length === 0) {

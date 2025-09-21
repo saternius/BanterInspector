@@ -13,7 +13,39 @@
             this.consoleBuffer = [];
             this.maxConsoleLines = 1000;
             this.setupEventListeners();
+            this.setupCollapsible();
             this.render();
+        }
+
+        /**
+         * Setup collapsible functionality
+         */
+        setupCollapsible() {
+            const collapseBtn = document.getElementById('lifecycleCollapseBtn');
+            const panel = document.getElementById('lifecyclePanel');
+
+            if (collapseBtn && panel) {
+                // Load saved state from localStorage
+                const isCollapsed = localStorage.getItem('lifecyclePanelCollapsed') === 'true';
+                if (isCollapsed) {
+                    panel.classList.add('collapsed');
+                    collapseBtn.classList.add('collapsed');
+                }
+
+                // Add click handler
+                collapseBtn.addEventListener('click', () => {
+                    const isCurrentlyCollapsed = panel.classList.contains('collapsed');
+                    if (isCurrentlyCollapsed) {
+                        panel.classList.remove('collapsed');
+                        collapseBtn.classList.remove('collapsed');
+                        localStorage.setItem('lifecyclePanelCollapsed', 'false');
+                    } else {
+                        panel.classList.add('collapsed');
+                        collapseBtn.classList.add('collapsed');
+                        localStorage.setItem('lifecyclePanelCollapsed', 'true');
+                    }
+                });
+            }
         }
 
         /**
