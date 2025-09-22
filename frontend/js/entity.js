@@ -75,6 +75,14 @@ export class Entity{
         return true;
     }
 
+    _loaded(){
+        this._finished_loading = true;
+        let scripts = this.components.filter(c=>c.type === "MonoBehavior");
+        scripts.forEach(async script=>{
+            await script.ctx.onLoaded();
+        })
+    }
+
     async _checkForGhostComponents(id){
         let visible_components = this.components.map(x=>x._bs)
         Object.values(this._bs.components).forEach(async bs_comp => {
