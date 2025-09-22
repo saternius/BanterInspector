@@ -762,6 +762,7 @@
          * Render MonoBehavior component with special handling
          */
         renderMonoBehaviorComponent(component, index, totalComponents) {
+            log("properties panel", "rendering MonoBehavior component", component.id)
             const section = document.createElement('div');
             section.className = 'component-section';
             section.dataset.panel = 'propertyPanelComponent';
@@ -781,7 +782,7 @@
             const titleDiv = document.createElement('div');
             titleDiv.innerHTML = `
                 <span class="component-name">MonoBehavior</span>
-                <span class="component-type">${component.properties.name || 'Script'}</span>
+                <span class="component-type">${component.id}</span>
             `;
             
             const actionsDiv = document.createElement('div');

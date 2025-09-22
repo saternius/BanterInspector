@@ -393,7 +393,7 @@ export class Networking {
                 if(SM.selectedEntity === monobehavior._entity.id){
                     renderProps()
                 }
-                SM.props[`__${componentId}/${arg1}:component`] = arg2
+                SM.props[`__${componentId}/vars:component`] = monobehavior.ctx.vars
             }else if(op === "_running"){
                 if(monobehavior){
                     monobehavior.ctx._running = safeParse(arg1);

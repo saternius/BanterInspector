@@ -24,11 +24,20 @@ export class MonoBehaviorComponent extends EntityComponent {
             }
         }
         
-        setTimeout(()=>{
-            this.loadVarsFromSpaceState();
-        }, 10)
+        // setTimeout(()=>{
+        //     this.loadVarsFromSpaceState();
+        // }, 10)
         
         return this;
+    }
+
+    async _setMany(properties){
+        //ensures file is last prop set
+        for(let property in properties){
+            if(property === "file") continue;
+            await this._set(property, properties[property]);
+        }
+        await this._set("file", properties.file);
     }
 
     async _set(property, value){
@@ -52,7 +61,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         return {
             name: "myScript",
             file: null,
-            vars: {},
+            vars: SM.props[`__${this.id}/vars:component`] || {},
             _owner: SM.scene.spaceState.public.hostUser
         }
     }
@@ -91,11 +100,13 @@ export class MonoBehaviorComponent extends EntityComponent {
             // Initialize vars with defaults
             const varDefinitions = this.ctx.vars;
             const initializedVars = {};
-            
+            const historicalVars = SM.props[`__${this.id}/vars:component`] || {};
+            log("mono", "historicalVars", historicalVars)
+
             for (const [varName, varDef] of Object.entries(varDefinitions)) {
-                if (this.properties.vars[varName] !== undefined) {
+                if (historicalVars[varName] !== undefined) {
                     // Use existing value
-                    initializedVars[varName] = this.properties.vars[varName];
+                    initializedVars[varName] = historicalVars[varName];
                 } else if (varDef.default !== undefined) {
                     // Use default value
                     initializedVars[varName] = varDef.default;
@@ -129,7 +140,14 @@ export class MonoBehaviorComponent extends EntityComponent {
         this._scriptFunction.call(this.ctx);
         await lifecycle.registerMonoBehavior(this);  
         this._start();  
-        log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name}`);
+        log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name} with ctx.vars: `, this.ctx.vars);
+        let selEnt = SM.getEntityById(SM.selectedEntity);
+        if(selEnt){
+            let onPage = selEnt.components.filter(x=>(x.type==="MonoBehavior" && x.properties.file === fileName)).length > 0
+            if(onPage){
+                inspector.propertiesPanel.render(SM.selectedEntity);
+            }
+        }
     }
 
     async _start(){
@@ -205,7 +223,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     newScriptContext(){
         let newContext =  {
-            vars: {},
+            vars: SM.props[`__${this.id}/vars:component`] || {},
             _running: false, // Initialize _running to prevent undefined
             onStart: async ()=>{},
             onUpdate: async ()=>{},
@@ -236,10 +254,10 @@ export class MonoBehaviorComponent extends EntityComponent {
         // this.scriptContext.vars[varName] = value;
     }
 
-    loadVarsFromSpaceState(){
-        let key = "__" + this.id + "/vars:component";
-        this.ctx.vars = SM.props[key] || {};
-    }
+    // loadVarsFromSpaceState(){
+    //     let key = "__" + this.id + "/vars:component";
+    //     this.ctx.vars = SM.props[key] || {};
+    // }
 
     async _destroy(){
         await super._destroy();
