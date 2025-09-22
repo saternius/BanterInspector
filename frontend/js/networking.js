@@ -389,7 +389,9 @@ export class Networking {
             let [componentId, op, arg1, arg2] = items.slice(1)
             let monobehavior = SM.getEntityComponentById(componentId);
             if(op === "vars"){
+                log("net", "update_monobehavior vars =>", componentId, arg1, arg2)
                 monobehavior.ctx.vars[arg1] = safeParse(arg2);
+                monobehavior.properties.vars[arg1] = safeParse(arg2);
                 if(SM.selectedEntity === monobehavior._entity.id){
                     renderProps()
                 }

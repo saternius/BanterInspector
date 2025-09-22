@@ -444,6 +444,7 @@ export class InventoryFirebase {
      * Sync item to Firebase
      */
     async syncToFirebase(inventoryItem) {
+        log("net", "syncToFirebase", inventoryItem)
         // Check if item is in a remote folder or root is remote
         const isRemote = this.isItemInRemoteLocation();
         if (!isRemote) return;

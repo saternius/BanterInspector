@@ -467,6 +467,7 @@
                     let childEntity = await hierarchyToEntity(child, entity.id);
                     await childEntity._setParent(entity);
                 }
+                entity._loaded();
                 return entity;
             }
             return await hierarchyToEntity(hierarchy, null);
@@ -562,13 +563,7 @@
 
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);
-            entity._finished_loading = true;
-            let scripts = entity.components.filter(c=>c.type === "MonoBehavior");
-            scripts.forEach(async script=>{
-                if(script.ctx.onLoaded){
-                    await script.ctx.onLoaded();
-                }
-            })
+            entity._loaded();
             return entity;
         }
 
@@ -616,7 +611,7 @@
                 let childEntity = await this.loadHistoricalEntity(child, entity.id);
                 await childEntity._setParent(entity);
             })
-
+            entity._loaded();
             return entity;
         }
 

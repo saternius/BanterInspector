@@ -99,17 +99,25 @@ export class MonoBehaviorComponent extends EntityComponent {
         if (this.ctx.vars) {
             // Initialize vars with defaults
             const varDefinitions = this.ctx.vars;
-            const initializedVars = {};
             const historicalVars = SM.props[`__${this.id}/vars:component`] || {};
+            const initializedVars = {};
+            log("mono", "varDefinitions", varDefinitions)
             log("mono", "historicalVars", historicalVars)
+            log("mono", "properties.vars", this.properties.vars)
 
             for (const [varName, varDef] of Object.entries(varDefinitions)) {
-                if (historicalVars[varName] !== undefined) {
+                if(this.properties.vars[varName] !== undefined){
+                    initializedVars[varName] = this.properties.vars[varName];
+                    log("mono", `$${varName} => ${this.properties.vars[varName]} via properties`)
+                }
+                else if (historicalVars[varName] !== undefined) {
                     // Use existing value
                     initializedVars[varName] = historicalVars[varName];
+                    log("mono", `$${varName} => ${historicalVars[varName]} via historicalVars`)
                 } else if (varDef.default !== undefined) {
                     // Use default value
                     initializedVars[varName] = varDef.default;
+                    log("mono", `$${varName} => ${varDef.default} via varDef.default`)
                 } else {
                     // Initialize based on type
                     switch (varDef.type) {
@@ -131,6 +139,7 @@ export class MonoBehaviorComponent extends EntityComponent {
                         default:
                             initializedVars[varName] = null;
                     }
+                    log("mono", `$${varName} => ${initializedVars[varName]} via varDef.type`)
                 }
             }
             
@@ -156,6 +165,9 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(!this._entity.active) return;
         this.ctx._running = true;
         await this.ctx.onStart();
+        if(this._entity._finished_loading){
+            await this.ctx.onLoaded();
+        }
         let message = `update_monobehavior¶${this.id}¶_running¶true`;
         networking.sendOneShot(message);
         inspector.lifecyclePanel.render()
@@ -201,6 +213,9 @@ export class MonoBehaviorComponent extends EntityComponent {
             
         });
         window.dispatchEvent(event);
+        if(this._entity._finished_loading){
+            await this.ctx.onLoaded();
+        }
         log("mono", "refreshed", this.id)
     }
 
@@ -226,6 +241,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             vars: SM.props[`__${this.id}/vars:component`] || {},
             _running: false, // Initialize _running to prevent undefined
             onStart: async ()=>{},
+            onLoaded: async ()=>{},
             onUpdate: async ()=>{},
             onDestroy: async ()=>{},
             onKeyDown: ()=>{},
@@ -246,11 +262,15 @@ export class MonoBehaviorComponent extends EntityComponent {
     async updateVar(varName, value) {
         log("mono", "[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
+        this.properties.vars[varName] = value;
+        this.ctx.vars[varName] = value;
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
         let message = `update_monobehavior¶${this.id}¶vars¶${varName}¶${value}`;
         networking.sendOneShot(message);
+        log("mono", "updated ctx.vars and properties.vars =>", varName, value)
+       
         // this.scriptContext.vars[varName] = value;
     }
 
