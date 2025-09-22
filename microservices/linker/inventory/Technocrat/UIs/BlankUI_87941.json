@@ -1,0 +1,322 @@
+{
+  "author": "Technocrat",
+  "created": 1758543837952,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "UI",
+        "parentId": "Scene/BlankUI_87941",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 0.1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 0.1,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "NewEntity_70210",
+        "parentId": "Scene/BlankUI_87941",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.9835216782839067,
+            "x": 0.002266396317113861,
+            "y": -0.18077602660015912,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1758477548068,
+          "data": "class WindowUI {\n    constructor(ctx, windowName){\n        this.ctx = ctx;\n        this.windowName = windowName;\n        this.held = false;\n        this.lastParent = \"Scene\";\n        this.user = SM.myName();\n        this.container = null;\n        this.contentArea = null;\n        this.PaneEntity = null;\n        this.doc = null;\n\n        this.ctx.onStart = async ()=>{\n            let {startingPosition, startingRotation} = await this.getStartingSpot();\n            let transform = this.ctx._entity.getTransform();    \n            transform.Set(\"localPosition\", {x: 0, y: 0, z: 0});\n            this.PaneEntity = await AddEntity(this.ctx._entity.id, \"UI\")\n            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));\n            this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));\n            window.blankUI = this.doc;\n            //transform.Set(\"localPosition\", startingPosition);\n            //transform.Set(\"localRotation\", startingRotation);\n            this.generateUI();\n\n            this.ctx._entity._bs.On(\"click\", e => {\n                log(`${this.windowName} UI`, \"TEMP holder\")\n                this.grabHandler(e)\n            })\n        }\n\n        this.ctx.onDestroy = async()=>{\n            log(`${this.windowName} UI`, \"onDestroy\")\n            if(this.PaneEntity){\n                await RemoveEntity(this.PaneEntity.id)\n            }\n        }\n    }\n\n    generateUI(){\n        if(this.container){\n            this.container.Destroy();\n        }\n        log(`${this.windowName} UI`, \"generating UI\")\n        this.container = this.doc.CreateVisualElement();\n        this.container.style.display = \"flex\";\n        this.container.style.flexDirection = \"column\";\n        this.container.style.height = \"100%\";\n        this.container.style.width = \"100%\";\n        //container.style.backgroundColor = \"red\";\n    \n        // Create Windows-style header\n        const header = this.doc.CreateVisualElement();\n        header.style.display = \"flex\";\n        header.style.flexDirection = \"row\";\n        header.style.justifyContent = \"space-between\";\n        header.style.backgroundColor = \"#0051e5\";\n        header.style.paddingLeft = \"8px\";\n        header.style.borderBottom = \"1px solid #333\";\n    \n        header.OnClick(this.grabHandler)\n        \n    \n        const title = this.doc.CreateLabel();\n        title.text = this.windowName;\n        title.style.color = \"#ffffff\";\n        title.style.fontSize = \"14px\";\n        title.style.fontWeight = \"bold\";\n    \n    \n        const closeButton = this.doc.CreateLabel();\n        closeButton.text = \"x\";\n        closeButton.style.backgroundColor = \"red\";\n        closeButton.style.color = \"#ffffff\";\n        closeButton.style.border = \"none\";\n        closeButton.style.borderRadius = \"0px\";\n        closeButton.style.fontSize = \"12px\";\n        closeButton.style.padding = \"4px\";\n        closeButton.style.paddingRight = \"8px\";\n        closeButton.style.paddingLeft = \"8px\";\n        closeButton.style.cursor = \"pointer\";\n        closeButton.OnClick(() => {\n            this.DestroySelf();\n        });\n        closeButton.OnMouseEnter(() => {\n            closeButton.style.backgroundColor = \"#e81123\";\n        });\n        closeButton.OnMouseLeave(() => {\n            closeButton.style.backgroundColor = \"transparent\";\n        });\n    \n        header.AppendChild(title);\n        header.AppendChild(closeButton);\n        this.container.AppendChild(header);\n    \n        // Create content area for undo/redo items\n        this.contentArea = this.doc.CreateVisualElement();\n        this.contentArea.style.overflowY = \"auto\";\n        this.contentArea.style.margin = \"4px\";\n        this.contentArea.style.backgroundColor = \"white\";\n        this.contentArea.style.height = \"100%\"\n        this.container.AppendChild(this.contentArea);\n        \n        \n    }\n\n    grabHandler(e){\n        console.log(\"grabHandler\", e.detail)\n        if(this.held){\n            this.ctx._entity.SetParent(this.lastParent)\n        }else{\n            console.log(\"click\", e.detail)\n            let rightHandHolderPath = \"People/\"+this.user+\"/Trackers/RIGHT_HAND/Holder\";\n            let rightHandHolder = SM.getEntityById(rightHandHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${rightHandHolderPath}`, rightHandHolder)\n            if(!rightHandHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            rightHandHolder.getTransform().Set(\"position\", e.detail.point)\n            this.lastParent = this.ctx._entity.parentId;\n            this.ctx._entity.SetParent(rightHandHolderPath)\n        }\n        this.held = !this.held;\n    }\n\n    async fetchTracker(name){\n        try{\n            let tracker = await GetTracker(name);\n            return tracker;\n        }catch(e){\n            await new Promise(resolve => setTimeout(resolve, 500));\n            return await this.fetchTracker(name);\n        }\n    }\n\n    async getStartingSpot(){\n        let headTracker = await this.fetchTracker(\"HEAD\");\n        let headTransform = headTracker.getTransform();\n        let headPosition = headTransform._bs._localPosition;\n        let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);\n        let startingPosition = TransformOps.Add(headPosition, headForward);\n        startingPosition.y -= 0.5;\n        let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);\n        return {startingPosition, startingRotation};\n    }\n\n    async DestroySelf(){\n        log(`${this.windowName} UI`, \"Destroying Blank UI\");\n        await RemoveEntity(this.ctx._entity.id);\n    }\n}\n\nthis.UI = new WindowUI(this, \"Blank\");\n\n\n",
+          "description": "",
+          "folder": "UIs",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1758477548068,
+          "last_used": 1758543739615,
+          "name": "BlankUI.js",
+          "startup": false
+        },
+        "loadAsync": false,
+        "properties": {
+          "file": "BlankUI.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "BlankUI_87941",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "UIs",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_77919",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 2.3453648,
+                "y": 1.3443090199999999,
+                "z": 0.6859100250000001
+              },
+              "localRotation": {
+                "w": 0.9835216782839067,
+                "x": 0.002266396317113861,
+                "y": -0.18077602660015912,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "MonoBehavior_7842",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "created": 1758477548068,
+              "data": "\nlet held = false;\nlet lastParent = \"Scene\";\nlet user = SM.myName();\n\nlet grabHandler = (e)=>{\n    console.log(\"grabHandler\", e.detail)\n    if(held){\n        this._entity.SetParent(lastParent)\n    }else{\n        console.log(\"click\", e.detail)\n        let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n        let tippyHolder = SM.getEntityById(tippyHolderPath)\n        console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n        if(!tippyHolder){\n            showNotification(\"Error: RIGHT_HAND Holder not found\")\n            return;\n        }\n        tippyHolder.getTransform().Set(\"position\", e.detail.point)\n        lastParent = this._entity.parentId;\n        this._entity.SetParent(tippyHolderPath)\n    }\n    held = !held;\n}\n\n\nlet fetchTracker = async (name)=>{\n    try{\n        let tracker = await GetTracker(name);\n        return tracker;\n    }catch(e){\n        await new Promise(resolve => setTimeout(resolve, 500));\n        return await fetchTracker(name);\n    }\n}\n\nlet getStartingSpot = async ()=>{\n    let headTracker = await fetchTracker(\"HEAD\");\n    let headTransform = headTracker.getTransform();\n    let headPosition = headTransform._bs._localPosition;\n    let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);\n    let startingPosition = TransformOps.Add(headPosition, headForward);\n    startingPosition.y -= 0.5;\n    let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);\n    return {startingPosition, startingRotation};\n}\n\n\nlet container = null;\nlet contentArea = null;\nlet generateUI = ()=>{\n    if(container){\n        container.Destroy();\n    }\n    log(\"BLANK UI\", \"generating UI\")\n    container = doc.CreateVisualElement();\n    container.style.display = \"flex\";\n    container.style.flexDirection = \"column\";\n    container.style.width = \"100%\";\n    container.style.height = \"100%\";\n\n    // Create Windows-style header\n    const header = doc.CreateVisualElement();\n    header.style.display = \"flex\";\n    header.style.flexDirection = \"row\";\n    header.style.justifyContent = \"space-between\";\n    header.style.alignItems = \"center\";\n    header.style.backgroundColor = \"grey\";\n    header.style.padding = \"8px\";\n    header.style.borderBottom = \"1px solid #333\";\n\n    header.OnClick(grabHandler)\n    \n\n    const title = doc.CreateLabel();\n    title.text = \"Undo/Redo Stack\";\n    title.style.color = \"#ffffff\";\n    title.style.fontSize = \"14px\";\n    title.style.fontWeight = \"bold\";\n\n    const closeButton = doc.CreateButton();\n    closeButton.text = \"✕\";\n    closeButton.style.backgroundColor = \"transparent\";\n    closeButton.style.color = \"#ffffff\";\n    closeButton.style.border = \"none\";\n    closeButton.style.fontSize = \"16px\";\n    closeButton.style.padding = \"4px 8px\";\n    closeButton.style.cursor = \"pointer\";\n    closeButton.OnClick(() => {\n        DestroySelf();\n    });\n    closeButton.OnMouseEnter(() => {\n        closeButton.style.backgroundColor = \"#e81123\";\n    });\n    closeButton.OnMouseLeave(() => {\n        closeButton.style.backgroundColor = \"transparent\";\n    });\n\n    header.AppendChild(title);\n    header.AppendChild(closeButton);\n    container.AppendChild(header);\n\n    // Create content area for undo/redo items\n    contentArea = doc.CreateVisualElement();\n    contentArea.style.flex = \"1\";\n    contentArea.style.overflowY = \"auto\";\n    contentArea.style.padding = \"8px\";\n    contentArea.style.backgroundColor = \"rgba(31,46,61,1)\";\n    container.AppendChild(contentArea);\n}\n\n\n\nlet PaneEntity = null;\nlet changeListener = null;\nlet doc = null;\n\nthis.onStart = async ()=>{\n    // let {startingPosition, startingRotation} = await getStartingSpot();\n    // let transform = this._entity.getTransform();    \n    // transform.Set(\"localPosition\", {x: 0, y: 0, z: 0});\n    // PaneEntity = await AddEntity(this._entity.id, \"UI\")\n    // doc = await PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));\n    // transform.Set(\"localPosition\", startingPosition);\n    // transform.Set(\"localRotation\", startingRotation);\n    // generateUI();\n}\n\nthis.onDestroy = async()=>{\n    log(\"BLANK UI\", \"onDestroy\")\n    if(PaneEntity){\n        await RemoveEntity(PaneEntity.id)\n    }\n}\n\n\nlet DestroySelf = async ()=>{\n    log(\"BLANK UI\", \"Destroying Blank UI\");\n    await RemoveEntity(this._entity.id);\n}",
+              "description": "",
+              "folder": "UIs",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758477548068,
+              "last_used": 1758477791995,
+              "name": "BlankUI.js",
+              "startup": false
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "BlankUI.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/BlankUI_87941",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "BlankUI_87941",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "BlankUI",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_70210",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/BlankUI_87941"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_70210",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/BlankUI_87941"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterGeometry_1186"
+      },
+      "componentType": "BanterGeometry",
+      "entityId": "Scene/BlankUI_87941/NewEntity_70210",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMaterial_9915"
+      },
+      "componentType": "BanterMaterial",
+      "entityId": "Scene/BlankUI_87941/NewEntity_70210",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterGeometry_1186",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterGeometry_1186",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "depth"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1758543837952,
+  "name": "BlankUI_87941"
+}

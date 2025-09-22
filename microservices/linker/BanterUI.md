@@ -1020,3 +1020,113 @@ try {
 - Batch UI updates when possible
 - Use efficient element hierarchies
 - Consider UI pooling for dynamic content
+
+## CSS/USS Styling Limitations
+
+The Banter UI system uses Unity's UI Toolkit USS (Unity Style Sheets) which has important limitations compared to standard web CSS:
+
+### Supported CSS Properties
+
+**Layout System**
+- **Flexbox Only**: Unity UI Toolkit uses flexbox as its primary layout system
+  - Supported: `flex-direction`, `justify-content`, `align-items`, `flex-grow`, `flex-shrink`, `flex-wrap`
+  - **NOT Supported**: CSS Grid, float layouts, table layouts
+  - **NOT Supported**: `display` property (all elements are flex containers by default)
+
+**Box Model**
+- Supported: `width`, `height`, `min-width`, `max-width`, `min-height`, `max-height`
+- Supported: `margin`, `padding` (and their directional variants)
+- Supported: `position` (absolute, relative), `top`, `left`, `right`, `bottom`
+- **Limited**: Border properties only support solid borders (no dashed, dotted styles)
+
+**Visual Styling**
+- Supported: `background-color`, `background-image`, `opacity`
+- Supported: `border-width`, `border-color`, `border-radius`
+- **NOT Supported**: `box-shadow`, `text-shadow`
+- **NOT Supported**: Gradients (linear-gradient, radial-gradient)
+- **NOT Supported**: Multiple backgrounds
+
+**Typography**
+- Supported: `color`, `font-size`, `letter-spacing`, `word-spacing`
+- **Limited**: Font properties require Unity-specific formats (`-unity-font`, `-unity-font-style`)
+- **Limited**: `text-align` requires Unity prefix (`-unity-text-align`)
+- **NOT Supported**: Web fonts (@font-face), variable fonts
+
+**Transforms**
+- Supported: `rotate`, `scale`, `transform-origin`
+- **NOT Supported**: `translate`, `skew`, `matrix` transforms
+- **NOT Supported**: 3D transforms (`rotateX`, `rotateY`, `perspective`)
+
+**Animations & Transitions**
+- **NOT Supported**: CSS animations (@keyframes)
+- **NOT Supported**: CSS transitions
+- Animation must be handled through code
+
+### Unity-Specific Properties
+
+Unity adds vendor-prefixed properties for platform-specific features:
+
+```css
+/* Unity-specific background properties */
+-unity-background-scale-mode: scale-to-fit; /* or stretch-to-fill, scale-and-crop */
+-unity-background-image-tint-color: #ffffff;
+
+/* Unity text properties */
+-unity-text-align: middle-center; /* combines horizontal and vertical alignment */
+-unity-text-outline-width: 1px;
+-unity-text-outline-color: #000000;
+
+/* Unity 9-slice properties for scalable borders */
+-unity-slice-left: 10;
+-unity-slice-right: 10;
+-unity-slice-top: 10;
+-unity-slice-bottom: 10;
+```
+
+### Important Differences from Web CSS
+
+1. **No Cascading**: Styles don't cascade the same way as web CSS
+2. **No Pseudo-classes**: Limited support (`:hover`, `:active`, `:focus` only)
+3. **No Pseudo-elements**: `::before`, `::after` not supported
+4. **No Media Queries**: No responsive breakpoints
+5. **No CSS Variables**: Custom properties not supported
+6. **Pixel Units Only**: Most properties only accept pixel values, not percentages or other units
+7. **No !important**: Priority override not available
+
+### Workarounds and Best Practices
+
+1. **For Responsive Design**: Use flexbox properties and handle window resizing in code
+2. **For Animations**: Use Unity's animation system or script property changes over time
+3. **For Complex Layouts**: Combine multiple VisualElements with flexbox
+4. **For Dynamic Styles**: Use inline styles or class toggling through JavaScript
+5. **For Gradients/Shadows**: Use background images or Unity shader effects
+
+### Example: Web CSS vs Unity USS
+
+**Web CSS (Not Supported)**
+```css
+.button {
+    display: inline-block;
+    background: linear-gradient(#e66465, #9198e5);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+.button:hover {
+    transform: translateY(-2px);
+}
+```
+
+**Unity USS Equivalent**
+```css
+.button {
+    background-color: #e66465; /* No gradient support */
+    /* No box-shadow - use border or image */
+    border-width: 2px;
+    border-color: rgba(0,0,0,0.1);
+}
+.button:hover {
+    /* Limited hover support */
+    background-color: #9198e5;
+    /* Animation via code, not CSS */
+}
+```

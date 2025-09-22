@@ -21,13 +21,24 @@ class WindowUI {
             transform.Set("localPosition", startingPosition);
             transform.Set("localRotation", startingRotation);
             this.generateUI();
+
+            log(`${this.windowName} UI`, "onLoaded")
+            let handle = this.ctx._entity.children.find(c=>c.name === "Handle")
+            log(`${this.windowName} UI`, "Handle", handle)
+            handle._bs.On("click", e => {
+                log(`${this.windowName} UI`, "TEMP holder")
+                this.grabHandler(e)
+            })
         }
 
-        this.ctx.onDestroy = async()=>{
-            log(`${this.windowName} UI`, "onDestroy")
-            if(this.PaneEntity){
-                await RemoveEntity(this.PaneEntity.id)
-            }
+        this.ctx.onLoaded = async()=>{
+            log(`${this.windowName} UI`, "onLoaded")
+            let handle = this.ctx._entity.children.find(c=>c.name === "Handle")
+            log(`${this.windowName} UI`, "Handle", handle)
+            handle._bs.On("click", e => {
+                log(`${this.windowName} UI`, "TEMP holder")
+                this.grabHandler(e)
+            })
         }
     }
 
