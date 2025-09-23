@@ -205,6 +205,8 @@ export function attachAuthToDatabase(networking) {
 
             // Add auth helper to networking object
             networking.auth = authHelper;
+
+            window.loadInventoryDeps()
         } else {
             // Retry if Firebase isn't ready yet
             setTimeout(initAuth, 1000);

@@ -180,7 +180,6 @@ this.onStart = async ()=>{
     }
     
     changeManager.addChangeListener(changeListener)
-    
 }
 
 

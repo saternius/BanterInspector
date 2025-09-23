@@ -11,6 +11,8 @@
     export class SpacePropsPanel {
         constructor() {
             this.editingProps = new Map();
+            this.pinnedProps = new Set();
+            this.loadPinnedProps();
             this.setupEventListeners();
             this.setupCollapsible();
             this.render();
@@ -103,22 +105,34 @@
         renderPropsList(type, props) {
             const listElement = document.getElementById(`${type}PropsList`);
             const countElement = document.getElementById(`${type}PropsCount`);
-            
+
             if (!listElement || !countElement) return;
-            
+
             const propKeys = Object.keys(props);
             countElement.textContent = propKeys.length;
-            
+
             if (propKeys.length === 0) {
                 listElement.innerHTML = `<div class="empty-props">No ${type} properties</div>`;
                 return;
             }
-            
+
             listElement.innerHTML = '';
-            
-            propKeys.forEach(key => {
+
+            // Sort properties: pinned first, then alphabetical
+            const sortedKeys = propKeys.sort((a, b) => {
+                const aKey = `${type}_${a}`;
+                const bKey = `${type}_${b}`;
+                const aPinned = this.pinnedProps.has(aKey);
+                const bPinned = this.pinnedProps.has(bKey);
+
+                if (aPinned && !bPinned) return -1;
+                if (!aPinned && bPinned) return 1;
+                return a.localeCompare(b);
+            });
+
+            sortedKeys.forEach(key => {
                 const value = props[key];
-                
+
                 if(value === "null" || value === "undefined") return;
                 const propItem = this.createPropItem(type, key, value);
                 listElement.appendChild(propItem);
@@ -130,13 +144,26 @@
          */
         createPropItem(type, key, value) {
             const item = document.createElement('div');
-            item.className = 'prop-item';
-            
+            const propKey = `${type}_${key}`;
+            const isPinned = this.pinnedProps.has(propKey);
+
+            item.className = isPinned ? 'prop-item pinned' : 'prop-item';
+
+            // Pin button
+            const pinBtn = document.createElement('button');
+            pinBtn.className = isPinned ? 'prop-pin-button pinned' : 'prop-pin-button';
+            pinBtn.innerHTML = '📌';
+            pinBtn.title = isPinned ? 'Unpin' : 'Pin to top';
+            pinBtn.onmousedown = (e) => {
+                e.stopPropagation();
+                this.togglePinProp(type, key);
+            };
+
             const keyElement = document.createElement('div');
             keyElement.className = 'prop-key';
             keyElement.textContent = key;
             keyElement.title = key;
-            keyElement.style.marginLeft = "14px";
+            keyElement.style.marginLeft = "4px";
             
             const valueContainer = document.createElement('div');
             valueContainer.className = 'prop-value';
@@ -281,9 +308,10 @@
                 valueContainer.appendChild(actions);
             }
             
+            item.appendChild(pinBtn);
             item.appendChild(keyElement);
             item.appendChild(valueContainer);
-            
+
             return item;
         }
 
@@ -496,6 +524,42 @@
                 this.saveProp(type, key);
             } else if (event.key === 'Escape') {
                 this.cancelEditProp(type, key);
+            }
+        }
+
+        /**
+         * Toggle pin status for a property
+         */
+        togglePinProp(type, key) {
+            const propKey = `${type}_${key}`;
+            if (this.pinnedProps.has(propKey)) {
+                this.pinnedProps.delete(propKey);
+            } else {
+                this.pinnedProps.add(propKey);
+            }
+            this.savePinnedProps();
+            this.render();
+        }
+
+        /**
+         * Save pinned properties to localStorage
+         */
+        savePinnedProps() {
+            localStorage.setItem('spacePropsPinned', JSON.stringify([...this.pinnedProps]));
+        }
+
+        /**
+         * Load pinned properties from localStorage
+         */
+        loadPinnedProps() {
+            const saved = localStorage.getItem('spacePropsPinned');
+            if (saved) {
+                try {
+                    const props = JSON.parse(saved);
+                    this.pinnedProps = new Set(props);
+                } catch (e) {
+                    this.pinnedProps = new Set();
+                }
             }
         }
     }

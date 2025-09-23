@@ -856,6 +856,7 @@
          * Scripts must have both startup and active flags set to true
          */
         async executeStartupScripts(stage) {
+            log('startup', "executing startup scripts for: ", stage)
             if(!lifecycle){
                 log('startup', 'Lifecycle not initialized, delaying..');
                 await new Promise(resolve => setTimeout(resolve, 500));
