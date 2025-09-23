@@ -53,14 +53,6 @@ export class Inventory {
         this.ui.setupDropZone();
         this.ui.render();
         this.ui.showEmptyPreview();
-
-        // Make default folder imports
-        setTimeout(()=>{
-            if(!this.folders['Scripts']){
-                log("init", "importing scripts from firebase");
-                this.firebase.importFromFirebase("inventory/Technocrat/Scripts");
-            }
-        }, 10000)
     }
     
     /**

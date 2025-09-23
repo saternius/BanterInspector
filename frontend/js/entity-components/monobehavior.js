@@ -244,6 +244,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             onLoaded: async ()=>{},
             onUpdate: async ()=>{},
             onDestroy: async ()=>{},
+            onVarChange: async (d,v)=>{},
             onKeyDown: ()=>{},
             onKeyUp: ()=>{},
             keyDown: ()=>{},
@@ -260,18 +261,21 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async updateVar(varName, value) {
-        log("mono", "[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
-        this.properties.vars[varName] = value;
-        this.ctx.vars[varName] = value;
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
         let message = `update_monobehavior¶${this.id}¶vars¶${varName}¶${value}`;
         networking.sendOneShot(message);
         log("mono", "updated ctx.vars and properties.vars =>", varName, value)
-       
-        // this.scriptContext.vars[varName] = value;
+    }
+
+    async _updateVar(varName, value) {
+        log("mono", "[MONO] updating var =>", varName, value)
+        if (!this.ctx || !this.ctx.vars) return;
+        this.properties.vars[varName] = value;
+        this.ctx.vars[varName] = value;
+        await this.ctx.onVarChange(varName, value);
     }
 
     // loadVarsFromSpaceState(){

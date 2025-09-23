@@ -51,6 +51,12 @@ class WindowUI {
                 this.grabHandler(e)
             })
         }
+        this.ctx.onVarChange = async (varName, value)=>{
+            log(`${this.windowName} UI`, "onVarChange", varName, value)
+            if(varName === "imgUrl"){
+                this.contentArea.style.backgroundImage = `url("${value.value}")`;
+            }
+        }
 
         this.ctx.onDestroy = async()=>{
             log(`${this.windowName} UI`, "onDestroy")

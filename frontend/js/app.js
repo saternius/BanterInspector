@@ -335,7 +335,7 @@
             // // Handle space state changes from Unity
             if (SM.scene) {
 
-                let onLoad = ()=>{
+                let onLoad = async ()=>{
                     log("init", "onLoad()");
                     if(window.isLocalHost){
                         SM.scene.localUser = {
@@ -349,7 +349,7 @@
                             [SM.scene.localUser.id]: SM.scene.localUser
                         }
                     }
-                    saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+                    await saveLocalUserSceneToLocalStorage(SM.scene.localUser);
                     
                     SM.setup();
                     loadingScreen.updateStage('scene-connect', 100, 'Scene connected');
@@ -594,7 +594,12 @@
         }
     }
     
-    var saveLocalUserSceneToLocalStorage = (luser)=>{
+    var saveLocalUserSceneToLocalStorage = async (luser)=>{
+        if(!luser){
+            //sleep for 1 second
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return await saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+        }
         localStorage.setItem("localUser", JSON.stringify({
             "name": luser.name,
             "uid": luser.uid,
