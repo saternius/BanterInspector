@@ -1580,7 +1580,8 @@ this.keyUp = (key)=>{
             startup: false,  // Script runs on scene startup (only for scripts)
             startupSequence: "onSceneLoaded",
             active: false,    // Script is active even without being attached to GameObject (only for scripts)
-            global: false    // Script is global (only for scripts)
+            global: false,    // Script is global (only for scripts)
+            autoUpdate: false // Script auto updates when imported from remote folder
         };
         
         // Only add folder property if we're in a folder

@@ -400,7 +400,8 @@ export class Inventory {
             startup: false,  // Script runs on scene startup (only relevant for scripts)
             startupSequence: "onSceneLoaded",
             active: false,    // Script is active even without being attached to GameObject (only relevant for scripts)
-            global: false    // Script is global (only relevant for scripts)
+            global: false,    // Script is global (only relevant for scripts)
+            autoUpdate: false // Script auto updates when imported from remote folder
         };
         
         // Only add folder property if we're in a folder
