@@ -20,6 +20,7 @@ export class InventoryFirebase {
     
     folderLinkable(folder){
         if(!folder.remote) return false;
+        if(folder.autoUpdate) return true;
         if(folder.importedFrom){
             let origin = folder.importedFrom.split('/');
             if(origin[1] !== SM.myName()){
@@ -773,7 +774,7 @@ export class InventoryFirebase {
 
         let subjectName = firebaseRef.split('/').pop();
         let path = subjectName;
-        if(parentFolder !== ""){
+        if(parentFolder !== "" && parentFolder !== null){
             parentFolder = parentFolder || this.inventory.currentFolder;
             path = `${parentFolder}/${subjectName}`
         }else{

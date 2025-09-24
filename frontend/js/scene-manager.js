@@ -855,7 +855,7 @@
          * Execute startup scripts from inventory
          * Scripts must have both startup and active flags set to true
          */
-        async executeStartupScripts(stage) {
+        async executeStartupScripts(stage, attempts = 0) {
             log('startup', "executing startup scripts for: ", stage)
             if(!lifecycle){
                 log('startup', 'Lifecycle not initialized, delaying..');
@@ -864,9 +864,12 @@
             }
            
             if(stage === "onSceneLoaded" && !lifecycle.startupExecutionCheckpoints.onInspectorLoaded){
+                if(attempts > 15){
+                    await this.executeStartupScripts("onInspectorLoaded");
+                }
                 log('startup', 'Inspector startup has not completed yet, delaying..');
                 await new Promise(resolve => setTimeout(resolve, 500));
-                return await this.executeStartupScripts(stage);
+                return await this.executeStartupScripts(stage, attempts + 1);
             }
 
             try {

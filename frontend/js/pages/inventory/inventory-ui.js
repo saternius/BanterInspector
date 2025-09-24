@@ -893,6 +893,19 @@ export class InventoryUI {
                 }
             });
         }
+
+        const autoUpdateToggle = this.previewPane.querySelector('.script-auto-update-toggle');
+        if (autoUpdateToggle) {
+            autoUpdateToggle.addEventListener('change', () => {
+                const item = this.inventory.items[itemName];
+                if(item){
+                    item.autoUpdate = autoUpdateToggle.checked;
+                    this.inventory.syncItem(itemName, item);
+                    showNotification(`Updated auto update setting for "${itemName}"`);
+                }
+            });
+        }
+        
         
         // Description textarea
         const descriptionTextarea = this.previewPane.querySelector('.description-textarea');
@@ -1477,6 +1490,11 @@ export class InventoryUI {
                             <input type="checkbox" class="script-active-toggle" data-item-name="${item.name}"
                                 ${item.active ? 'checked' : ''} style="cursor: pointer;">
                             <span>Active</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" class="script-auto-update-toggle" data-item-name="${item.name}"
+                                ${item.autoUpdate ? 'checked' : ''} style="cursor: pointer;">
+                            <span>Auto</span>
                         </label>
                     </div>
                     ${item.startup ? `
