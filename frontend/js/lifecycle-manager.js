@@ -5,7 +5,11 @@
 let localhost = window.location.hostname === 'localhost'
 export class LifecycleManager {
     constructor() {
-        this.startupExecutionCheckpoints = {
+        this.startupExecutionStart = {
+            onInspectorLoaded: false,
+            onSceneLoaded: false
+        }
+        this.startupExecutionComplete = {
             onInspectorLoaded: false,
             onSceneLoaded: false
         }

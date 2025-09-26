@@ -2,8 +2,6 @@
  * Scene Manager
  * Handles Unity scene connection, state management, and data synchronization
  */
-
-
 // (async () => {
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
@@ -862,14 +860,31 @@
                 await new Promise(resolve => setTimeout(resolve, 500));
                 return await this.executeStartupScripts(stage);
             }
+
+            if(stage === "onInspectorLoaded"){
+                if(lifecycle.startupExecutionStart.onInspectorLoaded){
+                    log('startup', 'Inspector startup has already started, skipping..');
+                    return;
+                }
+                lifecycle.startupExecutionStart.onInspectorLoaded = true;
+            }
            
-            if(stage === "onSceneLoaded" && !lifecycle.startupExecutionCheckpoints.onInspectorLoaded){
-                if(attempts > 15){
+            if(stage === "onSceneLoaded"){
+                if(!lifecycle.startupExecutionStart.onInspectorLoaded){
+                    log('startup', 'Inspector startup has not started for some reason..');
                     await this.executeStartupScripts("onInspectorLoaded");
                 }
-                log('startup', 'Inspector startup has not completed yet, delaying..');
-                await new Promise(resolve => setTimeout(resolve, 500));
-                return await this.executeStartupScripts(stage, attempts + 1);
+                if(lifecycle.startupExecutionStart.onInspectorLoaded && !lifecycle.startupExecutionComplete.onInspectorLoaded){ 
+                    log('startup', 'Inspector startup has not completed yet, delaying..');
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    return await this.executeStartupScripts(stage, attempts + 1);
+                }
+
+                if(lifecycle.startupExecutionStart.onSceneLoaded){
+                    log('startup', 'Scene startup has already started, skipping..');
+                    return;
+                }
+                lifecycle.startupExecutionStart.onSceneLoaded = true;
             }
 
             try {
@@ -926,7 +941,7 @@
                 err('startup', 'Error in executeStartupScripts:', error);
             }
 
-            lifecycle.startupExecutionCheckpoints[stage] = true;
+            lifecycle.startupExecutionComplete[stage] = true;
             log('startup', `[${stage}] COMPLETED`);
         }
     }

@@ -1,6 +1,24 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { eulerToQuaternion, parseBest } = await import(`${window.repoUrl}/utils.js`);
 
+
+let getScale = async (entID) =>{
+    if(entID === "Scene" || entID === "People" || !entID){
+        return {x:1, y:1, z:1}
+    }
+    let x = SM.getEntityById(entID)
+    if(!x){
+        return {x:1,y:1,z:1}
+    }
+    let scale = await x.getTransform().Get("localScale")
+    let parentScale = await getScale(x.parentId)
+    return {
+        x:scale.x * parentScale.x,
+        y:scale.y * parentScale.y,
+        z:scale.z * parentScale.z
+    }
+}
+
 export class TransformComponent extends EntityComponent {
     constructor(){
         super();
@@ -80,6 +98,21 @@ export class TransformComponent extends EntityComponent {
         }
         await this.Set(property, newVec);
         return this
+    }
+
+    async Get(property){
+        await this._bs.Q([13])
+        if(property === "transform"){
+            return {
+                position: this._bs._position,
+                rotation: this._bs._rotation,
+                scale: await getScale(this._entity.id)
+            }
+        }
+        if(property === "scale"){
+            return await getScale(this._entity.id)
+        }
+        return this._bs[`_${property}`];
     }
 
 }
