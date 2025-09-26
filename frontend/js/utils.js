@@ -659,7 +659,26 @@ const _originalError = console.error;
 window.log = function(tag, ...args) {
     const color = window.logger.getTagColor(tag);
     const callerInfo = window.logger.getCallerInfo();
-    
+
+    // Truncate excessively long arguments for console display
+    const MAX_ARG_LENGTH = 1000;
+    const truncatedArgs = args.map(arg => {
+        if (typeof arg === 'string' && arg.length > MAX_ARG_LENGTH) {
+            return arg.substring(0, MAX_ARG_LENGTH) + '... [truncated]';
+        } else if (typeof arg === 'object') {
+            try {
+                const str = JSON.stringify(arg);
+                if (str && str.length > MAX_ARG_LENGTH) {
+                    return str.substring(0, MAX_ARG_LENGTH) + '... [truncated object]';
+                }
+                return arg;
+            } catch(e) {
+                return '[circular or complex object]';
+            }
+        }
+        return arg;
+    });
+
     // Create nicely formatted output with inline location
     if (callerInfo) {
         console.groupCollapsed(
@@ -667,17 +686,35 @@ window.log = function(tag, ...args) {
             `color: ${color}; font-weight: bold`,
             'color: #888; font-size: 0.9em',
             'color: inherit',
-            ...args
+            ...truncatedArgs
         );
         console.trace('Stack trace');
         console.groupEnd();
     } else {
-        _originalLog.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args]);
+        _originalLog.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...truncatedArgs]);
     }
-    
+
     // Handle lifecycle console
     if(window.logger.include[tag]){
-        const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+        const MAX_MESSAGE_LENGTH = 5000;
+        let message = args.map(a=>{
+            if(typeof a === "object") {
+                try {
+                    const str = JSON.stringify(a);
+                    return str && str.length > MAX_ARG_LENGTH ? str.substring(0, MAX_ARG_LENGTH) + '...[truncated]' : str;
+                } catch(e) {
+                    return '[circular object]';
+                }
+            }
+            const str = String(a);
+            return str.length > MAX_ARG_LENGTH ? str.substring(0, MAX_ARG_LENGTH) + '...[truncated]' : str;
+        }).join(" ");
+
+        // Final truncation check for complete message
+        if (message.length > MAX_MESSAGE_LENGTH) {
+            message = message.substring(0, MAX_MESSAGE_LENGTH) + '... [message truncated]';
+        }
+
         const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
         appendToConsole(tag, generateId('log'), message + locationInfo);
     }
@@ -686,7 +723,26 @@ window.log = function(tag, ...args) {
 window.err = function(tag, ...args) {
     const color = window.logger.getTagColor(tag);
     const callerInfo = window.logger.getCallerInfo();
-    
+
+    // Truncate excessively long arguments for console display
+    const MAX_ARG_LENGTH = 1000;
+    const truncatedArgs = args.map(arg => {
+        if (typeof arg === 'string' && arg.length > MAX_ARG_LENGTH) {
+            return arg.substring(0, MAX_ARG_LENGTH) + '... [truncated]';
+        } else if (typeof arg === 'object') {
+            try {
+                const str = JSON.stringify(arg);
+                if (str && str.length > MAX_ARG_LENGTH) {
+                    return str.substring(0, MAX_ARG_LENGTH) + '... [truncated object]';
+                }
+                return arg;
+            } catch(e) {
+                return '[circular or complex object]';
+            }
+        }
+        return arg;
+    });
+
     // Create nicely formatted output with inline location
     if (callerInfo) {
         console.groupCollapsed(
@@ -694,17 +750,35 @@ window.err = function(tag, ...args) {
             `color: ${color}; font-weight: bold`,
             'color: #f88; font-size: 0.9em',
             'color: inherit',
-            ...args
+            ...truncatedArgs
         );
         console.trace('Stack trace');
         console.groupEnd();
     } else {
-        _originalError.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args]);
+        _originalError.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...truncatedArgs]);
     }
-    
+
     // Handle lifecycle console
     if(window.logger.include[tag]){
-        const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
+        const MAX_MESSAGE_LENGTH = 5000;
+        let message = args.map(a=>{
+            if(typeof a === "object") {
+                try {
+                    const str = JSON.stringify(a);
+                    return str && str.length > MAX_ARG_LENGTH ? str.substring(0, MAX_ARG_LENGTH) + '...[truncated]' : str;
+                } catch(e) {
+                    return '[circular object]';
+                }
+            }
+            const str = String(a);
+            return str.length > MAX_ARG_LENGTH ? str.substring(0, MAX_ARG_LENGTH) + '...[truncated]' : str;
+        }).join(" ");
+
+        // Final truncation check for complete message
+        if (message.length > MAX_MESSAGE_LENGTH) {
+            message = message.substring(0, MAX_MESSAGE_LENGTH) + '... [message truncated]';
+        }
+
         const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
         appendToConsole("error", generateId('error'), message + locationInfo);
     }

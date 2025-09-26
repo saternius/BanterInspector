@@ -1,0 +1,2461 @@
+{
+  "author": "Technocrat",
+  "created": 1758849100869,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "A",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "B",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "F",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "E",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": false,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "G",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "D",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "C",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0.92
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "backlight",
+            "parentId": "Scene/Clock10/Digit4",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758775954468,
+              "data": "\nlet getChildEntity = (childName)=>{\n    let rel_path = this._entity.id+\"/\"+childName\n    return SM.getEntityById(rel_path)\n}\n\n// Track last displayed number to avoid unnecessary updates\nthis.lastNumber = -1\n\nthis.displayNumber = (number)=>{\n    // Only update if the number has changed\n    if (number === this.lastNumber) {\n        return\n    }\n    this.lastNumber = number\n    let A = getChildEntity(\"A\")\n    let B = getChildEntity(\"B\")\n    let C = getChildEntity(\"C\")\n    let D = getChildEntity(\"D\")\n    let E = getChildEntity(\"E\")\n    let F = getChildEntity(\"F\")\n    let G = getChildEntity(\"G\")\n\n    // Define which segments should be on/off for each digit 0-9\n    const patterns = {\n        0: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: false },\n        1: { A: false, B: true,  C: true,  D: false, E: false, F: false, G: false },\n        2: { A: true,  B: true,  C: false, D: true,  E: true,  F: false, G: true  },\n        3: { A: true,  B: true,  C: true,  D: true,  E: false, F: false, G: true  },\n        4: { A: false, B: true,  C: true,  D: false, E: false, F: true,  G: true  },\n        5: { A: true,  B: false, C: true,  D: true,  E: false, F: true,  G: true  },\n        6: { A: true,  B: false, C: true,  D: true,  E: true,  F: true,  G: true  },\n        7: { A: true,  B: true,  C: true,  D: false, E: false, F: false, G: false },\n        8: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: true  },\n        9: { A: true,  B: true,  C: true,  D: true,  E: false, F: true,  G: true  }\n    };\n\n    // Apply the pattern for the given number\n    if(number >= 0 && number <= 9) {\n        const pattern = patterns[number];\n        if(A) A.Set(\"active\", pattern.A);\n        if(B) B.Set(\"active\", pattern.B);\n        if(C) C.Set(\"active\", pattern.C);\n        if(D) D.Set(\"active\", pattern.D);\n        if(E) E.Set(\"active\", pattern.E);\n        if(F) F.Set(\"active\", pattern.F);\n        if(G) G.Set(\"active\", pattern.G);\n    }\n}\n\nthis.onStart = ()=>{\n    this._entity._digitScript = this;\n}\n\nthis.onDestroy = ()=>{\n    this._entity._digitScript = null;\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758775954468,
+              "last_used": 1758847446782,
+              "name": "Digit.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "Digit.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Digit4",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a9970f20aef5588f0ed4bd4f06a0a675e7f203ce048d6973536aa85f47dd8892"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Colon",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 0.90444737345679
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6487c1a155c3554541426559cd7153529b50dd5ed6e1cd8ca16b79e04397918f"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "GlassBack",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f69cd8dab9bd3ea9b3a4a699d79ca588b3f16c1fc5bc94375c586eb0e78a2b5b"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Case",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=8a73c18cd5b76684c88fdf91cb4b005b931c5a15b0259973abd2963e61e1908f"
+                },
+                "type": "BanterGLTF"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1758699638306,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1757922834432,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "RefreshIcon",
+            "parentId": "Scene/Clock10/ButtonReset",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a22b1972b0865a58308d82908d99f4016ddd9be38260f0637a128eddcf3a18ef"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "center": {
+                "x": -0.5,
+                "y": 1.75,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "type": "BanterColliderEvents"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758843427418,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"clock-button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"playpause\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clock button\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758843427418,
+              "last_used": 1758847032647,
+              "name": "ClockButton.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "ClockButton.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "reset"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "ButtonReset",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "A",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "B",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "F",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "E",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": false,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "G",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "D",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "C",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0.867902
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "backlight",
+            "parentId": "Scene/Clock10/Digit3",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0.7728888888888888,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758775954468,
+              "data": "\nlet getChildEntity = (childName)=>{\n    let rel_path = this._entity.id+\"/\"+childName\n    return SM.getEntityById(rel_path)\n}\n\n// Track last displayed number to avoid unnecessary updates\nthis.lastNumber = -1\n\nthis.displayNumber = (number)=>{\n    // Only update if the number has changed\n    if (number === this.lastNumber) {\n        return\n    }\n    this.lastNumber = number\n    let A = getChildEntity(\"A\")\n    let B = getChildEntity(\"B\")\n    let C = getChildEntity(\"C\")\n    let D = getChildEntity(\"D\")\n    let E = getChildEntity(\"E\")\n    let F = getChildEntity(\"F\")\n    let G = getChildEntity(\"G\")\n\n    // Define which segments should be on/off for each digit 0-9\n    const patterns = {\n        0: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: false },\n        1: { A: false, B: true,  C: true,  D: false, E: false, F: false, G: false },\n        2: { A: true,  B: true,  C: false, D: true,  E: true,  F: false, G: true  },\n        3: { A: true,  B: true,  C: true,  D: true,  E: false, F: false, G: true  },\n        4: { A: false, B: true,  C: true,  D: false, E: false, F: true,  G: true  },\n        5: { A: true,  B: false, C: true,  D: true,  E: false, F: true,  G: true  },\n        6: { A: true,  B: false, C: true,  D: true,  E: true,  F: true,  G: true  },\n        7: { A: true,  B: true,  C: true,  D: false, E: false, F: false, G: false },\n        8: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: true  },\n        9: { A: true,  B: true,  C: true,  D: true,  E: false, F: true,  G: true  }\n    };\n\n    // Apply the pattern for the given number\n    if(number >= 0 && number <= 9) {\n        const pattern = patterns[number];\n        if(A) A.Set(\"active\", pattern.A);\n        if(B) B.Set(\"active\", pattern.B);\n        if(C) C.Set(\"active\", pattern.C);\n        if(D) D.Set(\"active\", pattern.D);\n        if(E) E.Set(\"active\", pattern.E);\n        if(F) F.Set(\"active\", pattern.F);\n        if(G) G.Set(\"active\", pattern.G);\n    }\n}\n\nthis.onStart = ()=>{\n    this._entity._digitScript = this;\n}\n\nthis.onDestroy = ()=>{\n    this._entity._digitScript = null;\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758775954468,
+              "last_used": 1758847446782,
+              "name": "Digit.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "Digit.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Digit3",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "A",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "B",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "F",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "E",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": false,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "G",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "D",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "C",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0.77
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "backlight",
+            "parentId": "Scene/Clock10/Digit1",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 2.6344285096213045,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758775954468,
+              "data": "\nlet getChildEntity = (childName)=>{\n    let rel_path = this._entity.id+\"/\"+childName\n    return SM.getEntityById(rel_path)\n}\n\n// Track last displayed number to avoid unnecessary updates\nthis.lastNumber = -1\n\nthis.displayNumber = (number)=>{\n    // Only update if the number has changed\n    if (number === this.lastNumber) {\n        return\n    }\n    this.lastNumber = number\n    let A = getChildEntity(\"A\")\n    let B = getChildEntity(\"B\")\n    let C = getChildEntity(\"C\")\n    let D = getChildEntity(\"D\")\n    let E = getChildEntity(\"E\")\n    let F = getChildEntity(\"F\")\n    let G = getChildEntity(\"G\")\n\n    // Define which segments should be on/off for each digit 0-9\n    const patterns = {\n        0: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: false },\n        1: { A: false, B: true,  C: true,  D: false, E: false, F: false, G: false },\n        2: { A: true,  B: true,  C: false, D: true,  E: true,  F: false, G: true  },\n        3: { A: true,  B: true,  C: true,  D: true,  E: false, F: false, G: true  },\n        4: { A: false, B: true,  C: true,  D: false, E: false, F: true,  G: true  },\n        5: { A: true,  B: false, C: true,  D: true,  E: false, F: true,  G: true  },\n        6: { A: true,  B: false, C: true,  D: true,  E: true,  F: true,  G: true  },\n        7: { A: true,  B: true,  C: true,  D: false, E: false, F: false, G: false },\n        8: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: true  },\n        9: { A: true,  B: true,  C: true,  D: true,  E: false, F: true,  G: true  }\n    };\n\n    // Apply the pattern for the given number\n    if(number >= 0 && number <= 9) {\n        const pattern = patterns[number];\n        if(A) A.Set(\"active\", pattern.A);\n        if(B) B.Set(\"active\", pattern.B);\n        if(C) C.Set(\"active\", pattern.C);\n        if(D) D.Set(\"active\", pattern.D);\n        if(E) E.Set(\"active\", pattern.E);\n        if(F) F.Set(\"active\", pattern.F);\n        if(G) G.Set(\"active\", pattern.G);\n    }\n}\n\nthis.onStart = ()=>{\n    this._entity._digitScript = this;\n}\n\nthis.onDestroy = ()=>{\n    this._entity._digitScript = null;\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758775954468,
+              "last_used": 1758847446782,
+              "name": "Digit.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "Digit.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Digit1",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "A",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "B",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "F",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "E",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": false,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "G",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "D",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "C",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 0.82
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
+                },
+                "type": "BanterGLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "backlight",
+            "parentId": "Scene/Clock10/Digit2",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 1.8303024617696162,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758775954468,
+              "data": "\nlet getChildEntity = (childName)=>{\n    let rel_path = this._entity.id+\"/\"+childName\n    return SM.getEntityById(rel_path)\n}\n\n// Track last displayed number to avoid unnecessary updates\nthis.lastNumber = -1\n\nthis.displayNumber = (number)=>{\n    // Only update if the number has changed\n    if (number === this.lastNumber) {\n        return\n    }\n    this.lastNumber = number\n    let A = getChildEntity(\"A\")\n    let B = getChildEntity(\"B\")\n    let C = getChildEntity(\"C\")\n    let D = getChildEntity(\"D\")\n    let E = getChildEntity(\"E\")\n    let F = getChildEntity(\"F\")\n    let G = getChildEntity(\"G\")\n\n    // Define which segments should be on/off for each digit 0-9\n    const patterns = {\n        0: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: false },\n        1: { A: false, B: true,  C: true,  D: false, E: false, F: false, G: false },\n        2: { A: true,  B: true,  C: false, D: true,  E: true,  F: false, G: true  },\n        3: { A: true,  B: true,  C: true,  D: true,  E: false, F: false, G: true  },\n        4: { A: false, B: true,  C: true,  D: false, E: false, F: true,  G: true  },\n        5: { A: true,  B: false, C: true,  D: true,  E: false, F: true,  G: true  },\n        6: { A: true,  B: false, C: true,  D: true,  E: true,  F: true,  G: true  },\n        7: { A: true,  B: true,  C: true,  D: false, E: false, F: false, G: false },\n        8: { A: true,  B: true,  C: true,  D: true,  E: true,  F: true,  G: true  },\n        9: { A: true,  B: true,  C: true,  D: true,  E: false, F: true,  G: true  }\n    };\n\n    // Apply the pattern for the given number\n    if(number >= 0 && number <= 9) {\n        const pattern = patterns[number];\n        if(A) A.Set(\"active\", pattern.A);\n        if(B) B.Set(\"active\", pattern.B);\n        if(C) C.Set(\"active\", pattern.C);\n        if(D) D.Set(\"active\", pattern.D);\n        if(E) E.Set(\"active\", pattern.E);\n        if(F) F.Set(\"active\", pattern.F);\n        if(G) G.Set(\"active\", pattern.G);\n    }\n}\n\nthis.onStart = ()=>{\n    this._entity._digitScript = this;\n}\n\nthis.onDestroy = ()=>{\n    this._entity._digitScript = null;\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758775954468,
+              "last_used": 1758847446782,
+              "name": "Digit.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "Digit.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Digit2",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f9d8f4b432250dc3c7f35a954fe97aec56350858139ccf5db881dec270a14842"
+                },
+                "type": "BanterGLTF"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1758699638306,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1757922834432,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "PlayPauseIcon",
+            "parentId": "Scene/Clock10/ButtonPlayPause",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=888d0e0ae85cc1bfe077413ebebc59abc42cf73c8e63b1758dd598d7ce521768"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "center": {
+                "x": 0.5,
+                "y": 1.75,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "loadAsync": false,
+            "type": "BanterColliderEvents"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758843427418,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"clock-button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"playpause\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clock button\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Clock",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758843427418,
+              "last_used": 1758847032647,
+              "name": "ClockButton.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "ClockButton.js",
+              "name": "myScript",
+              "vars": {
+                "clickEventName": {
+                  "type": "string",
+                  "value": "clock-button-clicked"
+                },
+                "tag": {
+                  "type": "string",
+                  "value": "playpause"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "ButtonPlayPause",
+        "parentId": "Scene/Clock10",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1758842473748,
+          "data": "let getChildEntity = (childName)=>{\n    let rel_path = this._entity.id+\"/\"+childName\n    return SM.getEntityById(rel_path)\n}\n\n// Stopwatch state\nthis.startTime = null\nthis.elapsedTime = 0\nthis.isRunning = false\nthis.updateInterval = null\nthis.lastMinutes = -1\nthis.lastSeconds = -1\n\n// Get digit entities\nlet D1 = null\nlet D2 = null\nlet D3 = null\nlet D4 = null\nlet audioSource = null\nthis.onStart = () => {\n    // Cache digit references\n    D1 = getChildEntity(\"Digit1\")\n    D2 = getChildEntity(\"Digit2\")\n    D3 = getChildEntity(\"Digit3\")\n    D4 = getChildEntity(\"Digit4\")\n    audioSource = this._entity.getComponent(\"BanterAudioSource\")\n\n    // Initial display\n    this.updateDisplay(0, 0)\n\n    // Listen for button events\n    window.addEventListener('clock-button-clicked', this.handleButtonClick)\n}\n\nthis.handleButtonClick = (e) => {\n    log(\"stopwatch\", \"handleButtonClick\", e.detail.flag)\n    if (e.detail.flag === \"playpause\") {\n        this.togglePlayPause()\n    } else if (e.detail.flag === \"reset\") {\n        this.reset()\n    }\n}\n\nthis.togglePlayPause = () => {\n    log(\"stopwatch\", \"togglePlayPause\")\n    if (this.isRunning) {\n        // Stop the stopwatch\n        this.isRunning = false\n        this.elapsedTime += Date.now() - this.startTime\n        if (this.updateInterval) {\n            clearInterval(this.updateInterval)\n            this.updateInterval = null\n        }\n    } else {\n        // Start the stopwatch\n        this.isRunning = true\n        this.startTime = Date.now()\n\n        // Update display every 10ms for smooth seconds counting\n        this.updateInterval = setInterval(() => {\n            this.updateTime()\n        }, 10)\n    }\n}\n\nthis.reset = () => {\n    // Stop if running\n    if (this.isRunning) {\n        this.isRunning = false\n        if (this.updateInterval) {\n            clearInterval(this.updateInterval)\n            this.updateInterval = null\n        }\n    }\n\n    // Reset time\n    this.startTime = null\n    this.elapsedTime = 0\n    this.lastMinutes = -1\n    this.lastSeconds = -1\n    // Reset display\n    this.updateDisplay(0, 0)\n}\n\nthis.updateTime = () => {\n    if (!this.isRunning) return\n\n    let totalMs = this.elapsedTime + (Date.now() - this.startTime)\n    let totalSeconds = Math.floor(totalMs / 1000)\n    let minutes = Math.floor(totalSeconds / 60)\n    let seconds = totalSeconds % 60\n\n    // Limit to 99:59 max display\n    if (minutes > 99) {\n        minutes = 99\n        seconds = 59\n    }\n\n    this.updateDisplay(minutes, seconds)\n}\n\nthis.updateDisplay = async (minutes, seconds) => {\n    // Only update if values have changed\n    if (minutes === this.lastMinutes && seconds === this.lastSeconds) {\n        return\n    }\n\n    // Store new values\n    this.lastMinutes = minutes\n    this.lastSeconds = seconds\n    audioSource._bs.PlayOneShotFromUrl(\"https://suitable-bulldog-flying.ngrok-free.app/assets/audio/tick.mp3\")\n    await new Promise(resolve => setTimeout(resolve, 100))\n\n    // Convert to individual digits\n    let min1 = Math.floor(minutes / 10)\n    let min2 = minutes % 10\n    let sec1 = Math.floor(seconds / 10)\n    let sec2 = seconds % 10\n\n    // Update each digit display\n    if (D1 && D1._digitScript && D1._digitScript.displayNumber) {\n        D1._digitScript.displayNumber(min1)\n    }\n    if (D2 && D2._digitScript && D2._digitScript.displayNumber) {\n        D2._digitScript.displayNumber(min2)\n    }\n    if (D3 && D3._digitScript && D3._digitScript.displayNumber) {\n        D3._digitScript.displayNumber(sec1)\n    }\n    if (D4 && D4._digitScript && D4._digitScript.displayNumber) {\n        D4._digitScript.displayNumber(sec2)\n    }\n}\n\nthis.onDestroy = () => {\n    // Clean up\n    if (this.updateInterval) {\n        clearInterval(this.updateInterval)\n    }\n    window.removeEventListener('clock-button-clicked', this.handleButtonClick)\n}\n",
+          "description": "",
+          "folder": "Clock",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1758842473748,
+          "last_used": 1758849025431,
+          "name": "Stopwatch.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "properties": {
+          "file": "Stopwatch.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "bypassEffects": false,
+          "bypassListenerEffects": false,
+          "bypassReverbZones": false,
+          "loop": false,
+          "mute": false,
+          "pitch": 1,
+          "playOnAwake": true,
+          "spatialBlend": 1,
+          "volume": 0.05
+        },
+        "type": "BanterAudioSource"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Clock10",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Misc",
+  "history": [
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BoxCollider_1946"
+      },
+      "componentType": "BoxCollider",
+      "entityId": "Scene/Clock8_48646/ButtonReset",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterColliderEvents_8501"
+      },
+      "componentType": "BanterColliderEvents",
+      "entityId": "Scene/Clock8_48646/ButtonReset",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_1946",
+      "newValue": {
+        "x": -0.5,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "center"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_1946",
+      "newValue": {
+        "x": -0.5,
+        "y": 1.75,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.5,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "center"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Clock8_48646/ButtonReset",
+      "newValue": "5",
+      "options": {
+        "source": "ui"
+      },
+      "property": "layer"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_5307"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Clock8_48646/ButtonReset",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_5307",
+      "newValue": "ClockButton.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_5307",
+      "newValue": {
+        "type": "string",
+        "value": "reset"
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "tag"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Clock8_48646",
+      "newValue": "Clock9",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/Clock9",
+      "folder": "Clock",
+      "itemName": "Clock9",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterAudioSource_441"
+      },
+      "componentType": "BanterAudioSource",
+      "entityId": "Scene/Clock9",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterAudioSource_441",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "mute"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterAudioSource_441",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "mute"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterAudioSource_441",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "volume"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterAudioSource_441",
+      "newValue": 0.05,
+      "options": {
+        "source": "ui"
+      },
+      "property": "volume"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Clock9",
+      "newValue": "Clock10",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1758849100869,
+  "name": "Clock10"
+}

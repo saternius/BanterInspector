@@ -762,7 +762,6 @@
          * Render MonoBehavior component with special handling
          */
         renderMonoBehaviorComponent(component, index, totalComponents) {
-            log("properties panel", "rendering MonoBehavior component", component.id)
             const section = document.createElement('div');
             section.className = 'component-section';
             section.dataset.panel = 'propertyPanelComponent';
@@ -875,7 +874,9 @@
             // Get available scripts from inventory
             
             const scripts = window.inventory.getAvailableScripts();
-            scripts.forEach(script => {
+            
+            let addScriptOption = (script)=>{
+                if(!script) return;
                 const option = document.createElement('option');
                 option.value = script.name;
                 option.textContent = `${script.name} (by ${script.author})`;
@@ -883,6 +884,12 @@
                     option.selected = true;
                 }
                 fileSelect.appendChild(option);
+            }
+
+            addScriptOption(inventory.items[component.properties.file]);
+            scripts.forEach(script => {
+                if(script.name === component.properties.file) return;
+                addScriptOption(script);
             });
             
             fileSelect.onchange = async () => {

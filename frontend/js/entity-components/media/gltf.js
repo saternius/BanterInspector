@@ -1,6 +1,14 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
+
+// Reference code for the gltf component via pure BanterScript code
+// const go = new BS.GameObject();
+// const glb = new BS.BanterGLTF('https://cdn.sidequestvr.com/file/2309817/christmas_tree_polycraft.glb');
+// await go.AddComponent(glb);
+// const transform = await go.AddComponent(new BS.Transform());
+// transform.localScale = new BS.Vector3(0.01, 0.01, 0.01);    
+
 export class BanterGLTFComponent extends EntityComponent {
     constructor() {
         super();
@@ -57,43 +65,26 @@ export class BanterGLTFComponent extends EntityComponent {
         }
         log('gltf', 'creating new gltf object..')
         this._gltfObject = new BS.GameObject();
-        
-        log('gltf', 'creating new gltf component..')
         this._gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
-        log('gltf', 'adding component..')
         await this._gltfObject.AddComponent(this._gltfComponent);
-        log('gltf', 'added component..')
-        // this._gltfTransform = await this._gltfObject.AddComponent(new BS.Transform());
-        // log('gltf', 'adding transform..')
-        // this._gltfTransform.localScale = new BS.Vector3(0.01, 0.01, 0.01);
-        // log('gltf', 'set scale..')
-        await this._gltfObject.SetParent(this._entity._bs, true);
-        this._gltfObject.SetLayer(5);
-        log('gltf', 'set parent..')
+        let parentTransform = await this._entity.getTransform().Get("transform");
+        let position = parentTransform.position;
+        let rotation = parentTransform.rotation;
+        let scale = parentTransform.scale;
+        log('gltf', 'parentTransform', position, rotation, scale, this._entity.id)
+        this._gltfTransform = await this._gltfObject.AddComponent(new BS.Transform());
+        this._gltfTransform.position = new BS.Vector3(position.x,position.y, position.z);
+        this._gltfTransform.rotation = new BS.Vector4(rotation.x,rotation.y, rotation.z, rotation.w);
+        this._gltfTransform.localScale = new BS.Vector3(scale.x, scale.y, scale.z);
 
-       
-        // const go = new BS.GameObject();
-        // const glb = new BS.BanterGLTF('https://cdn.sidequestvr.com/file/2309817/christmas_tree_polycraft.glb');
-        // await go.AddComponent(glb);
-        // const transform = await go.AddComponent(new BS.Transform());
-        // transform.localScale = new BS.Vector3(0.01, 0.01, 0.01);      
+        await this._gltfObject.SetParent(this._entity._bs, true);
+        await this._gltfObject.SetLayer(5);  
         
     }
 
     async _set(property, value) {
-        // if (!this._bs) return;
-
         value = parseBest(value);
         this.properties[property] = value;
-
-        // try {
-        //     if (this._bs[property] !== undefined) {
-        //         this._bs[property] = value;
-        //     }
-        // } catch (e) {
-        //     console.error(`Failed to update ${property} on BanterGLTF:`, e);
-        // }
-
         if(this._generationTimeout){
             clearTimeout(this._generationTimeout);
         }
