@@ -29,44 +29,100 @@ class WindowUI {
         this.contentArea = null;
         this.PaneEntity = null;
         this.doc = null;
+        this.handle = null;
 
-        this.ctx.onLoaded = async ()=>{
-            log(`${this.windowName} UI`, "onLoaded")
-            let {startingPosition, startingRotation} = await this.getStartingSpot();
-            let transform = this.ctx._entity.getTransform();    
-            transform.Set("localPosition", {x: 0, y: 0, z: 0});
-            this.PaneEntity = await AddEntity(this.ctx._entity.id, "UI")
-            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));
+        let isOwner = ()=>{
+            return this.ctx._component.properties._owner === SM.myName();
+        }        
+
+        let getChildEntity = (childName)=>{
+            let rel_path = this.ctx._entity.id+"/"+childName
+            log(`${this.windowName} UI`, "getChildEntityPath", rel_path)
+            let entity = SM.getEntityById(rel_path)
+            log(`${this.windowName} UI`, "getChildEntity", entity)
+            return entity
+        }
+
+        let constructWindow = async (imageUrl)=>{
+            if(this.doc){
+                await this.doc.Destroy();
+            }
+
+            // Get image dimensions
+            let imgWidth = 512;
+            let imgHeight = 512;
+
+            if(imageUrl) {
+                try {
+                    const dimensions = await this.getImageDimensions(imageUrl);
+                    imgWidth = dimensions.width;
+                    imgHeight = dimensions.height;
+                    log(`${this.windowName} UI`, `Image dimensions: ${imgWidth}x${imgHeight}`);
+                } catch(e) {
+                    log(`${this.windowName} UI`, "Failed to get image dimensions, using default 512x512", e);
+                }
+            }
+
+            // Create UI with image resolution
+            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(imgWidth, imgHeight), false));
             this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));
             window.blankUI = this.doc;
-            transform.Set("localPosition", startingPosition);
-            transform.Set("localRotation", startingRotation);
-            this.generateUI();
+
+
+            // Adjust entity scale based on resolution
+            if(this.PaneEntity){
+                let transform = this.PaneEntity.getTransform();
+                log(`${this.windowName} UI`, "PaneEntity Transform", transform)
+                transform._set("localScale", {
+                    x: imgWidth / 512,
+                    y: imgHeight / 512,
+                    z: 1
+                });
+            }
+            if(this.handle){
+                log(`${this.windowName} UI`, "Handle", this.handle)
+                this.handle.getTransform()._set("localPosition", {x: 0, y: imgHeight/1024, z: 0});
+            }
+            this.generateUI(imageUrl);
+        }
+
+        this.ctx.onLoaded = async ()=>{
+            log(`${this.windowName} UI`, "onLoaded")            
+            this.PaneEntity = getChildEntity("UI")
+            await constructWindow(this.ctx.vars.imgUrl.value);
+
+            if(isOwner()){
+                let {startingPosition, startingRotation} = await this.getStartingSpot();
+                let transform = this.ctx._entity.getTransform();    
+                transform.Set("localPosition", startingPosition);
+                transform.Set("localRotation", startingRotation);
+            }
 
             log(`${this.windowName} UI`, "onLoaded")
-            let handle = this.ctx._entity.children.find(c=>c.name === "Handle")
-            log(`${this.windowName} UI`, "Handle", handle)
-            handle._bs.On("click", e => {
+            this.handle = this.ctx._entity.children.find(c=>c.name === "Handle")
+            log(`${this.windowName} UI`, "Handle", this.handle)
+            this.handle._bs.On("click", e => {
                 log(`${this.windowName} UI`, "TEMP holder")
                 this.grabHandler(e)
             })
         }
+
         this.ctx.onVarChange = async (varName, value)=>{
             log(`${this.windowName} UI`, "onVarChange", varName, value)
             if(varName === "imgUrl"){
-                this.contentArea.style.backgroundImage = `url("${value.value}")`;
+                await constructWindow(value.value);
             }
         }
 
         this.ctx.onDestroy = async()=>{
             log(`${this.windowName} UI`, "onDestroy")
-            if(this.PaneEntity){
-                await RemoveEntity(this.PaneEntity.id)
+            if(this.doc){
+                await this.doc.Destroy();
             }
         }
     }
 
-    generateUI(){
+    generateUI(imageUrl){
         if(this.container){
             this.container.Destroy();
         }
@@ -127,7 +183,7 @@ class WindowUI {
         this.contentArea.style.overflowY = "auto";
         this.contentArea.style.margin = "4px";
         this.contentArea.style.backgroundColor = "white";
-        this.contentArea.style.backgroundImage = `url("${this.ctx.vars.imgUrl.value}")`;
+        this.contentArea.style.backgroundImage = `url("${imageUrl}")`;
         this.contentArea.style.backgroundSize = "cover";
         this.contentArea.style.backgroundPosition = "center";
         this.contentArea.style.backgroundRepeat = "no-repeat";
@@ -177,6 +233,22 @@ class WindowUI {
         startingPosition.y -= 0.5;
         let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);
         return {startingPosition, startingRotation};
+    }
+
+    async getImageDimensions(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = function() {
+                resolve({
+                    width: this.width,
+                    height: this.height
+                });
+            };
+            img.onerror = function() {
+                reject(new Error('Failed to load image'));
+            };
+            img.src = url;
+        });
     }
 
     async DestroySelf(){

@@ -10,7 +10,7 @@ class WindowUI {
         this.PaneEntity = null;
         this.doc = null;
 
-        this.ctx.onLoaded = async ()=>{
+        this.ctx.onStart = async ()=>{
             let {startingPosition, startingRotation} = await this.getStartingSpot();
             let transform = this.ctx._entity.getTransform();    
             transform.Set("localPosition", {x: 0, y: 0, z: 0});
