@@ -8,12 +8,16 @@ export class MonoBehaviorComponent extends EntityComponent {
         this.inventoryItem = null;
     }
 
-    async init(entity, sceneComponent, properties){
-        await super.init(entity, sceneComponent, properties);
+    async init(entity, sceneComponent, properties, options){
+        await super.init(entity, sceneComponent, properties, options);
+        if(options?.owner){
+            this.properties._owner = options.owner;
+        }
         this.ctx = (this.ctx) ? this.ctx : this.newScriptContext();
         this._scriptFunction = (this._scriptFunction) ? this._scriptFunction : null;
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
+
         if(this.properties.file && this.properties.file.length > 0){
             if(SM.props["__" + this.id + "/_running:component"] !== false){
                 if(!this.ctx._running){
@@ -238,7 +242,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     newScriptContext(){
         let newContext =  {
-            vars: SM.props[`__${this.id}/vars:component`] || {},
+            vars: SM.props[`__${this.id}/vars:component`] || this.properties.vars || {},
             _running: false, // Initialize _running to prevent undefined
             onStart: async ()=>{},
             onLoaded: async ()=>{},

@@ -76,6 +76,7 @@ export class Entity{
     }
 
     _loaded(){
+        log("RANDOM DEBUG", this.id, Object.keys(SM.entityData.entityMap).join(", "))
         this._finished_loading = true;
         let scripts = this.components.filter(c=>c.type === "MonoBehavior");
         scripts.forEach(async script=>{
@@ -87,7 +88,11 @@ export class Entity{
         let visible_components = this.components.map(x=>x._bs)
         Object.values(this._bs.components).forEach(async bs_comp => {
             if(!visible_components.includes(bs_comp)){
-                log("entity", "ghost component found: ", componentTextMap[bs_comp.type])
+                log("entity", this.id, "ghost component found: ", bs_comp.type, componentTextMap[bs_comp.type])
+                if(bs_comp.type === 34){
+                    //This is UI
+                    return;
+                }
                 let component_ref = `${componentTextMap[bs_comp.type]}_${id}`
                 let props = {
                     id: component_ref

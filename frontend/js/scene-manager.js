@@ -508,7 +508,8 @@
 
 
         //Creates a entity from the inventory schema
-        async _loadEntity(entityData, parentId){
+        async _loadEntity(entityData, parentId, options){
+            log("RANDOM DEBUG", "LOADING ENTITY", entityData, parentId, options)
             //TODO: add a param for await req for sync/async component/entity
             let loadSubEntity = async (item, parentId, parentEnt)=>{ 
             
@@ -529,7 +530,7 @@
                                 id: component.id
                             }
                         }
-                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync});
+                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync, cmdUser: options?.owner});
                         if(!component.loadAsync){
                             log("loadEntity", "component [AWAIT]", component.type, item.name+"/"+component.type+":"+component.id)
                             await result;
@@ -540,18 +541,26 @@
                 }
 
                 if(item.children){
+                    let childPromises = [];
                     for(let i=0; i<item.children.length; i++){
                         let child = item.children[i];
-                        let childEntity = loadSubEntity(child, newEntity.id, newEntity);
+                        let childEntityPromise = loadSubEntity(child, newEntity.id, newEntity);
                         if(!child.loadAsync){
                             console.log("LoadEntity", "Entity [AWAIT]", child.name)
-                            await childEntity;
+                            await childEntityPromise;
                         }else{
                             console.log("LoadEntity", "Entity [ASYNC]", child.name)
+                            childPromises.push(childEntityPromise);
                         }
+                    }
+                    // Wait for all async children to complete
+                    if(childPromises.length > 0){
+                        await Promise.all(childPromises);
                     }
                 }
                 await newEntity._setParent(parentEnt);
+                // Call _loaded() after all children are fully instantiated
+                newEntity._loaded();
                 return newEntity;
             }
 
@@ -561,7 +570,7 @@
 
             this.expandedNodes.add(parentId);
             this.selectEntity(entity.id);
-            entity._loaded();
+            // _loaded() is now called within loadSubEntity after all children are instantiated
             return entity;
         }
 
@@ -605,10 +614,15 @@
                 entity.components.push(entityComponent);
             }
 
-            hierarchy.children.forEach(async (child)=>{
-                let childEntity = await this.loadHistoricalEntity(child, entity.id);
-                await childEntity._setParent(entity);
-            })
+            // Process all children and wait for them to complete
+            if(hierarchy.children && hierarchy.children.length > 0){
+                const childPromises = hierarchy.children.map(async (child) => {
+                    let childEntity = await this.loadHistoricalEntity(child, entity.id);
+                    await childEntity._setParent(entity);
+                    return childEntity;
+                });
+                await Promise.all(childPromises);
+            }
             entity._loaded();
             return entity;
         }
@@ -855,7 +869,7 @@
          */
         async executeStartupScripts(stage, attempts = 0) {
             log('startup', "executing startup scripts for: ", stage)
-            if(!lifecycle){
+            if(!lifecycle || !window.inventory || !window.inventory.items){
                 log('startup', 'Lifecycle not initialized, delaying..');
                 await new Promise(resolve => setTimeout(resolve, 500));
                 return await this.executeStartupScripts(stage);
@@ -900,13 +914,9 @@
                     item.startupSequence === stage
                 );
                 
-                if (startupScripts.length === 0) {
-                    log('startup', 'No startup scripts found');
-                    return;
-                }
+           
                 
                 log('startup', `Found ${startupScripts.length} startup scripts to execute`);
-                
                 for (const script of startupScripts) {
                     try {
                         log('startup', `Executing startup script: ${script.name}`);

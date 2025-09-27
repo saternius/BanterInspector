@@ -1,0 +1,515 @@
+{
+  "author": "Technocrat",
+  "created": 1758867053568,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.654296875,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 0.025,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 0.05,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1,
+                "y": 0.1,
+                "z": 0.1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "Handle",
+        "parentId": "Scene/msbg",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 2.328125,
+                "y": 1.30859375,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "UI",
+        "parentId": "Scene/msbg",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": -5.756116175,
+            "y": 1.0226576,
+            "z": 1.743774625
+          },
+          "localRotation": {
+            "w": 0.6095165824042571,
+            "x": 0.04400912212301289,
+            "y": 0.7915508404039481,
+            "z": 0
+          },
+          "localScale": {
+            "x": 6,
+            "y": 6,
+            "z": 6
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1758544948292,
+          "data": "this.default = {\n    imgUrl: {\n        \"type\": \"string\",\n        \"value\": \"\"\n    }\n}\nlog(\"Image UI\", \"ImageUI loaded with vars: \", this.vars)\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        log(\"Image UI\", \"setting var\", key, val)\n        this.vars[key] = val\n    }\n})    \n\nlog(\"Image UI\", \"ImageUI loaded with vars: \", this.vars)\n\n\n\n\n\nclass WindowUI {\n    constructor(ctx, windowName){\n        this.ctx = ctx;\n        this.windowName = windowName;\n        this.held = false;\n        this.lastParent = \"Scene\";\n        this.user = SM.myName();\n        this.container = null;\n        this.contentArea = null;\n        this.PaneEntity = null;\n        this.doc = null;\n        this.handle = null;\n\n        let constructWindow = async (imageUrl)=>{\n            if(this.doc){\n                await this.doc.Destroy();\n            }\n\n            // Get image dimensions\n            let imgWidth = 512;\n            let imgHeight = 512;\n\n            if(imageUrl) {\n                try {\n                    const dimensions = await this.getImageDimensions(imageUrl);\n                    imgWidth = dimensions.width;\n                    imgHeight = dimensions.height;\n                    log(`${this.windowName} UI`, `Image dimensions: ${imgWidth}x${imgHeight}`);\n                } catch(e) {\n                    log(`${this.windowName} UI`, \"Failed to get image dimensions, using default 512x512\", e);\n                }\n            }\n\n            // Create UI with image resolution\n            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(imgWidth, imgHeight), false));\n            this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));\n            window.blankUI = this.doc;\n\n\n            // Adjust entity scale based on resolution\n            if(this.PaneEntity){\n                let transform = this.PaneEntity.getTransform();\n                log(`${this.windowName} UI`, \"PaneEntity Transform\", transform)\n                transform.Set(\"localScale\", {\n                    x: imgWidth / 512,\n                    y: imgHeight / 512,\n                    z: 1\n                });\n            }\n            if(this.handle){\n                log(`${this.windowName} UI`, \"Handle\", this.handle)\n                this.handle.getTransform().Set(\"localPosition\", {x: 0, y: imgHeight/1024, z: 0});\n            }\n\n\n\n            this.generateUI(imageUrl);\n\n        }\n\n        this.ctx.onLoaded = async ()=>{\n            log(`${this.windowName} UI`, \"onLoaded\")\n            let {startingPosition, startingRotation} = await this.getStartingSpot();\n            let transform = this.ctx._entity.getTransform();    \n            transform.Set(\"localPosition\", {x: 0, y: 0, z: 0});\n            this.PaneEntity = await AddEntity(this.ctx._entity.id, \"UI\")\n            await constructWindow(this.ctx.vars.imgUrl.value);\n            transform.Set(\"localPosition\", startingPosition);\n            transform.Set(\"localRotation\", startingRotation);\n            log(`${this.windowName} UI`, \"onLoaded\")\n            this.handle = this.ctx._entity.children.find(c=>c.name === \"Handle\")\n            log(`${this.windowName} UI`, \"Handle\", this.handle)\n            this.handle._bs.On(\"click\", e => {\n                log(`${this.windowName} UI`, \"TEMP holder\")\n                this.grabHandler(e)\n            })\n        }\n\n        this.ctx.onVarChange = async (varName, value)=>{\n            log(`${this.windowName} UI`, \"onVarChange\", varName, value)\n            if(varName === \"imgUrl\"){\n                await constructWindow(value.value);\n            }\n        }\n\n        this.ctx.onDestroy = async()=>{\n            log(`${this.windowName} UI`, \"onDestroy\")\n            if(this.PaneEntity){\n                await RemoveEntity(this.PaneEntity.id)\n            }\n        }\n    }\n\n    generateUI(imageUrl){\n        if(this.container){\n            this.container.Destroy();\n        }\n        log(`${this.windowName} UI`, \"generating UI\")\n        this.container = this.doc.CreateVisualElement();\n        this.container.style.display = \"flex\";\n        this.container.style.flexDirection = \"column\";\n        this.container.style.height = \"100%\";\n        this.container.style.width = \"100%\";\n        //container.style.backgroundColor = \"red\";\n    \n        // Create Windows-style header\n        const header = this.doc.CreateVisualElement();\n        header.style.display = \"flex\";\n        header.style.flexDirection = \"row\";\n        header.style.justifyContent = \"space-between\";\n        header.style.backgroundColor = \"#0051e5\";\n        header.style.paddingLeft = \"8px\";\n        header.style.borderBottom = \"1px solid #333\";\n    \n        header.OnClick(this.grabHandler)\n        \n    \n        const title = this.doc.CreateLabel();\n        title.text = this.windowName;\n        title.style.color = \"#ffffff\";\n        title.style.fontSize = \"14px\";\n        title.style.fontWeight = \"bold\";\n    \n    \n        const closeButton = this.doc.CreateLabel();\n        closeButton.text = \"x\";\n        closeButton.style.backgroundColor = \"red\";\n        closeButton.style.color = \"#ffffff\";\n        closeButton.style.border = \"none\";\n        closeButton.style.borderRadius = \"0px\";\n        closeButton.style.fontSize = \"12px\";\n        closeButton.style.padding = \"4px\";\n        closeButton.style.paddingRight = \"8px\";\n        closeButton.style.paddingLeft = \"8px\";\n        closeButton.style.cursor = \"pointer\";\n        closeButton.OnClick(() => {\n            this.DestroySelf();\n        });\n        closeButton.OnMouseEnter(() => {\n            closeButton.style.backgroundColor = \"#e81123\";\n        });\n        closeButton.OnMouseLeave(() => {\n            closeButton.style.backgroundColor = \"transparent\";\n        });\n    \n        header.AppendChild(title);\n        header.AppendChild(closeButton);\n        this.container.AppendChild(header);\n    \n        // Create content area for undo/redo items\n        this.contentArea = this.doc.CreateVisualElement();\n        this.contentArea.style.overflowY = \"auto\";\n        this.contentArea.style.margin = \"4px\";\n        this.contentArea.style.backgroundColor = \"white\";\n        this.contentArea.style.backgroundImage = `url(\"${imageUrl}\")`;\n        this.contentArea.style.backgroundSize = \"cover\";\n        this.contentArea.style.backgroundPosition = \"center\";\n        this.contentArea.style.backgroundRepeat = \"no-repeat\";\n        log(\"ImageUI\", \"contentArea\", this.contentArea)\n        this.contentArea.style.height = \"100%\"\n        this.container.AppendChild(this.contentArea);\n        \n        \n    }\n\n    grabHandler(e){\n        console.log(\"grabHandler\", e.detail)\n        if(this.held){\n            this.ctx._entity.SetParent(this.lastParent)\n        }else{\n            console.log(\"click\", e.detail)\n            let rightHandHolderPath = \"People/\"+this.user+\"/Trackers/RIGHT_HAND/Holder\";\n            let rightHandHolder = SM.getEntityById(rightHandHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${rightHandHolderPath}`, rightHandHolder)\n            if(!rightHandHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            rightHandHolder.getTransform().Set(\"position\", e.detail.point)\n            this.lastParent = this.ctx._entity.parentId;\n            this.ctx._entity.SetParent(rightHandHolderPath)\n        }\n        this.held = !this.held;\n    }\n\n    async fetchTracker(name){\n        try{\n            let tracker = await GetTracker(name);\n            return tracker;\n        }catch(e){\n            await new Promise(resolve => setTimeout(resolve, 500));\n            return await this.fetchTracker(name);\n        }\n    }\n\n    async getStartingSpot(){\n        let headTracker = await this.fetchTracker(\"HEAD\");\n        let headTransform = headTracker.getTransform();\n        let headPosition = headTransform._bs._localPosition;\n        let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);\n        let startingPosition = TransformOps.Add(headPosition, headForward);\n        startingPosition.y -= 0.5;\n        let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);\n        return {startingPosition, startingRotation};\n    }\n\n    async getImageDimensions(url) {\n        return new Promise((resolve, reject) => {\n            const img = new Image();\n            img.onload = function() {\n                resolve({\n                    width: this.width,\n                    height: this.height\n                });\n            };\n            img.onerror = function() {\n                reject(new Error('Failed to load image'));\n            };\n            img.src = url;\n        });\n    }\n\n    async DestroySelf(){\n        log(`${this.windowName} UI`, \"Destroying Image UI\");\n        await RemoveEntity(this.ctx._entity.id);\n    }\n}\n\nthis.UI = new WindowUI(this, \"Image\");\n",
+          "description": "",
+          "folder": "UIs",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1758544948292,
+          "last_used": 1758866756306,
+          "name": "ImageUI.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "properties": {
+          "file": "ImageUI.js",
+          "name": "myScript",
+          "vars": {
+            "imgUrl": {
+              "type": "string",
+              "value": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f582392a-6eb0-479f-9eca-26ee455b297b/dh2lfsa-50109a52-b76e-4a3b-9515-b7b44917829f.jpg/v1/fill/w_1192,h_670,q_70,strp/bliss__1080p__by_ollywindows007_dh2lfsa-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTA4MCIsInBhdGgiOiIvZi9mNTgyMzkyYS02ZWIwLTQ3OWYtOWVjYS0yNmVlNDU1YjI5N2IvZGgybGZzYS01MDEwOWE1Mi1iNzZlLTRhM2ItOTUxNS1iN2I0NDkxNzgyOWYuanBnIiwid2lkdGgiOiI8PTE5MjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.f9zHnBCJ6EAMDXtmIzpoKUEAZ-LxkVzWQIQm1nUKB4A"
+            }
+          }
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "msbg",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "UIs",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_56272",
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.55,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterGeometry_2480",
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 0.025,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 0.05,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.5,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "BanterGeometry"
+              },
+              {
+                "id": "BanterMaterial_20871",
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 1,
+                    "g": 1,
+                    "r": 1
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "BoxCollider_76882",
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 1,
+                    "y": 0.1,
+                    "z": 0.1
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "id": "BanterColliderEvents_16868",
+                "loadAsync": false,
+                "options": {
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "type": "BanterColliderEvents"
+              }
+            ],
+            "id": "Scene/ImageWindow_50100/Handle",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "Handle",
+            "parentId": "Scene/ImageWindow_50100",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "id": "Transform_11035",
+            "loadAsync": false,
+            "options": {
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": -0.6625836249999997,
+                "y": 1.126986775,
+                "z": -3.1360273
+              },
+              "localRotation": {
+                "w": 0.8652925444292371,
+                "x": 0.013474983802285845,
+                "y": 0.5010860578450624,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "MonoBehavior_98834",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "created": 1758544948292,
+              "data": "this.default = {}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\n\nthis.onStart = ()=>{\n    console.log(\"onStart\")\n}\n\nthis.onUpdate = ()=>{\n    console.log(\"onUpdate\")\n}\n\nthis.onDestroy = ()=>{\n    console.log(\"onDestroy\")\n}\n\nthis.keyDown = (key)=>{\n    console.log(\"keyDown\", key)\n}\n\nthis.keyUp = (key)=>{\n    console.log(\"keyUp\", key)\n}",
+              "description": "",
+              "folder": "UIs",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758544948292,
+              "last_used": 1758544950907,
+              "name": "ImageUI.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "properties": {
+              "file": "ImageUI.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/ImageWindow_50100",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "ImageWindow_50100",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "ImageWindow",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_98834",
+      "newValue": {
+        "type": "string",
+        "value": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f582392a-6eb0-479f-9eca-26ee455b297b/dh2lfsa-50109a52-b76e-4a3b-9515-b7b44917829f.jpg/v1/fill/w_1192,h_670,q_70,strp/bliss__1080p__by_ollywindows007_dh2lfsa-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTA4MCIsInBhdGgiOiIvZi9mNTgyMzkyYS02ZWIwLTQ3OWYtOWVjYS0yNmVlNDU1YjI5N2IvZGgybGZzYS01MDEwOWE1Mi1iNzZlLTRhM2ItOTUxNS1iN2I0NDkxNzgyOWYuanBnIiwid2lkdGgiOiI8PTE5MjAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.f9zHnBCJ6EAMDXtmIzpoKUEAZ-LxkVzWQIQm1nUKB4A"
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "imgUrl"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_11035",
+      "newValue": {
+        "x": 6,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_11035",
+      "newValue": {
+        "x": 6,
+        "y": 6,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 6,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_11035",
+      "newValue": {
+        "x": 6,
+        "y": 6,
+        "z": 6
+      },
+      "options": {
+        "oldValue": {
+          "x": 6,
+          "y": 6,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ImageWindow_50100",
+      "newValue": "msbg",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1758867053568,
+  "name": "msbg"
+}

@@ -414,7 +414,7 @@ export class Networking {
        
         if(items[0] === "load_entity"){
             let [parentId, entity_data] = items.slice(1)
-            await SM._loadEntity(JSON.parse(entity_data), parentId);
+            await SM._loadEntity(JSON.parse(entity_data), parentId, {owner: sender});
             await SM.updateHierarchy();
         }
 

@@ -43,6 +43,7 @@ tooltipBtn.addEventListener("click", async ()=>{
 			active.setSelectionRange(newPos, newPos);
 		}
 		active.dispatchEvent(new Event("input", { bubbles: true }));
+		active.dispatchEvent(new Event("change", { bubbles: true }));
 		active.focus();
 	}catch(err){
 		console.error("Clipboard read failed", err);
