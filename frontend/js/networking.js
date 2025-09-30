@@ -460,6 +460,26 @@ export class Networking {
             await SM.updateHierarchy();
         }
 
+        if(items[0] === "entity_cloned"){
+            let [sourceEntityId, cloneName, componentIdMapJson] = items.slice(1)
+            const sourceEntity = SM.getEntityById(sourceEntityId);
+            if (!sourceEntity) return;
+
+            // Parse the component ID map
+            const componentIdMap = JSON.parse(componentIdMapJson);
+
+            // Use scene.Instantiate to clone the entity
+            const clonedGameObject = await SM.scene.Instantiate(sourceEntity._bs);
+
+            // Rename the cloned GameObject to match the synchronized name
+            await clonedGameObject.SetName(cloneName);
+
+            // Create entity wrapper and map all components recursively using synchronized IDs
+            await SM._createEntityFromGameObject(clonedGameObject, sourceEntity.parentId, cloneName, sourceEntity, componentIdMap);
+
+            await SM.updateHierarchy();
+        }
+
         if(items[0] === "monobehavior_start"){
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);

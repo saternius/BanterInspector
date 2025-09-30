@@ -833,73 +833,53 @@ export class CloneEntityChange extends Change{
             console.error(`Source entity ${entityId} not found`);
             return;
         }
-        this.entityData = this.sourceEntity.export();
-        this.entityId = `${this.sourceEntity.parentId}/${this.sourceEntity.name}_${Math.floor(Math.random() * 100000)}`;
+        this.sourceEntityId = entityId;
+        // Generate a unique clone name upfront for synchronization across clients
+        this.cloneName = `${this.sourceEntity.name}_${Math.floor(Math.random() * 100000)}`;
+        this.clonedEntityId = `${this.sourceEntity.parentId}/${this.cloneName}`;
+
+        // Pre-generate all component IDs for the entire hierarchy
+        this.componentIdMap = this.generateComponentIdMap(this.sourceEntity);
+
         this.options = options || {};
+    }
+
+    /**
+     * Recursively generates component IDs for the entity and all its children
+     * Returns a map of original component IDs to new component IDs
+     */
+    generateComponentIdMap(entity) {
+        const idMap = {};
+
+        // Generate IDs for this entity's components
+        entity.components.forEach(component => {
+            const newId = `${component.type}_${Math.floor(Math.random() * 99999)}`;
+            idMap[component.id] = newId;
+        });
+
+        // Recursively generate IDs for children
+        if (entity.children && entity.children.length > 0) {
+            entity.children.forEach(child => {
+                const childMap = this.generateComponentIdMap(child);
+                Object.assign(idMap, childMap);
+            });
+        }
+
+        return idMap;
     }
 
     async apply() {
         super.apply();
 
-        let changeChildrenIds = (entity)=>{
-            entity.components.forEach(component=>{
-                component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
-            })
-            entity.children.forEach(child=>{
-                child.parentId = entity.id;
-                child.id = entity.id+"/"+child.name;
-                changeChildrenIds(child);
-            })
-        }
-
-        let itemData = this.entityData;
-        itemData.name = this.sourceEntity.name+"_"+Math.floor(Math.random() * 100000);
-        itemData.parentId = this.sourceEntity.parentId;
-        itemData.id = this.sourceEntity.parentId+"/"+itemData.name;
-        changeChildrenIds(itemData);
-
-        let data = `load_entity¶${this.sourceEntity.parentId}¶${JSON.stringify(itemData)}`
+        // Send OneShot message with source entity ID, clone name, and component ID map
+        let data = `entity_cloned¶${this.sourceEntityId}¶${this.cloneName}¶${JSON.stringify(this.componentIdMap)}`
         networking.sendOneShot(data);
 
-        //Additionally send all of the entity properties to space props
-        if(!this.options.ephemeral){
-
-            let getEntitySpaceProperties = (entity)=>{
-                let props = {}
-                let getSubEntityProps = (entity)=>{
-                    props[`__${entity.id}/active:entity`] = entity.active
-                    props[`__${entity.id}/persistent:entity`] = entity.persistent
-                    props[`__${entity.id}/name:entity`] = entity.name
-                    props[`__${entity.id}/layer:entity`] = entity.layer
-                    
-                    entity.components.forEach(component=>{
-                        Object.keys(component.properties).forEach(prop=>{
-                            props[`__${component.id}/${prop}:component`] = component.properties[prop]
-                        })
-                    })
-    
-                    entity.children.forEach(child=>{
-                        getSubEntityProps(child)
-                    })
-                }
-    
-                getSubEntityProps(entity)
-                return props
-            }
-
-
-            let itemProps = getEntitySpaceProperties(itemData);
-            Object.keys(itemProps).forEach(key=>{
-                SM.props[key] = itemProps[key]
-            })
-        }
-
-
-        this.entityId = `${this.sourceEntity.parentId}/${itemData.name}`
+        // Wait for the cloned entity to be created and initialized
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const entity = SM.getEntityById(this.entityId, false);
+                const entity = SM.getEntityById(this.clonedEntityId, false);
                 if (entity !== undefined && entity._finished_loading) {
                   resolve(entity);
                 } else {
@@ -914,8 +894,8 @@ export class CloneEntityChange extends Change{
 
     async undo() {
         super.undo();
-        if(!this.entityId) return;
-        let data = `entity_removed¶${this.entityId}`
+        if(!this.clonedEntityId) return;
+        let data = `entity_removed¶${this.clonedEntityId}`
         networking.sendOneShot(data);
     }
 
@@ -924,13 +904,13 @@ export class CloneEntityChange extends Change{
     }
 
     getUndoDescription() {
-        return `Remove entity ${this.sourceEntity.name}`;
+        return `Remove cloned entity`;
     }
 
     cmd(){
         return {
             action: "clone_entity",
-            entityId: this.entityId,
+            entityId: this.sourceEntityId,
             options: this.options
         }
     }

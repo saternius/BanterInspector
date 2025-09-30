@@ -4,21 +4,22 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class BanterCylinderComponent extends BanterMeshComponent {
     constructor() {
         super();
-        this._bsRef = BS.BanterCylinder;
+        this._bsRef = BS.BanterGeometry;
         this.type = 'BanterCylinder';
     }
 
+    async init(entity, sceneComponent, properties, options){
+        await super.init(entity, sceneComponent, properties, options);
+        this._bs['geometryType'] = 2;
+        return this;
+    }
+
+
     defaultProperties() {
         return {
-            // topRadius: 1,
-            // bottomRadius: 1,
              height: 1,
              radialSegments: 32,
              radius: 1,
-            // heightSegments: 1,
-            // openEnded: false,
-            // thetaStart: 0,
-            // thetaLength: 6.283185307179586
         };
     }
 
@@ -41,16 +42,13 @@ export class BanterCylinderComponent extends BanterMeshComponent {
 
         try {
             if (this._bs[property] !== undefined) {
-                this._bs[property] = value;
-                let geometry = this._entity.getComponent("BanterGeometry")
-                if(geometry){
-                    if(property === 'radius'){
-                        geometry._set("topRadius", value)
-                        geometry._set("bottomRadius", value)
-                    }else{
-                        geometry._set(property, value)
-                    }
+                if(property === 'radius'){
+                    this._bs['radiusTop'] = value;
+                    this._bs['radiusBottom'] = value;
+                }else{
+                    this._bs[property] = value;
                 }
+                
             }
         } catch (e) {
             console.error(`Failed to update ${property} on BanterCylinder:`, e);
