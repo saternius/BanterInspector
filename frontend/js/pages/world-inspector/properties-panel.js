@@ -568,12 +568,36 @@
                     if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${axis}`){
                         input.style.backgroundColor = "#1e3764";
                         input.style.borderColor = "#326689";
-                    }   
+                    }
 
                     vectorGroup.appendChild(axisLabel);
                     vectorGroup.appendChild(input);
                 });
-                
+
+                // Add reset button for rotation
+                const resetButton = document.createElement('button');
+                resetButton.className = 'rotation-reset-btn';
+                resetButton.style.marginLeft = '8px';
+                resetButton.style.padding = '4px 8px';
+                resetButton.style.background = '#2a2a2a';
+                resetButton.style.border = '1px solid #3a3a3a';
+                resetButton.style.borderRadius = '4px';
+                resetButton.style.color = '#999';
+                resetButton.style.cursor = 'pointer';
+                resetButton.style.fontSize = '14px';
+                resetButton.innerHTML = '∅';
+                resetButton.title = 'Reset rotation to zero';
+
+                resetButton.onmousedown = (e) => {
+                    e.stopPropagation();
+                    // Set all rotation values to 0
+                    const zeroRotation = { x: 0, y: 0, z: 0, w: 1 };
+                    const change = new ComponentPropertyChange(componentId, key, zeroRotation, { source: 'ui' });
+                    changeManager.applyChange(change);
+                };
+
+                vectorGroup.appendChild(resetButton);
+
                 valueContainer.appendChild(vectorGroup);
                 
             } else if (isVector3Object(value)) {

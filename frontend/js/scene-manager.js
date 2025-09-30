@@ -805,7 +805,80 @@
             await newEntity._setParent(parentEntity);
         }
 
-       
+        /**
+         * Creates entity wrappers for a cloned GameObject and all its children/components
+         * Used after scene.Instantiate to map the Unity GameObject hierarchy to our entity system
+         * @param {Object} gameObject - The cloned Unity GameObject
+         * @param {string} parentId - The parent entity ID
+         * @param {string} name - The entity name
+         * @param {Object} sourceEntity - The original entity being cloned (for ID mapping)
+         * @param {Object} componentIdMap - Map of original component IDs to new synchronized IDs
+         */
+        async _createEntityFromGameObject(gameObject, parentId, name, sourceEntity, componentIdMap) {
+            // Create the entity wrapper
+            const entity = await new Entity().init({
+                name: name || gameObject.name,
+                parentId: parentId,
+                _bs: gameObject,
+                layer: gameObject.layer
+            });
+
+            // Map all components from the GameObject using synchronized IDs
+            let componentIndex = 0;
+
+            // Handle Transform component first
+            const transform = gameObject.GetComponent(BS.ComponentType.Transform);
+            if (transform) {
+                const sourceComponent = sourceEntity.components[componentIndex];
+                const component_ref = componentIdMap[sourceComponent.id];
+                const componentClass = componentBSTypeMap[transform.type];
+                const entityComponent = await new componentClass().init(entity, transform);
+                entityComponent.setId(component_ref);
+                entity.components.push(entityComponent);
+                this.entityData.componentMap[component_ref] = entityComponent;
+                componentIndex++;
+            }
+
+            // Handle all other components
+            for (let c in gameObject.components) {
+                const component = gameObject.components[c];
+                if (component.type === BS.ComponentType.Transform) continue;
+
+                if (SUPPORTED_COMPONENTS.has(component.type)) {
+                    const sourceComponent = sourceEntity.components[componentIndex];
+                    const component_ref = componentIdMap[sourceComponent.id];
+                    const componentClass = componentTypeMap[component_ref.split("_")[0]];
+                    const entityComponent = await new componentClass().init(entity, component);
+                    entityComponent.setId(component_ref);
+                    entity.components.push(entityComponent);
+                    this.entityData.componentMap[component_ref] = entityComponent;
+                    componentIndex++;
+                }
+            }
+
+            // Add entity to parent
+            const parentEntity = this.getEntityById(parentId);
+            if (parentEntity) {
+                parentEntity.children.push(entity);
+            }
+
+            // Recursively handle children
+            if (gameObject.Traverse && sourceEntity.children && sourceEntity.children.length > 0) {
+                let childIndex = 0;
+                gameObject.Traverse((child) => {
+                    if (child && child.id !== gameObject.unityId && child.parent === gameObject.unityId) {
+                        const sourceChild = sourceEntity.children[childIndex];
+                        this._createEntityFromGameObject(child, entity.id, child.name, sourceChild, componentIdMap);
+                        childIndex++;
+                    }
+                });
+            }
+
+            entity._loaded();
+            return entity;
+        }
+
+
         async _addComponent(entity, componentType, componentProperties, options){
             // Check if component already exists (for unique components)
             const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
