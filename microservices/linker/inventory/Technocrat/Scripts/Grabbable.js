@@ -13,7 +13,11 @@ this.onStart = ()=>{
     let user = SM.myName()
     this._entity._bs.On("click", async (e) => {
         if(held){
-            this._entity.SetParent(lastParent)
+            await this._entity.SetParent(lastParent)
+            let transform = this._entity.getTransform()
+            await transform._bs.Q([13])
+            await transform.Set("localPosition", transform._bs._position)
+            await transform.Set("localRotation", transform._bs._rotation)
         }else{
             console.log("click", e.detail)
             let tippyHolderPath = "People/"+user+"/Trackers/RIGHT_HAND/Holder";

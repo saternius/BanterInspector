@@ -13,9 +13,9 @@ export class BanterBoxComponent extends BanterMeshComponent {
             width: 1,
             height: 1,
             depth: 1,
-            widthSegments: 1,
-            heightSegments: 1,
-            depthSegments: 1
+            // widthSegments: 1,
+            // heightSegments: 1,
+            // depthSegments: 1
         };
     }
 
@@ -23,7 +23,7 @@ export class BanterBoxComponent extends BanterMeshComponent {
         const properties = {};
         
         const floatProps = ['width', 'height', 'depth'];
-        const intProps = ['widthSegments', 'heightSegments', 'depthSegments'];
+        // const intProps = ['widthSegments', 'heightSegments', 'depthSegments'];
         
         floatProps.forEach(prop => {
             if (sceneComponent[prop] !== undefined) {
@@ -31,11 +31,11 @@ export class BanterBoxComponent extends BanterMeshComponent {
             }
         });
         
-        intProps.forEach(prop => {
-            if (sceneComponent[prop] !== undefined) {
-                properties[prop] = parseBest(sceneComponent[prop]);
-            }
-        });
+        // intProps.forEach(prop => {
+        //     if (sceneComponent[prop] !== undefined) {
+        //         properties[prop] = parseBest(sceneComponent[prop]);
+        //     }
+        // });
         
         return properties;
     }
@@ -46,9 +46,15 @@ export class BanterBoxComponent extends BanterMeshComponent {
         value = parseBest(value);
         this.properties[property] = value;
 
+        
+
         try {
             if (this._bs[property] !== undefined) {
                 this._bs[property] = value;
+                let geometry = this._entity.getComponent("BanterGeometry")
+                if(geometry){
+                    geometry._set(property, value)
+                }
             }
         } catch (e) {
             console.error(`Failed to update ${property} on BanterBox:`, e);

@@ -509,7 +509,7 @@
 
         //Creates a entity from the inventory schema
         async _loadEntity(entityData, parentId, options){
-            log("RANDOM DEBUG", "LOADING ENTITY", entityData, parentId, options)
+            //log("RANDOM DEBUG", "LOADING ENTITY", entityData, parentId, options)
             //TODO: add a param for await req for sync/async component/entity
             let loadSubEntity = async (item, parentId, parentEnt)=>{ 
             

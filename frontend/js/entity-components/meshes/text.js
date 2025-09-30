@@ -17,7 +17,7 @@ export class BanterTextComponent extends BanterMeshComponent {
             fontSize: 0.1,
             richText: false,
             enableWordWrapping: true,
-            rectTransformSizeDelta: { x: 2, y: 1 }
+            // rectTransformSizeDelta: { x: 2, y: 1 }
         };
     }
 
@@ -56,12 +56,12 @@ export class BanterTextComponent extends BanterMeshComponent {
             }
         });
         
-        if (sceneComponent.rectTransformSizeDelta !== undefined) {
-            properties.rectTransformSizeDelta = {
-                x: sceneComponent.rectTransformSizeDelta.x || 2,
-                y: sceneComponent.rectTransformSizeDelta.y || 1
-            };
-        }
+        // if (sceneComponent.rectTransformSizeDelta !== undefined) {
+        //     properties.rectTransformSizeDelta = {
+        //         x: sceneComponent.rectTransformSizeDelta.x || 2,
+        //         y: sceneComponent.rectTransformSizeDelta.y || 1
+        //     };
+        // }
         
         return properties;
     }

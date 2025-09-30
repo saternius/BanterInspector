@@ -17,7 +17,7 @@ let D2 = null
 let D3 = null
 let D4 = null
 let audioSource = null
-this.onStart = () => {
+this.onLoaded = () => {
     // Cache digit references
     D1 = getChildEntity("Digit1")
     D2 = getChildEntity("Digit2")

@@ -76,7 +76,7 @@ export class Entity{
     }
 
     _loaded(){
-        log("RANDOM DEBUG", this.id, Object.keys(SM.entityData.entityMap).join(", "))
+        //log("RANDOM DEBUG", this.id, Object.keys(SM.entityData.entityMap).join(", "))
         this._finished_loading = true;
         let scripts = this.components.filter(c=>c.type === "MonoBehavior");
         scripts.forEach(async script=>{
@@ -186,7 +186,7 @@ export class Entity{
     }
 
     rename(newName, localUpdate){
-        log("entity", `renaming ${this.id} to ${newName} : ${localUpdate}`)
+        //log("entity", `renaming ${this.id} to ${newName} : ${localUpdate}`)
         if(!localUpdate) this._deleteOldSpaceProperties();
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
