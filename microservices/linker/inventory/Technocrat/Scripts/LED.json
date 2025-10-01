@@ -1,0 +1,562 @@
+{
+  "author": "Technocrat",
+  "created": 1759290037809,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": -0.02696905942239835,
+                "y": -0.08105232689814816,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "depth": 0.01,
+              "height": 0.1,
+              "width": 0.01
+            },
+            "type": "BanterBox"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.4549019607843137,
+                "g": 0.4549019607843137,
+                "r": 0.4666666666666667
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "rod1",
+        "parentId": "Scene/LED",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0.023042988794965653,
+                "y": -0.08105233,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "depth": 0.01,
+              "height": 0.1,
+              "width": 0.01
+            },
+            "type": "BanterBox"
+          },
+          {
+            "loadAsync": false,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.454902,
+                "g": 0.454902,
+                "r": 0.4666667
+              },
+              "generateMipMaps": true,
+              "shaderName": [
+                "U",
+                "n",
+                "l",
+                "i",
+                "t",
+                "/",
+                "D",
+                "i",
+                "f",
+                "f",
+                "u",
+                "s",
+                "e"
+              ],
+              "side": 0
+            },
+            "type": "BanterMaterial"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "rod2",
+        "parentId": "Scene/LED",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "depth": 0.1,
+          "height": 0.1,
+          "width": 0.1
+        },
+        "type": "BanterBox"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0,
+            "g": 0,
+            "r": 0
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "convex": false,
+          "isTrigger": false
+        },
+        "type": "MeshCollider"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759289143241,
+          "data": "this.default = {\n    eventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: { \n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nlet material = null;\nthis.handleEvent = (e) => {\n    log(\"eventFlasher\", \"handleEvent\", e.detail.flag)\n    if (e.detail.flag === this.vars.tag.value) {\n        if(material){\n            material.Set(\"color\", {r:1,g:0,b:0,a:1})\n            setTimeout(() => {\n                material.Set(\"color\", {r:0,g:0,b:0,a:1})\n            }, 500)\n        }\n    }\n}\n\nthis.onStart = ()=>{\n    log(\"eventFlasher\", \"onStart\")\n    material = this._entity.getComponent(\"BanterMaterial\")\n    window.addEventListener(this.vars.eventName.value, this.handleEvent)\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(this.vars.eventName.value, this.handleEvent)\n}\n",
+          "description": "",
+          "folder": "Scripts",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1759289143242,
+          "last_used": 1759289830205,
+          "name": "EventFlasher.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "EventFlasher.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "LED",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Scripts",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_72274",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_72274",
+      "newValue": "led",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_60275",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/led"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_60275",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/led"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/led",
+      "newParentId": "Scene/controller",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/controller/led",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/led",
+      "newValue": "LED",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterBox_5935"
+      },
+      "componentType": "BanterBox",
+      "entityId": "Scene/LED",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMaterial_7068"
+      },
+      "componentType": "BanterMaterial",
+      "entityId": "Scene/LED",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5935",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5935",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5935",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "depth"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterBox_5503"
+      },
+      "componentType": "BanterBox",
+      "entityId": "Scene/LED/NewEntity_60275",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMaterial_116"
+      },
+      "componentType": "BanterMaterial",
+      "entityId": "Scene/LED/NewEntity_60275",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5503",
+      "newValue": 0.01,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5503",
+      "newValue": 0.01,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5503",
+      "newValue": 0.01,
+      "options": {
+        "source": "ui"
+      },
+      "property": "depth"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5503",
+      "newValue": 0.04,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_41271764",
+      "newValue": {
+        "x": 0,
+        "y": 0.2,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_41271764",
+      "newValue": {
+        "x": 0,
+        "y": -0.2,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.2,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_5503",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_41271764",
+      "newValue": {
+        "x": -0.1,
+        "y": -0.11900000000000001,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 1.1367777777777777,
+          "y": -0.11900000000000001,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/LED/NewEntity_60275",
+      "newValue": "rod1",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/LED/rod1",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/LED/rod1_44234",
+      "newValue": "rod2",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_8844",
+      "newValue": "EventFlasher.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_1515"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/LED/rod1",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_1515",
+      "newValue": "Clickable.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759290037809,
+  "name": "LED"
+}
