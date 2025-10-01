@@ -199,11 +199,3 @@ class BANTER_OT_copy_hash(bpy.types.Operator):
         else:
             self.report({'WARNING'}, "No hash to copy")
         return {'FINISHED'}
-
-
-# Register the copy operator
-def register():
-    bpy.utils.register_class(BANTER_OT_copy_hash)
-
-def unregister():
-    bpy.utils.unregister_class(BANTER_OT_copy_hash)

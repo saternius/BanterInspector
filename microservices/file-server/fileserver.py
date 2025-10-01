@@ -211,12 +211,12 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                     self.wfile.write(error_response.encode())
                     return
                 
-                # Check file size (20MB limit)
-                if len(glb_data) > 20 * 1024 * 1024:
+                # Check file size (40MB limit)
+                if len(glb_data) > 40 * 1024 * 1024:
                     self.send_response(413)
                     self.send_header('Content-Type', 'application/json')
                     self.end_headers()
-                    error_response = json.dumps({'error': 'File size exceeds 20MB limit'})
+                    error_response = json.dumps({'error': 'File size exceeds 40MB limit'})
                     self.wfile.write(error_response.encode())
                     return
                 
@@ -367,7 +367,7 @@ if __name__ == '__main__':
         directory = sys.argv[2] if len(sys.argv) > 2 else os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'frontend')
     os.chdir(directory)
     print(f"Serving {directory!r} on http://0.0.0.0:{port} with CORS enabled")
-    print(f"GLB Storage: POST /api/store_glb?username=<user>&secret=<secret>&mesh_name=<name> (max 20MB) → returns hash")
+    print(f"GLB Storage: POST /api/store_glb?username=<user>&secret=<secret>&mesh_name=<name> (max 40MB) → returns hash")
     print(f"  - Accepts: raw binary, JSON with base64, or multipart/form-data")
     print(f"  - Stores reference in Firebase at: glb_loader/<username>_<secret>")
     print(f"  - mesh_name defaults to 'mesh_<random>' if not provided")

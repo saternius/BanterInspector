@@ -17,7 +17,7 @@ Object.entries(this.default).forEach(([key, val])=>{
 
 this.onStart = ()=>{
     this._entity._bs.On("click", e => {
-        log("stopWatch", "click")
+        log("clickable", "click")
         const event = new CustomEvent(this.vars.clickEventName.value, {
             detail: {
                 entity: this._entity,
