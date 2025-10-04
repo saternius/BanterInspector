@@ -18,7 +18,7 @@ let v = (str)=>{
 }
 
 let loadItem = async (itemRef, target) =>{
-    if(target === "_self") target = this._slot.id
+    if(target === "_self") target = this._entity.id
     if(target === undefined) target = "Root"
     return await LoadItem(itemRef, target)
 }
@@ -31,7 +31,7 @@ let deleteSlot = async (slot) =>{
         }
         slot = slot.id
     }
-    RemoveSlot(slot)
+    RemoveEntity(slot)
 }
 
 let getSlotByName = (slotName) =>{

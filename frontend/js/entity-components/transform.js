@@ -106,7 +106,10 @@ export class TransformComponent extends EntityComponent {
             return {
                 position: this._bs._position,
                 rotation: this._bs._rotation,
-                scale: await getScale(this._entity.id)
+                scale: await getScale(this._entity.id),
+                localPosition: this._bs._localPosition,
+                localRotation: this._bs._localRotation,
+                localScale: this._bs._localScale
             }
         }
         if(property === "scale"){

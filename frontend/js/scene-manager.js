@@ -823,6 +823,9 @@
                 layer: gameObject.layer
             });
 
+            
+            
+
             // Map all components from the GameObject using synchronized IDs
             let componentIndex = 0;
 
@@ -837,7 +840,20 @@
                 entity.components.push(entityComponent);
                 this.entityData.componentMap[component_ref] = entityComponent;
                 componentIndex++;
+
+
+                // Set the parent and transform
+                let parentBS = this.getEntityById(parentId)._bs;
+                entity._bs.SetParent(parentBS)
+                let sourceTransform = sourceEntity.getTransform()
+                let transformProps = await sourceTransform.Get("transform")
+                console.log('transformProps', transformProps)
+                entityComponent.Set("localPosition", transformProps.localPosition)
+                entityComponent.Set("localRotation", transformProps.localRotation)
+                entityComponent.Set("localScale", transformProps.localScale)
             }
+
+           
 
             // Handle all other components
             for (let c in gameObject.components) {
@@ -873,6 +889,7 @@
                     }
                 });
             }
+
 
             entity._loaded();
             return entity;

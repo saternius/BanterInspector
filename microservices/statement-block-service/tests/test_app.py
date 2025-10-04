@@ -246,10 +246,191 @@ class TestRateLimiting:
     def test_rate_limiting_disabled(self, client, mock_text_processor):
         """Test that rate limiting can be disabled."""
         mock_text_processor.process_text.return_value = ["Test response"]
-        
+
         # Make many requests - all should succeed when rate limiting is disabled
         for i in range(10):
             response = client.post('/process-text',
                 json={'text': 'test', 'existing_blocks': []}
             )
             assert response.status_code == 200
+
+class TestFormatBlend2EndEndpoint:
+
+    def test_format_blend2end_success(self, client, mock_text_processor):
+        """Test successful blend2end formatting."""
+        mock_text_processor.format_blend2end.return_value = {
+            "description": "A wooden desk with two drawers",
+            "functionality": ["Drawers should be grabbable and slide open"],
+            "style": "Modern minimalist"
+        }
+
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'I want a wooden desk with drawers that slide',
+                'existing_form': {},
+                'intent': ''
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 200
+        assert 'description' in data
+        assert 'functionality' in data
+        assert 'style' in data
+        assert isinstance(data['functionality'], list)
+        assert 'processing_time_ms' in data
+
+    def test_format_blend2end_with_existing_form(self, client, mock_text_processor):
+        """Test blend2end formatting with existing form data."""
+        mock_text_processor.format_blend2end.return_value = {
+            "description": "A wooden desk with two drawers",
+            "functionality": [
+                "Drawers should be grabbable and slide open",
+                "Desktop should be a static surface"
+            ],
+            "style": "Modern minimalist"
+        }
+
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'also the desktop should be a static surface',
+                'existing_form': {
+                    'description': 'A wooden desk with two drawers',
+                    'functionality': ['Drawers should be grabbable and slide open'],
+                    'style': 'Modern minimalist'
+                }
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 200
+        assert len(data['functionality']) == 2
+
+    def test_format_blend2end_missing_text(self, client):
+        """Test request without text field."""
+        response = client.post('/format-blend2end',
+            json={'existing_form': {}}
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 400
+        assert 'error' in data
+        assert "'text' field is required" in str(data)
+
+    def test_format_blend2end_invalid_json(self, client):
+        """Test request with invalid JSON."""
+        response = client.post('/format-blend2end',
+            data='invalid json',
+            content_type='application/json'
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 400
+        assert 'error' in data
+        assert 'Invalid JSON' in data['error']
+
+    def test_format_blend2end_text_too_long(self, client):
+        """Test request with text exceeding max length."""
+        with patch.object(Config, 'MAX_TEXT_LENGTH', 100):
+            response = client.post('/format-blend2end',
+                json={
+                    'text': 'x' * 101,
+                    'existing_form': {}
+                }
+            )
+
+            data = json.loads(response.data)
+            assert response.status_code == 400
+            assert 'error' in data
+            assert 'exceeds maximum length' in str(data)
+
+    def test_format_blend2end_invalid_existing_form_type(self, client):
+        """Test request with invalid existing_form type."""
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'test text',
+                'existing_form': 'not an object'
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 400
+        assert 'error' in data
+        assert 'must be an object' in str(data)
+
+    def test_format_blend2end_invalid_functionality_type(self, client):
+        """Test request with invalid functionality type in existing_form."""
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'test text',
+                'existing_form': {
+                    'description': 'A desk',
+                    'functionality': 'not an array',
+                    'style': 'Modern'
+                }
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 400
+        assert 'error' in data
+        assert 'must be an array' in str(data)
+
+    def test_format_blend2end_empty_text(self, client, mock_text_processor):
+        """Test processing empty text with existing form."""
+        mock_text_processor.format_blend2end.return_value = {
+            'description': 'Existing description',
+            'functionality': ['Existing functionality'],
+            'style': 'Existing style'
+        }
+
+        response = client.post('/format-blend2end',
+            json={
+                'text': '',
+                'existing_form': {
+                    'description': 'Existing description',
+                    'functionality': ['Existing functionality'],
+                    'style': 'Existing style'
+                }
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 200
+        assert data['description'] == 'Existing description'
+
+    def test_format_blend2end_exception_handling(self, client, mock_text_processor):
+        """Test exception handling during blend2end processing."""
+        mock_text_processor.format_blend2end.side_effect = Exception("Processing error")
+
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'test text',
+                'existing_form': {}
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 500
+        assert 'error' in data
+        assert 'An error occurred while processing' in data['error']
+
+    def test_format_blend2end_with_intent(self, client, mock_text_processor):
+        """Test blend2end formatting with intent context."""
+        mock_text_processor.format_blend2end.return_value = {
+            "description": "A desk for gaming",
+            "functionality": ["RGB lighting"],
+            "style": "Gaming aesthetic"
+        }
+
+        response = client.post('/format-blend2end',
+            json={
+                'text': 'desk with RGB lights',
+                'existing_form': {},
+                'intent': 'Creating a gaming setup'
+            }
+        )
+
+        data = json.loads(response.data)
+        assert response.status_code == 200
+        assert 'description' in data

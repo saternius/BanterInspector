@@ -479,6 +479,7 @@
                     const change = new ComponentPropertyChange(componentId, key, parseBest(dropdown.value), { source: 'ui' });
                     changeManager.applyChange(change);
                 };
+                valueContainer.style.width = '50%';
                 valueContainer.appendChild(dropdown);
             } else if(key === "uid"){
                 //create a dropdown input that list all of the users Object.values(SM.scene.users) with the label being user.name and the value being user.uid
@@ -1126,7 +1127,13 @@
                     const change = new MonoBehaviorVarChange(component.id, varName, {type: 'color', value: varValue.value}, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
-                
+
+                // Enable color input handler for VR
+                preview.onclick = (e) => {
+                    e.stopPropagation();
+                    inputHandler.inputFocusChanged(colorInput, component, varName, 'monobehavior');
+                };
+
                 preview.onmousedown = () => colorInput.click();
                 
                 colorGroup.appendChild(preview);

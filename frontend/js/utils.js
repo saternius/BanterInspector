@@ -565,6 +565,7 @@ export class Logger{
         // Store original console methods
         this.originalLog = console.log.bind(console);
         this.originalError = console.error.bind(console);
+        this.active = true;
     }
 
     hashStringToColor(str) {
@@ -657,6 +658,7 @@ const _originalError = console.error;
 
 // Create custom log that shows correct source location
 window.log = function(tag, ...args) {
+    if(!window.logger.active) return;
     const color = window.logger.getTagColor(tag);
     const callerInfo = window.logger.getCallerInfo();
 
@@ -665,16 +667,6 @@ window.log = function(tag, ...args) {
     const truncatedArgs = args.map(arg => {
         if (typeof arg === 'string' && arg.length > MAX_ARG_LENGTH) {
             return arg.substring(0, MAX_ARG_LENGTH) + '... [truncated]';
-        } else if (typeof arg === 'object') {
-            try {
-                const str = JSON.stringify(arg);
-                if (str && str.length > MAX_ARG_LENGTH) {
-                    return str.substring(0, MAX_ARG_LENGTH) + '... [truncated object]';
-                }
-                return arg;
-            } catch(e) {
-                return '[circular or complex object]';
-            }
         }
         return arg;
     });

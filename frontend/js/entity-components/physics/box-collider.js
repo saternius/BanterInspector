@@ -40,7 +40,8 @@ export class BoxColliderControls{
 
             this.visual.AddComponent(new BS.BanterGeometry());
             let material = new BS.BanterMaterial()
-            material.color = new BS.Vector4(0, 1, 0, .5);
+            material.color = new BS.Vector4(0, 1, 0, .25);
+            material.shaderName = 'Unlit/DiffuseTransparent';
             this.visual.AddComponent(material);
             await this.visual.SetParent(this.component._entity._bs, true);
             this.controls['view'].label = "Hide";

@@ -1,11 +1,27 @@
 this.default = {
     eventName: {
         "type": "string",
-        "value": "button-clicked"
+        "value": "button-clicked",
     },
     tag: { 
         "type": "string",
         "value": "play"
+    },
+    on:{
+        "type": "color",
+        "value": {r:1,g:1,b:1,a:1}
+    },
+    off:{
+        "type": "color",
+        "value": {r:0,g:0,b:0,a:1}
+    },
+    permanent:{
+        "type": "boolean",
+        "value": false
+    },
+    duration:{
+        "type": "number",
+        "value": 500
     }
 }
 
@@ -20,10 +36,12 @@ this.handleEvent = (e) => {
     log("eventFlasher", "handleEvent", e.detail.flag)
     if (e.detail.flag === this.vars.tag.value) {
         if(material){
-            material.Set("color", {r:1,g:0,b:0,a:1})
-            setTimeout(() => {
-                material.Set("color", {r:0,g:0,b:0,a:1})
-            }, 500)
+            material.Set("color", this.vars.on.value)
+            if(!this.vars.permanent.value){
+                setTimeout(() => {
+                    material.Set("color", this.vars.off.value)
+                }, this.vars.duration.value)
+            }
         }
     }
 }

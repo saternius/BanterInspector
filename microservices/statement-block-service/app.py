@@ -8,7 +8,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
 from config import Config
-from utils import validate_request_data, create_error_response, timer_decorator
+from utils import validate_request_data, validate_blend2end_request_data, create_error_response, timer_decorator
 
 # Set up logging
 logging.basicConfig(
@@ -136,6 +136,55 @@ def process_text():
         
     except Exception as e:
         logger.error(f"Error processing text: {str(e)}", exc_info=True)
+        return create_error_response(
+            "An error occurred while processing the text",
+            status_code=500,
+            details=str(e) if Config.DEBUG else None
+        )
+
+@app.route('/format-blend2end', methods=['POST'])
+@limiter.limit(f"{Config.RATE_LIMIT_CALLS} per {Config.RATE_LIMIT_PERIOD} seconds")
+@timer_decorator
+def format_blend2end():
+    """Endpoint to format text into Blend2End object specification."""
+    # Get request data
+    try:
+        data = request.get_json()
+    except Exception:
+        return create_error_response("Invalid JSON in request body", status_code=400)
+
+    # Validate request data
+    validation_errors = validate_blend2end_request_data(data)
+    if validation_errors:
+        return create_error_response(
+            "Validation failed",
+            status_code=400,
+            details=validation_errors
+        )
+
+    # Extract parameters
+    text = data.get('text', '').strip()
+    existing_form = data.get('existing_form', {})
+    intent = data.get('intent', '')
+
+    # Process the text
+    try:
+        # Set timeout for the entire operation
+        start_time = time.time()
+        result = text_processor.format_blend2end(text, existing_form, intent)
+
+        # Check if we exceeded timeout
+        if time.time() - start_time > Config.REQUEST_TIMEOUT:
+            return create_error_response(
+                "Request timeout exceeded",
+                status_code=504
+            )
+
+        # Return successful response
+        return result, 200
+
+    except Exception as e:
+        logger.error(f"Error formatting blend2end text: {str(e)}", exc_info=True)
         return create_error_response(
             "An error occurred while processing the text",
             status_code=500,
