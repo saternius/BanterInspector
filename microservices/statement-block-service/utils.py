@@ -118,5 +118,44 @@ def validate_request_data(data):
     
     return errors
 
+def validate_blend2end_request_data(data):
+    """Validate incoming blend2end request data."""
+    errors = []
+
+    if not data:
+        errors.append("Request body is required")
+        return errors
+
+    if 'text' not in data:
+        errors.append("'text' field is required")
+    elif not isinstance(data.get('text'), str):
+        errors.append("'text' must be a string")
+    elif len(data.get('text', '')) > Config.MAX_TEXT_LENGTH:
+        errors.append(f"'text' exceeds maximum length of {Config.MAX_TEXT_LENGTH} characters")
+
+    if 'intent' in data:
+        if not isinstance(data.get('intent'), str):
+            errors.append("'intent' must be a string")
+
+    if 'existing_form' in data:
+        existing_form = data.get('existing_form')
+        if existing_form is not None and not isinstance(existing_form, dict):
+            errors.append("'existing_form' must be an object")
+        elif isinstance(existing_form, dict):
+            # Validate existing_form structure
+            if 'description' in existing_form and not isinstance(existing_form['description'], str):
+                errors.append("'existing_form.description' must be a string")
+            if 'functionality' in existing_form:
+                if not isinstance(existing_form['functionality'], list):
+                    errors.append("'existing_form.functionality' must be an array")
+                else:
+                    for i, item in enumerate(existing_form['functionality']):
+                        if not isinstance(item, str):
+                            errors.append(f"'existing_form.functionality[{i}]' must be a string")
+            if 'style' in existing_form and not isinstance(existing_form['style'], str):
+                errors.append("'existing_form.style' must be a string")
+
+    return errors
+
 # Import Config after defining functions to avoid circular import
 from config import Config

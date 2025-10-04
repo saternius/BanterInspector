@@ -22,7 +22,8 @@ export class BanterMaterialComponent extends EntityComponent {
         return {
             shaderName: {
                 'Standard': 'Standard',
-                'Unlit/Diffuse': 'Unlit/Diffuse'
+                'Unlit/Diffuse': 'Unlit/Diffuse',
+                'Unlit/DiffuseTransparent': 'Unlit/DiffuseTransparent'
             }
         }
     }

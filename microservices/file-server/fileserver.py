@@ -293,7 +293,7 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
             try:
                 content_length = int(self.headers['Content-Length'])
                 post_data = self.rfile.read(content_length)
-                
+
                 req = urllib.request.Request(
                     'http://localhost:5000/process-text',
                     data=post_data,
@@ -301,15 +301,42 @@ class CORSRequestHandler(SimpleHTTPRequestHandler):
                         'Content-Type': self.headers.get('Content-Type', 'application/json')
                     }
                 )
-                
+
                 with urllib.request.urlopen(req) as response:
                     proxy_response = response.read()
-                    
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/json')
                 self.end_headers()
                 self.wfile.write(proxy_response)
-                
+
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                error_response = json.dumps({'error': str(e)})
+                self.wfile.write(error_response.encode())
+        elif self.path == '/api/format-blend2end':
+            try:
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+
+                req = urllib.request.Request(
+                    'http://localhost:5000/format-blend2end',
+                    data=post_data,
+                    headers={
+                        'Content-Type': self.headers.get('Content-Type', 'application/json')
+                    }
+                )
+
+                with urllib.request.urlopen(req) as response:
+                    proxy_response = response.read()
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(proxy_response)
+
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
@@ -373,6 +400,7 @@ if __name__ == '__main__':
     print(f"  - mesh_name defaults to 'mesh_<random>' if not provided")
     print(f"GLB Retrieval: GET /api/fetch_glb?file=<hash>")
     print(f"Proxying /api/process-text to http://localhost:5000/process-text")
+    print(f"Proxying /api/format-blend2end to http://localhost:5000/format-blend2end")
     print(f"Proxying /docs/* to http://localhost:4004/docs/*")
     print(f"Proxying /setclaims to http://localhost:3303/setclaims")
     HTTPServer(('0.0.0.0', port), CORSRequestHandler).serve_forever()

@@ -442,6 +442,27 @@ export class InventoryFirebase {
     }
 
     /**
+     * Recursively remove undefined properties from an object
+     */
+    removeUndefined(obj) {
+        if (obj === null || typeof obj !== 'object') {
+            return obj;
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map(item => this.removeUndefined(item));
+        }
+
+        const cleaned = {};
+        for (const [key, value] of Object.entries(obj)) {
+            if (value !== undefined) {
+                cleaned[key] = this.removeUndefined(value);
+            }
+        }
+        return cleaned;
+    }
+
+    /**
      * Sync item to Firebase
      */
     async syncToFirebase(inventoryItem) {
@@ -457,7 +478,7 @@ export class InventoryFirebase {
 
         try {
             const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            
+
             // Build the Firebase path
             let firebasePath = `inventory/${userName}`;
             if (inventoryItem.folder) {
@@ -466,9 +487,12 @@ export class InventoryFirebase {
             }
             const sanitizedItemName = this.sanitizeFirebasePath(inventoryItem.name);
             firebasePath += `/${sanitizedItemName}`;
-            
+
+            // Remove undefined properties before syncing
+            const cleanedItem = this.removeUndefined(inventoryItem);
+
             // Save to Firebase
-            await window.networking.setData(firebasePath, inventoryItem);
+            await window.networking.setData(firebasePath, cleanedItem);
             log('net', 'Item synced to Firebase:', firebasePath);
         } catch (error) {
             err('net', 'Failed to sync item to Firebase:', error);

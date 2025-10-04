@@ -31,7 +31,7 @@ let deleteSlot = async (slot) =>{
         }
         slot = slot.id
     }
-    RemoveSlot(slot)
+    RemoveEntity(slot)
 }
 
 let getSlotByName = (slotName) =>{

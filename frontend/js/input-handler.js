@@ -1,4 +1,5 @@
 const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
+const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
 export class InputHandler{
     constructor(){
         this.currentInput = null;
@@ -661,6 +662,13 @@ export class InputHandler{
     
     
     getColorValue(component, property){
+        // Handle MonoBehavior variables
+        if(this.contextType === 'monobehavior'){
+            const varDef = component.vars?.[property];
+            return varDef?.value || {r: 1, g: 1, b: 1, a: 1};
+        }
+
+        // Handle regular component properties
         if(!property.includes(".")){
             return component.properties[property] || {r: 1, g: 1, b: 1, a: 1};
         }
@@ -670,6 +678,14 @@ export class InputHandler{
     }
     
     setColorValue(component, property, color){
+        // Handle MonoBehavior variables
+        if(this.contextType === 'monobehavior'){
+            const change = new MonoBehaviorVarChange(component.id, property, {type: 'color', value: color}, { source: 'ui' });
+            window.changeManager.applyChange(change);
+            return;
+        }
+
+        // Handle regular component properties
         if(!property.includes(".")){
             component.Set(property, color);
             return;
@@ -815,16 +831,17 @@ export class InputHandler{
         }
     }
 
-    inputFocusChanged(activeEl, component, property){
-        if(!this.initialized){ 
-            return; 
+    inputFocusChanged(activeEl, component, property, contextType = null){
+        if(!this.initialized){
+            return;
         }
         if(this.currentInput === activeEl){
             return;
         }
-       
+
         this.focusComponent = component;
         this.focusProperty = property;
+        this.contextType = contextType; // 'monobehavior' or null for regular components
         //inspector.propertiesPanel.render(SM.selectedEntity)
         this.clearHighlight();
 
@@ -835,7 +852,7 @@ export class InputHandler{
         if(activeEl.type === "color"){
             this.helpColorInputElement(activeEl, component, property);
         }
-        
+
     }
 
 }

@@ -82,6 +82,7 @@ export class InspectorInjector {
         }
 
         window.blockServiceUrl = `${window.ngrokUrl}/api/process-text`;
+        window.blend2endServiceUrl = `${window.ngrokUrl}/api/format-blend2end`;
     }
 
     injectDependencies() {

@@ -8,6 +8,17 @@ export class BanterGrabHandleComponent extends EntityComponent {
         this.type = 'BanterGrabHandle';
     }
 
+    enums(){
+        return {
+            grabType: {
+                0: 'POINT',
+                1: 'CYLINDER',
+                2: 'BALL',
+                3: 'SOFT'
+            }
+        }
+    }
+
     defaultProperties() {
         return {
             grabType: 0,
