@@ -134,14 +134,14 @@
                 return;
             }
 
-            let fileServer = localStorage.getItem('file_server');
-            if(!fileServer){
-                localStorage.setItem('file_server', "stable");
-                fileServer = "stable";
-            }
-            let fileServerEl = document.getElementById("custom-fileServer");
-            fileServerEl.children[0].innerHTML = fileServer;
-            
+            // let fileServer = localStorage.getItem('file_server');
+            // if(!fileServer){
+            //     localStorage.setItem('file_server', "stable");
+            //     fileServer = "stable";
+            // }
+            // let fileServerEl = document.getElementById("custom-fileServer");
+            // fileServerEl.children[0].innerHTML = fileServer;
+            let fileServer = "ngrok";
 
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
@@ -418,12 +418,18 @@
                 let ref_idx = 0;
                 let transform = gO.GetComponent(BS.ComponentType.Transform)
                 if(transform){
+                    try{
                     let component_ref = h.components[ref_idx]
-                    let componentClass = componentBSTypeMap[transform.type]
+                    let componentClass = componentBSTypeMap[transform.componentType]
                     let entityComponent = await new componentClass().init(entity, transform);
                     entityComponent.setId(component_ref);
                     entity.components.push(entityComponent);
                     ref_idx++;
+                    }catch(e){
+                        log('init', "transform", transform)
+                        log('init', "componentBSTypeMap", componentBSTypeMap)
+                        err('init', "error initializing transform for", entity.name, e)
+                    }
                 }
 
                 
@@ -439,7 +445,7 @@
                     }
 
                     if(SUPPORTED_COMPONENTS.has(component.type)){
-                        let componentClass = componentBSTypeMap[component.type]
+                        let componentClass = componentBSTypeMap[component.componentType]
                         let props = this.getHistoricalProps(component_ref).props
                         let entityComponent = await new componentClass().init(entity, component, props);
                         entityComponent.setId(component_ref);
@@ -834,7 +840,7 @@
             if (transform) {
                 const sourceComponent = sourceEntity.components[componentIndex];
                 const component_ref = componentIdMap[sourceComponent.id];
-                const componentClass = componentBSTypeMap[transform.type];
+                const componentClass = componentBSTypeMap[transform.componentType];
                 const entityComponent = await new componentClass().init(entity, transform);
                 entityComponent.setId(component_ref);
                 entity.components.push(entityComponent);
@@ -1065,5 +1071,8 @@
             return map
         }
         return dig(window.entities()[0])
+    }
+    window.selected = ()=>{
+        return window.SM.getSelectedEntity()
     }
 //})()

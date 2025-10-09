@@ -97,7 +97,7 @@ export class Entity{
                 let props = {
                     id: component_ref
                 }
-                let componentClass = componentBSTypeMap[bs_comp.type];
+                let componentClass = componentBSTypeMap[bs_comp.componentType];
                 let entityComponent = await new componentClass().init(this, bs_comp, props, {context: "ghost"});
                 entityComponent.setId(component_ref);
                 this.components.push(entityComponent);

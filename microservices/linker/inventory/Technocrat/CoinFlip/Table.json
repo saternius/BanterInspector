@@ -1,0 +1,531 @@
+{
+  "author": "Technocrat",
+  "created": 1759937997392,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.85,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "ghost"
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "depth": 1,
+          "height": 0.05,
+          "width": 1.5
+        },
+        "type": "BanterBox"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0.08627450980392157,
+            "g": 0.1411764705882353,
+            "r": 0.16470588235294117
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": -0.475,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1.5,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "type": "BanterColliderEvents"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759851309566,
+          "data": "// CoinFlip Extension\n// Adds a draggable popup window with a flip button\nlet getPennies = ()=>{\n    return SM.getAllEntities()\n    .filter(x=>x.penny)\n    .map(x=>x.getComponent(\"MonoBehavior\"))\n    .filter(x=>x.properties.file === \"Flipable.js\")\n    .map(x=>x.ctx)\n}\n\nclass CoinFlip {\n    constructor() {\n        this.popup = null;\n        this.isDragging = false;\n        this.dragOffset = { x: 0, y: 0 };\n    }\n\n    init() {\n        this.createPopup();\n        this.injectStyles();\n        return this.popup;\n    }\n\n    createPopup() {\n        // Create popup container\n        this.popup = document.createElement('div');\n        this.popup.id = 'coinflip-popup';\n        this.popup.className = 'coinflip-popup';\n        this.popup.innerHTML = `\n            <div class=\"coinflip-header\">\n                <span class=\"coinflip-title\">🪙 Coin Flip</span>\n                <button class=\"coinflip-close\" title=\"Close\">&times;</button>\n            </div>\n            <div class=\"coinflip-content\">\n                <button class=\"coinflip-btn\">Flip</button>\n            </div>\n        `;\n\n        // Position popup in center of screen initially\n        this.popup.style.left = '50%';\n        this.popup.style.top = '50%';\n        this.popup.style.transform = 'translate(-50%, -50%)';\n\n        // Add to document body\n        document.body.appendChild(this.popup);\n\n        // Set up event listeners\n        this.setupEventListeners();\n    }\n\n    setupEventListeners() {\n        const header = this.popup.querySelector('.coinflip-header');\n        const closeBtn = this.popup.querySelector('.coinflip-close');\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n\n        // Dragging functionality\n        header.addEventListener('mousedown', (e) => {\n            if (e.target.classList.contains('coinflip-close')) return;\n\n            this.isDragging = true;\n\n            // Get current position\n            const rect = this.popup.getBoundingClientRect();\n            this.dragOffset.x = e.clientX - rect.left;\n            this.dragOffset.y = e.clientY - rect.top;\n\n            // Remove transform for absolute positioning\n            this.popup.style.transform = 'none';\n\n            header.style.cursor = 'grabbing';\n        });\n\n        document.addEventListener('mousemove', (e) => {\n            if (!this.isDragging) return;\n\n            const x = e.clientX - this.dragOffset.x;\n            const y = e.clientY - this.dragOffset.y;\n\n            this.popup.style.left = `${x}px`;\n            this.popup.style.top = `${y}px`;\n        });\n\n        document.addEventListener('mouseup', () => {\n            if (this.isDragging) {\n                this.isDragging = false;\n                header.style.cursor = 'grab';\n            }\n        });\n\n        // Close button\n        closeBtn.addEventListener('mousedown', (e) => {\n            e.stopPropagation();\n            this.close();\n        });\n\n        // Flip button\n        flipBtn.addEventListener('mousedown', () => {\n            //console.log(\"FLIP!\");\n            getPennies().forEach(x=>x.flip());\n        });\n    }\n\n    injectStyles() {\n        if (document.getElementById('coinflip-styles')) return;\n\n        const styleEl = document.createElement('style');\n        styleEl.id = 'coinflip-styles';\n        styleEl.textContent = `\n            .coinflip-popup {\n                position: fixed;\n                width: 200px;\n                background: rgba(30, 30, 30, 0.95);\n                border: 1px solid rgba(255, 255, 255, 0.2);\n                border-radius: 8px;\n                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);\n                z-index: 10000;\n                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n            }\n\n            .coinflip-header {\n                display: flex;\n                justify-content: space-between;\n                align-items: center;\n                padding: 10px 15px;\n                background: rgba(255, 255, 255, 0.05);\n                border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n                border-radius: 8px 8px 0 0;\n                cursor: grab;\n                user-select: none;\n            }\n\n            .coinflip-title {\n                color: #fff;\n                font-size: 14px;\n                font-weight: 600;\n            }\n\n            .coinflip-close {\n                background: transparent;\n                border: none;\n                color: #aaa;\n                font-size: 24px;\n                line-height: 1;\n                cursor: pointer;\n                padding: 0;\n                width: 24px;\n                height: 24px;\n                display: flex;\n                align-items: center;\n                justify-content: center;\n                transition: color 0.2s;\n            }\n\n            .coinflip-close:hover {\n                color: #fff;\n            }\n\n            .coinflip-content {\n                padding: 20px;\n                display: flex;\n                justify-content: center;\n            }\n\n            .coinflip-btn {\n                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n                border: none;\n                border-radius: 6px;\n                padding: 12px 40px;\n                color: #fff;\n                font-size: 16px;\n                font-weight: 600;\n                cursor: pointer;\n                transition: transform 0.1s, box-shadow 0.2s;\n                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);\n            }\n\n            .coinflip-btn:hover {\n                transform: translateY(-1px);\n                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);\n            }\n\n            .coinflip-btn:active {\n                transform: translateY(0);\n            }\n        `;\n        document.head.appendChild(styleEl);\n    }\n\n    close() {\n        if (this.popup && this.popup.parentNode) {\n            this.popup.remove();\n        }\n    }\n\n    destroy() {\n        this.close();\n\n        // Remove styles\n        const styles = document.getElementById('coinflip-styles');\n        if (styles && styles.parentNode) {\n            styles.remove();\n        }\n\n        if (window.coinFlipInstance) {\n            delete window.coinFlipInstance;\n        }\n    }\n}\n\n// Initialize extension\nlet coinFlipInstance = null;\nlet popupElement = null;\n\nthis.default = {};\n\nObject.entries(this.default).forEach(([key, val]) => {\n    if (!this.vars[key]) this.vars[key] = val;\n});\n\nthis.onStart = () => {\n    console.log(\"CoinFlip extension starting...\");\n    coinFlipInstance = new CoinFlip();\n    popupElement = coinFlipInstance.init();\n\n    // Make instance globally accessible\n    window.coinFlipInstance = coinFlipInstance;\n};\n\nthis.onUpdate = () => {\n    // No update logic needed\n};\n\nthis.onDestroy = () => {\n    console.log(\"CoinFlip extension destroying...\");\n    if (coinFlipInstance) {\n        coinFlipInstance.destroy();\n        coinFlipInstance = null;\n        popupElement = null;\n    }\n};\n\nthis.keyDown = (key) => {\n    // Optional: Add keyboard shortcuts if needed\n};\n\nthis.keyUp = (key) => {\n    // Optional: Add keyboard shortcuts if needed\n};",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1759851309566,
+          "last_used": 1759854563077,
+          "name": "FlipController.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "FlipController.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Table",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_71175",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.85,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterBox_59176",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "depth": 1,
+              "height": 0.05,
+              "width": 1.5
+            },
+            "type": "BanterBox"
+          },
+          {
+            "id": "BanterMaterial_96598",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.08627450980392157,
+                "g": 0.1411764705882353,
+                "r": 0.16470588235294117
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BoxCollider_60745",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": -0.475,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1.5,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_85782",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "id": "Scene/Table_11824",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Table_11824",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "Table",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_42490",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 2.1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterCylinder_81262",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "height": 0.025,
+              "radialSegments": 32,
+              "radius": 0.1
+            },
+            "type": "BanterCylinder"
+          },
+          {
+            "id": "BanterMaterial_23764",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.1568627450980392,
+                "g": 0.403921568627451,
+                "r": 0.48627450980392156
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BoxCollider_56851",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.2,
+                "y": 0.025,
+                "z": 0.2
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterRigidbody_36728",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "BanterRigidbody"
+          },
+          {
+            "id": "BanterColliderEvents_19899",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "type": "BanterColliderEvents"
+          },
+          {
+            "id": "MonoBehavior_45783",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1759783702790,
+              "data": "\nlet flip = (e)=>{\n    let rigidBody = this._entity.getComponent(\"BanterRigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return;\n    }\n    rigidBody._bs.AddForce({x: 0, y: 4, z: 0}, BS.ForceMode.Impulse);\n}\n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", flip)\n    window.coin = this._entity;\n}\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1759783702790,
+              "last_used": 1759835476385,
+              "name": "Flipable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Flipable.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BanterSyncedObject_53245",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "kinematicIfNotOwned": true,
+              "syncPosition": true,
+              "syncRotation": true,
+              "takeOwnershipOnCollision": false,
+              "takeOwnershipOnGrab": true
+            },
+            "type": "BanterSyncedObject"
+          }
+        ],
+        "id": "Scene/Table_11824/penny_squared_90829",
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "penny_squared_90829",
+        "parentId": "Scene/Table_11824",
+        "persistent": true
+      },
+      "itemName": "penny_squared",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/Table_11824"
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/Table_11824",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Table_11824",
+      "newValue": "Table",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_3482"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Table",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_3482",
+      "newValue": "FlipController.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/Table",
+      "folder": "CoinFlip",
+      "itemName": "Table",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759937997392,
+  "name": "Table"
+}

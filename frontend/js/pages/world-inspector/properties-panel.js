@@ -813,7 +813,18 @@
             actionsDiv.style.display = 'flex';
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
-            
+
+            // Add refresh button for MonoBehavior
+            const refreshBtn = document.createElement('button');
+            refreshBtn.className = 'component-reorder-btn';
+            refreshBtn.innerHTML = '↻';
+            refreshBtn.title = 'Refresh script';
+            refreshBtn.onmousedown = (e) => {
+                e.stopPropagation();
+                component.Refresh();
+            };
+            actionsDiv.appendChild(refreshBtn);
+
             // Add up/down arrows for MonoBehavior
             // Up arrow - hide if component is at index 1 (right after Transform)
             if (index > 1) {
@@ -827,7 +838,7 @@
                 };
                 actionsDiv.appendChild(upBtn);
             }
-            
+
             // Down arrow - hide if component is the last one
             if (index < totalComponents - 1) {
                 const downBtn = document.createElement('button');
@@ -840,7 +851,7 @@
                 };
                 actionsDiv.appendChild(downBtn);
             }
-            
+
             // Delete button
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'component-delete-btn';
