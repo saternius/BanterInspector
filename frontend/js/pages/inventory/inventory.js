@@ -968,4 +968,114 @@ export class Inventory {
 
         return updatedCount;
     }
+
+    /**
+     * Convert entity data from old format to new format
+     * Old format: Transform is a component with options wrapper
+     * New format: Transform is auto-generated, components don't have options wrapper
+     */
+    convertEntityToNewFormat(entityData) {
+        if (!entityData) return null;
+
+        // Helper to check if entity has old format
+        const hasOldFormat = (entity) => {
+            if (!entity.components || !Array.isArray(entity.components)) return false;
+            // Check if any component has the old 'options' wrapper or Transform is in components
+            return entity.components.some(comp =>
+                comp.options !== undefined || comp.type === 'Transform'
+            );
+        };
+
+        // Helper to convert a single entity
+        const convertEntity = (entity) => {
+            let needsConversion = hasOldFormat(entity);
+
+            if (needsConversion) {
+                // Find and extract Transform component data
+                let transformComponent = entity.components.find(c => c.type === 'Transform');
+                let transformData = null;
+
+                if (transformComponent) {
+                    transformData = {
+                        localPosition: transformComponent.properties?.localPosition || { x: 0, y: 0, z: 0 },
+                        localRotation: transformComponent.properties?.localRotation || { x: 0, y: 0, z: 0, w: 1 },
+                        localScale: transformComponent.properties?.localScale || { x: 1, y: 1, z: 1 }
+                    };
+                }
+
+                // Remove Transform from components and clean up options wrapper
+                entity.components = entity.components
+                    .filter(comp => comp.type !== 'Transform')
+                    .map(comp => {
+                        return comp;
+                    });
+
+                // Add transform data at entity level
+                if (transformData) {
+                    entity.transform = transformData;
+                }
+            }
+
+            // Recursively convert children
+            if (entity.children && Array.isArray(entity.children)) {
+                entity.children = entity.children.map(child => convertEntity(child));
+            }
+
+            return entity;
+        };
+
+        // Convert the entity tree
+        return convertEntity(JSON.parse(JSON.stringify(entityData))); // Deep clone before conversion
+    }
+
+    /**
+     * Update all entity items in inventory to new format
+     * This converts items from the old format (Transform as component with options)
+     * to the new format (Transform auto-generated at entity level)
+     */
+    updateItems() {
+        let updatedCount = 0;
+        let alreadyUpdatedCount = 0;
+
+        // Iterate through all items
+        Object.entries(this.items).forEach(([itemKey, item]) => {
+            // Only process entity items
+            if (item.itemType === 'entity') {
+                // Check if item needs conversion
+                const hasOldFormat = (entityData) => {
+                    if (!entityData || !entityData.components) return false;
+                    return entityData.components.some(c =>
+                        c.options !== undefined || c.type === 'Transform'
+                    );
+                };
+
+                if (hasOldFormat(item.data)) {
+                    // Convert to new format
+                    item.data = this.convertEntityToNewFormat(item.data);
+
+                    // Save updated item
+                    const storageKey = `inventory_${itemKey}`;
+                    localStorage.setItem(storageKey, JSON.stringify(item));
+                    updatedCount++;
+
+                    log('inventory', `Converted item "${itemKey}" to new format`);
+                } else {
+                    alreadyUpdatedCount++;
+                }
+            }
+        });
+
+        // Reload items from localStorage to ensure consistency
+        if (updatedCount > 0) {
+            this.items = this.loadItems();
+            this.ui.render();
+            showNotification(`Updated ${updatedCount} entity item${updatedCount > 1 ? 's' : ''} to new format`);
+        } else {
+            showNotification(`All ${alreadyUpdatedCount} entity items are already in the new format`);
+        }
+
+        return { updated: updatedCount, alreadyUpdated: alreadyUpdatedCount };
+    }
+
+
 }

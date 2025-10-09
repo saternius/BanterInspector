@@ -470,7 +470,7 @@
 
         async provideHierarchyEntity(){
             let sendHier = async (path)=>{
-                let entity = SM.getEntityById(path)
+                let entity = SM.getEntityById(path, false)
                 if(!entity){
                     log("init", "I don't have a hier for: ", path)
                     return
@@ -696,6 +696,7 @@
 
 
         getEntityById(entityId, useFallback = true) {
+            if(!entityId){ return null }
             let ent = this.entityData.entityMap[entityId];
             if(useFallback && !ent){
                 log("fallback", "searching for: ", entityId)

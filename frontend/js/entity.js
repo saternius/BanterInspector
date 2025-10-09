@@ -14,6 +14,7 @@ export class Entity{
         this.persistent = true;
         this.identifiers = new Set();
         this.initialized = false;
+        this.type = "Entity";
         
 
         if(!entityData._bs){
@@ -148,6 +149,12 @@ export class Entity{
         delete SM.props[`__${this.id}/persistent:entity`];
         delete SM.props[`__${this.id}/name:entity`];
         delete SM.props[`__${this.id}/layer:entity`];
+        delete SM.props[`__${this.id}/localPosition:entity`];
+        delete SM.props[`__${this.id}/localRotation:entity`];
+        delete SM.props[`__${this.id}/localScale:entity`];
+        delete SM.props[`__${this.id}/position:entity`];
+        delete SM.props[`__${this.id}/rotation:entity`];
+        delete SM.props[`__${this.id}/scale:entity`];
         if(this.parentId){
             const parent = SM.getEntityById(this.parentId);
             if (parent) {
@@ -175,6 +182,19 @@ export class Entity{
         }
     }
 
+    transformVal(property){
+        let prop = this.transform[property];
+        let base = {
+            x: prop.x,
+            y: prop.y,
+            z: prop.z
+        }
+        if(prop.w){
+            base.w = prop.w;
+        }
+        return base;
+    }
+
     saveSpaceProperties(){
         let message = `update_entity¶${this.id}¶active¶${this.active}`;
         networking.sendOneShot(message);
@@ -183,6 +203,18 @@ export class Entity{
         message = `update_entity¶${this.id}¶name¶${this.name}`;
         networking.sendOneShot(message);
         message = `update_entity¶${this.id}¶layer¶${this.layer}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶localPosition¶${JSON.stringify(this.transform.localPosition)}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶localRotation¶${JSON.stringify(this.transform.localRotation)}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶localScale¶${JSON.stringify(this.transform.localScale)}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶position¶${JSON.stringify(this.transform.position)}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶rotation¶${JSON.stringify(this.transform.rotation)}`;
+        networking.sendOneShot(message);
+        message = `update_entity¶${this.id}¶scale¶${JSON.stringify(this.transform.scale)}`;
         networking.sendOneShot(message);
     }
 
@@ -228,6 +260,25 @@ export class Entity{
         if(prop == "layer"){
             this.layer = newValue;
             this._bs.SetLayer(newValue);
+        }
+
+        if(prop == "localPosition"){
+            this.transform.localPosition = new BS.Vector3(newValue.x,newValue.y, newValue.z)
+        }
+        if(prop == "localRotation"){
+            this.transform.localRotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
+        }
+        if(prop == "localScale"){
+            this.transform.localScale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
+        }
+        if(prop == "position"){
+            this.transform.position = new BS.Vector3(newValue.x,newValue.y, newValue.z)
+        }
+        if(prop == "rotation"){
+            this.transform.rotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
+        }
+        if(prop == "scale"){
+            this.transform.scale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
         }
     }
 
