@@ -11,6 +11,14 @@ export class Change {
     constructor(){
         this.id = `change_${Math.floor(Math.random() * 1000000)}`;
         this.timeout = 5000;
+        this.voidChange = false;
+    }
+
+    void(message){
+        this.voidChange = true;
+        if(message){
+            showNotification(message);
+        }
     }
 
     async apply(){
@@ -32,10 +40,17 @@ export class Change {
             }
             commandStr += value + " ";
         })
+        if(this.voidChange){
+            cmd_el.style.textDecoration = "line-through";
+            cmd_el.style.color = "gray";
+        }
         appendToConsole("command", this.id, commandStr);
     }
 
     async undo(){
+        if(this.voidChange){
+            return;
+        }
         let cmd_el = document.getElementById(this.id);
         if(cmd_el){
             cmd_el.style.textDecoration = "line-through";
@@ -68,6 +83,23 @@ export class EntityPropertyChange extends Change{
     }
 
     async apply(){
+        if(this.property === "name"){
+            if((this.oldValue === "Scene" || this.newValue === "Scene")){
+                this.void("Cannot assign/change the name of 'Scene'");
+                return;
+            }
+            if((this.newValue === "People" || this.oldValue === "People")){
+                this.void("Cannot change the name of 'People'");
+                return;
+            }
+            let newId = SM.getEntityById(this.entityId).parentId+"/"+this.newValue;
+            let existsAlready = SM.getEntityById(newId, false);
+            if(existsAlready){
+                this.void("Entity with that name already exists");
+                return;
+            }
+        }
+        
         super.apply();
         await this.change(this.newValue)
     }

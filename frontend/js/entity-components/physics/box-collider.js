@@ -7,6 +7,7 @@ export class BoxColliderControls{
         this.visible = false;
         this.visual = null;
         this.visualTransform = null;
+        this.type = 'BoxCollider';
         this.controls = {
             'view': {
                 'input': 'button',

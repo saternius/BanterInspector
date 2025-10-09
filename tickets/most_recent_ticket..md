@@ -1,0 +1,1 @@
+In the properties-panel for MonoBehavior components, add a refresh button to the header where clicking it calls the components Refresh methodc

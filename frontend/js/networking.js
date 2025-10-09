@@ -319,14 +319,19 @@ export class Networking {
             if(window.logger.include.spaceProps){
                 appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
             }
+            try{
+                if(newValue[0] === "{" || newValue[0] === "["){
+                    newValue = JSON.parse(newValue);
+                }
+                if (isProtected) {
+                    SM.scene.spaceState.protected[property] = newValue;
+                } else {
+                    SM.scene.spaceState.public[property] = newValue;
+                }
+            }catch(e){
+                log('net', "Failed to handle space state change:", event);
+                err('net', "ERROR: ", e);
 
-            if(newValue[0] === "{" || newValue[0] === "["){
-                newValue = JSON.parse(newValue);
-            }
-            if (isProtected) {
-                SM.scene.spaceState.protected[property] = newValue;
-            } else {
-                SM.scene.spaceState.public[property] = newValue;
             }
         });
     }
