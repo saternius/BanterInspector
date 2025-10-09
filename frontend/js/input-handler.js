@@ -80,31 +80,40 @@ export class InputHandler{
     }
 
 
-    setValue(component, property, value){
+    setValue(target, property, value){
         let sections = property.split(".");
-        let lockkey = component.id+"_"+sections[0];
+        let lockkey = target.id+"_"+sections[0];
         if(inspector.propertiesPanel.scaleLockStates.get(lockkey)){
             inspector.propertiesPanel.handleProportionalScaleChange(component.type, component.id, sections[0], sections[1], value, component.properties[sections[0]], 0);
             return;
         }
 
         if(!property.includes(".")){
-            component.Set(property, value);
+            target.Set(property, value);
             return;
         }
         let [key, axis] = property.split(".");
-        let currentVec = deepClone(component.properties[key]);
-        currentVec[axis] = value;
-        component.Set(key, currentVec);
+        if(target.type === "Entity"){
+            let currentVec = deepClone(target.transformVal(key));
+            currentVec[axis] = value;
+            target.Set(key, currentVec);
+        }else{
+            let currentVec = deepClone(component.properties[key]);
+            currentVec[axis] = value;
+            target.Set(key, currentVec);
+        }
+        
     }
 
-    helpNumericInputElement(element, component, property){
+    helpNumericInputElement(element, target, property){
         let turnLoopInterval = null;
         let tolTurnLoopInterval = null;
         let lastRadialRot = 0;
         let currentRadialRot = 0;
         let lastTolRot = 0;
         let currentTolRot = 0;
+        let name = (target.type === "Entity") ? target.name : target._entity.name;
+        let type = (target.type === "Entity") ? '' : target.type;
 
 
         this.currentInput.style.backgroundColor = "#1e3764";
@@ -113,8 +122,8 @@ export class InputHandler{
         this.spacePanel.style.display = "none"; 
         this.lifeCyclePanel.style.display = "none";
         this.inputHelperSubject.innerHTML = `
-            <span style="color:orange">${component._entity.name}</span> 
-            <span style="color:#8babd5">${component.type}</span> 
+            <span style="color:orange">${name}</span> 
+            <span style="color:#8babd5">${type}</span> 
             <span >${property}</span>
         `;
         this.inputHelperValue.innerHTML = element.value;
@@ -154,7 +163,7 @@ export class InputHandler{
                 this.radialCrown.style.transform = `rotateZ(${lastRadialRot + deltaX}deg)`;
                 currentRadialRot = lastRadialRot + deltaX;
                 this.inputHelperValue.innerHTML = valueTarget.toFixed(4);
-                this.setValue(component, property, valueTarget);
+                this.setValue(target, property, valueTarget);
             }
             if(turnLoopInterval){
                 clearInterval(turnLoopInterval);

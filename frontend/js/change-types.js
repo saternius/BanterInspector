@@ -774,6 +774,9 @@ export class LoadItemChange extends Change{
                     props[`__${entity.id}/persistent:entity`] = entity.persistent
                     props[`__${entity.id}/name:entity`] = entity.name
                     props[`__${entity.id}/layer:entity`] = entity.layer
+                    props[`__${entity.id}/localPosition:entity`] = entity.transform.localPosition
+                    props[`__${entity.id}/localRotation:entity`] = entity.transform.localRotation
+                    props[`__${entity.id}/localScale:entity`] = entity.transform.localScale
                     if(entity.components){
                         entity.components.forEach(component=>{
                             if(component.properties){   

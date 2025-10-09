@@ -166,12 +166,231 @@
             }));
         }
 
+
+        /**
+         * Create a simple property row for Entities and MonoBehaviors
+         */
+        createPropertyRow(label, value, type, onChange, enums) {
+            let entityId = SM.selectedEntity;
+            let entity = SM.getSelectedEntity();
+            const row = document.createElement('div');
+            row.className = 'property-row';
+            
+            const labelElement = document.createElement('span');
+            labelElement.className = 'property-label';
+            labelElement.textContent = formatPropertyName(label);;
+            
+            const valueContainer = document.createElement('div');
+            valueContainer.className = 'property-value';
+            
+            if (type === 'checkbox') {
+                const input = document.createElement('input');
+                input.type = 'checkbox';
+                input.className = 'checkbox-input';
+                input.checked = value;
+                input.id = `${entityId}_${label}`;
+                input.onchange = () => onChange(input.checked);
+                valueContainer.appendChild(input);
+            } else if (type === 'text') {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'property-input';
+                input.value = value || '';
+                input.id = `${entityId}_${label}`;
+                input.onchange = () => onChange(input.value);
+                valueContainer.appendChild(input);
+            } else if (type === 'dropdown') {
+                const select = document.createElement('select');
+                select.className = 'property-input';
+                select.value = value || '';
+                select.id = `${entityId}_${label}`;
+                select.onchange = () => onChange(select.value);
+                Object.entries(enums).forEach(([key, enumValue]) => {
+                    const option = document.createElement('option');
+                    option.value = enumValue;
+                    option.textContent = key;
+                    if(enumValue === value){
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+                valueContainer.appendChild(select);
+            } else if(type === 'vector3'){
+                // Vector3 properties
+                const isScaleProperty = label.toLowerCase().includes('scale');
+                const scaleLockKey = `${entityId}_${label}`;
+                
+                const vectorContainer = document.createElement('div');
+                vectorContainer.style.display = 'flex';
+                vectorContainer.style.alignItems = 'center';
+                vectorContainer.style.width = '100%';
+                
+                const vectorGroup = document.createElement('div');
+                vectorGroup.className = 'vector-group';
+                
+                ['x', 'y', 'z'].forEach(axis => {
+                    const axisLabel = document.createElement('span');
+                    axisLabel.className = 'vector-label';
+                    axisLabel.textContent = axis.toUpperCase();
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'property-input number';
+                    input.value = value[axis] || 0;
+                    input.step = 'any';
+                    input.id = `${entityId}_${label}.${axis}`;
+                    input.onchange = () => {
+                        onChange(axis, input.value, value);
+                    };
+                    input.onclick = (e)=>{
+                        inputHandler.inputFocusChanged(input, entity,`${label}.${axis}`);
+                    }
+                    if(inputHandler.focusComponent === entity && inputHandler.focusProperty === `${label}.${axis}`){
+                        input.style.backgroundColor = "#1e3764";
+                        input.style.borderColor = "#326689";
+                    }   
+
+                    vectorGroup.appendChild(axisLabel);
+                    vectorGroup.appendChild(input);
+                });
+                
+                vectorContainer.appendChild(vectorGroup);
+                
+                // Add lock button for scale properties
+                if (isScaleProperty) {
+                    const lockButton = document.createElement('button');
+                    lockButton.className = 'scale-lock-btn';
+                    lockButton.style.marginLeft = '8px';
+                    lockButton.style.padding = '4px 4px';
+                    lockButton.style.background = this.scaleLockStates.get(scaleLockKey) ? '#4a90e2' : '#2a2a2a';
+                    lockButton.style.border = '1px solid #3a3a3a';
+                    lockButton.style.borderRadius = '4px';
+                    lockButton.style.color = this.scaleLockStates.get(scaleLockKey) ? '#fff' : '#999';
+                    lockButton.style.cursor = 'pointer';
+                    lockButton.style.fontSize = '12px';
+                    lockButton.innerHTML = this.scaleLockStates.get(scaleLockKey) ? '🔒' : '🔓';
+                    lockButton.title = this.scaleLockStates.get(scaleLockKey) ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                    
+                    lockButton.onmousedown = (e) => {
+                        e.stopPropagation();
+                        const isLocked = !this.scaleLockStates.get(scaleLockKey);
+                        this.scaleLockStates.set(scaleLockKey, isLocked);
+                        
+                        if (isLocked) {
+                            // Store current ratios when locking
+                            const baseValue = value.x || 1;
+                            this.scaleRatios.set(scaleLockKey, {
+                                x: (value.x || 0) / baseValue,
+                                y: (value.y || 0) / baseValue,
+                                z: (value.z || 0) / baseValue
+                            });
+                        }
+                        
+                        // Update button appearance
+                        lockButton.style.background = isLocked ? '#4a90e2' : '#2a2a2a';
+                        lockButton.style.color = isLocked ? '#fff' : '#999';
+                        lockButton.innerHTML = isLocked ? '🔒' : '🔓';
+                        lockButton.title = isLocked ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                    };
+                    
+                    vectorGroup.appendChild(lockButton);
+                }
+                if(label === 'localPosition'){
+                    // Add reset button for position
+                    const resetButton = document.createElement('button');
+                    resetButton.className = 'position-reset-btn';
+                    resetButton.style.marginLeft = '8px';
+                    resetButton.style.padding = '4px 8px';
+                    resetButton.style.background = '#2a2a2a';
+                    resetButton.style.border = '1px solid #3a3a3a';
+                    resetButton.style.borderRadius = '4px';
+                    resetButton.style.color = '#999';
+                    resetButton.style.cursor = 'pointer';
+                    resetButton.style.fontSize = '14px';
+                    resetButton.innerHTML = '∅';
+                    resetButton.title = 'Reset position to zero';
+
+                    resetButton.onmousedown = (e) => {
+                        e.stopPropagation();
+                        const zeroPosition = { x: 0, y: 0, z: 0};
+                        const change = new EntityPropertyChange(entityId, label, zeroPosition, { source: 'ui' });
+                        changeManager.applyChange(change);
+                    };
+                    vectorGroup.appendChild(resetButton);
+                    valueContainer.appendChild(vectorGroup);
+                }
+                
+                valueContainer.appendChild(vectorContainer);
+            } else if(type === "vector4"){
+                // Transform rotation - convert quaternion to Euler angles
+                const eulerAngles = quaternionToEuler(value);
+                const vectorGroup = document.createElement('div');
+                vectorGroup.className = 'vector-group';
+                
+                ['x', 'y', 'z'].forEach(axis => {
+                    const axisLabel = document.createElement('span');
+                    axisLabel.className = 'vector-label';
+                    axisLabel.textContent = axis.toUpperCase();
+                    
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.className = 'property-input number';
+                    input.value = formatNumber(eulerAngles[axis], 2);
+                    input.step = 'any';
+                    input.id = `${entityId}_${label}.${axis}`;
+                    input.onchange = () => onChange(axis, input.value, value);
+                    input.onclick = (e)=>{
+                        inputHandler.inputFocusChanged(input, entity, `localRotation.${axis}`);
+                    }
+
+                    if(inputHandler.focusComponent === entity && inputHandler.focusProperty === `localRotation.${axis}`){
+                        input.style.backgroundColor = "#1e3764";
+                        input.style.borderColor = "#326689";
+                    }
+
+                    vectorGroup.appendChild(axisLabel);
+                    vectorGroup.appendChild(input);
+                });
+
+                // Add reset button for rotation
+                const resetButton = document.createElement('button');
+                resetButton.className = 'rotation-reset-btn';
+                resetButton.style.marginLeft = '8px';
+                resetButton.style.padding = '4px 8px';
+                resetButton.style.background = '#2a2a2a';
+                resetButton.style.border = '1px solid #3a3a3a';
+                resetButton.style.borderRadius = '4px';
+                resetButton.style.color = '#999';
+                resetButton.style.cursor = 'pointer';
+                resetButton.style.fontSize = '14px';
+                resetButton.innerHTML = '∅';
+                resetButton.title = 'Reset rotation to zero';
+
+                resetButton.onmousedown = (e) => {
+                    e.stopPropagation();
+                    // Set all rotation values to 0
+                    const zeroRotation = { x: 0, y: 0, z: 0, w: 1 };
+                    const change = new EntityPropertyChange(entityId, label, zeroRotation, { source: 'ui' });
+                    changeManager.applyChange(change);
+                };
+                vectorGroup.appendChild(resetButton);
+                valueContainer.appendChild(vectorGroup);
+            }
+            
+            row.appendChild(document.createElement('span')); // Empty space for button
+            row.appendChild(labelElement);
+            row.appendChild(valueContainer);
+            
+            return row;
+        }
+
         /**
          * Create entity properties section
          */
         createEntityPropertiesSection(entity) {
+            if(!entity){ return }
             const section = document.createElement('div');
-            section.className = 'component-section';
+            section.className = 'entity-section';
             section.dataset.panel = 'propertyPanelComponent';
             
             const header = document.createElement('div');
@@ -219,7 +438,7 @@
             nameRow.appendChild(inputName);
 
             // Layer property
-            const layerRow = this.createPropertyRow('Layer', entity.layer, 'dropdown',  (value) => {
+            const layerRow = this.createPropertyRow('layer', entity.layer, 'dropdown',  (value) => {
                 const change = new EntityPropertyChange(entity.id, 'layer', value, { source: 'ui' });
                 changeManager.applyChange(change);
             }, BanterLayers);
@@ -227,16 +446,107 @@
 
             
             // Active property
-            const activeRow = this.createPropertyRow('Active', entity.active, 'checkbox', (value) => {
+            const activeRow = this.createPropertyRow('active', entity.active, 'checkbox', (value) => {
                 const change = new EntityPropertyChange(entity.id, 'active', value, { source: 'ui' });
                 changeManager.applyChange(change);
             });
             
-            // Persistent property
-            const persistentRow = this.createPropertyRow('Persistent', entity.persistent, 'checkbox', (value) => {
-                const change = new EntityPropertyChange(entity.id, 'persistent', value, { source: 'ui' });
+            // // Persistent property
+            // const persistentRow = this.createPropertyRow('persistent', entity.persistent, 'checkbox', (value) => {
+            //     const change = new EntityPropertyChange(entity.id, 'persistent', value, { source: 'ui' });
+            //     changeManager.applyChange(change);
+            // });
+
+
+            let localPosition = entity.transformVal("localPosition")
+            let localRotation = entity.transformVal("localRotation")
+            let localScale = entity.transformVal("localScale")
+
+            // Local Position property
+            const localPositionRow = this.createPropertyRow('localPosition', localPosition, 'vector3', (axis, value) => {
+                let newValue = deepClone(localPosition)
+                newValue[axis] = value
+                const change = new EntityPropertyChange(entity.id, 'localPosition', newValue, { source: 'ui', oldValue: localPosition });
                 changeManager.applyChange(change);
             });
+
+            // Local Rotation property
+            const localRotationRow = this.createPropertyRow('localRotation', localRotation, 'vector4', (axis, value) => {
+                let entity = SM.getSelectedEntity();
+                const currentQuaternion = entity.transform.localRotation;
+                const eulerAngles = quaternionToEuler(currentQuaternion);
+                const numValue = parseFloat(value);
+                if (!isNaN(numValue)) {
+                    let oldValue = deepClone(entity.transformVal("localRotation"))
+                    eulerAngles[axis] = numValue;
+                    const newQuaternion = eulerToQuaternion(eulerAngles);
+                    const change = new EntityPropertyChange(SM.selectedEntity, 'localRotation', newQuaternion, { source: 'ui', oldValue: oldValue });
+                    changeManager.applyChange(change);
+                }
+            });
+
+            // Local Scale property
+            const localScaleRow = this.createPropertyRow('localScale', localScale, 'vector3', (axis, value) => {
+                let scaleLockKey = `${entity.id}_localScale`;
+                if (this.scaleLockStates.get(scaleLockKey)) {
+                    const numValue = parseFloat(value);
+                    if (isNaN(numValue)) return;
+                    let ratios = this.scaleRatios.get(scaleLockKey);
+                    let currentVector = localScale
+                    // If no ratios stored, calculate them from current values
+                    if (!ratios) {
+                        const baseValue = currentVector[axis] || 1;
+                        ratios = {
+                            x: (currentVector.x || 0) / baseValue,
+                            y: (currentVector.y || 0) / baseValue,
+                            z: (currentVector.z || 0) / baseValue
+                        };
+                        this.scaleRatios.set(scaleLockKey, ratios);
+                    }
+                    
+                    // Calculate the scale factor based on the changed axis
+                    const oldValue = currentVector[axis] || 1;
+                    const scaleFactor = numValue / oldValue;
+                    
+                    // Apply proportional scaling to all axes
+                    const oldVector = deepClone(currentVector);
+                    const newVector = {
+                        x: currentVector.x * scaleFactor,
+                        y: currentVector.y * scaleFactor,
+                        z: currentVector.z * scaleFactor
+                    };
+                    
+                    // Apply the change
+                    const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newVector, { source: 'ui', oldValue: oldVector });
+                    changeManager.applyChange(change);
+                    
+                    // Update the inputs to reflect the new values
+                    setTimeout(() => {
+                        const propertyRow = this.propertiesContent.querySelector(`.entity-section`);
+                        if (propertyRow) {
+                            const inputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
+                            const vectorInputs = Array.from(inputs).filter(input => {
+                                const container = input.closest('.property-row');
+                                const label = container?.querySelector('.property-label');
+                                return label && label.textContent === formatPropertyName(key);
+                            });
+                            
+                            if (vectorInputs.length === 3) {
+                                vectorInputs[0].value = formatNumber(newVector.x, 6);
+                                vectorInputs[1].value = formatNumber(newVector.y, 6);
+                                vectorInputs[2].value = formatNumber(newVector.z, 6);
+                            }
+                        }
+                    }, 50);
+
+                } else {
+                    let newValue = deepClone(localScale)
+                    newValue[axis] = value;
+                    const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newValue, { source: 'ui', oldValue: localScale });
+                    changeManager.applyChange(change);
+                }
+            });
+            
             
             if (this.showLoadSettings) {
                 const asyncRow = this.createAsyncToggleRow(entity);
@@ -246,13 +556,17 @@
             body.appendChild(nameRow);
             body.appendChild(layerRow);
             body.appendChild(activeRow);
-            body.appendChild(persistentRow);
-            
+            // body.appendChild(persistentRow);
+            body.appendChild(localPositionRow);
+            body.appendChild(localRotationRow);
+            body.appendChild(localScaleRow);
             section.appendChild(header);
             section.appendChild(body);
             
             return section;
         }
+
+
 
 
         /**
@@ -436,7 +750,7 @@
         }
 
         /**
-         * Render a property row
+         * Render a property row for arbitrary Components
          */
         renderProperty(key, value, component, componentIndex, propertyIndex) {
             const componentType = component.type;
@@ -545,66 +859,10 @@
                
                 valueContainer.appendChild(input);
                 
-            } else if (key.includes('otation') && isQuaternion(value)) {
-                // Transform rotation - convert quaternion to Euler angles
-                const eulerAngles = quaternionToEuler(value);
-                const vectorGroup = document.createElement('div');
-                vectorGroup.className = 'vector-group';
-                
-                ['x', 'y', 'z'].forEach(axis => {
-                    const axisLabel = document.createElement('span');
-                    axisLabel.className = 'vector-label';
-                    axisLabel.textContent = axis.toUpperCase();
-                    
-                    const input = document.createElement('input');
-                    input.type = 'number';
-                    input.className = 'property-input number';
-                    input.value = formatNumber(eulerAngles[axis], 2);
-                    input.step = 'any';
-                    input.onchange = () => this.handleRotationChange(componentId, axis, input.value, componentIndex);
-                    input.onclick = (e)=>{
-                        inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
-                    }
-
-                    if(inputHandler.focusComponent === component && inputHandler.focusProperty === `${key}.${axis}`){
-                        input.style.backgroundColor = "#1e3764";
-                        input.style.borderColor = "#326689";
-                    }
-
-                    vectorGroup.appendChild(axisLabel);
-                    vectorGroup.appendChild(input);
-                });
-
-                // Add reset button for rotation
-                const resetButton = document.createElement('button');
-                resetButton.className = 'rotation-reset-btn';
-                resetButton.style.marginLeft = '8px';
-                resetButton.style.padding = '4px 8px';
-                resetButton.style.background = '#2a2a2a';
-                resetButton.style.border = '1px solid #3a3a3a';
-                resetButton.style.borderRadius = '4px';
-                resetButton.style.color = '#999';
-                resetButton.style.cursor = 'pointer';
-                resetButton.style.fontSize = '14px';
-                resetButton.innerHTML = '∅';
-                resetButton.title = 'Reset rotation to zero';
-
-                resetButton.onmousedown = (e) => {
-                    e.stopPropagation();
-                    // Set all rotation values to 0
-                    const zeroRotation = { x: 0, y: 0, z: 0, w: 1 };
-                    const change = new ComponentPropertyChange(componentId, key, zeroRotation, { source: 'ui' });
-                    changeManager.applyChange(change);
-                };
-
-                vectorGroup.appendChild(resetButton);
-
-                valueContainer.appendChild(vectorGroup);
-                
             } else if (isVector3Object(value)) {
                 // Vector3 properties
-                const isScaleProperty = key.toLowerCase().includes('scale');
-                const scaleLockKey = `${componentId}_${key}`;
+                // const isScaleProperty = key.toLowerCase().includes('scale');
+                // const scaleLockKey = `${componentId}_${key}`;
                 
                 const vectorContainer = document.createElement('div');
                 vectorContainer.style.display = 'flex';
@@ -625,11 +883,11 @@
                     input.value = value[axis] || 0;
                     input.step = 'any';
                     input.onchange = () => {
-                        if (isScaleProperty && this.scaleLockStates.get(scaleLockKey)) {
-                            this.handleProportionalScaleChange(componentType, componentId, key, axis, input.value, value, componentIndex);
-                        } else {
-                            this.handleVector3Change(componentType, componentId, key, axis, input.value, componentIndex);
-                        }
+                        // if (isScaleProperty && this.scaleLockStates.get(scaleLockKey)) {
+                        //     this.handleProportionalScaleChange(componentId, key, axis, input.value, value);
+                        // } else {
+                            this.handleVector3Change(componentId, key, axis, input.value);
+                        // }
                     };
                     input.onclick = (e)=>{
                         inputHandler.inputFocusChanged(input, component,`${key}.${axis}`);
@@ -646,44 +904,44 @@
                 vectorContainer.appendChild(vectorGroup);
                 
                 // Add lock button for scale properties
-                if (isScaleProperty) {
-                    const lockButton = document.createElement('button');
-                    lockButton.className = 'scale-lock-btn';
-                    lockButton.style.marginLeft = '8px';
-                    lockButton.style.padding = '4px 4px';
-                    lockButton.style.background = this.scaleLockStates.get(scaleLockKey) ? '#4a90e2' : '#2a2a2a';
-                    lockButton.style.border = '1px solid #3a3a3a';
-                    lockButton.style.borderRadius = '4px';
-                    lockButton.style.color = this.scaleLockStates.get(scaleLockKey) ? '#fff' : '#999';
-                    lockButton.style.cursor = 'pointer';
-                    lockButton.style.fontSize = '12px';
-                    lockButton.innerHTML = this.scaleLockStates.get(scaleLockKey) ? '🔒' : '🔓';
-                    lockButton.title = this.scaleLockStates.get(scaleLockKey) ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                // if (isScaleProperty) {
+                //     const lockButton = document.createElement('button');
+                //     lockButton.className = 'scale-lock-btn';
+                //     lockButton.style.marginLeft = '8px';
+                //     lockButton.style.padding = '4px 4px';
+                //     lockButton.style.background = this.scaleLockStates.get(scaleLockKey) ? '#4a90e2' : '#2a2a2a';
+                //     lockButton.style.border = '1px solid #3a3a3a';
+                //     lockButton.style.borderRadius = '4px';
+                //     lockButton.style.color = this.scaleLockStates.get(scaleLockKey) ? '#fff' : '#999';
+                //     lockButton.style.cursor = 'pointer';
+                //     lockButton.style.fontSize = '12px';
+                //     lockButton.innerHTML = this.scaleLockStates.get(scaleLockKey) ? '🔒' : '🔓';
+                //     lockButton.title = this.scaleLockStates.get(scaleLockKey) ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
                     
-                    lockButton.onmousedown = (e) => {
-                        e.stopPropagation();
-                        const isLocked = !this.scaleLockStates.get(scaleLockKey);
-                        this.scaleLockStates.set(scaleLockKey, isLocked);
+                //     lockButton.onmousedown = (e) => {
+                //         e.stopPropagation();
+                //         const isLocked = !this.scaleLockStates.get(scaleLockKey);
+                //         this.scaleLockStates.set(scaleLockKey, isLocked);
                         
-                        if (isLocked) {
-                            // Store current ratios when locking
-                            const baseValue = value.x || 1;
-                            this.scaleRatios.set(scaleLockKey, {
-                                x: (value.x || 0) / baseValue,
-                                y: (value.y || 0) / baseValue,
-                                z: (value.z || 0) / baseValue
-                            });
-                        }
+                //         if (isLocked) {
+                //             // Store current ratios when locking
+                //             const baseValue = value.x || 1;
+                //             this.scaleRatios.set(scaleLockKey, {
+                //                 x: (value.x || 0) / baseValue,
+                //                 y: (value.y || 0) / baseValue,
+                //                 z: (value.z || 0) / baseValue
+                //             });
+                //         }
                         
-                        // Update button appearance
-                        lockButton.style.background = isLocked ? '#4a90e2' : '#2a2a2a';
-                        lockButton.style.color = isLocked ? '#fff' : '#999';
-                        lockButton.innerHTML = isLocked ? '🔒' : '🔓';
-                        lockButton.title = isLocked ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
-                    };
+                //         // Update button appearance
+                //         lockButton.style.background = isLocked ? '#4a90e2' : '#2a2a2a';
+                //         lockButton.style.color = isLocked ? '#fff' : '#999';
+                //         lockButton.innerHTML = isLocked ? '🔒' : '🔓';
+                //         lockButton.title = isLocked ? 'Proportional scaling locked' : 'Click to lock proportional scaling';
+                //     };
                     
-                    vectorGroup.appendChild(lockButton);
-                }
+                //     vectorGroup.appendChild(lockButton);
+                // }
                 
                 valueContainer.appendChild(vectorContainer);
                 
@@ -1209,62 +1467,12 @@
             return row;
         }
 
-        /**
-         * Create a simple property row
-         */
-        createPropertyRow(label, value, type, onChange, enums) {
-            const row = document.createElement('div');
-            row.className = 'property-row';
-            
-            const labelElement = document.createElement('span');
-            labelElement.className = 'property-label';
-            labelElement.textContent = label;
-            
-            const valueContainer = document.createElement('div');
-            valueContainer.className = 'property-value';
-            
-            if (type === 'checkbox') {
-                const input = document.createElement('input');
-                input.type = 'checkbox';
-                input.className = 'checkbox-input';
-                input.checked = value;
-                input.onchange = () => onChange(input.checked);
-                valueContainer.appendChild(input);
-            } else if (type === 'text') {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'property-input';
-                input.value = value || '';
-                input.onchange = () => onChange(input.value);
-                valueContainer.appendChild(input);
-            } else if (type === 'dropdown') {
-                const select = document.createElement('select');
-                select.className = 'property-input';
-                select.value = value || '';
-                select.onchange = () => onChange(select.value);
-                Object.entries(enums).forEach(([key, enumValue]) => {
-                    const option = document.createElement('option');
-                    option.value = enumValue;
-                    option.textContent = key;
-                    if(enumValue === value){
-                        option.selected = true;
-                    }
-                    select.appendChild(option);
-                });
-                valueContainer.appendChild(select);
-            }
-            
-            row.appendChild(document.createElement('span')); // Empty space for button
-            row.appendChild(labelElement);
-            row.appendChild(valueContainer);
-            
-            return row;
-        }
+
 
         /**
          * Handle Vector3 property changes
          */
-        handleVector3Change(componentType, componentId, key, axis, value, componentIndex) {
+        handleVector3Change(componentId, key, axis, value) {
             const entity = SM.getEntityById(SM.selectedEntity);
             if (!entity) return;
             
@@ -1280,100 +1488,6 @@
                 changeManager.applyChange(change);
             }
         }
-
-        /**
-         * Handle proportional scale changes when lock is active
-         */
-        handleProportionalScaleChange(componentType, componentId, key, changedAxis, newValue, currentVector, componentIndex) {
-            const entity = SM.getEntityById(SM.selectedEntity);
-            if (!entity) return;
-            
-            const component = entity.components.find(c => c.id === componentId);
-            if (!component || !component.properties[key]) return;
-            
-            const numValue = parseFloat(newValue);
-            if (isNaN(numValue)) return;
-            
-            const scaleLockKey = `${componentId}_${key}`;
-            let ratios = this.scaleRatios.get(scaleLockKey);
-            
-            // If no ratios stored, calculate them from current values
-            if (!ratios) {
-                const baseValue = currentVector[changedAxis] || 1;
-                ratios = {
-                    x: (currentVector.x || 0) / baseValue,
-                    y: (currentVector.y || 0) / baseValue,
-                    z: (currentVector.z || 0) / baseValue
-                };
-                this.scaleRatios.set(scaleLockKey, ratios);
-            }
-            
-            // Calculate the scale factor based on the changed axis
-            const oldValue = currentVector[changedAxis] || 1;
-            const scaleFactor = numValue / oldValue;
-            
-            // Apply proportional scaling to all axes
-            const oldVector = deepClone(currentVector);
-            const newVector = {
-                x: currentVector.x * scaleFactor,
-                y: currentVector.y * scaleFactor,
-                z: currentVector.z * scaleFactor
-            };
-            
-            // Apply the change
-            const change = new ComponentPropertyChange(componentId, key, newVector, { source: 'ui', oldValue: oldVector });
-            changeManager.applyChange(change);
-            
-            // Update the inputs to reflect the new values
-            setTimeout(() => {
-                const propertyRow = this.propertiesContent.querySelector(`.component-section[data-component-id="${componentId}"]`);
-                if (propertyRow) {
-                    const inputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
-                    const vectorInputs = Array.from(inputs).filter(input => {
-                        const container = input.closest('.property-row');
-                        const label = container?.querySelector('.property-label');
-                        return label && label.textContent === formatPropertyName(key);
-                    });
-                    
-                    if (vectorInputs.length === 3) {
-                        vectorInputs[0].value = formatNumber(newVector.x, 6);
-                        vectorInputs[1].value = formatNumber(newVector.y, 6);
-                        vectorInputs[2].value = formatNumber(newVector.z, 6);
-                    }
-                }
-            }, 50);
-        }
-
-        /**
-         * Handle rotation changes (Euler angles to Quaternion)
-         */
-        handleRotationChange(componentId, axis, value, componentIndex) {
-            const entity = SM.getEntityById(SM.selectedEntity);
-            if (!entity) return;
-            
-            const component = entity.components.find(c => c.id === componentId);
-            if (!component || !component.properties.localRotation) return;
-            
-            // Get current quaternion and convert to Euler
-            const currentQuaternion = component.properties.localRotation;
-            const eulerAngles = quaternionToEuler(currentQuaternion);
-            
-            // Update the changed axis
-            const numValue = parseFloat(value);
-            if (!isNaN(numValue)) {
-                let oldValue = deepClone(currentQuaternion)
-
-                eulerAngles[axis] = numValue;
-                
-                // Convert back to quaternion
-                const newQuaternion = eulerToQuaternion(eulerAngles);
-                
-                // Queue the change
-                const change = new ComponentPropertyChange(componentId, 'localRotation', newQuaternion, { source: 'ui', oldValue: oldValue });
-                changeManager.applyChange(change);
-            }
-        }
-
 
         /**
          * Delete a component from the selected entity

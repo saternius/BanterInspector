@@ -2087,6 +2087,13 @@ input:hover{
     margin-bottom: 10px;
 }
 
+.entity-section {
+    background: #1f1f1f;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
 /* Component reorder buttons */
 .component-reorder-btn {
     background: transparent;
