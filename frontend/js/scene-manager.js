@@ -78,32 +78,23 @@
                 hierarchy:{
                     "name": "Scene",
                     "layer": 0,
-                    "components": [
-                        "Transform_5523"
-                    ],
+                    "components": [],
                     "children": [
                         {
                             "name": "Ground",
                             "layer": 0,
-                            "components": [
-                                "Transform_58041",
-                                "BoxCollider_25563"
-                            ],
+                            "components": ["BoxCollider_25563"],
                             "children": [
                                 {
                                     "name": "GroundMesh",
                                     "layer": 0,
-                                    "components": [
-                                        "Transform_98837"
-                                    ],
+                                    "components": [],
                                     "children": []
                                 },
                                 {
                                     "name": "Sigil",
                                     "layer": 0,
-                                    "components": [
-                                        "Transform_46066"
-                                    ],
+                                    "components": [],
                                     "children": []
                                 }
                             ]
@@ -162,12 +153,12 @@
                     let people_hier = {
                         name: "People",
                         layer: 0,
-                        components: ["Transform_People"],
+                        components: [],
                         children: [
                             {
                                 name: this.myName(),
                                 layer: 0,
-                                components: ["Transform_People_"+this.myName()],
+                                components: [],
                                 children: []
                             }
                         ]
@@ -330,11 +321,11 @@
                 let entity = {}
 
                 // Make transform the top component
-                let transform = obj.GetComponent(BS.ComponentType.Transform)
-                if(transform){
-                    let component_ref = `Transform_${Math.floor(Math.random()*99999)}`
-                    component_refs.push(component_ref);
-                }
+                // let transform = obj.GetComponent(BS.ComponentType.Transform)
+                // if(transform){
+                //     let component_ref = `Transform_${Math.floor(Math.random()*99999)}`
+                //     component_refs.push(component_ref);
+                // }
 
                 for(let c in obj.components){
                     let component = obj.components[c]
@@ -416,21 +407,20 @@
                 
                 //Make transform the top component
                 let ref_idx = 0;
-                let transform = gO.GetComponent(BS.ComponentType.Transform)
-                if(transform){
-                    try{
-                    let component_ref = h.components[ref_idx]
-                    let componentClass = componentBSTypeMap[transform.componentType]
-                    let entityComponent = await new componentClass().init(entity, transform);
-                    entityComponent.setId(component_ref);
-                    entity.components.push(entityComponent);
-                    ref_idx++;
-                    }catch(e){
-                        log('init', "transform", transform)
-                        log('init', "componentBSTypeMap", componentBSTypeMap)
-                        err('init', "error initializing transform for", entity.name, e)
-                    }
-                }
+                // let transform = gO.GetComponent(BS.ComponentType.Transform)
+                // if(transform){
+                //     try{
+                //         let component_ref = h.components[ref_idx]
+                //         let componentClass = componentBSTypeMap[transform.componentType]
+                //         let entityComponent = await new componentClass().init(entity, transform);
+                //         entityComponent.setId(component_ref);
+                //         entity.components.push(entityComponent);
+                //         ref_idx++;
+                //     }catch(e){
+                //         log('init', "transform", transform)
+                //         err('init', "error initializing transform for", entity.name, e)
+                //     }
+                // }
 
                 
                 // Add other components
@@ -793,21 +783,19 @@
 
             log("scene", "NEW SLOT:", newEntity)
 
-            function stringTo8DigitNumber(str) {
-                let hash = 0x811c9dc5; // FNV offset basis
-                for (let i = 0; i < str.length; i++) {
-                  hash ^= str.charCodeAt(i);
-                  hash = (hash + ((hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24))) >>> 0;
-                }
-                return hash % 100_000_000;
-              }
-
-            let properties = {
-                id: `Transform_${stringTo8DigitNumber(newEntity.id)}`
-            }
-
-            let transform = await new TransformComponent().init(newEntity, null, properties);
-            newEntity.components.push(transform);
+            // function stringTo8DigitNumber(str) {
+            //     let hash = 0x811c9dc5; // FNV offset basis
+            //     for (let i = 0; i < str.length; i++) {
+            //       hash ^= str.charCodeAt(i);
+            //       hash = (hash + ((hash << 1) + (hash << 4) + (hash << 7) + (hash << 8) + (hash << 24))) >>> 0;
+            //     }
+            //     return hash % 100_000_000;
+            //   }
+            // let properties = {
+            //     id: `Transform_${stringTo8DigitNumber(newEntity.id)}`
+            // }
+            // let transform = await new TransformComponent().init(newEntity, null, properties);
+            // newEntity.components.push(transform);
             await newEntity._setParent(parentEntity);
         }
 
@@ -836,28 +824,28 @@
             let componentIndex = 0;
 
             // Handle Transform component first
-            const transform = gameObject.GetComponent(BS.ComponentType.Transform);
-            if (transform) {
-                const sourceComponent = sourceEntity.components[componentIndex];
-                const component_ref = componentIdMap[sourceComponent.id];
-                const componentClass = componentBSTypeMap[transform.componentType];
-                const entityComponent = await new componentClass().init(entity, transform);
-                entityComponent.setId(component_ref);
-                entity.components.push(entityComponent);
-                this.entityData.componentMap[component_ref] = entityComponent;
-                componentIndex++;
+            // const transform = gameObject.GetComponent(BS.ComponentType.Transform);
+            // if (transform) {
+            //     const sourceComponent = sourceEntity.components[componentIndex];
+            //     const component_ref = componentIdMap[sourceComponent.id];
+            //     const componentClass = componentBSTypeMap[transform.componentType];
+            //     const entityComponent = await new componentClass().init(entity, transform);
+            //     entityComponent.setId(component_ref);
+            //     entity.components.push(entityComponent);
+            //     this.entityData.componentMap[component_ref] = entityComponent;
+            //     componentIndex++;
 
 
-                // Set the parent and transform
-                let parentBS = this.getEntityById(parentId)._bs;
-                entity._bs.SetParent(parentBS)
-                let sourceTransform = sourceEntity.getTransform()
-                let transformProps = await sourceTransform.Get("transform")
-                console.log('transformProps', transformProps)
-                entityComponent.Set("localPosition", transformProps.localPosition)
-                entityComponent.Set("localRotation", transformProps.localRotation)
-                entityComponent.Set("localScale", transformProps.localScale)
-            }
+            //     // Set the parent and transform
+            //     let parentBS = this.getEntityById(parentId)._bs;
+            //     entity._bs.SetParent(parentBS)
+            //     let sourceTransform = sourceEntity.getTransform()
+            //     let transformProps = await sourceTransform.Get("transform")
+            //     console.log('transformProps', transformProps)
+            //     entityComponent.Set("localPosition", transformProps.localPosition)
+            //     entityComponent.Set("localRotation", transformProps.localRotation)
+            //     entityComponent.Set("localScale", transformProps.localScale)
+            // }
 
            
 
@@ -923,11 +911,8 @@
             
             let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
 
-            if(componentType === "Transform"){
-                entity.components.unshift(entityComponent);
-            }else{
-                entity.components.push(entityComponent);
-            }
+            
+            entity.components.push(entityComponent);
             this.entityData.componentMap[entityComponent.id] = entityComponent;
 
             // Refresh properties panel

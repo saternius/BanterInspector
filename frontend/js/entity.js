@@ -39,12 +39,13 @@ export class Entity{
         this.identifiers.add(this.id);
         window.SM.entityData.entityMap[this.id] = this;
         this.initialized = true;
+        this.transform = this._bs.transform;
         return this;
     }
 
-    getTransform(){
-        return this.components.find(component => component.type === "Transform");
-    }
+    // getTransform(){
+    //     return this.components.find(component => component.type === "Transform");
+    // }
 
     getComponent(componentType, index = 0){
         return this.components.filter(component => component.type === componentType)[index];
