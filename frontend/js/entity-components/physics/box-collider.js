@@ -34,11 +34,11 @@ export class BoxColliderControls{
         if(this.visible){
             this.visual = new BS.GameObject(this.name);
 
-            this.visualTransform = new BS.Transform()
+            this.visualTransform = this.visual.transform;
             this.visualTransform.localScale = new BS.Vector3(this.component.properties.size.x, this.component.properties.size.y, this.component.properties.size.z);
             this.visualTransform.localPosition = new BS.Vector3(this.component.properties.center.x, this.component.properties.center.y, this.component.properties.center.z);
-            this.visual.AddComponent(this.visualTransform);
 
+            
             this.visual.AddComponent(new BS.BanterGeometry());
             let material = new BS.BanterMaterial()
             material.color = new BS.Vector4(0, 1, 0, .25);

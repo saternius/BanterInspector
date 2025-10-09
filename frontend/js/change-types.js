@@ -334,11 +334,11 @@ export class ComponentReorderChange extends Change{
         const entity = SM.getEntityById(this.entityId);
         if (!entity || !entity.components) return;
         
-        // Don't allow moving Transform component (index 0)
-        if (this.fromIndex === 0 || this.toIndex === 0) {
-            console.warn('Cannot reorder Transform component');
-            return;
-        }
+        // // Don't allow moving Transform component (index 0)
+        // if (this.fromIndex === 0 || this.toIndex === 0) {
+        //     console.warn('Cannot reorder Transform component');
+        //     return;
+        // }
         
         const components = entity.components;
         if (this.fromIndex < 0 || this.fromIndex >= components.length ||

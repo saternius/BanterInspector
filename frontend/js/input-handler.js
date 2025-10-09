@@ -37,7 +37,7 @@ export class InputHandler{
                     }
                 }
 
-                let pos = rightHand.getTransform()._bs._localRotation;
+                let pos = rightHand.transform._localRotation;
 
                 return {
                     x: pos.x,

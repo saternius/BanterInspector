@@ -299,9 +299,9 @@
             // Header
             const header = document.createElement('div');
             header.className = 'component-header';
-            if(component.type === "Transform"){
-                header.classList.add('perm');
-            }
+            // if(component.type === "Transform"){
+            //     header.classList.add('perm');
+            // }
             
             const headerContent = document.createElement('div');
             headerContent.style.display = 'flex';
@@ -321,48 +321,48 @@
             actionsDiv.style.gap = '8px';
             
             // Add up/down arrows (except for Transform component)
-            if (component.type !== 'Transform') {
+            // if (component.type !== 'Transform') {
                 // Up arrow - hide if component is at index 1 (right after Transform)
-                if (index > 1) {
-                    const upBtn = document.createElement('button');
-                    upBtn.className = 'component-reorder-btn';
-                    upBtn.innerHTML = '↑';
-                    upBtn.title = 'Move up';
-                    upBtn.onmousedown = (e) => {
-                        e.stopPropagation();
-                        this.moveComponentUp(index);
-                    };
-                    actionsDiv.appendChild(upBtn);
-                }
-                
-                // Down arrow - hide if component is the last one
-                if (index < totalComponents - 1) {
-                    const downBtn = document.createElement('button');
-                    downBtn.className = 'component-reorder-btn';
-                    downBtn.innerHTML = '↓';
-                    downBtn.title = 'Move down';
-                    downBtn.onmousedown = (e) => {
-                        e.stopPropagation();
-                        this.moveComponentDown(index, totalComponents);
-                    };
-                    actionsDiv.appendChild(downBtn);
-                }
+            if (index > 1) {
+                const upBtn = document.createElement('button');
+                upBtn.className = 'component-reorder-btn';
+                upBtn.innerHTML = '↑';
+                upBtn.title = 'Move up';
+                upBtn.onmousedown = (e) => {
+                    e.stopPropagation();
+                    this.moveComponentUp(index);
+                };
+                actionsDiv.appendChild(upBtn);
             }
             
-            // Delete button (don't allow deleting Transform components)
-            if (component.type !== 'Transform') {
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'component-delete-btn';
-                deleteBtn.innerHTML = '×';
-                deleteBtn.title = 'Delete component';
-                deleteBtn.onmousedown = async (e) => {
+            // Down arrow - hide if component is the last one
+            if (index < totalComponents - 1) {
+                const downBtn = document.createElement('button');
+                downBtn.className = 'component-reorder-btn';
+                downBtn.innerHTML = '↓';
+                downBtn.title = 'Move down';
+                downBtn.onmousedown = (e) => {
                     e.stopPropagation();
-                    if (await confirm(`Delete ${component.type} component?`)) {
-                        this.deleteComponent(component.id, component.type);
-                    }
+                    this.moveComponentDown(index, totalComponents);
                 };
-                actionsDiv.appendChild(deleteBtn);
+                actionsDiv.appendChild(downBtn);
             }
+            // }
+            
+            // Delete button (don't allow deleting Transform components)
+            // if (component.type !== 'Transform') {
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'component-delete-btn';
+            deleteBtn.innerHTML = '×';
+            deleteBtn.title = 'Delete component';
+            deleteBtn.onmousedown = async (e) => {
+                e.stopPropagation();
+                if (await confirm(`Delete ${component.type} component?`)) {
+                    this.deleteComponent(component.id, component.type);
+                }
+            };
+            actionsDiv.appendChild(deleteBtn);
+            // }
             
             const toggleSpan = document.createElement('span');
             toggleSpan.className = 'component-toggle';
