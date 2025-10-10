@@ -528,7 +528,7 @@
                             const vectorInputs = Array.from(inputs).filter(input => {
                                 const container = input.closest('.property-row');
                                 const label = container?.querySelector('.property-label');
-                                return label && label.textContent === formatPropertyName(key);
+                                return label && label.textContent === formatPropertyName('localScale');
                             });
                             
                             if (vectorInputs.length === 3) {

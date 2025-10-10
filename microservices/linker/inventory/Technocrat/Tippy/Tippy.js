@@ -19,7 +19,7 @@ this.onStart = async ()=>{
 
         console.log("attaching..")
         await this._entity.SetParent('People/'+user)
-        await this._entity.getTransform().Set("localPosition", {x: 0, y: 0, z: 0});
+        await this._entity.Set("localPosition", {x: 0, y: 0, z: 0});
         await AddComponent(this._entity.id, "BanterAttachedObject", {
             componentProperties:{
                 uid: scene.localUser.uid,
@@ -35,10 +35,9 @@ this.onStart = async ()=>{
 }
 
 
-let tippyTransform = this._entity.getTransform()
 this.onUpdate = ()=>{
-    //console.log("Updating tippyTransform", tippyTransform, tippyTransform._bs._localRotation)
-    tippyTransform._bs.Q([13])
+    //console.log("Updating tippy transform")
+    this._entity._bs.transform.Q([13])
 }
 
 this.onDestroy = ()=>{

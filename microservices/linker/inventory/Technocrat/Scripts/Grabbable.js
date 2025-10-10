@@ -14,10 +14,9 @@ this.onStart = ()=>{
     this._entity._bs.On("click", async (e) => {
         if(held){
             await this._entity.SetParent(lastParent)
-            let transform = this._entity.getTransform()
-            await transform._bs.Q([13])
-            await transform.Set("localPosition", transform._bs._position)
-            await transform.Set("localRotation", transform._bs._rotation)
+            await this._entity._bs.transform.Q([13])
+            await this._entity.Set("localPosition", this._entity._bs.transform._position)
+            await this._entity.Set("localRotation", this._entity._bs.transform._rotation)
         }else{
             console.log("click", e.detail)
             let tippyHolderPath = "People/"+user+"/Trackers/RIGHT_HAND/Holder";
@@ -27,7 +26,7 @@ this.onStart = ()=>{
                 showNotification("Error: RIGHT_HAND Holder not found")
                 return;
             }
-            tippyHolder.getTransform().Set("position", e.detail.point)
+            await tippyHolder.Set("position", e.detail.point)
             lastParent = this._entity.parentId;
             this._entity.SetParent(tippyHolderPath)
         }

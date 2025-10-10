@@ -21,7 +21,7 @@ async function onEntitySelected(e){
     }
     entity.components[0]._bs.Q([13])
     setTimeout(()=>{
-        gizmo.getTransform().Set("localPosition", entity.components[0]._bs._position);
+        gizmo.Set("localPosition", entity.components[0]._bs._position);
     }, 100)
 }
 

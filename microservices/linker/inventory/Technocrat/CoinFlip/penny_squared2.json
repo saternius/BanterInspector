@@ -1,0 +1,643 @@
+{
+  "author": "Technocrat",
+  "created": 1760055496393,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "PennyMesh",
+        "parentId": "Scene/penny_squared2",
+        "persistent": true,
+        "type": "Entity"
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 0.2,
+            "y": 0.025,
+            "z": 0.2
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "angularDrag": 0.05,
+          "angularVelocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "centerOfMass": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "collisionDetectionMode": 0,
+          "drag": 0,
+          "freezePositionX": false,
+          "freezePositionY": false,
+          "freezePositionZ": false,
+          "freezeRotationX": false,
+          "freezeRotationY": false,
+          "freezeRotationZ": false,
+          "isKinematic": false,
+          "mass": 1,
+          "useGravity": true,
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        "type": "BanterRigidbody"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "type": "BanterColliderEvents"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759783702790,
+          "data": "this._entity.penny = true;\nthis.flip = (e)=>{\n    let rigidBody = this._entity.getComponent(\"BanterRigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return;\n    }\n    rigidBody._bs.AddForce({x: 0, y: 4, z: 0}, BS.ForceMode.Impulse);\n    rigidBody._bs.AddTorque({x: 2, y:1,  z: 5}, BS.ForceMode.Impulse);\n}\n\n\n// this.onStart = ()=>{\n    \n// }\n// this.onDestroy = ()=>{\n//     this._entity._bs.listeners.get(\"click\").delete(flip);\n// }\n",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1759855136851,
+          "last_used": 1759938196957,
+          "name": "Flipable.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "file": "Flipable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "kinematicIfNotOwned": true,
+          "syncPosition": true,
+          "syncRotation": true,
+          "takeOwnershipOnCollision": false,
+          "takeOwnershipOnGrab": true
+        },
+        "type": "BanterSyncedObject"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "penny_squared2",
+    "parentId": "Scene",
+    "penny": true,
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity"
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/Penny",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/Penny",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": ".1",
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": ".1",
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": ".1",
+        "z": ".1"
+      },
+      "options": {
+        "oldValue": {
+          "x": ".1",
+          "y": ".1",
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": "PennyMesh",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/PennyMesh",
+      "newParentId": "Scene/PennyT",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "BanterCylinder_13653",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "height": 0.025,
+              "radialSegments": 32,
+              "radius": 0.1
+            },
+            "type": "BanterCylinder"
+          },
+          {
+            "id": "BanterMaterial_13394",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.1568627450980392,
+                "g": 0.403921568627451,
+                "r": 0.48627450980392156
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BoxCollider_63469",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.2,
+                "y": 0.025,
+                "z": 0.2
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterRigidbody_84894",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "BanterRigidbody"
+          },
+          {
+            "id": "BanterColliderEvents_26604",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "type": "BanterColliderEvents"
+          },
+          {
+            "id": "MonoBehavior_29576",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1759783702790,
+              "data": "\nlet flip = (e)=>{\n    let rigidBody = this._entity.getComponent(\"BanterRigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return;\n    }\n    rigidBody._bs.AddForce({x: 0, y: 4, z: 0}, BS.ForceMode.Impulse);\n}\n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", flip)\n    window.coin = this._entity;\n}\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1759783702790,
+              "last_used": 1759835476385,
+              "name": "Flipable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Flipable.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "id": "BanterSyncedObject_53080",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "kinematicIfNotOwned": true,
+              "syncPosition": true,
+              "syncRotation": true,
+              "takeOwnershipOnCollision": false,
+              "takeOwnershipOnGrab": true
+            },
+            "type": "BanterSyncedObject"
+          }
+        ],
+        "id": "Scene/PennyT/penny_squared_74385",
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "penny_squared_74385",
+        "parentId": "Scene/PennyT",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      "itemName": "penny_squared",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/PennyT"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyT/PennyMesh",
+      "newValue": {
+        "w": 0.9238795325112867,
+        "x": 0,
+        "y": 0,
+        "z": 0.3826834323650898
+      },
+      "options": {
+        "oldValue": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyT/PennyMesh",
+      "newValue": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.9238795325112867,
+          "x": 0,
+          "y": 0,
+          "z": 0.3826834323650898
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/PennyT/penny_squared_74385",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/penny_squared_74385",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/penny_squared_74385",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/PennyT/PennyMesh",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/penny_squared_74385",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyMesh",
+      "newValue": {
+        "w": 0.9999996192282494,
+        "x": 0,
+        "y": 0,
+        "z": 0.0008726645152351496
+      },
+      "options": {
+        "oldValue": {
+          "w": 1,
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyMesh",
+      "newValue": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.9999996192282494,
+          "x": 0,
+          "y": 0,
+          "z": 0.0008726645152351496
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyMesh",
+      "newValue": {
+        "x": 0,
+        "y": "0.1",
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/PennyMesh",
+      "newValue": {
+        "x": 0,
+        "y": "0",
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": "0.1",
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/PennyMesh",
+      "newParentId": "Scene/penny_squared_74385",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/penny_squared_74385",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/penny_squared_74385",
+      "newValue": "penny_squared2",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760055496393,
+  "name": "penny_squared2"
+}

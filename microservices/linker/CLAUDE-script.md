@@ -23,7 +23,7 @@ Scripts operate within an entity-component system that mirrors Unity's GameObjec
 ### 3. State Management
 Scripts maintain state through:
 - Instance variables (e.g., `this.speed`, `this.started`)
-- Custom variables system (`this.vars`) with type definitions
+- Custom variables system (`this.vars`) with type definitions11
 - Default values pattern (`this.default`)
 
 ## Data Structures and Patterns
@@ -67,20 +67,35 @@ Object.entries(this.default).forEach(([key, val]) => {
 ```
 
 ### Transform Manipulation
-Common patterns for manipulating object transforms:
+Transform properties are accessed and modified through the entity's `Get()` and `Set()` methods:
 
 ```javascript
-// Cache transform reference
-this.transform = this._entity.getTransform()
+// Read transform properties using Get()
+let pos = this._entity.Get("localPosition")    // {x, y, z}
+let rot = this._entity.Get("localRotation")    // {x, y, z, w} - quaternion
+let scale = this._entity.Get("localScale")     // {x, y, z}
 
-// Set absolute position
-this.transform.Set("localPosition", {x: 0, y: 1, z: 0})
+// World space properties
+let worldPos = this._entity.Get("position")
+let worldRot = this._entity.Get("rotation")
 
-// Add to current values (delta)
-this.transform.Add("localRotation", {x: 1, y: 1, z: 1})
+// Modify transforms using Set() (automatically syncs across all clients)
+await this._entity.Set("localPosition", {x: 0, y: 1, z: 0})
+await this._entity.Set("localScale", {x: 2, y: 2, z: 2})
 
-// Multiply current values
-this.transform.Multiply("localScale", {x: 0.5, y: 0.5, z: 0.5})
+// Rotation can be set using EITHER Euler angles (Vector3) OR Quaternion (Vector4)
+await this._entity.Set("localRotation", {x: 0, y: 90, z: 0})           // Euler angles (degrees)
+await this._entity.Set("localRotation", {x: 0, y: 0, z: 0, w: 1})      // Quaternion
+
+// World space modifications
+await this._entity.Set("position", {x: 5, y: 0, z: 5})
+await this._entity.Set("rotation", {x: 0, y: 180, z: 0})               // Euler angles
+await this._entity.Set("rotation", {x: 0, y: 0, z: 0, w: 1})          // Quaternion
+
+// Other entity properties can also use Get/Set
+let entityName = this._entity.Get("name")
+let isActive = this._entity.Get("active")
+await this._entity.Set("active", false)
 ```
 
 ## Common Utility Functions
@@ -292,10 +307,20 @@ scene.SetPublicSpaceProperty("score", 100)
 ### Rotating Object
 ```javascript
 this.onUpdate = () => {
-    this.transform.Add("localRotation", {
-        x: this.rotationSpeed,
-        y: this.rotationSpeed,
-        z: this.rotationSpeed
+    // Get current rotation (returns quaternion)
+    let currentRot = this._entity.Get("localRotation")
+
+    // Option 1: Use Euler angles (simpler, more intuitive)
+    // Note: You'll need to track euler angles separately or convert from quaternion
+    this.eulerY = (this.eulerY || 0) + this.rotationSpeed
+    this._entity.Set("localRotation", {x: 0, y: this.eulerY, z: 0})
+
+    // Option 2: Modify quaternion directly (if you understand quaternion math)
+    this._entity.Set("localRotation", {
+        x: currentRot.x + this.rotationSpeed,
+        y: currentRot.y + this.rotationSpeed,
+        z: currentRot.z + this.rotationSpeed,
+        w: currentRot.w
     })
 }
 ```

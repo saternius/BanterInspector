@@ -31,8 +31,7 @@ let score = ()=>{
 }
 
 this.onStart = async ()=>{
-    this.transform = this._entity.getTransform()
-    await this.transform.Set("localPosition", {x:0,y:Math.random()*2.5,z:6})
+    await this._entity.Set("localPosition", {x:0,y:Math.random()*2.5,z:6})
     this.started = true;
     let parent = SM.getEntityById(this._entity.parentId)
     let pipeSpawner = parent.getComponent("MonoBehavior").ctx
@@ -42,21 +41,21 @@ this.onStart = async ()=>{
 this.onUpdate = ()=>{
     if(!this.started) return;
     if(this.speed === 0) return;
-    
-    this.transform.Add("localPosition", {
-        x: 0,
-        y: 0,
-        z: -this.speed
+
+    let currentPos = this._entity.Get("localPosition")
+    this._entity.Set("localPosition", {
+        x: currentPos.x,
+        y: currentPos.y,
+        z: currentPos.z - this.speed
     })
-    let zPos = this.transform.properties.localPosition.z;
+    let zPos = this._entity.Get("localPosition").z;
     if(zPos < 0 && !this.scored){
         score()
     }
-    
+
     if(zPos < -6){
         deleteSlot(this._entity)
     }
-    //console.log("[PIPE]", this.transform.properties.localPosition)
 }
 
 this.onDestroy = ()=>{

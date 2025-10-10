@@ -70,12 +70,12 @@ export class BanterGLTFComponent extends EntityComponent {
         let parentTransform = await this._entity.transform;
         let position = parentTransform.position;
         let rotation = parentTransform.rotation;
-        let scale = parentTransform.scale;
-        log('gltf', 'parentTransform', position, rotation, scale, this._entity.id)
+        let localScale = parentTransform.localScale;
+        log('gltf', 'parentTransform', position, rotation, localScale, this._entity.id)
         this._gltfTransform = this._gltfObject.transform;
         this._gltfTransform.position = new BS.Vector3(position.x,position.y, position.z);
         this._gltfTransform.rotation = new BS.Vector4(rotation.x,rotation.y, rotation.z, rotation.w);
-        this._gltfTransform.localScale = new BS.Vector3(scale.x, scale.y, scale.z);
+        this._gltfTransform.localScale = new BS.Vector3(localScale.x, localScale.y, localScale.z);
 
         await this._gltfObject.SetParent(this._entity._bs, true);
         await this._gltfObject.SetLayer(5);  
