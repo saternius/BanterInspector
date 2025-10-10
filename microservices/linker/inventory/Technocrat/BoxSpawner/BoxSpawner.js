@@ -73,19 +73,20 @@ this.onStart = ()=>{
             return
         }
         console.log(item)
-        let itemTransform = item.getTransform()
-        await itemTransform.Add("localPosition", 
+        let currentPos = item.Get("localPosition")
+        await item.Set("localPosition",
                           {
-                            x: Math.random()*8 - 4,
-                            y: Math.random()*4,
-                            z: Math.random()*8 - 4
+                            x: currentPos.x + Math.random()*8 - 4,
+                            y: currentPos.y + Math.random()*4,
+                            z: currentPos.z + Math.random()*8 - 4
                           }
                          )
-        await itemTransform.Multiply("localScale",
+        let currentScale = item.Get("localScale")
+        await item.Set("localScale",
                                     {
-                                        x: Math.random()*.5+.25,
-                                        y: Math.random()*.5+.25,
-                                        z: Math.random()*.5+.25
+                                        x: currentScale.x * (Math.random()*.5+.25),
+                                        y: currentScale.y * (Math.random()*.5+.25),
+                                        z: currentScale.z * (Math.random()*.5+.25)
                                     }
                                    )
         let material = item.getComponent("BanterMaterial")

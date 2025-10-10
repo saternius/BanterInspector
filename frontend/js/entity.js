@@ -1,5 +1,5 @@
 const { TransformComponent } = await import(`${window.repoUrl}/entity-components/transform.js`);
-const { deepClone, parseBest } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoUrl}/utils.js`);
 
 export class Entity{
     async init(entityData){
@@ -210,12 +210,12 @@ export class Entity{
         networking.sendOneShot(message);
         message = `update_entity¶${this.id}¶localScale¶${JSON.stringify(this.transform.localScale)}`;
         networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶position¶${JSON.stringify(this.transform.position)}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶rotation¶${JSON.stringify(this.transform.rotation)}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶scale¶${JSON.stringify(this.transform.scale)}`;
-        networking.sendOneShot(message);
+        // message = `update_entity¶${this.id}¶position¶${JSON.stringify(this.transform.position)}`;
+        // networking.sendOneShot(message);
+        // message = `update_entity¶${this.id}¶rotation¶${JSON.stringify(this.transform.rotation)}`;
+        // networking.sendOneShot(message);
+        // message = `update_entity¶${this.id}¶scale¶${JSON.stringify(this.transform.scale)}`;
+        // networking.sendOneShot(message);
     }
 
     rename(newName, localUpdate){
@@ -267,6 +267,13 @@ export class Entity{
         }
         if(prop == "localRotation"){
             this.transform.localRotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
+            if ('w' in newValue) {
+                newValue.w = parseFloat(newValue.w || 1);
+                this._bs[property] = new BS.Vector4( newValue.x, newValue.y, newValue.z, newValue.w);
+            } else {
+                newValue = eulerToQuaternion(newValue);
+                this._bs[property] = new BS.Vector4(newValue.x, newValue.y, newValue.z, newValue.w);
+            }
         }
         if(prop == "localScale"){
             this.transform.localScale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
@@ -277,17 +284,23 @@ export class Entity{
         if(prop == "rotation"){
             this.transform.rotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
         }
-        if(prop == "scale"){
-            this.transform.scale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
-        }
+        // if(prop == "scale"){
+        //     this.transform.scale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
+        // }
     }
 
     export(keep){
-        let ignore = ['id', 'ctx']
+        let ignore = ['id', 'ctx', 'transform']
         if(keep){
             ignore = ignore.filter(x=>!keep.includes(x));
         }
-        return deepClone(this, ignore, true);
+        let clone = deepClone(this, ignore, true);
+        clone.transform = {
+            localPosition: this.transformVal("localPosition"),
+            localRotation: this.transformVal("localRotation"),
+            localScale: this.transformVal("localScale")
+        }
+        return clone;
     }
 
     async Set(property, value){
@@ -300,6 +313,14 @@ export class Entity{
         if(property == "name"){
             this.rename(value, false);
         }
+    }
+    
+    Get(property){
+        let transformProperty = this.transform[property]
+        if(transformProperty){
+            return transformProperty;
+        }
+        return this[property];
     }
 
     async SetParent(newParentId){

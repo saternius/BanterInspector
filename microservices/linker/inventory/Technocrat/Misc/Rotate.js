@@ -1,13 +1,14 @@
 
 this.onStart = ()=>{
-    this.transform = this._entity.getTransform()
 }
 
 this.onUpdate = ()=>{
-    this.transform.Add("localRotation", {
-        x: 1,
-        y: 0,
-        z: 0
+    let currentRot = this._entity.Get("localRotation")
+    this._entity.Set("localRotation", {
+        x: currentRot.x + 1,
+        y: currentRot.y,
+        z: currentRot.z,
+        w: currentRot.w
     })
 }
 

@@ -32,7 +32,7 @@ this.onStart = ()=>{
                 showNotification("Error: RIGHT_HAND Holder not found")
                 return;
             }
-            tippyHolder.getTransform().Set("position", e.detail.point)
+            tippyHolder.Set("position", e.detail.point)
             this._entity.SetParent(tippyHolderPath)
         }
         held = !held;

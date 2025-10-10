@@ -13,14 +13,13 @@ class WindowUI {
 
         this.ctx.onStart = async ()=>{
             let {startingPosition, startingRotation} = await this.getStartingSpot();
-            let transform = this.ctx._entity.getTransform();    
-            transform.Set("localPosition", {x: 0, y: 0, z: 0});
+            this.ctx._entity.Set("localPosition", {x: 0, y: 0, z: 0});
             this.PaneEntity = await AddEntity(this.ctx._entity.id, "UI")
             this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));
             this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));
             window.blankUI = this.doc;
-            transform.Set("localPosition", startingPosition);
-            transform.Set("localRotation", startingRotation);
+            this.ctx._entity.Set("localPosition", startingPosition);
+            this.ctx._entity.Set("localRotation", startingRotation);
             this.generateUI();
         }
 
@@ -112,7 +111,7 @@ class WindowUI {
                 showNotification("Error: RIGHT_HAND Holder not found")
                 return;
             }
-            rightHandHolder.getTransform().Set("position", e.detail.point)
+            rightHandHolder.Set("position", e.detail.point)
             this.lastParent = this.ctx._entity.parentId;
             this.ctx._entity.SetParent(rightHandHolderPath)
         }
