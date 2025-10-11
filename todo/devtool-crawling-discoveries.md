@@ -36,9 +36,12 @@ scene.spaceState        // Public/protected space properties
 scene.localUser         // Current user
 
 // Entity Scene Manager (Inspector's wrapper layer)
-SM                      // Scene Manager singleton
+SM                      // Scene Manager singleton (NOW EXPOSED GLOBALLY!)
 SM.scene                // Reference to BanterScript's scene (same as global 'scene')
-SM.entityData.entities  // Inspector's Entity wrappers (adds MonoBehavior, sync, items, extensions)
+SM.entityData.entities  // Inspector's Entity wrappers (indexed by numeric ID: "0", "1", etc.)
+SM.entityData.entityMap // Entity lookup map
+SM.entityData.componentMap // Component lookup map
+SM.getEntityById(path)  // Get Entity wrapper by path
 entities()              // Global function returning top-level entities (Scene, People)
 
 // Systems
@@ -48,20 +51,65 @@ ComponentRegistry       // All Component classes with metadata and helpers
 LifecycleAPI            // MonoBehavior script tracking and inspection
 inventory               // Asset management (scripts, prefabs)
 networking              // Multi-user sync via Firebase
-propertiesPanel         // Properties UI controller
 lifecyclePanel          // Script lifecycle tracking
+
+// Inspector Panels (via inspector object)
+inspector               // Main inspector object containing all panels
+inspector.hierarchyPanel      // Hierarchy tree UI
+inspector.propertiesPanel     // Properties editor UI
+inspector.spacePropsPanel     // Space properties UI
+inspector.componentMenu       // Component add menu UI
+inspector.lifecyclePanel      // Lifecycle tracking UI (same as global lifecyclePanel)
+inspector.inventory           // Inventory UI (same as global inventory)
+inspector.scriptEditors       // Map of open script editors
+inspector.feedback            // Feedback system with voice input
+inspector.navigation          // Navigation and page management
+
+// Utility Systems
+inputHandler            // VR input handling with color picker
+TransformOps            // Vector3 utilities (Add, Subtract, Multiply, Divide)
+loadingScreen           // Loading progress tracking
+componentBSTypeMap      // Maps BS.ComponentType enum integers to Component classes
+componentTextMap        // Maps BS.ComponentType enum integers to string names
 
 // BS Library
 BS                      // BanterScript library (56 component classes, 118 methods)
 BS.BanterScene          // Scene class (use 'scene' global instead)
 
-// Command Functions
-SetEntityProp()         // Set entity property
-AddEntity()             // Add new entity
-RemoveEntity()          // Remove entity
-MoveEntity()            // Move entity in hierarchy
-CloneEntity()           // Clone entity
-SaveEntityItem()        // Save to inventory
+// Command Functions (28 total)
+// Entity operations
+SetEntityProp(entityId, property, newValue, options)
+AddEntity(parentId, entityName, options)
+RemoveEntity(entityId, options)
+MoveEntity(entityId, newParentId, options)
+CloneEntity(entityId, options)
+
+// Component operations
+AddComponent(entityId, componentType, options)
+RemoveComponent(componentId, options)
+SetComponentProp(componentId, property, newValue, options)
+
+// Space properties
+SetSpaceProp(property, newValue, protect, options)
+addPublicProp()         // Add public space property (UI helper)
+addProtectedProp()      // Add protected space property (UI helper)
+
+// Inventory operations
+LoadItem(itemName, parentId, options)
+SaveEntityItem(entityId, itemName, folder, options)
+DeleteItem(itemName, options)
+CreateFolder()
+RemoveFolder()
+MoveItemDirectory()
+
+// Script operations
+CreateScript()
+EditScript(scriptName, scriptContent, options)
+SetMonoBehaviorVar()
+
+// Utility
+RunCommand(execString, options)  // Execute shell command
+GetTracker(name)        // Get VR tracker entity
 
 // Firebase (if initialized)
 firebase                // Firebase SDK
@@ -79,21 +127,52 @@ isEncodedSpacePropertyKey(key) // Check if key is in encoded format
 
 ### Module Exposure
 
-**Exposed as globals:**
-- ✅ `changeManager`
-- ✅ `ChangeTypes` (NEW - all change classes with metadata)
-- ✅ `ComponentRegistry` (NEW - all component classes with metadata)
-- ✅ `LifecycleAPI` (NEW - MonoBehavior script tracking and inspection)
-- ✅ `propertiesPanel`
-- ✅ `inventory`
-- ✅ `networking`
-- ✅ `scene`
-- ✅ `lifecyclePanel`
-- ✅ `lifecycle` (LifecycleManager instance, for debugging)
+**Exposed as globals (48 module-related objects found):**
 
-**NOT exposed (encapsulated in module scope):**
-- ❌ `sceneManager`
-- ❌ `hierarchyPanel`
+**Core Systems:**
+- ✅ `SM` - Scene Manager singleton (NOW EXPOSED! 🎉)
+- ✅ `scene` - BanterScript scene object
+- ✅ `BS` - BanterScript library
+- ✅ `inspector` - Main inspector object (contains all panels)
+
+**Registries & APIs:**
+- ✅ `ChangeTypes` - All change classes with metadata
+- ✅ `ComponentRegistry` - All component classes with metadata
+- ✅ `LifecycleAPI` - MonoBehavior script tracking and inspection
+- ✅ `componentBSTypeMap` - BS.ComponentType enum → Component class mapping
+- ✅ `componentTextMap` - BS.ComponentType enum → string name mapping
+
+**Managers:**
+- ✅ `changeManager` - Undo/redo system
+- ✅ `lifecycle` - LifecycleManager instance
+- ✅ `networking` - Firebase multi-user sync
+- ✅ `inputHandler` - VR input handling with color picker
+
+**Panels (accessible via inspector object):**
+- ✅ `inspector.hierarchyPanel` - Hierarchy tree UI
+- ✅ `inspector.propertiesPanel` - Properties editor UI
+- ✅ `inspector.spacePropsPanel` - Space properties UI (also global `spacePropsPanel`)
+- ✅ `inspector.componentMenu` - Component add menu UI
+- ✅ `inspector.lifecyclePanel` - Lifecycle tracking UI (also global `lifecyclePanel`)
+- ✅ `inspector.inventory` - Inventory UI (also global `inventory`)
+- ✅ `inspector.scriptEditors` - Map of open script editors
+- ✅ `inspector.feedback` - Feedback system
+- ✅ `inspector.navigation` - Navigation and page management
+
+**Direct Panel Globals (for backward compatibility):**
+- ✅ `lifecyclePanel`
+- ✅ `spacePropsPanel`
+- ✅ `inventory`
+
+**Utilities:**
+- ✅ `TransformOps` - Vector3 math utilities
+- ✅ `loadingScreen` - Loading progress tracking
+- ✅ `scriptEditors` - Script editor Map (same as inspector.scriptEditors)
+- ✅ `logger` - Logging system
+
+**External Libraries:**
+- ✅ `firebase` - Firebase SDK
+- ✅ `SpeechSDK` - Microsoft Speech SDK
 
 ---
 
@@ -139,15 +218,17 @@ Object.keys(SM.entityData.entities).length
 // Get top-level entities (Scene, People)
 entities()
 
-// Get a specific Entity wrapper by ID
-SM.entityData.entities["Scene"]
-SM.entityData.entities["Scene/MyEntity"]
+// IMPORTANT: SM.entityData.entities is indexed by NUMERIC ID ("0", "1"), not by path!
+// Get a specific Entity wrapper by numeric index
+SM.entityData.entities["0"]  // Usually the Scene entity
+SM.entityData.entities["1"]  // Usually the People entity
 
-// Find Entity wrapper by path
+// Find Entity wrapper by path (recommended method)
 SM.getEntityById("Scene/MyEntity")
+SM.getEntityById("Scene/Ground")
 
-// List all Entity wrapper paths
-Object.keys(SM.entityData.entities)
+// List all Entity wrapper numeric indices
+Object.keys(SM.entityData.entities)  // Returns: ["0", "1"]
 
 // Entity vs GameObject comparison
 const entityId = "Scene/MyEntity";
@@ -427,6 +508,133 @@ encodeSpacePropertyKey("MyEntity", "Transform/localScale", "12345_Transform")
 // Returns: "__MyEntity/Transform/localScale:12345_Transform"
 ```
 
+### Scene Manager (SM) Inspection
+
+```javascript
+// Access Scene Manager (NOW EXPOSED GLOBALLY!)
+SM
+
+// Get all Entity wrapper methods
+Object.getOwnPropertyNames(Object.getPrototypeOf(SM)).filter(m => m !== 'constructor')
+
+// EntityData structure
+SM.entityData.entities  // Indexed by numeric ID: "0", "1", etc.
+SM.entityData.entityMap
+SM.entityData.componentMap
+
+// Get entity by path (recommended)
+SM.getEntityById("Scene/Ground")
+
+// Scene Manager properties
+SM.iamHost           // Am I the host?
+SM.loaded            // Is scene fully loaded?
+SM.selectedEntity    // Currently selected entity
+SM.expandedNodes     // Expanded hierarchy nodes
+
+// Utility methods
+SM.getAllEntities()  // Get all entity wrappers
+SM.getAllMonoBehaviors()  // Get all MonoBehavior components
+```
+
+### Inspector Panels Inspection
+
+```javascript
+// Access all panels via inspector object
+inspector
+
+// Hierarchy panel
+inspector.hierarchyPanel.treeContainer
+inspector.hierarchyPanel.searchTerm
+inspector.hierarchyPanel.draggedEntityId
+
+// Properties panel
+inspector.propertiesPanel.propertiesContent
+inspector.propertiesPanel.collapseAllComponents()
+inspector.propertiesPanel.render()
+
+// Component menu
+inspector.componentMenu.overlay
+inspector.componentMenu.searchInput
+
+// Navigation
+inspector.navigation.currentPage  // Current page name
+inspector.navigation.pages         // All registered pages
+
+// Feedback system
+inspector.feedback.recording       // Is recording voice?
+inspector.feedback.tickets         // All feedback tickets
+inspector.feedback.statementBlockEditor  // AI text processing
+```
+
+### Component Type Mapping
+
+```javascript
+// Map BS.ComponentType enum integers to classes/names
+componentBSTypeMap
+componentTextMap
+
+// Get component class from BS.ComponentType enum
+const enumVal = BS.ComponentType.BanterBox;  // e.g., 7
+const ComponentClass = componentBSTypeMap[enumVal]
+const componentName = componentTextMap[enumVal]  // "BanterBox"
+
+// List all mapped types
+Object.keys(componentBSTypeMap)  // Array of enum integers
+Object.entries(componentTextMap).slice(0, 10)  // Sample mappings
+```
+
+### TransformOps (Vector3 Utilities)
+
+```javascript
+// Vector3 math operations
+const v1 = { x: 1, y: 2, z: 3 };
+const v2 = { x: 4, y: 5, z: 6 };
+
+TransformOps.Add(v1, v2)       // { x: 5, y: 7, z: 9 }
+TransformOps.Subtract(v1, v2)  // { x: -3, y: -3, z: -3 }
+TransformOps.Multiply(v1, 2)   // { x: 2, y: 4, z: 6 }
+TransformOps.Divide(v1, 2)     // { x: 0.5, y: 1, z: 1.5 }
+```
+
+### Input Handler (VR & Color Picker)
+
+```javascript
+// VR input handling
+inputHandler.initialized
+inputHandler.currentInput     // Currently focused input element
+inputHandler.tolerance        // Input precision tolerance
+
+// VR controller
+inputHandler.getRightControllerRot()  // Get right controller rotation
+inputHandler.radialCrown      // Radial menu data
+inputHandler.radialCrownTol   // Radial menu tolerance
+
+// Color picker
+inputHandler.getColorValue()  // Get current color
+inputHandler.setColorValue(color)  // Set color
+inputHandler.rgbToHsv(r, g, b)  // Convert RGB to HSV
+inputHandler.hsvToRgb(h, s, v)  // Convert HSV to RGB
+inputHandler.rgbToHex(r, g, b)  // Convert RGB to hex
+inputHandler.hexToRgb(hex)      // Convert hex to RGB
+```
+
+### Loading Screen
+
+```javascript
+// Loading progress tracking
+loadingScreen.stages          // All loading stages
+loadingScreen.currentStageIndex  // Current stage index
+loadingScreen.subProgress     // Sub-progress within stage
+loadingScreen.errorState      // Is there an error?
+loadingScreen.startTime       // Load start timestamp
+
+// DOM elements
+loadingScreen.element         // Main loading screen element
+loadingScreen.progressFillElement
+loadingScreen.percentageElement
+loadingScreen.statusElement
+```
+
 ### Networking & Users
 
 ```javascript
@@ -539,7 +747,7 @@ The BanterScript library's official scene object that bridges Unity and JavaScri
 
 **Key Properties:**
 - `objects` - Object containing all BanterScript GameObjects by ID (native Unity objects)
-- `components` - Map of all component instances
+- `components` - **Object** (not a Map!) of all component instances, indexed by component ID
 - `users` - Connected users object
 - `spaceState` - Public/protected properties
   - `spaceState.public` - Shared properties accessible to all
@@ -607,11 +815,13 @@ The inspector's Entity system that wraps BanterScript GameObjects with additiona
 ```
 
 **Key Components:**
-- `SM` - Scene Manager singleton (not exposed globally, accessed via modules)
+- `SM` - Scene Manager singleton (**NOW EXPOSED GLOBALLY!**)
 - `SM.scene` - Reference to BanterScript's scene object
-- `SM.entityData.entities` - Object containing Inspector's Entity wrappers
+- `SM.entityData.entities` - **Object indexed by numeric ID** ("0", "1", etc.), NOT by path
+- `SM.entityData.entityMap` - Entity lookup map
+- `SM.entityData.componentMap` - Component lookup map
 - `entities()` - Global function returning top-level entities (Scene, People)
-- `SM.getEntityById(path)` - Find Entity wrapper by path
+- `SM.getEntityById(path)` - Find Entity wrapper by path (**recommended access method**)
 
 **Entity Wrapper Features:**
 - Wraps BanterScript GameObjects with inspector-specific functionality
@@ -964,13 +1174,15 @@ Entity wrappers extend GameObjects with inspector-specific features, accessed vi
 ```
 
 **Access Patterns:**
-- By path: `SM.entityData.entities["Scene/Parent/Child"]`
-- By path (method): `SM.getEntityById("Scene/Parent/Child")`
-- Top-level: `entities()` returns Scene and People entities
+- ❌ ~~By path: `SM.entityData.entities["Scene/Parent/Child"]`~~ (WRONG - not indexed by path!)
+- ✅ By numeric ID: `SM.entityData.entities["0"]` (Scene), `SM.entityData.entities["1"]` (People)
+- ✅ By path (method): `SM.getEntityById("Scene/Parent/Child")` (**recommended**)
+- ✅ Top-level: `entities()` returns Scene and People entities
 
 **Key Distinction:**
 - GameObject (in `scene.objects`): Native BanterScript/Unity layer
 - Entity (in `SM.entityData.entities`): Inspector's wrapper adding sync, scripts, items, extensions
+- **IMPORTANT**: Entity wrappers stored by numeric ID, not by path. Use `SM.getEntityById(path)` for path lookup.
 
 ### Component Structure
 
@@ -1403,119 +1615,59 @@ Object.keys(comp)
 
 ---
 
-## Resolved Discoveries
+## Common Gotchas & Non-Obvious Behaviors
 
-This section documents issues that were identified and successfully resolved during runtime exploration.
+**⚠️ CRITICAL: SM.entityData.entities Indexing**
+```javascript
+// ❌ WRONG - entities NOT indexed by path
+SM.entityData.entities["Scene/MyEntity"]  // undefined!
 
-### 1. Change Types System ✅
+// ✅ CORRECT - indexed by numeric ID
+SM.entityData.entities["0"]  // Scene entity
+SM.entityData.entities["1"]  // People entity
 
-**Issue:** Change types were not exposed globally, making it difficult to inspect the undo/redo system.
+// ✅ CORRECT - use helper method for path lookup
+SM.getEntityById("Scene/MyEntity")
+```
 
-**Resolution:** Exposed as `window.ChangeTypes` with:
-- All 24 change class constructors
-- Rich metadata (category, description, parameters, undoable status, shell commands)
-- Helper methods: `getInfo()`, `getByCategory()`, `getCategories()`, `getUndoable()`, `getCommands()`, `list()`, `getStats()`
-- Categories: base, entity, component, space, script, inventory
+**⚠️ scene.components is an Object, not a Map**
+```javascript
+// ❌ WRONG
+scene.components.get(componentId)
 
-**Reference:** See [Change Types System](#3a-change-types-system-changetypes-global) section
+// ✅ CORRECT
+scene.components[componentId]
+```
 
----
+**⚠️ BS.BanterScene.entities does NOT exist**
+- Use `scene.objects` for BanterScript GameObjects (native Unity layer)
+- Use `SM.entityData.entities` for Inspector's Entity wrappers (adds sync, scripts, items)
+- Two-layer architecture: BS (native) → Inspector (wrapper)
 
-### 2. Component Registry ✅
+**💡 Discovery Helper Methods**
+All registries provide self-documentation:
+```javascript
+ComponentRegistry.list()      // List all components
+ComponentRegistry.getStats()  // Get statistics
+ChangeTypes.list()            // List all change types
+LifecycleAPI.list()           // List all running scripts
+```
 
-**Issue:** Component classes and metadata were not easily accessible for runtime inspection.
+**💡 Container Object Pattern**
+Related modules grouped in `inspector` object for better organization:
+```javascript
+Object.keys(inspector)  // Discover all panels
+inspector.hierarchyPanel.render()  // Direct access
+```
 
-**Resolution:** Exposed as `window.ComponentRegistry` with:
-- All 38 component class constructors
-- Rich metadata (category, description, icon)
-- Unity layer definitions (24 layers)
-- Component type mappings and bundle information
-- Helper methods: `getByName()`, `getByCategory()`, `getInfo()`, `list()`, `getStats()`, `isSupported()`, layer utilities
+**💡 Component Type Conversion**
+```javascript
+// Convert BS.ComponentType enum to class/name
+const enumVal = BS.ComponentType.BanterBox;
+const ComponentClass = componentBSTypeMap[enumVal];
+const componentName = componentTextMap[enumVal];
+```
 
-**Reference:** See [Component Registry System](#3b-component-registry-system-componentregistry-global) section
-
----
-
-### 3. MonoBehavior Script Tracking ✅
-
-**Issue:** Running MonoBehavior scripts were not easily inspectable at runtime.
-
-**Resolution:** Exposed as `window.LifecycleAPI` with:
-- Comprehensive API for querying scripts by entity, file, owner
-- Methods to get lifecycle info, custom methods, and call them
-- Control over FPS and lifecycle manager state
-- Helper methods: `getAllScripts()`, `getByEntity()`, `getByFile()`, `getRunning()`, `getInfo()`, `callMethod()`, `list()`, `getStats()`
-
-**Reference:** See [Lifecycle System](#3c-lifecycle-system-lifecycleapi-global) section
-
----
-
-### 4. Space Property Encoding ✅
-
-**Issue:** Encoded space property keys (`__EntityName/Property:ComponentId`) were difficult to parse.
-
-**Resolution:** Created global decoder utilities:
-- `decodeSpacePropertyKey(key)` - Parse encoded format into structured object
-- `encodeSpacePropertyKey(entityName, propertyPath, componentId)` - Create encoded keys
-- `isEncodedSpacePropertyKey(key)` - Quick boolean check
-- Handles malformed keys gracefully
-
-**Reference:** See [Space Property Encoding](#space-property-encoding) section
-
----
-
-### 5. Unity Layer Definitions ✅
-
-**Issue:** Unity layer numbers and names were not easily accessible.
-
-**Resolution:** Exposed via `ComponentRegistry.layers`:
-- 24 defined Unity layers (Default: 0, UI: 5, Grabbable: 20, NetworkPlayer: 17, etc.)
-- Helper methods: `ComponentRegistry.getLayerName(num)`, `ComponentRegistry.getLayerNumber(name)`
-
-**Reference:** See [Component Registry System](#3b-component-registry-system-componentregistry-global) section
-
----
-
-### 6. BanterScript vs Entity Scene Manager Architecture ✅
-
-**Issue:** Confusion about the relationship between `scene.objects`, `BS.BanterScene.entities`, and the inspector's entity system.
-
-**Resolution:** Clarified two-layer architecture:
-- **BanterScript Library (BS)**: Official Unity ↔ JavaScript bridge
-  - `scene` / `SM.scene`: BanterScript's official scene object
-  - `scene.objects`: All BanterScript GameObjects (native Unity layer)
-- **Entity Scene Manager (Inspector)**: Extension layer built on BanterScript
-  - `SM.entityData.entities`: Inspector's Entity wrappers
-  - `entities()`: Global function returning top-level entities (Scene, People)
-  - Adds: JS MonoBehavior scripts, automatic oneShot sync, store/load items, extensions
-- **Key Distinction**: GameObject (native) vs Entity (inspector wrapper)
-- **Note**: `BS.BanterScene.entities` does not exist (was a misunderstanding)
-
-**Reference:** See [Entity Scene Manager](#1a-entity-scene-manager-inspectors-wrapper-layer) section
-
----
-
-## Known Gaps & Questions
-
-### Critical Unknowns
-
-1. **Module Exposure Pattern**
-   - Inconsistent: some modules global, others not
-   - **Investigate:** Check which modules are intentionally private
-
-### Minor Unknowns
-
-2. **Asset Reference Format**
-   - How are Texture, Material, Audio references stored?
-   - Check entities with media components
-
-3. **Network Sync Behavior**
-   - How does OneShot work when `networking.connected = false`?
-   - Local mode behavior?
-
-4. **Console Logging Volume**
-   - Why heavy console activity?
-   - Debug mode enabled?
 
 ---
 
