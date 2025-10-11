@@ -67,17 +67,23 @@ export class BanterGLTFComponent extends EntityComponent {
         this._gltfObject = new BS.GameObject();
         this._gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
         await this._gltfObject.AddComponent(this._gltfComponent);
-        let parentTransform = await this._entity.transform;
-        let position = parentTransform.position;
-        let rotation = parentTransform.rotation;
-        let localScale = parentTransform.localScale;
-        log('gltf', 'parentTransform', position, rotation, localScale, this._entity.id)
-        this._gltfTransform = this._gltfObject.transform;
-        this._gltfTransform.position = new BS.Vector3(position.x,position.y, position.z);
-        this._gltfTransform.rotation = new BS.Vector4(rotation.x,rotation.y, rotation.z, rotation.w);
-        this._gltfTransform.localScale = new BS.Vector3(localScale.x, localScale.y, localScale.z);
 
-        await this._gltfObject.SetParent(this._entity._bs, true);
+        // this._gltfComponent.On("loaded",() => {
+        //     // go 
+        //   });
+        
+        
+        // let parentTransform = await this._entity.transform;
+        // let position = parentTransform.position;
+        // let rotation = parentTransform.rotation;
+        // let localScale = parentTransform.localScale;
+        // log('gltf', 'parentTransform', position, rotation, localScale, this._entity.id)
+        // this._gltfTransform = this._gltfObject.transform;
+        // this._gltfTransform.position = new BS.Vector3(position.x,position.y, position.z);
+        // this._gltfTransform.rotation = new BS.Vector4(rotation.x,rotation.y, rotation.z, rotation.w);
+        // this._gltfTransform.localScale = new BS.Vector3(localScale.x, localScale.y, localScale.z);
+
+        await this._gltfObject.SetParent(this._entity._bs, false);
         await this._gltfObject.SetLayer(5);  
         
     }

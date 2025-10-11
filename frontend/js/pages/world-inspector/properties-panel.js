@@ -465,7 +465,7 @@
             // Local Position property
             const localPositionRow = this.createPropertyRow('localPosition', localPosition, 'vector3', (axis, value) => {
                 let newValue = deepClone(localPosition)
-                newValue[axis] = value
+                newValue[axis] = parseFloat(value);
                 const change = new EntityPropertyChange(entity.id, 'localPosition', newValue, { source: 'ui', oldValue: localPosition });
                 changeManager.applyChange(change);
             });
@@ -541,7 +541,7 @@
 
                 } else {
                     let newValue = deepClone(localScale)
-                    newValue[axis] = value;
+                    newValue[axis] = parseFloat(value);
                     const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newValue, { source: 'ui', oldValue: localScale });
                     changeManager.applyChange(change);
                 }

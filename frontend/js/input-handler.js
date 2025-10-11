@@ -410,7 +410,26 @@ export class InputHandler{
         
         const hexRow = document.createElement('div');
         hexRow.className = 'color-value-row';
-        hexRow.innerHTML = '<span>Hex:</span><span id="hexDisplay">#FFFFFF</span>';
+
+        const hexLabel = document.createElement('span');
+        hexLabel.textContent = 'Hex:';
+        hexRow.appendChild(hexLabel);
+
+        const hexInput = document.createElement('input');
+        hexInput.type = 'text';
+        hexInput.id = 'hexDisplay';
+        hexInput.className = 'hex-input';
+        hexInput.value = '#FFFFFF';
+        hexInput.maxLength = 7;
+        hexInput.style.cssText = 'background: #1a1a1a; border: 1px solid #444; color: #fff; padding: 2px 6px; font-family: monospace; width: 80px; cursor: pointer;';
+        hexRow.appendChild(hexInput);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copy';
+        copyBtn.className = 'hex-copy-btn';
+        copyBtn.style.cssText = 'margin-left: 8px; padding: 2px 8px; background: #2a2a2a; border: 1px solid #444; color: #8babd5; cursor: pointer; font-size: 11px;';
+        hexRow.appendChild(copyBtn);
+
         values.appendChild(hexRow);
         
         container.appendChild(values);
@@ -428,15 +447,16 @@ export class InputHandler{
         this.colorChangeCallback = onChange;
         this.currentHSV = this.rgbToHsv(color.r * 255, color.g * 255, color.b * 255);
         this.currentAlpha = color.a || 1;
-        
+
         // Update displays
         this.updateColorDisplay(color);
         this.updatePickerVisuals();
-        
+
         // Setup interactions
         this.setupSaturationBrightnessPicker();
         this.setupHuePicker();
         this.setupAlphaPicker();
+        this.setupHexInputHandlers();
     }
     
     setupSaturationBrightnessPicker(){
@@ -578,7 +598,84 @@ export class InputHandler{
             // }
         });
     }
-    
+
+    setupHexInputHandlers(){
+        const hexInput = document.getElementById('hexDisplay');
+        const copyBtn = document.querySelector('.hex-copy-btn');
+
+        if(!hexInput || !copyBtn){
+            console.error('Hex input elements not found');
+            return;
+        }
+
+        // Copy button handler
+        this.addEventListeners(copyBtn, 'click', async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            try {
+                await navigator.clipboard.writeText(hexInput.value);
+                // Visual feedback
+                const originalText = copyBtn.textContent;
+                const originalBg = copyBtn.style.background;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = '#2d5016';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = originalBg;
+                }, 1000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+                showNotification('Failed to copy hex value');
+            }
+        });
+
+        // Hex input handler - update color when user pastes or types
+        this.addEventListeners(hexInput, 'input', (e) => {
+            let hexValue = hexInput.value.trim();
+
+            // Auto-add # if missing
+            if(hexValue.length > 0 && !hexValue.startsWith('#')){
+                hexValue = '#' + hexValue;
+                hexInput.value = hexValue;
+            }
+
+            // Only process if we have a complete hex value
+            if(hexValue.length === 7){
+                const rgb = this.hexToRgb(hexValue);
+                if(rgb){
+                    // Update HSV from the new RGB values
+                    this.currentHSV = this.rgbToHsv(rgb.r, rgb.g, rgb.b);
+
+                    // Update the color
+                    this.updateFromHSV();
+                    this.updatePickerVisuals();
+
+                    // Visual feedback - green border
+                    hexInput.style.borderColor = '#4a7c29';
+                    setTimeout(() => {
+                        hexInput.style.borderColor = '#444';
+                    }, 500);
+                } else {
+                    // Invalid hex - red border
+                    hexInput.style.borderColor = '#a02020';
+                }
+            }
+        });
+
+        // Select all text when clicking on the input
+        this.addEventListeners(hexInput, 'click', (e) => {
+            e.stopPropagation();
+            hexInput.select();
+        });
+
+        // Handle paste event
+        this.addEventListeners(hexInput, 'paste', (e) => {
+            e.stopPropagation();
+            // Let the input event handler process the pasted value
+        });
+    }
+
     updatePickerVisuals(){
         // Update saturation/brightness square background
         const square = document.getElementById('colorSbSquare');
@@ -662,7 +759,7 @@ export class InputHandler{
         
         const hexDisplay = document.getElementById('hexDisplay');
         if(hexDisplay){
-            hexDisplay.textContent = this.rgbToHex(r, g, b);
+            hexDisplay.value = this.rgbToHex(r, g, b);
         }
         
         // Update main value display
@@ -770,6 +867,22 @@ export class InputHandler{
             const hex = x.toString(16);
             return hex.length === 1 ? '0' + hex : hex;
         }).join('').toUpperCase();
+    }
+
+    hexToRgb(hex){
+        // Remove # if present
+        hex = hex.replace('#', '');
+
+        // Validate hex format
+        if(!/^[0-9A-Fa-f]{6}$/.test(hex)){
+            return null;
+        }
+
+        return {
+            r: parseInt(hex.substring(0, 2), 16),
+            g: parseInt(hex.substring(2, 4), 16),
+            b: parseInt(hex.substring(4, 6), 16)
+        };
     }
    
     getDeepActiveElement(doc = document){

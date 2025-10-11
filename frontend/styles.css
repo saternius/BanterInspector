@@ -1973,7 +1973,7 @@ input:hover{
 }
 
 /* Console */
-.lifecycle-console-container {
+.lifecycle-shell-container {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1981,7 +1981,7 @@ input:hover{
     min-height: 150px;
 }
 
-.console-header {
+.shell-header {
     background: #1f1f1f;
     padding: 6px 12px;
     font-size: 12px;
@@ -1992,13 +1992,13 @@ input:hover{
     align-items: center;
 }
 
-.console-toggles {
+.shell-toggles {
     display: flex;
     gap: 4px;
     align-items: center;
 }
 
-.console-toggle {
+.shell-toggle {
     background: #2a2a2a;
     border: 1px solid #333;
     color: #666;
@@ -2009,22 +2009,22 @@ input:hover{
     transition: all 0.2s ease;
 }
 
-.console-toggle:hover {
+.shell-toggle:hover {
     background: #333;
 }
 
-.console-toggle.active {
+.shell-toggle.active {
     background: #1f3024;
     border-color: #1f3024;
     color: #aaa;
 }
 
-.console-toggle.active:hover {
+.shell-toggle.active:hover {
     background: #27422e;
     color: #fff;
 }
 
-.lifecycle-console {
+.lifecycle-shell {
     flex: 1;
     overflow-y: auto;
     background: #0f0f0f;
@@ -2055,7 +2055,7 @@ input:hover{
     gap: 4px;
 }
 
-.console-clear-button {
+.shell-clear-button {
     background: transparent;
     border: none;
     color: #888;
@@ -2065,7 +2065,7 @@ input:hover{
     margin-left: auto;
 }
 
-.console-clear-button:hover {
+.shell-clear-button:hover {
     color: #fff;
 }
 
@@ -5129,7 +5129,7 @@ input:hover{
     }
 }
 
-.command-console-input{
+.command-shell-input{
     background: black;
     padding: 4px;
     font-family: monospace;

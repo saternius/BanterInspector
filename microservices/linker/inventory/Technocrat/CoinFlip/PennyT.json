@@ -1,0 +1,205 @@
+{
+  "author": "Technocrat",
+  "created": 1760055251541,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "created": 1757922834432,
+              "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+              "folder": "Scripts",
+              "imported": true,
+              "importedAt": 1758699638306,
+              "importedFrom": "inventory/Technocrat/Scripts",
+              "itemType": "script",
+              "last_used": 1757922834432,
+              "name": "GLTFGrabbable.js",
+              "remote": true,
+              "startup": false
+            },
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "file": "GLTFGrabbable.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "PennyMesh",
+        "parentId": "Scene/PennyT",
+        "persistent": true,
+        "type": "Entity"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "PennyT",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity"
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/Penny",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/Penny",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": ".1",
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": ".1",
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": ".1",
+        "y": ".1",
+        "z": ".1"
+      },
+      "options": {
+        "oldValue": {
+          "x": ".1",
+          "y": ".1",
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_34122",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_34122",
+      "newValue": "PennyT",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": "PennyMesh",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/PennyMesh",
+      "newParentId": "Scene/PennyT",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "newParentId": "Scene/PennyT",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760055251541,
+  "name": "PennyT"
+}

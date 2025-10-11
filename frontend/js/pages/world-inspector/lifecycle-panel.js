@@ -10,8 +10,8 @@
     export class LifecyclePanel {
         constructor() {
             this.selectedLogs = new Set(); // Set of componentIds that have logging enabled
-            this.consoleBuffer = [];
-            this.maxConsoleLines = 1000;
+            this.shellBuffer = [];
+            this.maxShellLines = 1000;
             this.setupEventListeners();
             this.setupCollapsible();
             this.render();
@@ -78,7 +78,7 @@
             // console.log = (...args) => {
             //     // Call original console.log
             //     originalLog.apply(console, args);
-                
+
             //     // Check if this is from a MonoBehavior context
             //     const stack = new Error().stack;
             //     if (stack && stack.includes('MonoBehavior')) {
@@ -86,7 +86,7 @@
             //         lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
             //             if (this.selectedLogs.has(componentId)) {
             //                 const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-            //                 this.addConsoleOutput(scriptName, args.join(' '));
+            //                 this.addShellOutput(scriptName, args.join(' '));
             //             }
             //         });
             //     }
@@ -223,7 +223,7 @@
             if(monoBehavior.ctx._running){
                 stopBtn.onmousedown = () => {
                     monoBehavior.Stop();
-                    this.addConsoleOutput(scriptName, '[Stopped]', monoBehavior.id);
+                    this.addShellOutput(scriptName, '[Stopped]', monoBehavior.id);
                     this.render();
                 }
             }else{
@@ -240,7 +240,7 @@
             refreshBtn.title = 'Refresh';
             refreshBtn.onmousedown = () => {
                 monoBehavior.Refresh();
-                this.addConsoleOutput(scriptName, '[Refreshed]', monoBehavior.id);
+                this.addShellOutput(scriptName, '[Refreshed]', monoBehavior.id);
                 this.render();
             }
             
@@ -266,7 +266,7 @@
                 const monoBehavior = lifecycle.monoBehaviors.get(componentId);
                 if (monoBehavior) {
                     const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                    this.addConsoleOutput(scriptName, '[Logging enabled]', monoBehavior.id);
+                    this.addShellOutput(scriptName, '[Logging enabled]', monoBehavior.id);
                 }
             } else {
                 this.selectedLogs.delete(componentId);
@@ -275,21 +275,21 @@
 
 
         /**
-         * Add output to the console
+         * Add output to the shell
          */
-        addConsoleOutput(scriptName, output, id) {
+        addShellOutput(scriptName, output, id) {
             let outputStr = `[${scriptName}]: ${output}`;
-            //appendToConsole("script", "script_"+id+"_"+Math.floor(Math.random()*1000000), outputStr);
+            //appendToShell("script", "script_"+id+"_"+Math.floor(Math.random()*1000000), outputStr);
         }
 
 
 
         /**
-         * Clear the console
+         * Clear the shell
          */
-        clearConsole() {
-            let consoleEl = document.getElementById("lifecycleConsole");
-            consoleEl.innerHTML = "";
+        clearShell() {
+            let shellEl = document.getElementById("lifecycleShell");
+            shellEl.innerHTML = "";
         }
     }
 

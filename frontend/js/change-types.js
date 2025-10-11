@@ -1,7 +1,7 @@
 // Import required dependencies
 
 
-const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
+const { deepClone, parseBest, appendToShell, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -44,7 +44,7 @@ export class Change {
             cmd_el.style.textDecoration = "line-through";
             cmd_el.style.color = "gray";
         }
-        appendToConsole("command", this.id, commandStr);
+        appendToShell("command", this.id, commandStr);
     }
 
     async undo(){
@@ -1765,19 +1765,19 @@ window.RunCommand = async (execString, options)=>{
             helpDiv.innerHTML = getHelpText();
             
             // Append the colored help directly
-            const consoleEl = document.getElementById("lifecycleConsole");
-            if(consoleEl) {
-                const children = consoleEl.children;
+            const shellEl = document.getElementById("lifecycleShell");
+            if(shellEl) {
+                const children = shellEl.children;
                 if (children.length >= 500) {
-                    consoleEl.removeChild(children[0]);
+                    shellEl.removeChild(children[0]);
                 }
-                
+
                 const wrapper = document.createElement('div');
                 wrapper.className = 'change-item';
                 wrapper.id = "help_"+Math.floor(Math.random()*1000000);
                 wrapper.appendChild(helpDiv);
-                consoleEl.appendChild(wrapper);
-                consoleEl.scrollTop = consoleEl.scrollHeight;
+                shellEl.appendChild(wrapper);
+                shellEl.scrollTop = shellEl.scrollHeight;
             }
             return;
         case "add_entity":
@@ -1839,7 +1839,7 @@ window.RunCommand = async (execString, options)=>{
             change = new ComponentReorderChange(args[1], args[2], args[3], options);
             break;
         default:
-            appendToConsole("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
+            appendToShell("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
     }
 
     if(change){
@@ -1935,26 +1935,26 @@ class CommandHistory {
 
 const commandHistory = new CommandHistory();
 
-let commmandInputEl = document.getElementById("commandConsoleInput");
-commmandInputEl.addEventListener("keydown", (e)=>{
+let commandInputEl = document.getElementById("commandShellInput");
+commandInputEl.addEventListener("keydown", (e)=>{
     if(e.key === "Enter"){
-        let execString = commmandInputEl.value;
+        let execString = commandInputEl.value;
         if(execString.trim()) {
             commandHistory.add(execString);
             window.RunCommand(execString);
         }
-        commmandInputEl.value = "";
+        commandInputEl.value = "";
         commandHistory.reset();
     } else if(e.key === "ArrowUp") {
         e.preventDefault();
-        commmandInputEl.value = commandHistory.navigateUp(commmandInputEl.value);
+        commandInputEl.value = commandHistory.navigateUp(commandInputEl.value);
         // Move cursor to end
-        commmandInputEl.setSelectionRange(commmandInputEl.value.length, commmandInputEl.value.length);
+        commandInputEl.setSelectionRange(commandInputEl.value.length, commandInputEl.value.length);
     } else if(e.key === "ArrowDown") {
         e.preventDefault();
-        commmandInputEl.value = commandHistory.navigateDown(commmandInputEl.value);
+        commandInputEl.value = commandHistory.navigateDown(commandInputEl.value);
         // Move cursor to end
-        commmandInputEl.setSelectionRange(commmandInputEl.value.length, commmandInputEl.value.length);
+        commandInputEl.setSelectionRange(commandInputEl.value.length, commandInputEl.value.length);
     }
 })
 
@@ -2040,3 +2040,303 @@ window.EditScript = async (scriptName, scriptContent, options)=>{
     let change = new EditScriptItemChange(scriptName, scriptContent, options);
     return await change.apply();
 }
+
+// ============================================================================
+// EXPOSE CHANGE TYPES FOR RUNTIME INSPECTION
+// ============================================================================
+
+/**
+ * Global registry of all Change types for runtime inspection and debugging.
+ * Accessible via window.ChangeTypes in the browser console.
+ *
+ * Usage:
+ *   - List all change types: Object.keys(ChangeTypes.classes)
+ *   - Get change type info: ChangeTypes.getInfo('EntityPropertyChange')
+ *   - Create change instance: new ChangeTypes.classes.EntityPropertyChange(...)
+ *   - Get all entity changes: ChangeTypes.getByCategory('entity')
+ */
+window.ChangeTypes = {
+    // All change class constructors
+    classes: {
+        Change,
+        EntityPropertyChange,
+        ComponentPropertyChange,
+        SpacePropertyChange,
+        ComponentAddChange,
+        ComponentReorderChange,
+        ComponentRemoveChange,
+        EntityAddChange,
+        EntityRemoveChange,
+        EntityMoveChange,
+        MonoBehaviorVarChange,
+        LoadItemChange,
+        CloneEntityChange,
+        SaveEntityItemChange,
+        RenameItemChange,
+        DeleteItemChange,
+        CreateFolderChange,
+        RenameFolderChange,
+        MoveFolderChange,
+        RemoveFolderChange,
+        MoveItemDirectoryChange,
+        CreateScriptItemChange,
+        EditScriptItemChange
+    },
+
+    // Metadata about each change type
+    metadata: {
+        Change: {
+            category: 'base',
+            description: 'Base class for all changes',
+            parameters: [],
+            undoable: true
+        },
+        EntityPropertyChange: {
+            category: 'entity',
+            description: 'Change a property of an entity (name, active, layer, etc.)',
+            parameters: ['entityId', 'property', 'newValue', 'options'],
+            undoable: true,
+            command: 'set_entity_property'
+        },
+        ComponentPropertyChange: {
+            category: 'component',
+            description: 'Change a property of a component',
+            parameters: ['componentId', 'property', 'newValue', 'options'],
+            undoable: true,
+            command: 'set_component_property'
+        },
+        SpacePropertyChange: {
+            category: 'space',
+            description: 'Change a public or protected space property',
+            parameters: ['property', 'newValue', 'protect', 'options'],
+            undoable: true,
+            command: 'set_space_property'
+        },
+        ComponentAddChange: {
+            category: 'component',
+            description: 'Add a component to an entity',
+            parameters: ['entityId', 'componentType', 'options'],
+            undoable: true,
+            command: 'add_component'
+        },
+        ComponentReorderChange: {
+            category: 'component',
+            description: 'Reorder a component in the entity component list',
+            parameters: ['entityId', 'fromIndex', 'toIndex', 'options'],
+            undoable: true,
+            command: 'reorder_component'
+        },
+        ComponentRemoveChange: {
+            category: 'component',
+            description: 'Remove a component from an entity',
+            parameters: ['componentId', 'options'],
+            undoable: true,
+            command: 'remove_component'
+        },
+        EntityAddChange: {
+            category: 'entity',
+            description: 'Add a new entity as child of parent',
+            parameters: ['parentId', 'entityName', 'options'],
+            undoable: true,
+            command: 'add_entity'
+        },
+        EntityRemoveChange: {
+            category: 'entity',
+            description: 'Remove an entity and its children',
+            parameters: ['entityId', 'options'],
+            undoable: true,
+            command: 'remove_entity'
+        },
+        EntityMoveChange: {
+            category: 'entity',
+            description: 'Move entity to new parent',
+            parameters: ['entityId', 'newParentId', 'options'],
+            undoable: true,
+            command: 'move_entity'
+        },
+        MonoBehaviorVarChange: {
+            category: 'script',
+            description: 'Change a MonoBehavior variable value',
+            parameters: ['componentId', 'varName', 'newValue', 'options'],
+            undoable: true,
+            command: 'set_mono_behavior_var'
+        },
+        LoadItemChange: {
+            category: 'inventory',
+            description: 'Load item from inventory into scene',
+            parameters: ['itemName', 'parentId', 'itemData', 'options'],
+            undoable: true,
+            command: 'load_item'
+        },
+        CloneEntityChange: {
+            category: 'entity',
+            description: 'Clone an entity and its children',
+            parameters: ['entityId', 'options'],
+            undoable: true,
+            command: 'clone_entity'
+        },
+        SaveEntityItemChange: {
+            category: 'inventory',
+            description: 'Save entity as inventory item',
+            parameters: ['entityId', 'itemName', 'folder', 'options'],
+            undoable: false,
+            command: 'save_item'
+        },
+        RenameItemChange: {
+            category: 'inventory',
+            description: 'Rename an inventory item',
+            parameters: ['itemName', 'newName', 'options'],
+            undoable: false,
+            command: 'rename_item'
+        },
+        DeleteItemChange: {
+            category: 'inventory',
+            description: 'Delete item from inventory',
+            parameters: ['itemName', 'options'],
+            undoable: false,
+            command: 'delete_item'
+        },
+        CreateFolderChange: {
+            category: 'inventory',
+            description: 'Create inventory folder',
+            parameters: ['folderName', 'parentFolderName', 'options'],
+            undoable: false,
+            command: 'create_folder'
+        },
+        RenameFolderChange: {
+            category: 'inventory',
+            description: 'Rename inventory folder',
+            parameters: ['originalName', 'newName', 'options'],
+            undoable: true,
+            command: 'rename_folder'
+        },
+        MoveFolderChange: {
+            category: 'inventory',
+            description: 'Move folder to new parent (NOT IMPLEMENTED)',
+            parameters: [],
+            undoable: false,
+            command: null
+        },
+        RemoveFolderChange: {
+            category: 'inventory',
+            description: 'Remove inventory folder and its contents',
+            parameters: ['folderPath', 'options'],
+            undoable: false,
+            command: 'remove_folder'
+        },
+        MoveItemDirectoryChange: {
+            category: 'inventory',
+            description: 'Move item to different folder',
+            parameters: ['itemName', 'folderName', 'options'],
+            undoable: false,
+            command: 'move_item_directory'
+        },
+        CreateScriptItemChange: {
+            category: 'inventory',
+            description: 'Create new script or markdown item',
+            parameters: ['scriptName', 'options'],
+            undoable: false,
+            command: 'create_script'
+        },
+        EditScriptItemChange: {
+            category: 'inventory',
+            description: 'Edit script content',
+            parameters: ['scriptName', 'scriptContent', 'options'],
+            undoable: false,
+            command: 'edit_script'
+        }
+    },
+
+    // Helper methods for runtime inspection
+
+    /**
+     * Get information about a specific change type
+     * @param {string} typeName - Name of the change type
+     * @returns {Object} Metadata object with category, description, parameters
+     */
+    getInfo(typeName) {
+        return this.metadata[typeName] || null;
+    },
+
+    /**
+     * Get all change types in a category
+     * @param {string} category - Category name (entity, component, inventory, space, script, base)
+     * @returns {Array<string>} Array of change type names
+     */
+    getByCategory(category) {
+        return Object.entries(this.metadata)
+            .filter(([_, meta]) => meta.category === category)
+            .map(([name, _]) => name);
+    },
+
+    /**
+     * Get all categories
+     * @returns {Array<string>} Array of unique category names
+     */
+    getCategories() {
+        return [...new Set(Object.values(this.metadata).map(meta => meta.category))];
+    },
+
+    /**
+     * Get all undoable change types
+     * @returns {Array<string>} Array of change type names that support undo
+     */
+    getUndoable() {
+        return Object.entries(this.metadata)
+            .filter(([_, meta]) => meta.undoable === true)
+            .map(([name, _]) => name);
+    },
+
+    /**
+     * Get all change types that have shell commands
+     * @returns {Object} Map of command names to change type names
+     */
+    getCommands() {
+        const commands = {};
+        Object.entries(this.metadata).forEach(([typeName, meta]) => {
+            if (meta.command) {
+                commands[meta.command] = typeName;
+            }
+        });
+        return commands;
+    },
+
+    /**
+     * List all change types with their basic info
+     * @returns {Array<Object>} Array of {name, category, description, undoable} objects
+     */
+    list() {
+        return Object.entries(this.metadata).map(([name, meta]) => ({
+            name,
+            category: meta.category,
+            description: meta.description,
+            undoable: meta.undoable,
+            command: meta.command || null
+        }));
+    },
+
+    /**
+     * Get statistics about change types
+     * @returns {Object} Statistics object
+     */
+    getStats() {
+        const categories = this.getCategories();
+        const stats = {
+            total: Object.keys(this.classes).length,
+            byCategory: {},
+            undoable: this.getUndoable().length,
+            withCommands: Object.keys(this.getCommands()).length
+        };
+
+        categories.forEach(cat => {
+            stats.byCategory[cat] = this.getByCategory(cat).length;
+        });
+
+        return stats;
+    }
+};
+
+// Log availability for debugging
+console.log('[ChangeTypes] Exposed globally with', Object.keys(window.ChangeTypes.classes).length, 'change types');
+console.log('[ChangeTypes] Usage: window.ChangeTypes.list() or ChangeTypes.getInfo("EntityPropertyChange")');
+console.log('[ChangeTypes] Categories:', window.ChangeTypes.getCategories().join(', '));

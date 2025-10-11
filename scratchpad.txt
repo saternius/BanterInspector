@@ -1,0 +1,18 @@
+  ssh -L 4202:127.0.0.1:4202 sater@192.168.0.135 -N -v
+
+claude mcp add-json banter-devtool '<stringified-json-config>'
+
+
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--browser-url=http://localhost:9222"
+      ]
+    }
+  }
+}
+
+claude mcp add chrome-devtools npx chrome-devtools-mcp@latest --browser-url=http://localhost:4202
