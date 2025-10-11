@@ -281,12 +281,265 @@ export const componentBundleMap = {
 }
 
 
+// Legacy global exports (kept for backwards compatibility)
 window.componentBSTypeMap = componentBSTypeMap;
 window.componentTextMap = componentTextMap;
 
-export { 
-    Entity, 
-    EntityComponent, 
+// ============================================================================
+// EXPOSE COMPONENT REGISTRY FOR RUNTIME INSPECTION
+// ============================================================================
+
+/**
+ * Global registry of all Component types and metadata for runtime inspection and debugging.
+ * Accessible via window.ComponentRegistry in the browser console.
+ *
+ * Usage:
+ *   - List all components: ComponentRegistry.list()
+ *   - Get component by name: ComponentRegistry.getByName('BanterBox')
+ *   - Get components by category: ComponentRegistry.getByCategory('meshes')
+ *   - Check layer definitions: ComponentRegistry.layers
+ */
+window.ComponentRegistry = {
+    // All component class constructors
+    classes: {
+        Entity,
+        EntityComponent,
+        TransformComponent,
+        MonoBehaviorComponent,
+        // Meshes/Geometry
+        BanterGeometryComponent,
+        BanterBoxComponent,
+        BanterCircleComponent,
+        BanterConeComponent,
+        BanterCylinderComponent,
+        BanterPlaneComponent,
+        BanterRingComponent,
+        BanterSphereComponent,
+        BanterTorusComponent,
+        BanterInvertedMeshComponent,
+        BanterTextComponent,
+        // Materials
+        BanterMaterialComponent,
+        BanterPhysicMaterialComponent,
+        // Physics
+        BanterRigidbodyComponent,
+        BoxColliderComponent,
+        SphereColliderComponent,
+        CapsuleColliderComponent,
+        MeshColliderComponent,
+        ConfigurableJointComponent,
+        // Media
+        BanterAudioSourceComponent,
+        BanterVideoPlayerComponent,
+        BanterGLTFComponent,
+        // Behaviors
+        BanterGrabHandleComponent,
+        BanterSyncedObjectComponent,
+        BanterHeldEventsComponent,
+        BanterAttachedObjectComponent,
+        BanterColliderEventsComponent,
+        // Misc
+        BanterBillboardComponent,
+        BanterMirrorComponent,
+        BanterBrowserComponent,
+        BanterAssetBundleComponent,
+        BanterPortalComponent,
+        BanterKitItemComponent,
+        BanterStreetViewComponent,
+        BanterWorldObjectComponent
+    },
+
+    // Component metadata organized by category
+    metadata: {
+        // Core
+        Entity: { category: 'core', description: 'Entity/GameObject class', icon: '📦' },
+        EntityComponent: { category: 'core', description: 'Base component class', icon: '🧩' },
+        TransformComponent: { category: 'core', description: 'Position, rotation, scale', icon: '📐' },
+        MonoBehaviorComponent: { category: 'scripting', description: 'Script execution component', icon: '📜' },
+
+        // Meshes/Geometry
+        BanterGeometryComponent: { category: 'meshes', description: 'Generic geometry component', icon: '🔷' },
+        BanterBoxComponent: { category: 'meshes', description: 'Box/cube primitive', icon: '◼️' },
+        BanterCircleComponent: { category: 'meshes', description: 'Circle primitive', icon: '⭕' },
+        BanterConeComponent: { category: 'meshes', description: 'Cone primitive', icon: '🔺' },
+        BanterCylinderComponent: { category: 'meshes', description: 'Cylinder primitive', icon: '🥫' },
+        BanterPlaneComponent: { category: 'meshes', description: 'Flat plane primitive', icon: '▬' },
+        BanterRingComponent: { category: 'meshes', description: 'Ring/torus primitive', icon: '⭕' },
+        BanterSphereComponent: { category: 'meshes', description: 'Sphere primitive', icon: '⚪' },
+        BanterTorusComponent: { category: 'meshes', description: 'Torus/donut primitive', icon: '🍩' },
+        BanterInvertedMeshComponent: { category: 'meshes', description: 'Inverted mesh (inside-out)', icon: '🔄' },
+        BanterTextComponent: { category: 'meshes', description: '3D text mesh', icon: '📝' },
+
+        // Materials
+        BanterMaterialComponent: { category: 'materials', description: 'Material properties (color, texture)', icon: '🎨' },
+        BanterPhysicMaterialComponent: { category: 'materials', description: 'Physics material (friction, bounce)', icon: '⚙️' },
+
+        // Physics
+        BanterRigidbodyComponent: { category: 'physics', description: 'Physics simulation', icon: '💫' },
+        BoxColliderComponent: { category: 'physics', description: 'Box collision shape', icon: '📦' },
+        SphereColliderComponent: { category: 'physics', description: 'Sphere collision shape', icon: '⚪' },
+        CapsuleColliderComponent: { category: 'physics', description: 'Capsule collision shape', icon: '💊' },
+        MeshColliderComponent: { category: 'physics', description: 'Mesh-based collision', icon: '🔷' },
+        ConfigurableJointComponent: { category: 'physics', description: 'Configurable physics joint', icon: '🔗' },
+
+        // Media
+        BanterAudioSourceComponent: { category: 'media', description: 'Audio playback', icon: '🔊' },
+        BanterVideoPlayerComponent: { category: 'media', description: 'Video playback', icon: '📹' },
+        BanterGLTFComponent: { category: 'media', description: 'GLTF 3D model loader', icon: '🎭' },
+
+        // Behaviors
+        BanterGrabHandleComponent: { category: 'behaviors', description: 'Grabbable object', icon: '✋' },
+        BanterSyncedObjectComponent: { category: 'behaviors', description: 'Multi-user synchronization', icon: '🔄' },
+        BanterHeldEventsComponent: { category: 'behaviors', description: 'Events when object is held', icon: '🤝' },
+        BanterAttachedObjectComponent: { category: 'behaviors', description: 'Attach to player or object', icon: '📌' },
+        BanterColliderEventsComponent: { category: 'behaviors', description: 'Collision/trigger events', icon: '💥' },
+
+        // Misc
+        BanterBillboardComponent: { category: 'misc', description: 'Always face camera', icon: '👁️' },
+        BanterMirrorComponent: { category: 'misc', description: 'Reflective mirror surface', icon: '🪞' },
+        BanterBrowserComponent: { category: 'misc', description: 'Embedded web browser', icon: '🌐' },
+        BanterAssetBundleComponent: { category: 'misc', description: 'Load Unity asset bundles', icon: '📦' },
+        BanterPortalComponent: { category: 'misc', description: 'Portal to another space', icon: '🚪' },
+        BanterKitItemComponent: { category: 'misc', description: 'Kit item reference', icon: '🎁' },
+        BanterStreetViewComponent: { category: 'misc', description: 'Google Street View integration', icon: '🗺️' },
+        BanterWorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' }
+    },
+
+    // Unity layer definitions
+    layers: BanterLayers,
+
+    // Component type mappings (for compatibility)
+    typeMap: componentTypeMap,
+    bsTypeMap: componentBSTypeMap,
+    textMap: componentTextMap,
+    bundleMap: componentBundleMap,
+    supportedComponents: SUPPORTED_COMPONENTS,
+
+    // Helper methods for runtime inspection
+
+    /**
+     * Get component class by name
+     * @param {string} name - Component name (e.g., 'BanterBox')
+     * @returns {Function|null} Component class constructor
+     */
+    getByName(name) {
+        return this.classes[name] || this.typeMap[name] || null;
+    },
+
+    /**
+     * Get all components in a category
+     * @param {string} category - Category name (core, meshes, materials, physics, media, behaviors, misc, scripting)
+     * @returns {Array<string>} Array of component names
+     */
+    getByCategory(category) {
+        return Object.entries(this.metadata)
+            .filter(([_, meta]) => meta.category === category)
+            .map(([name, _]) => name);
+    },
+
+    /**
+     * Get all categories
+     * @returns {Array<string>} Array of unique category names
+     */
+    getCategories() {
+        return [...new Set(Object.values(this.metadata).map(meta => meta.category))];
+    },
+
+    /**
+     * Get metadata for a specific component
+     * @param {string} name - Component name
+     * @returns {Object|null} Metadata object
+     */
+    getInfo(name) {
+        return this.metadata[name] || null;
+    },
+
+    /**
+     * List all components with their metadata
+     * @returns {Array<Object>} Array of {name, category, description, icon} objects
+     */
+    list() {
+        return Object.entries(this.metadata).map(([name, meta]) => ({
+            name,
+            category: meta.category,
+            description: meta.description,
+            icon: meta.icon
+        }));
+    },
+
+    /**
+     * Get statistics about components
+     * @returns {Object} Statistics object
+     */
+    getStats() {
+        const categories = this.getCategories();
+        const stats = {
+            total: Object.keys(this.classes).length,
+            byCategory: {},
+            layers: Object.keys(this.layers).length
+        };
+
+        categories.forEach(cat => {
+            stats.byCategory[cat] = this.getByCategory(cat).length;
+        });
+
+        return stats;
+    },
+
+    /**
+     * Check if a component is supported
+     * @param {string|number} componentType - Component type (string name or BS.ComponentType enum)
+     * @returns {boolean} True if supported
+     */
+    isSupported(componentType) {
+        if (typeof componentType === 'string') {
+            // Convert string name to BS.ComponentType
+            const bsType = Object.keys(this.textMap).find(key =>
+                this.textMap[key] === componentType
+            );
+            return this.supportedComponents.has(parseInt(bsType));
+        }
+        return this.supportedComponents.has(componentType);
+    },
+
+    /**
+     * Get layer name by layer number
+     * @param {number} layerNum - Layer number (0-23)
+     * @returns {string|null} Layer name
+     */
+    getLayerName(layerNum) {
+        return Object.keys(this.layers).find(name =>
+            this.layers[name] === layerNum
+        ) || null;
+    },
+
+    /**
+     * Get layer number by layer name
+     * @param {string} layerName - Layer name
+     * @returns {number|null} Layer number
+     */
+    getLayerNumber(layerName) {
+        return this.layers[layerName] ?? null;
+    },
+
+    /**
+     * Get components that this component auto-includes (bundles)
+     * @param {string} componentName - Component name
+     * @returns {Array<string>} Array of bundled component names
+     */
+    getBundledComponents(componentName) {
+        return this.bundleMap[componentName] || [];
+    }
+};
+
+// Log availability for debugging
+console.log('[ComponentRegistry] Exposed globally with', Object.keys(window.ComponentRegistry.classes).length, 'component types');
+console.log('[ComponentRegistry] Usage: ComponentRegistry.list() or ComponentRegistry.getByCategory("meshes")');
+console.log('[ComponentRegistry] Categories:', window.ComponentRegistry.getCategories().join(', '));
+
+export {
+    Entity,
+    EntityComponent,
     TransformComponent,
     BanterGeometryComponent,
     BanterMaterialComponent,

@@ -18,22 +18,21 @@ export class Entity{
         
 
         if(!entityData._bs){
-            let newGameObject = new BS.GameObject(this.name);
-            this._bs = newGameObject;
+            let params = {name: this.name};
+            let lp = entityData.localPosition;
+            let lr = entityData.localRotation;
+            let ls = entityData.localScale;
+            if(lp){ params.localPosition = new BS.Vector3(lp.x, lp.y, lp.z) }
+            if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
+            if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
+            
+    
             let parentEntity = SM.getEntityOrScene(this.parentId);
-            try{
-                if(parentEntity){
-                    let parentGameObject = parentEntity._bs;
-                    if(parentGameObject){
-                        await newGameObject.SetParent(parentGameObject, true);
-                    }
-                }
-                await newGameObject.SetActive(true);
-                await newGameObject.SetLayer(this.layer);
-            }catch(e){
-                err("entity", this, this.parentId, parentEntity)
-                err("entity", e);
-            }
+            params.parent = parentEntity._bs;
+            params.layer = this.layer;
+            params.active = this.active;
+            let newGameObject = new BS.GameObject(params);
+            this._bs = newGameObject;
         }
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
@@ -44,9 +43,7 @@ export class Entity{
         return this;
     }
 
-    // getTransform(){
-    //     return this.components.find(component => component.type === "Transform");
-    // }
+
 
     getComponent(componentType, index = 0){
         return this.components.filter(component => component.type === componentType)[index];
@@ -266,14 +263,12 @@ export class Entity{
             this.transform.localPosition = new BS.Vector3(newValue.x,newValue.y, newValue.z)
         }
         if(prop == "localRotation"){
-            this.transform.localRotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
             if ('w' in newValue) {
                 newValue.w = parseFloat(newValue.w || 1);
-                this._bs[property] = new BS.Vector4( newValue.x, newValue.y, newValue.z, newValue.w);
             } else {
                 newValue = eulerToQuaternion(newValue);
-                this._bs[property] = new BS.Vector4(newValue.x, newValue.y, newValue.z, newValue.w);
             }
+            this.transform.localRotation = new BS.Vector4(newValue.x, newValue.y, newValue.z, newValue.w);
         }
         if(prop == "localScale"){
             this.transform.localScale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
@@ -290,15 +285,29 @@ export class Entity{
     }
 
     export(keep){
-        let ignore = ['id', 'ctx', 'transform']
+        let ignore = ['id', 'ctx']
         if(keep){
             ignore = ignore.filter(x=>!keep.includes(x));
         }
-        let clone = deepClone(this, ignore, true);
-        clone.transform = {
-            localPosition: this.transformVal("localPosition"),
-            localRotation: this.transformVal("localRotation"),
-            localScale: this.transformVal("localScale")
+
+        
+        let clone = {};
+        for(const key in this){
+            if(ignore.includes(key)) continue;
+            if(key.startsWith("_")) continue;
+            if(this.hasOwnProperty(key)){
+                if(key === "transform"){
+                    clone[key] = {
+                        localPosition: this.transformVal("localPosition"),
+                        localRotation: this.transformVal("localRotation"),
+                        localScale: this.transformVal("localScale")
+                    }
+                }else if(key === "children"){
+                    clone[key] = this.children.map(child=>child.export(keep));
+                }else{
+                    clone[key] = deepClone(this[key], ignore, true);
+                }
+            }
         }
         return clone;
     }

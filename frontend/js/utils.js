@@ -386,22 +386,22 @@ export function parseBest(str) {
     return str;
 }
 
-export function appendToConsole(tag, id, str){
+export function appendToShell(tag, id, str){
     if(window.logger && window.logger.include[tag]){
-        let consoleEl = document.getElementById("lifecycleConsole");
-        if(!consoleEl) return;
-        
-        const children = consoleEl.children;
+        let shellEl = document.getElementById("lifecycleShell");
+        if(!shellEl) return;
+
+        const children = shellEl.children;
         if (children.length >= 500) {
-            consoleEl.removeChild(children[0]);
+            shellEl.removeChild(children[0]);
         }
-        
+
         const div = document.createElement('div');
         div.className = 'change-item';
         div.id = id;
         div.style.whiteSpace = 'pre-wrap';
         div.style.fontFamily = 'monospace';
-        
+
         if(window.logger && window.logger.getTagColor){
             const color = tag === "error" ? "red" : window.logger.getTagColor(tag);
             div.innerHTML = `<span style="color: ${color}; font-weight: bold">[${tag.toUpperCase()}]:</span> ${str}`;
@@ -411,9 +411,9 @@ export function appendToConsole(tag, id, str){
                 div.style.color = "red";
             }
         }
-        
-        consoleEl.appendChild(div);
-        consoleEl.scrollTop = consoleEl.scrollHeight;
+
+        shellEl.appendChild(div);
+        shellEl.scrollTop = shellEl.scrollHeight;
     }
 }
 
@@ -629,12 +629,12 @@ export class Logger{
                 console.log(`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...args);
             }
             
-            // Handle lifecycle console separately
+            // Handle lifecycle shell separately
             if(logger.include[tag]){
                 const callerInfo = logger.getCallerInfo();
                 const message = args.map(a=>(typeof a === "object" ? JSON.stringify(a) : a)).join(" ");
                 const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
-                appendToConsole(isError ? "error" : tag, generateId(isError ? 'error' : 'log'), message + locationInfo);
+                appendToShell(isError ? "error" : tag, generateId(isError ? 'error' : 'log'), message + locationInfo);
             }
         };
     }
@@ -686,7 +686,7 @@ window.log = function(tag, ...args) {
         _originalLog.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...truncatedArgs]);
     }
 
-    // Handle lifecycle console
+    // Handle lifecycle shell
     if(window.logger.include[tag]){
         const MAX_MESSAGE_LENGTH = 5000;
         let message = args.map(a=>{
@@ -708,7 +708,7 @@ window.log = function(tag, ...args) {
         }
 
         const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
-        appendToConsole(tag, generateId('log'), message + locationInfo);
+        appendToShell(tag, generateId('log'), message + locationInfo);
     }
 };
 
@@ -750,7 +750,7 @@ window.err = function(tag, ...args) {
         _originalError.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...truncatedArgs]);
     }
 
-    // Handle lifecycle console
+    // Handle lifecycle shell
     if(window.logger.include[tag]){
         const MAX_MESSAGE_LENGTH = 5000;
         let message = args.map(a=>{
@@ -772,7 +772,7 @@ window.err = function(tag, ...args) {
         }
 
         const locationInfo = callerInfo ? ` (${callerInfo.fileName}:${callerInfo.lineNum})` : '';
-        appendToConsole("error", generateId('error'), message + locationInfo);
+        appendToShell("error", generateId('error'), message + locationInfo);
     }
 };
 

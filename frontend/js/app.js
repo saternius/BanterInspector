@@ -146,11 +146,11 @@
                     });
                 });
 
-                // Setup clear console button (moved to console header)
-                const clearConsoleBtn = document.getElementById('clearConsoleBtn2');
-                if (clearConsoleBtn) {
-                    clearConsoleBtn.addEventListener('mousedown', () => {
-                        this.lifecyclePanel.clearConsole();
+                // Setup clear shell button (moved to shell header)
+                const clearShellBtn = document.getElementById('clearShellBtn2');
+                if (clearShellBtn) {
+                    clearShellBtn.addEventListener('mousedown', () => {
+                        this.lifecyclePanel.clearShell();
                     });
                 }
 

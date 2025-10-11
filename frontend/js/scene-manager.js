@@ -337,9 +337,13 @@
 
                 entity.name = obj.name;
                 entity.components = component_refs;
+                entity.localPosition = obj.transform.localPosition;
+                entity.localRotation = obj.transform.localRotation;
+                entity.localScale = obj.transform.localScale;
                 if (obj.Traverse) {
                     const childPromises = [];
                     obj.Traverse((child) => {
+                        log('init', 'traversing..',child.id, child.name,  child.parent, obj.unityId)
                         if (child && child.id !== obj.unityId) {
                             if (child.parent == obj.unityId) {
                                 childPromises.push(createEntityHierarchy(child));
@@ -368,7 +372,10 @@
                     name: entity.name,
                     layer: entity.layer,
                     components: Array.from(new Set(entity.components.map(c=>c.id))),
-                    children: entity.children.map(c=>createEntityHierarchy(c))
+                    children: entity.children.map(c=>createEntityHierarchy(c)),
+                    localPosition: entity.transform.localPosition,
+                    localRotation: entity.transform.localRotation,
+                    localScale: entity.transform.localScale
                 }
                 return h;
             }
@@ -402,7 +409,10 @@
                     name: h.name || 'GameObject',
                     parentId: parent_path,
                     _bs: gO,
-                    layer: gO.layer
+                    layer: gO.layer,
+                    localPosition: h.localPosition,
+                    localPosition: h.localPosition,
+                    localPosition: h.localPosition
                 });
                 
                 //Make transform the top component
@@ -513,7 +523,10 @@
                     name: item.name,
                     parentId: parentId,
                     layer: item.layer,
-                    loadAsync: item.loadAsync
+                    loadAsync: item.loadAsync,
+                    localPosition: item.transform.localPosition,
+                    localRotation: item.transform.localRotation,
+                    localScale: item.transform.localScale
                 });
     
                 
@@ -596,7 +609,10 @@
             const entity = await new Entity().init({
                 name: hierarchy.name,
                 parentId: parentId,
-                layer: hierarchy.layer
+                layer: hierarchy.layer,
+                localPosition: hierarchy.localPosition,
+                localRotation: hierarchy.localRotation,
+                localScale: hierarchy.localScale
             });
 
             for(let i=0; i<hierarchy.components.length; i++){
@@ -815,7 +831,10 @@
                 name: name || gameObject.name,
                 parentId: parentId,
                 _bs: gameObject,
-                layer: gameObject.layer
+                layer: gameObject.layer,
+                localPosition: gameObject.transform.localPosition,
+                localRotation: gameObject.transform.localRotation,
+                localScale: gameObject.transform.localScale
             });
 
             
