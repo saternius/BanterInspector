@@ -15,7 +15,8 @@ A practical guide for exploring and debugging the Banter Inspector runtime envir
 5. [Patterns & Conventions](#patterns--conventions)
 6. [Console Logging System](#console-logging-system)
 7. [Investigation Techniques](#investigation-techniques)
-8. [Known Gaps & Questions](#known-gaps--questions)
+8. [Resolved Discoveries](#resolved-discoveries)
+9. [Known Gaps & Questions](#known-gaps--questions)
 
 ---
 
@@ -27,12 +28,18 @@ All accessible from the browser console (F12):
 
 ```javascript
 // Core Scene Management
-scene                    // Main scene instance with entities/components
-scene.objects           // Object containing all entities (use this, NOT BS.BanterScene.entities)
+scene                    // BanterScript's official scene object (same as SM.scene)
+scene.objects           // All BanterScript GameObjects in the scene (native Unity objects)
 scene.components        // Map of all components
 scene.users             // Connected users
 scene.spaceState        // Public/protected space properties
 scene.localUser         // Current user
+
+// Entity Scene Manager (Inspector's wrapper layer)
+SM                      // Scene Manager singleton
+SM.scene                // Reference to BanterScript's scene (same as global 'scene')
+SM.entityData.entities  // Inspector's Entity wrappers (adds MonoBehavior, sync, items, extensions)
+entities()              // Global function returning top-level entities (Scene, People)
 
 // Systems
 changeManager           // Undo/redo system with stacks
@@ -63,6 +70,11 @@ firebase                // Firebase SDK
 logger                  // Logger instance with tag filter configuration
 log(tag, ...args)       // Tagged logging function
 err(tag, ...args)       // Tagged error logging function
+
+// Space Property Utilities
+decodeSpacePropertyKey(key)    // Decode __EntityName/Property:ComponentId format
+encodeSpacePropertyKey(entityName, propertyPath, componentId)  // Encode space property key
+isEncodedSpacePropertyKey(key) // Check if key is in encoded format
 ```
 
 ### Module Exposure
@@ -92,16 +104,19 @@ Copy-paste these into Chrome DevTools console to inspect runtime state.
 ### Entity Inspection
 
 ```javascript
-// Get all entity IDs
+// BanterScript GameObjects (native Unity objects)
+// scene.objects contains ALL BanterScript GameObjects
+
+// Get all GameObject IDs
 Object.keys(scene.objects)
 
-// Count entities
+// Count GameObjects
 Object.keys(scene.objects).length
 
-// Get entity by path
+// Get GameObject by path (BanterScript method)
 scene.FindByPath("Scene/MyEntity")
 
-// List all entity names and paths
+// List all GameObject names and paths
 Object.keys(scene.objects).map(id => ({
   id,
   name: scene.objects[id].name,
@@ -109,25 +124,41 @@ Object.keys(scene.objects).map(id => ({
   active: scene.objects[id].active
 }))
 
-// Get root entities (no parent)
-Object.keys(scene.objects).filter(id => {
-  return !scene.objects[id].parent
-}).map(id => scene.objects[id].name)
-
-// Get entity details
-const entity = scene.objects[Object.keys(scene.objects)[0]];
-console.log({
-  id: entity.id,
-  name: entity.name,
-  path: entity.path,
-  active: entity.active,
-  layer: entity.layer,
-  componentCount: Object.keys(entity.components || {}).length,
-  childCount: entity.children?.length || 0
-})
-
-// Find entities by name
+// Find GameObjects by name
 Object.values(scene.objects).filter(e => e.name.includes("searchTerm"))
+
+// Inspector's Entity Wrappers (adds MonoBehavior, sync, items, extensions)
+// SM.entityData.entities contains Inspector's Entity wrapper layer
+
+// Get all Entity wrappers
+SM.entityData.entities
+
+// Count Entity wrappers
+Object.keys(SM.entityData.entities).length
+
+// Get top-level entities (Scene, People)
+entities()
+
+// Get a specific Entity wrapper by ID
+SM.entityData.entities["Scene"]
+SM.entityData.entities["Scene/MyEntity"]
+
+// Find Entity wrapper by path
+SM.getEntityById("Scene/MyEntity")
+
+// List all Entity wrapper paths
+Object.keys(SM.entityData.entities)
+
+// Entity vs GameObject comparison
+const entityId = "Scene/MyEntity";
+const entity = SM.entityData.entities[entityId];  // Inspector's Entity wrapper
+const gameObject = scene.objects[entity.id];      // Underlying BanterScript GameObject
+
+// Entity wrappers add:
+// - JS MonoBehavior script attachment
+// - Automatic oneShot broadcasting for sync
+// - Storing and loading items
+// - Building extensions
 ```
 
 ### Component Inspection
@@ -371,6 +402,29 @@ scene.spaceState.public["propertyName"]
 // Count properties
 Object.keys(scene.spaceState.public).length
 Object.keys(scene.spaceState.protected).length
+
+// Decode encoded space property keys
+// Pattern: __<EntityName>/<PropertyPath>:<ComponentId>
+decodeSpacePropertyKey("__BanterMaterial_9677/color:component")
+// Returns: { isEncoded: true, entityName: "BanterMaterial_9677", propertyPath: "color", componentId: "component", malformed: false }
+
+// Find all encoded properties
+Object.keys(scene.spaceState.public)
+  .filter(key => isEncodedSpacePropertyKey(key))
+
+// Decode all encoded properties
+Object.keys(scene.spaceState.public)
+  .filter(key => isEncodedSpacePropertyKey(key))
+  .map(key => ({ key, decoded: decodeSpacePropertyKey(key), value: scene.spaceState.public[key] }))
+
+// Find properties for a specific entity
+Object.keys(scene.spaceState.public)
+  .map(key => ({ key, decoded: decodeSpacePropertyKey(key), value: scene.spaceState.public[key] }))
+  .filter(item => item.decoded.isEncoded && item.decoded.entityName === "MyEntity")
+
+// Create an encoded property key
+encodeSpacePropertyKey("MyEntity", "Transform/localScale", "12345_Transform")
+// Returns: "__MyEntity/Transform/localScale:12345_Transform"
 ```
 
 ### Networking & Users
@@ -479,12 +533,12 @@ console.log('Check console for errors above')
 
 ### Core Systems
 
-#### 1. Scene Management (`scene` global)
+#### 1. BanterScript Scene (`scene` global, `SM.scene`)
 
-The main scene instance manages all entities, components, and scene state.
+The BanterScript library's official scene object that bridges Unity and JavaScript.
 
 **Key Properties:**
-- `objects` - Object (NOT Map) containing all entities by ID
+- `objects` - Object containing all BanterScript GameObjects by ID (native Unity objects)
 - `components` - Map of all component instances
 - `users` - Connected users object
 - `spaceState` - Public/protected properties
@@ -528,7 +582,50 @@ YtInfo(), Base64ToCDN()
 Raycast()
 ```
 
-#### 2. BS (BanterScript) Library
+#### 1a. Entity Scene Manager (Inspector's Wrapper Layer)
+
+The inspector's Entity system that wraps BanterScript GameObjects with additional functionality.
+
+**Architecture:**
+```
+┌─────────────────────────────────────────┐
+│  Entity Scene Manager (Inspector)       │
+│  - Entity wrappers in SM.entityData     │
+│  - JS MonoBehavior scripts              │
+│  - Automatic sync via oneShot           │
+│  - Store/load items                     │
+│  - Extensions & plugins                 │
+└─────────────────────────────────────────┘
+                  ↓
+┌─────────────────────────────────────────┐
+│  BanterScript Library (BS)              │
+│  - GameObjects in scene.objects         │
+│  - Unity ↔ JavaScript bridge            │
+│  - Component system                     │
+│  - Native Unity features                │
+└─────────────────────────────────────────┘
+```
+
+**Key Components:**
+- `SM` - Scene Manager singleton (not exposed globally, accessed via modules)
+- `SM.scene` - Reference to BanterScript's scene object
+- `SM.entityData.entities` - Object containing Inspector's Entity wrappers
+- `entities()` - Global function returning top-level entities (Scene, People)
+- `SM.getEntityById(path)` - Find Entity wrapper by path
+
+**Entity Wrapper Features:**
+- Wraps BanterScript GameObjects with inspector-specific functionality
+- Enables JS MonoBehavior script attachment
+- Provides automatic oneShot broadcasting for client synchronization
+- Supports storing and loading items from inventory
+- Extensible architecture for building custom features
+
+**Important Distinction:**
+- `scene.objects[id]` = BanterScript GameObject (native Unity object)
+- `SM.entityData.entities[path]` = Inspector's Entity wrapper (adds sync, scripts, items)
+- Entity wrappers reference underlying GameObjects but add inspector functionality
+
+#### 2. BanterScript Library (BS)
 
 Unity bridge library with component classes and helper methods.
 
@@ -541,8 +638,10 @@ Unity bridge library with component classes and helper methods.
 - Behaviors: BanterGrabHandle, BanterSyncedObject, BanterColliderEvents, etc.
 - Special: BanterMonoBehaviour, BanterAssetBundle, BanterMirror, BanterPortal, etc.
 
-**Important Note:**
-- Use `scene.objects` to access entities, NOT `BS.BanterScene.entities` (legacy/unused)
+**Important Notes:**
+- `scene.objects` contains BanterScript GameObjects (native Unity layer)
+- For Inspector's Entity wrappers, use `SM.entityData.entities`
+- The inspector builds on top of BanterScript, not replacing it
 
 #### 3. Change Manager (`changeManager` global)
 
@@ -811,7 +910,9 @@ UI panel for script execution tracking.
 
 ## Data Structures
 
-### Entity Structure
+### BanterScript GameObject Structure
+
+BanterScript GameObjects are native Unity objects accessed via `scene.objects`:
 
 ```javascript
 {
@@ -823,15 +924,53 @@ UI panel for script execution tracking.
   components: {                    // Components by ID
     "compId": { /* component */ }
   },
-  children: [],                    // Array of child entity references
-  parent: <entity_ref>             // Parent entity reference (or null/undefined)
+  children: [],                    // Array of child GameObject references
+  parent: <gameObject_ref>         // Parent GameObject reference (or null/undefined)
 }
 ```
 
 **Access Patterns:**
-- By ID: `scene.objects[entityId]`
+- By ID: `scene.objects[gameObjectId]`
 - By path: `scene.FindByPath("Scene/Entity")`
 - By name: `scene.Find("EntityName")`
+
+### Inspector Entity Wrapper Structure
+
+Entity wrappers extend GameObjects with inspector-specific features, accessed via `SM.entityData.entities`:
+
+```javascript
+{
+  id: "numeric_string",           // References the underlying GameObject ID
+  eid: "path_string",             // Entity ID (hierarchical path: "Scene/Parent/Child")
+  name: "EntityName",              // Display name
+  path: "Scene/Parent/Child",      // Full hierarchy path (same as eid)
+  active: true,                    // Visibility/enabled state
+  layer: "0",                      // Unity layer
+
+  // Inspector-specific features
+  components: [],                  // Array of component references
+  children: [],                    // Array of child Entity wrappers
+  parent: <entity_ref>,           // Parent Entity wrapper
+  parentId: "Scene/Parent",       // Parent entity path
+
+  // Enhanced functionality
+  _bs: <BanterScriptGameObject>,  // Reference to underlying BS GameObject
+
+  // Methods (examples)
+  Set(property, value),           // Set property with sync
+  SetParent(parentPath),          // Change parent with sync
+  getComponent(type)              // Get component by type
+}
+```
+
+**Access Patterns:**
+- By path: `SM.entityData.entities["Scene/Parent/Child"]`
+- By path (method): `SM.getEntityById("Scene/Parent/Child")`
+- Top-level: `entities()` returns Scene and People entities
+
+**Key Distinction:**
+- GameObject (in `scene.objects`): Native BanterScript/Unity layer
+- Entity (in `SM.entityData.entities`): Inspector's wrapper adding sync, scripts, items, extensions
 
 ### Component Structure
 
@@ -904,16 +1043,53 @@ Some properties use special encoding for component-specific state:
 
 This allows component properties to be synced via the space property system.
 
+**Decoding Utilities:**
+
+Use the global decoder functions to parse these encoded keys:
+
+```javascript
+// Decode an encoded space property key
+const decoded = decodeSpacePropertyKey("__BanterMaterial_9677/color:component");
+// Returns: {
+//   isEncoded: true,
+//   raw: "__BanterMaterial_9677/color:component",
+//   entityName: "BanterMaterial_9677",
+//   propertyPath: "color",
+//   componentId: "component",
+//   malformed: false
+// }
+
+// Check if a key is encoded
+isEncodedSpacePropertyKey("__BanterMaterial_9677/color:component")  // true
+isEncodedSpacePropertyKey("normalProperty")  // false
+
+// Create an encoded key
+const encoded = encodeSpacePropertyKey("MyEntity", "Transform/localScale", "12345_Transform");
+// Returns: "__MyEntity/Transform/localScale:12345_Transform"
+
+// Decode all encoded space properties
+Object.keys(scene.spaceState.public)
+  .filter(key => isEncodedSpacePropertyKey(key))
+  .map(key => decodeSpacePropertyKey(key))
+
+// Find all space properties for a specific entity
+Object.keys(scene.spaceState.public)
+  .map(key => decodeSpacePropertyKey(key))
+  .filter(decoded => decoded.isEncoded && decoded.entityName === "MyEntity")
+```
+
 ---
 
 ## Patterns & Conventions
 
-### 1. Path-Based Entity Identification
+### 1. Path-Based Identification
 
-Entities use hierarchical paths similar to file systems:
+Both GameObjects and Entity wrappers use hierarchical paths similar to file systems:
 - Format: `"Scene/Parent/Child/Entity"`
 - Root entities typically: `"Scene"`, `"People"`
-- Use `scene.FindByPath(path)` for lookups
+- BanterScript: Use `scene.FindByPath(path)` for GameObject lookups
+- Inspector: Use `SM.getEntityById(path)` for Entity wrapper lookups
+- Top-level: Use `entities()` to get Scene and People Entity wrappers
 
 ### 2. Component ID Conventions
 
@@ -1227,62 +1403,119 @@ Object.keys(comp)
 
 ---
 
+## Resolved Discoveries
+
+This section documents issues that were identified and successfully resolved during runtime exploration.
+
+### 1. Change Types System ✅
+
+**Issue:** Change types were not exposed globally, making it difficult to inspect the undo/redo system.
+
+**Resolution:** Exposed as `window.ChangeTypes` with:
+- All 24 change class constructors
+- Rich metadata (category, description, parameters, undoable status, shell commands)
+- Helper methods: `getInfo()`, `getByCategory()`, `getCategories()`, `getUndoable()`, `getCommands()`, `list()`, `getStats()`
+- Categories: base, entity, component, space, script, inventory
+
+**Reference:** See [Change Types System](#3a-change-types-system-changetypes-global) section
+
+---
+
+### 2. Component Registry ✅
+
+**Issue:** Component classes and metadata were not easily accessible for runtime inspection.
+
+**Resolution:** Exposed as `window.ComponentRegistry` with:
+- All 38 component class constructors
+- Rich metadata (category, description, icon)
+- Unity layer definitions (24 layers)
+- Component type mappings and bundle information
+- Helper methods: `getByName()`, `getByCategory()`, `getInfo()`, `list()`, `getStats()`, `isSupported()`, layer utilities
+
+**Reference:** See [Component Registry System](#3b-component-registry-system-componentregistry-global) section
+
+---
+
+### 3. MonoBehavior Script Tracking ✅
+
+**Issue:** Running MonoBehavior scripts were not easily inspectable at runtime.
+
+**Resolution:** Exposed as `window.LifecycleAPI` with:
+- Comprehensive API for querying scripts by entity, file, owner
+- Methods to get lifecycle info, custom methods, and call them
+- Control over FPS and lifecycle manager state
+- Helper methods: `getAllScripts()`, `getByEntity()`, `getByFile()`, `getRunning()`, `getInfo()`, `callMethod()`, `list()`, `getStats()`
+
+**Reference:** See [Lifecycle System](#3c-lifecycle-system-lifecycleapi-global) section
+
+---
+
+### 4. Space Property Encoding ✅
+
+**Issue:** Encoded space property keys (`__EntityName/Property:ComponentId`) were difficult to parse.
+
+**Resolution:** Created global decoder utilities:
+- `decodeSpacePropertyKey(key)` - Parse encoded format into structured object
+- `encodeSpacePropertyKey(entityName, propertyPath, componentId)` - Create encoded keys
+- `isEncodedSpacePropertyKey(key)` - Quick boolean check
+- Handles malformed keys gracefully
+
+**Reference:** See [Space Property Encoding](#space-property-encoding) section
+
+---
+
+### 5. Unity Layer Definitions ✅
+
+**Issue:** Unity layer numbers and names were not easily accessible.
+
+**Resolution:** Exposed via `ComponentRegistry.layers`:
+- 24 defined Unity layers (Default: 0, UI: 5, Grabbable: 20, NetworkPlayer: 17, etc.)
+- Helper methods: `ComponentRegistry.getLayerName(num)`, `ComponentRegistry.getLayerNumber(name)`
+
+**Reference:** See [Component Registry System](#3b-component-registry-system-componentregistry-global) section
+
+---
+
+### 6. BanterScript vs Entity Scene Manager Architecture ✅
+
+**Issue:** Confusion about the relationship between `scene.objects`, `BS.BanterScene.entities`, and the inspector's entity system.
+
+**Resolution:** Clarified two-layer architecture:
+- **BanterScript Library (BS)**: Official Unity ↔ JavaScript bridge
+  - `scene` / `SM.scene`: BanterScript's official scene object
+  - `scene.objects`: All BanterScript GameObjects (native Unity layer)
+- **Entity Scene Manager (Inspector)**: Extension layer built on BanterScript
+  - `SM.entityData.entities`: Inspector's Entity wrappers
+  - `entities()`: Global function returning top-level entities (Scene, People)
+  - Adds: JS MonoBehavior scripts, automatic oneShot sync, store/load items, extensions
+- **Key Distinction**: GameObject (native) vs Entity (inspector wrapper)
+- **Note**: `BS.BanterScene.entities` does not exist (was a misunderstanding)
+
+**Reference:** See [Entity Scene Manager](#1a-entity-scene-manager-inspectors-wrapper-layer) section
+
+---
+
 ## Known Gaps & Questions
 
 ### Critical Unknowns
 
-1. **Change Types System** ✅ **RESOLVED**
-   - Now exposed globally as `window.ChangeTypes`
-   - Includes 24 change types across 6 categories
-   - Comprehensive metadata and helper methods available
-   - See [Change Types System](#change-types-system) section for usage
-
-2. **Component Registry** ✅ **RESOLVED**
-   - Now exposed globally as `window.ComponentRegistry`
-   - Includes 38 component types across 8 categories
-   - Unity layer definitions (24 layers)
-   - Component type mappings and bundle information
-   - See [Component Registry System](#component-registry-system) section for usage
-
-3. **MonoBehavior Tracking** ✅ **RESOLVED**
-   - Now exposed globally as `window.LifecycleAPI`
-   - Tracks running scripts via `lifecycle.monoBehaviors` Map
-   - Scripts tracked by MonoBehavior component ID (e.g., "MonoBehavior_85004")
-   - Comprehensive API for querying by entity, file, owner
-   - Can call custom methods, get lifecycle info, control FPS
-   - See [Lifecycle & Script Tracking](#lifecycle--script-tracking) section for usage
-
-4. **Module Exposure Pattern**
+1. **Module Exposure Pattern**
    - Inconsistent: some modules global, others not
    - **Investigate:** Check which modules are intentionally private
 
-5. **Entity Storage Duality**
-   - Why both `BS.BanterScene.entities` and `scene.objects`?
-   - Is `BS.BanterScene.entities` legacy code?
-   - **Investigate:** Search codebase for usage patterns
-
 ### Minor Unknowns
 
-6. **Space Property Decoding**
-   - How to parse `__EntityName/Property:ComponentId` format?
-   - Is there a decoder function?
-
-7. **Asset Reference Format**
+2. **Asset Reference Format**
    - How are Texture, Material, Audio references stored?
    - Check entities with media components
 
-8. **Layer Definitions** ✅ **RESOLVED**
-   - Now available via `ComponentRegistry.layers`
-   - 24 defined layers including: Default (0), UI (5), Grabbable (20), NetworkPlayer (17), etc.
-   - Use `ComponentRegistry.getLayerName(num)` or `ComponentRegistry.getLayerNumber(name)`
-
-9. **Network Sync Behavior**
+3. **Network Sync Behavior**
    - How does OneShot work when `networking.connected = false`?
    - Local mode behavior?
 
-10. **Console Logging Volume**
-    - Why heavy console activity?
-    - Debug mode enabled?
+4. **Console Logging Volume**
+   - Why heavy console activity?
+   - Debug mode enabled?
 
 ---
 
@@ -1415,10 +1648,16 @@ Syntax:
 
 This guide provides reusable inspection techniques for the Banter Inspector runtime. The key architectural points:
 
-- **Entities:** Stored in `scene.objects` (not `BS.BanterScene.entities`)
-- **Components:** 56 types in BS library, properties use `_` prefix
-- **Inventory:** Cloud-synced asset management
+- **Two-Layer Architecture:**
+  - **BanterScript Library (BS)**: Unity ↔ JavaScript bridge, GameObjects in `scene.objects`
+  - **Entity Scene Manager (Inspector)**: Extension layer, Entity wrappers in `SM.entityData.entities`
+- **GameObjects vs Entities:**
+  - GameObjects: Native BanterScript/Unity objects (`scene.objects`)
+  - Entities: Inspector wrappers adding sync, scripts, items, extensions (`SM.entityData.entities`)
+- **Components:** 56 types in BanterScript library, properties use `_` prefix
+- **Inventory:** Cloud-synced asset management with items and extensions
 - **Change System:** Full undo/redo for collaborative editing
-- **Networking:** Firebase-based multi-user sync
+- **Networking:** Firebase-based multi-user sync via oneShot broadcasting
+- **Scripts:** JS MonoBehavior system with lifecycle management
 
 For specific implementation details, refer to the source code files listed above. For runtime state, use the inspection snippets provided.
