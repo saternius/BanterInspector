@@ -896,3 +896,109 @@ window.lockQuaternionAxes = (q, lockX = false, lockY = false, lockZ = false) =>{
     if (lockZ) q = qLockAxis(q, Z_AXIS);
     return qNormalize(q);
 }
+
+/**
+ * Decode encoded space property key
+ * Space properties use special encoding for component-specific state:
+ * Pattern: __<EntityName>/<PropertyPath>:<ComponentId>
+ *
+ * Examples:
+ *   "__BanterMaterial_9677/color:component"
+ *   "__MonoBehavior_2905/file:component"
+ *   "__Gravestone/Transform/localScale:50546_Transform"
+ *
+ * @param {string} encodedKey - The encoded space property key
+ * @returns {Object|null} Decoded object with { entityName, propertyPath, componentId, isEncoded }
+ *                        Returns null if key is not in encoded format
+ */
+export function decodeSpacePropertyKey(encodedKey) {
+    if (typeof encodedKey !== 'string') {
+        return null;
+    }
+
+    // Check if key starts with double underscore (encoded format)
+    if (!encodedKey.startsWith('__')) {
+        return {
+            isEncoded: false,
+            raw: encodedKey
+        };
+    }
+
+    // Pattern: __<EntityName>/<PropertyPath>:<ComponentId>
+    // We need to find the last ':' to split componentId
+    // and the first '/' to split entityName from propertyPath
+
+    const withoutPrefix = encodedKey.substring(2); // Remove '__'
+
+    // Find the last ':' which separates componentId
+    const lastColonIndex = withoutPrefix.lastIndexOf(':');
+
+    if (lastColonIndex === -1) {
+        // No colon found, might be malformed
+        return {
+            isEncoded: true,
+            raw: encodedKey,
+            entityName: withoutPrefix,
+            propertyPath: null,
+            componentId: null,
+            malformed: true
+        };
+    }
+
+    const componentId = withoutPrefix.substring(lastColonIndex + 1);
+    const entityAndProperty = withoutPrefix.substring(0, lastColonIndex);
+
+    // Find the first '/' which separates entity name from property path
+    const firstSlashIndex = entityAndProperty.indexOf('/');
+
+    if (firstSlashIndex === -1) {
+        // No slash found, might be malformed
+        return {
+            isEncoded: true,
+            raw: encodedKey,
+            entityName: entityAndProperty,
+            propertyPath: null,
+            componentId: componentId,
+            malformed: true
+        };
+    }
+
+    const entityName = entityAndProperty.substring(0, firstSlashIndex);
+    const propertyPath = entityAndProperty.substring(firstSlashIndex + 1);
+
+    return {
+        isEncoded: true,
+        raw: encodedKey,
+        entityName: entityName,
+        propertyPath: propertyPath,
+        componentId: componentId,
+        malformed: false
+    };
+}
+
+/**
+ * Encode a space property key for component-specific state
+ * Creates the special encoding format: __<EntityName>/<PropertyPath>:<ComponentId>
+ *
+ * @param {string} entityName - Name of the entity
+ * @param {string} propertyPath - Path to the property (e.g., "Transform/localScale" or "color")
+ * @param {string} componentId - Component ID (or "component" for generic component reference)
+ * @returns {string} Encoded space property key
+ */
+export function encodeSpacePropertyKey(entityName, propertyPath, componentId) {
+    return `__${entityName}/${propertyPath}:${componentId}`;
+}
+
+/**
+ * Check if a space property key is in encoded format
+ * @param {string} key - The space property key to check
+ * @returns {boolean} True if key is in encoded format (starts with __)
+ */
+export function isEncodedSpacePropertyKey(key) {
+    return typeof key === 'string' && key.startsWith('__');
+}
+
+// Expose globally for runtime inspection
+window.decodeSpacePropertyKey = decodeSpacePropertyKey;
+window.encodeSpacePropertyKey = encodeSpacePropertyKey;
+window.isEncodedSpacePropertyKey = isEncodedSpacePropertyKey;
