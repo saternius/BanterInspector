@@ -13,6 +13,8 @@ class CoinFlip {
         this.popup = null;
         this.isDragging = false;
         this.dragOffset = { x: 0, y: 0 };
+        this.bankroll = 0; // Bankroll in cents
+        this.trackingCoins = new Map(); // Map of coin ID -> interval ID for tracking
     }
 
     init() {
@@ -32,6 +34,7 @@ class CoinFlip {
                 <button class="coinflip-close" title="Close">&times;</button>
             </div>
             <div class="coinflip-content">
+                <div class="coinflip-bankroll">Bankroll: $<span id="bankroll-amount">0.00</span></div>
                 <button class="coinflip-btn">Flip</button>
             </div>
         `;
@@ -96,7 +99,12 @@ class CoinFlip {
         // Flip button
         flipBtn.addEventListener('mousedown', () => {
             //console.log("FLIP!");
-            getPennies().forEach(x=>x.flip());
+            const pennies = getPennies();
+            pennies.forEach(x => {
+                x.flip();
+                // Start tracking this coin
+                this.trackCoin(x._entity);
+            });
         });
     }
 
@@ -158,7 +166,25 @@ class CoinFlip {
             .coinflip-content {
                 padding: 20px;
                 display: flex;
-                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .coinflip-bankroll {
+                color: #fff;
+                font-size: 18px;
+                font-weight: 600;
+                text-align: center;
+                padding: 10px 20px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 6px;
+                min-width: 150px;
+            }
+
+            #bankroll-amount {
+                color: #4ade80;
+                font-family: 'Courier New', monospace;
             }
 
             .coinflip-btn {
@@ -186,6 +212,127 @@ class CoinFlip {
         document.head.appendChild(styleEl);
     }
 
+    updateBankrollDisplay() {
+        const bankrollElement = document.getElementById('bankroll-amount');
+        if (bankrollElement) {
+            bankrollElement.textContent = (this.bankroll / 100).toFixed(2);
+        }
+    }
+
+    trackCoin(entity) {
+        // Prevent tracking the same coin multiple times
+        const coinKey = entity.id;
+        if (this.trackingCoins.has(coinKey)) {
+            return;
+        }
+
+        // Wait 500ms before starting to track to let physics kick in
+        setTimeout(() => {
+            let checkCount = 0;
+            let hasMovedSignificantly = false;
+
+            const checkInterval = setInterval(() => {
+                const rigidBody = entity.getComponent("BanterRigidbody");
+                if (!rigidBody) {
+                    clearInterval(checkInterval);
+                    this.trackingCoins.delete(coinKey);
+                    return;
+                }
+
+                // Try to get velocity from the BanterScript rigidbody
+                let velocity = rigidBody._bs.velocity;
+                if (!velocity) {
+                    // Fallback: check position changes
+                    const currentPos = entity.Get("position");
+                    if (!this.lastCoinPos) {
+                        this.lastCoinPos = {};
+                    }
+
+                    if (this.lastCoinPos[coinKey]) {
+                        const dx = currentPos.x - this.lastCoinPos[coinKey].x;
+                        const dy = currentPos.y - this.lastCoinPos[coinKey].y;
+                        const dz = currentPos.z - this.lastCoinPos[coinKey].z;
+                        velocity = { x: dx * 10, y: dy * 10, z: dz * 10 }; // Approximate velocity
+                    } else {
+                        velocity = { x: 100, y: 100, z: 100 }; // Force movement detection on first check
+                    }
+                    this.lastCoinPos[coinKey] = currentPos;
+                }
+
+                const speed = Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2);
+
+                // Track if coin has moved significantly
+                if (speed > 0.5) {
+                    hasMovedSignificantly = true;
+                }
+
+                // Debug logging (remove after testing)
+                if (checkCount % 10 === 0) {
+                    console.log(`Coin ${coinKey} - Speed: ${speed.toFixed(3)}, HasMoved: ${hasMovedSignificantly}`);
+                }
+
+                checkCount++;
+
+                // Only consider it settled if it has moved significantly AND is now slow
+                if (hasMovedSignificantly && speed < 0.2) {
+                    clearInterval(checkInterval);
+                    this.trackingCoins.delete(coinKey);
+
+                    // Clean up position tracking
+                    if (this.lastCoinPos && this.lastCoinPos[coinKey]) {
+                        delete this.lastCoinPos[coinKey];
+                    }
+
+                    // Check if it's heads or tails
+                    const isHeads = this.isCoinHeads(entity);
+                    console.log(`Coin landed: ${isHeads ? 'HEADS' : 'TAILS'}`);
+
+                    if (isHeads) {
+                        this.bankroll += 1; // Add 1 cent
+                        this.updateBankrollDisplay();
+                        console.log(`Won! Bankroll: $${(this.bankroll / 100).toFixed(2)}`);
+                    }
+                }
+
+                // Timeout after 10 seconds
+                if (checkCount > 100) {
+                    console.log(`Coin tracking timeout for ${coinKey}`);
+                    clearInterval(checkInterval);
+                    this.trackingCoins.delete(coinKey);
+                    if (this.lastCoinPos && this.lastCoinPos[coinKey]) {
+                        delete this.lastCoinPos[coinKey];
+                    }
+                }
+            }, 100); // Check every 100ms
+
+            // Store interval ID so we can clear it later
+            this.trackingCoins.set(coinKey, checkInterval);
+        }, 500); // Wait 500ms before starting tracking
+    }
+
+    isCoinHeads(entity) {
+        // Get the rotation of the coin
+        const rotation = entity.Get("rotation");
+
+        if (!rotation) {
+            return false;
+        }
+
+        // Convert quaternion to up vector
+        // For a coin, we check if the local "up" vector points upward in world space
+        // Quaternion to matrix conversion for the up vector (0,1,0)
+        const { x, y, z, w } = rotation;
+
+        // Calculate the world "up" direction from the coin's local up axis
+        const upX = 2 * (x*y + w*z);
+        const upY = 1 - 2 * (x*x + z*z);
+        const upZ = 2 * (y*z - w*x);
+
+        // If the coin's up vector points upward (positive Y), it's heads
+        // If it points downward (negative Y), it's tails
+        return upY > 0;
+    }
+
     close() {
         if (this.popup && this.popup.parentNode) {
             this.popup.remove();
@@ -193,6 +340,12 @@ class CoinFlip {
     }
 
     destroy() {
+        // Clear all tracking intervals
+        for (const [, intervalId] of this.trackingCoins.entries()) {
+            clearInterval(intervalId);
+        }
+        this.trackingCoins.clear();
+
         this.close();
 
         // Remove styles
@@ -239,10 +392,10 @@ this.onDestroy = () => {
     }
 };
 
-this.keyDown = (key) => {
+this.keyDown = (_key) => {
     // Optional: Add keyboard shortcuts if needed
 };
 
-this.keyUp = (key) => {
+this.keyUp = (_key) => {
     // Optional: Add keyboard shortcuts if needed
 };
