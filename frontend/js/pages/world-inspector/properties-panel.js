@@ -20,31 +20,46 @@
             
             // Store collapsed state of components
             this.collapsedComponents = new Set();
-            
+
             // Store proportional scaling lock state for scale properties
             this.scaleLockStates = new Map(); // Key: componentId_propertyKey, Value: boolean
             this.scaleRatios = new Map(); // Key: componentId_propertyKey, Value: {x: number, y: number, z: number}
-            
+
             // Load settings toggle state
             this.showLoadSettings = false;
-            
+
+            // Transform display mode - 'local' or 'global'
+            this.transformMode = 'local';
+
             this.setupEventListeners();
         }
 
-      
-        
+
+
+        /**
+         * Toggle Transform mode between local and global
+         */
+        toggleTransformMode() {
+            this.transformMode = this.transformMode === 'local' ? 'global' : 'local';
+
+            // Re-render to show updated transform values
+            if (SM.selectedEntity) {
+                this.render(SM.selectedEntity);
+            }
+        }
+
         /**
          * Toggle Load Settings mode
          */
         toggleLoadSettings() {
             this.showLoadSettings = !this.showLoadSettings;
-            
+
             // Update button appearance
             if (this.loadSettingsBtn) {
                 this.loadSettingsBtn.style.backgroundColor = this.showLoadSettings ? '#4a90e2' : '';
                 this.loadSettingsBtn.style.color = this.showLoadSettings ? '#fff' : '';
             }
-            
+
             // Re-render to show/hide async toggles
             if (SM.selectedEntity) {
                 this.render(SM.selectedEntity);
@@ -295,8 +310,8 @@
                     
                     vectorGroup.appendChild(lockButton);
                 }
-                if(label === 'localPosition'){
-                    // Add reset button for position
+                // Add reset button for position properties (both local and global)
+                if(label === 'localPosition' || label === 'position'){
                     const resetButton = document.createElement('button');
                     resetButton.className = 'position-reset-btn';
                     resetButton.style.marginLeft = '8px';
@@ -313,7 +328,8 @@
                     resetButton.onmousedown = (e) => {
                         e.stopPropagation();
                         const zeroPosition = { x: 0, y: 0, z: 0};
-                        const change = new EntityPropertyChange(entityId, label, zeroPosition, { source: 'ui' });
+                        // Always reset localPosition even if displaying global
+                        const change = new EntityPropertyChange(entityId, 'localPosition', zeroPosition, { source: 'ui' });
                         changeManager.applyChange(change);
                     };
                     vectorGroup.appendChild(resetButton);
@@ -370,7 +386,8 @@
                     e.stopPropagation();
                     // Set all rotation values to 0
                     const zeroRotation = { x: 0, y: 0, z: 0, w: 1 };
-                    const change = new EntityPropertyChange(entityId, label, zeroRotation, { source: 'ui' });
+                    // Always reset localRotation even if displaying global
+                    const change = new EntityPropertyChange(entityId, 'localRotation', zeroRotation, { source: 'ui' });
                     changeManager.applyChange(change);
                 };
                 vectorGroup.appendChild(resetButton);
@@ -392,15 +409,45 @@
             const section = document.createElement('div');
             section.className = 'entity-section';
             section.dataset.panel = 'propertyPanelComponent';
-            
+
             const header = document.createElement('div');
             header.className = 'component-header perm';
-            header.innerHTML = `
-                <div>
-                    <span class="component-name">Entity</span>
-                    <span class="component-type">${entity.id}</span>
-                </div>
+
+            const headerContent = document.createElement('div');
+            headerContent.style.display = 'flex';
+            headerContent.style.justifyContent = 'space-between';
+            headerContent.style.alignItems = 'center';
+            headerContent.style.width = '100%';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.innerHTML = `
+                <span class="component-name">Entity</span>
+                <span class="component-type">${entity.id}</span>
             `;
+
+            // Transform mode toggle button
+            const transformToggleBtn = document.createElement('button');
+            transformToggleBtn.className = 'transform-mode-toggle-btn';
+            transformToggleBtn.style.padding = '4px 8px';
+            transformToggleBtn.style.marginRight = '8px';
+            transformToggleBtn.style.background = '#2a2a2a';
+            transformToggleBtn.style.border = '1px solid #3a3a3a';
+            transformToggleBtn.style.borderRadius = '4px';
+            transformToggleBtn.style.color = '#ccc';
+            transformToggleBtn.style.cursor = 'pointer';
+            transformToggleBtn.style.fontSize = '11px';
+            transformToggleBtn.style.fontWeight = 'bold';
+            transformToggleBtn.textContent = this.transformMode === 'local' ? 'Local' : 'Global';
+            transformToggleBtn.title = 'Toggle between local and global transform display';
+
+            transformToggleBtn.onmousedown = (e) => {
+                e.stopPropagation();
+                this.toggleTransformMode();
+            };
+
+            headerContent.appendChild(titleDiv);
+            headerContent.appendChild(transformToggleBtn);
+            header.appendChild(headerContent);
             
             const body = document.createElement('div');
             body.className = 'component-body';
@@ -458,26 +505,42 @@
             // });
 
 
-            let localPosition = entity.transformVal("localPosition")
-            let localRotation = entity.transformVal("localRotation")
-            let localScale = entity.transformVal("localScale")
+            // Get transform values based on mode
+            let displayPosition, displayRotation, displayScale;
+            let positionLabel, rotationLabel, scaleLabel;
 
-            // Local Position property
-            const localPositionRow = this.createPropertyRow('localPosition', localPosition, 'vector3', (axis, value) => {
-                let newValue = deepClone(localPosition)
+            if (this.transformMode === 'global') {
+                displayPosition = entity.transform.position || { x: 0, y: 0, z: 0 };
+                displayRotation = entity.transform.rotation || { x: 0, y: 0, z: 0, w: 1 };
+                displayScale = entity.transform.scale || { x: 1, y: 1, z: 1 };
+                positionLabel = 'position';
+                rotationLabel = 'rotation';
+                scaleLabel = 'scale';
+            } else {
+                displayPosition = entity.transformVal("localPosition");
+                displayRotation = entity.transformVal("localRotation");
+                displayScale = entity.transformVal("localScale");
+                positionLabel = 'localPosition';
+                rotationLabel = 'localRotation';
+                scaleLabel = 'localScale';
+            }
+
+            // Position property
+            const localPositionRow = this.createPropertyRow(positionLabel, displayPosition, 'vector3', (axis, value) => {
+                let newValue = deepClone(displayPosition);
                 newValue[axis] = parseFloat(value);
-                const change = new EntityPropertyChange(entity.id, 'localPosition', newValue, { source: 'ui', oldValue: localPosition });
+                const change = new EntityPropertyChange(entity.id, 'localPosition', newValue, { source: 'ui', oldValue: displayPosition });
                 changeManager.applyChange(change);
             });
 
-            // Local Rotation property
-            const localRotationRow = this.createPropertyRow('localRotation', localRotation, 'vector4', (axis, value) => {
+            // Rotation property
+            const localRotationRow = this.createPropertyRow(rotationLabel, displayRotation, 'vector4', (axis, value) => {
                 let entity = SM.getSelectedEntity();
-                const currentQuaternion = entity.transform.localRotation;
+                const currentQuaternion = this.transformMode === 'global' ? entity.transform.rotation : entity.transform.localRotation;
                 const eulerAngles = quaternionToEuler(currentQuaternion);
                 const numValue = parseFloat(value);
                 if (!isNaN(numValue)) {
-                    let oldValue = deepClone(entity.transformVal("localRotation"))
+                    let oldValue = deepClone(this.transformMode === 'global' ? entity.transform.rotation : entity.transformVal("localRotation"));
                     eulerAngles[axis] = numValue;
                     const newQuaternion = eulerToQuaternion(eulerAngles);
                     const change = new EntityPropertyChange(SM.selectedEntity, 'localRotation', newQuaternion, { source: 'ui', oldValue: oldValue });
@@ -485,14 +548,14 @@
                 }
             });
 
-            // Local Scale property
-            const localScaleRow = this.createPropertyRow('localScale', localScale, 'vector3', (axis, value) => {
+            // Scale property
+            const localScaleRow = this.createPropertyRow(scaleLabel, displayScale, 'vector3', (axis, value) => {
                 let scaleLockKey = `${entity.id}_localScale`;
                 if (this.scaleLockStates.get(scaleLockKey)) {
                     const numValue = parseFloat(value);
                     if (isNaN(numValue)) return;
                     let ratios = this.scaleRatios.get(scaleLockKey);
-                    let currentVector = localScale
+                    let currentVector = displayScale;
                     // If no ratios stored, calculate them from current values
                     if (!ratios) {
                         const baseValue = currentVector[axis] || 1;
@@ -503,11 +566,11 @@
                         };
                         this.scaleRatios.set(scaleLockKey, ratios);
                     }
-                    
+
                     // Calculate the scale factor based on the changed axis
                     const oldValue = currentVector[axis] || 1;
                     const scaleFactor = numValue / oldValue;
-                    
+
                     // Apply proportional scaling to all axes
                     const oldVector = deepClone(currentVector);
                     const newVector = {
@@ -515,34 +578,20 @@
                         y: currentVector.y * scaleFactor,
                         z: currentVector.z * scaleFactor
                     };
-                    
+
                     // Apply the change
                     const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newVector, { source: 'ui', oldValue: oldVector });
                     changeManager.applyChange(change);
-                    
+
                     // Update the inputs to reflect the new values
                     setTimeout(() => {
-                        const propertyRow = this.propertiesContent.querySelector(`.entity-section`);
-                        if (propertyRow) {
-                            const inputs = propertyRow.querySelectorAll('.vector-group input[type="number"]');
-                            const vectorInputs = Array.from(inputs).filter(input => {
-                                const container = input.closest('.property-row');
-                                const label = container?.querySelector('.property-label');
-                                return label && label.textContent === formatPropertyName('localScale');
-                            });
-                            
-                            if (vectorInputs.length === 3) {
-                                vectorInputs[0].value = formatNumber(newVector.x, 6);
-                                vectorInputs[1].value = formatNumber(newVector.y, 6);
-                                vectorInputs[2].value = formatNumber(newVector.z, 6);
-                            }
-                        }
+                        this.updateTransform();
                     }, 50);
 
                 } else {
-                    let newValue = deepClone(localScale)
+                    let newValue = deepClone(displayScale);
                     newValue[axis] = parseFloat(value);
-                    const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newValue, { source: 'ui', oldValue: localScale });
+                    const change = new EntityPropertyChange(SM.selectedEntity, 'localScale', newValue, { source: 'ui', oldValue: displayScale });
                     changeManager.applyChange(change);
                 }
             });
@@ -566,6 +615,66 @@
             return section;
         }
 
+        /**
+         * Update transform display values to match current entity state
+         * Useful for external updates or when transform changes
+         */
+        updateTransform() {
+            const entity = SM.getSelectedEntity();
+            if (!entity) return;
+
+            const entitySection = this.propertiesContent.querySelector('.entity-section');
+            if (!entitySection) return;
+
+            // Get current transform values based on mode
+            let currentPosition, currentRotation, currentScale;
+            let positionLabel, rotationLabel, scaleLabel;
+
+            if (this.transformMode === 'global') {
+                currentPosition = entity.transform.position || { x: 0, y: 0, z: 0 };
+                currentRotation = entity.transform.rotation || { x: 0, y: 0, z: 0, w: 1 };
+                currentScale = entity.transform.scale || { x: 1, y: 1, z: 1 };
+                positionLabel = formatPropertyName('position');
+                rotationLabel = formatPropertyName('rotation');
+                scaleLabel = formatPropertyName('scale');
+            } else {
+                currentPosition = entity.transformVal("localPosition");
+                currentRotation = entity.transformVal("localRotation");
+                currentScale = entity.transformVal("localScale");
+                positionLabel = formatPropertyName('localPosition');
+                rotationLabel = formatPropertyName('localRotation');
+                scaleLabel = formatPropertyName('localScale');
+            }
+
+            // Update position inputs
+            this.updateVector3Inputs(entitySection, positionLabel, currentPosition);
+
+            // Update rotation inputs (convert quaternion to euler)
+            const eulerAngles = quaternionToEuler(currentRotation);
+            this.updateVector3Inputs(entitySection, rotationLabel, eulerAngles);
+
+            // Update scale inputs
+            this.updateVector3Inputs(entitySection, scaleLabel, currentScale);
+        }
+
+        /**
+         * Helper to update vector3 inputs for a specific property
+         */
+        updateVector3Inputs(section, labelText, values) {
+            const propertyRows = section.querySelectorAll('.property-row');
+            for (const row of propertyRows) {
+                const label = row.querySelector('.property-label');
+                if (label && label.textContent === labelText) {
+                    const inputs = row.querySelectorAll('.vector-group input[type="number"]');
+                    if (inputs.length >= 3) {
+                        inputs[0].value = formatNumber(values.x, 6);
+                        inputs[1].value = formatNumber(values.y, 6);
+                        inputs[2].value = formatNumber(values.z, 6);
+                    }
+                    break;
+                }
+            }
+        }
 
 
 

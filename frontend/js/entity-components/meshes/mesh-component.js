@@ -6,7 +6,7 @@ export class BanterMeshComponent extends EntityComponent {
 
     async init(entity, sceneComponent, properties, options){
         await super.init(entity, sceneComponent, properties, options);
-        if(this.options.context === "new"){
+        if(this.options.source === "ui"){
             this.initGrabbable();
         }
         return this;

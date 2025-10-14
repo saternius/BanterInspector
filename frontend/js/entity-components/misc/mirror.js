@@ -48,4 +48,17 @@ export class BanterMirrorComponent extends EntityComponent {
             console.error(`Failed to update ${property} on BanterMirror:`, e);
         }
     }
+
+    // Culling layer methods
+    SetCullingLayer(layer) {
+        if (this._bs && typeof this._bs.SetCullingLayer === 'function') {
+            this._bs.SetCullingLayer(layer);
+        }
+    }
+
+    AddCullingLayer(layer) {
+        if (this._bs && typeof this._bs.AddCullingLayer === 'function') {
+            this._bs.AddCullingLayer(layer);
+        }
+    }
 }
