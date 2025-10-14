@@ -349,4 +349,7 @@ await attachComponent.Set("uid", scene.localUser.uid)
 await attachComponent.Set("attachmentPoint", 3) // right hand
 ```
 
+Final Tips:
+In order to get continual updates of a banter gameobject's component propertie values you need to use .WatchProperties([BS.PropertyName.prop,..]) on the component
+
 This guide provides the foundational patterns and practices for creating interactive scripts in the Banter Inspector. Scripts can range from simple animations to complex game logic, all while maintaining clean, maintainable code that integrates seamlessly with the VR environment.

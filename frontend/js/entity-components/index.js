@@ -76,6 +76,50 @@ const { BanterWorldObjectComponent } = await import(`${window.repoUrl}/entity-co
 window.updateModuleProgress("world-object");
 const { ConfigurableJointComponent } = await import(`${window.repoUrl}/entity-components/physics/configurable-joint.js`);
 window.updateModuleProgress("configurable-joint");
+const { CharacterJointComponent } = await import(`${window.repoUrl}/entity-components/physics/character-joint.js`);
+window.updateModuleProgress("character-joint");
+const { FixedJointComponent } = await import(`${window.repoUrl}/entity-components/physics/fixed-joint.js`);
+window.updateModuleProgress("fixed-joint");
+const { HingeJointComponent } = await import(`${window.repoUrl}/entity-components/physics/hinge-joint.js`);
+window.updateModuleProgress("hinge-joint");
+const { SpringJointComponent } = await import(`${window.repoUrl}/entity-components/physics/spring-joint.js`);
+window.updateModuleProgress("spring-joint");
+const { BanterGrabbableComponent } = await import(`${window.repoUrl}/entity-components/behaviors/grabbable.js`);
+window.updateModuleProgress("grabbable");
+const { BanterUIPanelComponent } = await import(`${window.repoUrl}/entity-components/misc/ui-panel.js`);
+window.updateModuleProgress("ui-panel");
+const { BanterAvatarPedestalComponent } = await import(`${window.repoUrl}/entity-components/misc/avatar-pedestal.js`);
+window.updateModuleProgress("avatar-pedestal");
+const { BanterTorusKnotComponent } = await import(`${window.repoUrl}/entity-components/meshes/torus-knot.js`);
+window.updateModuleProgress("torus-knot");
+const { BanterAppleComponent } = await import(`${window.repoUrl}/entity-components/meshes/apple.js`);
+window.updateModuleProgress("apple");
+const { BanterCatenoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/catenoid.js`);
+window.updateModuleProgress("catenoid");
+const { BanterFermetComponent } = await import(`${window.repoUrl}/entity-components/meshes/fermet.js`);
+window.updateModuleProgress("fermet");
+const { BanterHelicoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/helicoid.js`);
+window.updateModuleProgress("helicoid");
+const { BanterHornComponent } = await import(`${window.repoUrl}/entity-components/meshes/horn.js`);
+window.updateModuleProgress("horn");
+const { BanterKleinComponent } = await import(`${window.repoUrl}/entity-components/meshes/klein.js`);
+window.updateModuleProgress("klein");
+const { BanterMobiusComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius.js`);
+window.updateModuleProgress("mobius");
+const { BanterMobius3dComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius3d.js`);
+window.updateModuleProgress("mobius3d");
+const { BanterNaticaComponent } = await import(`${window.repoUrl}/entity-components/meshes/natica.js`);
+window.updateModuleProgress("natica");
+const { BanterPillowComponent } = await import(`${window.repoUrl}/entity-components/meshes/pillow.js`);
+window.updateModuleProgress("pillow");
+const { BanterScherkComponent } = await import(`${window.repoUrl}/entity-components/meshes/scherk.js`);
+window.updateModuleProgress("scherk");
+const { BanterSnailComponent } = await import(`${window.repoUrl}/entity-components/meshes/snail.js`);
+window.updateModuleProgress("snail");
+const { BanterSpiralComponent } = await import(`${window.repoUrl}/entity-components/meshes/spiral.js`);
+window.updateModuleProgress("spiral");
+const { BanterSpringComponent } = await import(`${window.repoUrl}/entity-components/meshes/spring.js`);
+window.updateModuleProgress("spring");
 
 export const BanterLayers = {
     Default: 0,
@@ -140,7 +184,29 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterKitItem,
     BS.ComponentType.BanterStreetView,
     BS.ComponentType.BanterWorldObject,
-    BS.ComponentType.ConfigurableJoint
+    BS.ComponentType.ConfigurableJoint,
+    BS.ComponentType.CharacterJoint,
+    BS.ComponentType.FixedJoint,
+    BS.ComponentType.HingeJoint,
+    BS.ComponentType.SpringJoint,
+    BS.ComponentType.BanterGrabbable,
+    BS.ComponentType.BanterUIPanel,
+    BS.ComponentType.BanterAvatarPedestal,
+    BS.ComponentType.BanterTorusKnot,
+    BS.ComponentType.BanterApple,
+    BS.ComponentType.BanterCatenoid,
+    BS.ComponentType.BanterFermet,
+    BS.ComponentType.BanterHelicoid,
+    BS.ComponentType.BanterHorn,
+    BS.ComponentType.BanterKlein,
+    BS.ComponentType.BanterMobius,
+    BS.ComponentType.BanterMobius3d,
+    BS.ComponentType.BanterNatica,
+    BS.ComponentType.BanterPillow,
+    BS.ComponentType.BanterScherk,
+    BS.ComponentType.BanterSnail,
+    BS.ComponentType.BanterSpiral,
+    BS.ComponentType.BanterSpring
 ]);
 
 export const componentTypeMap = {
@@ -180,6 +246,28 @@ export const componentTypeMap = {
     "BanterStreetView": BanterStreetViewComponent,
     "BanterWorldObject": BanterWorldObjectComponent,
     "ConfigurableJoint": ConfigurableJointComponent,
+    "CharacterJoint": CharacterJointComponent,
+    "FixedJoint": FixedJointComponent,
+    "HingeJoint": HingeJointComponent,
+    "SpringJoint": SpringJointComponent,
+    "BanterGrabbable": BanterGrabbableComponent,
+    "BanterUIPanel": BanterUIPanelComponent,
+    "BanterAvatarPedestal": BanterAvatarPedestalComponent,
+    "BanterTorusKnot": BanterTorusKnotComponent,
+    "BanterApple": BanterAppleComponent,
+    "BanterCatenoid": BanterCatenoidComponent,
+    "BanterFermet": BanterFermetComponent,
+    "BanterHelicoid": BanterHelicoidComponent,
+    "BanterHorn": BanterHornComponent,
+    "BanterKlein": BanterKleinComponent,
+    "BanterMobius": BanterMobiusComponent,
+    "BanterMobius3d": BanterMobius3dComponent,
+    "BanterNatica": BanterNaticaComponent,
+    "BanterPillow": BanterPillowComponent,
+    "BanterScherk": BanterScherkComponent,
+    "BanterSnail": BanterSnailComponent,
+    "BanterSpiral": BanterSpiralComponent,
+    "BanterSpring": BanterSpringComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
@@ -220,6 +308,28 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterStreetView]: BanterStreetViewComponent,
     [BS.ComponentType.BanterWorldObject]: BanterWorldObjectComponent,
     [BS.ComponentType.ConfigurableJoint]: ConfigurableJointComponent,
+    [BS.ComponentType.CharacterJoint]: CharacterJointComponent,
+    [BS.ComponentType.FixedJoint]: FixedJointComponent,
+    [BS.ComponentType.HingeJoint]: HingeJointComponent,
+    [BS.ComponentType.SpringJoint]: SpringJointComponent,
+    [BS.ComponentType.BanterGrabbable]: BanterGrabbableComponent,
+    [BS.ComponentType.BanterUIPanel]: BanterUIPanelComponent,
+    [BS.ComponentType.BanterAvatarPedestal]: BanterAvatarPedestalComponent,
+    [BS.ComponentType.BanterTorusKnot]: BanterTorusKnotComponent,
+    [BS.ComponentType.BanterApple]: BanterAppleComponent,
+    [BS.ComponentType.BanterCatenoid]: BanterCatenoidComponent,
+    [BS.ComponentType.BanterFermet]: BanterFermetComponent,
+    [BS.ComponentType.BanterHelicoid]: BanterHelicoidComponent,
+    [BS.ComponentType.BanterHorn]: BanterHornComponent,
+    [BS.ComponentType.BanterKlein]: BanterKleinComponent,
+    [BS.ComponentType.BanterMobius]: BanterMobiusComponent,
+    [BS.ComponentType.BanterMobius3d]: BanterMobius3dComponent,
+    [BS.ComponentType.BanterNatica]: BanterNaticaComponent,
+    [BS.ComponentType.BanterPillow]: BanterPillowComponent,
+    [BS.ComponentType.BanterScherk]: BanterScherkComponent,
+    [BS.ComponentType.BanterSnail]: BanterSnailComponent,
+    [BS.ComponentType.BanterSpiral]: BanterSpiralComponent,
+    [BS.ComponentType.BanterSpring]: BanterSpringComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
@@ -260,6 +370,28 @@ export const componentTextMap = {
     [BS.ComponentType.BanterStreetView]: "BanterStreetView",
     [BS.ComponentType.BanterWorldObject]: "BanterWorldObject",
     [BS.ComponentType.ConfigurableJoint]: "ConfigurableJoint",
+    [BS.ComponentType.CharacterJoint]: "CharacterJoint",
+    [BS.ComponentType.FixedJoint]: "FixedJoint",
+    [BS.ComponentType.HingeJoint]: "HingeJoint",
+    [BS.ComponentType.SpringJoint]: "SpringJoint",
+    [BS.ComponentType.BanterGrabbable]: "BanterGrabbable",
+    [BS.ComponentType.BanterUIPanel]: "BanterUIPanel",
+    [BS.ComponentType.BanterAvatarPedestal]: "BanterAvatarPedestal",
+    [BS.ComponentType.BanterTorusKnot]: "BanterTorusKnot",
+    [BS.ComponentType.BanterApple]: "BanterApple",
+    [BS.ComponentType.BanterCatenoid]: "BanterCatenoid",
+    [BS.ComponentType.BanterFermet]: "BanterFermet",
+    [BS.ComponentType.BanterHelicoid]: "BanterHelicoid",
+    [BS.ComponentType.BanterHorn]: "BanterHorn",
+    [BS.ComponentType.BanterKlein]: "BanterKlein",
+    [BS.ComponentType.BanterMobius]: "BanterMobius",
+    [BS.ComponentType.BanterMobius3d]: "BanterMobius3d",
+    [BS.ComponentType.BanterNatica]: "BanterNatica",
+    [BS.ComponentType.BanterPillow]: "BanterPillow",
+    [BS.ComponentType.BanterScherk]: "BanterScherk",
+    [BS.ComponentType.BanterSnail]: "BanterSnail",
+    [BS.ComponentType.BanterSpiral]: "BanterSpiral",
+    [BS.ComponentType.BanterSpring]: "BanterSpring",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
@@ -316,8 +448,23 @@ window.ComponentRegistry = {
         BanterRingComponent,
         BanterSphereComponent,
         BanterTorusComponent,
+        BanterTorusKnotComponent,
         BanterInvertedMeshComponent,
         BanterTextComponent,
+        BanterAppleComponent,
+        BanterCatenoidComponent,
+        BanterFermetComponent,
+        BanterHelicoidComponent,
+        BanterHornComponent,
+        BanterKleinComponent,
+        BanterMobiusComponent,
+        BanterMobius3dComponent,
+        BanterNaticaComponent,
+        BanterPillowComponent,
+        BanterScherkComponent,
+        BanterSnailComponent,
+        BanterSpiralComponent,
+        BanterSpringComponent,
         // Materials
         BanterMaterialComponent,
         BanterPhysicMaterialComponent,
@@ -328,12 +475,17 @@ window.ComponentRegistry = {
         CapsuleColliderComponent,
         MeshColliderComponent,
         ConfigurableJointComponent,
+        CharacterJointComponent,
+        FixedJointComponent,
+        HingeJointComponent,
+        SpringJointComponent,
         // Media
         BanterAudioSourceComponent,
         BanterVideoPlayerComponent,
         BanterGLTFComponent,
         // Behaviors
         BanterGrabHandleComponent,
+        BanterGrabbableComponent,
         BanterSyncedObjectComponent,
         BanterHeldEventsComponent,
         BanterAttachedObjectComponent,
@@ -346,7 +498,9 @@ window.ComponentRegistry = {
         BanterPortalComponent,
         BanterKitItemComponent,
         BanterStreetViewComponent,
-        BanterWorldObjectComponent
+        BanterWorldObjectComponent,
+        BanterUIPanelComponent,
+        BanterAvatarPedestalComponent
     },
 
     // Component metadata organized by category
@@ -367,8 +521,23 @@ window.ComponentRegistry = {
         BanterRingComponent: { category: 'meshes', description: 'Ring/torus primitive', icon: '⭕' },
         BanterSphereComponent: { category: 'meshes', description: 'Sphere primitive', icon: '⚪' },
         BanterTorusComponent: { category: 'meshes', description: 'Torus/donut primitive', icon: '🍩' },
+        BanterTorusKnotComponent: { category: 'meshes', description: 'Torus knot geometry', icon: '🍩' },
         BanterInvertedMeshComponent: { category: 'meshes', description: 'Inverted mesh (inside-out)', icon: '🔄' },
         BanterTextComponent: { category: 'meshes', description: '3D text mesh', icon: '📝' },
+        BanterAppleComponent: { category: 'meshes', description: 'Apple parametric surface', icon: '🍎' },
+        BanterCatenoidComponent: { category: 'meshes', description: 'Catenoid minimal surface', icon: '🌀' },
+        BanterFermetComponent: { category: 'meshes', description: 'Fermat spiral surface', icon: '🌀' },
+        BanterHelicoidComponent: { category: 'meshes', description: 'Helicoid minimal surface', icon: '🌀' },
+        BanterHornComponent: { category: 'meshes', description: 'Horn/trumpet surface', icon: '📯' },
+        BanterKleinComponent: { category: 'meshes', description: 'Klein bottle surface', icon: '🌀' },
+        BanterMobiusComponent: { category: 'meshes', description: 'Möbius strip', icon: '♾️' },
+        BanterMobius3dComponent: { category: 'meshes', description: '3D Möbius surface', icon: '♾️' },
+        BanterNaticaComponent: { category: 'meshes', description: 'Seashell-like surface', icon: '🐚' },
+        BanterPillowComponent: { category: 'meshes', description: 'Pillow-shaped surface', icon: '🛏️' },
+        BanterScherkComponent: { category: 'meshes', description: 'Scherk minimal surface', icon: '🌀' },
+        BanterSnailComponent: { category: 'meshes', description: 'Snail shell surface', icon: '🐌' },
+        BanterSpiralComponent: { category: 'meshes', description: 'Spiral surface', icon: '🌀' },
+        BanterSpringComponent: { category: 'meshes', description: 'Spring/helix surface', icon: '🔩' },
 
         // Materials
         BanterMaterialComponent: { category: 'materials', description: 'Material properties (color, texture)', icon: '🎨' },
@@ -381,6 +550,10 @@ window.ComponentRegistry = {
         CapsuleColliderComponent: { category: 'physics', description: 'Capsule collision shape', icon: '💊' },
         MeshColliderComponent: { category: 'physics', description: 'Mesh-based collision', icon: '🔷' },
         ConfigurableJointComponent: { category: 'physics', description: 'Configurable physics joint', icon: '🔗' },
+        CharacterJointComponent: { category: 'physics', description: 'Character ragdoll joint', icon: '🦴' },
+        FixedJointComponent: { category: 'physics', description: 'Fixed connection between rigidbodies', icon: '🔗' },
+        HingeJointComponent: { category: 'physics', description: 'Rotational joint around axis', icon: '🚪' },
+        SpringJointComponent: { category: 'physics', description: 'Elastic spring connection', icon: '🪃' },
 
         // Media
         BanterAudioSourceComponent: { category: 'media', description: 'Audio playback', icon: '🔊' },
@@ -389,6 +562,7 @@ window.ComponentRegistry = {
 
         // Behaviors
         BanterGrabHandleComponent: { category: 'behaviors', description: 'Grabbable object', icon: '✋' },
+        BanterGrabbableComponent: { category: 'behaviors', description: 'Advanced grab mechanics with VR controller integration', icon: '🤲' },
         BanterSyncedObjectComponent: { category: 'behaviors', description: 'Multi-user synchronization', icon: '🔄' },
         BanterHeldEventsComponent: { category: 'behaviors', description: 'Events when object is held', icon: '🤝' },
         BanterAttachedObjectComponent: { category: 'behaviors', description: 'Attach to player or object', icon: '📌' },
@@ -402,7 +576,9 @@ window.ComponentRegistry = {
         BanterPortalComponent: { category: 'misc', description: 'Portal to another space', icon: '🚪' },
         BanterKitItemComponent: { category: 'misc', description: 'Kit item reference', icon: '🎁' },
         BanterStreetViewComponent: { category: 'misc', description: 'Google Street View integration', icon: '🗺️' },
-        BanterWorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' }
+        BanterWorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' },
+        BanterUIPanelComponent: { category: 'misc', description: 'UI panel with haptics and sounds', icon: '📱' },
+        BanterAvatarPedestalComponent: { category: 'misc', description: 'Ready Player Me avatar display', icon: '🧍' }
     },
 
     // Unity layer definitions
@@ -576,5 +752,27 @@ export {
     BanterStreetViewComponent,
     BanterWorldObjectComponent,
     ConfigurableJointComponent,
+    CharacterJointComponent,
+    FixedJointComponent,
+    HingeJointComponent,
+    SpringJointComponent,
+    BanterGrabbableComponent,
+    BanterUIPanelComponent,
+    BanterAvatarPedestalComponent,
+    BanterTorusKnotComponent,
+    BanterAppleComponent,
+    BanterCatenoidComponent,
+    BanterFermetComponent,
+    BanterHelicoidComponent,
+    BanterHornComponent,
+    BanterKleinComponent,
+    BanterMobiusComponent,
+    BanterMobius3dComponent,
+    BanterNaticaComponent,
+    BanterPillowComponent,
+    BanterScherkComponent,
+    BanterSnailComponent,
+    BanterSpiralComponent,
+    BanterSpringComponent,
     MonoBehaviorComponent
 };

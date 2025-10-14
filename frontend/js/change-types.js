@@ -141,6 +141,10 @@ export class ComponentPropertyChange extends Change{
         this.newValue = deepClone(newValue);
         this.options = options || {};
         this.component = SM.getEntityComponentById(componentId);
+        if(!this.component){
+            this.void(`Component ${componentId} not found`);
+            return;
+        }
         this.oldValue = deepClone(this.options.oldValue || this.getOldValue());
     }
 
@@ -255,6 +259,26 @@ export class ComponentAddChange extends Change{
         this.componentType = componentType;
         this.options = options || {};
         this.componentProperties = this.options.componentProperties || {};
+
+        // Validate component type exists
+        const validation = window.ChangeTypes?.validateComponent(componentType);
+        if (validation && !validation.valid) {
+            this.void(`Invalid component type: ${componentType}`);
+
+            // Build error message with suggestions
+            let errorMsg = validation.message;
+            if (validation.suggestions && validation.suggestions.length > 0) {
+                errorMsg += '\n\nDid you mean one of these?\n' +
+                    validation.suggestions.slice(0, 5).map(s => `  - ${s}`).join('\n');
+            }
+
+            // Also add helpful tips about component naming
+            errorMsg += '\n\nNote: Most components have "Banter" prefix (e.g., BanterBox, BanterSphere)';
+            errorMsg += '\nExcept colliders which don\'t (e.g., BoxCollider, SphereCollider)';
+            errorMsg += '\n\nUse ComponentRegistry.list() to see all available components.';
+
+            throw new Error(errorMsg);
+        }
     }
 
     async apply() {
@@ -265,7 +289,8 @@ export class ComponentAddChange extends Change{
         let event = {
             entityId: this.entityId,
             componentType: this.componentType,
-            componentProperties: this.componentProperties
+            componentProperties: this.componentProperties,
+            options: this.options
         }
         let event_str = JSON.stringify(event);
         let data = `component_added¶${event_str}`
@@ -1705,147 +1730,7 @@ export class EditScriptItemChange extends Change{
 }
 
 
-let getHelpText = ()=>{
-return `
-<span style="color: #00ff00; font-weight: bold;">Available Commands:</span>
 
-<span style="color: #ffaa00; font-weight: bold;">Entity Commands:</span>
-  <span style="color: #88ddff;">add_entity</span> <span style="color: #ff88ff;">$parentId $entityName</span>         - Add a new entity as child of parent
-  <span style="color: #88ddff;">remove_entity</span> <span style="color: #ff88ff;">$entityId</span>                   - Remove an entity and its children
-  <span style="color: #88ddff;">move_entity</span> <span style="color: #ff88ff;">$entityId $newParentId</span>       - Move entity to new parent
-  <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ff88ff;">$entityId $prop $val</span>- Set entity property value
-  <span style="color: #88ddff;">clone_entity</span> <span style="color: #ff88ff;">$entityId</span>                    - Clone an entity and its children
-
-<span style="color: #ffaa00; font-weight: bold;">Component Commands:</span>
-  <span style="color: #88ddff;">add_component</span> <span style="color: #ff88ff;">$entityId $componentType</span>   - Add component to entity
-  <span style="color: #88ddff;">remove_component</span> <span style="color: #ff88ff;">$componentId</span>              - Remove component from entity
-  <span style="color: #88ddff;">set_component_property</span> <span style="color: #ff88ff;">$compId $prop $val</span>- Set component property value
-
-<span style="color: #ffaa00; font-weight: bold;">Space Commands:</span>
-  <span style="color: #88ddff;">set_space_property</span> <span style="color: #ff88ff;">$prop $val $protect</span>  - Set space property (protect: true/false)
-
-<span style="color: #ffaa00; font-weight: bold;">MonoBehavior Commands:</span>
-  <span style="color: #88ddff;">set_mono_behavior_var</span> <span style="color: #ff88ff;">$compId $var $val</span> - Set MonoBehavior variable value
-
-<span style="color: #ffaa00; font-weight: bold;">Inventory Commands:</span>
-  <span style="color: #88ddff;">load_item</span> <span style="color: #ff88ff;">$itemName $parentId</span>            - Load item from inventory
-  <span style="color: #88ddff;">save_item</span> <span style="color: #ff88ff;">$entityId $itemName $desc</span>     - Save entity as inventory item
-  <span style="color: #88ddff;">delete_item</span> <span style="color: #ff88ff;">$itemName</span>                     - Delete item from inventory
-  <span style="color: #88ddff;">create_folder</span> <span style="color: #ff88ff;">$folderName $color</span>         - Create inventory folder
-  <span style="color: #88ddff;">remove_folder</span> <span style="color: #ff88ff;">$folderName</span>                 - Remove inventory folder
-  <span style="color: #88ddff;">move_item_directory</span> <span style="color: #ff88ff;">$itemName $folder</span>    - Move item to folder
-  <span style="color: #88ddff;">create_script_item</span> <span style="color: #ff88ff;">$scriptName</span>            - Create new script item
-
-<span style="color: #00ff00; font-weight: bold;">Usage Examples:</span>
-  <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Scene MyEntity</span>                   - Add entity to root
-  <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">e_123 Cube</span>                   - Add Cube component to entity
-  <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ffff88;">e_123 name "New Name"</span>  - Rename entity
-  <span style="color: #88ddff;">load_item</span> <span style="color: #ffff88;">MyPrefab e_456</span>                   - Load prefab as child of e_456
-
-<span style="color: #00ff00; font-weight: bold;">Notes:</span>
-  <span style="color: #aaaaaa;">- Use 'Scene' for root/no parent
-  - Entity IDs format: e_XXX
-  - Component IDs format: c_XXX
-  - Values are auto-parsed (strings, numbers, booleans, vectors, colors)
-  - Vectors: [1,2,3] or {x:1,y:2,z:3}
-  - Colors: #FF0000 or {r:1,g:0,b:0}</span>`
-}
-
-window.RunCommand = async (execString, options)=>{
-
-    let args = execString.split(" ").map(arg=>parseBest(arg));
-    let change = null;
-    options = options || {};
-    switch(args[0]){
-        case "help":
-            // Create a colored help text div
-            const helpDiv = document.createElement('div');
-            helpDiv.style.fontFamily = 'monospace';
-            helpDiv.style.whiteSpace = 'pre-wrap';
-            helpDiv.innerHTML = getHelpText();
-            
-            // Append the colored help directly
-            const shellEl = document.getElementById("lifecycleShell");
-            if(shellEl) {
-                const children = shellEl.children;
-                if (children.length >= 500) {
-                    shellEl.removeChild(children[0]);
-                }
-
-                const wrapper = document.createElement('div');
-                wrapper.className = 'change-item';
-                wrapper.id = "help_"+Math.floor(Math.random()*1000000);
-                wrapper.appendChild(helpDiv);
-                shellEl.appendChild(wrapper);
-                shellEl.scrollTop = shellEl.scrollHeight;
-            }
-            return;
-        case "add_entity":
-            change = new EntityAddChange(args[1], args[2], options);
-            break;
-        case "remove_entity":
-            change = new EntityRemoveChange(args[1], options);
-            break;
-        case "move_entity":
-            change = new EntityMoveChange(args[1], args[2], options);
-            break;
-        case "set_entity_property":
-            change = new EntityPropertyChange(args[1], args[2], args[3], options);
-            break;
-        case "add_component":
-            options.componentProperties = args[3];
-            change = new ComponentAddChange(args[1], args[2], options);
-            break;
-        case "remove_component":
-            change = new ComponentRemoveChange(args[1], options);
-            break;
-        case "set_component_property":
-            change = new ComponentPropertyChange(args[1], args[2], args[3], options);
-            break;
-        case "set_space_property":
-            change = new SpacePropertyChange(args[1], args[2], args[3], options);
-            break;
-        case "set_mono_behavior_var":
-            change = new MonoBehaviorVarChange(args[1], args[2], args[3], options);
-            break;
-        case "load_item":
-            change = new LoadItemChange(args[1], args[2], args[3], options);
-            break;
-        case "clone_entity":
-            change = new CloneEntityChange(args[1], options);
-            break;
-        case "save_item":
-            change = new SaveEntityItemChange(args[1], args[2], args[3], options);
-            break;
-        case "delete_item":
-            change = new DeleteItemChange(args[1], options);
-            break;
-        case "create_folder":
-            change = new CreateFolderChange(args[1], args[2], options);
-            break;
-        case "remove_folder":
-            change = new RemoveFolderChange(args[1], options);
-            break;
-        case "move_item_directory":
-            change = new MoveItemDirectoryChange(args[1], args[2], options);
-            break;
-        case "create_script":
-            change = new CreateScriptItemChange(args[1], options);
-            break;
-        case "edit_script":
-            change = new EditScriptItemChange(args[1], args[2], options);
-            break;
-        case "reorder_component":
-            change = new ComponentReorderChange(args[1], args[2], args[3], options);
-            break;
-        default:
-            appendToShell("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
-    }
-
-    if(change){
-        await change.apply();
-    }
-}
 
 // Command history management
 const COMMAND_HISTORY_KEY = 'commandHistory';
@@ -1979,6 +1864,12 @@ window.RemoveComponent = async (componentId, options)=>{
     let change = new ComponentRemoveChange(componentId, options);
     return await change.apply();
 }
+
+window.ReorderComponent = async (entityId, fromIndex, toIndex, options)=>{
+    let change = new ComponentReorderChange(entityId, fromIndex, toIndex, options);
+    return await change.apply();
+}
+
 window.AddEntity = async (parentId, entityName, options)=>{
     let change = new EntityAddChange(parentId, entityName, options);
     return await change.apply();
@@ -1991,9 +1882,21 @@ window.MoveEntity = async (entityId, newParentId, options)=>{
     let change = new EntityMoveChange(entityId, newParentId, options);
     return await change.apply();
 }
+
+window.RenameItem = async (itemName, newName, options)=>{
+    let change = new RenameItemChange(itemName, newName, options);
+    return await change.apply();
+}
+
 window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
     let change = new MonoBehaviorVarChange(componentId, varName, newValue, options);
     return await change.apply();
+}
+
+window.SetItem = (item)=>{
+    const storageKey = 'inventory_' + item.name;
+    localStorage.setItem(storageKey, JSON.stringify(item));
+    inventory.items[item.name] = item;
 }
 
 window.LoadItem = async (itemName, parentId, options)=>{
@@ -2041,6 +1944,16 @@ window.EditScript = async (scriptName, scriptContent, options)=>{
     return await change.apply();
 }
 
+window.RenameFolder = async (folderName, newName, options)=>{
+    let change = new RenameFolderChange(folderName, newName, options);
+    return await change.apply();
+}
+
+window.MoveFolder = async (folderName, newName, options)=>{
+    let change = new MoveFolderChange(folderName, newName, options);
+    return await change.apply();
+}
+
 // ============================================================================
 // EXPOSE CHANGE TYPES FOR RUNTIME INSPECTION
 // ============================================================================
@@ -2059,28 +1972,28 @@ window.ChangeTypes = {
     // All change class constructors
     classes: {
         Change,
-        EntityPropertyChange,
-        ComponentPropertyChange,
-        SpacePropertyChange,
-        ComponentAddChange,
-        ComponentReorderChange,
-        ComponentRemoveChange,
-        EntityAddChange,
-        EntityRemoveChange,
-        EntityMoveChange,
-        MonoBehaviorVarChange,
-        LoadItemChange,
-        CloneEntityChange,
-        SaveEntityItemChange,
-        RenameItemChange,
-        DeleteItemChange,
-        CreateFolderChange,
-        RenameFolderChange,
-        MoveFolderChange,
-        RemoveFolderChange,
-        MoveItemDirectoryChange,
-        CreateScriptItemChange,
-        EditScriptItemChange
+        SetEntityProp,
+        SetComponentProp,
+        SetSpaceProp,
+        AddComponent,
+        ReorderComponent,
+        RemoveComponent,
+        AddEntity,
+        RemoveEntity,
+        MoveEntity,
+        SetMonoBehaviorVar,
+        LoadItem,
+        CloneEntity,
+        SaveEntityItem,
+        RenameItem,
+        DeleteItem,
+        CreateFolder,
+        RenameFolder,
+        MoveFolder,
+        RemoveFolder,
+        MoveItemDirectory,
+        CreateScript,
+        EditScript
     },
 
     // Metadata about each change type
@@ -2091,154 +2004,154 @@ window.ChangeTypes = {
             parameters: [],
             undoable: true
         },
-        EntityPropertyChange: {
+        SetEntityProp: {
             category: 'entity',
             description: 'Change a property of an entity (name, active, layer, etc.)',
             parameters: ['entityId', 'property', 'newValue', 'options'],
             undoable: true,
             command: 'set_entity_property'
         },
-        ComponentPropertyChange: {
+        SetComponentProp: {
             category: 'component',
             description: 'Change a property of a component',
             parameters: ['componentId', 'property', 'newValue', 'options'],
             undoable: true,
             command: 'set_component_property'
         },
-        SpacePropertyChange: {
+        SetSpaceProp: {
             category: 'space',
             description: 'Change a public or protected space property',
             parameters: ['property', 'newValue', 'protect', 'options'],
             undoable: true,
             command: 'set_space_property'
         },
-        ComponentAddChange: {
+        AddComponent: {
             category: 'component',
             description: 'Add a component to an entity',
             parameters: ['entityId', 'componentType', 'options'],
             undoable: true,
             command: 'add_component'
         },
-        ComponentReorderChange: {
+        ReorderComponent: {
             category: 'component',
             description: 'Reorder a component in the entity component list',
             parameters: ['entityId', 'fromIndex', 'toIndex', 'options'],
             undoable: true,
             command: 'reorder_component'
         },
-        ComponentRemoveChange: {
+        RemoveComponent: {
             category: 'component',
             description: 'Remove a component from an entity',
             parameters: ['componentId', 'options'],
             undoable: true,
             command: 'remove_component'
         },
-        EntityAddChange: {
+        AddEntity: {
             category: 'entity',
             description: 'Add a new entity as child of parent',
             parameters: ['parentId', 'entityName', 'options'],
             undoable: true,
             command: 'add_entity'
         },
-        EntityRemoveChange: {
+        RemoveEntity: {
             category: 'entity',
             description: 'Remove an entity and its children',
             parameters: ['entityId', 'options'],
             undoable: true,
             command: 'remove_entity'
         },
-        EntityMoveChange: {
+        MoveEntity: {
             category: 'entity',
             description: 'Move entity to new parent',
             parameters: ['entityId', 'newParentId', 'options'],
             undoable: true,
             command: 'move_entity'
         },
-        MonoBehaviorVarChange: {
+        SetMonoBehaviorVar: {
             category: 'script',
             description: 'Change a MonoBehavior variable value',
             parameters: ['componentId', 'varName', 'newValue', 'options'],
             undoable: true,
             command: 'set_mono_behavior_var'
         },
-        LoadItemChange: {
+        LoadItem: {
             category: 'inventory',
             description: 'Load item from inventory into scene',
             parameters: ['itemName', 'parentId', 'itemData', 'options'],
             undoable: true,
             command: 'load_item'
         },
-        CloneEntityChange: {
+        CloneEntity: {
             category: 'entity',
             description: 'Clone an entity and its children',
             parameters: ['entityId', 'options'],
             undoable: true,
             command: 'clone_entity'
         },
-        SaveEntityItemChange: {
+        SaveEntityItem: {
             category: 'inventory',
             description: 'Save entity as inventory item',
             parameters: ['entityId', 'itemName', 'folder', 'options'],
             undoable: false,
             command: 'save_item'
         },
-        RenameItemChange: {
+        RenameItem: {
             category: 'inventory',
             description: 'Rename an inventory item',
             parameters: ['itemName', 'newName', 'options'],
             undoable: false,
             command: 'rename_item'
         },
-        DeleteItemChange: {
+        DeleteItem: {
             category: 'inventory',
             description: 'Delete item from inventory',
             parameters: ['itemName', 'options'],
             undoable: false,
             command: 'delete_item'
         },
-        CreateFolderChange: {
+        CreateFolder: {
             category: 'inventory',
             description: 'Create inventory folder',
             parameters: ['folderName', 'parentFolderName', 'options'],
             undoable: false,
             command: 'create_folder'
         },
-        RenameFolderChange: {
+        RenameFolder: {
             category: 'inventory',
             description: 'Rename inventory folder',
             parameters: ['originalName', 'newName', 'options'],
             undoable: true,
             command: 'rename_folder'
         },
-        MoveFolderChange: {
+        MoveFolder: {
             category: 'inventory',
             description: 'Move folder to new parent (NOT IMPLEMENTED)',
             parameters: [],
             undoable: false,
             command: null
         },
-        RemoveFolderChange: {
+        RemoveFolder: {
             category: 'inventory',
             description: 'Remove inventory folder and its contents',
             parameters: ['folderPath', 'options'],
             undoable: false,
             command: 'remove_folder'
         },
-        MoveItemDirectoryChange: {
+        MoveItemDirectory: {
             category: 'inventory',
             description: 'Move item to different folder',
             parameters: ['itemName', 'folderName', 'options'],
             undoable: false,
             command: 'move_item_directory'
         },
-        CreateScriptItemChange: {
+        CreateScriptItem: {
             category: 'inventory',
             description: 'Create new script or markdown item',
             parameters: ['scriptName', 'options'],
             undoable: false,
             command: 'create_script'
         },
-        EditScriptItemChange: {
+        EditScriptItem: {
             category: 'inventory',
             description: 'Edit script content',
             parameters: ['scriptName', 'scriptContent', 'options'],
@@ -2333,9 +2246,415 @@ window.ChangeTypes = {
         });
 
         return stats;
+    },
+    getHelpText(){
+        return `
+        <span style="color: #00ff00; font-weight: bold;">Available Commands:</span>
+
+        <span style="color: #ffaa00; font-weight: bold;">Entity Commands:</span>
+          <span style="color: #88ddff;">add_entity</span> <span style="color: #ff88ff;">$parentId $entityName</span>         - Add a new entity as child of parent
+          <span style="color: #88ddff;">remove_entity</span> <span style="color: #ff88ff;">$entityId</span>                   - Remove an entity and its children
+          <span style="color: #88ddff;">move_entity</span> <span style="color: #ff88ff;">$entityId $newParentId</span>       - Move entity to new parent
+          <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ff88ff;">$entityId $prop $val</span>- Set entity property value
+          <span style="color: #88ddff;">clone_entity</span> <span style="color: #ff88ff;">$entityId</span>                    - Clone an entity and its children
+
+        <span style="color: #ffaa00; font-weight: bold;">Component Commands:</span>
+          <span style="color: #88ddff;">add_component</span> <span style="color: #ff88ff;">$entityId $componentType</span>   - Add component to entity
+          <span style="color: #88ddff;">remove_component</span> <span style="color: #ff88ff;">$componentId</span>              - Remove component from entity
+          <span style="color: #88ddff;">set_component_property</span> <span style="color: #ff88ff;">$compId $prop $val</span>- Set component property value
+
+        <span style="color: #ffaa00; font-weight: bold;">Space Commands:</span>
+          <span style="color: #88ddff;">set_space_property</span> <span style="color: #ff88ff;">$prop $val $protect</span>  - Set space property (protect: true/false)
+
+        <span style="color: #ffaa00; font-weight: bold;">MonoBehavior Commands:</span>
+          <span style="color: #88ddff;">set_mono_behavior_var</span> <span style="color: #ff88ff;">$compId $var $val</span> - Set MonoBehavior variable value
+
+        <span style="color: #ffaa00; font-weight: bold;">Inventory Commands:</span>
+          <span style="color: #88ddff;">load_item</span> <span style="color: #ff88ff;">$itemName $parentId</span>            - Load item from inventory
+          <span style="color: #88ddff;">save_item</span> <span style="color: #ff88ff;">$entityId $itemName $desc</span>     - Save entity as inventory item
+          <span style="color: #88ddff;">delete_item</span> <span style="color: #ff88ff;">$itemName</span>                     - Delete item from inventory
+          <span style="color: #88ddff;">create_folder</span> <span style="color: #ff88ff;">$folderName $color</span>         - Create inventory folder
+          <span style="color: #88ddff;">remove_folder</span> <span style="color: #ff88ff;">$folderName</span>                 - Remove inventory folder
+          <span style="color: #88ddff;">move_item_directory</span> <span style="color: #ff88ff;">$itemName $folder</span>    - Move item to folder
+          <span style="color: #88ddff;">create_script_item</span> <span style="color: #ff88ff;">$scriptName</span>            - Create new script item
+
+        <span style="color: #00ff00; font-weight: bold;">Usage Examples:</span>
+          <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Scene MyEntity</span>                   - Add entity to root
+          <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">Scene/Box BanterBox</span>         - Add BanterBox component
+          <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ffff88;">Scene/Box name "New Name"</span>  - Rename entity
+          <span style="color: #88ddff;">load_item</span> <span style="color: #ffff88;">MyPrefab Scene</span>                   - Load prefab to Scene
+
+        <span style="color: #00ff00; font-weight: bold;">Discovery Commands:</span>
+          <span style="color: #88ddff;">ComponentRegistry.list()</span>              - List all available components
+          <span style="color: #88ddff;">ComponentRegistry.getByCategory("meshes")</span> - Get components by category
+          <span style="color: #88ddff;">ChangeTypes.validateComponent("BanterBox")</span> - Check if component exists
+          <span style="color: #88ddff;">ChangeTypes.suggestComponent("cube")</span>  - Get component name suggestions
+
+        <span style="color: #00ff00; font-weight: bold;">Notes:</span>
+          <span style="color: #aaaaaa;">- Most components have 'Banter' prefix (BanterBox, BanterSphere, BanterMaterial)
+          - Colliders DON'T have Banter prefix (BoxCollider, SphereCollider)
+          - Entity IDs use path format: Scene/Parent/Child
+          - Component IDs format: ComponentType_12345
+          - Values are auto-parsed (strings, numbers, booleans, vectors, colors)
+          - Vectors: [1,2,3] or {x:1,y:2,z:3}
+          - Colors: #FF0000 or {r:1,g:0,b:0}
+          - ALWAYS verify components exist after add_component!</span>`
+        },
+
+    /**
+     * Validate if a component type exists and is supported
+     * @param {string} componentType - Component type name to validate
+     * @returns {Object} {valid: boolean, message: string, suggestions: Array<string>}
+     */
+    validateComponent(componentType) {
+        // Check if ComponentRegistry exists
+        if (!window.ComponentRegistry) {
+            return {
+                valid: false,
+                message: 'ComponentRegistry not available',
+                suggestions: []
+            };
+        }
+
+        // Check if component exists
+        const exists = window.ComponentRegistry.typeMap[componentType];
+        if (exists) {
+            return {
+                valid: true,
+                message: `Component "${componentType}" is valid`,
+                suggestions: []
+            };
+        }
+
+        // Get suggestions using fuzzy matching
+        const suggestions = this.suggestComponent(componentType);
+
+        return {
+            valid: false,
+            message: `Component "${componentType}" not found. Did you mean one of these?`,
+            suggestions: suggestions.slice(0, 5)  // Top 5 suggestions
+        };
+    },
+
+    /**
+     * Suggest component names based on fuzzy matching
+     * @param {string} input - Partial or misspelled component name
+     * @returns {Array<string>} Sorted array of suggested component names
+     */
+    suggestComponent(input) {
+        if (!window.ComponentRegistry) return [];
+
+        const allComponents = Object.keys(window.ComponentRegistry.typeMap);
+        const lowerInput = input.toLowerCase();
+
+        // Calculate similarity scores
+        const scored = allComponents.map(name => {
+            const lowerName = name.toLowerCase();
+            let score = 0;
+
+            // Exact match
+            if (lowerName === lowerInput) score += 1000;
+
+            // Starts with
+            if (lowerName.startsWith(lowerInput)) score += 100;
+
+            // Contains
+            if (lowerName.includes(lowerInput)) score += 50;
+
+            // Levenshtein-like simple similarity
+            const commonChars = [...lowerInput].filter(char => lowerName.includes(char)).length;
+            score += commonChars * 10;
+
+            // Penalize length difference
+            score -= Math.abs(lowerName.length - lowerInput.length) * 2;
+
+            return { name, score };
+        });
+
+        // Sort by score and return top matches
+        return scored
+            .filter(item => item.score > 0)
+            .sort((a, b) => b.score - a.score)
+            .map(item => item.name);
+    },
+
+    /**
+     * Validate command syntax before execution
+     * @param {string} commandString - Full command string to validate
+     * @returns {Object} {valid: boolean, message: string, suggestions: Array<string>}
+     */
+    validateCommand(commandString) {
+        const args = commandString.trim().split(" ");
+        const command = args[0];
+
+        // Check if command exists
+        const commands = this.getCommands();
+        const validCommands = Object.keys(commands);
+
+        if (!validCommands.includes(command) && command !== 'help') {
+            return {
+                valid: false,
+                message: `Unknown command: "${command}"`,
+                suggestions: validCommands.filter(cmd =>
+                    cmd.toLowerCase().includes(command.toLowerCase())
+                )
+            };
+        }
+
+        // Validate add_component specifically
+        if (command === 'add_component') {
+            if (args.length < 3) {
+                return {
+                    valid: false,
+                    message: 'add_component requires entityId and componentType',
+                    suggestions: []
+                };
+            }
+
+            const componentType = args[2];
+            const componentValidation = this.validateComponent(componentType);
+
+            if (!componentValidation.valid) {
+                return componentValidation;
+            }
+        }
+
+        // Validate set_component_property specifically
+        if (command === 'set_component_property') {
+            if (args.length < 4) {
+                return {
+                    valid: false,
+                    message: 'set_component_property requires componentId, property, and newValue',
+                    suggestions: []
+                };
+            }
+
+            const componentId = parseBest(args[1]);
+            const propertyName = parseBest(args[2]);
+
+            // Check if SM (SceneManager) is available
+            if (!window.SM) {
+                // Can't validate without SM, but allow command through
+                return {
+                    valid: true,
+                    message: 'SceneManager not available, skipping property validation',
+                    suggestions: []
+                };
+            }
+
+            // Get the component
+            const component = window.SM.getEntityComponentById(componentId, false);
+            if (!component) {
+                return {
+                    valid: false,
+                    message: `Component "${componentId}" not found`,
+                    suggestions: []
+                };
+            }
+
+        
+            // Check if property exists
+            const validProperties = Object.keys(component.properties);
+            if (!validProperties.includes(propertyName)) {
+                // Suggest similar property names
+                const suggestions = validProperties.filter(prop =>
+                    prop.toLowerCase().includes(propertyName.toLowerCase()) ||
+                    propertyName.toLowerCase().includes(prop.toLowerCase())
+                );
+
+                return {
+                    valid: false,
+                    message: `Property "${propertyName}" does not exist in component "${component.type}". Valid properties: ${validProperties.join(', ')}`,
+                    suggestions: suggestions.length > 0 ? suggestions : validProperties.slice(0, 5)
+                };
+            }
+        }
+
+        return {
+            valid: true,
+            message: 'Command syntax is valid',
+            suggestions: []
+        };
+    },
+
+    /**
+     * Get help for a specific command or component
+     * @param {string} name - Command or component name
+     * @returns {string} Help text
+     */
+    getHelp(name) {
+        // Check if it's a command
+        const commands = this.getCommands();
+        const changeType = commands[name];
+        if (changeType) {
+            const info = this.getInfo(changeType);
+            return `
+Command: ${name}
+Description: ${info.description}
+Parameters: ${info.parameters.join(', ')}
+Undoable: ${info.undoable ? 'Yes' : 'No'}
+            `.trim();
+        }
+
+        // Check if it's a component
+        if (window.ComponentRegistry) {
+            const compInfo = window.ComponentRegistry.getInfo(name);
+            if (compInfo) {
+                return `
+Component: ${name}
+Category: ${compInfo.category}
+Description: ${compInfo.description}
+Usage: add_component <entityId> ${name}
+                `.trim();
+            }
+        }
+
+        return `No help available for "${name}". Try: ChangeTypes.list() or ComponentRegistry.list()`;
+    },
+
+    /**
+     * Validate and run a command string safely with error checking
+     * @param {string} commandString - Full command string to validate and execute
+     * @param {Object} options - Optional options object to pass to RunCommand
+     * @returns {Promise<boolean>} True if command executed successfully
+     * @throws {Error} If validation fails
+     */
+    async runSafe(commandString, options) {
+        // Validate command syntax first
+        const validation = this.validateCommand(commandString);
+
+        if (!validation.valid) {
+            let errorMsg = `❌ ${validation.message}`;
+            if (validation.suggestions.length > 0) {
+                errorMsg += `\n\nDid you mean:\n` + validation.suggestions.map(s => `  - ${s}`).join('\n');
+            }
+
+            // Log to console for debugging
+            console.error(errorMsg);
+
+            // Throw error so calling code knows validation failed
+            throw new Error(errorMsg);
+        }
+
+        console.log(`✓ Command validated, executing: ${commandString}`);
+        await window.RunCommand(commandString, options);
+        return true;
     }
 };
 
+
+window.RunCommand = async (execString, options)=>{
+    let args = execString.split(" ").map(arg=>parseBest(arg));
+
+    // Convert arrays to {x, y, z} objects for Vector3-like values
+    args = args.map(arg => {
+        if (Array.isArray(arg)) {
+            if (arg.length === 3) {
+                return { x: arg[0], y: arg[1], z: arg[2] };
+            } else if (arg.length === 2) {
+                return { x: arg[0], y: arg[1] };
+            } else if (arg.length === 4) {
+                return { x: arg[0], y: arg[1], z: arg[2], w: arg[3] };
+            }
+        }
+        return arg;
+    });
+
+    let change = null;
+    options = options || {};
+    switch(args[0]){
+        case "help":
+            // Create a colored help text div
+            const helpDiv = document.createElement('div');
+            helpDiv.style.fontFamily = 'monospace';
+            helpDiv.style.whiteSpace = 'pre-wrap';
+            helpDiv.innerHTML = window.ChangeTypes.getHelpText();
+            
+            // Append the colored help directly
+            const shellEl = document.getElementById("lifecycleShell");
+            if(shellEl) {
+                const children = shellEl.children;
+                if (children.length >= 500) {
+                    shellEl.removeChild(children[0]);
+                }
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'change-item';
+                wrapper.id = "help_"+Math.floor(Math.random()*1000000);
+                wrapper.appendChild(helpDiv);
+                shellEl.appendChild(wrapper);
+                shellEl.scrollTop = shellEl.scrollHeight;
+            }
+            return;
+        case "add_entity":
+            change = new EntityAddChange(args[1], args[2], options);
+            break;
+        case "remove_entity":
+            change = new EntityRemoveChange(args[1], options);
+            break;
+        case "move_entity":
+            change = new EntityMoveChange(args[1], args[2], options);
+            break;
+        case "set_entity_property":
+            change = new EntityPropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "add_component":
+            options.componentProperties = args[3];
+            change = new ComponentAddChange(args[1], args[2], options);
+            break;
+        case "remove_component":
+            change = new ComponentRemoveChange(args[1], options);
+            break;
+        case "set_component_property":
+            change = new ComponentPropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "set_space_property":
+            change = new SpacePropertyChange(args[1], args[2], args[3], options);
+            break;
+        case "set_mono_behavior_var":
+            change = new MonoBehaviorVarChange(args[1], args[2], args[3], options);
+            break;
+        case "load_item":
+            change = new LoadItemChange(args[1], args[2], args[3], options);
+            break;
+        case "clone_entity":
+            change = new CloneEntityChange(args[1], options);
+            break;
+        case "save_item":
+            change = new SaveEntityItemChange(args[1], args[2], args[3], options);
+            break;
+        case "delete_item":
+            change = new DeleteItemChange(args[1], options);
+            break;
+        case "create_folder":
+            change = new CreateFolderChange(args[1], args[2], options);
+            break;
+        case "remove_folder":
+            change = new RemoveFolderChange(args[1], options);
+            break;
+        case "move_item_directory":
+            change = new MoveItemDirectoryChange(args[1], args[2], options);
+            break;
+        case "create_script":
+            change = new CreateScriptItemChange(args[1], options);
+            break;
+        case "edit_script":
+            change = new EditScriptItemChange(args[1], args[2], options);
+            break;
+        case "reorder_component":
+            change = new ComponentReorderChange(args[1], args[2], args[3], options);
+            break;
+        default:
+            appendToShell("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
+    }
+
+    if(change){
+        await change.apply();
+    }
+}
+
+ChangeTypes.RunCommand = RunCommand;
+window.RunSafeCommand = ChangeTypes.runSafe.bind(ChangeTypes);
 // Log availability for debugging
 console.log('[ChangeTypes] Exposed globally with', Object.keys(window.ChangeTypes.classes).length, 'change types');
 console.log('[ChangeTypes] Usage: window.ChangeTypes.list() or ChangeTypes.getInfo("EntityPropertyChange")');

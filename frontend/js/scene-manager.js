@@ -1077,7 +1077,7 @@
         }
         return dig(window.entities()[0])
     }
-    window.selected = ()=>{
+    window.sel = ()=>{
         return window.SM.getSelectedEntity()
     }
 //})()

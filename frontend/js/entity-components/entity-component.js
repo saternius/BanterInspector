@@ -114,4 +114,22 @@ export class EntityComponent{
         SM.props[`__${this.id}/${property}:component`] = value;
         await networking.sendOneShot(message);
     }
+
+    WatchProperties(properties, callback){
+        let bs_props = properties.map(p=>BS.PropertyName[p]);
+        log("WatchProperties", this.id, properties)
+        this._bs.WatchProperties(bs_props, (e)=>{
+            log("WatchProperties", this.id, properties)
+            for(let p of properties){
+                this.properties[p] = this._bs[p];
+                if(SM.selectedEntity === this._entity.id){
+                    inspector.propertiesPanel.updateProperty(this.id, p, this._bs[p])
+                }
+            }
+            if(callback){
+                callback({'target': this, 'properties': this.properties});
+            }
+        });
+        return this;
+    }
 }

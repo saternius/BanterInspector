@@ -447,211 +447,143 @@ export class InspectorInjector {
         }
     }
 
+    /**
+     * Component metadata for menu generation
+     * This mirrors the ComponentRegistry structure from index.js
+     * Note: This could be refactored to dynamically load from ComponentRegistry
+     * after modules are loaded, but for now it's static for injection time.
+     */
+    getComponentMetadata() {
+        return {
+            meshes: {
+                icon: '🎨',
+                name: 'Meshes',
+                components: [
+                    { type: 'BanterGeometry', name: 'Geometry', desc: '3D procedural shapes' },
+                    { type: 'BanterBox', name: 'Box', desc: 'Box/cube primitive' },
+                    { type: 'BanterSphere', name: 'Sphere', desc: 'Sphere primitive' },
+                    { type: 'BanterCircle', name: 'Circle', desc: 'Circle primitive' },
+                    { type: 'BanterCone', name: 'Cone', desc: 'Cone primitive' },
+                    { type: 'BanterCylinder', name: 'Cylinder', desc: 'Cylinder primitive' },
+                    { type: 'BanterPlane', name: 'Plane', desc: 'Flat plane primitive' },
+                    { type: 'BanterRing', name: 'Ring', desc: 'Ring primitive' },
+                    { type: 'BanterTorus', name: 'Torus', desc: 'Torus/donut primitive' },
+                    { type: 'BanterTorusKnot', name: 'Torus Knot', desc: 'Torus knot geometry' },
+                    { type: 'BanterInvertedMesh', name: 'Inverted Mesh', desc: 'Inverted mesh (inside-out)' },
+                    { type: 'BanterText', name: 'Text', desc: '3D text mesh' },
+                    { type: 'BanterApple', name: 'Apple', desc: 'Apple parametric surface' },
+                    { type: 'BanterCatenoid', name: 'Catenoid', desc: 'Catenoid minimal surface' },
+                    { type: 'BanterFermet', name: 'Fermat', desc: 'Fermat spiral surface' },
+                    { type: 'BanterHelicoid', name: 'Helicoid', desc: 'Helicoid minimal surface' },
+                    { type: 'BanterHorn', name: 'Horn', desc: 'Horn/trumpet surface' },
+                    { type: 'BanterKlein', name: 'Klein Bottle', desc: 'Klein bottle surface' },
+                    { type: 'BanterMobius', name: 'Möbius Strip', desc: 'Möbius strip' },
+                    { type: 'BanterMobius3d', name: 'Möbius 3D', desc: '3D Möbius surface' },
+                    { type: 'BanterNatica', name: 'Natica', desc: 'Seashell-like surface' },
+                    { type: 'BanterPillow', name: 'Pillow', desc: 'Pillow-shaped surface' },
+                    { type: 'BanterScherk', name: 'Scherk', desc: 'Scherk minimal surface' },
+                    { type: 'BanterSnail', name: 'Snail', desc: 'Snail shell surface' },
+                    { type: 'BanterSpiral', name: 'Spiral', desc: 'Spiral surface' },
+                    { type: 'BanterSpring', name: 'Spring', desc: 'Spring/helix surface' }
+                ]
+            },
+            materials: {
+                icon: '🎨',
+                name: 'Materials',
+                components: [
+                    { type: 'BanterMaterial', name: 'Material', desc: 'Surface appearance' },
+                    { type: 'BanterPhysicMaterial', name: 'Physic Material', desc: 'Physics material properties' }
+                ]
+            },
+            physics: {
+                icon: '⚛',
+                name: 'Physics',
+                components: [
+                    { type: 'BanterRigidbody', name: 'Rigidbody', desc: 'Enables physics simulation' },
+                    { type: 'BoxCollider', name: 'Box Collider', desc: 'Box-shaped collision' },
+                    { type: 'SphereCollider', name: 'Sphere Collider', desc: 'Sphere-shaped collision' },
+                    { type: 'CapsuleCollider', name: 'Capsule Collider', desc: 'Capsule-shaped collision' },
+                    { type: 'MeshCollider', name: 'Mesh Collider', desc: 'Mesh-based collision' },
+                    { type: 'ConfigurableJoint', name: 'Configurable Joint', desc: 'Configurable joint' },
+                    { type: 'CharacterJoint', name: 'Character Joint', desc: 'Character ragdoll joint' },
+                    { type: 'FixedJoint', name: 'Fixed Joint', desc: 'Fixed connection' },
+                    { type: 'HingeJoint', name: 'Hinge Joint', desc: 'Rotational joint' },
+                    { type: 'SpringJoint', name: 'Spring Joint', desc: 'Elastic spring connection' }
+                ]
+            },
+            media: {
+                icon: '🎬',
+                name: 'Media',
+                components: [
+                    { type: 'BanterGLTF', name: 'GLTF', desc: 'Load 3D models' },
+                    { type: 'BanterAudioSource', name: 'Audio Source', desc: 'Play sounds and music' },
+                    { type: 'BanterVideoPlayer', name: 'Video Player', desc: 'Play video content' },
+                    { type: 'BanterBillboard', name: 'Billboard', desc: 'Always faces camera' }
+                ]
+            },
+            behaviors: {
+                icon: '🤚',
+                name: 'Behaviors',
+                components: [
+                    { type: 'BanterGrabHandle', name: 'Grab Handle', desc: 'Basic grab mechanics' },
+                    { type: 'BanterGrabbable', name: 'Grabbable', desc: 'Advanced grab with VR controls' },
+                    { type: 'BanterColliderEvents', name: 'Collider Events', desc: 'Trigger and collision events' },
+                    { type: 'BanterAttachedObject', name: 'Attached Object', desc: 'Attach to users' },
+                    { type: 'BanterSyncedObject', name: 'Synced Object', desc: 'Network synchronization' },
+                    { type: 'BanterHeldEvents', name: 'Held Events', desc: 'Input while holding' },
+                    { type: 'MonoBehavior', name: 'MonoBehavior', desc: 'Custom script component' }
+                ]
+            },
+            misc: {
+                icon: '📦',
+                name: 'Misc',
+                components: [
+                    { type: 'BanterMirror', name: 'Mirror', desc: 'Reflective surface' },
+                    { type: 'BanterBrowser', name: 'Browser', desc: 'Embed web content' },
+                    { type: 'BanterAssetBundle', name: 'Asset Bundle', desc: 'Unity asset bundles' },
+                    { type: 'BanterPortal', name: 'Portal', desc: 'Portal to other spaces' },
+                    { type: 'BanterWorldObject', name: 'World Object', desc: 'World object reference' },
+                    { type: 'BanterStreetView', name: 'Street View', desc: 'Street view panorama' },
+                    { type: 'BanterKitItem', name: 'Kit Item', desc: 'Kit item component' },
+                    { type: 'BanterUIPanel', name: 'UI Panel', desc: 'UI with haptics and sounds' },
+                    { type: 'BanterAvatarPedestal', name: 'Avatar Pedestal', desc: 'Ready Player Me avatar' }
+                ]
+            }
+        };
+    }
+
+    /**
+     * Generate component categories HTML from metadata
+     * Dynamically builds the component menu from the metadata structure
+     */
     getComponentCategories() {
-        return `
-        <!-- Meshes Category -->
-        <div class="component-category">
-            <div class="category-header">
-                <span class="category-icon">🎨</span>
-                <span class="category-name">Meshes</span>
-            </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterBox">
-                    <span class="component-item-name">Box</span>
-                    <span class="component-item-desc">Box mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterSphere">
-                    <span class="component-item-name">Sphere</span>
-                    <span class="component-item-desc">Sphere mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterCircle">
-                    <span class="component-item-name">Circle</span>
-                    <span class="component-item-desc">Circle mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterCone">
-                    <span class="component-item-name">Cone</span>
-                    <span class="component-item-desc">Cone mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterCylinder">
-                    <span class="component-item-name">Cylinder</span>
-                    <span class="component-item-desc">Cylinder mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterTorus">
-                    <span class="component-item-name">Torus</span>
-                    <span class="component-item-desc">Torus mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterPlane">
-                    <span class="component-item-name">Plane</span>
-                    <span class="component-item-desc">Plane mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterRing">
-                    <span class="component-item-name">Ring</span>
-                    <span class="component-item-desc">Ring mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterGeometry">
-                    <span class="component-item-name">Geometry</span>
-                    <span class="component-item-desc">3D procedural shapes</span>
-                </div>
-                <div class="component-item" data-component="BanterInvertedMesh">
-                    <span class="component-item-name">Inverted Mesh</span>
-                    <span class="component-item-desc">Inverted mesh</span>
-                </div>
-                <div class="component-item" data-component="BanterText">
-                    <span class="component-item-name">Text</span>
-                    <span class="component-item-desc">3D text display</span>
-                </div>
-            </div>
-        </div>
+        const metadata = this.getComponentMetadata();
+        let html = '';
 
-        <!-- Materials Category -->
+        for (const [categoryKey, categoryData] of Object.entries(metadata)) {
+            html += `
+        <!-- ${categoryData.name} Category -->
         <div class="component-category">
             <div class="category-header">
-                <span class="category-icon">🎨</span>
-                <span class="category-name">Materials</span>
+                <span class="category-icon">${categoryData.icon}</span>
+                <span class="category-name">${categoryData.name}</span>
             </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterMaterial">
-                    <span class="component-item-name">Material</span>
-                    <span class="component-item-desc">Surface appearance</span>
-                </div>
-                <div class="component-item" data-component="BanterPhysicMaterial">
-                    <span class="component-item-name">Physic Material</span>
-                    <span class="component-item-desc">Physics material properties</span>
-                </div>
-            </div>
-        </div>
+            <div class="category-items">`;
 
-        <!-- Physics Category -->
-        <div class="component-category">
-            <div class="category-header">
-                <span class="category-icon">⚛</span>
-                <span class="category-name">Physics</span>
-            </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterRigidbody">
-                    <span class="component-item-name">Rigidbody</span>
-                    <span class="component-item-desc">Enables physics simulation</span>
-                </div>
-                <div class="component-item" data-component="BoxCollider">
-                    <span class="component-item-name">Box Collider</span>
-                    <span class="component-item-desc">Box-shaped collision detection</span>
-                </div>
-                <div class="component-item" data-component="SphereCollider">
-                    <span class="component-item-name">Sphere Collider</span>
-                    <span class="component-item-desc">Sphere-shaped collision detection</span>
-                </div>
-                <div class="component-item" data-component="CapsuleCollider">
-                    <span class="component-item-name">Capsule Collider</span>
-                    <span class="component-item-desc">Capsule-shaped collision detection</span>
-                </div>
-                <div class="component-item" data-component="MeshCollider">
-                    <span class="component-item-name">Mesh Collider</span>
-                    <span class="component-item-desc">Mesh-based collision detection</span>
-                </div>
-                <div class="component-item" data-component="ConfigurableJoint">
-                    <span class="component-item-name">Configurable Joint</span>
-                    <span class="component-item-desc">Configurable joint constraint</span>
-                </div>
-            </div>
-        </div>
+            for (const component of categoryData.components) {
+                html += `
+                <div class="component-item" data-component="${component.type}">
+                    <span class="component-item-name">${component.name}</span>
+                    <span class="component-item-desc">${component.desc}</span>
+                </div>`;
+            }
 
-        <!-- Media Category -->
-        <div class="component-category">
-            <div class="category-header">
-                <span class="category-icon">🎬</span>
-                <span class="category-name">Media</span>
-            </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterGLTF">
-                    <span class="component-item-name">GLTF</span>
-                    <span class="component-item-desc">Load 3D models</span>
-                </div>
-                <div class="component-item" data-component="BanterAudioSource">
-                    <span class="component-item-name">Audio Source</span>
-                    <span class="component-item-desc">Play sounds and music</span>
-                </div>
-                <div class="component-item" data-component="BanterVideoPlayer">
-                    <span class="component-item-name">Video Player</span>
-                    <span class="component-item-desc">Play video content</span>
-                </div>
-                <div class="component-item" data-component="BanterBillboard">
-                    <span class="component-item-name">Billboard</span>
-                    <span class="component-item-desc">Always faces camera</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Misc Category -->
-        <div class="component-category">
-            <div class="category-header">
-                <span class="category-icon">📦</span>
-                <span class="category-name">Misc</span>
-            </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterMirror">
-                    <span class="component-item-name">Mirror</span>
-                    <span class="component-item-desc">Reflective surface</span>
-                </div>
-                <div class="component-item" data-component="BanterBrowser">
-                    <span class="component-item-name">Browser</span>
-                    <span class="component-item-desc">Embed web content</span>
-                </div>
-                <div class="component-item" data-component="BanterAssetBundle">
-                    <span class="component-item-name">Asset Bundle</span>
-                    <span class="component-item-desc">Unity asset bundles</span>
-                </div>
-                <div class="component-item" data-component="BanterWorldObject">
-                    <span class="component-item-name">World Object</span>
-                    <span class="component-item-desc">World object reference</span>
-                </div>
-                <div class="component-item" data-component="BanterStreetView">
-                    <span class="component-item-name">Street View</span>
-                    <span class="component-item-desc">Street view panorama</span>
-                </div>
-                <div class="component-item" data-component="BanterKitItem">
-                    <span class="component-item-name">Kit Item</span>
-                    <span class="component-item-desc">Kit item component</span>
-                </div>
-                <div class="component-item" data-component="BanterPortal">
-                    <span class="component-item-name">Portal</span>
-                    <span class="component-item-desc">Portal to other spaces</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Behaviors Category -->
-        <div class="component-category">
-            <div class="category-header">
-                <span class="category-icon">🤚</span>
-                <span class="category-name">Behaviors</span>
-            </div>
-            <div class="category-items">
-                <div class="component-item" data-component="BanterColliderEvents">
-                    <span class="component-item-name">Collider Events</span>
-                    <span class="component-item-desc">Trigger and collision events</span>
-                </div>
-                <div class="component-item" data-component="BanterAttachedObject">
-                    <span class="component-item-name">Attached Object</span>
-                    <span class="component-item-desc">Attach to users</span>
-                </div>
-                <div class="component-item" data-component="BanterSyncedObject">
-                    <span class="component-item-name">Synced Object</span>
-                    <span class="component-item-desc">Network synchronization</span>
-                </div>
-                <div class="component-item" data-component="BanterGrabHandle">
-                    <span class="component-item-name">Grab Handle</span>
-                    <span class="component-item-desc">Make object grabbable</span>
-                </div>
-                <div class="component-item" data-component="BanterHeldEvents">
-                    <span class="component-item-name">Held Events</span>
-                    <span class="component-item-desc">Input while holding</span>
-                </div>
-                <div class="component-item" data-component="MonoBehavior">
-                    <span class="component-item-name">MonoBehavior</span>
-                    <span class="component-item-desc">Add a MonoBehavior script</span>
-                </div>
+            html += `
             </div>
         </div>`;
+        }
+
+        return html;
     }
 
     getFeedbackPageHTML() {

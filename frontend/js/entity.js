@@ -336,4 +336,26 @@ export class Entity{
         let data = `entity_moved¶${this.id}¶${newParentId}¶0`
         networking.sendOneShot(data);
     }
+
+    WatchTransform(properties, callback){
+        log("watch", this.id, "transform", properties)
+        let bs_props = properties.map(p=>BS.PropertyName[p]);
+        this._bs.WatchTransform(bs_props, (e)=>{
+            log("WatchTransform")
+            if(SM.selectedEntity === this.id){
+                inspector.propertiesPanel.updateTransform()
+            }
+            if(callback){
+                callback({'target': this, 'transform': this.transform});
+            }
+        });
+    }
+
+    GetScript(scriptName){
+        let scripts = this.components.filter(x=>x.type === "MonoBehavior" && x.properties.name === scriptName).map(x=>x.ctx);
+        if(scripts.length === 0){
+            return null;
+        }
+        return scripts[0];
+    }
 }

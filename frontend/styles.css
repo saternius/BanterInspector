@@ -2701,6 +2701,7 @@ input:hover{
     flex-direction: column;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     height: 100%;
+    max-height: 700px;
 }
 
 .component-menu-header {
@@ -2824,9 +2825,11 @@ input:hover{
     display: grid;
     gap: 4px;
     max-height: 1000px;
-    overflow: hidden;
+    overflow: scroll;
     transition: max-height 0.3s ease-out, opacity 0.3s ease-out, margin 0.3s ease-out;
     opacity: 1;
+    max-height: 500px;
+    scrollbar-width: none;
 }
 
 .category-items.collapsed {
