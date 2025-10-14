@@ -139,7 +139,7 @@ await mcp__chrome-devtools__take_snapshot();
 **For Deeper Understanding (if needed):**
 - `/frontend/js/change-types.js` - All available operations
 - `/frontend/js/entity-components/index.js` - Component registry
-- `/microservices/linker/inventory/` - Example inventory items
+- `/extensions/code_linker/inventory/` - Example inventory items
 - `/CLAUDE.md` - Full project context (if you need to understand the broader system)
 
 ### Key Pitfalls to Avoid

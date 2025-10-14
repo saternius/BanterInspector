@@ -8,7 +8,7 @@ linker_port = 5005
 
 print(sys.argv)
 print("Inventory Link: " + os.getcwd())
-cur_path = f"{os.getcwd()}/microservices/linker"
+cur_path = f"{os.getcwd()}/extensions/code_linker"
 target_path = sys.argv[1]
 if(target_path.startswith(cur_path)):
     target_path = target_path[len(cur_path)+1:]

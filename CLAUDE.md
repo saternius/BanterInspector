@@ -24,7 +24,8 @@ inspector/
 ├── microservices/     # Backend services
 │   ├── statement-block-service/  # AI text processing service
 │   └── file_server/   # File serving utilities for hosting app
-│   └── linker/        # Syncs in-game code to vscode
+├── extensions/        # Extensions and plugins
+│   └── code_linker/   # Syncs in-game code to vscode
 ├── docs/              # Documentation and examples
 │   ├── examples/      # Example scenes and scripts
 │   └── site/          # Docusaurus documentation site
@@ -78,7 +79,11 @@ Backend services are located in the `microservices/` directory:
   - Converts unstructured speech/text into organized statement blocks
   - General-purpose design for reuse across different contexts
 - `file_server/` - File serving utilities for development
-- `linker/` - Syncs in-game inventory and game-state data to a local file so that users can dev on their IDE of choice instead of the build in ScriptEditor
+
+### Extensions
+Extensions and plugins are located in the `extensions/` directory:
+
+- `code_linker/` - Syncs in-game inventory and game-state data to a local file so that users can dev on their IDE of choice instead of the built-in ScriptEditor
 
 ### Key Patterns
 1. **Module Loading**: ES6 modules with dynamic imports based on environment (CDN for prod, local for dev)
