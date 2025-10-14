@@ -105,6 +105,10 @@ export class InventoryUI {
                 <span class="remote-icon">☁️</span>
                 Remote
             </button>
+            <button class="force-sync-button" id="forceSyncBtn" title="Force sync all items to Firebase">
+                <span class="sync-icon">🔄</span>
+                Force Sync
+            </button>
             <button class="link-button" id="copyLinkBtn" title="Copy Firebase path">
                 <span class="link-icon">🔗</span>
             </button>`
@@ -389,7 +393,13 @@ export class InventoryUI {
         if (copyLinkBtn) {
             copyLinkBtn.addEventListener('mousedown', () => this.inventory.firebase.copyFirebaseRef());
         }
-        
+
+        // Add event listener for force sync button
+        const forceSyncBtn = inventoryContainer.querySelector('#forceSyncBtn');
+        if (forceSyncBtn) {
+            forceSyncBtn.addEventListener('mousedown', () => this.inventory.firebase.forceSyncAll());
+        }
+
         // Add event listener for import from Firebase button
         const importFirebaseBtn = inventoryContainer.querySelector('#importFirebaseBtn');
         if (importFirebaseBtn) {

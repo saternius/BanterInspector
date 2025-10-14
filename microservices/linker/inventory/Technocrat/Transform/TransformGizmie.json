@@ -66,7 +66,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -82,7 +82,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -147,7 +147,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -163,7 +163,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -213,7 +213,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -281,7 +281,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -297,7 +297,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -362,7 +362,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -378,7 +378,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -428,7 +428,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -496,7 +496,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -512,7 +512,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -577,7 +577,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -593,7 +593,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -643,7 +643,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -742,7 +742,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -758,11 +758,11 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -774,7 +774,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -839,7 +839,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -855,11 +855,11 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -871,7 +871,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -936,7 +936,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -952,11 +952,11 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -968,7 +968,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1070,7 +1070,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1086,7 +1086,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1151,7 +1151,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1167,7 +1167,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1219,7 +1219,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1287,7 +1287,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1303,7 +1303,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1368,7 +1368,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1384,7 +1384,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1436,7 +1436,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1504,7 +1504,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1520,7 +1520,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1585,7 +1585,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1601,7 +1601,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1653,7 +1653,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1718,7 +1718,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -1734,7 +1734,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
@@ -1755,7 +1755,7 @@
               },
               {
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1865,7 +1865,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_26402",
+                    "id": "Geometry_26402",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -1896,10 +1896,10 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_14285",
+                    "id": "Material_14285",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -1913,7 +1913,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/Y/shaft",
@@ -1950,7 +1950,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_7989",
+                    "id": "Geometry_7989",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -1981,10 +1981,10 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_62628",
+                    "id": "Material_62628",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -1998,7 +1998,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/Y/tip",
@@ -2050,9 +2050,9 @@
                 "type": "CapsuleCollider"
               },
               {
-                "id": "BanterColliderEvents_2198",
+                "id": "ColliderEvents_2198",
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "id": "Scene/Translate_35852/Y",
@@ -2092,7 +2092,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_79104",
+                    "id": "Geometry_79104",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -2123,10 +2123,10 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_44489",
+                    "id": "Material_44489",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -2140,7 +2140,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/X/shaft",
@@ -2177,7 +2177,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_44436",
+                    "id": "Geometry_44436",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -2208,10 +2208,10 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_25049",
+                    "id": "Material_25049",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -2225,7 +2225,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/X/tip",
@@ -2277,9 +2277,9 @@
                 "type": "CapsuleCollider"
               },
               {
-                "id": "BanterColliderEvents_75468",
+                "id": "ColliderEvents_75468",
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "id": "Scene/Translate_35852/X",
@@ -2319,7 +2319,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_540",
+                    "id": "Geometry_540",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -2350,10 +2350,10 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_30004",
+                    "id": "Material_30004",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -2367,7 +2367,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/Z/shaft",
@@ -2404,7 +2404,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_82645",
+                    "id": "Geometry_82645",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -2435,10 +2435,10 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_75121",
+                    "id": "Material_75121",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -2452,7 +2452,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "id": "Scene/Translate_35852/Z/tip",
@@ -2504,9 +2504,9 @@
                 "type": "CapsuleCollider"
               },
               {
-                "id": "BanterColliderEvents_94905",
+                "id": "ColliderEvents_94905",
                 "initialized": true,
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "id": "Scene/Translate_35852/Z",
@@ -2593,7 +2593,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_25080",
+                        "id": "Geometry_25080",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -2624,10 +2624,10 @@
                           "width": 1.3,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_96251",
+                        "id": "Material_96251",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -2641,7 +2641,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/Y/shaft",
@@ -2678,7 +2678,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_46932",
+                        "id": "Geometry_46932",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -2709,10 +2709,10 @@
                           "width": 0.5,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_87494",
+                        "id": "Material_87494",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -2726,7 +2726,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/Y/tip",
@@ -2778,9 +2778,9 @@
                     "type": "CapsuleCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_94555",
+                    "id": "ColliderEvents_94555",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Translate/Y",
@@ -2820,7 +2820,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_5315",
+                        "id": "Geometry_5315",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -2851,10 +2851,10 @@
                           "width": 1.3,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_10334",
+                        "id": "Material_10334",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -2868,7 +2868,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/X/shaft",
@@ -2905,7 +2905,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_55397",
+                        "id": "Geometry_55397",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -2936,10 +2936,10 @@
                           "width": 0.5,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_45678",
+                        "id": "Material_45678",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -2953,7 +2953,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/X/tip",
@@ -3005,9 +3005,9 @@
                     "type": "CapsuleCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_8292",
+                    "id": "ColliderEvents_8292",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Translate/X",
@@ -3047,7 +3047,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_31547",
+                        "id": "Geometry_31547",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -3078,10 +3078,10 @@
                           "width": 1.3,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_83487",
+                        "id": "Material_83487",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -3095,7 +3095,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/Z/shaft",
@@ -3132,7 +3132,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_53286",
+                        "id": "Geometry_53286",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -3163,10 +3163,10 @@
                           "width": 0.5,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_41307",
+                        "id": "Material_41307",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -3180,7 +3180,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Translate/Z/tip",
@@ -3232,9 +3232,9 @@
                     "type": "CapsuleCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_2016",
+                    "id": "ColliderEvents_2016",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Translate/Z",
@@ -3308,7 +3308,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_58922",
+                    "id": "Geometry_58922",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -3339,10 +3339,10 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_8010",
+                    "id": "Material_8010",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -3356,7 +3356,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "id": "BoxCollider_9241",
@@ -3377,9 +3377,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_57704",
+                    "id": "ColliderEvents_57704",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Rotation/Y-Ring",
@@ -3416,7 +3416,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_21102",
+                    "id": "Geometry_21102",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -3447,10 +3447,10 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_266",
+                    "id": "Material_266",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -3464,7 +3464,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "id": "BoxCollider_15286",
@@ -3485,9 +3485,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_13941",
+                    "id": "ColliderEvents_13941",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Rotation/X-Ring",
@@ -3524,7 +3524,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_44436",
+                    "id": "Geometry_44436",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -3555,10 +3555,10 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_93836",
+                    "id": "Material_93836",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -3572,7 +3572,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "id": "BoxCollider_15643",
@@ -3593,9 +3593,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_3535",
+                    "id": "ColliderEvents_3535",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Rotation/Z-Ring",
@@ -3672,7 +3672,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_81218",
+                        "id": "Geometry_81218",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -3703,10 +3703,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_65101",
+                        "id": "Material_65101",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -3720,7 +3720,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/Y/line",
@@ -3757,7 +3757,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_8659",
+                        "id": "Geometry_8659",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -3788,10 +3788,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_41156",
+                        "id": "Material_41156",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -3805,7 +3805,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/Y/cube",
@@ -3859,9 +3859,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_71055",
+                    "id": "ColliderEvents_71055",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Scale/Y",
@@ -3901,7 +3901,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_78080",
+                        "id": "Geometry_78080",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -3932,10 +3932,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_55279",
+                        "id": "Material_55279",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -3949,7 +3949,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/X/line",
@@ -3986,7 +3986,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_31178",
+                        "id": "Geometry_31178",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -4017,10 +4017,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_80082",
+                        "id": "Material_80082",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -4034,7 +4034,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/X/cube",
@@ -4088,9 +4088,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_55864",
+                    "id": "ColliderEvents_55864",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Scale/X",
@@ -4130,7 +4130,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_44878",
+                        "id": "Geometry_44878",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -4161,10 +4161,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_55980",
+                        "id": "Material_55980",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -4178,7 +4178,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/Z/line",
@@ -4215,7 +4215,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_74713",
+                        "id": "Geometry_74713",
                         "initialized": true,
                         "properties": {
                           "arc": 6.283185307179586,
@@ -4246,10 +4246,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_91671",
+                        "id": "Material_91671",
                         "initialized": true,
                         "properties": {
                           "color": {
@@ -4263,7 +4263,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Scene/TransformGizmo_25222/Scale/Z/cube",
@@ -4317,9 +4317,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_97464",
+                    "id": "ColliderEvents_97464",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Scale/Z",
@@ -4356,7 +4356,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_80200",
+                    "id": "Geometry_80200",
                     "initialized": true,
                     "properties": {
                       "arc": 6.283185307179586,
@@ -4387,10 +4387,10 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_33029",
+                    "id": "Material_33029",
                     "initialized": true,
                     "properties": {
                       "color": {
@@ -4404,7 +4404,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "id": "BoxCollider_74677",
@@ -4425,9 +4425,9 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterColliderEvents_23204",
+                    "id": "ColliderEvents_23204",
                     "initialized": true,
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   }
                 ],
                 "id": "Scene/TransformGizmo_25222/Scale/UniformScale",
@@ -4560,9 +4560,9 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "BanterColliderEvents_7659"
+        "id": "ColliderEvents_7659"
       },
-      "componentType": "BanterColliderEvents",
+      "componentType": "ColliderEvents",
       "entityId": "Scene/TransformGizmo_25222/Rotation/Y-Ring",
       "options": {
         "source": "ui"
@@ -4582,9 +4582,9 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "BanterColliderEvents_9059"
+        "id": "ColliderEvents_9059"
       },
-      "componentType": "BanterColliderEvents",
+      "componentType": "ColliderEvents",
       "entityId": "Scene/TransformGizmo_25222/Rotation/X-Ring",
       "options": {
         "source": "ui"
@@ -4604,9 +4604,9 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "BanterColliderEvents_9090"
+        "id": "ColliderEvents_9090"
       },
-      "componentType": "BanterColliderEvents",
+      "componentType": "ColliderEvents",
       "entityId": "Scene/TransformGizmo_25222/Rotation/Z-Ring",
       "options": {
         "source": "ui"

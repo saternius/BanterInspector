@@ -41,7 +41,7 @@
               "thetaStart": 0,
               "topRadius": 1
             },
-            "type": "BanterCylinder"
+            "type": "Cylinder"
           },
           {
             "initialized": true,
@@ -57,7 +57,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "initialized": true,
@@ -90,7 +90,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "initialized": true,
@@ -119,7 +119,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           }
         ],
         "initialized": true,
@@ -158,7 +158,7 @@
           "attachmentPoint": 4,
           "uid": ""
         },
-        "type": "BanterAttachedObject"
+        "type": "AttachedObject"
       }
     ],
     "finished_loading": true,
@@ -202,7 +202,7 @@
                 "type": "Transform"
               },
               {
-                "id": "BanterCylinder_44716",
+                "id": "Cylinder_44716",
                 "properties": {
                   "bottomRadius": 1,
                   "height": 1,
@@ -213,10 +213,10 @@
                   "thetaStart": 0,
                   "topRadius": 1
                 },
-                "type": "BanterCylinder"
+                "type": "Cylinder"
               },
               {
-                "id": "BanterMaterial_66023",
+                "id": "Material_66023",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -229,7 +229,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Scene/Passthrough_39176/Mesh",
@@ -263,12 +263,12 @@
             "type": "Transform"
           },
           {
-            "id": "BanterAttachedObject_29164",
+            "id": "AttachedObject_29164",
             "properties": {
               "attachmentPoint": 4,
               "uid": "eaa1c21f8eda971a409a66d3f19f70c6"
             },
-            "type": "BanterAttachedObject"
+            "type": "AttachedObject"
           }
         ],
         "id": "Scene/Passthrough_39176",
@@ -285,7 +285,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterAttachedObject_29164",
+      "componentId": "AttachedObject_29164",
       "newValue": "",
       "options": {
         "source": "ui"

@@ -553,6 +553,47 @@ export class InventoryFirebase {
     }
 
     /**
+     * Force sync all items in current folder to Firebase
+     */
+    async forceSyncAll() {
+        if (!SM.scene?.localUser?.name) {
+            showNotification('User not logged in. Cannot sync to Firebase.');
+            return;
+        }
+
+        // Check if current folder is remote
+        if (!this.isItemInRemoteLocation()) {
+            showNotification('Current folder is not remote. Cannot sync.');
+            return;
+        }
+
+        try {
+            // Get all items in the current folder
+            const itemsInFolder = Object.entries(this.inventory.items).filter(([key, item]) =>
+                item.folder === this.inventory.currentFolder
+            );
+
+            if (itemsInFolder.length === 0) {
+                showNotification('No items to sync in current folder');
+                return;
+            }
+
+            showNotification(`Syncing ${itemsInFolder.length} item(s) to Firebase...`);
+
+            let syncedCount = 0;
+            for (const [itemName, item] of itemsInFolder) {
+                await this.syncToFirebase(item);
+                syncedCount++;
+            }
+
+            showNotification(`Successfully synced ${syncedCount} item(s) to Firebase!`);
+        } catch (error) {
+            err('net', 'Failed to force sync items:', error);
+            showNotification('Failed to sync items to Firebase');
+        }
+    }
+
+    /**
      * Make current location remote - upload to Firebase
      */
     async makeRemote() {
@@ -560,21 +601,21 @@ export class InventoryFirebase {
             showNotification('User not logged in. Cannot upload to Firebase.');
             return;
         }
-        
+
         const userName = this.sanitizeFirebasePath(SM.scene.localUser.name);
         const contents = this.inventory.getCurrentViewContents();
         let totalSize = 0;
-        
+
         // Calculate total size
         Object.keys(contents.items).forEach(itemName => {
             totalSize += this.inventory.calculateSize(itemName, false);
         });
-        
+
         Object.keys(contents.folders).forEach(folderName => {
             totalSize += this.inventory.calculateSize(folderName, true);
         });
-        
-    
+
+
          // Check if total size exceeds 1MB
          const oneMB = 1024 * 1024;
          if (totalSize > oneMB) {
@@ -586,7 +627,7 @@ export class InventoryFirebase {
         const itemCount = Object.keys(contents.items).length;
         const folderCount = Object.keys(contents.folders).length;
         const sizeInMB = (totalSize / oneMB).toFixed(2);
-        
+
         this.inventory.ui.showConfirmModal(
             `Upload ${itemCount} items and ${folderCount} folders (${sizeInMB}MB) to Firebase?`,
             async () => {
@@ -798,10 +839,16 @@ export class InventoryFirebase {
 
         let subjectName = firebaseRef.split('/').pop();
         let path = subjectName;
-        if(parentFolder !== "" && parentFolder !== null){
-            parentFolder = parentFolder || this.inventory.currentFolder;
-            path = `${parentFolder}/${subjectName}`
-        }else{
+
+        // Check if parentFolder is explicitly provided and valid (not undefined, null, or empty string)
+        if(parentFolder !== undefined && parentFolder !== "" && parentFolder !== null){
+            path = `${parentFolder}/${subjectName}`;
+        } else if (this.inventory.currentFolder) {
+            // If no parent folder provided but we're in a folder, use current folder
+            parentFolder = this.inventory.currentFolder;
+            path = `${parentFolder}/${subjectName}`;
+        } else {
+            // Import to root
             parentFolder = null;
         }
 

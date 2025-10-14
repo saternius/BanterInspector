@@ -12,7 +12,7 @@ let held = false;
 // let holdingBarHack = ()=>{
 //     let barHack = SM.getEntityById("People/"+user+"/BarHack")
 //     if(barHack){
-//         let heldEvents = barHack.getComponent("BanterHeldEvents")
+//         let heldEvents = barHack.getComponent("HeldEvents")
 //         log("mirror", "heldEvents => ", heldEvents)
 //         heldEvents.Set("blockRightThumbstick", held)
 //     }

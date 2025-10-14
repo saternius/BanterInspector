@@ -31,7 +31,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterMaterial_7006",
+            "id": "Material_7006",
             "initialized": true,
             "properties": {
               "color": {
@@ -45,10 +45,10 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
-            "id": "BanterGeometry_87509",
+            "id": "Geometry_87509",
             "initialized": true,
             "properties": {
               "arc": 6.283185,
@@ -79,7 +79,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           }
         ],
         "id": "Scene/Passthrough_73267_70712_29573/Mesh",
@@ -115,13 +115,13 @@
         "type": "Transform"
       },
       {
-        "id": "BanterAttachedObject_66628",
+        "id": "AttachedObject_66628",
         "initialized": true,
         "properties": {
           "attachmentPoint": 4,
           "uid": ""
         },
-        "type": "BanterAttachedObject"
+        "type": "AttachedObject"
       }
     ],
     "id": "Scene/Passthrough_73267_70712_29573",
@@ -136,7 +136,7 @@
   "history": [
     {
       "action": "set_component_property",
-      "componentId": "BanterMaterial_16870",
+      "componentId": "Material_16870",
       "newValue": "Unlit/Diffuse",
       "options": {
         "source": "ui"
@@ -145,7 +145,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterAttachedObject_73433",
+      "componentId": "AttachedObject_73433",
       "newValue": "",
       "options": {
         "source": "ui"

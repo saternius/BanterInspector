@@ -36,7 +36,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGeometry_50673",
+                    "id": "Geometry_50673",
                     "properties": {
                       "arc": 6.283185,
                       "depth": 12,
@@ -66,10 +66,10 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
-                    "id": "BanterMaterial_41992",
+                    "id": "Material_41992",
                     "properties": {
                       "color": {
                         "a": 1,
@@ -95,7 +95,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "id": "BoxCollider_19321",
@@ -146,7 +146,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterMaterial_37408",
+                    "id": "Material_37408",
                     "properties": {
                       "color": {
                         "a": 1,
@@ -172,10 +172,10 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
-                    "id": "BanterGeometry_57342",
+                    "id": "Geometry_57342",
                     "properties": {
                       "arc": 6.283185,
                       "depth": 12,
@@ -205,7 +205,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   }
                 ],
                 "id": "Root/Flappy_1128_4930_24231/Stage/Ground/Dirt",
@@ -269,8 +269,8 @@
                 "type": "Transform"
               },
               {
-                "id": "BanterColliderEvents_31800",
-                "type": "BanterColliderEvents"
+                "id": "ColliderEvents_31800",
+                "type": "ColliderEvents"
               },
               {
                 "id": "BoxCollider_26582",
@@ -290,7 +290,7 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "BanterMaterial_93021",
+                "id": "Material_93021",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -316,10 +316,10 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
-                "id": "BanterGeometry_52298",
+                "id": "Geometry_52298",
                 "properties": {
                   "arc": 6.283185,
                   "depth": 12,
@@ -349,7 +349,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               }
             ],
             "id": "Root/Flappy_1128_4930_24231/Stage/Clouds",
@@ -460,7 +460,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterText_4802",
+            "id": "Text_4802",
             "properties": {
               "color": {
                 "a": 1,
@@ -479,7 +479,7 @@
               "text": "Press 8 to start",
               "verticalAlignment": 1
             },
-            "type": "BanterText"
+            "type": "Text"
           }
         ],
         "id": "Root/Flappy_1128_4930_24231/DebugText",
@@ -522,7 +522,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_20861",
+                        "id": "Geometry_20861",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 6,
@@ -552,10 +552,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_55975",
+                        "id": "Material_55975",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -568,7 +568,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box",
@@ -602,7 +602,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_70597",
+                        "id": "Geometry_70597",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -632,10 +632,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_50757",
+                        "id": "Material_50757",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -648,7 +648,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_20271",
@@ -682,7 +682,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_86996",
+                        "id": "Geometry_86996",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -712,10 +712,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_34689",
+                        "id": "Material_34689",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -728,7 +728,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_60198",
@@ -762,7 +762,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_12820",
+                        "id": "Geometry_12820",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 7,
@@ -792,10 +792,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_51826",
+                        "id": "Material_51826",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -808,7 +808,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_34266",
@@ -842,7 +842,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_6075",
+                        "id": "Geometry_6075",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -872,10 +872,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_81628",
+                        "id": "Material_81628",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -888,7 +888,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_22161",
@@ -922,7 +922,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_64845",
+                        "id": "Geometry_64845",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -952,10 +952,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_81216",
+                        "id": "Material_81216",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -968,7 +968,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_52272",
@@ -1002,7 +1002,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_27140",
+                        "id": "Geometry_27140",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1032,10 +1032,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_24656",
+                        "id": "Material_24656",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1048,7 +1048,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_6926",
@@ -1082,7 +1082,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_46346",
+                        "id": "Geometry_46346",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 4,
@@ -1112,10 +1112,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_13451",
+                        "id": "Material_13451",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1128,7 +1128,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_43966",
@@ -1162,7 +1162,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_78557",
+                        "id": "Geometry_78557",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1192,10 +1192,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_18004",
+                        "id": "Material_18004",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1208,7 +1208,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_34362",
@@ -1242,7 +1242,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_77009",
+                        "id": "Geometry_77009",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1272,10 +1272,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_89586",
+                        "id": "Material_89586",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1288,7 +1288,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_74788",
@@ -1322,7 +1322,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_26055",
+                        "id": "Geometry_26055",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1352,10 +1352,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_82358",
+                        "id": "Material_82358",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1368,7 +1368,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_51877",
@@ -1402,7 +1402,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_4419",
+                        "id": "Geometry_4419",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1432,10 +1432,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_10897",
+                        "id": "Material_10897",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1448,7 +1448,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_48182",
@@ -1482,7 +1482,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_95864",
+                        "id": "Geometry_95864",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1512,10 +1512,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_40754",
+                        "id": "Material_40754",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1528,7 +1528,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_54106",
@@ -1562,7 +1562,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_8886",
+                        "id": "Geometry_8886",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1592,10 +1592,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_87695",
+                        "id": "Material_87695",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1608,7 +1608,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_48657",
@@ -1642,7 +1642,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_31710",
+                        "id": "Geometry_31710",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1672,10 +1672,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_78293",
+                        "id": "Material_78293",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1688,7 +1688,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_78877",
@@ -1722,7 +1722,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_84466",
+                        "id": "Geometry_84466",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 6,
@@ -1752,10 +1752,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_26232",
+                        "id": "Material_26232",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1768,7 +1768,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_77793",
@@ -1802,7 +1802,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_56547",
+                        "id": "Geometry_56547",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1832,10 +1832,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_73555",
+                        "id": "Material_73555",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1848,7 +1848,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_70143",
@@ -1882,7 +1882,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_15470",
+                        "id": "Geometry_15470",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1912,10 +1912,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_44101",
+                        "id": "Material_44101",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -1928,7 +1928,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_24740",
@@ -1962,7 +1962,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_70096",
+                        "id": "Geometry_70096",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -1992,10 +1992,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_7949",
+                        "id": "Material_7949",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2008,7 +2008,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_55634",
@@ -2042,7 +2042,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_20382",
+                        "id": "Geometry_20382",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2072,10 +2072,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_26723",
+                        "id": "Material_26723",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2088,7 +2088,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_29698",
@@ -2122,7 +2122,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_40623",
+                        "id": "Geometry_40623",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -2152,10 +2152,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_60874",
+                        "id": "Material_60874",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2168,7 +2168,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_11146",
@@ -2202,7 +2202,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_89959",
+                        "id": "Geometry_89959",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2232,10 +2232,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_90931",
+                        "id": "Material_90931",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2248,7 +2248,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_20540",
@@ -2282,7 +2282,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_13018",
+                        "id": "Geometry_13018",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2312,10 +2312,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_99787",
+                        "id": "Material_99787",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2328,7 +2328,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_38116",
@@ -2362,7 +2362,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_18634",
+                        "id": "Geometry_18634",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2392,10 +2392,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_60745",
+                        "id": "Material_60745",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2408,7 +2408,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_38161",
@@ -2442,7 +2442,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_92966",
+                        "id": "Geometry_92966",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2472,10 +2472,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_11893",
+                        "id": "Material_11893",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2488,7 +2488,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_8717",
@@ -2522,7 +2522,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_70411",
+                        "id": "Geometry_70411",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -2552,10 +2552,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_53377",
+                        "id": "Material_53377",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2568,7 +2568,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_91283",
@@ -2602,7 +2602,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_1408",
+                        "id": "Geometry_1408",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 5,
@@ -2632,10 +2632,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_34250",
+                        "id": "Material_34250",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2648,7 +2648,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_56158",
@@ -2682,7 +2682,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_52881",
+                        "id": "Geometry_52881",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 5,
@@ -2712,10 +2712,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_87762",
+                        "id": "Material_87762",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2728,7 +2728,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black/Box_67596",
@@ -2795,7 +2795,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_44993",
+                        "id": "Geometry_44993",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -2825,10 +2825,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_52694",
+                        "id": "Material_52694",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2841,7 +2841,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1/Box",
@@ -2875,7 +2875,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_63633",
+                        "id": "Geometry_63633",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -2905,10 +2905,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_66433",
+                        "id": "Material_66433",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -2921,7 +2921,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1/Box_53078",
@@ -2955,7 +2955,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_33142",
+                        "id": "Geometry_33142",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -2985,10 +2985,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_14785",
+                        "id": "Material_14785",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3001,7 +3001,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1/Box_50714",
@@ -3035,7 +3035,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_12551",
+                        "id": "Geometry_12551",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -3065,10 +3065,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_90333",
+                        "id": "Material_90333",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3081,7 +3081,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1/Box_51453",
@@ -3115,7 +3115,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_91564",
+                        "id": "Geometry_91564",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -3145,10 +3145,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_88839",
+                        "id": "Material_88839",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3161,7 +3161,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1/Box_95768",
@@ -3228,7 +3228,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_78823",
+                        "id": "Geometry_78823",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -3258,10 +3258,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_61408",
+                        "id": "Material_61408",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3274,7 +3274,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box",
@@ -3308,7 +3308,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_10334",
+                        "id": "Geometry_10334",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 4,
@@ -3338,10 +3338,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_21432",
+                        "id": "Material_21432",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3354,7 +3354,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_53562",
@@ -3388,7 +3388,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_95501",
+                        "id": "Geometry_95501",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -3418,10 +3418,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_8078",
+                        "id": "Material_8078",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3434,7 +3434,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_51049",
@@ -3468,7 +3468,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_24386",
+                        "id": "Geometry_24386",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -3498,10 +3498,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_4775",
+                        "id": "Material_4775",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3514,7 +3514,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_50257",
@@ -3548,7 +3548,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_8496",
+                        "id": "Geometry_8496",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -3578,10 +3578,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_39426",
+                        "id": "Material_39426",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3594,7 +3594,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_65241",
@@ -3628,7 +3628,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_72816",
+                        "id": "Geometry_72816",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 4,
@@ -3658,10 +3658,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_89152",
+                        "id": "Material_89152",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3674,7 +3674,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_16833",
@@ -3708,7 +3708,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_71184",
+                        "id": "Geometry_71184",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 5,
@@ -3738,10 +3738,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_30073",
+                        "id": "Material_30073",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3754,7 +3754,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_28910",
@@ -3788,7 +3788,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_2016",
+                        "id": "Geometry_2016",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -3818,10 +3818,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_80962",
+                        "id": "Material_80962",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3834,7 +3834,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White/Box_33275",
@@ -3901,7 +3901,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_32214",
+                        "id": "Geometry_32214",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -3931,10 +3931,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_56316",
+                        "id": "Material_56316",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -3947,7 +3947,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box",
@@ -3981,7 +3981,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_88876",
+                        "id": "Geometry_88876",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -4011,10 +4011,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_88761",
+                        "id": "Material_88761",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4027,7 +4027,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_14379",
@@ -4061,7 +4061,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_24894",
+                        "id": "Geometry_24894",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -4091,10 +4091,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_96723",
+                        "id": "Material_96723",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4107,7 +4107,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_5676",
@@ -4141,7 +4141,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_68680",
+                        "id": "Geometry_68680",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -4171,10 +4171,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_97841",
+                        "id": "Material_97841",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4187,7 +4187,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_93542",
@@ -4221,7 +4221,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_9047",
+                        "id": "Geometry_9047",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -4251,10 +4251,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_85490",
+                        "id": "Material_85490",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4267,7 +4267,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_74438",
@@ -4301,7 +4301,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_21780",
+                        "id": "Geometry_21780",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 3,
@@ -4331,10 +4331,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_99502",
+                        "id": "Material_99502",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4347,7 +4347,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_15769",
@@ -4381,7 +4381,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_63731",
+                        "id": "Geometry_63731",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 4,
@@ -4411,10 +4411,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_31335",
+                        "id": "Material_31335",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4427,7 +4427,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2/Box_62862",
@@ -4494,7 +4494,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_46483",
+                        "id": "Geometry_46483",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -4524,10 +4524,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_37567",
+                        "id": "Material_37567",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4540,7 +4540,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Grey/Box",
@@ -4574,7 +4574,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_65010",
+                        "id": "Geometry_65010",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -4604,10 +4604,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_74267",
+                        "id": "Material_74267",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4620,7 +4620,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Grey/Box_59147",
@@ -4687,7 +4687,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_94452",
+                        "id": "Geometry_94452",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 5,
@@ -4717,10 +4717,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_10926",
+                        "id": "Material_10926",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4733,7 +4733,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Orange/Box",
@@ -4767,7 +4767,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_87912",
+                        "id": "Geometry_87912",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 2,
@@ -4797,10 +4797,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_96512",
+                        "id": "Material_96512",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4813,7 +4813,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Orange/Box_30884",
@@ -4880,7 +4880,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_78818",
+                        "id": "Geometry_78818",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 6,
@@ -4910,10 +4910,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_32023",
+                        "id": "Material_32023",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -4926,7 +4926,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red/Box",
@@ -4960,7 +4960,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_15489",
+                        "id": "Geometry_15489",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 5,
@@ -4990,10 +4990,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_62914",
+                        "id": "Material_62914",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -5006,7 +5006,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red/Box_97520",
@@ -5040,7 +5040,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_21438",
+                        "id": "Geometry_21438",
                         "properties": {
                           "arc": 6.283185307179586,
                           "depth": 1,
@@ -5070,10 +5070,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_89488",
+                        "id": "Material_89488",
                         "properties": {
                           "color": {
                             "a": 1,
@@ -5086,7 +5086,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "id": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red/Box_23060",
@@ -5178,11 +5178,11 @@
             "type": "Transform"
           },
           {
-            "id": "BanterColliderEvents_95258",
-            "type": "BanterColliderEvents"
+            "id": "ColliderEvents_95258",
+            "type": "ColliderEvents"
           },
           {
-            "id": "BanterRigidbody_89785",
+            "id": "Rigidbody_89785",
             "properties": {
               "angularDrag": 0.05,
               "angularVelocity": {
@@ -5212,7 +5212,7 @@
                 "z": 0
               }
             },
-            "type": "BanterRigidbody"
+            "type": "Rigidbody"
           },
           {
             "id": "BoxCollider_2518",
@@ -5232,7 +5232,7 @@
             "type": "BoxCollider"
           },
           {
-            "id": "BanterGeometry_47090",
+            "id": "Geometry_47090",
             "properties": {
               "arc": 6.283185,
               "depth": 1,
@@ -5262,7 +5262,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "ctx": {

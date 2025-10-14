@@ -51,7 +51,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -128,7 +128,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -205,7 +205,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -282,7 +282,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -359,7 +359,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -436,7 +436,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -513,7 +513,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -590,7 +590,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -728,7 +728,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a9970f20aef5588f0ed4bd4f06a0a675e7f203ce048d6973536aa85f47dd8892"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -805,7 +805,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6487c1a155c3554541426559cd7153529b50dd5ed6e1cd8ca16b79e04397918f"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -882,7 +882,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f69cd8dab9bd3ea9b3a4a699d79ca588b3f16c1fc5bc94375c586eb0e78a2b5b"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -959,7 +959,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=888d0e0ae85cc1bfe077413ebebc59abc42cf73c8e63b1758dd598d7ce521768"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -1036,7 +1036,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a22b1972b0865a58308d82908d99f4016ddd9be38260f0637a128eddcf3a18ef"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -1116,7 +1116,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1193,7 +1193,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1270,7 +1270,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1347,7 +1347,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1424,7 +1424,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1501,7 +1501,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1578,7 +1578,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1655,7 +1655,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1796,7 +1796,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1873,7 +1873,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1950,7 +1950,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2027,7 +2027,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2104,7 +2104,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2181,7 +2181,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2258,7 +2258,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2335,7 +2335,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2476,7 +2476,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2553,7 +2553,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2630,7 +2630,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2707,7 +2707,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2784,7 +2784,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2861,7 +2861,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2938,7 +2938,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -3015,7 +3015,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -3160,7 +3160,7 @@
                 "active": true,
                 "components": [
                   {
-                    "id": "BanterGLTF_91025",
+                    "id": "GLTF_91025",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3174,7 +3174,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "Transform_79939",
@@ -3259,7 +3259,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_96309",
+                    "id": "GLTF_96309",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3273,7 +3273,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_46782",
@@ -3335,7 +3335,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_43376",
+                    "id": "GLTF_43376",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3349,7 +3349,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_81775",
@@ -3388,7 +3388,7 @@
                 "active": true,
                 "components": [
                   {
-                    "id": "BanterGLTF_82292",
+                    "id": "GLTF_82292",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3402,7 +3402,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "Transform_59484",
@@ -3487,7 +3487,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_48720",
+                    "id": "GLTF_48720",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3501,7 +3501,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_36848",
@@ -3563,7 +3563,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_56449",
+                    "id": "GLTF_56449",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3577,7 +3577,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_55135",
@@ -3616,7 +3616,7 @@
                 "active": true,
                 "components": [
                   {
-                    "id": "BanterGLTF_1922",
+                    "id": "GLTF_1922",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3630,7 +3630,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "Transform_54326",
@@ -3715,7 +3715,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_89667",
+                    "id": "GLTF_89667",
                     "loadAsync": false,
                     "options": {
                       "context": "new"
@@ -3729,7 +3729,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_31126",
@@ -3828,7 +3828,7 @@
             "active": true,
             "components": [
               {
-                "id": "BanterGLTF_8416",
+                "id": "GLTF_8416",
                 "loadAsync": false,
                 "options": {
                   "context": "new"
@@ -3842,7 +3842,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a9970f20aef5588f0ed4bd4f06a0a675e7f203ce048d6973536aa85f47dd8892"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "id": "Transform_95141",
@@ -3904,7 +3904,7 @@
             "active": true,
             "components": [
               {
-                "id": "BanterGLTF_91501",
+                "id": "GLTF_91501",
                 "loadAsync": false,
                 "options": {
                   "context": "new"
@@ -3918,7 +3918,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6487c1a155c3554541426559cd7153529b50dd5ed6e1cd8ca16b79e04397918f"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "id": "Transform_53856",
@@ -4003,7 +4003,7 @@
                 "type": "Transform"
               },
               {
-                "id": "BanterGLTF_6397",
+                "id": "GLTF_6397",
                 "loadAsync": false,
                 "options": {
                   "context": "new"
@@ -4017,7 +4017,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f69cd8dab9bd3ea9b3a4a699d79ca588b3f16c1fc5bc94375c586eb0e78a2b5b"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "id": "MonoBehavior_50392",
@@ -4056,7 +4056,7 @@
             "active": true,
             "components": [
               {
-                "id": "BanterGLTF_81928",
+                "id": "GLTF_81928",
                 "loadAsync": false,
                 "options": {
                   "context": "new"
@@ -4070,7 +4070,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=888d0e0ae85cc1bfe077413ebebc59abc42cf73c8e63b1758dd598d7ce521768"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "id": "Transform_35315",
@@ -4132,7 +4132,7 @@
             "active": true,
             "components": [
               {
-                "id": "BanterGLTF_63779",
+                "id": "GLTF_63779",
                 "loadAsync": false,
                 "options": {
                   "context": "new"
@@ -4146,7 +4146,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a22b1972b0865a58308d82908d99f4016ddd9be38260f0637a128eddcf3a18ef"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "id": "Transform_43166",
@@ -4238,7 +4238,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_57372",
+                    "id": "GLTF_57372",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4253,7 +4253,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_99668",
@@ -4319,7 +4319,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_3367",
+                    "id": "GLTF_3367",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4334,7 +4334,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_31938",
@@ -4400,7 +4400,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_65144",
+                    "id": "GLTF_65144",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4415,7 +4415,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_35222",
@@ -4481,7 +4481,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_2801",
+                    "id": "GLTF_2801",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4496,7 +4496,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_19411",
@@ -4562,7 +4562,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_99824",
+                    "id": "GLTF_99824",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4577,7 +4577,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_78849",
@@ -4643,7 +4643,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_36355",
+                    "id": "GLTF_36355",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4658,7 +4658,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_11770",
@@ -4724,7 +4724,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_98439",
+                    "id": "GLTF_98439",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4739,7 +4739,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_67473",
@@ -4805,7 +4805,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_64390",
+                    "id": "GLTF_64390",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4820,7 +4820,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_56459",
@@ -4953,7 +4953,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_26819",
+                    "id": "GLTF_26819",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -4968,7 +4968,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_30983",
@@ -5034,7 +5034,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_23271",
+                    "id": "GLTF_23271",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5049,7 +5049,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_51596",
@@ -5115,7 +5115,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_75985",
+                    "id": "GLTF_75985",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5130,7 +5130,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_24170",
@@ -5196,7 +5196,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_70428",
+                    "id": "GLTF_70428",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5211,7 +5211,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_93369",
@@ -5277,7 +5277,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_24121",
+                    "id": "GLTF_24121",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5292,7 +5292,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_87281",
@@ -5358,7 +5358,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_61356",
+                    "id": "GLTF_61356",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5373,7 +5373,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_74513",
@@ -5439,7 +5439,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_67931",
+                    "id": "GLTF_67931",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5454,7 +5454,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_81224",
@@ -5520,7 +5520,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_54615",
+                    "id": "GLTF_54615",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5535,7 +5535,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_84891",
@@ -5668,7 +5668,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_8554",
+                    "id": "GLTF_8554",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5683,7 +5683,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_94846",
@@ -5749,7 +5749,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_69284",
+                    "id": "GLTF_69284",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5764,7 +5764,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_76417",
@@ -5830,7 +5830,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_25607",
+                    "id": "GLTF_25607",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5845,7 +5845,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_89060",
@@ -5911,7 +5911,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_60017",
+                    "id": "GLTF_60017",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -5926,7 +5926,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_90606",
@@ -5992,7 +5992,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_56710",
+                    "id": "GLTF_56710",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -6007,7 +6007,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_19347",
@@ -6073,7 +6073,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_12497",
+                    "id": "GLTF_12497",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -6088,7 +6088,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_77154",
@@ -6154,7 +6154,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_88120",
+                    "id": "GLTF_88120",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -6169,7 +6169,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_32609",
@@ -6235,7 +6235,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterGLTF_31679",
+                    "id": "GLTF_31679",
                     "loadAsync": false,
                     "options": {
                       "context": "item",
@@ -6250,7 +6250,7 @@
                       "slippery": false,
                       "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                     },
-                    "type": "BanterGLTF"
+                    "type": "GLTF"
                   },
                   {
                     "id": "MonoBehavior_88160",

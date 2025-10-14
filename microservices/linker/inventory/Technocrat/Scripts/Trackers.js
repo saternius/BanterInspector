@@ -38,9 +38,9 @@ let getOrMakeTracker = async (name)=>{
     if(!tracker){
         log("Trackers", "Tracker not found, loading =>", name);
         tracker = await LoadItem('Tracker', `People/${me}/Trackers`, {name: name});
-        let material = tracker.getComponent("BanterMaterial");
+        let material = tracker.getComponent("Material");
         material.Set("color", rgba);
-        let attachment = tracker.getComponent("BanterAttachedObject");
+        let attachment = tracker.getComponent("AttachedObject");
         attachment.Set("attachmentPoint", attachmentPoints[name]);
         attachment.Set("uid", scene.localUser.uid);
 

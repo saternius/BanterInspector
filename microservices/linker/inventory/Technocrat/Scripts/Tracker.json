@@ -6,50 +6,14 @@
     "children": [
       {
         "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
+        "id": "People/Technocrat/Trackers/HEAD/Holder",
         "initialized": true,
         "layer": 0,
         "loadAsync": false,
         "name": "Holder",
-        "parentId": "Scene/Tracker",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "parentId": "People/Technocrat/Trackers/HEAD",
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
             "y": 0,
@@ -66,10 +30,12 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
+        "id": "BanterGeometry_65608",
         "loadAsync": false,
         "options": {
           "context": "item",
@@ -104,9 +70,10 @@
           "width": 0.05,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
+        "id": "BanterMaterial_40372",
         "loadAsync": false,
         "options": {
           "context": "item",
@@ -124,9 +91,10 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
+        "id": "BanterAttachedObject_66227",
         "loadAsync": false,
         "options": {
           "context": "item",
@@ -136,15 +104,34 @@
           "attachmentPoint": 0,
           "uid": ""
         },
-        "type": "BanterAttachedObject"
+        "type": "AttachedObject"
       }
     ],
+    "id": "People/Technocrat/Trackers/HEAD",
     "initialized": true,
     "layer": 0,
     "loadAsync": false,
-    "name": "Tracker",
-    "parentId": "Scene",
-    "persistent": true
+    "name": "HEAD",
+    "parentId": "People/Technocrat/Trackers",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Scripts",
@@ -332,7 +319,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1760127933203,
+  "importedFrom": "inventory/Technocrat/Scripts",
   "itemType": "entity",
   "last_used": 1758008958455,
-  "name": "Tracker"
+  "name": "Tracker",
+  "remote": true
 }

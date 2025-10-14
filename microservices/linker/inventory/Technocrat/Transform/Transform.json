@@ -63,7 +63,7 @@
                   "width": 1.3,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -79,7 +79,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -144,7 +144,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -160,7 +160,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -210,7 +210,7 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -278,7 +278,7 @@
                   "width": 1.3,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -294,7 +294,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -359,7 +359,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -375,7 +375,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -425,7 +425,7 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -493,7 +493,7 @@
                   "width": 1.3,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -509,7 +509,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -574,7 +574,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -590,7 +590,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -640,7 +640,7 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,

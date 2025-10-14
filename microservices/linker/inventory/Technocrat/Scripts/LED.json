@@ -9,28 +9,6 @@
         "components": [
           {
             "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": -0.02696905942239835,
-                "y": -0.08105232689814816,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
             "options": {
               "context": "new"
             },
@@ -39,7 +17,7 @@
               "height": 0.1,
               "width": 0.01
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -58,7 +36,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "inventoryItem": {
@@ -94,7 +72,25 @@
         "loadAsync": false,
         "name": "rod1",
         "parentId": "Scene/LED",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.02696905942239835,
+            "y": -0.08105232689814816,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -102,33 +98,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": 0.023042988794965653,
-                "y": -0.08105233,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.01,
               "height": 0.1,
               "width": 0.01
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -157,7 +131,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           }
         ],
         "initialized": true,
@@ -165,16 +139,11 @@
         "loadAsync": false,
         "name": "rod2",
         "parentId": "Scene/LED",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": 0,
-            "y": 0,
+            "x": 0.023042988794965653,
+            "y": -0.08105233,
             "z": 0
           },
           "localRotation": {
@@ -188,9 +157,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "loadAsync": false,
         "options": {
@@ -201,7 +171,7 @@
           "height": 0.1,
           "width": 0.1
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -220,7 +190,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -267,7 +237,25 @@
     "loadAsync": false,
     "name": "LED",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Scripts",
@@ -556,7 +544,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1760127933203,
+  "importedFrom": "inventory/Technocrat/Scripts",
   "itemType": "entity",
   "last_used": 1759290037809,
-  "name": "LED"
+  "name": "LED",
+  "remote": true
 }

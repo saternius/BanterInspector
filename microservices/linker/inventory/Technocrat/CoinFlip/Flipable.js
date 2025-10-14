@@ -44,7 +44,7 @@ const tracks = {
 }
 
 this.onLoaded = ()=>{
-    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent("BanterAudioSource")
+    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent("AudioSource")
     Object.values(tracks).forEach((suburl)=>{
         preloadAudio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${suburl}`)
     })
@@ -53,11 +53,11 @@ this.onLoaded = ()=>{
 
 let play_audio = (track)=>{
     let source = track.split('_')[0]
-    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent("BanterAudioSource")
+    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent("AudioSource")
     audio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${tracks[track]}`)
 }
 
-let audio = this._entity.getComponent("BanterAudioSource")
+let audio = this._entity.getComponent("AudioSource")
 this.flip = async ()=>{
     let up_force = Math.random()*2+2
     let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2
@@ -65,7 +65,7 @@ this.flip = async ()=>{
     let z_torque = (Math.random() - 0.5) * 10 + 1  // Range: -4 to +6 
     log("flipable", up_force, x_torque, y_torque, z_torque)
 
-    let rigidBody = this._entity.getComponent("BanterRigidbody")
+    let rigidBody = this._entity.getComponent("Rigidbody")
     if(!rigidBody){
         log("flipable", "NO RIGIDBODY")
         return null;
@@ -113,7 +113,7 @@ this.trackCoin = () => {
             let lastPos = null;
 
             const checkInterval = setInterval(() => {
-                const rigidBody = this._entity.getComponent("BanterRigidbody");
+                const rigidBody = this._entity.getComponent("Rigidbody");
                 if (!rigidBody) {
                     clearInterval(checkInterval);
                     resolve(null);
@@ -208,7 +208,7 @@ this.onStart = ()=>{
     log("flipable", "Is Promise?", watchResult instanceof Promise);
 
     // Also test the rigidbody watcher
-    const rigidBody = this._entity.getComponent("BanterRigidbody");
+    const rigidBody = this._entity.getComponent("Rigidbody");
     if(rigidBody) {
         rigidBody.WatchProperties(['velocity', 'angularVelocity'], (data)=>{
             log("flipable", "velocity changed, data:", data);

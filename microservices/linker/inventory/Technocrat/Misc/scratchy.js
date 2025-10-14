@@ -42,7 +42,7 @@ const entityData = {
   
   entityData.components = [
     {
-      type: "BanterGLTF",
+      type: "GLTF",
       properties: {
         url: "https://your-cdn.com/model.glb",
         addColliders: true,

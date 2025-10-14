@@ -36,7 +36,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "initialized": true,
@@ -69,7 +69,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
         "initialized": true,
@@ -84,7 +84,7 @@
           "shaderName": "Standard",
           "side": 0
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       }
     ],
     "initialized": true,
@@ -107,9 +107,9 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "BanterBox_6051"
+        "id": "Box_6051"
       },
-      "componentType": "BanterBox",
+      "componentType": "Box",
       "entityId": "Scene/NewEntity_93781",
       "options": {
         "source": "ui"
@@ -117,7 +117,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterMaterial_6051",
+      "componentId": "Material_6051",
       "newValue": "Standard",
       "options": {
         "source": "ui"

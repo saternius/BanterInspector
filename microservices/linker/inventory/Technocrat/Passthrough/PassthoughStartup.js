@@ -25,7 +25,7 @@ passthroughBtn.addEventListener("click", async ()=>{
     cooledDown = false;
     showNotification("Spawning Passthrough")
     passthrough = await LoadItem("t712", "Scene")
-    let attachmentComponent = passthrough.getComponent("BanterAttachedObject")
+    let attachmentComponent = passthrough.getComponent("AttachedObject")
     await attachmentComponent.Set("uid", scene.localUser.uid)
     await passthrough.Set("name", "Passthrough_"+scene.localUser.name);
     passthroughBtn.disabled = true;

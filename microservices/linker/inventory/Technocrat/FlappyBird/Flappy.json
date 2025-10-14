@@ -76,7 +76,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "loadAsync": false,
@@ -111,7 +111,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -206,7 +206,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -244,7 +244,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   }
                 ],
                 "initialized": true,
@@ -328,7 +328,7 @@
                   "context": "item",
                   "loadAsync": false
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "loadAsync": false,
@@ -385,7 +385,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -423,7 +423,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               }
             ],
             "initialized": true,
@@ -583,7 +583,7 @@
               "text": "You made it to 0 ~(>.<)~\n Press R to restart",
               "verticalAlignment": 1
             },
-            "type": "BanterText"
+            "type": "Text"
           }
         ],
         "initialized": true,
@@ -668,7 +668,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -689,7 +689,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -765,7 +765,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -786,7 +786,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -862,7 +862,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -883,7 +883,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -959,7 +959,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -980,7 +980,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1056,7 +1056,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1077,7 +1077,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1153,7 +1153,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1174,7 +1174,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1250,7 +1250,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1271,7 +1271,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1347,7 +1347,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1368,7 +1368,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1444,7 +1444,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1465,7 +1465,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1541,7 +1541,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1562,7 +1562,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1638,7 +1638,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1659,7 +1659,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1735,7 +1735,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1756,7 +1756,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1832,7 +1832,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1853,7 +1853,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -1929,7 +1929,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -1950,7 +1950,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2026,7 +2026,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2047,7 +2047,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2123,7 +2123,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2144,7 +2144,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2220,7 +2220,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2241,7 +2241,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2317,7 +2317,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2338,7 +2338,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2414,7 +2414,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2435,7 +2435,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2511,7 +2511,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2532,7 +2532,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2608,7 +2608,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2629,7 +2629,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2705,7 +2705,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2726,7 +2726,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2802,7 +2802,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2823,7 +2823,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2899,7 +2899,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -2920,7 +2920,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -2996,7 +2996,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3017,7 +3017,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3093,7 +3093,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3114,7 +3114,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3190,7 +3190,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3211,7 +3211,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3287,7 +3287,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3308,7 +3308,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3424,7 +3424,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3445,7 +3445,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3521,7 +3521,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3542,7 +3542,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3618,7 +3618,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3639,7 +3639,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3715,7 +3715,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3736,7 +3736,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3812,7 +3812,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3833,7 +3833,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -3949,7 +3949,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -3970,7 +3970,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4046,7 +4046,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4067,7 +4067,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4143,7 +4143,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4164,7 +4164,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4240,7 +4240,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4261,7 +4261,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4337,7 +4337,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4358,7 +4358,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4434,7 +4434,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4455,7 +4455,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4531,7 +4531,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4552,7 +4552,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4628,7 +4628,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4649,7 +4649,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4765,7 +4765,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4786,7 +4786,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4862,7 +4862,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4883,7 +4883,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -4959,7 +4959,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -4980,7 +4980,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5056,7 +5056,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5077,7 +5077,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5153,7 +5153,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5174,7 +5174,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5250,7 +5250,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5271,7 +5271,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5347,7 +5347,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5368,7 +5368,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5484,7 +5484,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5505,7 +5505,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5581,7 +5581,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5602,7 +5602,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5718,7 +5718,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5739,7 +5739,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5815,7 +5815,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5836,7 +5836,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -5952,7 +5952,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -5973,7 +5973,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -6049,7 +6049,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -6070,7 +6070,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -6146,7 +6146,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
                         "loadAsync": false,
@@ -6167,7 +6167,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       }
                     ],
                     "initialized": true,
@@ -6286,7 +6286,7 @@
               "context": "item",
               "loadAsync": false
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           },
           {
             "loadAsync": false,
@@ -6324,7 +6324,7 @@
                 "z": 0
               }
             },
-            "type": "BanterRigidbody"
+            "type": "Rigidbody"
           },
           {
             "loadAsync": false,
@@ -6384,14 +6384,14 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "inventoryItem": {
               "active": false,
               "author": "Technocrat",
               "created": 1753682003733,
-              "data": "let getEntity = (slotPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+slotPath\n    //console.log(\"rel_path => \", rel_path)\n    return SM.getEntityById(rel_path)\n}\n\nlet getEntityScript = (slotPath, scriptName) =>{\n    let slot = getEntity(slotPath)\n    if(!slot){\n        console.log(\"NO SLOT IN PATH: \", slotPath)\n        return\n    }\n    //console.log(\"PIPE SLOT => \", slot)\n    return slot.components.find(x=>x.type === \"MonoBehavior\" && x.properties.name === scriptName)\n}\n\n\nlet getScript = async (slotPath, scriptName)=>{\n    const returnWhenSlotLoaded = () => {\n            return new Promise(resolve => {\n              const check = () => {\n                console.log(\"checking: \", this._running, this)\n                if(!this._running){\n                    resolve()\n                }else{\n                    const script = getEntityScript(slotPath, scriptName);\n                     //console.log(\"SCRIPT FOUND => \", script)\n                    if (script !== undefined ) {\n                      resolve(script.ctx);\n                    } else {\n                      // try again in 100 ms\n                      console.log(`Script in [${slotPath}](${scriptName}) not found from ${this._entity.id} retrying..`)\n                      setTimeout(check, 100);\n                    }\n                }\n              };\n              check();\n            });\n          };\n    return await returnWhenSlotLoaded();\n}\n\n\nlet handleScriptUpdates = async (event)=>{\n    console.log(\"[SCRIPT UPDATED]\", event)\n    if(event.detail.name === \"PipeSpawner\"){\n        console.log(\"GETTING NEW PIPESPAWNER\")\n        pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n        console.log(\"NEW PIPESPAWNER: \", pipeSpawner)\n    }\n}\n\n\n\n\nlet step_str = .75\nlet GROUND_FLOOR = 0\nlet CIELING = 4.5\nlet game_state = \"menu\"\nlet pipeSpawner = null;\nlet debugText = null;\nlet flying = true;\nlet alive = true;\nlet started = false;\nlet vy = 0;\nlet rotation = 0;\n// let material = this._entity.getComponent(\"BanterMaterial\")\n// let mat_id = material.id\nlet points = 0\nlet speed = 1\n\nthis.default = {\n    gravity: {\n        type: \"number\",\n        value: .05*step_str\n    },\n    jumpStrength: {\n        type: \"number\",\n        value: -.3*step_str\n    },\n    maxFallSpeed: {\n        type: \"number\",\n        value: 2.4*step_str\n    },\n    maxUpAngle:{\n        type: \"number\",\n        value: -30\n    },\n    maxDownAngle:{\n        type: \"number\",\n        value: 90\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\nlet v = (str)=>{\n    if(this.vars[str] === undefined){\n        if(this.default[str]){\n            this.vars[str] = this.default[str]\n        }\n        console.log(`VARIABLE [${str}] is not defined in $vars`)\n    }\n    return this.vars[str].value\n}\n\n\nfunction setStatus(text){\n    game_state = text\n    if(debugText){\n        let text_id = debugText.getComponent(\"BanterText\").id\n        SetComponentProp(text_id, \"text\", text)\n    }\n}\n\nlet die = ()=>{\n    if(!alive) return;\n    alive = false;\n//     SetComponentProp(mat_id, \"color\", {r:1,g:0,b:0,a:1})\n    pipeSpawner.stop()\n    let ascii = \"~(>.<)~\\n Press R to restart\"   // flustered\n    if(points > 32){\n        ascii = \"!!!\\\\(>w<)/!!!\"   // top tier\n    }else if(points > 16){\n        ascii = \"!(^O^)! \\n Press R to test the limit\"    // super excited\n    }else if(points > 8){\n        ascii = \"c(owo)c\\n Press R to go again\"    // grabby hands happy\n    }else if(points > 4){\n        ascii = \"q(uwu)p\\n Press R to do better\"    // soft emotional\n    }else if(points > 1){\n        ascii = \"(-_-#)\\n Press R to keep trying\"     // stinky mood\n    }\n\n    setStatus(`You made it to ${points} ${ascii}`)\n}\n\n\nthis.jump = ()=>{\n    if(alive){\n        vy = v('jumpStrength')\n    }\n}\n\nthis.score = ()=>{\n    points += 1\n    setStatus(points)\n}\n\nthis.reset = ()=>{\n    this.transform.Set(\"localPosition\", {x:0, y:3, z:0})\n    this.transform.Set(\"localRotation\", {x:0, y:0, z:0})\n    setStatus(\"Press F to start\")\n//     SetComponentProp(mat_id, \"color\", {r:1,g:1,b:0,a:1})\n    pipeSpawner.clear()\n    alive = true\n    vy = 0\n    rotation = 0;\n    started = false;\n    points = 0\n    speed = 1\n}\n\nthis.startRun = ()=>{\n    started = true\n    flying = true\n    pipeSpawner.start()\n    setStatus(\"0\")\n}\n\n\nlet handleKey = (e)=>{\n    console.log(e.code)\n    if(e.code === \"Numpad3\"){ //Reset\n        console.log(\"key => pip.clear\")\n        pipeSpawner.clear()\n    }\n    if(e.code === \"KeyR\"){\n        this.reset()\n    }\n    if(e.code === \"KeyF\"){\n        if(!started){\n            this.startRun()\n        }\n        this.jump()\n    }\n}\n\nthis.onStart = async ()=>{\n    console.log(\"onStart\");\n    pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n    debugText = getEntity(\"DebugText\")\n    window.addEventListener('script-refreshed', handleScriptUpdates)\n    window.addEventListener(\"keydown\", handleKey)\n    this.transform = this._entity.getTransform();\n    this.reset();\n}\n\nlet last_message = \"\"\nthis.onUpdate = ()=>{\n    if(!this.transform){\n        //log(\"BIRD\", \"transform not found\")\n        return\n    }\n    if(flying){\n        vy = Math.min(vy + v('gravity'), v('maxFallSpeed'));\n        this.transform.Add(\"localPosition\", {\n            x: 0,\n            y: -vy,\n            z: 0\n        })\n        \n        const factor = 120;\n        let rotation = vy * factor;\n        rotation = Math.max(v('maxUpAngle'), Math.min(rotation, v('maxDownAngle')));\n        this.transform.Set(\"localRotation\", {\n            z:rotation\n        });\n        \n        if(alive){\n            speed += .001\n            pipeSpawner.setSpeed(speed)\n            setStatus(`${points}: ${speed.toFixed(3)}`)\n        }\n    }\n    \n    \n    let yPos = this.transform.properties.localPosition.y;\n    message = `flying: ${flying}, vy: ${vy}, rotation: ${rotation}, yPos: ${yPos}`\n    if(message !== last_message){\n        last_message = message;\n    }\n    if(yPos < GROUND_FLOOR){\n        flying = false;\n        die()\n    }\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(\"keydown\", handleKey)\n    window.removeEventListener('script-refreshed', handleScriptUpdates)\n    this._entity._bs.listeners.get(\"trigger-enter\").clear();\n}\n\n\nthis._entity._bs.On(\"trigger-enter\", (e)=>{\n    console.log(\"[TRIGGER]\", e)\n    die()\n})",
+              "data": "let getEntity = (slotPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+slotPath\n    //console.log(\"rel_path => \", rel_path)\n    return SM.getEntityById(rel_path)\n}\n\nlet getEntityScript = (slotPath, scriptName) =>{\n    let slot = getEntity(slotPath)\n    if(!slot){\n        console.log(\"NO SLOT IN PATH: \", slotPath)\n        return\n    }\n    //console.log(\"PIPE SLOT => \", slot)\n    return slot.components.find(x=>x.type === \"MonoBehavior\" && x.properties.name === scriptName)\n}\n\n\nlet getScript = async (slotPath, scriptName)=>{\n    const returnWhenSlotLoaded = () => {\n            return new Promise(resolve => {\n              const check = () => {\n                console.log(\"checking: \", this._running, this)\n                if(!this._running){\n                    resolve()\n                }else{\n                    const script = getEntityScript(slotPath, scriptName);\n                     //console.log(\"SCRIPT FOUND => \", script)\n                    if (script !== undefined ) {\n                      resolve(script.ctx);\n                    } else {\n                      // try again in 100 ms\n                      console.log(`Script in [${slotPath}](${scriptName}) not found from ${this._entity.id} retrying..`)\n                      setTimeout(check, 100);\n                    }\n                }\n              };\n              check();\n            });\n          };\n    return await returnWhenSlotLoaded();\n}\n\n\nlet handleScriptUpdates = async (event)=>{\n    console.log(\"[SCRIPT UPDATED]\", event)\n    if(event.detail.name === \"PipeSpawner\"){\n        console.log(\"GETTING NEW PIPESPAWNER\")\n        pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n        console.log(\"NEW PIPESPAWNER: \", pipeSpawner)\n    }\n}\n\n\n\n\nlet step_str = .75\nlet GROUND_FLOOR = 0\nlet CIELING = 4.5\nlet game_state = \"menu\"\nlet pipeSpawner = null;\nlet debugText = null;\nlet flying = true;\nlet alive = true;\nlet started = false;\nlet vy = 0;\nlet rotation = 0;\n// let material = this._entity.getComponent(\"Material\")\n// let mat_id = material.id\nlet points = 0\nlet speed = 1\n\nthis.default = {\n    gravity: {\n        type: \"number\",\n        value: .05*step_str\n    },\n    jumpStrength: {\n        type: \"number\",\n        value: -.3*step_str\n    },\n    maxFallSpeed: {\n        type: \"number\",\n        value: 2.4*step_str\n    },\n    maxUpAngle:{\n        type: \"number\",\n        value: -30\n    },\n    maxDownAngle:{\n        type: \"number\",\n        value: 90\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\nlet v = (str)=>{\n    if(this.vars[str] === undefined){\n        if(this.default[str]){\n            this.vars[str] = this.default[str]\n        }\n        console.log(`VARIABLE [${str}] is not defined in $vars`)\n    }\n    return this.vars[str].value\n}\n\n\nfunction setStatus(text){\n    game_state = text\n    if(debugText){\n        let text_id = debugText.getComponent(\"Text\").id\n        SetComponentProp(text_id, \"text\", text)\n    }\n}\n\nlet die = ()=>{\n    if(!alive) return;\n    alive = false;\n//     SetComponentProp(mat_id, \"color\", {r:1,g:0,b:0,a:1})\n    pipeSpawner.stop()\n    let ascii = \"~(>.<)~\\n Press R to restart\"   // flustered\n    if(points > 32){\n        ascii = \"!!!\\\\(>w<)/!!!\"   // top tier\n    }else if(points > 16){\n        ascii = \"!(^O^)! \\n Press R to test the limit\"    // super excited\n    }else if(points > 8){\n        ascii = \"c(owo)c\\n Press R to go again\"    // grabby hands happy\n    }else if(points > 4){\n        ascii = \"q(uwu)p\\n Press R to do better\"    // soft emotional\n    }else if(points > 1){\n        ascii = \"(-_-#)\\n Press R to keep trying\"     // stinky mood\n    }\n\n    setStatus(`You made it to ${points} ${ascii}`)\n}\n\n\nthis.jump = ()=>{\n    if(alive){\n        vy = v('jumpStrength')\n    }\n}\n\nthis.score = ()=>{\n    points += 1\n    setStatus(points)\n}\n\nthis.reset = ()=>{\n    this.transform.Set(\"localPosition\", {x:0, y:3, z:0})\n    this.transform.Set(\"localRotation\", {x:0, y:0, z:0})\n    setStatus(\"Press F to start\")\n//     SetComponentProp(mat_id, \"color\", {r:1,g:1,b:0,a:1})\n    pipeSpawner.clear()\n    alive = true\n    vy = 0\n    rotation = 0;\n    started = false;\n    points = 0\n    speed = 1\n}\n\nthis.startRun = ()=>{\n    started = true\n    flying = true\n    pipeSpawner.start()\n    setStatus(\"0\")\n}\n\n\nlet handleKey = (e)=>{\n    console.log(e.code)\n    if(e.code === \"Numpad3\"){ //Reset\n        console.log(\"key => pip.clear\")\n        pipeSpawner.clear()\n    }\n    if(e.code === \"KeyR\"){\n        this.reset()\n    }\n    if(e.code === \"KeyF\"){\n        if(!started){\n            this.startRun()\n        }\n        this.jump()\n    }\n}\n\nthis.onStart = async ()=>{\n    console.log(\"onStart\");\n    pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n    debugText = getEntity(\"DebugText\")\n    window.addEventListener('script-refreshed', handleScriptUpdates)\n    window.addEventListener(\"keydown\", handleKey)\n    this.transform = this._entity.getTransform();\n    this.reset();\n}\n\nlet last_message = \"\"\nthis.onUpdate = ()=>{\n    if(!this.transform){\n        //log(\"BIRD\", \"transform not found\")\n        return\n    }\n    if(flying){\n        vy = Math.min(vy + v('gravity'), v('maxFallSpeed'));\n        this.transform.Add(\"localPosition\", {\n            x: 0,\n            y: -vy,\n            z: 0\n        })\n        \n        const factor = 120;\n        let rotation = vy * factor;\n        rotation = Math.max(v('maxUpAngle'), Math.min(rotation, v('maxDownAngle')));\n        this.transform.Set(\"localRotation\", {\n            z:rotation\n        });\n        \n        if(alive){\n            speed += .001\n            pipeSpawner.setSpeed(speed)\n            setStatus(`${points}: ${speed.toFixed(3)}`)\n        }\n    }\n    \n    \n    let yPos = this.transform.properties.localPosition.y;\n    message = `flying: ${flying}, vy: ${vy}, rotation: ${rotation}, yPos: ${yPos}`\n    if(message !== last_message){\n        last_message = message;\n    }\n    if(yPos < GROUND_FLOOR){\n        flying = false;\n        die()\n    }\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(\"keydown\", handleKey)\n    window.removeEventListener('script-refreshed', handleScriptUpdates)\n    this._entity._bs.listeners.get(\"trigger-enter\").clear();\n}\n\n\nthis._entity._bs.On(\"trigger-enter\", (e)=>{\n    console.log(\"[TRIGGER]\", e)\n    die()\n})",
               "folder": "FlappyBird",
               "itemType": "script",
               "last_used": 1759371720970,
@@ -6522,7 +6522,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterGeometry_49967",
+                        "id": "Geometry_49967",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -6557,10 +6557,10 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       },
                       {
-                        "id": "BanterMaterial_21226",
+                        "id": "Material_21226",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -6592,7 +6592,7 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       },
                       {
                         "id": "BoxCollider_72274",
@@ -6656,7 +6656,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterMaterial_70229",
+                        "id": "Material_70229",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -6688,10 +6688,10 @@
                           "side": 0,
                           "texture": ""
                         },
-                        "type": "BanterMaterial"
+                        "type": "Material"
                       },
                       {
-                        "id": "BanterGeometry_81768",
+                        "id": "Geometry_81768",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -6726,7 +6726,7 @@
                           "width": 1,
                           "widthSegments": 1
                         },
-                        "type": "BanterGeometry"
+                        "type": "Geometry"
                       }
                     ],
                     "id": "Scene/Flappy2_87399/Stage/Ground/Dirt",
@@ -6806,13 +6806,13 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterColliderEvents_37599",
+                    "id": "ColliderEvents_37599",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
                       "context": "item"
                     },
-                    "type": "BanterColliderEvents"
+                    "type": "ColliderEvents"
                   },
                   {
                     "id": "BoxCollider_65208",
@@ -6837,7 +6837,7 @@
                     "type": "BoxCollider"
                   },
                   {
-                    "id": "BanterMaterial_57285",
+                    "id": "Material_57285",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -6869,10 +6869,10 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
-                    "id": "BanterGeometry_18753",
+                    "id": "Geometry_18753",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -6907,7 +6907,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   }
                 ],
                 "id": "Scene/Flappy2_87399/Stage/Clouds",
@@ -7050,7 +7050,7 @@
                 "type": "Transform"
               },
               {
-                "id": "BanterText_36872",
+                "id": "Text_36872",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
@@ -7070,7 +7070,7 @@
                   "text": "0: 1.011",
                   "verticalAlignment": 1
                 },
-                "type": "BanterText"
+                "type": "Text"
               }
             ],
             "id": "Scene/Flappy2_87399/DebugText",
@@ -7121,7 +7121,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_3325",
+                            "id": "Geometry_3325",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7156,10 +7156,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_40225",
+                            "id": "Material_40225",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7177,7 +7177,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box",
@@ -7219,7 +7219,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_58946",
+                            "id": "Geometry_58946",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7254,10 +7254,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_9869",
+                            "id": "Material_9869",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7275,7 +7275,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_20271",
@@ -7317,7 +7317,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_22291",
+                            "id": "Geometry_22291",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7352,10 +7352,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_76153",
+                            "id": "Material_76153",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7373,7 +7373,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_60198",
@@ -7415,7 +7415,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_83748",
+                            "id": "Geometry_83748",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7450,10 +7450,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_68459",
+                            "id": "Material_68459",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7471,7 +7471,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_34266",
@@ -7513,7 +7513,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_21897",
+                            "id": "Geometry_21897",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7548,10 +7548,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_36066",
+                            "id": "Material_36066",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7569,7 +7569,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_22161",
@@ -7611,7 +7611,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_77833",
+                            "id": "Geometry_77833",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7646,10 +7646,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_43280",
+                            "id": "Material_43280",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7667,7 +7667,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_52272",
@@ -7709,7 +7709,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_96826",
+                            "id": "Geometry_96826",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7744,10 +7744,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_74126",
+                            "id": "Material_74126",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7765,7 +7765,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_6926",
@@ -7807,7 +7807,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_31162",
+                            "id": "Geometry_31162",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7842,10 +7842,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_71210",
+                            "id": "Material_71210",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7863,7 +7863,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_43966",
@@ -7905,7 +7905,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_62426",
+                            "id": "Geometry_62426",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7940,10 +7940,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_34853",
+                            "id": "Material_34853",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -7961,7 +7961,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_34362",
@@ -8003,7 +8003,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_12968",
+                            "id": "Geometry_12968",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8038,10 +8038,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_31958",
+                            "id": "Material_31958",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8059,7 +8059,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_74788",
@@ -8101,7 +8101,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_59477",
+                            "id": "Geometry_59477",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8136,10 +8136,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_89397",
+                            "id": "Material_89397",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8157,7 +8157,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_51877",
@@ -8199,7 +8199,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_70033",
+                            "id": "Geometry_70033",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8234,10 +8234,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_26472",
+                            "id": "Material_26472",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8255,7 +8255,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_48182",
@@ -8297,7 +8297,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_68050",
+                            "id": "Geometry_68050",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8332,10 +8332,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_42050",
+                            "id": "Material_42050",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8353,7 +8353,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_54106",
@@ -8395,7 +8395,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_58741",
+                            "id": "Geometry_58741",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8430,10 +8430,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_35786",
+                            "id": "Material_35786",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8451,7 +8451,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_48657",
@@ -8493,7 +8493,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_66398",
+                            "id": "Geometry_66398",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8528,10 +8528,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_99059",
+                            "id": "Material_99059",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8549,7 +8549,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_78877",
@@ -8591,7 +8591,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_60410",
+                            "id": "Geometry_60410",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8626,10 +8626,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_19920",
+                            "id": "Material_19920",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8647,7 +8647,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_77793",
@@ -8689,7 +8689,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_73828",
+                            "id": "Geometry_73828",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8724,10 +8724,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_98828",
+                            "id": "Material_98828",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8745,7 +8745,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_70143",
@@ -8787,7 +8787,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_72624",
+                            "id": "Geometry_72624",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8822,10 +8822,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_97051",
+                            "id": "Material_97051",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8843,7 +8843,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_24740",
@@ -8885,7 +8885,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_8093",
+                            "id": "Geometry_8093",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8920,10 +8920,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_35054",
+                            "id": "Material_35054",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -8941,7 +8941,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_55634",
@@ -8983,7 +8983,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_69742",
+                            "id": "Geometry_69742",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9018,10 +9018,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_60112",
+                            "id": "Material_60112",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9039,7 +9039,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_29698",
@@ -9081,7 +9081,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_22320",
+                            "id": "Geometry_22320",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9116,10 +9116,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_45594",
+                            "id": "Material_45594",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9137,7 +9137,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_11146",
@@ -9179,7 +9179,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_38888",
+                            "id": "Geometry_38888",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9214,10 +9214,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_86273",
+                            "id": "Material_86273",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9235,7 +9235,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_20540",
@@ -9277,7 +9277,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_90784",
+                            "id": "Geometry_90784",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9312,10 +9312,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_53746",
+                            "id": "Material_53746",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9333,7 +9333,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_38116",
@@ -9375,7 +9375,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_54465",
+                            "id": "Geometry_54465",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9410,10 +9410,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_2784",
+                            "id": "Material_2784",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9431,7 +9431,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_38161",
@@ -9473,7 +9473,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_87231",
+                            "id": "Geometry_87231",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9508,10 +9508,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_52093",
+                            "id": "Material_52093",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9529,7 +9529,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_8717",
@@ -9571,7 +9571,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_61195",
+                            "id": "Geometry_61195",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9606,10 +9606,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_10151",
+                            "id": "Material_10151",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9627,7 +9627,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_91283",
@@ -9669,7 +9669,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_35644",
+                            "id": "Geometry_35644",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9704,10 +9704,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_43773",
+                            "id": "Material_43773",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9725,7 +9725,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_56158",
@@ -9767,7 +9767,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_93358",
+                            "id": "Geometry_93358",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9802,10 +9802,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_48906",
+                            "id": "Material_48906",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9823,7 +9823,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Black/Box_67596",
@@ -9906,7 +9906,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_37889",
+                            "id": "Geometry_37889",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9941,10 +9941,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_751",
+                            "id": "Material_751",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -9962,7 +9962,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_1/Box",
@@ -10004,7 +10004,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_10454",
+                            "id": "Geometry_10454",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10039,10 +10039,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_49780",
+                            "id": "Material_49780",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10060,7 +10060,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_1/Box_53078",
@@ -10102,7 +10102,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_88138",
+                            "id": "Geometry_88138",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10137,10 +10137,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_93647",
+                            "id": "Material_93647",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10158,7 +10158,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_1/Box_50714",
@@ -10200,7 +10200,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_8759",
+                            "id": "Geometry_8759",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10235,10 +10235,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_6399",
+                            "id": "Material_6399",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10256,7 +10256,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_1/Box_51453",
@@ -10298,7 +10298,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_6574",
+                            "id": "Geometry_6574",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10333,10 +10333,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_45495",
+                            "id": "Material_45495",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10354,7 +10354,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_1/Box_95768",
@@ -10437,7 +10437,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_42730",
+                            "id": "Geometry_42730",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10472,10 +10472,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_5393",
+                            "id": "Material_5393",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10493,7 +10493,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box",
@@ -10535,7 +10535,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_91862",
+                            "id": "Geometry_91862",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10570,10 +10570,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_95927",
+                            "id": "Material_95927",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10591,7 +10591,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_53562",
@@ -10633,7 +10633,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_88658",
+                            "id": "Geometry_88658",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10668,10 +10668,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_28621",
+                            "id": "Material_28621",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10689,7 +10689,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_51049",
@@ -10731,7 +10731,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_44850",
+                            "id": "Geometry_44850",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10766,10 +10766,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_15011",
+                            "id": "Material_15011",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10787,7 +10787,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_50257",
@@ -10829,7 +10829,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_77463",
+                            "id": "Geometry_77463",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10864,10 +10864,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_18026",
+                            "id": "Material_18026",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10885,7 +10885,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_65241",
@@ -10927,7 +10927,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_42395",
+                            "id": "Geometry_42395",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10962,10 +10962,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_10070",
+                            "id": "Material_10070",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -10983,7 +10983,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_16833",
@@ -11025,7 +11025,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_75045",
+                            "id": "Geometry_75045",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11060,10 +11060,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_86441",
+                            "id": "Material_86441",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11081,7 +11081,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_28910",
@@ -11123,7 +11123,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_22168",
+                            "id": "Geometry_22168",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11158,10 +11158,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_4856",
+                            "id": "Material_4856",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11179,7 +11179,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/White/Box_33275",
@@ -11262,7 +11262,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_47417",
+                            "id": "Geometry_47417",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11297,10 +11297,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_72874",
+                            "id": "Material_72874",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11318,7 +11318,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box",
@@ -11360,7 +11360,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_3730",
+                            "id": "Geometry_3730",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11395,10 +11395,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_12729",
+                            "id": "Material_12729",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11416,7 +11416,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_14379",
@@ -11458,7 +11458,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_53270",
+                            "id": "Geometry_53270",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11493,10 +11493,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_75027",
+                            "id": "Material_75027",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11514,7 +11514,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_5676",
@@ -11556,7 +11556,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_59377",
+                            "id": "Geometry_59377",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11591,10 +11591,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_7516",
+                            "id": "Material_7516",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11612,7 +11612,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_93542",
@@ -11654,7 +11654,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_93320",
+                            "id": "Geometry_93320",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11689,10 +11689,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_45567",
+                            "id": "Material_45567",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11710,7 +11710,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_74438",
@@ -11752,7 +11752,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_7419",
+                            "id": "Geometry_7419",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11787,10 +11787,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_73002",
+                            "id": "Material_73002",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11808,7 +11808,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_15769",
@@ -11850,7 +11850,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_5359",
+                            "id": "Geometry_5359",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11885,10 +11885,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_63638",
+                            "id": "Material_63638",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -11906,7 +11906,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Yellow_2/Box_62862",
@@ -11989,7 +11989,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_23116",
+                            "id": "Geometry_23116",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12024,10 +12024,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_23594",
+                            "id": "Material_23594",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12045,7 +12045,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Grey/Box",
@@ -12087,7 +12087,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_95772",
+                            "id": "Geometry_95772",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12122,10 +12122,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_30861",
+                            "id": "Material_30861",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12143,7 +12143,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Grey/Box_59147",
@@ -12226,7 +12226,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_10692",
+                            "id": "Geometry_10692",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12261,10 +12261,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_88660",
+                            "id": "Material_88660",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12282,7 +12282,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Orange/Box",
@@ -12324,7 +12324,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_95021",
+                            "id": "Geometry_95021",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12359,10 +12359,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_73936",
+                            "id": "Material_73936",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12380,7 +12380,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Orange/Box_30884",
@@ -12463,7 +12463,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_67967",
+                            "id": "Geometry_67967",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12498,10 +12498,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_66931",
+                            "id": "Material_66931",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12519,7 +12519,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Red/Box",
@@ -12561,7 +12561,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_52085",
+                            "id": "Geometry_52085",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12596,10 +12596,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_52280",
+                            "id": "Material_52280",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12617,7 +12617,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Red/Box_97520",
@@ -12659,7 +12659,7 @@
                             "type": "Transform"
                           },
                           {
-                            "id": "BanterGeometry_55805",
+                            "id": "Geometry_55805",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12694,10 +12694,10 @@
                               "width": 1,
                               "widthSegments": 1
                             },
-                            "type": "BanterGeometry"
+                            "type": "Geometry"
                           },
                           {
-                            "id": "BanterMaterial_39856",
+                            "id": "Material_39856",
                             "loadAsync": false,
                             "options": {
                               "cmdUser": "Technocrat",
@@ -12715,7 +12715,7 @@
                               "side": 0,
                               "texture": ""
                             },
-                            "type": "BanterMaterial"
+                            "type": "Material"
                           }
                         ],
                         "id": "Scene/Flappy2_87399/Bird/Bird_67778/Red/Box_23060",
@@ -12831,16 +12831,16 @@
                 "type": "Transform"
               },
               {
-                "id": "BanterColliderEvents_7883",
+                "id": "ColliderEvents_7883",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
                   "context": "item"
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
-                "id": "BanterRigidbody_68245",
+                "id": "Rigidbody_68245",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
@@ -12875,7 +12875,7 @@
                     "z": 0
                   }
                 },
-                "type": "BanterRigidbody"
+                "type": "Rigidbody"
               },
               {
                 "id": "BoxCollider_97598",
@@ -12900,7 +12900,7 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "BanterGeometry_10822",
+                "id": "Geometry_10822",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
@@ -12935,7 +12935,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "MonoBehavior_7297",
@@ -12943,7 +12943,7 @@
                   "active": false,
                   "author": "Technocrat",
                   "created": 1753682003733,
-                  "data": "let getEntity = (slotPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+slotPath\n    //console.log(\"rel_path => \", rel_path)\n    return SM.getEntityById(rel_path)\n}\n\nlet getEntityScript = (slotPath, scriptName) =>{\n    let slot = getEntity(slotPath)\n    if(!slot){\n        console.log(\"NO SLOT IN PATH: \", slotPath)\n        return\n    }\n    //console.log(\"PIPE SLOT => \", slot)\n    return slot.components.find(x=>x.type === \"MonoBehavior\" && x.properties.name === scriptName)\n}\n\n\nlet getScript = async (slotPath, scriptName)=>{\n    const returnWhenSlotLoaded = () => {\n            return new Promise(resolve => {\n              const check = () => {\n                console.log(\"checking: \", this._running, this)\n                if(!this._running){\n                    resolve()\n                }else{\n                    const script = getEntityScript(slotPath, scriptName);\n                     //console.log(\"SCRIPT FOUND => \", script)\n                    if (script !== undefined ) {\n                      resolve(script.ctx);\n                    } else {\n                      // try again in 100 ms\n                      console.log(`Script in [${slotPath}](${scriptName}) not found from ${this._entity.id} retrying..`)\n                      setTimeout(check, 100);\n                    }\n                }\n              };\n              check();\n            });\n          };\n    return await returnWhenSlotLoaded();\n}\n\n\nlet handleScriptUpdates = async (event)=>{\n    console.log(\"[SCRIPT UPDATED]\", event)\n    if(event.detail.name === \"PipeSpawner\"){\n        console.log(\"GETTING NEW PIPESPAWNER\")\n        pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n        console.log(\"NEW PIPESPAWNER: \", pipeSpawner)\n    }\n}\n\n\n\n\nlet step_str = .75\nlet GROUND_FLOOR = 0\nlet CIELING = 4.5\nlet game_state = \"menu\"\nlet pipeSpawner = null;\nlet debugText = null;\nlet flying = true;\nlet alive = true;\nlet started = false;\nlet vy = 0;\nlet rotation = 0;\n// let material = this._entity.getComponent(\"BanterMaterial\")\n// let mat_id = material.id\nlet points = 0\nlet speed = 1\n\nthis.default = {\n    gravity: {\n        type: \"number\",\n        value: .05*step_str\n    },\n    jumpStrength: {\n        type: \"number\",\n        value: -.3*step_str\n    },\n    maxFallSpeed: {\n        type: \"number\",\n        value: 2.4*step_str\n    },\n    maxUpAngle:{\n        type: \"number\",\n        value: -30\n    },\n    maxDownAngle:{\n        type: \"number\",\n        value: 90\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\nlet v = (str)=>{\n    if(this.vars[str] === undefined){\n        if(this.default[str]){\n            this.vars[str] = this.default[str]\n        }\n        console.log(`VARIABLE [${str}] is not defined in $vars`)\n    }\n    return this.vars[str].value\n}\n\n\nfunction setStatus(text){\n    game_state = text\n    if(debugText){\n        let text_id = debugText.getComponent(\"BanterText\").id\n        SetComponentProp(text_id, \"text\", text)\n    }\n}\n\nlet die = ()=>{\n    if(!alive) return;\n    alive = false;\n//     SetComponentProp(mat_id, \"color\", {r:1,g:0,b:0,a:1})\n    pipeSpawner.stop()\n    let ascii = \"~(>.<)~\\n Press R to restart\"   // flustered\n    if(points > 32){\n        ascii = \"!!!\\\\(>w<)/!!!\"   // top tier\n    }else if(points > 16){\n        ascii = \"!(^O^)! \\n Press R to test the limit\"    // super excited\n    }else if(points > 8){\n        ascii = \"c(owo)c\\n Press R to go again\"    // grabby hands happy\n    }else if(points > 4){\n        ascii = \"q(uwu)p\\n Press R to do better\"    // soft emotional\n    }else if(points > 1){\n        ascii = \"(-_-#)\\n Press R to keep trying\"     // stinky mood\n    }\n\n    setStatus(`You made it to ${points} ${ascii}`)\n}\n\n\nthis.jump = ()=>{\n    if(alive){\n        vy = v('jumpStrength')\n    }\n}\n\nthis.score = ()=>{\n    points += 1\n    setStatus(points)\n}\n\nthis.reset = ()=>{\n    this.transform.Set(\"localPosition\", {x:0, y:3, z:0})\n    this.transform.Set(\"localRotation\", {x:0, y:0, z:0})\n    setStatus(\"Press F to start\")\n//     SetComponentProp(mat_id, \"color\", {r:1,g:1,b:0,a:1})\n    pipeSpawner.clear()\n    alive = true\n    vy = 0\n    rotation = 0;\n    started = false;\n    points = 0\n    speed = 1\n}\n\nthis.startRun = ()=>{\n    started = true\n    flying = true\n    pipeSpawner.start()\n    setStatus(\"0\")\n}\n\n\nlet handleKey = (e)=>{\n    console.log(e.code)\n    if(e.code === \"Numpad3\"){ //Reset\n        console.log(\"key => pip.clear\")\n        pipeSpawner.clear()\n    }\n    if(e.code === \"KeyR\"){\n        this.reset()\n    }\n    if(e.code === \"KeyF\"){\n        if(!started){\n            this.startRun()\n        }\n        this.jump()\n    }\n}\n\nthis.onStart = async ()=>{\n    console.log(\"onStart\");\n    pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n    debugText = getEntity(\"DebugText\")\n    window.addEventListener('script-refreshed', handleScriptUpdates)\n    window.addEventListener(\"keydown\", handleKey)\n    this.transform = this._entity.getTransform();\n    this.reset();\n}\n\nlet last_message = \"\"\nthis.onUpdate = ()=>{\n    if(!this.transform){\n        //log(\"BIRD\", \"transform not found\")\n        return\n    }\n    if(flying){\n        vy = Math.min(vy + v('gravity'), v('maxFallSpeed'));\n        this.transform.Add(\"localPosition\", {\n            x: 0,\n            y: -vy,\n            z: 0\n        })\n        \n        const factor = 120;\n        let rotation = vy * factor;\n        rotation = Math.max(v('maxUpAngle'), Math.min(rotation, v('maxDownAngle')));\n        this.transform.Set(\"localRotation\", {\n            z:rotation\n        });\n        \n        if(alive){\n            speed += .001\n            pipeSpawner.setSpeed(speed)\n            setStatus(`${points}: ${speed.toFixed(3)}`)\n        }\n    }\n    \n    \n    let yPos = this.transform.properties.localPosition.y;\n    message = `flying: ${flying}, vy: ${vy}, rotation: ${rotation}, yPos: ${yPos}`\n    if(message !== last_message){\n        last_message = message;\n    }\n    if(yPos < GROUND_FLOOR){\n        flying = false;\n        die()\n    }\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(\"keydown\", handleKey)\n    window.removeEventListener('script-refreshed', handleScriptUpdates)\n    this._entity._bs.listeners.get(\"trigger-enter\").clear();\n}\n\n\nthis._entity._bs.On(\"trigger-enter\", (e)=>{\n    console.log(\"[TRIGGER]\", e)\n    die()\n})",
+                  "data": "let getEntity = (slotPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+slotPath\n    //console.log(\"rel_path => \", rel_path)\n    return SM.getEntityById(rel_path)\n}\n\nlet getEntityScript = (slotPath, scriptName) =>{\n    let slot = getEntity(slotPath)\n    if(!slot){\n        console.log(\"NO SLOT IN PATH: \", slotPath)\n        return\n    }\n    //console.log(\"PIPE SLOT => \", slot)\n    return slot.components.find(x=>x.type === \"MonoBehavior\" && x.properties.name === scriptName)\n}\n\n\nlet getScript = async (slotPath, scriptName)=>{\n    const returnWhenSlotLoaded = () => {\n            return new Promise(resolve => {\n              const check = () => {\n                console.log(\"checking: \", this._running, this)\n                if(!this._running){\n                    resolve()\n                }else{\n                    const script = getEntityScript(slotPath, scriptName);\n                     //console.log(\"SCRIPT FOUND => \", script)\n                    if (script !== undefined ) {\n                      resolve(script.ctx);\n                    } else {\n                      // try again in 100 ms\n                      console.log(`Script in [${slotPath}](${scriptName}) not found from ${this._entity.id} retrying..`)\n                      setTimeout(check, 100);\n                    }\n                }\n              };\n              check();\n            });\n          };\n    return await returnWhenSlotLoaded();\n}\n\n\nlet handleScriptUpdates = async (event)=>{\n    console.log(\"[SCRIPT UPDATED]\", event)\n    if(event.detail.name === \"PipeSpawner\"){\n        console.log(\"GETTING NEW PIPESPAWNER\")\n        pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n        console.log(\"NEW PIPESPAWNER: \", pipeSpawner)\n    }\n}\n\n\n\n\nlet step_str = .75\nlet GROUND_FLOOR = 0\nlet CIELING = 4.5\nlet game_state = \"menu\"\nlet pipeSpawner = null;\nlet debugText = null;\nlet flying = true;\nlet alive = true;\nlet started = false;\nlet vy = 0;\nlet rotation = 0;\n// let material = this._entity.getComponent(\"Material\")\n// let mat_id = material.id\nlet points = 0\nlet speed = 1\n\nthis.default = {\n    gravity: {\n        type: \"number\",\n        value: .05*step_str\n    },\n    jumpStrength: {\n        type: \"number\",\n        value: -.3*step_str\n    },\n    maxFallSpeed: {\n        type: \"number\",\n        value: 2.4*step_str\n    },\n    maxUpAngle:{\n        type: \"number\",\n        value: -30\n    },\n    maxDownAngle:{\n        type: \"number\",\n        value: 90\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\nlet v = (str)=>{\n    if(this.vars[str] === undefined){\n        if(this.default[str]){\n            this.vars[str] = this.default[str]\n        }\n        console.log(`VARIABLE [${str}] is not defined in $vars`)\n    }\n    return this.vars[str].value\n}\n\n\nfunction setStatus(text){\n    game_state = text\n    if(debugText){\n        let text_id = debugText.getComponent(\"Text\").id\n        SetComponentProp(text_id, \"text\", text)\n    }\n}\n\nlet die = ()=>{\n    if(!alive) return;\n    alive = false;\n//     SetComponentProp(mat_id, \"color\", {r:1,g:0,b:0,a:1})\n    pipeSpawner.stop()\n    let ascii = \"~(>.<)~\\n Press R to restart\"   // flustered\n    if(points > 32){\n        ascii = \"!!!\\\\(>w<)/!!!\"   // top tier\n    }else if(points > 16){\n        ascii = \"!(^O^)! \\n Press R to test the limit\"    // super excited\n    }else if(points > 8){\n        ascii = \"c(owo)c\\n Press R to go again\"    // grabby hands happy\n    }else if(points > 4){\n        ascii = \"q(uwu)p\\n Press R to do better\"    // soft emotional\n    }else if(points > 1){\n        ascii = \"(-_-#)\\n Press R to keep trying\"     // stinky mood\n    }\n\n    setStatus(`You made it to ${points} ${ascii}`)\n}\n\n\nthis.jump = ()=>{\n    if(alive){\n        vy = v('jumpStrength')\n    }\n}\n\nthis.score = ()=>{\n    points += 1\n    setStatus(points)\n}\n\nthis.reset = ()=>{\n    this.transform.Set(\"localPosition\", {x:0, y:3, z:0})\n    this.transform.Set(\"localRotation\", {x:0, y:0, z:0})\n    setStatus(\"Press F to start\")\n//     SetComponentProp(mat_id, \"color\", {r:1,g:1,b:0,a:1})\n    pipeSpawner.clear()\n    alive = true\n    vy = 0\n    rotation = 0;\n    started = false;\n    points = 0\n    speed = 1\n}\n\nthis.startRun = ()=>{\n    started = true\n    flying = true\n    pipeSpawner.start()\n    setStatus(\"0\")\n}\n\n\nlet handleKey = (e)=>{\n    console.log(e.code)\n    if(e.code === \"Numpad3\"){ //Reset\n        console.log(\"key => pip.clear\")\n        pipeSpawner.clear()\n    }\n    if(e.code === \"KeyR\"){\n        this.reset()\n    }\n    if(e.code === \"KeyF\"){\n        if(!started){\n            this.startRun()\n        }\n        this.jump()\n    }\n}\n\nthis.onStart = async ()=>{\n    console.log(\"onStart\");\n    pipeSpawner = await getScript(\"Pipes\", \"PipeSpawner\")\n    debugText = getEntity(\"DebugText\")\n    window.addEventListener('script-refreshed', handleScriptUpdates)\n    window.addEventListener(\"keydown\", handleKey)\n    this.transform = this._entity.getTransform();\n    this.reset();\n}\n\nlet last_message = \"\"\nthis.onUpdate = ()=>{\n    if(!this.transform){\n        //log(\"BIRD\", \"transform not found\")\n        return\n    }\n    if(flying){\n        vy = Math.min(vy + v('gravity'), v('maxFallSpeed'));\n        this.transform.Add(\"localPosition\", {\n            x: 0,\n            y: -vy,\n            z: 0\n        })\n        \n        const factor = 120;\n        let rotation = vy * factor;\n        rotation = Math.max(v('maxUpAngle'), Math.min(rotation, v('maxDownAngle')));\n        this.transform.Set(\"localRotation\", {\n            z:rotation\n        });\n        \n        if(alive){\n            speed += .001\n            pipeSpawner.setSpeed(speed)\n            setStatus(`${points}: ${speed.toFixed(3)}`)\n        }\n    }\n    \n    \n    let yPos = this.transform.properties.localPosition.y;\n    message = `flying: ${flying}, vy: ${vy}, rotation: ${rotation}, yPos: ${yPos}`\n    if(message !== last_message){\n        last_message = message;\n    }\n    if(yPos < GROUND_FLOOR){\n        flying = false;\n        die()\n    }\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(\"keydown\", handleKey)\n    window.removeEventListener('script-refreshed', handleScriptUpdates)\n    this._entity._bs.listeners.get(\"trigger-enter\").clear();\n}\n\n\nthis._entity._bs.On(\"trigger-enter\", (e)=>{\n    console.log(\"[TRIGGER]\", e)\n    die()\n})",
                   "folder": "FlappyBird",
                   "itemType": "script",
                   "last_used": 1759371720970,

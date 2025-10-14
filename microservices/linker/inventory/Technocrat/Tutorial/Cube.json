@@ -53,7 +53,7 @@
           ],
           "side": 0
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "initialized": true,
@@ -86,7 +86,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       }
     ],
     "initialized": true,

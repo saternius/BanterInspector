@@ -525,7 +525,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1760424216324,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
   "itemType": "entity",
   "last_used": 1759937997392,
-  "name": "Table"
+  "name": "Table",
+  "remote": true
 }

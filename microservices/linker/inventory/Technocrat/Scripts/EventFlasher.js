@@ -48,7 +48,7 @@ this.handleEvent = (e) => {
 
 this.onStart = ()=>{
     log("eventFlasher", "onStart")
-    material = this._entity.getComponent("BanterMaterial")
+    material = this._entity.getComponent("Material")
     window.addEventListener(this.vars.eventName.value, this.handleEvent)
 }
 
