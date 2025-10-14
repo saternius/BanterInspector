@@ -1,5 +1,5 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
-export class BanterMeshComponent extends EntityComponent {
+export class MeshComponent extends EntityComponent {
     constructor() {
         super();
     }
@@ -13,7 +13,7 @@ export class BanterMeshComponent extends EntityComponent {
     }
 
     async initGrabbable(){
-        let material = this._entity?.getComponent("BanterMaterial");
+        let material = this._entity?.getComponent("Material");
         if(!material){
             setTimeout(this.initGrabbable.bind(this), 50);
             return;

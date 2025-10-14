@@ -268,11 +268,11 @@ Object.keys(comp).filter(k => k.startsWith('_'))
 
 // Get all entities with specific component type
 Object.values(scene.objects).filter(e =>
-  Object.values(e.components || {}).some(c => c.type === 'BanterRigidbody')
+  Object.values(e.components || {}).some(c => c.type === 'Rigidbody')
 )
 
 // Sample component class structure
-const sampleClass = BS.BanterBox;
+const sampleClass = BS.Box;
 console.log({
   static: Object.getOwnPropertyNames(sampleClass),
   prototype: Object.getOwnPropertyNames(sampleClass.prototype)
@@ -295,18 +295,18 @@ ComponentRegistry.getCategories()
 
 // Get components by category
 ComponentRegistry.getByCategory('meshes')
-// Returns: ['BanterGeometryComponent', 'BanterBoxComponent', 'BanterSphereComponent', ...]
+// Returns: ['GeometryComponent', 'BoxComponent', 'SphereComponent', ...]
 
 // Get component info
-ComponentRegistry.getInfo('BanterBoxComponent')
+ComponentRegistry.getInfo('BoxComponent')
 // Returns: { category: 'meshes', description: 'Box/cube primitive', icon: '◼️' }
 
 // Get component class by name
-const BoxComponent = ComponentRegistry.getByName('BanterBox')
+const BoxComponent = ComponentRegistry.getByName('Box')
 
 // Check if component is supported
-ComponentRegistry.isSupported('BanterBox')  // true
-ComponentRegistry.isSupported(BS.ComponentType.BanterBox)  // true
+ComponentRegistry.isSupported('Box')  // true
+ComponentRegistry.isSupported(BS.ComponentType.Box)  // true
 
 // Layer utilities
 ComponentRegistry.getLayerName(5)  // 'UI'
@@ -314,8 +314,8 @@ ComponentRegistry.getLayerNumber('UI')  // 5
 ComponentRegistry.layers  // Full layer definitions
 
 // Check bundled components
-ComponentRegistry.getBundledComponents('BanterGeometry')
-// Returns: ['BanterMaterial'] (auto-includes material)
+ComponentRegistry.getBundledComponents('Geometry')
+// Returns: ['Material'] (auto-includes material)
 ```
 
 ### Lifecycle & Script Tracking
@@ -486,8 +486,8 @@ Object.keys(scene.spaceState.protected).length
 
 // Decode encoded space property keys
 // Pattern: __<EntityName>/<PropertyPath>:<ComponentId>
-decodeSpacePropertyKey("__BanterMaterial_9677/color:component")
-// Returns: { isEncoded: true, entityName: "BanterMaterial_9677", propertyPath: "color", componentId: "component", malformed: false }
+decodeSpacePropertyKey("__Material_9677/color:component")
+// Returns: { isEncoded: true, entityName: "Material_9677", propertyPath: "color", componentId: "component", malformed: false }
 
 // Find all encoded properties
 Object.keys(scene.spaceState.public)
@@ -574,9 +574,9 @@ componentBSTypeMap
 componentTextMap
 
 // Get component class from BS.ComponentType enum
-const enumVal = BS.ComponentType.BanterBox;  // e.g., 7
+const enumVal = BS.ComponentType.Box;  // e.g., 7
 const ComponentClass = componentBSTypeMap[enumVal]
-const componentName = componentTextMap[enumVal]  // "BanterBox"
+const componentName = componentTextMap[enumVal]  // "Box"
 
 // List all mapped types
 Object.keys(componentBSTypeMap)  // Array of enum integers
@@ -840,13 +840,13 @@ The inspector's Entity system that wraps BanterScript GameObjects with additiona
 Unity bridge library with component classes and helper methods.
 
 **Component Classes (56 total):**
-- Primitives: BanterBox, BanterSphere, BanterCylinder, BanterPlane, etc.
-- Advanced Geometry: BanterMobius, BanterKlein, BanterTorus, etc.
-- Media: BanterAudioSource, BanterVideoPlayer, BanterGLTF, BanterTexture
-- Physics: BanterRigidbody, BanterPhysicMaterial
-- Materials: BanterMaterial
-- Behaviors: BanterGrabHandle, BanterSyncedObject, BanterColliderEvents, etc.
-- Special: BanterMonoBehaviour, BanterAssetBundle, BanterMirror, BanterPortal, etc.
+- Primitives: Box, Sphere, Cylinder, Plane, etc.
+- Advanced Geometry: Mobius, Klein, Torus, etc.
+- Media: AudioSource, VideoPlayer, GLTF, Texture
+- Physics: Rigidbody, PhysicMaterial
+- Materials: Material
+- Behaviors: GrabHandle, SyncedObject, ColliderEvents, etc.
+- Special: MonoBehavior, AssetBundle, Mirror, Portal, etc.
 
 **Important Notes:**
 - `scene.objects` contains BanterScript GameObjects (native Unity layer)
@@ -932,17 +932,17 @@ Comprehensive registry of all component classes with metadata and helper methods
     Entity, EntityComponent,
     TransformComponent,
     MonoBehaviorComponent,
-    // Meshes (11): BanterBox, BanterSphere, BanterCylinder, etc.
-    // Materials (2): BanterMaterial, BanterPhysicMaterial
-    // Physics (6): BanterRigidbody, colliders, joints
-    // Media (3): BanterAudioSource, BanterVideoPlayer, BanterGLTF
-    // Behaviors (5): BanterGrabHandle, BanterSyncedObject, etc.
-    // Misc (8): BanterMirror, BanterPortal, BanterBrowser, etc.
+    // Meshes (11): Box, Sphere, Cylinder, etc.
+    // Materials (2): Material, PhysicMaterial
+    // Physics (6): Rigidbody, colliders, joints
+    // Media (3): AudioSource, VideoPlayer, GLTF
+    // Behaviors (5): GrabHandle, SyncedObject, etc.
+    // Misc (8): Mirror, Portal, Browser, etc.
   },
 
   // Rich metadata for each component
   metadata: {
-    BanterBoxComponent: {
+    BoxComponent: {
       category: 'meshes',
       description: 'Box/cube primitive',
       icon: '◼️'
@@ -979,7 +979,7 @@ Comprehensive registry of all component classes with metadata and helper methods
 **Categories:**
 - `core` - Entity, EntityComponent, Transform
 - `meshes` - Geometry primitives (Box, Sphere, Cylinder, Text, etc.)
-- `materials` - BanterMaterial, BanterPhysicMaterial
+- `materials` - Material, PhysicMaterial
 - `physics` - Rigidbody, colliders, joints
 - `media` - Audio, video, GLTF models
 - `behaviors` - Grabbable, synced objects, events
@@ -1192,7 +1192,7 @@ Entity wrappers extend GameObjects with inspector-specific features, accessed vi
   scene: <ref>,                    // Scene reference
   service: <ref>,
   componentType: "TypeName",       // E.g., "SphereCollider"
-  type: "BanterTypeName",          // E.g., "BanterSphereCollider"
+  type: "BanterTypeName",          // E.g., "SphereCollider"
   oid: number,                     // Unity object ID
   unityId: number,
   hasUnity: boolean,
@@ -1207,7 +1207,7 @@ Entity wrappers extend GameObjects with inspector-specific features, accessed vi
 **Key Patterns:**
 - Properties stored directly on component with `_` prefix
 - NOT in a separate `properties` object
-- Component IDs may be numeric or include type: `"BanterRigidbody_37354"`
+- Component IDs may be numeric or include type: `"Rigidbody_37354"`
 
 ### Inventory Item Structure
 
@@ -1249,7 +1249,7 @@ Some properties use special encoding for component-specific state:
 **Pattern:** `__<EntityName>/<PropertyPath>:<ComponentId>`
 
 **Examples:**
-- `__BanterMaterial_9677/color:component`
+- `__Material_9677/color:component`
 - `__MonoBehavior_2905/file:component`
 - `__Gravestone/Transform/localScale:50546_Transform`
 
@@ -1261,18 +1261,18 @@ Use the global decoder functions to parse these encoded keys:
 
 ```javascript
 // Decode an encoded space property key
-const decoded = decodeSpacePropertyKey("__BanterMaterial_9677/color:component");
+const decoded = decodeSpacePropertyKey("__Material_9677/color:component");
 // Returns: {
 //   isEncoded: true,
-//   raw: "__BanterMaterial_9677/color:component",
-//   entityName: "BanterMaterial_9677",
+//   raw: "__Material_9677/color:component",
+//   entityName: "Material_9677",
 //   propertyPath: "color",
 //   componentId: "component",
 //   malformed: false
 // }
 
 // Check if a key is encoded
-isEncodedSpacePropertyKey("__BanterMaterial_9677/color:component")  // true
+isEncodedSpacePropertyKey("__Material_9677/color:component")  // true
 isEncodedSpacePropertyKey("normalProperty")  // false
 
 // Create an encoded key
@@ -1307,7 +1307,7 @@ Both GameObjects and Entity wrappers use hierarchical paths similar to file syst
 
 Components have unique IDs with two patterns:
 - Pure numeric: `"48096"`
-- Type-prefixed: `"BanterRigidbody_37354"`, `"BoxCollider_94547"`
+- Type-prefixed: `"Rigidbody_37354"`, `"BoxCollider_94547"`
 
 ### 3. Property Naming
 
@@ -1663,7 +1663,7 @@ inspector.hierarchyPanel.render()  // Direct access
 **💡 Component Type Conversion**
 ```javascript
 // Convert BS.ComponentType enum to class/name
-const enumVal = BS.ComponentType.BanterBox;
+const enumVal = BS.ComponentType.Box;
 const ComponentClass = componentBSTypeMap[enumVal];
 const componentName = componentTextMap[enumVal];
 ```

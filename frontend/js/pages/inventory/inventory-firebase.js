@@ -72,7 +72,7 @@ export class InventoryFirebase {
             let mesh_name = value.mesh_name;
             log("glb_loader", "change", snapshot.key, glb_url, mesh_name);
             let entity = await AddEntity("Scene", mesh_name);
-            await AddComponent(entity.id, "BanterGLTF", {
+            await AddComponent(entity.id, "GLTF", {
                 componentProperties:{
                     url: `${window.ngrokUrl}${glb_url}`,
                     addColliders: true

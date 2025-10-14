@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterVideoPlayerComponent extends EntityComponent {
+export class VideoPlayerComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterVideoPlayer;
-        this.type = 'BanterVideoPlayer';
+        this.type = 'VideoPlayer';
     }
 
     defaultProperties() {
@@ -72,7 +72,7 @@ export class BanterVideoPlayerComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterVideoPlayer:`, e);
+            console.error(`Failed to update ${property} on VideoPlayer:`, e);
         }
     }
 

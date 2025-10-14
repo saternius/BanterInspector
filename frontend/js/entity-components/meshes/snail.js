@@ -1,9 +1,9 @@
-const { BanterParametricSurfaceComponent } = await import(`${window.repoUrl}/entity-components/meshes/parametric-surface.js`);
+const { ParametricSurfaceComponent } = await import(`${window.repoUrl}/entity-components/meshes/parametric-surface.js`);
 
-export class BanterSnailComponent extends BanterParametricSurfaceComponent {
+export class SnailComponent extends ParametricSurfaceComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterSnail;
-        this.type = 'BanterSnail';
+        this.type = 'Snail';
     }
 }

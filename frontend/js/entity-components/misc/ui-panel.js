@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterUIPanelComponent extends EntityComponent {
+export class UIPanelComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterUIPanel;
-        this.type = 'BanterUIPanel';
+        this.type = 'UIPanel';
     }
 
     defaultProperties() {
@@ -74,7 +74,7 @@ export class BanterUIPanelComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterUIPanel:`, e);
+            console.error(`Failed to update ${property} on UIPanel:`, e);
         }
     }
 

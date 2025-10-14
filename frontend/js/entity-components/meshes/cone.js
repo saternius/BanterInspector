@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterConeComponent extends BanterMeshComponent {
+export class ConeComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterCone;
-        this.type = 'BanterCone';
+        this.type = 'Cone';
     }
 
     defaultProperties() {
@@ -59,7 +59,7 @@ export class BanterConeComponent extends BanterMeshComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterCone:`, e);
+            console.error(`Failed to update ${property} on Cone:`, e);
         }
     }
 }

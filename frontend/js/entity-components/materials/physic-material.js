@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterPhysicMaterialComponent extends EntityComponent {
+export class PhysicMaterialComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterPhysicMaterial;
-        this.type = 'BanterPhysicMaterial';
+        this.type = 'PhysicMaterial';
     }
 
     defaultProperties() {
@@ -40,7 +40,7 @@ export class BanterPhysicMaterialComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterPhysicMaterial:`, e);
+            console.error(`Failed to update ${property} on PhysicMaterial:`, e);
         }
     }
 }

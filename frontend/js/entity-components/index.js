@@ -6,17 +6,17 @@ const { TransformComponent } = await import(`${window.repoUrl}/entity-components
 window.updateModuleProgress("transform");
 const { MonoBehaviorComponent } = await import(`${window.repoUrl}/entity-components/monobehavior.js`);
 window.updateModuleProgress("monobehavior");
-const { BanterGeometryComponent } = await import(`${window.repoUrl}/entity-components/meshes/geometry.js`);
+const { GeometryComponent } = await import(`${window.repoUrl}/entity-components/meshes/geometry.js`);
 window.updateModuleProgress("geometry");
-const { BanterMaterialComponent } = await import(`${window.repoUrl}/entity-components/materials/material.js`);
+const { MaterialComponent } = await import(`${window.repoUrl}/entity-components/materials/material.js`);
 window.updateModuleProgress("material");
-const { BanterRigidbodyComponent } = await import(`${window.repoUrl}/entity-components/physics/rigidbody.js`);
+const { RigidbodyComponent } = await import(`${window.repoUrl}/entity-components/physics/rigidbody.js`);
 window.updateModuleProgress("rigidbody");
-const { BanterAudioSourceComponent } = await import(`${window.repoUrl}/entity-components/media/audio-source.js`);
+const { AudioSourceComponent } = await import(`${window.repoUrl}/entity-components/media/audio-source.js`);
 window.updateModuleProgress("audio-source");
-const { BanterVideoPlayerComponent } = await import(`${window.repoUrl}/entity-components/media/video-player.js`);
+const { VideoPlayerComponent } = await import(`${window.repoUrl}/entity-components/media/video-player.js`);
 window.updateModuleProgress("video-player");
-const { BanterTextComponent } = await import(`${window.repoUrl}/entity-components/meshes/text.js`);
+const { TextComponent } = await import(`${window.repoUrl}/entity-components/meshes/text.js`);
 window.updateModuleProgress("text");
 const { BoxColliderComponent } = await import(`${window.repoUrl}/entity-components/physics/box-collider.js`);
 window.updateModuleProgress("box-collider");
@@ -26,53 +26,53 @@ const { CapsuleColliderComponent } = await import(`${window.repoUrl}/entity-comp
 window.updateModuleProgress("capsule-collider");
 const { MeshColliderComponent } = await import(`${window.repoUrl}/entity-components/physics/mesh-collider.js`);
 window.updateModuleProgress("mesh-collider");
-const { BanterBillboardComponent } = await import(`${window.repoUrl}/entity-components/misc/billboard.js`);
+const { BillboardComponent } = await import(`${window.repoUrl}/entity-components/misc/billboard.js`);
 window.updateModuleProgress("billboard");
-const { BanterGrabHandleComponent } = await import(`${window.repoUrl}/entity-components/behaviors/grab-handle.js`);
+const { GrabHandleComponent } = await import(`${window.repoUrl}/entity-components/behaviors/grab-handle.js`);
 window.updateModuleProgress("grab-handle");
-const { BanterSyncedObjectComponent } = await import(`${window.repoUrl}/entity-components/behaviors/synced-object.js`);
+const { SyncedObjectComponent } = await import(`${window.repoUrl}/entity-components/behaviors/synced-object.js`);
 window.updateModuleProgress("synced-object");
-const { BanterPhysicMaterialComponent } = await import(`${window.repoUrl}/entity-components/materials/physic-material.js`);
+const { PhysicMaterialComponent } = await import(`${window.repoUrl}/entity-components/materials/physic-material.js`);
 window.updateModuleProgress("physic-material");
-const { BanterMirrorComponent } = await import(`${window.repoUrl}/entity-components/misc/mirror.js`);
+const { MirrorComponent } = await import(`${window.repoUrl}/entity-components/misc/mirror.js`);
 window.updateModuleProgress("mirror");
-const { BanterBrowserComponent } = await import(`${window.repoUrl}/entity-components/misc/browser.js`);
+const { BrowserComponent } = await import(`${window.repoUrl}/entity-components/misc/browser.js`);
 window.updateModuleProgress("browser");
-const { BanterHeldEventsComponent } = await import(`${window.repoUrl}/entity-components/behaviors/held-events.js`);
+const { HeldEventsComponent } = await import(`${window.repoUrl}/entity-components/behaviors/held-events.js`);
 window.updateModuleProgress("held-events");
-const { BanterAttachedObjectComponent } = await import(`${window.repoUrl}/entity-components/behaviors/attached-object.js`);
+const { AttachedObjectComponent } = await import(`${window.repoUrl}/entity-components/behaviors/attached-object.js`);
 window.updateModuleProgress("attached-object");
-const { BanterGLTFComponent } = await import(`${window.repoUrl}/entity-components/media/gltf.js`);
+const { GLTFComponent } = await import(`${window.repoUrl}/entity-components/media/gltf.js`);
 window.updateModuleProgress("gltf");
-const { BanterAssetBundleComponent } = await import(`${window.repoUrl}/entity-components/misc/asset-bundle.js`);
+const { AssetBundleComponent } = await import(`${window.repoUrl}/entity-components/misc/asset-bundle.js`);
 window.updateModuleProgress("asset-bundle");
-const { BanterPortalComponent } = await import(`${window.repoUrl}/entity-components/misc/portal.js`);
+const { PortalComponent } = await import(`${window.repoUrl}/entity-components/misc/portal.js`);
 window.updateModuleProgress("portal");
-const { BanterColliderEventsComponent } = await import(`${window.repoUrl}/entity-components/behaviors/collider-events.js`);
+const { ColliderEventsComponent } = await import(`${window.repoUrl}/entity-components/behaviors/collider-events.js`);
 window.updateModuleProgress("collider-events");
-const { BanterBoxComponent } = await import(`${window.repoUrl}/entity-components/meshes/box.js`);
+const { BoxComponent } = await import(`${window.repoUrl}/entity-components/meshes/box.js`);
 window.updateModuleProgress("box");
-const { BanterCircleComponent } = await import(`${window.repoUrl}/entity-components/meshes/circle.js`);
+const { CircleComponent } = await import(`${window.repoUrl}/entity-components/meshes/circle.js`);
 window.updateModuleProgress("circle");
-const { BanterConeComponent } = await import(`${window.repoUrl}/entity-components/meshes/cone.js`);
+const { ConeComponent } = await import(`${window.repoUrl}/entity-components/meshes/cone.js`);
 window.updateModuleProgress("cone");
-const { BanterCylinderComponent } = await import(`${window.repoUrl}/entity-components/meshes/cylinder.js`);
+const { CylinderComponent } = await import(`${window.repoUrl}/entity-components/meshes/cylinder.js`);
 window.updateModuleProgress("cylinder");
-const { BanterPlaneComponent } = await import(`${window.repoUrl}/entity-components/meshes/plane.js`);
+const { PlaneComponent } = await import(`${window.repoUrl}/entity-components/meshes/plane.js`);
 window.updateModuleProgress("plane");
-const { BanterRingComponent } = await import(`${window.repoUrl}/entity-components/meshes/ring.js`);
+const { RingComponent } = await import(`${window.repoUrl}/entity-components/meshes/ring.js`);
 window.updateModuleProgress("ring");
-const { BanterSphereComponent } = await import(`${window.repoUrl}/entity-components/meshes/sphere.js`);
+const { SphereComponent } = await import(`${window.repoUrl}/entity-components/meshes/sphere.js`);
 window.updateModuleProgress("sphere");
-const { BanterTorusComponent } = await import(`${window.repoUrl}/entity-components/meshes/torus.js`);
+const { TorusComponent } = await import(`${window.repoUrl}/entity-components/meshes/torus.js`);
 window.updateModuleProgress("torus");
-const { BanterInvertedMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/inverted-mesh.js`);
+const { InvertedMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/inverted-mesh.js`);
 window.updateModuleProgress("inverted-mesh");
-const { BanterKitItemComponent } = await import(`${window.repoUrl}/entity-components/misc/kit-item.js`);
+const { KitItemComponent } = await import(`${window.repoUrl}/entity-components/misc/kit-item.js`);
 window.updateModuleProgress("kit-item");
-const { BanterStreetViewComponent } = await import(`${window.repoUrl}/entity-components/misc/street-view.js`);
+const { StreetViewComponent } = await import(`${window.repoUrl}/entity-components/misc/street-view.js`);
 window.updateModuleProgress("street-view");
-const { BanterWorldObjectComponent } = await import(`${window.repoUrl}/entity-components/misc/world-object.js`);
+const { WorldObjectComponent } = await import(`${window.repoUrl}/entity-components/misc/world-object.js`);
 window.updateModuleProgress("world-object");
 const { ConfigurableJointComponent } = await import(`${window.repoUrl}/entity-components/physics/configurable-joint.js`);
 window.updateModuleProgress("configurable-joint");
@@ -84,41 +84,41 @@ const { HingeJointComponent } = await import(`${window.repoUrl}/entity-component
 window.updateModuleProgress("hinge-joint");
 const { SpringJointComponent } = await import(`${window.repoUrl}/entity-components/physics/spring-joint.js`);
 window.updateModuleProgress("spring-joint");
-const { BanterGrabbableComponent } = await import(`${window.repoUrl}/entity-components/behaviors/grabbable.js`);
+const { GrabbableComponent } = await import(`${window.repoUrl}/entity-components/behaviors/grabbable.js`);
 window.updateModuleProgress("grabbable");
-const { BanterUIPanelComponent } = await import(`${window.repoUrl}/entity-components/misc/ui-panel.js`);
+const { UIPanelComponent } = await import(`${window.repoUrl}/entity-components/misc/ui-panel.js`);
 window.updateModuleProgress("ui-panel");
-const { BanterAvatarPedestalComponent } = await import(`${window.repoUrl}/entity-components/misc/avatar-pedestal.js`);
+const { AvatarPedestalComponent } = await import(`${window.repoUrl}/entity-components/misc/avatar-pedestal.js`);
 window.updateModuleProgress("avatar-pedestal");
-const { BanterTorusKnotComponent } = await import(`${window.repoUrl}/entity-components/meshes/torus-knot.js`);
+const { TorusKnotComponent } = await import(`${window.repoUrl}/entity-components/meshes/torus-knot.js`);
 window.updateModuleProgress("torus-knot");
-const { BanterAppleComponent } = await import(`${window.repoUrl}/entity-components/meshes/apple.js`);
+const { AppleComponent } = await import(`${window.repoUrl}/entity-components/meshes/apple.js`);
 window.updateModuleProgress("apple");
-const { BanterCatenoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/catenoid.js`);
+const { CatenoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/catenoid.js`);
 window.updateModuleProgress("catenoid");
-const { BanterFermetComponent } = await import(`${window.repoUrl}/entity-components/meshes/fermet.js`);
+const { FermetComponent } = await import(`${window.repoUrl}/entity-components/meshes/fermet.js`);
 window.updateModuleProgress("fermet");
-const { BanterHelicoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/helicoid.js`);
+const { HelicoidComponent } = await import(`${window.repoUrl}/entity-components/meshes/helicoid.js`);
 window.updateModuleProgress("helicoid");
-const { BanterHornComponent } = await import(`${window.repoUrl}/entity-components/meshes/horn.js`);
+const { HornComponent } = await import(`${window.repoUrl}/entity-components/meshes/horn.js`);
 window.updateModuleProgress("horn");
-const { BanterKleinComponent } = await import(`${window.repoUrl}/entity-components/meshes/klein.js`);
+const { KleinComponent } = await import(`${window.repoUrl}/entity-components/meshes/klein.js`);
 window.updateModuleProgress("klein");
-const { BanterMobiusComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius.js`);
+const { MobiusComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius.js`);
 window.updateModuleProgress("mobius");
-const { BanterMobius3dComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius3d.js`);
+const { Mobius3dComponent } = await import(`${window.repoUrl}/entity-components/meshes/mobius3d.js`);
 window.updateModuleProgress("mobius3d");
-const { BanterNaticaComponent } = await import(`${window.repoUrl}/entity-components/meshes/natica.js`);
+const { NaticaComponent } = await import(`${window.repoUrl}/entity-components/meshes/natica.js`);
 window.updateModuleProgress("natica");
-const { BanterPillowComponent } = await import(`${window.repoUrl}/entity-components/meshes/pillow.js`);
+const { PillowComponent } = await import(`${window.repoUrl}/entity-components/meshes/pillow.js`);
 window.updateModuleProgress("pillow");
-const { BanterScherkComponent } = await import(`${window.repoUrl}/entity-components/meshes/scherk.js`);
+const { ScherkComponent } = await import(`${window.repoUrl}/entity-components/meshes/scherk.js`);
 window.updateModuleProgress("scherk");
-const { BanterSnailComponent } = await import(`${window.repoUrl}/entity-components/meshes/snail.js`);
+const { SnailComponent } = await import(`${window.repoUrl}/entity-components/meshes/snail.js`);
 window.updateModuleProgress("snail");
-const { BanterSpiralComponent } = await import(`${window.repoUrl}/entity-components/meshes/spiral.js`);
+const { SpiralComponent } = await import(`${window.repoUrl}/entity-components/meshes/spiral.js`);
 window.updateModuleProgress("spiral");
-const { BanterSpringComponent } = await import(`${window.repoUrl}/entity-components/meshes/spring.js`);
+const { SpringComponent } = await import(`${window.repoUrl}/entity-components/meshes/spring.js`);
 window.updateModuleProgress("spring");
 
 export const BanterLayers = {
@@ -211,205 +211,205 @@ export const SUPPORTED_COMPONENTS = new Set([
 
 export const componentTypeMap = {
     "Transform": TransformComponent,
-    "BanterGeometry": BanterGeometryComponent,
-    "BanterMaterial": BanterMaterialComponent,
-    "BanterRigidbody": BanterRigidbodyComponent,
-    "BanterAudioSource": BanterAudioSourceComponent,
-    "BanterVideoPlayer": BanterVideoPlayerComponent,
-    "BanterText": BanterTextComponent,
+    "Geometry": GeometryComponent,
+    "Material": MaterialComponent,
+    "Rigidbody": RigidbodyComponent,
+    "AudioSource": AudioSourceComponent,
+    "VideoPlayer": VideoPlayerComponent,
+    "Text": TextComponent,
     "BoxCollider": BoxColliderComponent,
     "SphereCollider": SphereColliderComponent,
     "CapsuleCollider": CapsuleColliderComponent,
     "MeshCollider": MeshColliderComponent,
-    "BanterBillboard": BanterBillboardComponent,
-    "BanterGrabHandle": BanterGrabHandleComponent,
-    "BanterSyncedObject": BanterSyncedObjectComponent,
-    "BanterPhysicMaterial": BanterPhysicMaterialComponent,
-    "BanterMirror": BanterMirrorComponent,
-    "BanterBrowser": BanterBrowserComponent,
-    "BanterHeldEvents": BanterHeldEventsComponent,
-    "BanterAttachedObject": BanterAttachedObjectComponent,
-    "BanterGLTF": BanterGLTFComponent,
-    "BanterAssetBundle": BanterAssetBundleComponent,
-    "BanterPortal": BanterPortalComponent,
-    "BanterColliderEvents": BanterColliderEventsComponent,
-    "BanterBox": BanterBoxComponent,
-    "BanterCircle": BanterCircleComponent,
-    "BanterCone": BanterConeComponent,
-    "BanterCylinder": BanterCylinderComponent,
-    "BanterPlane": BanterPlaneComponent,
-    "BanterRing": BanterRingComponent,
-    "BanterSphere": BanterSphereComponent,
-    "BanterTorus": BanterTorusComponent,
-    "BanterInvertedMesh": BanterInvertedMeshComponent,
-    "BanterKitItem": BanterKitItemComponent,
-    "BanterStreetView": BanterStreetViewComponent,
-    "BanterWorldObject": BanterWorldObjectComponent,
+    "Billboard": BillboardComponent,
+    "GrabHandle": GrabHandleComponent,
+    "SyncedObject": SyncedObjectComponent,
+    "PhysicMaterial": PhysicMaterialComponent,
+    "Mirror": MirrorComponent,
+    "Browser": BrowserComponent,
+    "HeldEvents": HeldEventsComponent,
+    "AttachedObject": AttachedObjectComponent,
+    "GLTF": GLTFComponent,
+    "AssetBundle": AssetBundleComponent,
+    "Portal": PortalComponent,
+    "ColliderEvents": ColliderEventsComponent,
+    "Box": BoxComponent,
+    "Circle": CircleComponent,
+    "Cone": ConeComponent,
+    "Cylinder": CylinderComponent,
+    "Plane": PlaneComponent,
+    "Ring": RingComponent,
+    "Sphere": SphereComponent,
+    "Torus": TorusComponent,
+    "InvertedMesh": InvertedMeshComponent,
+    "KitItem": KitItemComponent,
+    "StreetView": StreetViewComponent,
+    "WorldObject": WorldObjectComponent,
     "ConfigurableJoint": ConfigurableJointComponent,
     "CharacterJoint": CharacterJointComponent,
     "FixedJoint": FixedJointComponent,
     "HingeJoint": HingeJointComponent,
     "SpringJoint": SpringJointComponent,
-    "BanterGrabbable": BanterGrabbableComponent,
-    "BanterUIPanel": BanterUIPanelComponent,
-    "BanterAvatarPedestal": BanterAvatarPedestalComponent,
-    "BanterTorusKnot": BanterTorusKnotComponent,
-    "BanterApple": BanterAppleComponent,
-    "BanterCatenoid": BanterCatenoidComponent,
-    "BanterFermet": BanterFermetComponent,
-    "BanterHelicoid": BanterHelicoidComponent,
-    "BanterHorn": BanterHornComponent,
-    "BanterKlein": BanterKleinComponent,
-    "BanterMobius": BanterMobiusComponent,
-    "BanterMobius3d": BanterMobius3dComponent,
-    "BanterNatica": BanterNaticaComponent,
-    "BanterPillow": BanterPillowComponent,
-    "BanterScherk": BanterScherkComponent,
-    "BanterSnail": BanterSnailComponent,
-    "BanterSpiral": BanterSpiralComponent,
-    "BanterSpring": BanterSpringComponent,
+    "Grabbable": GrabbableComponent,
+    "UIPanel": UIPanelComponent,
+    "AvatarPedestal": AvatarPedestalComponent,
+    "TorusKnot": TorusKnotComponent,
+    "Apple": AppleComponent,
+    "Catenoid": CatenoidComponent,
+    "Fermet": FermetComponent,
+    "Helicoid": HelicoidComponent,
+    "Horn": HornComponent,
+    "Klein": KleinComponent,
+    "Mobius": MobiusComponent,
+    "Mobius3d": Mobius3dComponent,
+    "Natica": NaticaComponent,
+    "Pillow": PillowComponent,
+    "Scherk": ScherkComponent,
+    "Snail": SnailComponent,
+    "Spiral": SpiralComponent,
+    "Spring": SpringComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
 export const componentBSTypeMap = {
     [BS.ComponentType.Transform]: TransformComponent,
-    [BS.ComponentType.BanterGeometry]: BanterGeometryComponent,
-    [BS.ComponentType.BanterMaterial]: BanterMaterialComponent,
-    [BS.ComponentType.BanterRigidbody]: BanterRigidbodyComponent,
-    [BS.ComponentType.BanterAudioSource]: BanterAudioSourceComponent,
-    [BS.ComponentType.BanterVideoPlayer]: BanterVideoPlayerComponent,
-    [BS.ComponentType.BanterText]: BanterTextComponent,
+    [BS.ComponentType.BanterGeometry]: GeometryComponent,
+    [BS.ComponentType.BanterMaterial]: MaterialComponent,
+    [BS.ComponentType.BanterRigidbody]: RigidbodyComponent,
+    [BS.ComponentType.BanterAudioSource]: AudioSourceComponent,
+    [BS.ComponentType.BanterVideoPlayer]: VideoPlayerComponent,
+    [BS.ComponentType.BanterText]: TextComponent,
     [BS.ComponentType.BoxCollider]: BoxColliderComponent,
     [BS.ComponentType.SphereCollider]: SphereColliderComponent,
     [BS.ComponentType.CapsuleCollider]: CapsuleColliderComponent,
     [BS.ComponentType.MeshCollider]: MeshColliderComponent,
-    [BS.ComponentType.BanterBillboard]: BanterBillboardComponent,
-    [BS.ComponentType.BanterGrabHandle]: BanterGrabHandleComponent,
-    [BS.ComponentType.BanterSyncedObject]: BanterSyncedObjectComponent,
-    [BS.ComponentType.BanterPhysicMaterial]: BanterPhysicMaterialComponent,
-    [BS.ComponentType.BanterMirror]: BanterMirrorComponent,
-    [BS.ComponentType.BanterBrowser]: BanterBrowserComponent,
-    [BS.ComponentType.BanterHeldEvents]: BanterHeldEventsComponent,
-    [BS.ComponentType.BanterAttachedObject]: BanterAttachedObjectComponent,
-    [BS.ComponentType.BanterGLTF]: BanterGLTFComponent,
-    [BS.ComponentType.BanterAssetBundle]: BanterAssetBundleComponent,
-    [BS.ComponentType.BanterPortal]: BanterPortalComponent,
-    [BS.ComponentType.BanterColliderEvents]: BanterColliderEventsComponent,
-    [BS.ComponentType.BanterBox]: BanterBoxComponent,
-    [BS.ComponentType.BanterCircle]: BanterCircleComponent,
-    [BS.ComponentType.BanterCone]: BanterConeComponent,
-    [BS.ComponentType.BanterCylinder]: BanterCylinderComponent,
-    [BS.ComponentType.BanterPlane]: BanterPlaneComponent,
-    [BS.ComponentType.BanterRing]: BanterRingComponent,
-    [BS.ComponentType.BanterSphere]: BanterSphereComponent,
-    [BS.ComponentType.BanterTorus]: BanterTorusComponent,
-    [BS.ComponentType.BanterInvertedMesh]: BanterInvertedMeshComponent,
-    [BS.ComponentType.BanterKitItem]: BanterKitItemComponent,
-    [BS.ComponentType.BanterStreetView]: BanterStreetViewComponent,
-    [BS.ComponentType.BanterWorldObject]: BanterWorldObjectComponent,
+    [BS.ComponentType.BanterBillboard]: BillboardComponent,
+    [BS.ComponentType.BanterGrabHandle]: GrabHandleComponent,
+    [BS.ComponentType.BanterSyncedObject]: SyncedObjectComponent,
+    [BS.ComponentType.BanterPhysicMaterial]: PhysicMaterialComponent,
+    [BS.ComponentType.BanterMirror]: MirrorComponent,
+    [BS.ComponentType.BanterBrowser]: BrowserComponent,
+    [BS.ComponentType.BanterHeldEvents]: HeldEventsComponent,
+    [BS.ComponentType.BanterAttachedObject]: AttachedObjectComponent,
+    [BS.ComponentType.BanterGLTF]: GLTFComponent,
+    [BS.ComponentType.BanterAssetBundle]: AssetBundleComponent,
+    [BS.ComponentType.BanterPortal]: PortalComponent,
+    [BS.ComponentType.BanterColliderEvents]: ColliderEventsComponent,
+    [BS.ComponentType.BanterBox]: BoxComponent,
+    [BS.ComponentType.BanterCircle]: CircleComponent,
+    [BS.ComponentType.BanterCone]: ConeComponent,
+    [BS.ComponentType.BanterCylinder]: CylinderComponent,
+    [BS.ComponentType.BanterPlane]: PlaneComponent,
+    [BS.ComponentType.BanterRing]: RingComponent,
+    [BS.ComponentType.BanterSphere]: SphereComponent,
+    [BS.ComponentType.BanterTorus]: TorusComponent,
+    [BS.ComponentType.BanterInvertedMesh]: InvertedMeshComponent,
+    [BS.ComponentType.BanterKitItem]: KitItemComponent,
+    [BS.ComponentType.BanterStreetView]: StreetViewComponent,
+    [BS.ComponentType.BanterWorldObject]: WorldObjectComponent,
     [BS.ComponentType.ConfigurableJoint]: ConfigurableJointComponent,
     [BS.ComponentType.CharacterJoint]: CharacterJointComponent,
     [BS.ComponentType.FixedJoint]: FixedJointComponent,
     [BS.ComponentType.HingeJoint]: HingeJointComponent,
     [BS.ComponentType.SpringJoint]: SpringJointComponent,
-    [BS.ComponentType.BanterGrabbable]: BanterGrabbableComponent,
-    [BS.ComponentType.BanterUIPanel]: BanterUIPanelComponent,
-    [BS.ComponentType.BanterAvatarPedestal]: BanterAvatarPedestalComponent,
-    [BS.ComponentType.BanterTorusKnot]: BanterTorusKnotComponent,
-    [BS.ComponentType.BanterApple]: BanterAppleComponent,
-    [BS.ComponentType.BanterCatenoid]: BanterCatenoidComponent,
-    [BS.ComponentType.BanterFermet]: BanterFermetComponent,
-    [BS.ComponentType.BanterHelicoid]: BanterHelicoidComponent,
-    [BS.ComponentType.BanterHorn]: BanterHornComponent,
-    [BS.ComponentType.BanterKlein]: BanterKleinComponent,
-    [BS.ComponentType.BanterMobius]: BanterMobiusComponent,
-    [BS.ComponentType.BanterMobius3d]: BanterMobius3dComponent,
-    [BS.ComponentType.BanterNatica]: BanterNaticaComponent,
-    [BS.ComponentType.BanterPillow]: BanterPillowComponent,
-    [BS.ComponentType.BanterScherk]: BanterScherkComponent,
-    [BS.ComponentType.BanterSnail]: BanterSnailComponent,
-    [BS.ComponentType.BanterSpiral]: BanterSpiralComponent,
-    [BS.ComponentType.BanterSpring]: BanterSpringComponent,
+    [BS.ComponentType.BanterGrabbable]: GrabbableComponent,
+    [BS.ComponentType.BanterUIPanel]: UIPanelComponent,
+    [BS.ComponentType.BanterAvatarPedestal]: AvatarPedestalComponent,
+    [BS.ComponentType.BanterTorusKnot]: TorusKnotComponent,
+    [BS.ComponentType.BanterApple]: AppleComponent,
+    [BS.ComponentType.BanterCatenoid]: CatenoidComponent,
+    [BS.ComponentType.BanterFermet]: FermetComponent,
+    [BS.ComponentType.BanterHelicoid]: HelicoidComponent,
+    [BS.ComponentType.BanterHorn]: HornComponent,
+    [BS.ComponentType.BanterKlein]: KleinComponent,
+    [BS.ComponentType.BanterMobius]: MobiusComponent,
+    [BS.ComponentType.BanterMobius3d]: Mobius3dComponent,
+    [BS.ComponentType.BanterNatica]: NaticaComponent,
+    [BS.ComponentType.BanterPillow]: PillowComponent,
+    [BS.ComponentType.BanterScherk]: ScherkComponent,
+    [BS.ComponentType.BanterSnail]: SnailComponent,
+    [BS.ComponentType.BanterSpiral]: SpiralComponent,
+    [BS.ComponentType.BanterSpring]: SpringComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
 export const componentTextMap = {
     [BS.ComponentType.Transform]: "Transform",
-    [BS.ComponentType.BanterGeometry]: "BanterGeometry",
-    [BS.ComponentType.BanterMaterial]: "BanterMaterial",
-    [BS.ComponentType.BanterRigidbody]: "BanterRigidbody",
-    [BS.ComponentType.BanterAudioSource]: "BanterAudioSource",
-    [BS.ComponentType.BanterVideoPlayer]: "BanterVideoPlayer",
-    [BS.ComponentType.BanterText]: "BanterText",
+    [BS.ComponentType.BanterGeometry]: "Geometry",
+    [BS.ComponentType.BanterMaterial]: "Material",
+    [BS.ComponentType.BanterRigidbody]: "Rigidbody",
+    [BS.ComponentType.BanterAudioSource]: "AudioSource",
+    [BS.ComponentType.BanterVideoPlayer]: "VideoPlayer",
+    [BS.ComponentType.BanterText]: "Text",
     [BS.ComponentType.BoxCollider]: "BoxCollider",
     [BS.ComponentType.SphereCollider]: "SphereCollider",
     [BS.ComponentType.CapsuleCollider]: "CapsuleCollider",
     [BS.ComponentType.MeshCollider]: "MeshCollider",
-    [BS.ComponentType.BanterBillboard]: "BanterBillboard",
-    [BS.ComponentType.BanterGrabHandle]: "BanterGrabHandle",
-    [BS.ComponentType.BanterSyncedObject]: "BanterSyncedObject",
-    [BS.ComponentType.BanterPhysicMaterial]: "BanterPhysicMaterial",
-    [BS.ComponentType.BanterMirror]: "BanterMirror",
-    [BS.ComponentType.BanterBrowser]: "BanterBrowser",
-    [BS.ComponentType.BanterHeldEvents]: "BanterHeldEvents",
-    [BS.ComponentType.BanterAttachedObject]: "BanterAttachedObject",
-    [BS.ComponentType.BanterGLTF]: "BanterGLTF",
-    [BS.ComponentType.BanterAssetBundle]: "BanterAssetBundle",
-    [BS.ComponentType.BanterPortal]: "BanterPortal",
-    [BS.ComponentType.BanterColliderEvents]: "BanterColliderEvents",
-    [BS.ComponentType.BanterBox]: "BanterBox",
-    [BS.ComponentType.BanterCircle]: "BanterCircle",
-    [BS.ComponentType.BanterCone]: "BanterCone",
-    [BS.ComponentType.BanterCylinder]: "BanterCylinder",
-    [BS.ComponentType.BanterPlane]: "BanterPlane",
-    [BS.ComponentType.BanterRing]: "BanterRing",
-    [BS.ComponentType.BanterSphere]: "BanterSphere",
-    [BS.ComponentType.BanterTorus]: "BanterTorus",
-    [BS.ComponentType.BanterInvertedMesh]: "BanterInvertedMesh",
-    [BS.ComponentType.BanterKitItem]: "BanterKitItem",
-    [BS.ComponentType.BanterStreetView]: "BanterStreetView",
-    [BS.ComponentType.BanterWorldObject]: "BanterWorldObject",
+    [BS.ComponentType.BanterBillboard]: "Billboard",
+    [BS.ComponentType.BanterGrabHandle]: "GrabHandle",
+    [BS.ComponentType.BanterSyncedObject]: "SyncedObject",
+    [BS.ComponentType.BanterPhysicMaterial]: "PhysicMaterial",
+    [BS.ComponentType.BanterMirror]: "Mirror",
+    [BS.ComponentType.BanterBrowser]: "Browser",
+    [BS.ComponentType.BanterHeldEvents]: "HeldEvents",
+    [BS.ComponentType.BanterAttachedObject]: "AttachedObject",
+    [BS.ComponentType.BanterGLTF]: "GLTF",
+    [BS.ComponentType.BanterAssetBundle]: "AssetBundle",
+    [BS.ComponentType.BanterPortal]: "Portal",
+    [BS.ComponentType.BanterColliderEvents]: "ColliderEvents",
+    [BS.ComponentType.BanterBox]: "Box",
+    [BS.ComponentType.BanterCircle]: "Circle",
+    [BS.ComponentType.BanterCone]: "Cone",
+    [BS.ComponentType.BanterCylinder]: "Cylinder",
+    [BS.ComponentType.BanterPlane]: "Plane",
+    [BS.ComponentType.BanterRing]: "Ring",
+    [BS.ComponentType.BanterSphere]: "Sphere",
+    [BS.ComponentType.BanterTorus]: "Torus",
+    [BS.ComponentType.BanterInvertedMesh]: "InvertedMesh",
+    [BS.ComponentType.BanterKitItem]: "KitItem",
+    [BS.ComponentType.BanterStreetView]: "StreetView",
+    [BS.ComponentType.BanterWorldObject]: "WorldObject",
     [BS.ComponentType.ConfigurableJoint]: "ConfigurableJoint",
     [BS.ComponentType.CharacterJoint]: "CharacterJoint",
     [BS.ComponentType.FixedJoint]: "FixedJoint",
     [BS.ComponentType.HingeJoint]: "HingeJoint",
     [BS.ComponentType.SpringJoint]: "SpringJoint",
-    [BS.ComponentType.BanterGrabbable]: "BanterGrabbable",
-    [BS.ComponentType.BanterUIPanel]: "BanterUIPanel",
-    [BS.ComponentType.BanterAvatarPedestal]: "BanterAvatarPedestal",
-    [BS.ComponentType.BanterTorusKnot]: "BanterTorusKnot",
-    [BS.ComponentType.BanterApple]: "BanterApple",
-    [BS.ComponentType.BanterCatenoid]: "BanterCatenoid",
-    [BS.ComponentType.BanterFermet]: "BanterFermet",
-    [BS.ComponentType.BanterHelicoid]: "BanterHelicoid",
-    [BS.ComponentType.BanterHorn]: "BanterHorn",
-    [BS.ComponentType.BanterKlein]: "BanterKlein",
-    [BS.ComponentType.BanterMobius]: "BanterMobius",
-    [BS.ComponentType.BanterMobius3d]: "BanterMobius3d",
-    [BS.ComponentType.BanterNatica]: "BanterNatica",
-    [BS.ComponentType.BanterPillow]: "BanterPillow",
-    [BS.ComponentType.BanterScherk]: "BanterScherk",
-    [BS.ComponentType.BanterSnail]: "BanterSnail",
-    [BS.ComponentType.BanterSpiral]: "BanterSpiral",
-    [BS.ComponentType.BanterSpring]: "BanterSpring",
+    [BS.ComponentType.BanterGrabbable]: "Grabbable",
+    [BS.ComponentType.BanterUIPanel]: "UIPanel",
+    [BS.ComponentType.BanterAvatarPedestal]: "AvatarPedestal",
+    [BS.ComponentType.BanterTorusKnot]: "TorusKnot",
+    [BS.ComponentType.BanterApple]: "Apple",
+    [BS.ComponentType.BanterCatenoid]: "Catenoid",
+    [BS.ComponentType.BanterFermet]: "Fermet",
+    [BS.ComponentType.BanterHelicoid]: "Helicoid",
+    [BS.ComponentType.BanterHorn]: "Horn",
+    [BS.ComponentType.BanterKlein]: "Klein",
+    [BS.ComponentType.BanterMobius]: "Mobius",
+    [BS.ComponentType.BanterMobius3d]: "Mobius3d",
+    [BS.ComponentType.BanterNatica]: "Natica",
+    [BS.ComponentType.BanterPillow]: "Pillow",
+    [BS.ComponentType.BanterScherk]: "Scherk",
+    [BS.ComponentType.BanterSnail]: "Snail",
+    [BS.ComponentType.BanterSpiral]: "Spiral",
+    [BS.ComponentType.BanterSpring]: "Spring",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
 
 export const componentBundleMap = {
-    "BanterGeometry": ['BanterMaterial'],
-    "BoxCollider": ['BanterColliderEvents'],
-    "SphereCollider": ['BanterColliderEvents'],
-    "CapsuleCollider": ['BanterColliderEvents'],
-    "MeshCollider": ['BanterColliderEvents'],
-    "BanterBox": ['BanterMaterial'],
-    "BanterCylinder": ['BanterMaterial'],
-    // "BanterCircle": ['BanterMaterial'],
-    // "BanterCone": ['BanterMaterial'],
-    // "BanterPlane": ['BanterMaterial'],
-    // "BanterRing": ['BanterMaterial'],
-    // "BanterSphere": ['BanterMaterial'],
-    // "BanterTorus": ['BanterMaterial']
+    "Geometry": ['Material'],
+    "BoxCollider": ['ColliderEvents'],
+    "SphereCollider": ['ColliderEvents'],
+    "CapsuleCollider": ['ColliderEvents'],
+    "MeshCollider": ['ColliderEvents'],
+    "Box": ['Material'],
+    "Cylinder": ['Material'],
+    // "Circle": ['Material'],
+    // "Cone": ['Material'],
+    // "Plane": ['Material'],
+    // "Ring": ['Material'],
+    // "Sphere": ['Material'],
+    // "Torus": ['Material']
 }
 
 
@@ -427,7 +427,7 @@ window.componentTextMap = componentTextMap;
  *
  * Usage:
  *   - List all components: ComponentRegistry.list()
- *   - Get component by name: ComponentRegistry.getByName('BanterBox')
+ *   - Get component by name: ComponentRegistry.getByName('Box')
  *   - Get components by category: ComponentRegistry.getByCategory('meshes')
  *   - Check layer definitions: ComponentRegistry.layers
  */
@@ -439,37 +439,37 @@ window.ComponentRegistry = {
         TransformComponent,
         MonoBehaviorComponent,
         // Meshes/Geometry
-        BanterGeometryComponent,
-        BanterBoxComponent,
-        BanterCircleComponent,
-        BanterConeComponent,
-        BanterCylinderComponent,
-        BanterPlaneComponent,
-        BanterRingComponent,
-        BanterSphereComponent,
-        BanterTorusComponent,
-        BanterTorusKnotComponent,
-        BanterInvertedMeshComponent,
-        BanterTextComponent,
-        BanterAppleComponent,
-        BanterCatenoidComponent,
-        BanterFermetComponent,
-        BanterHelicoidComponent,
-        BanterHornComponent,
-        BanterKleinComponent,
-        BanterMobiusComponent,
-        BanterMobius3dComponent,
-        BanterNaticaComponent,
-        BanterPillowComponent,
-        BanterScherkComponent,
-        BanterSnailComponent,
-        BanterSpiralComponent,
-        BanterSpringComponent,
+        GeometryComponent,
+        BoxComponent,
+        CircleComponent,
+        ConeComponent,
+        CylinderComponent,
+        PlaneComponent,
+        RingComponent,
+        SphereComponent,
+        TorusComponent,
+        TorusKnotComponent,
+        InvertedMeshComponent,
+        TextComponent,
+        AppleComponent,
+        CatenoidComponent,
+        FermetComponent,
+        HelicoidComponent,
+        HornComponent,
+        KleinComponent,
+        MobiusComponent,
+        Mobius3dComponent,
+        NaticaComponent,
+        PillowComponent,
+        ScherkComponent,
+        SnailComponent,
+        SpiralComponent,
+        SpringComponent,
         // Materials
-        BanterMaterialComponent,
-        BanterPhysicMaterialComponent,
+        MaterialComponent,
+        PhysicMaterialComponent,
         // Physics
-        BanterRigidbodyComponent,
+        RigidbodyComponent,
         BoxColliderComponent,
         SphereColliderComponent,
         CapsuleColliderComponent,
@@ -480,27 +480,27 @@ window.ComponentRegistry = {
         HingeJointComponent,
         SpringJointComponent,
         // Media
-        BanterAudioSourceComponent,
-        BanterVideoPlayerComponent,
-        BanterGLTFComponent,
+        AudioSourceComponent,
+        VideoPlayerComponent,
+        GLTFComponent,
         // Behaviors
-        BanterGrabHandleComponent,
-        BanterGrabbableComponent,
-        BanterSyncedObjectComponent,
-        BanterHeldEventsComponent,
-        BanterAttachedObjectComponent,
-        BanterColliderEventsComponent,
+        GrabHandleComponent,
+        GrabbableComponent,
+        SyncedObjectComponent,
+        HeldEventsComponent,
+        AttachedObjectComponent,
+        ColliderEventsComponent,
         // Misc
-        BanterBillboardComponent,
-        BanterMirrorComponent,
-        BanterBrowserComponent,
-        BanterAssetBundleComponent,
-        BanterPortalComponent,
-        BanterKitItemComponent,
-        BanterStreetViewComponent,
-        BanterWorldObjectComponent,
-        BanterUIPanelComponent,
-        BanterAvatarPedestalComponent
+        BillboardComponent,
+        MirrorComponent,
+        BrowserComponent,
+        AssetBundleComponent,
+        PortalComponent,
+        KitItemComponent,
+        StreetViewComponent,
+        WorldObjectComponent,
+        UIPanelComponent,
+        AvatarPedestalComponent
     },
 
     // Component metadata organized by category
@@ -512,39 +512,39 @@ window.ComponentRegistry = {
         MonoBehaviorComponent: { category: 'scripting', description: 'Script execution component', icon: '📜' },
 
         // Meshes/Geometry
-        BanterGeometryComponent: { category: 'meshes', description: 'Generic geometry component', icon: '🔷' },
-        BanterBoxComponent: { category: 'meshes', description: 'Box/cube primitive', icon: '◼️' },
-        BanterCircleComponent: { category: 'meshes', description: 'Circle primitive', icon: '⭕' },
-        BanterConeComponent: { category: 'meshes', description: 'Cone primitive', icon: '🔺' },
-        BanterCylinderComponent: { category: 'meshes', description: 'Cylinder primitive', icon: '🥫' },
-        BanterPlaneComponent: { category: 'meshes', description: 'Flat plane primitive', icon: '▬' },
-        BanterRingComponent: { category: 'meshes', description: 'Ring/torus primitive', icon: '⭕' },
-        BanterSphereComponent: { category: 'meshes', description: 'Sphere primitive', icon: '⚪' },
-        BanterTorusComponent: { category: 'meshes', description: 'Torus/donut primitive', icon: '🍩' },
-        BanterTorusKnotComponent: { category: 'meshes', description: 'Torus knot geometry', icon: '🍩' },
-        BanterInvertedMeshComponent: { category: 'meshes', description: 'Inverted mesh (inside-out)', icon: '🔄' },
-        BanterTextComponent: { category: 'meshes', description: '3D text mesh', icon: '📝' },
-        BanterAppleComponent: { category: 'meshes', description: 'Apple parametric surface', icon: '🍎' },
-        BanterCatenoidComponent: { category: 'meshes', description: 'Catenoid minimal surface', icon: '🌀' },
-        BanterFermetComponent: { category: 'meshes', description: 'Fermat spiral surface', icon: '🌀' },
-        BanterHelicoidComponent: { category: 'meshes', description: 'Helicoid minimal surface', icon: '🌀' },
-        BanterHornComponent: { category: 'meshes', description: 'Horn/trumpet surface', icon: '📯' },
-        BanterKleinComponent: { category: 'meshes', description: 'Klein bottle surface', icon: '🌀' },
-        BanterMobiusComponent: { category: 'meshes', description: 'Möbius strip', icon: '♾️' },
-        BanterMobius3dComponent: { category: 'meshes', description: '3D Möbius surface', icon: '♾️' },
-        BanterNaticaComponent: { category: 'meshes', description: 'Seashell-like surface', icon: '🐚' },
-        BanterPillowComponent: { category: 'meshes', description: 'Pillow-shaped surface', icon: '🛏️' },
-        BanterScherkComponent: { category: 'meshes', description: 'Scherk minimal surface', icon: '🌀' },
-        BanterSnailComponent: { category: 'meshes', description: 'Snail shell surface', icon: '🐌' },
-        BanterSpiralComponent: { category: 'meshes', description: 'Spiral surface', icon: '🌀' },
-        BanterSpringComponent: { category: 'meshes', description: 'Spring/helix surface', icon: '🔩' },
+        GeometryComponent: { category: 'meshes', description: 'Generic geometry component', icon: '🔷' },
+        BoxComponent: { category: 'meshes', description: 'Box/cube primitive', icon: '◼️' },
+        CircleComponent: { category: 'meshes', description: 'Circle primitive', icon: '⭕' },
+        ConeComponent: { category: 'meshes', description: 'Cone primitive', icon: '🔺' },
+        CylinderComponent: { category: 'meshes', description: 'Cylinder primitive', icon: '🥫' },
+        PlaneComponent: { category: 'meshes', description: 'Flat plane primitive', icon: '▬' },
+        RingComponent: { category: 'meshes', description: 'Ring/torus primitive', icon: '⭕' },
+        SphereComponent: { category: 'meshes', description: 'Sphere primitive', icon: '⚪' },
+        TorusComponent: { category: 'meshes', description: 'Torus/donut primitive', icon: '🍩' },
+        TorusKnotComponent: { category: 'meshes', description: 'Torus knot geometry', icon: '🍩' },
+        InvertedMeshComponent: { category: 'meshes', description: 'Inverted mesh (inside-out)', icon: '🔄' },
+        TextComponent: { category: 'meshes', description: '3D text mesh', icon: '📝' },
+        AppleComponent: { category: 'meshes', description: 'Apple parametric surface', icon: '🍎' },
+        CatenoidComponent: { category: 'meshes', description: 'Catenoid minimal surface', icon: '🌀' },
+        FermetComponent: { category: 'meshes', description: 'Fermat spiral surface', icon: '🌀' },
+        HelicoidComponent: { category: 'meshes', description: 'Helicoid minimal surface', icon: '🌀' },
+        HornComponent: { category: 'meshes', description: 'Horn/trumpet surface', icon: '📯' },
+        KleinComponent: { category: 'meshes', description: 'Klein bottle surface', icon: '🌀' },
+        MobiusComponent: { category: 'meshes', description: 'Möbius strip', icon: '♾️' },
+        Mobius3dComponent: { category: 'meshes', description: '3D Möbius surface', icon: '♾️' },
+        NaticaComponent: { category: 'meshes', description: 'Seashell-like surface', icon: '🐚' },
+        PillowComponent: { category: 'meshes', description: 'Pillow-shaped surface', icon: '🛏️' },
+        ScherkComponent: { category: 'meshes', description: 'Scherk minimal surface', icon: '🌀' },
+        SnailComponent: { category: 'meshes', description: 'Snail shell surface', icon: '🐌' },
+        SpiralComponent: { category: 'meshes', description: 'Spiral surface', icon: '🌀' },
+        SpringComponent: { category: 'meshes', description: 'Spring/helix surface', icon: '🔩' },
 
         // Materials
-        BanterMaterialComponent: { category: 'materials', description: 'Material properties (color, texture)', icon: '🎨' },
-        BanterPhysicMaterialComponent: { category: 'materials', description: 'Physics material (friction, bounce)', icon: '⚙️' },
+        MaterialComponent: { category: 'materials', description: 'Material properties (color, texture)', icon: '🎨' },
+        PhysicMaterialComponent: { category: 'materials', description: 'Physics material (friction, bounce)', icon: '⚙️' },
 
         // Physics
-        BanterRigidbodyComponent: { category: 'physics', description: 'Physics simulation', icon: '💫' },
+        RigidbodyComponent: { category: 'physics', description: 'Physics simulation', icon: '💫' },
         BoxColliderComponent: { category: 'physics', description: 'Box collision shape', icon: '📦' },
         SphereColliderComponent: { category: 'physics', description: 'Sphere collision shape', icon: '⚪' },
         CapsuleColliderComponent: { category: 'physics', description: 'Capsule collision shape', icon: '💊' },
@@ -556,29 +556,29 @@ window.ComponentRegistry = {
         SpringJointComponent: { category: 'physics', description: 'Elastic spring connection', icon: '🪃' },
 
         // Media
-        BanterAudioSourceComponent: { category: 'media', description: 'Audio playback', icon: '🔊' },
-        BanterVideoPlayerComponent: { category: 'media', description: 'Video playback', icon: '📹' },
-        BanterGLTFComponent: { category: 'media', description: 'GLTF 3D model loader', icon: '🎭' },
+        AudioSourceComponent: { category: 'media', description: 'Audio playback', icon: '🔊' },
+        VideoPlayerComponent: { category: 'media', description: 'Video playback', icon: '📹' },
+        GLTFComponent: { category: 'media', description: 'GLTF 3D model loader', icon: '🎭' },
 
         // Behaviors
-        BanterGrabHandleComponent: { category: 'behaviors', description: 'Grabbable object', icon: '✋' },
-        BanterGrabbableComponent: { category: 'behaviors', description: 'Advanced grab mechanics with VR controller integration', icon: '🤲' },
-        BanterSyncedObjectComponent: { category: 'behaviors', description: 'Multi-user synchronization', icon: '🔄' },
-        BanterHeldEventsComponent: { category: 'behaviors', description: 'Events when object is held', icon: '🤝' },
-        BanterAttachedObjectComponent: { category: 'behaviors', description: 'Attach to player or object', icon: '📌' },
-        BanterColliderEventsComponent: { category: 'behaviors', description: 'Collision/trigger events', icon: '💥' },
+        GrabHandleComponent: { category: 'behaviors', description: 'Grabbable object', icon: '✋' },
+        GrabbableComponent: { category: 'behaviors', description: 'Advanced grab mechanics with VR controller integration', icon: '🤲' },
+        SyncedObjectComponent: { category: 'behaviors', description: 'Multi-user synchronization', icon: '🔄' },
+        HeldEventsComponent: { category: 'behaviors', description: 'Events when object is held', icon: '🤝' },
+        AttachedObjectComponent: { category: 'behaviors', description: 'Attach to player or object', icon: '📌' },
+        ColliderEventsComponent: { category: 'behaviors', description: 'Collision/trigger events', icon: '💥' },
 
         // Misc
-        BanterBillboardComponent: { category: 'misc', description: 'Always face camera', icon: '👁️' },
-        BanterMirrorComponent: { category: 'misc', description: 'Reflective mirror surface', icon: '🪞' },
-        BanterBrowserComponent: { category: 'misc', description: 'Embedded web browser', icon: '🌐' },
-        BanterAssetBundleComponent: { category: 'misc', description: 'Load Unity asset bundles', icon: '📦' },
-        BanterPortalComponent: { category: 'misc', description: 'Portal to another space', icon: '🚪' },
-        BanterKitItemComponent: { category: 'misc', description: 'Kit item reference', icon: '🎁' },
-        BanterStreetViewComponent: { category: 'misc', description: 'Google Street View integration', icon: '🗺️' },
-        BanterWorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' },
-        BanterUIPanelComponent: { category: 'misc', description: 'UI panel with haptics and sounds', icon: '📱' },
-        BanterAvatarPedestalComponent: { category: 'misc', description: 'Ready Player Me avatar display', icon: '🧍' }
+        BillboardComponent: { category: 'misc', description: 'Always face camera', icon: '👁️' },
+        MirrorComponent: { category: 'misc', description: 'Reflective mirror surface', icon: '🪞' },
+        BrowserComponent: { category: 'misc', description: 'Embedded web browser', icon: '🌐' },
+        AssetBundleComponent: { category: 'misc', description: 'Load Unity asset bundles', icon: '📦' },
+        PortalComponent: { category: 'misc', description: 'Portal to another space', icon: '🚪' },
+        KitItemComponent: { category: 'misc', description: 'Kit item reference', icon: '🎁' },
+        StreetViewComponent: { category: 'misc', description: 'Google Street View integration', icon: '🗺️' },
+        WorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' },
+        UIPanelComponent: { category: 'misc', description: 'UI panel with haptics and sounds', icon: '📱' },
+        AvatarPedestalComponent: { category: 'misc', description: 'Ready Player Me avatar display', icon: '🧍' }
     },
 
     // Unity layer definitions
@@ -595,7 +595,7 @@ window.ComponentRegistry = {
 
     /**
      * Get component class by name
-     * @param {string} name - Component name (e.g., 'BanterBox')
+     * @param {string} name - Component name (e.g., 'Box')
      * @returns {Function|null} Component class constructor
      */
     getByName(name) {
@@ -717,62 +717,62 @@ export {
     Entity,
     EntityComponent,
     TransformComponent,
-    BanterGeometryComponent,
-    BanterMaterialComponent,
-    BanterRigidbodyComponent,
-    BanterAudioSourceComponent,
-    BanterVideoPlayerComponent,
-    BanterTextComponent,
+    GeometryComponent,
+    MaterialComponent,
+    RigidbodyComponent,
+    AudioSourceComponent,
+    VideoPlayerComponent,
+    TextComponent,
     BoxColliderComponent,
     SphereColliderComponent,
     CapsuleColliderComponent,
     MeshColliderComponent,
-    BanterBillboardComponent,
-    BanterGrabHandleComponent,
-    BanterSyncedObjectComponent,
-    BanterPhysicMaterialComponent,
-    BanterMirrorComponent,
-    BanterBrowserComponent,
-    BanterHeldEventsComponent,
-    BanterAttachedObjectComponent,
-    BanterGLTFComponent,
-    BanterAssetBundleComponent,
-    BanterPortalComponent,
-    BanterColliderEventsComponent,
-    BanterBoxComponent,
-    BanterCircleComponent,
-    BanterConeComponent,
-    BanterCylinderComponent,
-    BanterPlaneComponent,
-    BanterRingComponent,
-    BanterSphereComponent,
-    BanterTorusComponent,
-    BanterInvertedMeshComponent,
-    BanterKitItemComponent,
-    BanterStreetViewComponent,
-    BanterWorldObjectComponent,
+    BillboardComponent,
+    GrabHandleComponent,
+    SyncedObjectComponent,
+    PhysicMaterialComponent,
+    MirrorComponent,
+    BrowserComponent,
+    HeldEventsComponent,
+    AttachedObjectComponent,
+    GLTFComponent,
+    AssetBundleComponent,
+    PortalComponent,
+    ColliderEventsComponent,
+    BoxComponent,
+    CircleComponent,
+    ConeComponent,
+    CylinderComponent,
+    PlaneComponent,
+    RingComponent,
+    SphereComponent,
+    TorusComponent,
+    InvertedMeshComponent,
+    KitItemComponent,
+    StreetViewComponent,
+    WorldObjectComponent,
     ConfigurableJointComponent,
     CharacterJointComponent,
     FixedJointComponent,
     HingeJointComponent,
     SpringJointComponent,
-    BanterGrabbableComponent,
-    BanterUIPanelComponent,
-    BanterAvatarPedestalComponent,
-    BanterTorusKnotComponent,
-    BanterAppleComponent,
-    BanterCatenoidComponent,
-    BanterFermetComponent,
-    BanterHelicoidComponent,
-    BanterHornComponent,
-    BanterKleinComponent,
-    BanterMobiusComponent,
-    BanterMobius3dComponent,
-    BanterNaticaComponent,
-    BanterPillowComponent,
-    BanterScherkComponent,
-    BanterSnailComponent,
-    BanterSpiralComponent,
-    BanterSpringComponent,
+    GrabbableComponent,
+    UIPanelComponent,
+    AvatarPedestalComponent,
+    TorusKnotComponent,
+    AppleComponent,
+    CatenoidComponent,
+    FermetComponent,
+    HelicoidComponent,
+    HornComponent,
+    KleinComponent,
+    MobiusComponent,
+    Mobius3dComponent,
+    NaticaComponent,
+    PillowComponent,
+    ScherkComponent,
+    SnailComponent,
+    SpiralComponent,
+    SpringComponent,
     MonoBehaviorComponent
 };

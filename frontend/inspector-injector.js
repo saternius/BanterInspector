@@ -459,47 +459,47 @@ export class InspectorInjector {
                 icon: '🎨',
                 name: 'Meshes',
                 components: [
-                    { type: 'BanterGeometry', name: 'Geometry', desc: '3D procedural shapes' },
-                    { type: 'BanterBox', name: 'Box', desc: 'Box/cube primitive' },
-                    { type: 'BanterSphere', name: 'Sphere', desc: 'Sphere primitive' },
-                    { type: 'BanterCircle', name: 'Circle', desc: 'Circle primitive' },
-                    { type: 'BanterCone', name: 'Cone', desc: 'Cone primitive' },
-                    { type: 'BanterCylinder', name: 'Cylinder', desc: 'Cylinder primitive' },
-                    { type: 'BanterPlane', name: 'Plane', desc: 'Flat plane primitive' },
-                    { type: 'BanterRing', name: 'Ring', desc: 'Ring primitive' },
-                    { type: 'BanterTorus', name: 'Torus', desc: 'Torus/donut primitive' },
-                    { type: 'BanterTorusKnot', name: 'Torus Knot', desc: 'Torus knot geometry' },
-                    { type: 'BanterInvertedMesh', name: 'Inverted Mesh', desc: 'Inverted mesh (inside-out)' },
-                    { type: 'BanterText', name: 'Text', desc: '3D text mesh' },
-                    { type: 'BanterApple', name: 'Apple', desc: 'Apple parametric surface' },
-                    { type: 'BanterCatenoid', name: 'Catenoid', desc: 'Catenoid minimal surface' },
-                    { type: 'BanterFermet', name: 'Fermat', desc: 'Fermat spiral surface' },
-                    { type: 'BanterHelicoid', name: 'Helicoid', desc: 'Helicoid minimal surface' },
-                    { type: 'BanterHorn', name: 'Horn', desc: 'Horn/trumpet surface' },
-                    { type: 'BanterKlein', name: 'Klein Bottle', desc: 'Klein bottle surface' },
-                    { type: 'BanterMobius', name: 'Möbius Strip', desc: 'Möbius strip' },
-                    { type: 'BanterMobius3d', name: 'Möbius 3D', desc: '3D Möbius surface' },
-                    { type: 'BanterNatica', name: 'Natica', desc: 'Seashell-like surface' },
-                    { type: 'BanterPillow', name: 'Pillow', desc: 'Pillow-shaped surface' },
-                    { type: 'BanterScherk', name: 'Scherk', desc: 'Scherk minimal surface' },
-                    { type: 'BanterSnail', name: 'Snail', desc: 'Snail shell surface' },
-                    { type: 'BanterSpiral', name: 'Spiral', desc: 'Spiral surface' },
-                    { type: 'BanterSpring', name: 'Spring', desc: 'Spring/helix surface' }
+                    { type: 'Geometry', name: 'Geometry', desc: '3D procedural shapes' },
+                    { type: 'Box', name: 'Box', desc: 'Box/cube primitive' },
+                    { type: 'Sphere', name: 'Sphere', desc: 'Sphere primitive' },
+                    { type: 'Circle', name: 'Circle', desc: 'Circle primitive' },
+                    { type: 'Cone', name: 'Cone', desc: 'Cone primitive' },
+                    { type: 'Cylinder', name: 'Cylinder', desc: 'Cylinder primitive' },
+                    { type: 'Plane', name: 'Plane', desc: 'Flat plane primitive' },
+                    { type: 'Ring', name: 'Ring', desc: 'Ring primitive' },
+                    { type: 'Torus', name: 'Torus', desc: 'Torus/donut primitive' },
+                    { type: 'TorusKnot', name: 'Torus Knot', desc: 'Torus knot geometry' },
+                    { type: 'InvertedMesh', name: 'Inverted Mesh', desc: 'Inverted mesh (inside-out)' },
+                    { type: 'Text', name: 'Text', desc: '3D text mesh' },
+                    { type: 'Apple', name: 'Apple', desc: 'Apple parametric surface' },
+                    { type: 'Catenoid', name: 'Catenoid', desc: 'Catenoid minimal surface' },
+                    { type: 'Fermet', name: 'Fermat', desc: 'Fermat spiral surface' },
+                    { type: 'Helicoid', name: 'Helicoid', desc: 'Helicoid minimal surface' },
+                    { type: 'Horn', name: 'Horn', desc: 'Horn/trumpet surface' },
+                    { type: 'Klein', name: 'Klein Bottle', desc: 'Klein bottle surface' },
+                    { type: 'Mobius', name: 'Möbius Strip', desc: 'Möbius strip' },
+                    { type: 'Mobius3d', name: 'Möbius 3D', desc: '3D Möbius surface' },
+                    { type: 'Natica', name: 'Natica', desc: 'Seashell-like surface' },
+                    { type: 'Pillow', name: 'Pillow', desc: 'Pillow-shaped surface' },
+                    { type: 'Scherk', name: 'Scherk', desc: 'Scherk minimal surface' },
+                    { type: 'Snail', name: 'Snail', desc: 'Snail shell surface' },
+                    { type: 'Spiral', name: 'Spiral', desc: 'Spiral surface' },
+                    { type: 'Spring', name: 'Spring', desc: 'Spring/helix surface' }
                 ]
             },
             materials: {
                 icon: '🎨',
                 name: 'Materials',
                 components: [
-                    { type: 'BanterMaterial', name: 'Material', desc: 'Surface appearance' },
-                    { type: 'BanterPhysicMaterial', name: 'Physic Material', desc: 'Physics material properties' }
+                    { type: 'Material', name: 'Material', desc: 'Surface appearance' },
+                    { type: 'PhysicMaterial', name: 'Physic Material', desc: 'Physics material properties' }
                 ]
             },
             physics: {
                 icon: '⚛',
                 name: 'Physics',
                 components: [
-                    { type: 'BanterRigidbody', name: 'Rigidbody', desc: 'Enables physics simulation' },
+                    { type: 'Rigidbody', name: 'Rigidbody', desc: 'Enables physics simulation' },
                     { type: 'BoxCollider', name: 'Box Collider', desc: 'Box-shaped collision' },
                     { type: 'SphereCollider', name: 'Sphere Collider', desc: 'Sphere-shaped collision' },
                     { type: 'CapsuleCollider', name: 'Capsule Collider', desc: 'Capsule-shaped collision' },
@@ -515,22 +515,22 @@ export class InspectorInjector {
                 icon: '🎬',
                 name: 'Media',
                 components: [
-                    { type: 'BanterGLTF', name: 'GLTF', desc: 'Load 3D models' },
-                    { type: 'BanterAudioSource', name: 'Audio Source', desc: 'Play sounds and music' },
-                    { type: 'BanterVideoPlayer', name: 'Video Player', desc: 'Play video content' },
-                    { type: 'BanterBillboard', name: 'Billboard', desc: 'Always faces camera' }
+                    { type: 'GLTF', name: 'GLTF', desc: 'Load 3D models' },
+                    { type: 'AudioSource', name: 'Audio Source', desc: 'Play sounds and music' },
+                    { type: 'VideoPlayer', name: 'Video Player', desc: 'Play video content' },
+                    { type: 'Billboard', name: 'Billboard', desc: 'Always faces camera' }
                 ]
             },
             behaviors: {
                 icon: '🤚',
                 name: 'Behaviors',
                 components: [
-                    { type: 'BanterGrabHandle', name: 'Grab Handle', desc: 'Basic grab mechanics' },
-                    { type: 'BanterGrabbable', name: 'Grabbable', desc: 'Advanced grab with VR controls' },
-                    { type: 'BanterColliderEvents', name: 'Collider Events', desc: 'Trigger and collision events' },
-                    { type: 'BanterAttachedObject', name: 'Attached Object', desc: 'Attach to users' },
-                    { type: 'BanterSyncedObject', name: 'Synced Object', desc: 'Network synchronization' },
-                    { type: 'BanterHeldEvents', name: 'Held Events', desc: 'Input while holding' },
+                    { type: 'GrabHandle', name: 'Grab Handle', desc: 'Basic grab mechanics' },
+                    { type: 'Grabbable', name: 'Grabbable', desc: 'Advanced grab with VR controls' },
+                    { type: 'ColliderEvents', name: 'Collider Events', desc: 'Trigger and collision events' },
+                    { type: 'AttachedObject', name: 'Attached Object', desc: 'Attach to users' },
+                    { type: 'SyncedObject', name: 'Synced Object', desc: 'Network synchronization' },
+                    { type: 'HeldEvents', name: 'Held Events', desc: 'Input while holding' },
                     { type: 'MonoBehavior', name: 'MonoBehavior', desc: 'Custom script component' }
                 ]
             },
@@ -538,15 +538,15 @@ export class InspectorInjector {
                 icon: '📦',
                 name: 'Misc',
                 components: [
-                    { type: 'BanterMirror', name: 'Mirror', desc: 'Reflective surface' },
-                    { type: 'BanterBrowser', name: 'Browser', desc: 'Embed web content' },
-                    { type: 'BanterAssetBundle', name: 'Asset Bundle', desc: 'Unity asset bundles' },
-                    { type: 'BanterPortal', name: 'Portal', desc: 'Portal to other spaces' },
-                    { type: 'BanterWorldObject', name: 'World Object', desc: 'World object reference' },
-                    { type: 'BanterStreetView', name: 'Street View', desc: 'Street view panorama' },
-                    { type: 'BanterKitItem', name: 'Kit Item', desc: 'Kit item component' },
-                    { type: 'BanterUIPanel', name: 'UI Panel', desc: 'UI with haptics and sounds' },
-                    { type: 'BanterAvatarPedestal', name: 'Avatar Pedestal', desc: 'Ready Player Me avatar' }
+                    { type: 'Mirror', name: 'Mirror', desc: 'Reflective surface' },
+                    { type: 'Browser', name: 'Browser', desc: 'Embed web content' },
+                    { type: 'AssetBundle', name: 'Asset Bundle', desc: 'Unity asset bundles' },
+                    { type: 'Portal', name: 'Portal', desc: 'Portal to other spaces' },
+                    { type: 'WorldObject', name: 'World Object', desc: 'World object reference' },
+                    { type: 'StreetView', name: 'Street View', desc: 'Street view panorama' },
+                    { type: 'KitItem', name: 'Kit Item', desc: 'Kit item component' },
+                    { type: 'UIPanel', name: 'UI Panel', desc: 'UI with haptics and sounds' },
+                    { type: 'AvatarPedestal', name: 'Avatar Pedestal', desc: 'Ready Player Me avatar' }
                 ]
             }
         };

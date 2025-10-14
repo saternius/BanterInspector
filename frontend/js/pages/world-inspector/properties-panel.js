@@ -682,11 +682,11 @@
          * Move component up in the order
          */
         moveComponentUp(index) {
-            if (index <= 1) return; // Can't move Transform or already at top after Transform
-            
+            if (index <= 0) return; // Already at top
+
             const change = new ComponentReorderChange(SM.selectedEntity, index, index - 1, { source: 'ui' });
             changeManager.applyChange(change);
-            
+
             // Re-render after a short delay
             setTimeout(() => this.render(SM.selectedEntity), 100);
         }
@@ -695,11 +695,11 @@
          * Move component down in the order
          */
         moveComponentDown(index, totalComponents) {
-            if (index === 0 || index >= totalComponents - 1) return; // Can't move Transform or already at bottom
-            
+            if (index >= totalComponents - 1) return; // Already at bottom
+
             const change = new ComponentReorderChange(SM.selectedEntity, index, index + 1, { source: 'ui' });
             changeManager.applyChange(change);
-            
+
             // Re-render after a short delay
             setTimeout(() => this.render(SM.selectedEntity), 100);
         }
@@ -743,10 +743,9 @@
             actionsDiv.style.alignItems = 'center';
             actionsDiv.style.gap = '8px';
             
-            // Add up/down arrows (except for Transform component)
-            // if (component.type !== 'Transform') {
-                // Up arrow - hide if component is at index 1 (right after Transform)
-            if (index > 1) {
+            // Add up/down arrows
+            // Up arrow - hide if component is at the top
+            if (index > 0) {
                 const upBtn = document.createElement('button');
                 upBtn.className = 'component-reorder-btn';
                 upBtn.innerHTML = '↑';
@@ -1193,11 +1192,11 @@
             actionsDiv.appendChild(refreshBtn);
 
             // Add up/down arrows for MonoBehavior
-            // Up arrow - hide if component is at index 1 (right after Transform)
-            if (index > 1) {
+            // Up arrow - hide if component is at the top
+            if (index > 0) {
                 const upBtn = document.createElement('button');
                 upBtn.className = 'component-reorder-btn';
-                upBtn.innerHTML = '▲';
+                upBtn.innerHTML = '↑';
                 upBtn.title = 'Move up';
                 upBtn.onmousedown = (e) => {
                     e.stopPropagation();
@@ -1210,7 +1209,7 @@
             if (index < totalComponents - 1) {
                 const downBtn = document.createElement('button');
                 downBtn.className = 'component-reorder-btn';
-                downBtn.innerHTML = '▼';
+                downBtn.innerHTML = '↓';
                 downBtn.title = 'Move down';
                 downBtn.onmousedown = (e) => {
                     e.stopPropagation();

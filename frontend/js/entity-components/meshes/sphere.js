@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterSphereComponent extends BanterMeshComponent {
+export class SphereComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterSphere;
-        this.type = 'BanterSphere';
+        this.type = 'Sphere';
     }
 
     defaultProperties() {
@@ -52,7 +52,7 @@ export class BanterSphereComponent extends BanterMeshComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterSphere:`, e);
+            console.error(`Failed to update ${property} on Sphere:`, e);
         }
     }
 }

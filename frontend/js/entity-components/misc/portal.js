@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterPortalComponent extends EntityComponent {
+export class PortalComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterPortal;
-        this.type = 'BanterPortal';
+        this.type = 'Portal';
     }
 
     defaultProperties() {
@@ -40,7 +40,7 @@ export class BanterPortalComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterPortal:`, e);
+            console.error(`Failed to update ${property} on Portal:`, e);
         }
     }
 }

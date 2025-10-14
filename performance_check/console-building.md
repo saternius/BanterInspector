@@ -54,9 +54,9 @@ get you to do tasks like these better in the future.
                                          const topBeam =
                                          SM.getEntityById(\"Scene/DoorAssembly/TopBeam\");\n  \n
                                           // Get cube components\n  const leftCube =
-                                         leftPost.getComponent(\"BanterBox\");\n  const rightCube
-                                          = rightPost.getComponent(\"BanterBox\");\n  const
-                                         topCube = topBeam.getComponent(\"BanterBox\");\n  \n  //
+                                         leftPost.getComponent(\"Box\");\n  const rightCube
+                                          = rightPost.getComponent(\"Box\");\n  const
+                                         topCube = topBeam.getComponent(\"Box\");\n  \n  //
                                           Configure left post (tall vertical beam on left)\n
                                          await RunCommand(`set_component_property ${leftCube.id}
                                          size [0.15,2.5,0.15]`);\n  await
@@ -98,15 +98,15 @@ get you to do tasks like these better in the future.
 ● chrome-devtools - evaluate_script (MCP)(function: "async () => {\n  // Add box geometry with
                                          correct component type name\n  await
                                          RunCommand(\"add_component Scene/DoorAssembly/LeftPost
-                                         BanterBox\");\n  await RunCommand(\"add_component
-                                         Scene/DoorAssembly/RightPost BanterBox\");\n  await
+                                         Box\");\n  await RunCommand(\"add_component
+                                         Scene/DoorAssembly/RightPost Box\");\n  await
                                          RunCommand(\"add_component Scene/DoorAssembly/TopBeam
-                                         BanterBox\");\n  \n  // Add materials\n  await
+                                         Box\");\n  \n  // Add materials\n  await
                                          RunCommand(\"add_component Scene/DoorAssembly/LeftPost
-                                         BanterMaterial\");\n  await RunCommand(\"add_component
-                                         Scene/DoorAssembly/RightPost BanterMaterial\");\n  await
+                                         Material\");\n  await RunCommand(\"add_component
+                                         Scene/DoorAssembly/RightPost Material\");\n  await
                                           RunCommand(\"add_component Scene/DoorAssembly/TopBeam
-                                         BanterMaterial\");\n  \n  return \"Components added with
+                                         Material\");\n  \n  return \"Components added with
                                           correct type names\";\n}")
   ⎿  # evaluate_script response                                                             
      Script ran on page and returned:
@@ -121,19 +121,19 @@ get you to do tasks like these better in the future.
                                          SM.getEntityById(\"Scene/DoorAssembly/RightPost\");\n
                                          const topBeam =
                                          SM.getEntityById(\"Scene/DoorAssembly/TopBeam\");\n  \n
-                                          // Get BanterBox components\n  const leftBox =
+                                          // Get Box components\n  const leftBox =
                                          leftPost.components.find(c => c.type ===
-                                         \"BanterBox\");\n  const rightBox =
+                                         \"Box\");\n  const rightBox =
                                          rightPost.components.find(c => c.type ===
-                                         \"BanterBox\");\n  const topBox =
+                                         \"Box\");\n  const topBox =
                                          topBeam.components.find(c => c.type ===
-                                         \"BanterBox\");\n  \n  // Get BanterMaterial
+                                         \"Box\");\n  \n  // Get Material
                                          components\n  const leftMat = leftPost.components.find(c
-                                          => c.type === \"BanterMaterial\");\n  const rightMat =
+                                          => c.type === \"Material\");\n  const rightMat =
                                          rightPost.components.find(c => c.type ===
-                                         \"BanterMaterial\");\n  const topMat =
+                                         \"Material\");\n  const topMat =
                                          topBeam.components.find(c => c.type ===
-                                         \"BanterMaterial\");\n  \n  // Configure left post (tall
+                                         \"Material\");\n  \n  // Configure left post (tall
                                           vertical beam on left)\n  await
                                          RunCommand(`set_component_property ${leftBox.id} size
                                          [0.15,2.5,0.15]`);\n  await
@@ -169,14 +169,14 @@ get you to do tasks like these better in the future.
                                          Scene/DoorAssembly DoorPanel\");\n  \n  // Add box
                                          geometry and material\n  await
                                          RunCommand(\"add_component Scene/DoorAssembly/DoorPanel
-                                         BanterBox\");\n  await RunCommand(\"add_component
-                                         Scene/DoorAssembly/DoorPanel BanterMaterial\");\n  \n
+                                         Box\");\n  await RunCommand(\"add_component
+                                         Scene/DoorAssembly/DoorPanel Material\");\n  \n
                                          // Get components\n  const door =
                                          SM.getEntityById(\"Scene/DoorAssembly/DoorPanel\");\n
                                          const doorBox = door.components.find(c => c.type ===
-                                         \"BanterBox\");\n  const doorMat =
+                                         \"Box\");\n  const doorMat =
                                          door.components.find(c => c.type ===
-                                         \"BanterMaterial\");\n  \n  // Configure door panel (2m
+                                         \"Material\");\n  \n  // Configure door panel (2m
                                          tall, 1m wide, 0.05m thick)\n  await
                                          RunCommand(`set_component_property ${doorBox.id} size
                                          [1,2,0.05]`);\n  \n  // Position door to hang from left
@@ -198,15 +198,15 @@ get you to do tasks like these better in the future.
 ● chrome-devtools - evaluate_script (MCP)(function: "async () => {\n  // Add rigidbody to door
                                          panel for physics simulation\n  await
                                          RunCommand(\"add_component Scene/DoorAssembly/DoorPanel
-                                         BanterRigidbody\");\n  \n  // Add box colliders to all
+                                         Rigidbody\");\n  \n  // Add box colliders to all
                                          pieces\n  await RunCommand(\"add_component
-                                         Scene/DoorAssembly/DoorPanel BanterBoxCollider\");\n
+                                         Scene/DoorAssembly/DoorPanel BoxCollider\");\n
                                          await RunCommand(\"add_component
-                                         Scene/DoorAssembly/LeftPost BanterBoxCollider\");\n
+                                         Scene/DoorAssembly/LeftPost BoxCollider\");\n
                                          await RunCommand(\"add_component
-                                         Scene/DoorAssembly/RightPost BanterBoxCollider\");\n
+                                         Scene/DoorAssembly/RightPost BoxCollider\");\n
                                          await RunCommand(\"add_component
-                                         Scene/DoorAssembly/TopBeam BanterBoxCollider\");\n  \n
+                                         Scene/DoorAssembly/TopBeam BoxCollider\");\n  \n
                                          return \"Physics components added\";\n}")
   ⎿  # evaluate_script response                                                             
      Script ran on page and returned:
@@ -218,7 +218,7 @@ get you to do tasks like these better in the future.
                                          its rigidbody\n  const door =
                                          SM.getEntityById(\"Scene/DoorAssembly/DoorPanel\");\n
                                          const rigidbody = door.components.find(c => c.type ===
-                                         \"BanterRigidbody\");\n  \n  // Configure rigidbody -
+                                         \"Rigidbody\");\n  \n  // Configure rigidbody -
                                          set mass and disable gravity for controlled movement\n
                                          await RunCommand(`set_component_property ${rigidbody.id}
                                           mass 10`);\n  await RunCommand(`set_component_property

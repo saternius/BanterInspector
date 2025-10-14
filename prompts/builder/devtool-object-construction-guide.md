@@ -54,8 +54,8 @@ const objectSpec = {
 // Define HOW to build it through sequential operations
 // Note: Use global functions, NOT ChangeTypes.classes
 let entity = await AddEntity("Scene", "MyObject", {context: 'script'});
-await AddComponent(entity.id, "BanterBox", {context: 'script'});
-let material = await AddComponent(entity.id, "BanterMaterial", {context: 'script'});
+await AddComponent(entity.id, "Box", {context: 'script'});
+let material = await AddComponent(entity.id, "Material", {context: 'script'});
 await SetComponentProp(material.id, "color", {r:1, g:0, b:0}, {context: 'script'})
 await SetEntityProp(entity.id, "localPosition", {x:0, y:1, z:0}, {context: 'script'});
 ```
@@ -83,8 +83,8 @@ await SetEntityProp(entity.id, "localPosition", {x:0, y:1, z:0}, {context: 'scri
 3. **Scripting vs UI Construction - Critical Difference**
    - **UI Construction**: Auto-imports dependencies with `{source: "ui"}`
    - **Scripted Construction**: NO auto-imports, all components must be explicit
-   - Example: BanterGeometry needs BanterMaterial? You must add BOTH
-   - Example: Need collision events? Must explicitly add BanterColliderEvents
+   - Example: Geometry needs Material? You must add BOTH
+   - Example: Need collision events? Must explicitly add ColliderEvents
 
 4. **Transform is Special**
    - Transform is NOT a component anymore in the new format
@@ -154,8 +154,8 @@ When constructing objects in Banter, there are two contexts:
 1. **UI Context** (`{source: "ui"}`)
    - Used when humans click buttons in the Inspector UI
    - Auto-imports dependent components for convenience
-   - Example: Adding BanterGeometry auto-adds BanterMaterial
-   - Example: Adding BoxCollider might auto-add BanterColliderEvents
+   - Example: Adding Geometry auto-adds Material
+   - Example: Adding BoxCollider might auto-add ColliderEvents
    - Designed for user-friendly manual building
 
 2. **Scripting Context** (default)
@@ -169,13 +169,13 @@ When constructing objects in Banter, there are two contexts:
 As a Chrome DevTools agent, you are ALWAYS in the **scripting context**. This means:
 
 ```javascript
-// ❌ WRONG ASSUMPTION: "BanterBox will auto-include BanterMaterial"
-await AddComponent(entityId, "BanterBox");
+// ❌ WRONG ASSUMPTION: "Box will auto-include Material"
+await AddComponent(entityId, "Box");
 // Result: Box with NO material (invisible/default)
 
 // ✅ CORRECT: Explicitly add both components
-await AddComponent(entityId, "BanterBox");
-await AddComponent(entityId, "BanterMaterial");
+await AddComponent(entityId, "Box");
+await AddComponent(entityId, "Material");
 // Result: Box with material as intended
 ```
 
@@ -185,30 +185,30 @@ When scripting, you must manually satisfy these common dependencies:
 
 | Primary Component | Required Dependencies | Optional Enhancements |
 |------------------|----------------------|----------------------|
-| **BanterGeometry** | BanterMaterial | - |
-| **BanterBox/Sphere/etc** | BanterMaterial | - |
-| **BanterGrabbable** | Collider (Box/Sphere/etc), BanterRigidbody | BanterHeldEvents |
-| **BanterRigidbody** | Collider (Box/Sphere/etc) | BanterPhysicMaterial |
-| **Colliders** | - | BanterColliderEvents (for triggers) |
-| **BanterText** | BanterMaterial | - |
-| **Joints** | BanterRigidbody on both entities | - |
+| **Geometry** | Material | - |
+| **Box/Sphere/etc** | Material | - |
+| **Grabbable** | Collider (Box/Sphere/etc), Rigidbody | HeldEvents |
+| **Rigidbody** | Collider (Box/Sphere/etc) | PhysicMaterial |
+| **Colliders** | - | ColliderEvents (for triggers) |
+| **Text** | Material | - |
+| **Joints** | Rigidbody on both entities | - |
 
 ### Example: Building a Grabbable Cube
 
 **UI Context (what a human would experience):**
-1. Add BanterBox → Material auto-added
-2. Add BanterGrabbable → Collider and Rigidbody auto-added
+1. Add Box → Material auto-added
+2. Add Grabbable → Collider and Rigidbody auto-added
 3. Done!
 
 **Scripting Context (what you must do):**
 ```javascript
 // Must explicitly add ALL components
 const components = [
-  { type: "BanterBox" },           // The mesh
-  { type: "BanterMaterial" },      // Must add explicitly!
+  { type: "Box" },           // The mesh
+  { type: "Material" },      // Must add explicitly!
   { type: "BoxCollider" },         // Must add explicitly!
-  { type: "BanterRigidbody" },     // Must add explicitly!
-  { type: "BanterGrabbable" }      // Finally, the grab behavior
+  { type: "Rigidbody" },     // Must add explicitly!
+  { type: "Grabbable" }      // Finally, the grab behavior
 ];
 ```
 
@@ -269,13 +269,13 @@ const entityData = {
 // Example: Box with material
 entityData.components = [
   {
-    type: "BanterBox",
+    type: "Box",
     properties: {
       // Box is a simplified geometry type
     }
   },
   {
-    type: "BanterMaterial",
+    type: "Material",
     properties: {
       color: { r: 1, g: 0.5, b: 0.2, a: 1 },
       shaderName: "Unlit/Diffuse",
@@ -288,7 +288,7 @@ entityData.components = [
 // Example: GLTF model with grabbable behavior
 entityData.components = [
   {
-    type: "BanterGLTF",
+    type: "GLTF",
     properties: {
       url: "https://your-cdn.com/model.glb",
       addColliders: true,
@@ -297,7 +297,7 @@ entityData.components = [
     }
   },
   {
-    type: "BanterGrabbable"
+    type: "Grabbable"
   }
 ];
 ```
@@ -417,7 +417,7 @@ await mcp__chrome-devtools__evaluate_script({
 
     // Use global function
     const component = await AddComponent(
-      entityId, "BanterBox", { context: 'script' }
+      entityId, "Box", { context: 'script' }
     );
 
     return {
@@ -435,7 +435,7 @@ await mcp__chrome-devtools__evaluate_script({
     // Use global function with initial properties
     const component = await AddComponent(
       entityId,
-      "BanterMaterial",
+      "Material",
       {
         componentProperties:{
           color: { r: 0.2, g: 0.5, b: 1, a: 1 } 
@@ -473,7 +473,7 @@ await mcp__chrome-devtools__evaluate_script({
 // Set component property
 await mcp__chrome-devtools__evaluate_script({
   function: `async () => {
-    const componentId = "BanterMaterial_12345";  // Actual component ID
+    const componentId = "Material_12345";  // Actual component ID
     const newColor = { r: 1, g: 0, b: 0, a: 1 };
 
     // Use global function
@@ -513,18 +513,18 @@ const grabbableCube = {
       localScale: { x: 1, y: 1, z: 1 }
     },
     components: [
-      { type: "BanterBox" },
+      { type: "Box" },
       {
-        type: "BanterMaterial",
+        type: "Material",
         properties: { color: { r: 1, g: 0, b: 0, a: 1 } }
       },
       { type: "BoxCollider" },
       {
-        type: "BanterRigidbody",
+        type: "Rigidbody",
         properties: { mass: 1, useGravity: true }
       },
       {
-        type: "BanterGrabbable"
+        type: "Grabbable"
       }
     ]
   }
@@ -546,12 +546,12 @@ await LoadItem("RedGrabbableCube", "Scene", null, {context: 'script'});
 const entity = await AddEntity("Scene", "RedGrabbableCube", {context: 'script'});
 
 // 2. Add box mesh
-await AddComponent(entity.id, "BanterBox", {context: 'script'});
+await AddComponent(entity.id, "Box", {context: 'script'});
 
 // 3. Add material with red color (REQUIRED!)
 await AddComponent(
   entity.id,
-  "BanterMaterial",
+  "Material",
   {
     context: 'script',
     color: { r: 1, g: 0, b: 0, a: 1 }
@@ -564,7 +564,7 @@ await AddComponent(entity.id, "BoxCollider", {context: 'script'});
 // 5. Add rigidbody for grabbable
 await AddComponent(
   entity.id,
-  "BanterRigidbody",
+  "Rigidbody",
   {
     context: 'script',
     mass: 1,
@@ -575,7 +575,7 @@ await AddComponent(
 // 6. Add grabbable component
 await AddComponent(
   entity.id,
-  "BanterGrabbable",
+  "Grabbable",
   {
     context: 'script'
   }
@@ -627,9 +627,9 @@ await SetEntityProp(
 ```javascript
 {
   components: [
-    { type: "BanterBox" },  // or BanterSphere, BanterCylinder
+    { type: "Box" },  // or Sphere, Cylinder
     {
-      type: "BanterMaterial",  // MUST be explicitly added for visibility!
+      type: "Material",  // MUST be explicitly added for visibility!
       properties: {
         color: { r: 1, g: 1, b: 1, a: 1 },
         shaderName: "Unlit/Diffuse",
@@ -646,11 +646,11 @@ await SetEntityProp(
 ```javascript
 {
   components: [
-    { type: "BanterBox" },            // The visual mesh
-    { type: "BanterMaterial" },       // Required for visibility
+    { type: "Box" },            // The visual mesh
+    { type: "Material" },       // Required for visibility
     { type: "BoxCollider" },          // Required for physics/grabbing
     {
-      type: "BanterRigidbody",        // Required for grabbable
+      type: "Rigidbody",        // Required for grabbable
       properties: {
         mass: 1,
         drag: 0.5,
@@ -658,7 +658,7 @@ await SetEntityProp(
         useGravity: true
       }
     },
-    { type: "BanterGrabbable" }       // The grab behavior itself
+    { type: "Grabbable" }       // The grab behavior itself
   ]
 }
 ```
@@ -669,7 +669,7 @@ await SetEntityProp(
 {
   components: [
     {
-      type: "BanterGLTF",
+      type: "GLTF",
       properties: {
         url: "https://cdn.example.com/model.glb",
         addColliders: true
@@ -694,11 +694,11 @@ await SetEntityProp(
 ```javascript
 {
   components: [
-    { type: "BanterSphere" },
-    { type: "BanterMaterial" },
+    { type: "Sphere" },
+    { type: "Material" },
     { type: "SphereCollider" },
     {
-      type: "BanterRigidbody",
+      type: "Rigidbody",
       properties: {
         mass: 0.5,
         drag: 0.1,
@@ -707,7 +707,7 @@ await SetEntityProp(
       }
     },
     {
-      type: "BanterPhysicMaterial",
+      type: "PhysicMaterial",
       properties: {
         bounciness: 0.8,
         frictionCombine: 0,
@@ -724,7 +724,7 @@ await SetEntityProp(
 {
   components: [
     {
-      type: "BanterUIPanel",
+      type: "UIPanel",
       properties: {
         width: 400,
         height: 300,
@@ -756,13 +756,13 @@ await mcp__chrome-devtools__evaluate_script({
 
     // 2. Add box component
     await window.AddComponent(
-      entity.id, "BanterBox", { context: 'script' }
+      entity.id, "Box", { context: 'script' }
     );
 
     // 3. CRITICAL: Add material (required for visibility!)
     await window.AddComponent(
       entity.id,
-      "BanterMaterial",
+      "Material",
       {
         context: 'script',
         color: { r: 1, g: 0.5, b: 0.2, a: 1 },
@@ -804,13 +804,13 @@ await mcp__chrome-devtools__evaluate_script({
         if (entity) {
           // Add sphere
           await window.AddComponent(
-            entity.id, "BanterSphere", { context: 'script' }
+            entity.id, "Sphere", { context: 'script' }
           );
 
           // CRITICAL: Add material with unique color per object
           await window.AddComponent(
             entity.id,
-            "BanterMaterial",
+            "Material",
             {
               context: 'script',
               color: {
@@ -906,7 +906,7 @@ await mcp__chrome-devtools__evaluate_script({
 ```javascript
 await mcp__chrome-devtools__evaluate_script({
   function: `() => {
-    const componentId = "BanterMaterial_12345";
+    const componentId = "Material_12345";
     const component = SM.getEntityComponentById(componentId);
 
     return {
@@ -1011,12 +1011,12 @@ componentProperties: {
 **Solution:** Add required components or use bundled types
 
 ```javascript
-// BanterGrabbable needs collider and rigidbody
+// Grabbable needs collider and rigidbody
 components: [
-  { type: "BanterBox" },
+  { type: "Box" },
   { type: "BoxCollider" },  // Required for grabbing
-  { type: "BanterRigidbody" },  // Required for physics
-  { type: "BanterGrabbable" }
+  { type: "Rigidbody" },  // Required for physics
+  { type: "Grabbable" }
 ]
 ```
 
@@ -1082,36 +1082,36 @@ ComponentRegistry.getByCategory()
 ### Common Component Types
 
 **Geometry/Meshes:**
-- `BanterBox`, `BanterSphere`, `BanterCylinder`, `BanterPlane`
-- `BanterTorus`, `BanterCone`, `BanterRing`
-- `BanterText` - 3D text
-- `BanterGeometry` - Generic geometry with parameters
+- `Box`, `Sphere`, `Cylinder`, `Plane`
+- `Torus`, `Cone`, `Ring`
+- `Text` - 3D text
+- `Geometry` - Generic geometry with parameters
 
 **Materials:**
-- `BanterMaterial` - Visual material
-- `BanterPhysicMaterial` - Physics properties
+- `Material` - Visual material
+- `PhysicMaterial` - Physics properties
 
 **Physics:**
-- `BanterRigidbody` - Physics simulation
+- `Rigidbody` - Physics simulation
 - `BoxCollider`, `SphereCollider`, `CapsuleCollider`, `MeshCollider`
 - Joints: `HingeJoint`, `FixedJoint`, `SpringJoint`, `ConfigurableJoint`
 
 **Behaviors:**
-- `BanterGrabbable` - VR grabbable
-- `BanterSyncedObject` - Multi-user sync
-- `BanterColliderEvents` - Collision detection
+- `Grabbable` - VR grabbable
+- `SyncedObject` - Multi-user sync
+- `ColliderEvents` - Collision detection
 - `MonoBehavior` - Custom scripts
 
 **Media:**
-- `BanterGLTF` - 3D models
-- `BanterAudioSource` - Sound playback
-- `BanterVideoPlayer` - Video playback
+- `GLTF` - 3D models
+- `AudioSource` - Sound playback
+- `VideoPlayer` - Video playback
 
 **Special:**
-- `BanterMirror` - Reflective surface
-- `BanterPortal` - Teleport portal
+- `Mirror` - Reflective surface
+- `Portal` - Teleport portal
 - `BanterUIPanel` - HTML UI
-- `BanterBrowser` - Web browser
+- `Browser` - Web browser
 
 ### Important Note on Methods
 
@@ -1125,7 +1125,7 @@ ComponentRegistry.getByCategory()
 These are typed directly in the inspector shell, not used in scripts:
 add_entity Scene MyEntity
 remove_entity Scene/MyEntity
-add_component Scene/Entity BanterBox
+add_component Scene/Entity Box
 set_entity_property Scene/Entity localPosition {x:0,y:1,z:0}
 ```
 
@@ -1134,7 +1134,7 @@ set_entity_property Scene/Entity localPosition {x:0,y:1,z:0}
 ## Best Practices Summary
 
 1. **EXPLICITLY ADD ALL COMPONENTS** - When scripting, nothing is automatic!
-2. **Always add BanterMaterial with geometry** - Without it, objects are invisible
+2. **Always add Material with geometry** - Without it, objects are invisible
 3. **Validate before proceeding** - Check entities exist before adding components
 4. **Use inventory for complex objects** - Easier to manage and reuse
 5. **Let system generate IDs** - Avoid ID conflicts
@@ -1172,7 +1172,7 @@ Before writing any code, you must choose your paradigm:
 2. **Choose your paradigm FIRST** - Don't mix approaches in a single task
 3. **Explicit is non-negotiable** - When scripting, YOU add EVERY component
 4. **No auto-imports in scripting** - The `{source: "ui"}` magic is UI-only
-5. **Materials are mandatory** - Geometry without BanterMaterial = invisible
+5. **Materials are mandatory** - Geometry without Material = invisible
 
 ### Decision Framework
 

@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterAudioSourceComponent extends EntityComponent {
+export class AudioSourceComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterAudioSource;
-        this.type = 'BanterAudioSource';
+        this.type = 'AudioSource';
     }
 
     defaultProperties() {
@@ -54,7 +54,7 @@ export class BanterAudioSourceComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterAudioSource:`, e);
+            console.error(`Failed to update ${property} on AudioSource:`, e);
         }
     }
 }

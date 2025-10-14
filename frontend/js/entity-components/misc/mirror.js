@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterMirrorComponent extends EntityComponent {
+export class MirrorComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterMirror;
-        this.type = 'BanterMirror';
+        this.type = 'Mirror';
     }
 
     defaultProperties() {
@@ -45,7 +45,7 @@ export class BanterMirrorComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterMirror:`, e);
+            console.error(`Failed to update ${property} on Mirror:`, e);
         }
     }
 

@@ -1,10 +1,10 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
-export class BanterHeldEventsComponent extends EntityComponent {
+export class HeldEventsComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterHeldEvents;
-        this.type = 'BanterHeldEvents';
+        this.type = 'HeldEvents';
     }
 
     defaultProperties() {
@@ -59,7 +59,7 @@ export class BanterHeldEventsComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterHeldEvents:`, e);
+            console.error(`Failed to update ${property} on HeldEvents:`, e);
         }
     }
 }

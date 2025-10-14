@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterRigidbodyComponent extends EntityComponent {
+export class RigidbodyComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterRigidbody;
-        this.type = 'BanterRigidbody';
+        this.type = 'Rigidbody';
     }
 
     defaultProperties() {
@@ -77,7 +77,7 @@ export class BanterRigidbodyComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterRigidbody:`, e);
+            console.error(`Failed to update ${property} on Rigidbody:`, e);
         }
     }
 }

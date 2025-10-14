@@ -26,12 +26,12 @@ You are a specialized agent that builds, modifies, and manages 3D objects in a l
 #### 1. Scripting Context = Explicit Everything
 ```javascript
 // ❌ WRONG: Expecting auto-imports like UI does
-await AddComponent(entityId, "BanterBox");
+await AddComponent(entityId, "Box");
 // Result: Box with no material (invisible)
 
 // ✅ CORRECT: Explicitly add ALL components
-await AddComponent(entityId, "BanterBox", {context: 'script'});
-await AddComponent(entityId, "BanterMaterial", {context: 'script'});
+await AddComponent(entityId, "Box", {context: 'script'});
+await AddComponent(entityId, "Material", {context: 'script'});
 ```
 
 #### 2. Use Global Functions, NOT Change Classes
@@ -76,8 +76,8 @@ Best for: Modifications, dynamic building, experiments
 ```javascript
 // Build step by step
 const entity = await AddEntity("Scene", "MyObject", {context: 'script'});
-await AddComponent(entity.id, "BanterBox", {context: 'script'});
-await AddComponent(entity.id, "BanterMaterial", {context: 'script'});
+await AddComponent(entity.id, "Box", {context: 'script'});
+await AddComponent(entity.id, "Material", {context: 'script'});
 await SetEntityProp(entity.id, "localPosition", {x:0, y:1, z:0}, {context: 'script'});
 ```
 
@@ -113,10 +113,10 @@ When scripting, you must manually add ALL required components:
 
 | Component | Required Dependencies |
 |-----------|----------------------|
-| **BanterBox/Sphere/etc** | BanterMaterial (for visibility) |
-| **BanterGrabbable** | Collider + BanterRigidbody |
-| **BanterRigidbody** | Collider (Box/Sphere/etc) |
-| **Joints** | BanterRigidbody on both entities |
+| **Box/Sphere/etc** | Material (for visibility) |
+| **Grabbable** | Collider + Rigidbody |
+| **Rigidbody** | Collider (Box/Sphere/etc) |
+| **Joints** | Rigidbody on both entities |
 
 ### Quick Validation
 
@@ -145,10 +145,10 @@ await mcp__chrome-devtools__take_snapshot();
 ### Key Pitfalls to Avoid
 
 1. **Transform is NOT a component anymore** - It's at entity level
-2. **No material = invisible object** - Always add BanterMaterial with geometry
+2. **No material = invisible object** - Always add Material with geometry
 3. **Entity paths must be complete** - Use "Scene/Entity" not just "Entity"
 4. **Components need unique IDs** - Let the system generate them
-5. **Check dependencies** - BanterGrabbable needs collider + rigidbody
+5. **Check dependencies** - Grabbable needs collider + rigidbody
 
 ### Decision Framework
 
@@ -178,10 +178,10 @@ await mcp__chrome-devtools__evaluate_script({
     const entity = await AddEntity("Scene", "RedCube", {context: 'script'});
 
     // Add mesh
-    await AddComponent(entity.id, "BanterBox", {context: 'script'});
+    await AddComponent(entity.id, "Box", {context: 'script'});
 
     // CRITICAL: Add material for visibility!
-    await AddComponent(entity.id, "BanterMaterial", {
+    await AddComponent(entity.id, "Material", {
       context: 'script',
       componentProperties: { color: {r:1, g:0, b:0, a:1} }
     });

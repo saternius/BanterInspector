@@ -912,7 +912,7 @@
 
         async _addComponent(entity, componentType, componentProperties, options){
             // Check if component already exists (for unique components)
-            const uniqueComponents = ['Transform', 'BanterRigidbody', 'BanterSyncedObject'];
+            const uniqueComponents = ['Transform', 'Rigidbody', 'SyncedObject'];
             if (uniqueComponents.includes(componentType)) {
                 const exists = entity.components.some(c => c.type === componentType);
                 if (exists) {
