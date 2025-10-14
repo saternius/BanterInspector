@@ -68,7 +68,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "loadAsync": false,
@@ -88,7 +88,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "loadAsync": false,
@@ -117,7 +117,7 @@
               "context": "item",
               "loadAsync": false
             },
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -232,7 +232,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_44473",
+                "id": "BanterGeometry_44473",
                 "loadAsync": false,
                 "options": {
                   "context": "item",
@@ -267,10 +267,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_75767",
+                "id": "BanterMaterial_75767",
                 "loadAsync": false,
                 "options": {
                   "context": "item",
@@ -288,7 +288,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_45529",
@@ -313,13 +313,13 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_33865",
+                "id": "BanterColliderEvents_33865",
                 "loadAsync": false,
                 "options": {
                   "context": "item",
                   "loadAsync": false
                 },
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/ImageWindow_1456/Handle",

@@ -1,4 +1,4 @@
-class WindowUI {
+class BlankWindowUI {
     constructor(ctx, windowName){
         this.ctx = ctx;
         this.windowName = windowName;
@@ -10,25 +10,24 @@ class WindowUI {
         this.PaneEntity = null;
         this.doc = null;
 
-        this.ctx.onStart = async ()=>{
+        this.ctx.onLoaded = async ()=>{
             let {startingPosition, startingRotation} = await this.getStartingSpot();
-            let transform = this.ctx._entity.getTransform();    
-            transform.Set("localPosition", {x: 0, y: 0, z: 0});
+            this.ctx._entity.Set("localPosition", {x: 0, y: 0, z: 0});
             this.PaneEntity = await AddEntity(this.ctx._entity.id, "UI")
             this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));
             this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));
             window.blankUI = this.doc;
-            transform.Set("localPosition", startingPosition);
-            transform.Set("localRotation", startingRotation);
+            this.ctx._entity.Set("localPosition", startingPosition);
+            this.ctx._entity.Set("localRotation", startingRotation);
             this.generateUI();
 
             log(`${this.windowName} UI`, "onLoaded")
-            let handle = this.ctx._entity.children.find(c=>c.name === "Handle")
-            log(`${this.windowName} UI`, "Handle", handle)
-            handle._bs.On("click", e => {
-                log(`${this.windowName} UI`, "TEMP holder")
-                this.grabHandler(e)
-            })
+            // let handle = this.ctx._entity.children.find(c=>c.name === "Handle")
+            // log(`${this.windowName} UI`, "Handle", handle)
+            // handle._bs.On("click", e => {
+            //     log(`${this.windowName} UI`, "TEMP holder")
+            //     this.grabHandler(e)
+            // })
         }
 
         this.ctx.onDestroy = async()=>{
@@ -119,7 +118,7 @@ class WindowUI {
                 showNotification("Error: RIGHT_HAND Holder not found")
                 return;
             }
-            rightHandHolder.getTransform().Set("position", e.detail.point)
+            rightHandHolder.Set("position", e.detail.point)
             this.lastParent = this.ctx._entity.parentId;
             this.ctx._entity.SetParent(rightHandHolderPath)
         }
@@ -138,12 +137,11 @@ class WindowUI {
 
     async getStartingSpot(){
         let headTracker = await this.fetchTracker("HEAD");
-        let headTransform = headTracker.getTransform();
-        let headPosition = headTransform._bs._localPosition;
-        let headForward = TransformOps.Multiply(headTransform._bs.forward, 1.75);
+        let headPosition = headTracker.Get("localPosition");
+        let headForward = TransformOps.Multiply(headTracker.Get("forward"), 1.75);
         let startingPosition = TransformOps.Add(headPosition, headForward);
         startingPosition.y -= 0.5;
-        let startingRotation = lockQuaternionAxes(headTransform._bs._rotation, true, false, true);
+        let startingRotation = lockQuaternionAxes(headTracker.Get("rotation"), true, false, true);
         return {startingPosition, startingRotation};
     }
 
@@ -153,6 +151,6 @@ class WindowUI {
     }
 }
 
-this.UI = new WindowUI(this, "Blank");
+this.UI = new BlankWindowUI(this, "Blank");
 
 

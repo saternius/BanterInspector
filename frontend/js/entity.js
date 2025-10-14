@@ -43,6 +43,25 @@ export class Entity{
         return this;
     }
 
+    get localPosition(){
+        return this.transform.localPosition;
+    }
+    get localRotation(){
+        return this.transform.localRotation;
+    }
+    get localScale(){
+        return this.transform.localScale;
+    }
+    get position(){
+        return this.transform.position;
+    }
+    get rotation(){
+        return this.transform.rotation;
+    }
+    get scale(){
+        return this.transform.scale;
+    }
+
 
 
     getComponent(componentType, index = 0){
@@ -320,6 +339,55 @@ export class Entity{
     }
     
     Get(property){
+        // Handle directional vectors
+        const directions = {
+            'forward': () => {
+                // Forward is local +Z axis rotated by entity's rotation
+                const rot = this.transform.rotation;
+                return new BS.Vector3(
+                    2 * (rot.x * rot.z + rot.w * rot.y),
+                    2 * (rot.y * rot.z - rot.w * rot.x),
+                    1 - 2 * (rot.x * rot.x + rot.y * rot.y)
+                );
+            },
+            'backward': () => {
+                const forward = this.Get('forward');
+                return new BS.Vector3(-forward.x, -forward.y, -forward.z);
+            },
+            'right': () => {
+                // Right is local +X axis rotated by entity's rotation
+                const rot = this.transform.rotation;
+                return new BS.Vector3(
+                    1 - 2 * (rot.y * rot.y + rot.z * rot.z),
+                    2 * (rot.x * rot.y + rot.w * rot.z),
+                    2 * (rot.x * rot.z - rot.w * rot.y)
+                );
+            },
+            'left': () => {
+                const right = this.Get('right');
+                return new BS.Vector3(-right.x, -right.y, -right.z);
+            },
+            'up': () => {
+                // Up is local +Y axis rotated by entity's rotation
+                const rot = this.transform.rotation;
+                return new BS.Vector3(
+                    2 * (rot.x * rot.y - rot.w * rot.z),
+                    1 - 2 * (rot.x * rot.x + rot.z * rot.z),
+                    2 * (rot.y * rot.z + rot.w * rot.x)
+                );
+            },
+            'down': () => {
+                const up = this.Get('up');
+                return new BS.Vector3(-up.x, -up.y, -up.z);
+            }
+        };
+
+        // Check if it's a directional property
+        if(directions[property]){
+            return directions[property]();
+        }
+
+        // Original logic for transform and entity properties
         let transformProperty = this.transform[property]
         if(transformProperty){
             return transformProperty;
