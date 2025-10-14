@@ -78,9 +78,9 @@ get you to do tasks like these better in the future.
       uid=1_59 StaticText "Z"
       uid=1_60 spinbutton "" value="1" valuetext="1" valuemin="0" valuemax="0"
       uid=1_61 button "🔓" description="Click to lock proportional scaling"
-      uid=1_62 StaticText "BanterGeometry"
+      uid=1_62 StaticText "Geometry"
       uid=1_63 StaticText " "
-      uid=1_64 StaticText "BanterGeometry_52195"
+      uid=1_64 StaticText "Geometry_52195"
       uid=1_65 button "↓" description="Move down"
       uid=1_66 button "×" description="Delete component"
       uid=1_67 StaticText "▼"
@@ -173,9 +173,9 @@ get you to do tasks like these better in the future.
       uid=1_146 button "↻" description="Reset to default"
       uid=1_147 StaticText "Theta Segments"
       uid=1_148 spinbutton "" value="6" valuetext="6" valuemin="0" valuemax="0"
-      uid=1_149 StaticText "BanterMaterial"
+      uid=1_149 StaticText "Material"
       uid=1_150 StaticText " "
-      uid=1_151 StaticText "BanterMaterial_51710"
+      uid=1_151 StaticText "Material_51710"
       uid=1_152 button "↓" description="Move down"
       uid=1_153 button "×" description="Delete component"
       uid=1_154 StaticText "▼"
@@ -200,9 +200,9 @@ get you to do tasks like these better in the future.
       uid=1_170 button "↻" description="Reset to default"
       uid=1_171 StaticText "Generate Mip Maps"
       uid=1_172 checkbox "" checked checked="true"
-      uid=1_173 StaticText "BanterAttachedObject"
+      uid=1_173 StaticText "AttachedObject"
       uid=1_174 StaticText " "
-      uid=1_175 StaticText "BanterAttachedObject_42328"
+      uid=1_175 StaticText "AttachedObject_42328"
       uid=1_176 button "↑" description="Move up"
       uid=1_177 button "×" description="Delete component"
       uid=1_178 StaticText "▼"
@@ -263,14 +263,14 @@ get you to do tasks like these better in the future.
                                          post\n    await RunSafeCommand(\"add_entity
                                          Scene/DoorFrame LeftPost\");\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/LeftPost
-                                         BanterBox\");\n    \n    // Wait for component to be
+                                         Box\");\n    \n    // Wait for component to be
                                          created\n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const leftEntity =
                                          SM.getEntityById(\"Scene/DoorFrame/LeftPost\");\n    if
                                          (!leftEntity) {\n        return \"ERROR: LeftPost entity
                                          not found\";\n    }\n    \n    const leftBox =
-                                         leftEntity.getComponent(\"BanterBox\");\n    if
-                                         (!leftBox) {\n        return \"ERROR: BanterBox component
+                                         leftEntity.getComponent(\"Box\");\n    if
+                                         (!leftBox) {\n        return \"ERROR: Box component
                                           not found on LeftPost\";\n    }\n    \n    // Configure
                                          left post dimensions (tall narrow post)\n    await
                                          RunSafeCommand(`set_component_property ${leftBox.id} size
@@ -279,9 +279,9 @@ get you to do tasks like these better in the future.
                                          Scene/DoorFrame/LeftPost localPosition [-0.55,0,0]\");\n
                                             \n    // Add material to left post\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/LeftPost
-                                         BanterMaterial\");\n    await new Promise(resolve =>
+                                         Material\");\n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const leftMat =
-                                         leftEntity.getComponent(\"BanterMaterial\");\n    if
+                                         leftEntity.getComponent(\"Material\");\n    if
                                          (leftMat) {\n        await
                                          RunSafeCommand(`set_component_property ${leftMat.id}
                                          color #8B4513`);\n    }\n    \n    console.log(\"✓
@@ -297,13 +297,13 @@ get you to do tasks like these better in the future.
                                          post\n    await RunSafeCommand(\"add_entity
                                          Scene/DoorFrame RightPost\");\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/RightPost
-                                         BanterBox\");\n    \n    await new Promise(resolve =>
+                                         Box\");\n    \n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const rightEntity =
                                           SM.getEntityById(\"Scene/DoorFrame/RightPost\");\n    if
                                           (!rightEntity) {\n        return \"ERROR: RightPost
                                          entity not found\";\n    }\n    \n    const rightBox =
-                                         rightEntity.getComponent(\"BanterBox\");\n    if
-                                         (!rightBox) {\n        return \"ERROR: BanterBox
+                                         rightEntity.getComponent(\"Box\");\n    if
+                                         (!rightBox) {\n        return \"ERROR: Box
                                          component not found on RightPost\";\n    }\n    \n    //
                                          Configure right post dimensions (tall narrow post)\n
                                          await RunSafeCommand(`set_component_property
@@ -312,9 +312,9 @@ get you to do tasks like these better in the future.
                                          Scene/DoorFrame/RightPost localPosition [0.55,0,0]\");\n
                                             \n    // Add material to right post\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/RightPost
-                                         BanterMaterial\");\n    await new Promise(resolve =>
+                                         Material\");\n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const rightMat =
-                                         rightEntity.getComponent(\"BanterMaterial\");\n    if
+                                         rightEntity.getComponent(\"Material\");\n    if
                                          (rightMat) {\n        await
                                          RunSafeCommand(`set_component_property ${rightMat.id}
                                          color #8B4513`);\n    }\n    \n    console.log(\"✓
@@ -330,13 +330,13 @@ get you to do tasks like these better in the future.
                                          piece (lintel)\n    await RunSafeCommand(\"add_entity
                                          Scene/DoorFrame TopFrame\");\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/TopFrame
-                                         BanterBox\");\n    \n    await new Promise(resolve =>
+                                         Box\");\n    \n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const topEntity =
                                          SM.getEntityById(\"Scene/DoorFrame/TopFrame\");\n    if
                                          (!topEntity) {\n        return \"ERROR: TopFrame entity
                                          not found\";\n    }\n    \n    const topBox =
-                                         topEntity.getComponent(\"BanterBox\");\n    if (!topBox)
-                                         {\n        return \"ERROR: BanterBox component not found
+                                         topEntity.getComponent(\"Box\");\n    if (!topBox)
+                                         {\n        return \"ERROR: Box component not found
                                          on TopFrame\";\n    }\n    \n    // Configure top frame
                                          dimensions (wide horizontal piece)\n    await
                                          RunSafeCommand(`set_component_property ${topBox.id} size
@@ -345,9 +345,9 @@ get you to do tasks like these better in the future.
                                          Scene/DoorFrame/TopFrame localPosition [0,1,0]\");\n
                                          \n    // Add material to top frame\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/TopFrame
-                                         BanterMaterial\");\n    await new Promise(resolve =>
+                                         Material\");\n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const topMat =
-                                         topEntity.getComponent(\"BanterMaterial\");\n    if
+                                         topEntity.getComponent(\"Material\");\n    if
                                          (topMat) {\n        await
                                          RunSafeCommand(`set_component_property ${topMat.id} color
                                           #8B4513`);\n    }\n    \n    console.log(\"✓ Created top
@@ -363,13 +363,13 @@ get you to do tasks like these better in the future.
                                          entity\n    await RunSafeCommand(\"add_entity
                                          Scene/DoorFrame Door\");\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/Door
-                                         BanterBox\");\n    \n    await new Promise(resolve =>
+                                         Box\");\n    \n    await new Promise(resolve =>
                                          setTimeout(resolve, 100));\n    \n    const doorEntity =
                                          SM.getEntityById(\"Scene/DoorFrame/Door\");\n    if
                                          (!doorEntity) {\n        return \"ERROR: Door entity not
                                          found\";\n    }\n    \n    const doorBox =
-                                         doorEntity.getComponent(\"BanterBox\");\n    if
-                                         (!doorBox) {\n        return \"ERROR: BanterBox component
+                                         doorEntity.getComponent(\"Box\");\n    if
+                                         (!doorBox) {\n        return \"ERROR: Box component
                                           not found on Door\";\n    }\n    \n    // Configure door
                                           dimensions (1m wide, 1.8m tall, 0.05m thick)\n    await
                                          RunSafeCommand(`set_component_property ${doorBox.id} size
@@ -380,10 +380,10 @@ get you to do tasks like these better in the future.
                                          RunSafeCommand(\"set_entity_property Scene/DoorFrame/Door
                                           localPosition [0,-0.1,0]\");\n    \n    // Add material
                                          to door\n    await RunSafeCommand(\"add_component
-                                         Scene/DoorFrame/Door BanterMaterial\");\n    await new
+                                         Scene/DoorFrame/Door Material\");\n    await new
                                          Promise(resolve => setTimeout(resolve, 100));\n    \n
                                          const doorMat =
-                                         doorEntity.getComponent(\"BanterMaterial\");\n    if
+                                         doorEntity.getComponent(\"Material\");\n    if
                                          (doorMat) {\n        // Nice wooden door color\n
                                          await RunSafeCommand(`set_component_property
                                          ${doorMat.id} color #A0522D`);\n    }\n    \n
@@ -398,9 +398,9 @@ get you to do tasks like these better in the future.
 ● chrome-devtools - evaluate_script (MCP)(function: "\nasync () => {\n    // Add Rigidbody to the
                                          door for physics simulation\n    await
                                          RunSafeCommand(\"add_component Scene/DoorFrame/Door
-                                         BanterRigidbody\");\n    \n    await new Promise(resolve
+                                         Rigidbody\");\n    \n    await new Promise(resolve
                                          => setTimeout(resolve, 100));\n    \n    const doorEntity
                                           = SM.getEntityById(\"Scene/DoorFrame/Door\");\n    if
                                          (!doorEntity) {\n        return \"ERROR: Door entity not
                                          found\";\n    }\n    \n    const rigidbody =
-                                         doorEntity.getComponent(\"BanterRigidbody\");\n    if
+                                         doorEntity.getComponent(\"Rigidbody\");\n    if

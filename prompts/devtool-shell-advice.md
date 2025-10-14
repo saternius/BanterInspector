@@ -37,7 +37,7 @@ All commands automatically:
 
 ### Component IDs
 - Format: `TypeName_RandomNumber`
-- Examples: `BanterBox_12345`, `BanterMaterial_67890`, `MonoBehavior_11223`
+- Examples: `Box_12345`, `Material_67890`, `MonoBehavior_11223`
 
 ---
 
@@ -68,15 +68,15 @@ await RunCommand("clone_entity Scene/Template");
 
 ```javascript
 // Add component (use correct names from list below!)
-await RunCommand("add_component Scene/MyEntity BanterBox");
-await RunCommand("add_component Scene/Light BanterPointLight");
+await RunCommand("add_component Scene/MyEntity Box");
+await RunCommand("add_component Scene/Light PointLight");
 
 // Remove component
-await RunCommand("remove_component BanterBox_12345");
+await RunCommand("remove_component Box_12345");
 
 // Set component properties
-await RunCommand("set_component_property BanterBox_12345 size [2,2,2]");
-await RunCommand("set_component_property BanterMaterial_67890 color #FF0000");
+await RunCommand("set_component_property Box_12345 size [2,2,2]");
+await RunCommand("set_component_property Material_67890 color #FF0000");
 ```
 
 **⚠️ CRITICAL: Component Type Names**
@@ -84,33 +84,33 @@ await RunCommand("set_component_property BanterMaterial_67890 color #FF0000");
 Most components are prefixed with `Banter`. Here are the **correct** names:
 
 **Meshes (ALL have Banter prefix):**
-- `BanterBox`, `BanterSphere`, `BanterCylinder`, `BanterPlane`
-- `BanterCone`, `BanterCircle`, `BanterRing`, `BanterTorus`
-- `BanterText`, `BanterTorusKnot`, `BanterInvertedMesh`
+- `Box`, `Sphere`, `Cylinder`, `Plane`
+- `Cone`, `Circle`, `Ring`, `Torus`
+- `Text`, `TorusKnot`, `InvertedMesh`
 
 **Materials:**
-- `BanterMaterial` (NOT StandardMaterial!)
-- `BanterPhysicMaterial`
+- `Material` (NOT StandardMaterial!)
+- `PhysicMaterial`
 
 **Physics Colliders (NO Banter prefix!):**
 - `BoxCollider`, `SphereCollider`, `CapsuleCollider`, `MeshCollider`
 
 **Physics:**
-- `BanterRigidbody`
+- `Rigidbody`
 
 **Joints:**
 - `ConfigurableJoint`, `CharacterJoint`, `FixedJoint`, `HingeJoint`, `SpringJoint`
 
 **Media:**
-- `BanterAudioSource`, `BanterVideoPlayer`, `BanterGLTF`
+- `AudioSource`, `VideoPlayer`, `GLTF`
 
 **Behaviors:**
-- `BanterGrabbable`, `BanterGrabHandle`, `BanterSyncedObject`
-- `BanterHeldEvents`, `BanterAttachedObject`, `BanterColliderEvents`
+- `Grabbable`, `GrabHandle`, `SyncedObject`
+- `HeldEvents`, `AttachedObject`, `ColliderEvents`
 
 **Misc:**
-- `BanterBillboard`, `BanterMirror`, `BanterBrowser`, `BanterPortal`
-- `BanterUIPanel`, `BanterAvatarPedestal`, `MonoBehavior`
+- `Billboard`, `Mirror`, `Browser`, `Portal`
+- `UIPanel`, `AvatarPedestal`, `MonoBehavior`
 
 ### Discovering Available Components
 
@@ -129,10 +129,10 @@ ComponentRegistry.getByCategory("behaviors");
 ComponentRegistry.getCategories();
 
 // Search for a specific component
-ComponentRegistry.getInfo("BanterBox");
+ComponentRegistry.getInfo("Box");
 
 // Check if a component is supported
-ComponentRegistry.isSupported("BanterBox");
+ComponentRegistry.isSupported("Box");
 ```
 
 ### Validating Commands Before Execution
@@ -141,9 +141,9 @@ Use the ChangeTypes validation helpers to catch errors before running commands:
 
 ```javascript
 // Validate component names before adding
-const validation = ChangeTypes.validateComponent("BanterBox");
+const validation = ChangeTypes.validateComponent("Box");
 if (validation.valid) {
-    await RunCommand("add_component Scene/MyEntity BanterBox");
+    await RunCommand("add_component Scene/MyEntity Box");
 } else {
     console.error(validation.message);
     console.log("Suggestions:", validation.suggestions);
@@ -152,10 +152,10 @@ if (validation.valid) {
 // Get fuzzy-matched suggestions for typos
 const suggestions = ChangeTypes.suggestComponent("cube");
 console.log(suggestions);
-// ["BanterBox", "BanterCube", ...] - sorted by relevance
+// ["Box", "Cube", ...] - sorted by relevance
 
 // Validate full command syntax
-const cmdValidation = ChangeTypes.validateCommand("add_component Scene/Box BanterBox");
+const cmdValidation = ChangeTypes.validateCommand("add_component Scene/Box Box");
 if (!cmdValidation.valid) {
     console.error(cmdValidation.message);
     if (cmdValidation.suggestions.length > 0) {
@@ -165,18 +165,18 @@ if (!cmdValidation.valid) {
 
 // Get help for specific commands or components
 console.log(ChangeTypes.getHelp("add_component"));
-console.log(ChangeTypes.getHelp("BanterBox"));
+console.log(ChangeTypes.getHelp("Box"));
 
 // Or use runSafe() to validate and execute in one step (throws on error)
 try {
-    await ChangeTypes.runSafe("add_component Scene/Box BanterBox");
+    await ChangeTypes.runSafe("add_component Scene/Box Box");
 } catch (error) {
     console.error("Command failed:", error.message);
 }
 ```
 
 **Validation Benefits:**
-- Catch typos before execution (e.g., "Cube" → suggests "BanterBox")
+- Catch typos before execution (e.g., "Cube" → suggests "Box")
 - Get helpful suggestions for misspelled component names
 - Verify command syntax is correct
 - Validate property names exist before setting them
@@ -227,7 +227,7 @@ Before executing commands, inspect the world:
 const entity = SM.getEntityById("Scene/MyEntity");
 
 // Get component
-const component = SM.getEntityComponentById("BanterBox_12345");
+const component = SM.getEntityComponentById("Box_12345");
 
 // Get all entities
 const allEntities = SM.getAllEntities();
@@ -247,15 +247,15 @@ entity.children     // Array of child entities
 entity.transform.localPosition   // {x, y, z}
 
 // Get component by type
-const box = entity.getComponent("BanterBox");
-const materials = entity.getComponents("BanterMaterial");
+const box = entity.getComponent("Box");
+const materials = entity.getComponents("Material");
 ```
 
 ### Component Properties
 
 ```javascript
-component.id          // "BanterBox_12345"
-component.type        // "BanterBox"
+component.id          // "Box_12345"
+component.type        // "Box"
 component.properties  // All properties object
 component._entity     // Parent entity
 ```
@@ -271,13 +271,13 @@ component._entity     // Parent entity
 await RunCommand("add_entity Scene Box");
 
 // Add components
-await RunCommand("add_component Scene/Box BanterBox");
-await RunCommand("add_component Scene/Box BanterMaterial");
+await RunCommand("add_component Scene/Box Box");
+await RunCommand("add_component Scene/Box Material");
 
 // ⚠️ ALWAYS query for component IDs after creation
 const entity = SM.getEntityById("Scene/Box");
-const box = entity.getComponent("BanterBox");
-const material = entity.getComponent("BanterMaterial");
+const box = entity.getComponent("Box");
+const material = entity.getComponent("Material");
 
 // Verify components exist before using them
 if (!box || !material) {
@@ -299,7 +299,7 @@ const entities = SM.getAllEntities();
 
 // Filter by criteria
 const boxes = entities.filter(e =>
-    e.components.some(c => c.type === "BanterBox")
+    e.components.some(c => c.type === "Box")
 );
 
 console.log(`Found ${boxes.length} boxes`);
@@ -331,9 +331,9 @@ await RunCommand("add_entity Scene/Environment/Lights FillLight");
 const allEntities = SM.getAllEntities();
 const spheres = [];
 
-// Collect all BanterSphere components
+// Collect all Sphere components
 for (const entity of allEntities) {
-    spheres.push(...entity.getComponents("BanterSphere"));
+    spheres.push(...entity.getComponents("Sphere"));
 }
 
 console.log(`Found ${spheres.length} spheres`);
@@ -367,15 +367,15 @@ Components get random IDs when created. **Always verify they exist:**
 
 ```javascript
 await RunCommand("add_entity Scene Box");
-await RunCommand("add_component Scene/Box BanterBox");
+await RunCommand("add_component Scene/Box Box");
 
 // Query to get the ID
 const entity = SM.getEntityById("Scene/Box");
-const box = entity.getComponent("BanterBox");
+const box = entity.getComponent("Box");
 
 // ⚠️ VERIFY component was created successfully
 if (!box) {
-    console.error("Failed to add BanterBox component!");
+    console.error("Failed to add Box component!");
     console.log("Check component name spelling and try again");
     return;
 }
@@ -405,14 +405,14 @@ Always validate component names to catch typos:
 
 ```javascript
 // Validate component exists before adding
-const validation = ChangeTypes.validateComponent("BanterBox");
+const validation = ChangeTypes.validateComponent("Box");
 if (!validation.valid) {
     console.error(validation.message);
     console.log("Try one of these:", validation.suggestions);
     return;
 }
 
-await RunCommand("add_component Scene/MyEntity BanterBox");
+await RunCommand("add_component Scene/MyEntity Box");
 ```
 
 ### 5. Use runSafe() with Error Handling
@@ -422,8 +422,8 @@ Always wrap `runSafe()` in try/catch to handle validation failures:
 ```javascript
 try {
     // This will throw if component doesn't exist or property is invalid
-    await ChangeTypes.runSafe("add_component Scene/Box BanterBox");
-    await ChangeTypes.runSafe("set_component_property BanterBox_123 width 2");
+    await ChangeTypes.runSafe("add_component Scene/Box Box");
+    await ChangeTypes.runSafe("set_component_property Box_123 width 2");
 } catch (error) {
     console.error("Command failed:", error.message);
     // Error message includes suggestions for corrections
@@ -438,10 +438,10 @@ Some components auto-add others (bundles):
 
 ```javascript
 // Check what gets bundled
-const bundles = ComponentRegistry.getBundledComponents("BanterBox");
-console.log("BanterBox auto-adds:", bundles); // ['BanterMaterial']
+const bundles = ComponentRegistry.getBundledComponents("Box");
+console.log("Box auto-adds:", bundles); // ['Material']
 
-// When you add BanterBox, BanterMaterial is auto-added
+// When you add Box, Material is auto-added
 ```
 
 ---
@@ -452,7 +452,7 @@ Commands are validated before execution:
 
 - ❌ Cannot rename or delete `Scene` or `People`
 - ❌ Cannot move or delete entities under `People`
-- ❌ Cannot add duplicate unique components (Transform, BanterRigidbody)
+- ❌ Cannot add duplicate unique components (Transform, Rigidbody)
 - ❌ Entity names must be unique within parent
 - ❌ Component IDs must be globally unique
 - ❌ Wrong component names will fail silently - component won't be created
@@ -463,7 +463,7 @@ Commands are validated before execution:
 
 ### Component Name Typo or Misspelling
 
-**Problem:** You typed "Cube" instead of "BanterBox" or misspelled a component name
+**Problem:** You typed "Cube" instead of "Box" or misspelled a component name
 
 **Solution:**
 ```javascript
@@ -472,12 +472,12 @@ const validation = ChangeTypes.validateComponent("Cube");
 if (!validation.valid) {
     console.error(validation.message);
     console.log("Suggestions:", validation.suggestions);
-    // Suggestions: ["BanterBox", "BanterCube", ...]
+    // Suggestions: ["Box", "Cube", ...]
 }
 
 // Or use fuzzy matching to find the right name
 const suggestions = ChangeTypes.suggestComponent("cube");
-console.log("Did you mean:", suggestions[0]); // "BanterBox"
+console.log("Did you mean:", suggestions[0]); // "Box"
 ```
 
 ### Component Not Found After Adding
@@ -487,7 +487,7 @@ console.log("Did you mean:", suggestions[0]); // "BanterBox"
 **Solution:**
 ```javascript
 // 1. Validate BEFORE adding to catch errors early
-const validation = ChangeTypes.validateComponent("BanterBox");
+const validation = ChangeTypes.validateComponent("Box");
 if (!validation.valid) {
     console.error(validation.message);
     console.log("Try:", validation.suggestions);
@@ -495,11 +495,11 @@ if (!validation.valid) {
 }
 
 // 2. Add component
-await RunCommand("add_component Scene/MyEntity BanterBox");
+await RunCommand("add_component Scene/MyEntity Box");
 
 // 3. Query and verify
 const entity = SM.getEntityById("Scene/MyEntity");
-const box = entity.getComponent("BanterBox");
+const box = entity.getComponent("Box");
 
 if (!box) {
     console.error("Component not created!");
@@ -520,7 +520,7 @@ if (!box) {
 **Solution:**
 ```javascript
 // Verify component exists
-const component = SM.getEntityComponentById("BanterBox_12345");
+const component = SM.getEntityComponentById("Box_12345");
 if (!component) {
     console.error("Component doesn't exist with that ID");
     return;
@@ -538,7 +538,7 @@ await RunCommand(`set_component_property ${component.id} size [1,1,1]`);
 **Problem:** Entity exists but `entity.components` is empty
 
 **Causes:**
-1. Used wrong component names (e.g., `Cube` instead of `BanterBox`)
+1. Used wrong component names (e.g., `Cube` instead of `Box`)
 2. Components failed to add
 
 **Solution:**
@@ -553,8 +553,8 @@ entity.components.forEach(c => {
 });
 
 // Add components with CORRECT names
-await RunCommand("add_component Scene/MyEntity BanterBox");
-await RunCommand("add_component Scene/MyEntity BanterMaterial");
+await RunCommand("add_component Scene/MyEntity Box");
+await RunCommand("add_component Scene/MyEntity Material");
 ```
 
 ---
@@ -613,9 +613,9 @@ function findComponentType(typeName) {
     return found;
 }
 
-// Find all BanterBox components
-const boxes = findComponentType("BanterBox");
-console.log(`Found ${boxes.length} BanterBox components:`, boxes);
+// Find all Box components
+const boxes = findComponentType("Box");
+console.log(`Found ${boxes.length} Box components:`, boxes);
 ```
 
 ### Verify Component Was Created
@@ -651,7 +651,7 @@ async function addComponentSafe(entityId, componentType) {
 }
 
 // Usage
-const box = await addComponentSafe("Scene/MyEntity", "BanterBox");
+const box = await addComponentSafe("Scene/MyEntity", "Box");
 if (box) {
     await RunCommand(`set_component_property ${box.id} size [2,2,2]`);
 }
@@ -663,7 +663,7 @@ Use `ChangeTypes.runSafe()` to validate and execute commands with automatic erro
 
 ```javascript
 // Validate and execute command - throws error if validation fails
-await ChangeTypes.runSafe("add_component Scene/Box BanterBox");
+await ChangeTypes.runSafe("add_component Scene/Box Box");
 
 // If component name is wrong, THROWS ERROR with suggestions
 try {
@@ -673,21 +673,21 @@ try {
     // ❌ Component "Cube" not found. Did you mean one of these?
     //
     // Did you mean:
-    //   - BanterBox
-    //   - BanterCube
+    //   - Box
+    //   - Cube
 }
 
 // Handles property validation too
 try {
-    await ChangeTypes.runSafe("set_component_property BanterBox_123 invalidProp value");
+    await ChangeTypes.runSafe("set_component_property Box_123 invalidProp value");
 } catch (error) {
     console.error(error.message);
-    // ❌ Property "invalidProp" does not exist in component "BanterBox".
+    // ❌ Property "invalidProp" does not exist in component "Box".
     // Valid properties: width, height, depth, ...
 }
 
 // You can still pass options as second parameter
-await ChangeTypes.runSafe("add_component Scene/Box BanterBox", { source: 'script' });
+await ChangeTypes.runSafe("add_component Scene/Box Box", { source: 'script' });
 ```
 
 **Important**: `runSafe()` throws an Error if validation fails, so wrap it in try/catch if you want to handle errors gracefully.
@@ -705,8 +705,8 @@ await RunCommand("set_entity_property <entityId> <property> <value>");
 await RunCommand("clone_entity <entityId>");
 
 // COMPONENTS (use correct names!)
-await RunCommand("add_component <entityId> BanterBox");  // NOT Cube
-await RunCommand("add_component <entityId> BanterMaterial");  // NOT StandardMaterial
+await RunCommand("add_component <entityId> Box");  // NOT Cube
+await RunCommand("add_component <entityId> Material");  // NOT StandardMaterial
 await RunCommand("remove_component <componentId>");
 await RunCommand("set_component_property <componentId> <property> <value>");
 
@@ -723,16 +723,16 @@ entity.getComponent(type)
 // DISCOVERING COMPONENTS
 ComponentRegistry.list()
 ComponentRegistry.getByCategory("meshes")
-ComponentRegistry.getInfo("BanterBox")
+ComponentRegistry.getInfo("Box")
 
 // VALIDATION HELPERS
-ChangeTypes.validateComponent("BanterBox")
+ChangeTypes.validateComponent("Box")
 ChangeTypes.suggestComponent("cube")
-ChangeTypes.validateCommand("add_component Scene/Box BanterBox")
+ChangeTypes.validateCommand("add_component Scene/Box Box")
 ChangeTypes.getHelp("add_component")
 
 // SAFE EXECUTION (validates before running)
-await ChangeTypes.runSafe("add_component Scene/Box BanterBox")
+await ChangeTypes.runSafe("add_component Scene/Box Box")
 ```
 
 ---
@@ -740,25 +740,25 @@ await ChangeTypes.runSafe("add_component Scene/Box BanterBox")
 ## Common Mistakes
 
 ❌ **WRONG:** `await RunCommand("add_component Scene/Box Cube");`
-✅ **CORRECT:** `await RunCommand("add_component Scene/Box BanterBox");`
+✅ **CORRECT:** `await RunCommand("add_component Scene/Box Box");`
 
 ❌ **WRONG:** `await RunCommand("add_component Scene/Box StandardMaterial");`
-✅ **CORRECT:** `await RunCommand("add_component Scene/Box BanterMaterial");`
+✅ **CORRECT:** `await RunCommand("add_component Scene/Box Material");`
 
 ❌ **WRONG:** `entity.getComponent("Cube")`
-✅ **CORRECT:** `entity.getComponent("BanterBox")`
+✅ **CORRECT:** `entity.getComponent("Box")`
 
 ❌ **WRONG:** Using component without verifying it exists
 ```javascript
-await RunCommand("add_component Scene/Box BanterBox");
-const box = entity.getComponent("BanterBox");
+await RunCommand("add_component Scene/Box Box");
+const box = entity.getComponent("Box");
 await RunCommand(`set_component_property ${box.id} size [2,2,2]`); // Crash if box is null!
 ```
 
 ✅ **CORRECT:** Always verify before using
 ```javascript
-await RunCommand("add_component Scene/Box BanterBox");
-const box = entity.getComponent("BanterBox");
+await RunCommand("add_component Scene/Box Box");
+const box = entity.getComponent("Box");
 if (!box) {
     console.error("Component not created!");
     return;

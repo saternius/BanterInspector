@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterGrabbableComponent extends EntityComponent {
+export class GrabbableComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterGrabbable;
-        this.type = 'BanterGrabbable';
+        this.type = 'Grabbable';
     }
 
     defaultProperties() {
@@ -73,7 +73,7 @@ export class BanterGrabbableComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterGrabbable:`, e);
+            console.error(`Failed to update ${property} on Grabbable:`, e);
         }
     }
 }

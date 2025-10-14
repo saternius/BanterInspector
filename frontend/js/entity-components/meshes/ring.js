@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterRingComponent extends BanterMeshComponent {
+export class RingComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterRing;
-        this.type = 'BanterRing';
+        this.type = 'Ring';
     }
 
     defaultProperties() {
@@ -51,7 +51,7 @@ export class BanterRingComponent extends BanterMeshComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterRing:`, e);
+            console.error(`Failed to update ${property} on Ring:`, e);
         }
     }
 }

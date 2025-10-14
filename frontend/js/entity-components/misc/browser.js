@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterBrowserComponent extends EntityComponent {
+export class BrowserComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterBrowser;
-        this.type = 'BanterBrowser';
+        this.type = 'Browser';
     }
 
     defaultProperties() {
@@ -51,7 +51,7 @@ export class BanterBrowserComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterBrowser:`, e);
+            console.error(`Failed to update ${property} on Browser:`, e);
         }
     }
 }

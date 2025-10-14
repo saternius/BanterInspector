@@ -178,20 +178,20 @@ await RunCommand("add_component <entityId> <componentType>");
 - **Lights:** `PointLight`, `SpotLight`, `DirectionalLight`
 - **Materials:** `StandardMaterial`, `PhysicsMaterial`
 - **Physics:** `BoxCollider`, `SphereCollider`, `CapsuleCollider`, `MeshCollider`
-- **Physics Bodies:** `BanterRigidbody`
+- **Physics Bodies:** `Rigidbody`
 - **Media:** `AudioSource`, `VideoPlayer`, `GltfModel`
-- **Behaviors:** `BanterGrabbable`, `BanterSyncedObject`, `MonoBehavior`
+- **Behaviors:** `Grabbable`, `SyncedObject`, `MonoBehavior`
 - **Misc:** `Browser`, `Mirror`, `Portal`, `UIPanel`
 
 **Examples:**
 ```javascript
 await RunCommand("add_component Scene/MyEntity Cube");
 await RunCommand("add_component Scene/Light PointLight");
-await RunCommand("add_component Scene/Player BanterRigidbody");
+await RunCommand("add_component Scene/Player Rigidbody");
 ```
 
 **Validation:**
-- ❌ Cannot add duplicate unique components (Transform, BanterRigidbody, BanterSyncedObject)
+- ❌ Cannot add duplicate unique components (Transform, Rigidbody, SyncedObject)
 
 ---
 
@@ -968,7 +968,7 @@ await RunCommand("add_entity Scene MyGameObject");
 await RunCommand("add_component Scene/MyGameObject Cube");
 await RunCommand("add_component Scene/MyGameObject StandardMaterial");
 await RunCommand("add_component Scene/MyGameObject BoxCollider");
-await RunCommand("add_component Scene/MyGameObject BanterRigidbody");
+await RunCommand("add_component Scene/MyGameObject Rigidbody");
 
 // 3. Query for component IDs
 const entity = SM.getEntityById("Scene/MyGameObject");

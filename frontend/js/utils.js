@@ -326,26 +326,26 @@ export function toSafeName(str) {
 export function getComponentIcon(componentType) {
     const icons = {
         'Transform': '⊹',
-        'BanterRigidbody': '⚛',
+        'Rigidbody': '⚛',
         'BoxCollider': '□',
         'SphereCollider': '○',
         'CapsuleCollider': '◯',
         'MeshCollider': '▣',
-        'BanterGeometry': '◆',
-        'BanterMaterial': '🎨',
-        'BanterText': 'T',
-        'BanterAudioSource': '🔊',
-        'BanterVideoPlayer': '▶',
-        'BanterBrowser': '🌐',
-        'BanterGLTF': '📦',
-        'BanterAssetBundle': '📁',
-        'BanterGrabHandle': '✋',
-        'BanterHeldEvents': '👆',
-        'BanterAttachedObject': '📌',
-        'BanterSyncedObject': '🔄',
-        'BanterBillboard': '👁',
-        'BanterMirror': '🪞',
-        'BanterPortal': '🌀'
+        'Geometry': '◆',
+        'Material': '🎨',
+        'Text': 'T',
+        'AudioSource': '🔊',
+        'VideoPlayer': '▶',
+        'Browser': '🌐',
+        'GLTF': '📦',
+        'AssetBundle': '📁',
+        'GrabHandle': '✋',
+        'HeldEvents': '👆',
+        'AttachedObject': '📌',
+        'SyncedObject': '🔄',
+        'Billboard': '👁',
+        'Mirror': '🪞',
+        'Portal': '🌀'
     };
     
     return icons[componentType] || '●';

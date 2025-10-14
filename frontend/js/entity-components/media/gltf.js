@@ -9,11 +9,11 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 // const transform = await go.AddComponent(new BS.Transform());
 // transform.localScale = new BS.Vector3(0.01, 0.01, 0.01);    
 
-export class BanterGLTFComponent extends EntityComponent {
+export class GLTFComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = false;
-        this.type = 'BanterGLTF';
+        this.type = 'GLTF';
         this._generationTimeout = null;
         this._gltfObject = null;
         this._gltfComponent = null;

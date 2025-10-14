@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterCylinderComponent extends BanterMeshComponent {
+export class CylinderComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterGeometry;
-        this.type = 'BanterCylinder';
+        this.type = 'Cylinder';
     }
 
     async init(entity, sceneComponent, properties, options){
@@ -51,7 +51,7 @@ export class BanterCylinderComponent extends BanterMeshComponent {
                 
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterCylinder:`, e);
+            console.error(`Failed to update ${property} on Cylinder:`, e);
         }
     }
 }

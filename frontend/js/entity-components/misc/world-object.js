@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterWorldObjectComponent extends EntityComponent {
+export class WorldObjectComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterWorldObject;
-        this.type = 'BanterWorldObject';
+        this.type = 'WorldObject';
     }
 
     defaultProperties() {

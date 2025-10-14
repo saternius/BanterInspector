@@ -1,10 +1,10 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 
-export class BanterColliderEventsComponent extends EntityComponent {
+export class ColliderEventsComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterColliderEvents;
-        this.type = 'BanterColliderEvents';
+        this.type = 'ColliderEvents';
     }
 
     defaultProperties() {

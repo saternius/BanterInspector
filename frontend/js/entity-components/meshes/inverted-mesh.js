@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterInvertedMeshComponent extends BanterMeshComponent {
+export class InvertedMeshComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterInvertedMesh;
-        this.type = 'BanterInvertedMesh';
+        this.type = 'InvertedMesh';
     }
 
     defaultProperties() {

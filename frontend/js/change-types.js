@@ -273,7 +273,7 @@ export class ComponentAddChange extends Change{
             }
 
             // Also add helpful tips about component naming
-            errorMsg += '\n\nNote: Most components have "Banter" prefix (e.g., BanterBox, BanterSphere)';
+            errorMsg += '\n\nNote: Component names like Box, Sphere, Material, etc.';
             errorMsg += '\nExcept colliders which don\'t (e.g., BoxCollider, SphereCollider)';
             errorMsg += '\n\nUse ComponentRegistry.list() to see all available components.';
 
@@ -2280,18 +2280,18 @@ window.ChangeTypes = {
 
         <span style="color: #00ff00; font-weight: bold;">Usage Examples:</span>
           <span style="color: #88ddff;">add_entity</span> <span style="color: #ffff88;">Scene MyEntity</span>                   - Add entity to root
-          <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">Scene/Box BanterBox</span>         - Add BanterBox component
+          <span style="color: #88ddff;">add_component</span> <span style="color: #ffff88;">Scene/Box Box</span>         - Add Box component
           <span style="color: #88ddff;">set_entity_property</span> <span style="color: #ffff88;">Scene/Box name "New Name"</span>  - Rename entity
           <span style="color: #88ddff;">load_item</span> <span style="color: #ffff88;">MyPrefab Scene</span>                   - Load prefab to Scene
 
         <span style="color: #00ff00; font-weight: bold;">Discovery Commands:</span>
           <span style="color: #88ddff;">ComponentRegistry.list()</span>              - List all available components
           <span style="color: #88ddff;">ComponentRegistry.getByCategory("meshes")</span> - Get components by category
-          <span style="color: #88ddff;">ChangeTypes.validateComponent("BanterBox")</span> - Check if component exists
+          <span style="color: #88ddff;">ChangeTypes.validateComponent("Box")</span> - Check if component exists
           <span style="color: #88ddff;">ChangeTypes.suggestComponent("cube")</span>  - Get component name suggestions
 
         <span style="color: #00ff00; font-weight: bold;">Notes:</span>
-          <span style="color: #aaaaaa;">- Most components have 'Banter' prefix (BanterBox, BanterSphere, BanterMaterial)
+          <span style="color: #aaaaaa;">- Most components have 'Banter' prefix (Box, Sphere, Material)
           - Colliders DON'T have Banter prefix (BoxCollider, SphereCollider)
           - Entity IDs use path format: Scene/Parent/Child
           - Component IDs format: ComponentType_12345

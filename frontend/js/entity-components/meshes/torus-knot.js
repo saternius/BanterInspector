@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterTorusKnotComponent extends BanterMeshComponent {
+export class TorusKnotComponent extends MeshComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterTorusKnot;
-        this.type = 'BanterTorusKnot';
+        this.type = 'TorusKnot';
     }
 
     defaultProperties() {
@@ -43,7 +43,7 @@ export class BanterTorusKnotComponent extends BanterMeshComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterTorusKnot:`, e);
+            console.error(`Failed to update ${property} on TorusKnot:`, e);
         }
     }
 }

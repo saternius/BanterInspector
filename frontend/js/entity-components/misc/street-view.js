@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterStreetViewComponent extends EntityComponent {
+export class StreetViewComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterStreetView;
-        this.type = 'BanterStreetView';
+        this.type = 'StreetView';
     }
 
     defaultProperties() {
@@ -35,7 +35,7 @@ export class BanterStreetViewComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterStreetView:`, e);
+            console.error(`Failed to update ${property} on StreetView:`, e);
         }
     }
 }

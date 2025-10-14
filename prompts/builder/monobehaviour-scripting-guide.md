@@ -709,8 +709,8 @@ this.safeGetEntity = (path) => {
 ```javascript
 // Cache references in onStart
 this.onStart = () => {
-    this.textComponent = this._entity.getComponent("BanterText");
-    this.material = this._entity.getComponent("BanterMaterial");
+    this.textComponent = this._entity.getComponent("Text");
+    this.material = this._entity.getComponent("Material");
 };
 
 // Use cached references in onUpdate
@@ -761,7 +761,7 @@ Object.entries(this.default).forEach(([key, val]) => {
 });
 
 this.onStart = () => {
-    this.material = this._entity.getComponent("BanterMaterial");
+    this.material = this._entity.getComponent("Material");
     this.originalColor = this.material?.properties?.color;
 
     this._entity._bs.On("click", () => {
@@ -815,7 +815,7 @@ this.onUpdate = () => {
 this.score = 0;
 
 this.onStart = () => {
-    this.textComponent = this._entity.getComponent("BanterText");
+    this.textComponent = this._entity.getComponent("Text");
     this.updateDisplay();
 
     window.addEventListener("score-changed", (e) => {

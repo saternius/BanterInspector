@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterAvatarPedestalComponent extends EntityComponent {
+export class AvatarPedestalComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterAvatarPedestal;
-        this.type = 'BanterAvatarPedestal';
+        this.type = 'AvatarPedestal';
     }
 
     defaultProperties() {
@@ -35,7 +35,7 @@ export class BanterAvatarPedestalComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterAvatarPedestal:`, e);
+            console.error(`Failed to update ${property} on AvatarPedestal:`, e);
         }
     }
 }

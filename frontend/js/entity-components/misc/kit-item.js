@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterKitItemComponent extends EntityComponent {
+export class KitItemComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterKitItem;
-        this.type = 'BanterKitItem';
+        this.type = 'KitItem';
     }
 
     defaultProperties() {
@@ -40,7 +40,7 @@ export class BanterKitItemComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterKitItem:`, e);
+            console.error(`Failed to update ${property} on KitItem:`, e);
         }
     }
 }

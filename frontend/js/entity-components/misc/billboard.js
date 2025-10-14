@@ -1,11 +1,11 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class BanterBillboardComponent extends EntityComponent {
+export class BillboardComponent extends EntityComponent {
     constructor() {
         super();
         this._bsRef = BS.BanterBillboard;
-        this.type = 'BanterBillboard';
+        this.type = 'Billboard';
     }
 
     defaultProperties() {
@@ -45,7 +45,7 @@ export class BanterBillboardComponent extends EntityComponent {
                 this._bs[property] = value;
             }
         } catch (e) {
-            console.error(`Failed to update ${property} on BanterBillboard:`, e);
+            console.error(`Failed to update ${property} on Billboard:`, e);
         }
     }
 }

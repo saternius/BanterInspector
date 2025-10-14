@@ -1,11 +1,11 @@
-const { BanterMeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
+const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
 /**
  * Base class for parametric surface mesh components
  * All parametric surfaces share the same stacks/slices properties
  */
-export class BanterParametricSurfaceComponent extends BanterMeshComponent {
+export class ParametricSurfaceComponent extends MeshComponent {
     constructor() {
         super();
     }

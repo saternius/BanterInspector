@@ -141,13 +141,13 @@ let deleteEntity = async (entity) => {
 ### Component Manipulation
 ```javascript
 // Get component from entity
-let material = entity.getComponent("BanterMaterial")
+let material = entity.getComponent("Material")
 
 // Set component property
 SetComponentProp(material.id, "color", {r: 1, g: 0, b: 0, a: 1})
 
 // Add component to entity
-await AddComponent(entity.id, "BanterAttachedObject", {
+await AddComponent(entity.id, "AttachedObject", {
     componentProperties: {
         uid: scene.localUser.uid,
         attachmentPoint: 3 // right hand
@@ -270,10 +270,10 @@ The Scene Manager provides global access to scene state:
 ### Synced Objects
 ```javascript
 // Create synced object
-let syncedComponent = entity.getComponent("BanterSyncedObject")
+let syncedComponent = entity.getComponent("SyncedObject")
 
 // Attach to user
-let attachComponent = entity.getComponent("BanterAttachedObject")
+let attachComponent = entity.getComponent("AttachedObject")
 await attachComponent.Set("uid", scene.localUser.uid)
 ```
 
@@ -337,14 +337,14 @@ this.spawnerTimeout = setInterval(async () => {
 ```javascript
 this._entity._bs.On("click", e => {
     this.counter++
-    let textComponent = getChildEntity("Display").getComponent("BanterText")
+    let textComponent = getChildEntity("Display").getComponent("Text")
     textComponent.Set("text", `Count: ${this.counter}`)
 })
 ```
 
 ### Following Player
 ```javascript
-let attachComponent = this._entity.getComponent("BanterAttachedObject")
+let attachComponent = this._entity.getComponent("AttachedObject")
 await attachComponent.Set("uid", scene.localUser.uid)
 await attachComponent.Set("attachmentPoint", 3) // right hand
 ```
