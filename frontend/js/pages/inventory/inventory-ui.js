@@ -2067,16 +2067,24 @@ export class InventoryUI {
                 }
                 return;
             }
-            
+
             // Regular Firebase reference import
-            if (!firebaseRef.startsWith('inventory/')) {
-                errorDiv.textContent = 'Reference must start with "inventory/"';
-                errorDiv.style.display = 'block';
-                return;
+            if (firebaseRef.startsWith('~/')) {
+                firebaseRef = firebaseRef.replace('~/', '');
+                // Auto-prepend with inventory/SM.myName()/ if not starting with inventory/
+                const userName = SM.myName();
+                if (!userName) {
+                    errorDiv.textContent = 'Unable to get current username';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                firebaseRef = `inventory/${userName}/${firebaseRef}`;
             }
             
             importBtn.textContent = 'Importing...';
             importBtn.disabled = true;
+
+            log("inventory", "importing from firebase", firebaseRef)
             
             try {
                 const success = await this.inventory.firebase.importFromFirebase(firebaseRef);
