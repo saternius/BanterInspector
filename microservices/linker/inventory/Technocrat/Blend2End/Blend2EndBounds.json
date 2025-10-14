@@ -33,7 +33,7 @@
           "height": 1,
           "width": 1
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -49,7 +49,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -103,7 +103,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterMaterial_1700",
+      "componentId": "Material_1700",
       "newValue": "Unlit/DiffuseTransparent",
       "options": {
         "source": "ui"

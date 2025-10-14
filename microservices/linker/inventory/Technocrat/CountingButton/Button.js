@@ -14,7 +14,7 @@ this.onStart = ()=>{
     let count = getChildEntity("Count")
     log("countingButton", "count", count)
     if(count){
-        countText = count.getComponent("BanterText")
+        countText = count.getComponent("Text")
         log("countingButton", "countText", countText)
         countText.Set("text", "0")
         log("countingButton", "setting default text to 0")

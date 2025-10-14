@@ -57,7 +57,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
         "initialized": true,
@@ -73,7 +73,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "initialized": true,
@@ -102,7 +102,7 @@
       },
       {
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       }
     ],
     "finished_loading": true,
@@ -144,7 +144,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterGeometry_63128",
+            "id": "Geometry_63128",
             "initialized": true,
             "properties": {
               "arc": 6.283185307179586,
@@ -175,10 +175,10 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
-            "id": "BanterMaterial_70270",
+            "id": "Material_70270",
             "initialized": true,
             "properties": {
               "color": {
@@ -192,7 +192,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "id": "MonoBehavior_88433",
@@ -222,9 +222,9 @@
             "type": "BoxCollider"
           },
           {
-            "id": "BanterColliderEvents_91598",
+            "id": "ColliderEvents_91598",
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "id": "Scene/Tippy_77772",

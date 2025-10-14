@@ -31,7 +31,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterGeometry_49782",
+            "id": "Geometry_49782",
             "initialized": true,
             "properties": {
               "arc": 6.283185307179586,
@@ -62,10 +62,10 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
-            "id": "BanterMaterial_35740",
+            "id": "Material_35740",
             "initialized": true,
             "properties": {
               "color": {
@@ -79,7 +79,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           }
         ],
         "id": "Scene/Controller/CountingButton_58874/ButtonMesh",
@@ -116,7 +116,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterText_7944",
+            "id": "Text_7944",
             "initialized": true,
             "properties": {
               "color": {
@@ -136,7 +136,7 @@
               "text": 13,
               "verticalAlignment": 1
             },
-            "type": "BanterText"
+            "type": "Text"
           }
         ],
         "id": "Scene/Controller/CountingButton_58874/Count",
@@ -190,9 +190,9 @@
         "type": "BoxCollider"
       },
       {
-        "id": "BanterColliderEvents_33373",
+        "id": "ColliderEvents_33373",
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       },
       {
         "id": "MonoBehavior_51141",
@@ -496,7 +496,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterText_1424",
+      "componentId": "Text_1424",
       "newValue": 1,
       "options": {
         "source": "ui"
@@ -1677,7 +1677,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterText_1424",
+      "componentId": "Text_1424",
       "newValue": 2,
       "options": {
         "source": "ui"
@@ -1686,7 +1686,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterText_1424",
+      "componentId": "Text_1424",
       "newValue": 1.5,
       "options": {
         "source": "ui"
@@ -1731,7 +1731,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "BanterText_1424",
+      "componentId": "Text_1424",
       "newValue": "0",
       "options": {
         "source": "ui"

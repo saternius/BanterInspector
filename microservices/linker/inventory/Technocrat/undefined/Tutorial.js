@@ -57,72 +57,72 @@ let tooltipContent = {
         }
     },
     "data-component": {
-        "BanterBox": {
+        "Box": {
             "title": "Box Mesh",
             "description": "Creates a 3D cube/box primitive mesh",
             "tips": ["Adjust size with scale property", "Good for walls, floors, platforms", "Combine with colliders for physics"]
         },
-        "BanterSphere": {
+        "Sphere": {
             "title": "Sphere Mesh",
             "description": "Creates a 3D sphere primitive mesh",
             "tips": ["Perfect for balls, planets, bubbles", "Use segments to control smoothness", "Works well with rigidbody physics"]
         },
-        "BanterCircle": {
+        "Circle": {
             "title": "Circle Mesh",
             "description": "Creates a flat 2D circle mesh",
             "tips": ["Useful for discs, portals, platforms", "Segments control edge smoothness", "Single-sided by default"]
         },
-        "BanterCone": {
+        "Cone": {
             "title": "Cone Mesh",
             "description": "Creates a 3D cone primitive mesh",
             "tips": ["Good for markers, arrows, trees", "Adjust height and radius", "Bottom is open by default"]
         },
-        "BanterCylinder": {
+        "Cylinder": {
             "title": "Cylinder Mesh",
             "description": "Creates a 3D cylinder primitive mesh",
             "tips": ["Perfect for pillars, tubes, barrels", "Control segment count for smoothness", "Has caps on both ends"]
         },
-        "BanterTorus": {
+        "Torus": {
             "title": "Torus Mesh",
             "description": "Creates a 3D donut-shaped mesh",
             "tips": ["Adjust tube and ring radius", "Good for rings, loops, decorative elements", "Control segments for detail"]
         },
-        "BanterPlane": {
+        "Plane": {
             "title": "Plane Mesh",
             "description": "Creates a flat rectangular surface",
             "tips": ["Perfect for floors, walls, screens", "Single-sided rendering", "Use for UI backgrounds"]
         },
-        "BanterRing": {
+        "Ring": {
             "title": "Ring Mesh",
             "description": "Creates a flat ring/annulus shape",
             "tips": ["Adjust inner and outer radius", "Good for UI elements, targets", "Segments control smoothness"]
         },
-        "BanterGeometry": {
+        "Geometry": {
             "title": "Procedural Geometry",
             "description": "Advanced procedural mesh generation",
             "tips": ["Create complex shapes programmatically", "Supports various geometry types", "Highly customizable vertices"]
         },
-        "BanterInvertedMesh": {
+        "InvertedMesh": {
             "title": "Inverted Mesh",
             "description": "Creates a mesh with inverted normals facing inward",
             "tips": ["Perfect for skyboxes and rooms", "View from inside the mesh", "Combine with textures for environments"]
         },
-        "BanterText": {
+        "Text": {
             "title": "3D Text",
             "description": "Displays text as 3D geometry in the scene",
             "tips": ["Supports custom fonts and colors", "Adjust alignment and size", "Can be made interactive with colliders"]
         },
-        "BanterMaterial": {
+        "Material": {
             "title": "Material",
             "description": "Controls the visual appearance and rendering of meshes",
             "tips": ["Apply textures and colors", "Adjust transparency and emission", "Control metallic and roughness values"]
         },
-        "BanterPhysicMaterial": {
+        "PhysicMaterial": {
             "title": "Physics Material",
             "description": "Defines physical properties like friction and bounciness",
             "tips": ["Control how objects slide and bounce", "Apply to colliders for realistic physics", "Combine with rigidbodies"]
         },
-        "BanterRigidbody": {
+        "Rigidbody": {
             "title": "Rigidbody",
             "description": "Enables physics simulation with gravity and forces",
             "tips": ["Required for moving physics objects", "Control mass and drag", "Use kinematic for animated objects"]
@@ -152,82 +152,82 @@ let tooltipContent = {
             "description": "Flexible physics constraint between objects",
             "tips": ["Create hinges, springs, chains", "Limit movement and rotation", "Combine multiple for complex rigs"]
         },
-        "BanterGLTF": {
+        "GLTF": {
             "title": "GLTF Model Loader",
             "description": "Loads 3D models from GLTF/GLB files",
             "tips": ["Supports animations and materials", "Use URLs or inventory paths", "Efficient format for web delivery"]
         },
-        "BanterAudioSource": {
+        "AudioSource": {
             "title": "Audio Source",
             "description": "Plays sound effects and music in 3D space",
             "tips": ["Supports spatial audio", "Loop for background music", "Adjust volume and pitch"]
         },
-        "BanterVideoPlayer": {
+        "VideoPlayer": {
             "title": "Video Player",
             "description": "Displays video content on surfaces",
             "tips": ["Supports streaming URLs", "Apply to planes or screens", "Control playback with scripts"]
         },
-        "BanterBillboard": {
+        "Billboard": {
             "title": "Billboard",
             "description": "Makes objects always face the camera",
             "tips": ["Perfect for UI elements in 3D", "Good for name tags and labels", "Can lock specific axes"]
         },
-        "BanterMirror": {
+        "Mirror": {
             "title": "Mirror",
             "description": "Creates a real-time reflective surface",
             "tips": ["Shows player avatars", "Adjust reflection quality", "Performance intensive - use sparingly"]
         },
-        "BanterBrowser": {
+        "Browser": {
             "title": "Web Browser",
             "description": "Embeds interactive web content in the scene",
             "tips": ["Display websites and web apps", "Supports user interaction", "Useful for dashboards and info panels"]
         },
-        "BanterAssetBundle": {
+        "AssetBundle": {
             "title": "Asset Bundle",
             "description": "Loads Unity asset bundles with custom content",
             "tips": ["Import complex Unity assets", "Supports prefabs and materials", "Platform-specific bundles"]
         },
-        "BanterWorldObject": {
+        "WorldObject": {
             "title": "World Object",
             "description": "Reference to persistent world objects",
             "tips": ["Links to pre-existing scene objects", "Survives scene reloads", "Used for world-level features"]
         },
-        "BanterStreetView": {
+        "StreetView": {
             "title": "Street View",
             "description": "Displays Google Street View panoramas",
             "tips": ["Explore real-world locations", "360-degree navigation", "Requires coordinates or address"]
         },
-        "BanterKitItem": {
+        "KitItem": {
             "title": "Kit Item",
             "description": "Marks objects as part of a reusable kit",
             "tips": ["Bundle related objects together", "Save as templates", "Share kits with other users"]
         },
-        "BanterPortal": {
+        "Portal": {
             "title": "Portal",
             "description": "Creates a gateway to other spaces or locations",
             "tips": ["Teleport between spaces", "Set destination URL", "Add visual effects for immersion"]
         },
-        "BanterColliderEvents": {
+        "ColliderEvents": {
             "title": "Collider Events",
             "description": "Triggers custom events on collision or trigger entry",
             "tips": ["Detect player interactions", "Create trigger zones", "Use with scripts for game logic"]
         },
-        "BanterAttachedObject": {
+        "AttachedObject": {
             "title": "Attached Object",
             "description": "Attaches objects to player body parts",
             "tips": ["Create wearable items", "Attach to hands, head, body", "Follows player movement"]
         },
-        "BanterSyncedObject": {
+        "SyncedObject": {
             "title": "Synced Object",
             "description": "Synchronizes object state across all connected users",
             "tips": ["Essential for multiplayer", "Syncs position and rotation", "Owner can transfer control"]
         },
-        "BanterGrabHandle": {
+        "GrabHandle": {
             "title": "Grab Handle",
             "description": "Makes objects grabbable and moveable by players",
             "tips": ["Enable VR hand interaction", "Set grab points and offsets", "Combine with physics for realism"]
         },
-        "BanterHeldEvents": {
+        "HeldEvents": {
             "title": "Held Events",
             "description": "Detects input while object is being held",
             "tips": ["Trigger actions on button press", "Create interactive tools", "Works with grab handles"]

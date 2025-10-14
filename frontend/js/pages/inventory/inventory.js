@@ -1029,9 +1029,92 @@ export class Inventory {
     }
 
     /**
+     * Update component names from BanterX format to simplified format
+     */
+    updateComponentNames(entityData) {
+        if (!entityData) return null;
+
+        const componentNameMap = {
+            'BanterGeometry': 'Geometry',
+            'BanterMaterial': 'Material',
+            'BanterRigidbody': 'Rigidbody',
+            'BanterAudioSource': 'AudioSource',
+            'BanterVideoPlayer': 'VideoPlayer',
+            'BanterText': 'Text',
+            'BanterBillboard': 'Billboard',
+            'BanterGrabHandle': 'GrabHandle',
+            'BanterSyncedObject': 'SyncedObject',
+            'BanterPhysicMaterial': 'PhysicMaterial',
+            'BanterMirror': 'Mirror',
+            'BanterBrowser': 'Browser',
+            'BanterHeldEvents': 'HeldEvents',
+            'BanterAttachedObject': 'AttachedObject',
+            'BanterGLTF': 'GLTF',
+            'BanterAssetBundle': 'AssetBundle',
+            'BanterPortal': 'Portal',
+            'BanterColliderEvents': 'ColliderEvents',
+            'BanterBox': 'Box',
+            'BanterCircle': 'Circle',
+            'BanterCone': 'Cone',
+            'BanterCylinder': 'Cylinder',
+            'BanterPlane': 'Plane',
+            'BanterRing': 'Ring',
+            'BanterSphere': 'Sphere',
+            'BanterTorus': 'Torus',
+            'BanterInvertedMesh': 'InvertedMesh',
+            'BanterKitItem': 'KitItem',
+            'BanterStreetView': 'StreetView',
+            'BanterWorldObject': 'WorldObject',
+            'BanterGrabbable': 'Grabbable',
+            'BanterUIPanel': 'UIPanel',
+            'BanterAvatarPedestal': 'AvatarPedestal',
+            'BanterTorusKnot': 'TorusKnot',
+            'BanterApple': 'Apple',
+            'BanterCatenoid': 'Catenoid',
+            'BanterFermet': 'Fermet',
+            'BanterHelicoid': 'Helicoid',
+            'BanterHorn': 'Horn',
+            'BanterKlein': 'Klein',
+            'BanterMobius': 'Mobius',
+            'BanterMobius3d': 'Mobius3d',
+            'BanterNatica': 'Natica',
+            'BanterPillow': 'Pillow',
+            'BanterScherk': 'Scherk',
+            'BanterSnail': 'Snail',
+            'BanterSpiral': 'Spiral',
+            'BanterSpring': 'Spring'
+        };
+
+        const updateEntity = (entity) => {
+            let needsUpdate = false;
+
+            // Update component type names
+            if (entity.components && Array.isArray(entity.components)) {
+                entity.components = entity.components.map(comp => {
+                    if (componentNameMap[comp.type]) {
+                        comp.type = componentNameMap[comp.type];
+                        needsUpdate = true;
+                    }
+                    return comp;
+                });
+            }
+
+            // Recursively update children
+            if (entity.children && Array.isArray(entity.children)) {
+                entity.children = entity.children.map(child => updateEntity(child));
+            }
+
+            return entity;
+        };
+
+        return updateEntity(JSON.parse(JSON.stringify(entityData))); // Deep clone before updating
+    }
+
+    /**
      * Update all entity items in inventory to new format
      * This converts items from the old format (Transform as component with options)
      * to the new format (Transform auto-generated at entity level)
+     * Also updates component names from BanterX format to simplified format
      */
     updateItems() {
         let updatedCount = 0;
@@ -1041,6 +1124,8 @@ export class Inventory {
         Object.entries(this.items).forEach(([itemKey, item]) => {
             // Only process entity items
             if (item.itemType === 'entity') {
+                let needsUpdate = false;
+
                 // Check if item needs conversion
                 const hasOldFormat = (entityData) => {
                     if (!entityData || !entityData.components) return false;
@@ -1049,16 +1134,40 @@ export class Inventory {
                     );
                 };
 
-                if (hasOldFormat(item.data)) {
-                    // Convert to new format
-                    item.data = this.convertEntityToNewFormat(item.data);
+                // Check if item has BanterX component names
+                const hasBanterNames = (entityData) => {
+                    if (!entityData || !entityData.components) return false;
+                    const checkEntity = (entity) => {
+                        if (entity.components && entity.components.some(c => c.type && c.type.startsWith('Banter'))) {
+                            return true;
+                        }
+                        if (entity.children && entity.children.some(child => checkEntity(child))) {
+                            return true;
+                        }
+                        return false;
+                    };
+                    return checkEntity(entityData);
+                };
 
+                // Convert old format if needed
+                if (hasOldFormat(item.data)) {
+                    item.data = this.convertEntityToNewFormat(item.data);
+                    needsUpdate = true;
+                }
+
+                // Update component names if needed
+                if (hasBanterNames(item.data)) {
+                    item.data = this.updateComponentNames(item.data);
+                    needsUpdate = true;
+                }
+
+                if (needsUpdate) {
                     // Save updated item
                     const storageKey = `inventory_${itemKey}`;
                     localStorage.setItem(storageKey, JSON.stringify(item));
                     updatedCount++;
 
-                    log('inventory', `Converted item "${itemKey}" to new format`);
+                    log('inventory', `Updated item "${itemKey}"`);
                 } else {
                     alreadyUpdatedCount++;
                 }
@@ -1069,9 +1178,9 @@ export class Inventory {
         if (updatedCount > 0) {
             this.items = this.loadItems();
             this.ui.render();
-            showNotification(`Updated ${updatedCount} entity item${updatedCount > 1 ? 's' : ''} to new format`);
+            showNotification(`Updated ${updatedCount} entity item${updatedCount > 1 ? 's' : ''}`);
         } else {
-            showNotification(`All ${alreadyUpdatedCount} entity items are already in the new format`);
+            showNotification(`All ${alreadyUpdatedCount} entity items are already up to date`);
         }
 
         return { updated: updatedCount, alreadyUpdated: alreadyUpdatedCount };

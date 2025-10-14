@@ -764,7 +764,7 @@ export class LoadItemChange extends Change{
             }
     
             let changeChildrenIds = (entity)=>{
-                entity.components.forEach(component=>{
+                entity.components?.forEach(component=>{
                     component.id = `${component.type}_${Math.floor(Math.random()*99999)}`;
                 })
                 if(entity.children){
