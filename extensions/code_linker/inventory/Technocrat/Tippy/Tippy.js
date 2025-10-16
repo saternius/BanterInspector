@@ -1,6 +1,6 @@
 this.default = {}
 
-let attached = this._entity.components.map(x=>x.type).includes("AttachedObject")
+let attached = this._entity.components.map(x=>x.type).includes("BanterAttachedObject")
 this.onStart = async ()=>{
     if(attached) return;
     console.log("Tippy onStart")
@@ -20,7 +20,7 @@ this.onStart = async ()=>{
         console.log("attaching..")
         await this._entity.SetParent('People/'+user)
         await this._entity.Set("localPosition", {x: 0, y: 0, z: 0});
-        await AddComponent(this._entity.id, "AttachedObject", {
+        await AddComponent(this._entity.id, "BanterAttachedObject", {
             componentProperties:{
                 uid: scene.localUser.uid,
                 attachmentPoint: 3, //right hand

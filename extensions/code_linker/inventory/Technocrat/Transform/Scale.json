@@ -63,7 +63,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -79,7 +79,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -144,7 +144,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -160,7 +160,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -213,7 +213,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -281,7 +281,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -297,7 +297,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -362,7 +362,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -378,7 +378,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -431,7 +431,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -499,7 +499,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -515,7 +515,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -580,7 +580,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
                 "initialized": true,
@@ -596,7 +596,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "initialized": true,
@@ -649,7 +649,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -714,7 +714,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -730,7 +730,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -752,7 +752,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,

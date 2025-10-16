@@ -64,7 +64,7 @@ let alive = true;
 let started = false;
 let vy = 0;
 let rotation = 0;
-// let material = this._entity.getComponent("Material")
+// let material = this._entity.getComponent("BanterMaterial")
 // let mat_id = material.id
 let points = 0
 let speed = 1
@@ -112,7 +112,7 @@ function setStatus(text){
     debugText = getEntity("DebugText")
     if(debugText){
         //log("BIRD", "debugText", debugText)
-        let text_id = debugText.getComponent("Text").id
+        let text_id = debugText.getComponent("BanterText").id
         SetComponentProp(text_id, "text", text)
     }
 }

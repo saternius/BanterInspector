@@ -33,7 +33,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_70711",
+                "id": "BanterGeometry_70711",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -63,10 +63,10 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_60326",
+                "id": "BanterMaterial_60326",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -79,7 +79,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeHole",
@@ -113,7 +113,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_44494",
+                "id": "BanterGeometry_44494",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -143,10 +143,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_38754",
+                "id": "BanterMaterial_38754",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -159,7 +159,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeShaft",
@@ -193,7 +193,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_17212",
+                "id": "BanterGeometry_17212",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -223,10 +223,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_9293",
+                "id": "BanterMaterial_9293",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -239,7 +239,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeTop",
@@ -289,8 +289,8 @@
             "type": "BoxCollider"
           },
           {
-            "id": "ColliderEvents_4780",
-            "type": "ColliderEvents"
+            "id": "BanterColliderEvents_4780",
+            "type": "BanterColliderEvents"
           }
         ],
         "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
@@ -327,7 +327,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_21230",
+                "id": "BanterGeometry_21230",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -357,10 +357,10 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_64508",
+                "id": "BanterMaterial_64508",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -373,7 +373,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeHole",
@@ -407,7 +407,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_83396",
+                "id": "BanterGeometry_83396",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -437,10 +437,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_80933",
+                "id": "BanterMaterial_80933",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -453,7 +453,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeShaft",
@@ -487,7 +487,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_52067",
+                "id": "BanterGeometry_52067",
                 "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
@@ -517,10 +517,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_55592",
+                "id": "BanterMaterial_55592",
                 "properties": {
                   "color": {
                     "a": 1,
@@ -533,7 +533,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeTop",
@@ -583,8 +583,8 @@
             "type": "BoxCollider"
           },
           {
-            "id": "ColliderEvents_7578",
-            "type": "ColliderEvents"
+            "id": "BanterColliderEvents_7578",
+            "type": "BanterColliderEvents"
           }
         ],
         "finished_loading": true,

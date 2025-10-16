@@ -23,7 +23,7 @@ this.onLoaded = () => {
     D2 = getChildEntity("Digit2")
     D3 = getChildEntity("Digit3")
     D4 = getChildEntity("Digit4")
-    audioSource = this._entity.getComponent("AudioSource")
+    audioSource = this._entity.getComponent("BanterAudioSource")
 
     // Initial display
     this.updateDisplay(0, 0)

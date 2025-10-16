@@ -1,0 +1,709 @@
+{
+  "author": "Technocrat",
+  "created": 1760583885290,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "script"
+            },
+            "properties": {
+              "height": 1.5,
+              "radialSegments": 32,
+              "radius": 0.8
+            },
+            "type": "Cylinder"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "componentProperties": {
+                "color": {
+                  "a": 1,
+                  "b": 0.9,
+                  "g": 0.9,
+                  "r": 0.9
+                }
+              },
+              "context": "script"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.9,
+                "g": 0.9,
+                "r": 0.9
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "Material"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Base",
+        "parentId": "Scene/ChessPawn",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.3,
+            "y": 0.05,
+            "z": 0.3
+          }
+        },
+        "type": "Entity"
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "script"
+            },
+            "properties": {
+              "height": 1,
+              "radialSegments": 32,
+              "radius": 1
+            },
+            "type": "Cylinder"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "componentProperties": {
+                "color": {
+                  "a": 1,
+                  "b": 0.9,
+                  "g": 0.9,
+                  "r": 0.9
+                }
+              },
+              "context": "script"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.9,
+                "g": 0.9,
+                "r": 0.9
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "Material"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Body",
+        "parentId": "Scene/ChessPawn",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.15,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.12,
+            "y": 0.3,
+            "z": 0.12
+          }
+        },
+        "type": "Entity"
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "script"
+            },
+            "properties": {
+              "height": 1,
+              "radialSegments": 32,
+              "radius": 1
+            },
+            "type": "Cylinder"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "componentProperties": {
+                "color": {
+                  "a": 1,
+                  "b": 0.9,
+                  "g": 0.9,
+                  "r": 0.9
+                }
+              },
+              "context": "script"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.9,
+                "g": 0.9,
+                "r": 0.9
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "Material"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Neck",
+        "parentId": "Scene/ChessPawn",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.335,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.08,
+            "y": 0.08,
+            "z": 0.08
+          }
+        },
+        "type": "Entity"
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "script"
+            },
+            "properties": {
+              "heightSegments": 16,
+              "phiLength": 6.283185307179586,
+              "phiStart": 0,
+              "radius": 1,
+              "thetaLength": 3.141592653589793,
+              "thetaStart": 0,
+              "widthSegments": 16
+            },
+            "type": "Sphere"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "context": "ghost"
+            },
+            "properties": {
+              "arc": 6.283185,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 0,
+              "height": 1,
+              "heightSegments": 16,
+              "innerRadius": 0.3,
+              "openEnded": false,
+              "outerRadius": 1,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 8,
+              "radius": 1,
+              "radiusBottom": 1,
+              "radiusTop": 1,
+              "segments": 24,
+              "thetaLength": 3.141593,
+              "thetaSegments": 24,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 16,
+              "width": 1,
+              "widthSegments": 16
+            },
+            "type": "Geometry"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "componentProperties": {
+                "color": {
+                  "a": 1,
+                  "b": 0.9,
+                  "g": 0.9,
+                  "r": 0.9
+                }
+              },
+              "context": "script"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.9,
+                "g": 0.9,
+                "r": 0.9
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "Material"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Head",
+        "parentId": "Scene/ChessPawn",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.5,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.15,
+            "y": 0.15,
+            "z": 0.15
+          }
+        },
+        "type": "Entity"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "ChessPawn",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1.5,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity"
+  },
+  "description": "",
+  "folder": "Chess",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.5,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.7,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.6,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.5,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.55,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.6,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.75,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.85,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.65,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.75,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.7,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.65,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Body",
+      "newValue": {
+        "x": 0,
+        "y": 0.25,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.35,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Body",
+      "newValue": {
+        "x": 0,
+        "y": 0.1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.25,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Body",
+      "newValue": {
+        "x": 0,
+        "y": 0.15,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.1,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.35,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.55,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.5,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.7,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.325,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.35,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.45,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.5,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Head",
+      "newValue": {
+        "x": 0,
+        "y": 0.5,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.45,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.33,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.325,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.4,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.33,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.35,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.4,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ChessPawn/Neck",
+      "newValue": {
+        "x": 0,
+        "y": 0.335,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.35,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Cylinder_3440",
+      "newValue": 0.8,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Cylinder_3440",
+      "newValue": 0.8,
+      "options": {
+        "source": "ui"
+      },
+      "property": "radius"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Cylinder_3440",
+      "newValue": 1.5,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760583885290,
+  "name": "ChessPawn"
+}

@@ -194,6 +194,10 @@ await mcp__chrome-devtools__evaluate_script({
 });
 ```
 
+WARNING:
+When making changes to extentions/code_linker/inventory the files will not automatically change in game. In order to sync the changes you need to use extensions/code_linker/claude_sync.py {file} to sync changes.
+
+
 ### Remember
 
 - **You have complete control and complete responsibility**
@@ -204,3 +208,4 @@ await mcp__chrome-devtools__evaluate_script({
 ---
 *The codebase for the inspector is located at ../../*
 *For comprehensive patterns and examples, see `devtool-object-construction-guide.md`*
+- to memorize

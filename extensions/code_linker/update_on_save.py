@@ -18,3 +18,5 @@ else:
     exit()
 
 requests.get(f"http://localhost:{linker_port}/save?file={target_path}")
+
+#'/home/jason/Desktop/sdq3/SideQuest.Banter.Unity/Injection/inspector/extensions/code_linker/update_on_save.py', '/home/jason/Desktop/sdq3/SideQuest.Banter.Unity/Injection/inspector/extensions/code_linker/inventory/Technocrat/Chess/Chess.js'

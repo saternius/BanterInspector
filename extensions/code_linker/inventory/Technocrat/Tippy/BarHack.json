@@ -57,7 +57,7 @@
           "width": 0,
           "widthSegments": 0.35962327160493823
         },
-        "type": "Geometry"
+        "type": "BanterGeometry"
       },
       {
         "initialized": true,
@@ -73,7 +73,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "Material"
+        "type": "BanterMaterial"
       },
       {
         "initialized": true,
@@ -94,7 +94,7 @@
       },
       {
         "initialized": true,
-        "type": "ColliderEvents"
+        "type": "BanterColliderEvents"
       },
       {
         "initialized": true,
@@ -127,7 +127,7 @@
             "z": 0
           }
         },
-        "type": "Rigidbody"
+        "type": "BanterRigidbody"
       },
       {
         "initialized": true,
@@ -144,7 +144,7 @@
           "fireRate": 0.1,
           "sensitivity": 1
         },
-        "type": "HeldEvents"
+        "type": "BanterHeldEvents"
       },
       {
         "initialized": true,
@@ -193,7 +193,7 @@
             "type": "Transform"
           },
           {
-            "id": "Geometry_87409",
+            "id": "BanterGeometry_87409",
             "initialized": true,
             "properties": {
               "arc": 6.283185307179586,
@@ -224,10 +224,10 @@
               "width": 0,
               "widthSegments": 0.35962327160493823
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
-            "id": "Material_90434",
+            "id": "BanterMaterial_90434",
             "initialized": true,
             "properties": {
               "color": {
@@ -241,7 +241,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "id": "BoxCollider_658",
@@ -262,12 +262,12 @@
             "type": "BoxCollider"
           },
           {
-            "id": "ColliderEvents_11022",
+            "id": "BanterColliderEvents_11022",
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           },
           {
-            "id": "Rigidbody_92916",
+            "id": "BanterRigidbody_92916",
             "initialized": true,
             "properties": {
               "angularDrag": 5,
@@ -298,7 +298,7 @@
                 "z": 0
               }
             },
-            "type": "Rigidbody"
+            "type": "BanterRigidbody"
           }
         ],
         "id": "Scene/Grabbable_8_45398",
@@ -317,9 +317,9 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "HeldEvents_1935"
+        "id": "BanterHeldEvents_1935"
       },
-      "componentType": "HeldEvents",
+      "componentType": "BanterHeldEvents",
       "entityId": "Scene/Grabbable_8_45398",
       "options": {
         "source": "ui"

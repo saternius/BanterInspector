@@ -60,7 +60,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -76,7 +76,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -97,7 +97,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -162,7 +162,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -178,7 +178,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -199,7 +199,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -264,7 +264,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -280,7 +280,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -301,7 +301,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -377,7 +377,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_47179",
+                "id": "BanterGeometry_47179",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -408,10 +408,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_670",
+                "id": "BanterMaterial_670",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -425,7 +425,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_21318",
@@ -447,9 +447,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_65566",
+                "id": "BanterColliderEvents_65566",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation_91124/Y-Ring",
@@ -486,7 +486,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_22359",
+                "id": "BanterGeometry_22359",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -517,10 +517,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_40944",
+                "id": "BanterMaterial_40944",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -534,7 +534,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_97897",
@@ -556,9 +556,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_17610",
+                "id": "BanterColliderEvents_17610",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation_91124/X-Ring",
@@ -595,7 +595,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_13860",
+                "id": "BanterGeometry_13860",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -626,10 +626,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_3079",
+                "id": "BanterMaterial_3079",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -643,7 +643,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_26890",
@@ -665,9 +665,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_12276",
+                "id": "BanterColliderEvents_12276",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation_91124/Z-Ring",
@@ -704,7 +704,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_69796",
+                "id": "BanterGeometry_69796",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -735,10 +735,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_77435",
+                "id": "BanterMaterial_77435",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -752,7 +752,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               }
             ],
             "id": "Scene/Rotation_91124/CenterSphere",
@@ -899,7 +899,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_22359",
+      "componentId": "BanterGeometry_22359",
       "newValue": 1,
       "options": {
         "source": "ui"
@@ -908,7 +908,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_22359",
+      "componentId": "BanterGeometry_22359",
       "newValue": 0.95,
       "options": {
         "source": "ui"
@@ -917,7 +917,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_22359",
+      "componentId": "BanterGeometry_22359",
       "newValue": 0.02,
       "options": {
         "source": "ui"
@@ -926,7 +926,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_22359",
+      "componentId": "BanterGeometry_22359",
       "newValue": 0.025,
       "options": {
         "source": "ui"
@@ -935,7 +935,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_47179",
+      "componentId": "BanterGeometry_47179",
       "newValue": 0.025,
       "options": {
         "source": "ui"
@@ -944,7 +944,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_13860",
+      "componentId": "BanterGeometry_13860",
       "newValue": 0.025,
       "options": {
         "source": "ui"
@@ -953,7 +953,7 @@
     },
     {
       "action": "set_component_property",
-      "componentId": "Geometry_13860",
+      "componentId": "BanterGeometry_13860",
       "newValue": 0.9,
       "options": {
         "source": "ui"

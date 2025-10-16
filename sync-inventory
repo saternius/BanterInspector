@@ -1,0 +1,14 @@
+#!/bin/bash
+# Convenience script for syncing inventory files
+
+INSPECTOR_ROOT="/home/jason/Desktop/sdq3/SideQuest.Banter.Unity/Injection/inspector"
+CLAUDE_SYNC="${INSPECTOR_ROOT}/extensions/code_linker/claude_sync.py"
+
+# If no arguments, sync recent files (last 5 minutes)
+if [ $# -eq 0 ]; then
+    echo "Syncing recently modified inventory files (last 5 minutes)..."
+    python3 "$CLAUDE_SYNC" --recent 5
+else
+    # Pass all arguments to claude_sync.py
+    python3 "$CLAUDE_SYNC" "$@"
+fi
