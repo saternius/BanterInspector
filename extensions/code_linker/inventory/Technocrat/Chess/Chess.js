@@ -17,6 +17,10 @@ class ChessGame {
         // Store original colors of 3D squares for restoration
         this.originalColors = {};
 
+        // 3D piece management - 8x8 array storing entity UUIDs of 3D pieces
+        // pieces3D[row][col] = entity UUID or null
+        this.pieces3D = Array(8).fill(null).map(() => Array(8).fill(null));
+
         // Chess piece Unicode symbols
         this.pieces = {
             white: {
@@ -84,6 +88,8 @@ class ChessGame {
         this.createPopup();
         this.injectStyles();
         this.renderBoard();
+        // Initialize 3D pieces and position them on the board
+        this.initialize3DPieces();
         return this.popup;
     }
 
@@ -314,9 +320,12 @@ class ChessGame {
         const piece = this.board[fromRow][fromCol];
         const capturedPiece = this.board[toRow][toCol];
 
-        // Make the move
+        // Make the move on the board
         this.board[toRow][toCol] = piece;
         this.board[fromRow][fromCol] = null;
+
+        // Move the 3D piece to match
+        this.move3DPiece(fromRow, fromCol, toRow, toCol);
 
         // Record move in history
         const moveNotation = this.getMoveNotation(piece, fromRow, fromCol, toRow, toCol, capturedPiece);
@@ -426,6 +435,238 @@ class ChessGame {
         });
     }
 
+    // 3D Piece Management Methods
+    initialize3DPieces() {
+        console.log("Initializing 3D pieces...");
+
+        // Clear the pieces3D array
+        this.pieces3D = Array(8).fill(null).map(() => Array(8).fill(null));
+
+        // First, try to find pieces already positioned on squares (after a restart/reload)
+        let foundOnSquares = 0;
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                const square = this.get3DSquare(row, col);
+                if (!square) continue;
+
+                // Check if this square has any piece children
+                square.children.forEach(child => {
+                    const pieceInfo = this.parsePieceName(child.name);
+                    if (pieceInfo) {
+                        // Found a piece already on this square
+                        const boardPiece = this.board[row][col];
+                        // Verify it matches the expected piece on the board
+                        if (boardPiece &&
+                            boardPiece.type === pieceInfo.type &&
+                            (boardPiece.color === pieceInfo.color || pieceInfo.color === 'unknown')) {
+                            this.pieces3D[row][col] = child.uuid;
+                            foundOnSquares++;
+                            console.log(`Found ${pieceInfo.color} ${pieceInfo.type} already at ${row},${col}`);
+                        }
+                    }
+                });
+            }
+        }
+
+        console.log(`Found ${foundOnSquares} pieces already positioned on squares`);
+
+        // If we found all pieces on squares, we're done
+        if (foundOnSquares >= 32) {
+            console.log("All pieces already positioned. Initialization complete.");
+            return;
+        }
+
+        // Otherwise, check the Pieces container for unpositioned pieces
+        const piecesContainer = SM.getEntityById(`${this.ctx._entity.id}/Pieces`);
+        if (!piecesContainer) {
+            console.warn("Pieces container not found at", `${this.ctx._entity.id}/Pieces`);
+            if (foundOnSquares === 0) {
+                console.warn("3D pieces will not be synchronized. Game will work in 2D only.");
+            }
+            return;
+        }
+
+        console.log("Found Pieces container with", piecesContainer.children.length, "unpositioned children");
+
+        // Iterate through all children of Pieces
+        piecesContainer.children.forEach(pieceEntity => {
+            console.log("Processing piece:", pieceEntity.name);
+            // Parse piece name to determine type and color
+            // Expected naming: "WhitePawn", "BlackRook", etc.
+            const pieceName = pieceEntity.name;
+            const pieceInfo = this.parsePieceName(pieceName);
+
+            if (!pieceInfo) {
+                console.warn(`Could not parse piece name: ${pieceName}`);
+                return;
+            }
+
+            console.log(`Parsed ${pieceName} as:`, pieceInfo);
+
+            // Find the correct board position for this piece based on initial board state
+            const position = this.findInitialPosition(pieceInfo.type, pieceInfo.color);
+
+            if (!position) {
+                console.warn(`Could not find initial position for ${pieceInfo.color} ${pieceInfo.type}`);
+                return;
+            }
+
+            if (position) {
+                const {row, col} = position;
+                this.pieces3D[row][col] = pieceEntity.uuid;
+
+                // Reparent piece to the square
+                const targetSquare = this.get3DSquare(row, col);
+                if (targetSquare) {
+                    MoveEntity(pieceEntity.id, targetSquare.id, {context: 'script'});
+                    // Get entity again with new ID after reparenting
+                    const movedEntity = SM.getEntityByUuid(pieceEntity.uuid);
+                    if (movedEntity) {
+                        // Reset local position to center it on the square
+                        SetEntityProp(movedEntity.id, "localPosition", {x: 0, y: 0.6, z: 0}, {context: 'script'});
+                    }
+                }
+
+                console.log(`Placed ${pieceInfo.color} ${pieceInfo.type} at ${row},${col} (UUID: ${pieceEntity.uuid})`);
+            }
+        });
+
+        // Count how many pieces were successfully assigned
+        let pieceCount = 0;
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                if (this.pieces3D[row][col] !== null) {
+                    pieceCount++;
+                }
+            }
+        }
+
+        console.log(`3D pieces initialized: ${pieceCount}/32 pieces assigned`);
+        if (pieceCount < 32) {
+            console.warn(`Only ${pieceCount} pieces found. You need 32 pieces (16 white, 16 black) for full 3D synchronization.`);
+            console.warn("Game will continue to work in 2D. Moves for pieces without 3D counterparts will be skipped in 3D.");
+        }
+    }
+
+    parsePieceName(name) {
+        // Parse names like "WhitePawn", "BlackRook", "ChessPawn", "ChessRook"
+        const lower = name.toLowerCase();
+
+        let color = null;
+        let type = null;
+
+        // Determine color
+        if (lower.includes('white')) {
+            color = 'white';
+        } else if (lower.includes('black')) {
+            color = 'black';
+        }
+
+        // Determine type
+        if (lower.includes('pawn')) type = 'pawn';
+        else if (lower.includes('rook')) type = 'rook';
+        else if (lower.includes('knight')) type = 'knight';
+        else if (lower.includes('bishop')) type = 'bishop';
+        else if (lower.includes('queen')) type = 'queen';
+        else if (lower.includes('king')) type = 'king';
+
+        // If no color specified, try to infer from context or default
+        // For now, if only type is found (like "ChessPawn"), we'll need to handle specially
+        if (type && !color) {
+            // This piece needs manual assignment
+            return { type, color: 'unknown' };
+        }
+
+        return (type && color) ? { type, color } : null;
+    }
+
+    findInitialPosition(type, color) {
+        // Find the first unassigned position in pieces3D that matches this piece in the board
+        for (let row = 0; row < 8; row++) {
+            for (let col = 0; col < 8; col++) {
+                const boardPiece = this.board[row][col];
+
+                // Check if this board position has the matching piece and isn't assigned yet
+                if (boardPiece &&
+                    boardPiece.type === type &&
+                    (boardPiece.color === color || color === 'unknown') &&
+                    this.pieces3D[row][col] === null) {
+
+                    // Mark this position as being processed
+                    return { row, col };
+                }
+            }
+        }
+
+        return null;
+    }
+
+    move3DPiece(fromRow, fromCol, toRow, toCol) {
+        const pieceUuid = this.pieces3D[fromRow][fromCol];
+
+        if (!pieceUuid) {
+            // No 3D piece at this position - this is okay, game continues in 2D only
+            console.log(`No 3D piece at ${fromRow},${fromCol} - skipping 3D move (2D move still works)`);
+            return;
+        }
+
+        // Get the piece entity by UUID (ID changes after reparenting)
+        const pieceEntity = SM.getEntityByUuid(pieceUuid);
+        if (!pieceEntity) {
+            console.log(`Could not find entity with UUID ${pieceUuid} - 3D move skipped`);
+            return;
+        }
+
+        // Get target square
+        const targetSquare = this.get3DSquare(toRow, toCol);
+        if (!targetSquare) {
+            console.log(`Could not get square at ${toRow},${toCol} - 3D move skipped`);
+            return;
+        }
+
+        // If there's a piece at the destination (capture), deactivate it
+        const capturedPieceUuid = this.pieces3D[toRow][toCol];
+        if (capturedPieceUuid) {
+            console.log(`Capturing piece at ${toRow},${toCol}`);
+            const capturedEntity = SM.getEntityByUuid(capturedPieceUuid);
+            if (capturedEntity) {
+                // Deactivate the captured piece
+                SetEntityProp(capturedEntity.id, "active", false, {context: 'script'});
+            }
+        }
+
+        // Move the piece by reparenting to the target square
+        console.log(`Moving piece from ${fromRow},${fromCol} to ${toRow},${toCol}`);
+        MoveEntity(pieceEntity.id, targetSquare.id, {context: 'script'});
+
+        // Get entity again with new ID after reparenting
+        const movedEntity = SM.getEntityByUuid(pieceUuid);
+        if (movedEntity) {
+            // Reset local position to center on square
+            SetEntityProp(movedEntity.id, "localPosition", {x: 0, y: 0.6, z: 0}, {context: 'script'});
+        }
+
+        // Update pieces3D array
+        this.pieces3D[toRow][toCol] = pieceUuid;
+        this.pieces3D[fromRow][fromCol] = null;
+    }
+
+    reset3DPieces() {
+        // Reactivate all pieces and move them back to starting positions
+        console.log("Resetting 3D pieces to starting positions");
+
+        // First, reactivate all pieces that might have been captured
+        const piecesContainer = SM.getEntityById(`${this.ctx._entity.id}/Pieces`);
+        if (piecesContainer) {
+            piecesContainer.children.forEach(pieceEntity => {
+                SetEntityProp(pieceEntity.id, "active", true, {context: 'script'});
+            });
+        }
+
+        // Re-initialize pieces to starting positions
+        this.initialize3DPieces();
+    }
+
     updatePlayerIndicator() {
         const indicator = this.popup.querySelector('.player-indicator');
         if (indicator) {
@@ -466,6 +707,8 @@ class ChessGame {
         this.selectedSquare = null;
         this.moveHistory = [];
         this.clearHighlights();  // Clear both 2D and 3D highlights
+        // Reset 3D pieces to starting positions
+        this.reset3DPieces();
         this.renderBoard();
         this.updatePlayerIndicator();
         this.updateMoveHistory();

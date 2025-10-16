@@ -15,6 +15,7 @@ export class Entity{
         this.identifiers = new Set();
         this.initialized = false;
         this.type = "Entity";
+        this.uuid = Math.floor(Math.random() * 10000000000000);
         
 
         if(!entityData._bs){
@@ -120,7 +121,7 @@ export class Entity{
         })
     }
 
-    async _setParent(newParent){
+    async _setParent(newParent, keepPosition){
         if (newParent === this) return;
         if(!newParent) return;
         if (this.parentId) {
@@ -131,7 +132,7 @@ export class Entity{
         }
         newParent.children.push(this);
         this.parentId = newParent.id;
-        this._bs.SetParent(newParent._bs);
+        this._bs.SetParent(newParent._bs, keepPosition);
         this.rename(this.name, true);
     }
 
@@ -395,8 +396,9 @@ export class Entity{
         return this[property];
     }
 
-    async SetParent(newParentId){
-        let data = `entity_moved¶${this.id}¶${newParentId}¶0`
+    async SetParent(newParentId, keepPosition){
+        if(!keepPosition) keepPosition = true;
+        let data = `entity_moved¶${this.id}¶${newParentId}¶${keepPosition}`
         networking.sendOneShot(data);
     }
 
