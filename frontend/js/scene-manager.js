@@ -722,6 +722,10 @@
             return ent;
         }
 
+        getEntityByUuid(uuid){
+            return Object.values(SM.entityData.entityMap).find(ent=>ent.uuid === uuid);
+        }
+
         fallbackEntitySearch(entityId){
             let crawlEnts = (arr, eid)=>{
                 for(var i=0; i<arr.length; i++){

@@ -220,6 +220,11 @@ this.onStart = ()=>{
     }
 
     log("flipable", "onStart completed - all watchers should be active");
+
+    this._entity._bs.On("click", (e)=>{
+        log("flipable", "click", e.detail)
+        this.flip();
+    });
 }
 
 this.onDestroy = ()=>{

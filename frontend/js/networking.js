@@ -457,11 +457,12 @@ export class Networking {
         }
 
         if(items[0] === "entity_moved"){
-            let [entityId, newParentId, newSiblingIndex] = items.slice(1)
+            let [entityId, newParentId, keepPosition] = items.slice(1)
             const entity = SM.getEntityById(entityId);
+            keepPosition = keepPosition === "true";
             if (!entity) return;
             if(!newParentId) newParentId = SM.entityData.entities[0].id;
-            await entity._setParent(SM.getEntityById(newParentId));
+            await entity._setParent(SM.getEntityById(newParentId), keepPosition);
             await SM.updateHierarchy();
         }
 

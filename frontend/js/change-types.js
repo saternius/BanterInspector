@@ -617,11 +617,12 @@ export class EntityRemoveChange extends Change{
 }
 
 export class EntityMoveChange extends Change{
-    constructor(entityId, newParentId, options) {
+    constructor(entityId, newParentId, keepPosition, options) {
         super();
         this.timeout = 500;
         this.entityId = entityId;
         this.newParentId = newParentId;
+        this.keepPosition = keepPosition;
         const entity = SM.getEntityById(entityId);
         this.oldParentId = entity?.parentId || null;
         this.oldSiblingIndex = this.getSiblingIndex(entityId, this.oldParentId);
@@ -647,14 +648,14 @@ export class EntityMoveChange extends Change{
         const entity = SM.getEntityById(this.entityId);
         const parent = SM.getEntityById(this.newParentId);
         if (!entity || !parent) return;
-        await entity.SetParent(this.newParentId);
+        await entity.SetParent(this.newParentId, this.keepPosition);
     }
 
     async undo() {
         super.undo();
         const entity = SM.getEntityById(this.entityId);
         if (!entity) return;
-        await entity.SetParent(this.oldParentId);
+        await entity.SetParent(this.oldParentId, this.keepPosition);
     }
 
     getDescription() {
@@ -670,6 +671,7 @@ export class EntityMoveChange extends Change{
             action: "move_entity",
             entityId: this.entityId,
             newParentId: this.newParentId,
+            keepPosition: this.keepPosition,
             options: this.options
         }
     }
