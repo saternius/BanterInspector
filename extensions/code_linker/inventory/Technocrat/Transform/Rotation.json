@@ -60,7 +60,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -76,7 +76,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -97,7 +97,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -162,7 +162,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -178,7 +178,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -199,7 +199,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -264,7 +264,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "Geometry"
+            "type": "BanterGeometry"
           },
           {
             "initialized": true,
@@ -280,7 +280,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "Material"
+            "type": "BanterMaterial"
           },
           {
             "initialized": true,
@@ -301,7 +301,7 @@
           },
           {
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "initialized": true,
@@ -377,7 +377,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_13273",
+                "id": "BanterGeometry_13273",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -408,10 +408,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_7768",
+                "id": "BanterMaterial_7768",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -425,7 +425,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_21945",
@@ -446,9 +446,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_62045",
+                "id": "BanterColliderEvents_62045",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/Y-Ring",
@@ -485,7 +485,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_99715",
+                "id": "BanterGeometry_99715",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -516,10 +516,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_53829",
+                "id": "BanterMaterial_53829",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -533,7 +533,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_71692",
@@ -554,9 +554,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_87833",
+                "id": "BanterColliderEvents_87833",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/X-Ring",
@@ -593,7 +593,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_63825",
+                "id": "BanterGeometry_63825",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -624,10 +624,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_56948",
+                "id": "BanterMaterial_56948",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -641,7 +641,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_10776",
@@ -662,9 +662,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_10283",
+                "id": "BanterColliderEvents_10283",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/Z-Ring",
@@ -746,7 +746,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_13273",
+                "id": "BanterGeometry_13273",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -777,10 +777,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_7768",
+                "id": "BanterMaterial_7768",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -794,7 +794,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_21945",
@@ -815,9 +815,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_62045",
+                "id": "BanterColliderEvents_62045",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/Y-Ring",
@@ -854,7 +854,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_99715",
+                "id": "BanterGeometry_99715",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -885,10 +885,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_53829",
+                "id": "BanterMaterial_53829",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -902,7 +902,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_71692",
@@ -923,9 +923,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_87833",
+                "id": "BanterColliderEvents_87833",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/X-Ring",
@@ -962,7 +962,7 @@
                 "type": "Transform"
               },
               {
-                "id": "Geometry_63825",
+                "id": "BanterGeometry_63825",
                 "initialized": true,
                 "properties": {
                   "arc": 6.283185307179586,
@@ -993,10 +993,10 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "Geometry"
+                "type": "BanterGeometry"
               },
               {
-                "id": "Material_56948",
+                "id": "BanterMaterial_56948",
                 "initialized": true,
                 "properties": {
                   "color": {
@@ -1010,7 +1010,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "Material"
+                "type": "BanterMaterial"
               },
               {
                 "id": "BoxCollider_10776",
@@ -1031,9 +1031,9 @@
                 "type": "BoxCollider"
               },
               {
-                "id": "ColliderEvents_10283",
+                "id": "BanterColliderEvents_10283",
                 "initialized": true,
-                "type": "ColliderEvents"
+                "type": "BanterColliderEvents"
               }
             ],
             "id": "Scene/Rotation3_69812/Z-Ring",

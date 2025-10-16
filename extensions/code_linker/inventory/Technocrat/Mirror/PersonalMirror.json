@@ -33,7 +33,7 @@
           "cameraClear": 1,
           "renderTextureSize": 1024
         },
-        "type": "Mirror"
+        "type": "BanterMirror"
       },
       {
         "initialized": true,
@@ -54,7 +54,7 @@
       },
       {
         "initialized": true,
-        "type": "ColliderEvents"
+        "type": "BanterColliderEvents"
       },
       {
         "initialized": true,
@@ -104,14 +104,14 @@
             "type": "Transform"
           },
           {
-            "id": "Mirror_50926",
+            "id": "BanterMirror_50926",
             "initialized": true,
             "properties": {
               "backgroundColor": "#000000",
               "cameraClear": 1,
               "renderTextureSize": 1024
             },
-            "type": "Mirror"
+            "type": "BanterMirror"
           },
           {
             "id": "BoxCollider_19137",
@@ -132,9 +132,9 @@
             "type": "BoxCollider"
           },
           {
-            "id": "ColliderEvents_76147",
+            "id": "BanterColliderEvents_76147",
             "initialized": true,
-            "type": "ColliderEvents"
+            "type": "BanterColliderEvents"
           }
         ],
         "id": "Scene/PersonalMirror_19488",

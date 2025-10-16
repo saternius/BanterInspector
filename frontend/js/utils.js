@@ -386,37 +386,6 @@ export function parseBest(str) {
     return str;
 }
 
-export function appendToShell(tag, id, str){
-    if(window.logger && window.logger.include[tag]){
-        let shellEl = document.getElementById("lifecycleShell");
-        if(!shellEl) return;
-
-        const children = shellEl.children;
-        if (children.length >= 500) {
-            shellEl.removeChild(children[0]);
-        }
-
-        const div = document.createElement('div');
-        div.className = 'change-item';
-        div.id = id;
-        div.style.whiteSpace = 'pre-wrap';
-        div.style.fontFamily = 'monospace';
-
-        if(window.logger && window.logger.getTagColor){
-            const color = tag === "error" ? "red" : window.logger.getTagColor(tag);
-            div.innerHTML = `<span style="color: ${color}; font-weight: bold">[${tag.toUpperCase()}]:</span> ${str}`;
-        } else {
-            div.textContent = str;
-            if(tag === "error"){
-                div.style.color = "red";
-            }
-        }
-
-        shellEl.appendChild(div);
-        shellEl.scrollTop = shellEl.scrollHeight;
-    }
-}
-
 /**
  * Custom confirm modal to replace browser's confirm()
  * Returns a promise that resolves to true/false based on user choice
@@ -552,6 +521,37 @@ export function showNotification(message) {
 }
 
 
+
+export function appendToShell(tag, id, str){
+    if(window.logger && window.logger.include[tag]){
+        let shellEl = document.getElementById("lifecycleShell");
+        if(!shellEl) return;
+
+        const children = shellEl.children;
+        if (children.length >= 500) {
+            shellEl.removeChild(children[0]);
+        }
+
+        const div = document.createElement('div');
+        div.className = 'change-item';
+        div.id = id;
+        div.style.whiteSpace = 'pre-wrap';
+        div.style.fontFamily = 'monospace';
+
+        if(window.logger && window.logger.getTagColor){
+            const color = tag === "error" ? "red" : window.logger.getTagColor(tag);
+            div.innerHTML = `<span style="color: ${color}; font-weight: bold">[${tag.toUpperCase()}]:</span> ${str}`;
+        } else {
+            div.textContent = str;
+            if(tag === "error"){
+                div.style.color = "red";
+            }
+        }
+
+        shellEl.appendChild(div);
+        shellEl.scrollTop = shellEl.scrollHeight;
+    }
+}
 export class Logger{
     constructor(){
         this.include = {
@@ -561,6 +561,8 @@ export class Logger{
             oneShot: false,
             spaceProps: false
         }
+        this.broadcastTags = [];
+        this.remoteTagsExcluded = [];
         this.tagColors = {};
         // Store original console methods
         this.originalLog = console.log.bind(console);
@@ -684,6 +686,20 @@ window.log = function(tag, ...args) {
         console.groupEnd();
     } else {
         _originalLog.apply(console, [`%c[${tag.toUpperCase()}]:%c`, `color: ${color}; font-weight: bold`, 'color: inherit', ...truncatedArgs]);
+    }
+
+    if(window.logger.broadcastEvent && window.logger.broadcastTags.includes(tag)){
+        let msg = {
+            tag: tag,
+            color: color,
+            truncatedArgs: truncatedArgs,
+            fileName: callerInfo.fileName,
+            lineNum: callerInfo.lineNum
+        }
+        window.dispatchEvent(new CustomEvent('log-event', {detail: msg}));
+        if(window.logger.remote && !window.logger.remoteTagsExcluded.includes(tag)){
+            networking.sendOneShot("log_event¶"+JSON.stringify(msg));
+        }
     }
 
     // Handle lifecycle shell

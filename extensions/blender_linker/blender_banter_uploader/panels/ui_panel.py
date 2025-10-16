@@ -1,6 +1,7 @@
 import bpy
 from bpy.types import Panel
 from ..utils import BanterUploader, GLBExporter
+import time
 
 class BANTER_PT_upload_panel(Panel):
     """Main upload panel in 3D viewport sidebar"""
@@ -9,24 +10,54 @@ class BANTER_PT_upload_panel(Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "Banter"
-    
+
+    # Cache for server status to avoid spamming
+    _server_status_cache = {}
+    _cache_duration = 10.0  # Check server status at most once every 10 seconds
+
+    @classmethod
+    def get_server_status(cls, server_url):
+        """Get cached server status or check if cache expired"""
+        current_time = time.time()
+
+        # Check if we have a cached result
+        if server_url in cls._server_status_cache:
+            cached_result, cached_time = cls._server_status_cache[server_url]
+
+            # Return cached result if still fresh (less than cache_duration seconds old)
+            if current_time - cached_time < cls._cache_duration:
+                return cached_result
+
+        # Cache expired or doesn't exist, check server status
+        try:
+            is_connected = BanterUploader.check_server_status(server_url)
+            cls._server_status_cache[server_url] = (is_connected, current_time)
+            return is_connected
+        except Exception:
+            # If check fails, cache the failure to avoid repeated attempts
+            cls._server_status_cache[server_url] = (False, current_time)
+            return False
+
     def draw(self, context):
         layout = self.layout
         scene = context.scene
-        
+
         # Server status
         prefs = context.preferences.addons["blender_banter_uploader"].preferences
         server_url = prefs.server_url
-        
+
         status_row = layout.row()
         status_row.label(text="Server:")
-        
-        # Check server status
-        is_connected = BanterUploader.check_server_status(server_url)
+
+        # Check server status (using cached value)
+        is_connected = self.get_server_status(server_url)
         if is_connected:
             status_row.label(text="Connected", icon='CHECKMARK')
         else:
             status_row.label(text="Disconnected", icon='ERROR')
+
+        # Add refresh button to force status check
+        status_row.operator("banter.refresh_server_status", text="", icon='FILE_REFRESH')
         
         layout.label(text=server_url, icon='URL')
         
@@ -186,9 +217,9 @@ class BANTER_OT_copy_hash(bpy.types.Operator):
     """Copy hash to clipboard"""
     bl_idname = "banter.copy_hash"
     bl_label = "Copy Hash"
-    
+
     hash_value: bpy.props.StringProperty()
-    
+
     def execute(self, context):
         if self.hash_value:
             context.window_manager.clipboard = self.hash_value
@@ -198,4 +229,27 @@ class BANTER_OT_copy_hash(bpy.types.Operator):
             self.report({'INFO'}, f"Copied: {context.scene.banter_last_upload_hash}")
         else:
             self.report({'WARNING'}, "No hash to copy")
+        return {'FINISHED'}
+
+
+# Operator for manually refreshing server status
+class BANTER_OT_refresh_server_status(bpy.types.Operator):
+    """Refresh server connection status"""
+    bl_idname = "banter.refresh_server_status"
+    bl_label = "Refresh Server Status"
+
+    def execute(self, context):
+        prefs = context.preferences.addons["blender_banter_uploader"].preferences
+        server_url = prefs.server_url
+
+        # Clear the cache for this server URL to force a fresh check
+        if server_url in BANTER_PT_upload_panel._server_status_cache:
+            del BANTER_PT_upload_panel._server_status_cache[server_url]
+
+        # Force a redraw of the UI
+        for area in context.screen.areas:
+            if area.type == 'VIEW_3D':
+                area.tag_redraw()
+
+        self.report({'INFO'}, "Server status refreshed")
         return {'FINISHED'}

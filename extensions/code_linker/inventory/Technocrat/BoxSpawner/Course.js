@@ -50,7 +50,7 @@ function handleKey(e){
     if(e.code === "Numpad7"){
         spawner_active = !spawner_active
         let box = getSlotByName("Box")
-        let mat_id = box.getComponent("Material").id
+        let mat_id = box.getComponent("BanterMaterial").id
         let target_color = (spawner_active) ? {r:1,g:0,b:0,a:1}:{r:1,g:1,b:1,a:1}
         SetComponentProp(mat_id, "color", target_color)
     }
@@ -87,7 +87,7 @@ this.onStart = ()=>{
                                         z: Math.random()*.5+.25
                                     }
                                    )
-        let material = item.getComponent("Material")
+        let material = item.getComponent("BanterMaterial")
         console.log('material: ', material)
         let target_color = {r:Math.random(),g:Math.random(),b:Math.random(),a:1}
         SetComponentProp(material.id, "color", target_color)
