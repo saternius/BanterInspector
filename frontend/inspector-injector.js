@@ -546,7 +546,8 @@ export class InspectorInjector {
                     { type: 'StreetView', name: 'Street View', desc: 'Street view panorama' },
                     { type: 'KitItem', name: 'Kit Item', desc: 'Kit item component' },
                     { type: 'UIPanel', name: 'UI Panel', desc: 'UI with haptics and sounds' },
-                    { type: 'AvatarPedestal', name: 'Avatar Pedestal', desc: 'Ready Player Me avatar' }
+                    { type: 'AvatarPedestal', name: 'Avatar Pedestal', desc: 'Ready Player Me avatar' },
+                    { type: 'Light', name: 'Light', desc: 'Light source (directional, point, spot)' }
                 ]
             }
         };

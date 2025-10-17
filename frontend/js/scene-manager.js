@@ -779,6 +779,11 @@
             return Object.values(this.entityData.componentMap).filter(x=>x.type === "MonoBehavior");
         }
 
+        getScriptByName(scriptName){
+            let mono =  Object.values(this.entityData.componentMap).find(x=>x.type === "MonoBehavior" && x.properties.name === scriptName);
+            return mono?.ctx;
+        }
+
 
         async _addNewEntity(entityName, parentId = null) {
             if(!this.scene || !window.BS){

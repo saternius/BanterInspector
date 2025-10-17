@@ -139,7 +139,7 @@ await mcp__chrome-devtools__take_snapshot();
 **For Deeper Understanding (if needed):**
 - `/frontend/js/change-types.js` - All available operations
 - `/frontend/js/entity-components/index.js` - Component registry
-- `/extensions/code_linker/inventory/` - Example inventory items
+- `/prompts/builder/extensions/code_linker/inventory/` - Example inventory items
 - `/CLAUDE.md` - Full project context (if you need to understand the broader system)
 
 ### Key Pitfalls to Avoid
@@ -195,7 +195,7 @@ await mcp__chrome-devtools__evaluate_script({
 ```
 
 WARNING:
-When making changes to extentions/code_linker/inventory the files will not automatically change in game. In order to sync the changes you need to use extensions/code_linker/claude_sync.py {file} to sync changes.
+When making changes to prompts/builder/extensions/code_linker/inventory the files will not automatically change in game. In order to sync the changes you need to use prompts/builder/extensions/code_linker/claude_sync.py {file} to sync changes.
 
 
 ### Remember
@@ -208,4 +208,6 @@ When making changes to extentions/code_linker/inventory the files will not autom
 ---
 *The codebase for the inspector is located at ../../*
 *For comprehensive patterns and examples, see `devtool-object-construction-guide.md`*
+*For comprehensive scripting guide see `monobehaviour-scripting-guide.md`*
+*For comprehensive guide on scripting BanterUI, see `BanterUI.md`*
 - to memorize
