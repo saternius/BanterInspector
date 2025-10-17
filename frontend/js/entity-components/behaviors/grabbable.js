@@ -4,7 +4,7 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 export class GrabbableComponent extends EntityComponent {
     constructor() {
         super();
-        this._bsRef = BS.BanterGrabbable;
+        this._bsRef = BS.BanterGrababble;  // Note: BS library has typo "Grababble"
         this.type = 'Grabbable';
     }
 

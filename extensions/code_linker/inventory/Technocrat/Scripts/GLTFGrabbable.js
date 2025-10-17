@@ -1,1 +1,0 @@
-log("GLTFGrabbable", "GLTFGrabbable")

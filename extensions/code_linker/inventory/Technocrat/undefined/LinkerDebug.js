@@ -1,1 +1,0 @@
-log("Linker Debug", "CHEKCPOINT 1")

@@ -120,6 +120,8 @@ const { SpiralComponent } = await import(`${window.repoUrl}/entity-components/me
 window.updateModuleProgress("spiral");
 const { SpringComponent } = await import(`${window.repoUrl}/entity-components/meshes/spring.js`);
 window.updateModuleProgress("spring");
+const { LightComponent } = await import(`${window.repoUrl}/entity-components/misc/light.js`);
+window.updateModuleProgress("light");
 
 export const BanterLayers = {
     Default: 0,
@@ -206,7 +208,8 @@ export const SUPPORTED_COMPONENTS = new Set([
     BS.ComponentType.BanterScherk,
     BS.ComponentType.BanterSnail,
     BS.ComponentType.BanterSpiral,
-    BS.ComponentType.BanterSpring
+    BS.ComponentType.BanterSpring,
+    BS.ComponentType.Light
 ]);
 
 export const componentTypeMap = {
@@ -268,6 +271,7 @@ export const componentTypeMap = {
     "Snail": SnailComponent,
     "Spiral": SpiralComponent,
     "Spring": SpringComponent,
+    "Light": LightComponent,
     "MonoBehavior": MonoBehaviorComponent
 }
 
@@ -330,6 +334,7 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterSnail]: SnailComponent,
     [BS.ComponentType.BanterSpiral]: SpiralComponent,
     [BS.ComponentType.BanterSpring]: SpringComponent,
+    [BS.ComponentType.Light]: LightComponent,
     [MonoBehaviorComponent]: MonoBehaviorComponent
 }
 
@@ -392,6 +397,7 @@ export const componentTextMap = {
     [BS.ComponentType.BanterSnail]: "Snail",
     [BS.ComponentType.BanterSpiral]: "Spiral",
     [BS.ComponentType.BanterSpring]: "Spring",
+    [BS.ComponentType.Light]: "Light",
     [MonoBehaviorComponent]: "MonoBehavior"
 }
 
@@ -500,7 +506,8 @@ window.ComponentRegistry = {
         StreetViewComponent,
         WorldObjectComponent,
         UIPanelComponent,
-        AvatarPedestalComponent
+        AvatarPedestalComponent,
+        LightComponent
     },
 
     // Component metadata organized by category
@@ -578,7 +585,8 @@ window.ComponentRegistry = {
         StreetViewComponent: { category: 'misc', description: 'Google Street View integration', icon: '🗺️' },
         WorldObjectComponent: { category: 'misc', description: 'World object reference', icon: '🌍' },
         UIPanelComponent: { category: 'misc', description: 'UI panel with haptics and sounds', icon: '📱' },
-        AvatarPedestalComponent: { category: 'misc', description: 'Ready Player Me avatar display', icon: '🧍' }
+        AvatarPedestalComponent: { category: 'misc', description: 'Ready Player Me avatar display', icon: '🧍' },
+        LightComponent: { category: 'misc', description: 'Light source (directional, point, spot)', icon: '💡' }
     },
 
     // Unity layer definitions
@@ -774,5 +782,6 @@ export {
     SnailComponent,
     SpiralComponent,
     SpringComponent,
+    LightComponent,
     MonoBehaviorComponent
 };

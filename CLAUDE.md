@@ -24,8 +24,10 @@ inspector/
 ├── microservices/     # Backend services
 │   ├── statement-block-service/  # AI text processing service
 │   └── file_server/   # File serving utilities for hosting app
-├── extensions/        # Extensions and plugins
-│   └── code_linker/   # Syncs in-game code to vscode
+├── prompts/           # Prompts and builder tools
+│   └── builder/
+│       └── extensions/    # Extensions and plugins
+│           └── code_linker/   # Syncs in-game code to vscode
 ├── docs/              # Documentation and examples
 │   ├── examples/      # Example scenes and scripts
 │   └── site/          # Docusaurus documentation site
@@ -81,7 +83,7 @@ Backend services are located in the `microservices/` directory:
 - `file_server/` - File serving utilities for development
 
 ### Extensions
-Extensions and plugins are located in the `extensions/` directory:
+Extensions and plugins are located in the `prompts/builder/extensions/` directory:
 
 - `code_linker/` - Syncs in-game inventory and game-state data to a local file so that users can dev on their IDE of choice instead of the built-in ScriptEditor
 
