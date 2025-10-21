@@ -323,6 +323,9 @@ export class Networking {
                 if(newValue[0] === "{" || newValue[0] === "["){
                     newValue = JSON.parse(newValue);
                 }
+                if(newValue === null || newValue === "null"){
+                    return;
+                }
                 if (isProtected) {
                     SM.scene.spaceState.protected[property] = newValue;
                 } else {
@@ -510,6 +513,11 @@ export class Networking {
             }
         }
 
+        if(items[0] === "import"){
+            let [path, minUpdateTime] = items.slice(1)
+            await inventory.firebase.importFromFirebase(path, "", minUpdateTime);
+        }
+
         
         const saveBtn = document.getElementById('saveBtn');
         if (saveBtn) {
@@ -542,11 +550,15 @@ export class Networking {
     }
 
 
-    async setSpaceProperty(key, value, isProtected) {
+    async setSpaceProperty(key, value, hostOnly, isProtected) {
         if (!SM.scene) return;
-        // if(typeof value === "object"){
-        //     value = JSON.stringify(value);
-        // }
+        
+        if(hostOnly && !SM.iamHost){
+            return;
+        }
+        if(typeof value === "object"){
+            value = JSON.stringify(value);
+        }
 
         if (isProtected) {
             SM.scene.SetProtectedSpaceProps({ [key]: value });
@@ -557,12 +569,16 @@ export class Networking {
         }
         
         if(window.isLocalHost){
-            this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
+            //this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
             //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
         }
     }
 
-    async deleteSpaceProperty(key, isProtected){
+    async deleteSpaceProperty(key, hostOnly, isProtected){
+        if(hostOnly && !SM.iamHost){
+            return;
+        }
+
         if(isProtected){
             SM.scene.SetProtectedSpaceProps({ [key]: null });
             delete SM.scene.spaceState.protected[key];
@@ -573,6 +589,36 @@ export class Networking {
         if(window.isLocalHost){
             localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
         }
+    }
+
+    async cleanupSceneOrphans(){
+        if(!SM.iamHost){
+            log("net", "cleanupSceneOrphans: not host")
+            return;
+        }
+        Object.keys(SM.scene.spaceState.public).forEach(key=>{
+            if(!key.startsWith("$")){
+                return;
+            }
+            let entityId = key.split(":")[0].slice(1);
+            if(!SM.getEntityById(entityId)){
+                log("net", "cleanupSceneOrphans: deleting orphan: ", entityId)
+                this.deleteSpaceProperty(key, true);
+            }
+        })
+    }
+
+    cleanSpaceState(){
+        Object.keys(SM.scene.spaceState.public).forEach(key=>{
+            if(SM.scene.spaceState.public[key] === null || SM.scene.spaceState.public[key] === "null"){
+                delete SM.scene.spaceState.public[key];
+            }
+        });
+        Object.keys(SM.scene.spaceState.protected).forEach(key=>{
+            if(SM.scene.spaceState.protected[key] === null || SM.scene.spaceState.protected[key] === "null"){
+                delete SM.scene.spaceState.protected[key];
+            }
+        });
     }
 
 

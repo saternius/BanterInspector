@@ -1,0 +1,1789 @@
+{
+  "author": "Technocrat",
+  "created": 1754911749338,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_34177",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterGeometry_49782",
+            "initialized": true,
+            "properties": {
+              "arc": 6.283185307179586,
+              "depth": 1,
+              "depthSegments": 1,
+              "geometryType": 2,
+              "height": 0.025,
+              "heightSegments": 1,
+              "innerRadius": 0.2,
+              "openEnded": false,
+              "outerRadius": 0.5,
+              "p": 2,
+              "parametricType": 0,
+              "phiLength": 6.283185307179586,
+              "phiSegments": 8,
+              "phiStart": 0,
+              "q": 3,
+              "radialSegments": 32,
+              "radius": 0.5,
+              "radiusBottom": 0.5,
+              "radiusTop": 0.5,
+              "segments": 64,
+              "thetaLength": 6.283185307179586,
+              "thetaSegments": 6,
+              "thetaStart": 0,
+              "tube": 0.4,
+              "tubularSegments": 64,
+              "width": 1,
+              "widthSegments": 1
+            },
+            "type": "BanterGeometry"
+          },
+          {
+            "id": "BanterMaterial_35740",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0,
+                "g": 0,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          }
+        ],
+        "id": "Scene/Controller/CountingButton_58874/ButtonMesh",
+        "initialized": true,
+        "layer": 0,
+        "name": "ButtonMesh",
+        "parentId": "Scene/Controller/CountingButton_58874",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_42981",
+            "initialized": true,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 1.05,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 0.4999999999999944,
+                "x": 0.5000000000000056,
+                "y": 0.49999999999999434,
+                "z": -0.5000000000000057
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterText_7944",
+            "initialized": true,
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.9411764705882353,
+                "g": 0.9411764705882353,
+                "r": 1
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1.5,
+              "horizontalAlignment": 1,
+              "rectTransformSizeDelta": {
+                "x": 2,
+                "y": 1
+              },
+              "richText": false,
+              "text": 13,
+              "verticalAlignment": 1
+            },
+            "type": "BanterText"
+          }
+        ],
+        "id": "Scene/Controller/CountingButton_58874/Count",
+        "initialized": true,
+        "layer": 0,
+        "name": "Count",
+        "parentId": "Scene/Controller/CountingButton_58874",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "id": "Transform_58940",
+        "initialized": true,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.7071067811865476,
+            "x": 0,
+            "y": 0,
+            "z": 0.7071067811865475
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "id": "BoxCollider_61545",
+        "initialized": true,
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1,
+            "y": 0.05,
+            "z": 1
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "id": "BanterColliderEvents_33373",
+        "initialized": true,
+        "type": "BanterColliderEvents"
+      },
+      {
+        "id": "MonoBehavior_51141",
+        "initialized": true,
+        "properties": {
+          "file": "Button.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "id": "Scene/Controller/CountingButton_58874",
+    "initialized": true,
+    "layer": 5,
+    "name": "CountingButton_58874",
+    "parentId": "Scene/Controller",
+    "persistent": true
+  },
+  "description": "A simple button with a number that increments by 1 if you click it.",
+  "folder": "CountingButton",
+  "history": [
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7070095854975654,
+        "x": 0.011723737226700021,
+        "y": -0.7070095854975655,
+        "z": -0.01172373722670002
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070784378132229,
+          "x": -0.006331096240941039,
+          "y": 0.707078437813223,
+          "z": 0.006331096240941038
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7070095854975654,
+        "x": 0.011723737226700021,
+        "y": -0.7070095854975655,
+        "z": -0.01172373722670002
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7070095854975654,
+          "x": 0.011723737226700021,
+          "y": -0.7070095854975655,
+          "z": -0.01172373722670002
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7070095854975654,
+        "x": 0.011723737226700021,
+        "y": -0.7070095854975655,
+        "z": -0.01172373722670002
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7070095854975654,
+          "x": 0.011723737226700021,
+          "y": -0.7070095854975655,
+          "z": -0.01172373722670002
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7070095854975654,
+        "x": 0.011723737226700021,
+        "y": -0.7070095854975655,
+        "z": -0.01172373722670002
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7070095854975654,
+          "x": 0.011723737226700021,
+          "y": -0.7070095854975655,
+          "z": -0.01172373722670002
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7071065119402605,
+        "x": -0.0006170669964235205,
+        "y": -0.7071065119402606,
+        "z": 0.0006170669964235204
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7070095854975654,
+          "x": 0.011723737226700021,
+          "y": -0.7070095854975655,
+          "z": -0.01172373722670002
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7068596032493372,
+        "x": 0.018694953709209435,
+        "y": 0.7068596032493373,
+        "z": -0.01869495370920943
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7071065119402605,
+          "x": -0.0006170669964235205,
+          "y": -0.7071065119402606,
+          "z": 0.0006170669964235204
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7070103629343111,
+        "x": 0.01167675911774042,
+        "y": 0.7070103629343112,
+        "z": -0.011676759117740416
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7068596032493372,
+          "x": 0.018694953709209435,
+          "y": 0.7068596032493373,
+          "z": -0.01869495370920943
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7070095854975654,
+        "x": 0.011723737226699935,
+        "y": 0.7070095854975655,
+        "z": -0.011723737226699933
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070103629343111,
+          "x": 0.01167675911774042,
+          "y": 0.7070103629343112,
+          "z": -0.011676759117740416
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7070095854975654,
+        "x": 0.011723737226699935,
+        "y": 0.7070095854975655,
+        "z": -0.011723737226699933
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070095854975654,
+          "x": 0.011723737226699935,
+          "y": 0.7070095854975655,
+          "z": -0.011723737226699933
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7070095854975654,
+        "x": 0.011723737226699935,
+        "y": 0.7070095854975655,
+        "z": -0.011723737226699933
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070095854975654,
+          "x": 0.011723737226699935,
+          "y": 0.7070095854975655,
+          "z": -0.011723737226699933
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7070095854975654,
+        "x": 0.011723737226699935,
+        "y": 0.7070095854975655,
+        "z": -0.011723737226699933
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070095854975654,
+          "x": 0.011723737226699935,
+          "y": 0.7070095854975655,
+          "z": -0.011723737226699933
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6964711277236154,
+        "x": 0.12218006485263988,
+        "y": 0.6964711277236155,
+        "z": -0.12218006485263987
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7070095854975654,
+          "x": 0.011723737226699935,
+          "y": 0.7070095854975655,
+          "z": -0.011723737226699933
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.3902783851018162,
+        "x": 0.5896463195190135,
+        "y": 0.3902783851018163,
+        "z": -0.5896463195190134
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6964711277236154,
+          "x": 0.12218006485263988,
+          "y": 0.6964711277236155,
+          "z": -0.12218006485263987
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5043442292812725,
+        "x": 0.49561769378289866,
+        "y": 0.5043442292812726,
+        "z": -0.49561769378289855
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.3902783851018162,
+          "x": 0.5896463195190135,
+          "y": 0.3902783851018163,
+          "z": -0.5896463195190134
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterText_1424",
+      "newValue": 1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "fontSize"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5043442292812725,
+        "x": 0.49561769378289866,
+        "y": 0.49561769378289866,
+        "z": -0.5043442292812726
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5043442292812725,
+          "x": 0.49561769378289866,
+          "y": 0.5043442292812726,
+          "z": -0.49561769378289855
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5000000000000017,
+        "x": 0.4999999999999983,
+        "y": 0.5000000000000016,
+        "z": -0.4999999999999984
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5043442292812725,
+          "x": 0.49561769378289866,
+          "y": 0.49561769378289866,
+          "z": -0.5043442292812726
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.26822636303875685,
+        "x": 0.6589574915280305,
+        "y": 0.2729491300182642,
+        "z": -0.6475557234341762
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5000000000000017,
+          "x": 0.4999999999999983,
+          "y": 0.5000000000000016,
+          "z": -0.4999999999999984
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.27059805007310034,
+        "x": -0.6532814824381875,
+        "y": -0.2705980500731004,
+        "z": 0.6532814824381875
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.26822636303875685,
+          "x": 0.6589574915280305,
+          "y": 0.2729491300182642,
+          "z": -0.6475557234341762
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.6921388124347159,
+        "x": -0.1714920550018878,
+        "y": -0.6797976275803853,
+        "z": 0.1714920550018878
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.27059805007310034,
+          "x": -0.6532814824381875,
+          "y": -0.2705980500731004,
+          "z": 0.6532814824381875
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.685994340570035,
+        "x": 0.17149858514250987,
+        "y": 0.6859943405700349,
+        "z": -0.17149858514250987
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.6921388124347159,
+          "x": -0.1714920550018878,
+          "y": -0.6797976275803853,
+          "z": 0.1714920550018878
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6797976275803853,
+        "x": 0.17149205500188763,
+        "y": 0.6921388124347159,
+        "z": -0.17149205500188763
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.685994340570035,
+          "x": 0.17149858514250987,
+          "y": 0.6859943405700349,
+          "z": -0.17149858514250987
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.6859943405700353,
+        "x": -0.17149858514250899,
+        "y": -0.6859943405700354,
+        "z": 0.17149858514250899
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6797976275803853,
+          "x": 0.17149205500188763,
+          "y": 0.6921388124347159,
+          "z": -0.17149205500188763
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7077902913272532,
+        "x": -0.08770246236251127,
+        "y": -0.6954491064729227,
+        "z": 0.08770246236251127
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.6859943405700353,
+          "x": -0.17149858514250899,
+          "y": -0.6859943405700354,
+          "z": 0.17149858514250899
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7016464154456233,
+        "x": 0.08770580193070293,
+        "y": 0.7016464154456232,
+        "z": -0.08770580193070293
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7077902913272532,
+          "x": -0.08770246236251127,
+          "y": -0.6954491064729227,
+          "z": 0.08770246236251127
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.006170592427165222,
+        "x": 0.7070798567270162,
+        "y": 0.006170592427165444,
+        "z": -0.7070798567270162
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7016464154456233,
+          "x": 0.08770580193070293,
+          "y": 0.7016464154456232,
+          "z": -0.08770580193070293
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 1.6653345369377348e-16,
+        "x": -0.7071067811865475,
+        "y": 5.551115123125783e-17,
+        "z": 0.7071067811865475
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.006170592427165222,
+          "x": 0.7070798567270162,
+          "y": 0.006170592427165444,
+          "z": -0.7070798567270162
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.5834988778876403,
+        "x": -0.4082327456199049,
+        "y": -0.5711576930333097,
+        "z": 0.4082327456199049
+      },
+      "options": {
+        "oldValue": {
+          "w": 1.6653345369377348e-16,
+          "x": -0.7071067811865475,
+          "y": 5.551115123125783e-17,
+          "z": 0.7071067811865475
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5773502691896251,
+        "x": 0.40824829046386435,
+        "y": 0.577350269189625,
+        "z": -0.40824829046386435
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.5834988778876403,
+          "x": -0.4082327456199049,
+          "y": -0.5711576930333097,
+          "z": 0.4082327456199049
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6262608576378028,
+        "x": 0.3162157250324841,
+        "y": 0.6386020424921335,
+        "z": -0.3162157250324841
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5773502691896251,
+          "x": 0.40824829046386435,
+          "y": 0.577350269189625,
+          "z": -0.40824829046386435
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.6324555320336777,
+        "x": -0.31622776601683444,
+        "y": -0.6324555320336778,
+        "z": 0.31622776601683444
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6262608576378028,
+          "x": 0.3162157250324841,
+          "y": 0.6386020424921335,
+          "z": -0.3162157250324841
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7077902913272532,
+        "x": -0.08770246236251127,
+        "y": -0.6954491064729227,
+        "z": 0.08770246236251127
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.6324555320336777,
+          "x": -0.31622776601683444,
+          "y": -0.6324555320336778,
+          "z": 0.31622776601683444
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7016464154456233,
+        "x": 0.08770580193070293,
+        "y": 0.7016464154456232,
+        "z": -0.08770580193070293
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7077902913272532,
+          "x": -0.08770246236251127,
+          "y": -0.6954491064729227,
+          "z": 0.08770246236251127
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.006170592427165222,
+        "x": 0.7070798567270162,
+        "y": 0.006170592427165444,
+        "z": -0.7070798567270162
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7016464154456233,
+          "x": 0.08770580193070293,
+          "y": 0.7016464154456232,
+          "z": -0.08770580193070293
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 1.6653345369377348e-16,
+        "x": -0.7071067811865475,
+        "y": 5.551115123125783e-17,
+        "z": 0.7071067811865475
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.006170592427165222,
+          "x": 0.7070798567270162,
+          "y": 0.006170592427165444,
+          "z": -0.7070798567270162
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.5834988778876403,
+        "x": -0.4082327456199049,
+        "y": -0.5711576930333097,
+        "z": 0.4082327456199049
+      },
+      "options": {
+        "oldValue": {
+          "w": 1.6653345369377348e-16,
+          "x": -0.7071067811865475,
+          "y": 5.551115123125783e-17,
+          "z": 0.7071067811865475
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5773502691896251,
+        "x": 0.40824829046386435,
+        "y": 0.577350269189625,
+        "z": -0.40824829046386435
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.5834988778876403,
+          "x": -0.4082327456199049,
+          "y": -0.5711576930333097,
+          "z": 0.4082327456199049
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6262608576378028,
+        "x": 0.3162157250324841,
+        "y": 0.6386020424921335,
+        "z": -0.3162157250324841
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5773502691896251,
+          "x": 0.40824829046386435,
+          "y": 0.577350269189625,
+          "z": -0.40824829046386435
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.6324555320336777,
+        "x": -0.31622776601683444,
+        "y": -0.6324555320336778,
+        "z": 0.31622776601683444
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6262608576378028,
+          "x": 0.3162157250324841,
+          "y": 0.6386020424921335,
+          "z": -0.3162157250324841
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.7077902913272532,
+        "x": -0.08770246236251127,
+        "y": -0.6954491064729227,
+        "z": 0.08770246236251127
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.6324555320336777,
+          "x": -0.31622776601683444,
+          "y": -0.6324555320336778,
+          "z": 0.31622776601683444
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.7016464154456233,
+        "x": 0.08770580193070293,
+        "y": 0.7016464154456232,
+        "z": -0.08770580193070293
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.7077902913272532,
+          "x": -0.08770246236251127,
+          "y": -0.6954491064729227,
+          "z": 0.08770246236251127
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.006170592427165222,
+        "x": 0.7070798567270162,
+        "y": 0.006170592427165444,
+        "z": -0.7070798567270162
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.7016464154456233,
+          "x": 0.08770580193070293,
+          "y": 0.7016464154456232,
+          "z": -0.08770580193070293
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 1.6653345369377348e-16,
+        "x": -0.7071067811865475,
+        "y": 5.551115123125783e-17,
+        "z": 0.7071067811865475
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.006170592427165222,
+          "x": 0.7070798567270162,
+          "y": 0.006170592427165444,
+          "z": -0.7070798567270162
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": -0.5834988778876403,
+        "x": -0.4082327456199049,
+        "y": -0.5711576930333097,
+        "z": 0.4082327456199049
+      },
+      "options": {
+        "oldValue": {
+          "w": 1.6653345369377348e-16,
+          "x": -0.7071067811865475,
+          "y": 5.551115123125783e-17,
+          "z": 0.7071067811865475
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.3305251481498137,
+        "x": 0.6307757458344779,
+        "y": 0.31956526480041314,
+        "z": -0.6251024927486243
+      },
+      "options": {
+        "oldValue": {
+          "w": -0.5834988778876403,
+          "x": -0.4082327456199049,
+          "y": -0.5711576930333097,
+          "z": 0.4082327456199049
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.646215174753142,
+        "x": 0.2992170834214835,
+        "y": 0.6340664570330291,
+        "z": -0.3013881433850524
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.3305251481498137,
+          "x": 0.6307757458344779,
+          "y": 0.31956526480041314,
+          "z": -0.6251024927486243
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.658651786964424,
+        "x": 0.2707447850302273,
+        "y": 0.6466093324371894,
+        "z": -0.2734436982500041
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.646215174753142,
+          "x": 0.2992170834214835,
+          "y": 0.6340664570330291,
+          "z": -0.3013881433850524
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6609893715001646,
+        "x": 0.2649867276984084,
+        "y": 0.6489709276747175,
+        "z": -0.26779062705875917
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.658651786964424,
+          "x": 0.2707447850302273,
+          "y": 0.6466093324371894,
+          "z": -0.2734436982500041
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6632766191361359,
+        "x": 0.25920849060134027,
+        "y": 0.6512831012635139,
+        "z": -0.2621171625744709
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6609893715001646,
+          "x": 0.2649867276984084,
+          "y": 0.6489709276747175,
+          "z": -0.26779062705875917
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6609893715001578,
+        "x": 0.2649867276984104,
+        "y": 0.648970927674724,
+        "z": -0.2677906270587581
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6632766191361359,
+          "x": 0.25920849060134027,
+          "y": 0.6512831012635139,
+          "z": -0.2621171625744709
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6586517869644126,
+        "x": 0.270744785030231,
+        "y": 0.6466093324372,
+        "z": -0.2734436982500029
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6609893715001578,
+          "x": 0.2649867276984104,
+          "y": 0.648970927674724,
+          "z": -0.2677906270587581
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6562640435450212,
+        "x": 0.27648222409843737,
+        "y": 0.6441984953955574,
+        "z": -0.2790759456449445
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6586517869644126,
+          "x": 0.270744785030231,
+          "y": 0.6466093324372,
+          "z": -0.2734436982500029
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6538263230778817,
+        "x": 0.2821986079748351,
+        "y": 0.6417386001443768,
+        "z": -0.2846869403261387
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6562640435450212,
+          "x": 0.27648222409843737,
+          "y": 0.6441984953955574,
+          "z": -0.2790759456449445
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6513388112048427,
+        "x": 0.28789350133466335,
+        "y": 0.6392298340142057,
+        "z": -0.2902762549946195
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6538263230778817,
+          "x": 0.2821986079748351,
+          "y": 0.6417386001443768,
+          "z": -0.2846869403261387
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6488016973595718,
+        "x": 0.29356647048973916,
+        "y": 0.6366723880572935,
+        "z": -0.29584346400243244
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6513388112048427,
+          "x": 0.28789350133466335,
+          "y": 0.6392298340142057,
+          "z": -0.2902762549946195
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6462151747531116,
+        "x": 0.2992170834214966,
+        "y": 0.6340664570330521,
+        "z": -0.30138814338505615
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6488016973595718,
+          "x": 0.29356647048973916,
+          "y": 0.6366723880572935,
+          "z": -0.29584346400243244
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6435794403591673,
+        "x": 0.3048449098138881,
+        "y": 0.6314122393932202,
+        "z": -0.3069098708936915
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6462151747531116,
+          "x": 0.2992170834214966,
+          "y": 0.6340664570330521,
+          "z": -0.30138814338505615
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6408946948991242,
+        "x": 0.3104495210861379,
+        "y": 0.6287099372667464,
+        "z": -0.31240822602740487
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6435794403591673,
+          "x": 0.3048449098138881,
+          "y": 0.6314122393932202,
+          "z": -0.3069098708936915
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.6797423808969382,
+        "x": 0.21230923367817248,
+        "y": 0.667980977331246,
+        "z": -0.21604744578712834
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6408946948991242,
+          "x": 0.3104495210861379,
+          "y": 0.6287099372667464,
+          "z": -0.31240822602740487
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.5043442292812415,
+        "x": 0.49561769378293025,
+        "y": 0.4956176937829288,
+        "z": -0.504344229281243
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.6797423808969382,
+          "x": 0.21230923367817248,
+          "y": 0.667980977331246,
+          "z": -0.21604744578712834
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "w": 0.4999999999999944,
+        "x": 0.5000000000000056,
+        "y": 0.49999999999999434,
+        "z": -0.5000000000000057
+      },
+      "options": {
+        "oldValue": {
+          "w": 0.5043442292812415,
+          "x": 0.49561769378293025,
+          "y": 0.4956176937829288,
+          "z": -0.504344229281243
+        },
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 2
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 2
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 4
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 3
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 4
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 2
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 3
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 2
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.5,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 2,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.15,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.5,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.15,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.05,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.1,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterText_1424",
+      "newValue": 2,
+      "options": {
+        "source": "ui"
+      },
+      "property": "fontSize"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterText_1424",
+      "newValue": 1.5,
+      "options": {
+        "source": "ui"
+      },
+      "property": "fontSize"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.15,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.05,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_30972450",
+      "newValue": {
+        "x": 0,
+        "y": 1.05,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.15,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterText_1424",
+      "newValue": "0",
+      "options": {
+        "source": "ui"
+      },
+      "property": "text"
+    },
+    {
+      "action": "set_slot_property",
+      "newValue": "CountingButton",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name",
+      "slotId": "Root/Button"
+    },
+    {
+      "action": "save_item",
+      "itemName": "CountingButton",
+      "options": {
+        "source": "ui"
+      },
+      "slotId": "Root/CountingButton"
+    },
+    {
+      "action": "set_slot_property",
+      "newValue": "Counter",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name",
+      "slotId": "Root/CountingButton/Count"
+    },
+    {
+      "action": "set_slot_property",
+      "newValue": "Count",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name",
+      "slotId": "Root/CountingButton/Counter"
+    },
+    {
+      "action": "add_slot",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Root/CountingButton",
+      "slotName": "NewSlot_34133"
+    }
+  ],
+  "itemType": "entity",
+  "lastUsed": 1758393957309,
+  "last_used": 1754911749338,
+  "name": "CountingButton"
+}

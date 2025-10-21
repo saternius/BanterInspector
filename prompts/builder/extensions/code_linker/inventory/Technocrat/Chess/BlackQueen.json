@@ -1,0 +1,1675 @@
+{
+  "author": "Technocrat",
+  "created": 1760598395963,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "addColliders": true,
+          "climbable": false,
+          "generateMipMaps": true,
+          "legacyRotate": false,
+          "nonConvexColliders": false,
+          "slippery": false,
+          "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=30ff583c9e70cab1922784623d0111157663028e7ef1d9d32cceac807db3e6d3"
+        },
+        "type": "GLTF"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1757922834432,
+          "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+          "folder": "Scripts",
+          "imported": true,
+          "importedAt": 1760127933203,
+          "importedFrom": "inventory/Technocrat/Scripts",
+          "itemType": "script",
+          "last_used": 1760425770381,
+          "name": "GLTFGrabbable.js",
+          "remote": true,
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "file": "GLTFGrabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "BlackQueen",
+    "parentId": "Scene/Pieces",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0.5,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity"
+  },
+  "description": "",
+  "folder": "Chess",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_60285",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f405206a88e4be917eab6f68de340e801c5326a63a311b3088222427b928eac5"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f405206a88e4be917eab6f68de340e801c5326a63a311b3088222427b928eac5"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_90568",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f405206a88e4be917eab6f68de340e801c5326a63a311b3088222427b928eac5"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f405206a88e4be917eab6f68de340e801c5326a63a311b3088222427b928eac5"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_65718",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_63651",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhitePawn",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhitePawn",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_75563",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d65e0e24eed9829fc833316d519db9bd4667abce525f378db94b617200537b16"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d65e0e24eed9829fc833316d519db9bd4667abce525f378db94b617200537b16"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_32225",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d65e0e24eed9829fc833316d519db9bd4667abce525f378db94b617200537b16"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d65e0e24eed9829fc833316d519db9bd4667abce525f378db94b617200537b16"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_86929",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_73565",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhiteKnight",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhiteKnight",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_29186",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=272ea16fc3e446d5652e29c84a6e200f8c92888b9921773f3cc6cf9b26ea7dca"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=272ea16fc3e446d5652e29c84a6e200f8c92888b9921773f3cc6cf9b26ea7dca"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_6852",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=272ea16fc3e446d5652e29c84a6e200f8c92888b9921773f3cc6cf9b26ea7dca"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=272ea16fc3e446d5652e29c84a6e200f8c92888b9921773f3cc6cf9b26ea7dca"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_98928",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_75151",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhiteBishop",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhiteBishop",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_4279",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a361c2871c54fbc4a98ac28073ad10ded1be472142e256b12b3b37d3bafd119b"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a361c2871c54fbc4a98ac28073ad10ded1be472142e256b12b3b37d3bafd119b"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_14889",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a361c2871c54fbc4a98ac28073ad10ded1be472142e256b12b3b37d3bafd119b"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a361c2871c54fbc4a98ac28073ad10ded1be472142e256b12b3b37d3bafd119b"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_38883",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_7154",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhiteRook",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhiteRook",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_12318",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3a3d99b1f37281f1b438d3e50560d6428a73285240438338a53b82872f5adae0"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3a3d99b1f37281f1b438d3e50560d6428a73285240438338a53b82872f5adae0"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_83432",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3a3d99b1f37281f1b438d3e50560d6428a73285240438338a53b82872f5adae0"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3a3d99b1f37281f1b438d3e50560d6428a73285240438338a53b82872f5adae0"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_99420",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_17168",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhiteQueen",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhiteQueen",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_23178",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=57c674083862a6fe452a2812650257bcf0f1d042833a4558c58554c7be83db72"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=57c674083862a6fe452a2812650257bcf0f1d042833a4558c58554c7be83db72"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_29154",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=57c674083862a6fe452a2812650257bcf0f1d042833a4558c58554c7be83db72"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=57c674083862a6fe452a2812650257bcf0f1d042833a4558c58554c7be83db72"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_57784",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_29494",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/WhiteKing",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "WhiteKing",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_54267",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6a7c93fd0d550ff4c065c4e81c8e7086c89bcc75faee4a96dacab0cfe08b2059"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6a7c93fd0d550ff4c065c4e81c8e7086c89bcc75faee4a96dacab0cfe08b2059"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_34283",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6a7c93fd0d550ff4c065c4e81c8e7086c89bcc75faee4a96dacab0cfe08b2059"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6a7c93fd0d550ff4c065c4e81c8e7086c89bcc75faee4a96dacab0cfe08b2059"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_89102",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_24244",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackPawn",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackPawn",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_39897",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6569883323b4b12bc947cb43c8f51f60d71997728cdfda3be328d00b7302f48b"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6569883323b4b12bc947cb43c8f51f60d71997728cdfda3be328d00b7302f48b"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_37559",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6569883323b4b12bc947cb43c8f51f60d71997728cdfda3be328d00b7302f48b"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6569883323b4b12bc947cb43c8f51f60d71997728cdfda3be328d00b7302f48b"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_43959",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_74639",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackKnight",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackKnight",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_7577",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=12aae7ee0a88a23d734045c3deda7898136d46fbd8026906312c57bdba587479"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=12aae7ee0a88a23d734045c3deda7898136d46fbd8026906312c57bdba587479"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_92783",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=12aae7ee0a88a23d734045c3deda7898136d46fbd8026906312c57bdba587479"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=12aae7ee0a88a23d734045c3deda7898136d46fbd8026906312c57bdba587479"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_91292",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_75031",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackBishop",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackBishop",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_58592",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=ff189b6b788dc9a7d5d4e0d5e1be22592f6ba1bf4ddb568c3654e8890680ea17"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=ff189b6b788dc9a7d5d4e0d5e1be22592f6ba1bf4ddb568c3654e8890680ea17"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_72233",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=ff189b6b788dc9a7d5d4e0d5e1be22592f6ba1bf4ddb568c3654e8890680ea17"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=ff189b6b788dc9a7d5d4e0d5e1be22592f6ba1bf4ddb568c3654e8890680ea17"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_5963",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_24307",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackRook",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackRook",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_97402",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=30ff583c9e70cab1922784623d0111157663028e7ef1d9d32cceac807db3e6d3"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=30ff583c9e70cab1922784623d0111157663028e7ef1d9d32cceac807db3e6d3"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_80049",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=30ff583c9e70cab1922784623d0111157663028e7ef1d9d32cceac807db3e6d3"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=30ff583c9e70cab1922784623d0111157663028e7ef1d9d32cceac807db3e6d3"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_92418",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_32936",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackQueen",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackQueen",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "GLTF_44009",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6ca0306bd414542f318a255f17bb5d35d358cd30c84a6f137404152fbb3e0a81"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6ca0306bd414542f318a255f17bb5d35d358cd30c84a6f137404152fbb3e0a81"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "GLTF_52036",
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "addColliders": true,
+                    "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6ca0306bd414542f318a255f17bb5d35d358cd30c84a6f137404152fbb3e0a81"
+                  }
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6ca0306bd414542f318a255f17bb5d35d358cd30c84a6f137404152fbb3e0a81"
+                },
+                "type": "GLTF"
+              },
+              {
+                "id": "MonoBehavior_36899",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "id": "MonoBehavior_88522",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1757922834432,
+                  "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+                  "folder": "Scripts",
+                  "imported": true,
+                  "importedAt": 1760127933203,
+                  "importedFrom": "inventory/Technocrat/Scripts",
+                  "itemType": "script",
+                  "last_used": 1760425770381,
+                  "name": "GLTFGrabbable.js",
+                  "remote": true,
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "componentProperties": {
+                    "file": "GLTFGrabbable.js"
+                  }
+                },
+                "properties": {
+                  "file": "GLTFGrabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Pieces_34568/BlackKing",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "BlackKing",
+            "parentId": "Scene/Pieces_34568",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.5,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity"
+          }
+        ],
+        "id": "Scene/Pieces_34568",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Pieces_34568",
+        "parentId": "Scene",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity"
+      },
+      "itemName": "Pieces",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760598395963,
+  "name": "BlackQueen"
+}

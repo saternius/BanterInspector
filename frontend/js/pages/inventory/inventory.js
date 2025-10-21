@@ -1186,5 +1186,10 @@ export class Inventory {
         return { updated: updatedCount, alreadyUpdated: alreadyUpdatedCount };
     }
 
+    boradcastLoadDep(path, minUpdateTime){
+        let data = `import¶${path}¶${minUpdateTime}`;
+        networking.sendOneShot(data);
+    }
+
 
 }

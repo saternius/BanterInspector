@@ -321,7 +321,7 @@ export class InspectorInjector {
                                 <div class="properties-content">
                                     <!-- Public Properties -->
                                     <div data-section="publicPropsSection" class="space-props-section">
-                                        <div class="space-props-header">
+                                        <div id="publicPropsSection" class="space-props-header">
                                             <h3>Public Properties</h3>
                                             <span class="props-count" id="publicPropsCount">0</span>
                                         </div>
@@ -337,7 +337,7 @@ export class InspectorInjector {
 
                                     <!-- Protected Properties -->
                                     <div data-section="protectedPropsSection" class="space-props-section">
-                                        <div class="space-props-header">
+                                        <div id="protectedPropsSection" class="space-props-header">
                                             <h3>Protected Properties</h3>
                                             <span class="props-count" id="protectedPropsCount">0</span>
                                         </div>

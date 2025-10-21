@@ -1,0 +1,110 @@
+{
+  "author": "Technocrat",
+  "created": 1759305378964,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759304908368,
+          "data": "let generateBlend2EndPage = ()=>{\n    log(\"blend2end\", \"generateBlend2EndPage\")\n    // generate a new page, and add it to the navigation\n}\n\nlet tooltipBtn = null;\nlet generateToolBtn = ()=>{\n    log(\"blend2end\", \"generateToolBtn\")\n    let navControls = document.querySelector(\".nav-controls\")\n    tooltipBtn = document.createElement(\"button\")\n    tooltipBtn.classList.add(\"nav-control-btn\")\n    tooltipBtn.innerHTML = \"<span>🤖</span>\"\n    navControls.appendChild(tooltipBtn)\n    \n    tooltipBtn.addEventListener(\"click\", ()=>{\n        generateBlend2EndPage();\n    })\n}\n\n\nthis.onStart = ()=>{\n    generateToolBtn()\n}\n\nthis.onDestroy = ()=>{\n    if(tooltipBtn){\n        tooltipBtn.remove()\n    }\n}\n",
+          "description": "",
+          "folder": "Blend2End",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1759304908368,
+          "last_used": 1759305280534,
+          "name": "Blend2End.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "Blend2End.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Blend2EndScript",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Blend2End",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_75140",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_75140",
+      "newValue": "Blend2EndScript",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_7875"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Blend2EndScript",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_7875",
+      "newValue": "Blend2End.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759305378964,
+  "name": "Blend2EndScript"
+}

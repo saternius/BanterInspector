@@ -27,8 +27,35 @@ export class EntityComponent{
         
         window.SM.entityData.componentMap[this.id] = this;
         this._initialized = true;
+        this.spaceProps = {};
+        this.checkSpaceDiff();
         return this;
     }
+
+    getSpaceProps(){
+        return this.properties;
+    }
+
+    checkSpaceDiff(){
+        if(!SM.iamHost) return;
+        let current = this.spaceProps;
+        let newProps = this.getSpaceProps();
+        let diff = Object.keys(newProps).filter(key=>{
+            if(current[key] === undefined) return true;
+            if(current[key] !== newProps[key]) return true;
+            return false;
+        });
+
+        if(diff.length > 0){
+            diff.forEach(k=>{
+                let spaceKey = `__${this.id}:${k}`;
+                networking.setSpaceProperty(spaceKey, newProps[k], true);
+            })
+            this.spaceProps = newProps;
+        }
+    }
+
+    
 
     enums(){
         return {};

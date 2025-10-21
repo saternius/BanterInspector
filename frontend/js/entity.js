@@ -16,7 +16,6 @@ export class Entity{
         this.initialized = false;
         this.type = "Entity";
         this.uuid = Math.floor(Math.random() * 10000000000000);
-        
 
         if(!entityData._bs){
             let params = {name: this.name};
@@ -41,6 +40,8 @@ export class Entity{
         window.SM.entityData.entityMap[this.id] = this;
         this.initialized = true;
         this.transform = this._bs.transform;
+        this.spaceProps = {};
+        this.checkSpaceDiff();
         return this;
     }
 
@@ -63,7 +64,39 @@ export class Entity{
         return this.transform.scale;
     }
 
+    getSpaceProps(){
+        return {
+            active: this.active,
+            layer: this.layer,
+            localPosition: this.transform.localPosition,
+            localRotation: this.transform.localRotation,
+            localScale: this.transform.localScale,
+            position: this.transform.position,
+            rotation: this.transform.rotation,
+            scale: this.transform.scale,
+            components: this.components.map(c=>c.id),
+            children: this.children.map(c=>c.id)
+        }
+    }
 
+    checkSpaceDiff(){
+        if(!SM.iamHost) return;
+        let current = this.spaceProps;
+        let newProps = this.getSpaceProps();
+        let diff = Object.keys(newProps).filter(key=>{
+            if(current[key] === undefined) return true;
+            if(current[key] !== newProps[key]) return true;
+            return false;
+        });
+
+        if(diff.length > 0){
+            diff.forEach(k=>{
+                let spaceKey = `$${this.id}:${k}`;
+                networking.setSpaceProperty(spaceKey, newProps[k], true);
+            })
+            this.spaceProps = newProps;
+        }
+    }
 
     getComponent(componentType, index = 0){
         return this.components.filter(component => component.type === componentType)[index];
@@ -86,6 +119,7 @@ export class Entity{
 
         // Update the Unity side if needed (this might require BS API support)
         // For now, just update the local state
+        this.checkSpaceDiff();
         return true;
     }
 
@@ -119,6 +153,7 @@ export class Entity{
                 inspector.propertiesPanel.render(this.id);
             }
         })
+        this.checkSpaceDiff();
     }
 
     async _setParent(newParent, keepPosition){
@@ -133,11 +168,13 @@ export class Entity{
         newParent.children.push(this);
         this.parentId = newParent.id;
         this._bs.SetParent(newParent._bs, keepPosition);
-        this.rename(this.name, true);
+        newParent.checkSpaceDiff();
+        this._rename(this.name);
     }
 
     async _destroy(){
         this._stagedForDestruction = true;
+        
         let monobehaviors = [...this.components.filter(component => component.type === "MonoBehavior")];
         for(let monobehavior of monobehaviors){
             await monobehavior._destroy();
@@ -155,18 +192,19 @@ export class Entity{
         }
 
         await this._bs.Destroy();
+        
         delete SM.entityData.entityMap[this.id];
-
-        delete SM.props[`__${this.id}/active:entity`];
-        delete SM.props[`__${this.id}/persistent:entity`];
-        delete SM.props[`__${this.id}/name:entity`];
-        delete SM.props[`__${this.id}/layer:entity`];
-        delete SM.props[`__${this.id}/localPosition:entity`];
-        delete SM.props[`__${this.id}/localRotation:entity`];
-        delete SM.props[`__${this.id}/localScale:entity`];
-        delete SM.props[`__${this.id}/position:entity`];
-        delete SM.props[`__${this.id}/rotation:entity`];
-        delete SM.props[`__${this.id}/scale:entity`];
+        this._deleteOldSpaceProperties();
+        // delete SM.props[`__${this.id}/active:entity`];
+        // delete SM.props[`__${this.id}/persistent:entity`];
+        // delete SM.props[`__${this.id}/name:entity`];
+        // delete SM.props[`__${this.id}/layer:entity`];
+        // delete SM.props[`__${this.id}/localPosition:entity`];
+        // delete SM.props[`__${this.id}/localRotation:entity`];
+        // delete SM.props[`__${this.id}/localScale:entity`];
+        // delete SM.props[`__${this.id}/position:entity`];
+        // delete SM.props[`__${this.id}/rotation:entity`];
+        // delete SM.props[`__${this.id}/scale:entity`];
         if(this.parentId){
             const parent = SM.getEntityById(this.parentId);
             if (parent) {
@@ -176,22 +214,25 @@ export class Entity{
     }
 
     _deleteOldSpaceProperties(){
-        let toDelete = [];
-        Object.keys(SM.props).forEach(key=>{
-            let lastSlash = key.lastIndexOf("/");
-            let compID = key.slice(2, lastSlash).trim();
-            let component = SM.getEntityComponentById(compID, false);
-            if(!component) return;
-            if(component._entity.id === this.id){
-                if(!key.endsWith(":component")){
-                    toDelete.push(key);
-                }
-            }
+        //let toDelete = [];
+        Object.keys(this.spaceProps).forEach(key=>{
+            networking.deleteSpaceProperty(`$${this.id}:${key}`, true);
         })
+        // Object.keys(SM.props).forEach(key=>{
+        //     let lastSlash = key.lastIndexOf("/");
+        //     let compID = key.slice(2, lastSlash).trim();
+        //     let component = SM.getEntityComponentById(compID, false);
+        //     if(!component) return;
+        //     if(component._entity.id === this.id){
+        //         if(!key.endsWith(":component")){
+        //             toDelete.push(key);
+        //         }
+        //     }
+        // })
 
-        for(let key of toDelete){
-            delete SM.props[key];
-        }
+        // for(let key of toDelete){
+        //     delete SM.props[key];
+        // }
     }
 
     transformVal(property){
@@ -208,49 +249,35 @@ export class Entity{
     }
 
     saveSpaceProperties(){
-        let message = `update_entity¶${this.id}¶active¶${this.active}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶persistent¶${this.persistent}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶name¶${this.name}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶layer¶${this.layer}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶localPosition¶${JSON.stringify(this.transform.localPosition)}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶localRotation¶${JSON.stringify(this.transform.localRotation)}`;
-        networking.sendOneShot(message);
-        message = `update_entity¶${this.id}¶localScale¶${JSON.stringify(this.transform.localScale)}`;
-        networking.sendOneShot(message);
-        // message = `update_entity¶${this.id}¶position¶${JSON.stringify(this.transform.position)}`;
-        // networking.sendOneShot(message);
-        // message = `update_entity¶${this.id}¶rotation¶${JSON.stringify(this.transform.rotation)}`;
-        // networking.sendOneShot(message);
-        // message = `update_entity¶${this.id}¶scale¶${JSON.stringify(this.transform.scale)}`;
-        // networking.sendOneShot(message);
+        this.spaceProps = {}
+        this.checkSpaceDiff();
+        let parent = SM.getEntityById(this.parentId);
+        if(parent){
+            parent.checkSpaceDiff();
+        }
     }
 
-    rename(newName, localUpdate){
-        //log("entity", `renaming ${this.id} to ${newName} : ${localUpdate}`)
-        if(!localUpdate) this._deleteOldSpaceProperties();
+    _rename(newName){
+        if(!SM.iamHost) this._deleteOldSpaceProperties();
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
         this._bs.SetName(newName);
         SM.entityData.entityMap[this.id] = this;
-        if(!localUpdate) this.saveSpaceProperties();
+        if(!SM.iamHost) this.saveSpaceProperties();
         this.children.forEach(child=>{
             child.parentId = this.id;
-            child.rename(child.name, localUpdate);
+            child._rename(child.name);
         })
         this.identifiers.add(this.id);
     }
+
 
     _set(prop, newValue){
         log("entity", `(${this.name}) update ${prop} =>`, newValue)
         newValue = parseBest(newValue);
         if(prop == "name"){
-            this.rename(newValue, true);
+            this._rename(newValue, true);
         }
         if(prop == "active"){
             this.active = newValue;
@@ -297,6 +324,7 @@ export class Entity{
         // if(prop == "scale"){
         //     this.transform.scale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
         // }
+        this.checkSpaceDiff();
     }
 
     export(keep){
@@ -335,7 +363,7 @@ export class Entity{
         let message = `update_entity¶${this.id}¶${property}¶${value}`;
         networking.sendOneShot(message);
         if(property == "name"){
-            this.rename(value, false);
+            this._rename(value);
         }
     }
     
