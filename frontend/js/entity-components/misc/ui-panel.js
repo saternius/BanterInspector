@@ -76,6 +76,7 @@ export class UIPanelComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on UIPanel:`, e);
         }
+        this.checkSpaceDiff();
     }
 
     // Methods

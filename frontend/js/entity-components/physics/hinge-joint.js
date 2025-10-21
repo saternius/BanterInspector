@@ -48,5 +48,6 @@ export class HingeJointComponent extends JointComponent {
         this.properties[property] = value;
 
         this._setJointProperty(property, value);
+        this.checkSpaceDiff();
     }
 }

@@ -37,5 +37,6 @@ export class AvatarPedestalComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on AvatarPedestal:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

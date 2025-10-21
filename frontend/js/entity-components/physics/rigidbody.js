@@ -79,5 +79,6 @@ export class RigidbodyComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Rigidbody:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

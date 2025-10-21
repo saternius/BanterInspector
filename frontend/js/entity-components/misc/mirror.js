@@ -47,6 +47,7 @@ export class MirrorComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Mirror:`, e);
         }
+        this.checkSpaceDiff();
     }
 
     // Culling layer methods

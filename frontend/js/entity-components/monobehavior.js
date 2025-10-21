@@ -51,6 +51,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             await this._loadScript(value);
         }
         this.properties[property] = value;
+        this.checkSpaceDiff();
     }
 
     extractProperties(sceneComponent) {

@@ -6,6 +6,7 @@ export class EntityComponent{
         this._lastUpdate = new Map();
         this._initialized = false;
         this.options = {};
+        this.spaceProps = {};
     }
 
     async init(entity, sceneComponent, properties, options){
@@ -27,7 +28,6 @@ export class EntityComponent{
         
         window.SM.entityData.componentMap[this.id] = this;
         this._initialized = true;
-        this.spaceProps = {};
         this.checkSpaceDiff();
         return this;
     }
@@ -51,7 +51,7 @@ export class EntityComponent{
                 let spaceKey = `__${this.id}:${k}`;
                 networking.setSpaceProperty(spaceKey, newProps[k], true);
             })
-            this.spaceProps = newProps;
+            this.spaceProps = JSON.parse(JSON.stringify(newProps));
         }
     }
 
@@ -107,6 +107,7 @@ export class EntityComponent{
         value = parseBest(value);
         this.properties[property] = value;
         this._bs[property] = value;
+        this.checkSpaceDiff();
     }
 
     async _destroy(){

@@ -76,5 +76,6 @@ export class MaterialComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Material:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

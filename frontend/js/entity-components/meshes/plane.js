@@ -51,5 +51,6 @@ export class PlaneComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Plane:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

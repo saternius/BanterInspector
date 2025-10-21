@@ -56,5 +56,6 @@ export class AudioSourceComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on AudioSource:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

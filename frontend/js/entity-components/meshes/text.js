@@ -84,5 +84,6 @@ export class TextComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Text:`, e);
         }
+        this.checkSpaceDiff();
     }
 }
