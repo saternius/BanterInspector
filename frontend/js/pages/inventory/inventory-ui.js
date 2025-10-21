@@ -8,6 +8,7 @@ export class InventoryUI {
         this.inventory = inventory;
         this.container = inventory.container;
         this.previewPane = inventory.previewPane;
+        this.containerEventListenerAdded = false;
 
     }
 
@@ -192,26 +193,29 @@ export class InventoryUI {
         const sortDropdown = container.querySelector('#sortDropdown');
         const sortDirectionBtn = container.querySelector('#sortDirectionBtn');
         const inventoryContainer = this.container.querySelector('.inventory-container');
-        
-        // Add click handler to inventory container for deselecting items
-        inventoryContainer.addEventListener('mousedown', (e) => {
-            // Check if click is on empty space (not on items, folders, or buttons)
-            const clickedOnItem = e.target.closest('.inventory-item');
-            const clickedOnFolder = e.target.closest('.folder-item');
-            const clickedOnButton = e.target.closest('button');
-            const clickedOnInput = e.target.closest('input, select');
-            const clickedOnBreadcrumb = e.target.closest('.folder-breadcrumb');
-            const clickedOnPreviewPane = e.target.closest('.inventory-preview-pane')
-            log("inventory", "clickedOn", e.target)
-            if (!clickedOnItem && !clickedOnFolder && !clickedOnButton && !clickedOnInput && !clickedOnBreadcrumb && !clickedOnPreviewPane) {
-                // Clicked on empty space - deselect item
-                if (this.inventory.selectedItem) {
-                    this.inventory.selectedItem = null;
-                    this.showEmptyPreview();
-                    this.render();
+
+        // Add click handler to inventory container for deselecting items - only once
+        if (!this.containerEventListenerAdded && inventoryContainer) {
+            this.containerEventListenerAdded = true;
+            inventoryContainer.addEventListener('mousedown', (e) => {
+                // Check if click is on empty space (not on items, folders, or buttons)
+                const clickedOnItem = e.target.closest('.inventory-item');
+                const clickedOnFolder = e.target.closest('.folder-item');
+                const clickedOnButton = e.target.closest('button');
+                const clickedOnInput = e.target.closest('input, select');
+                const clickedOnBreadcrumb = e.target.closest('.folder-breadcrumb');
+                const clickedOnPreviewPane = e.target.closest('.inventory-preview-pane')
+                // Removed debug log that was firing multiple times
+                if (!clickedOnItem && !clickedOnFolder && !clickedOnButton && !clickedOnInput && !clickedOnBreadcrumb && !clickedOnPreviewPane) {
+                    // Clicked on empty space - deselect item
+                    if (this.inventory.selectedItem) {
+                        this.inventory.selectedItem = null;
+                        this.showEmptyPreview();
+                        this.render();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         
         if (sortDropdown) {

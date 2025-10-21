@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Properties Popup Test</title>
+    <style>
+        body {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .test-button {
+            background: #3b82c4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .test-button:hover {
+            background: #2563eb;
+        }
+
+        .info-box {
+            background: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            margin-top: 0;
+            color: #3b82c4;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li::before {
+            content: '✓ ';
+            color: #4ade80;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>Space Properties Popup Test</h1>
+            <p>This page demonstrates the new popup window functionality for Space Properties panel.</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Features Implemented:</h3>
+            <ul class="feature-list">
+                <li>Popup button (⛶) added to both Public and Protected property headers</li>
+                <li>Draggable popup window by clicking and dragging the header</li>
+                <li>Resizable window using the bottom-right corner handle</li>
+                <li>Close button (×) to return to inline panel view</li>
+                <li>Automatic hiding of inline panel when popup is open</li>
+                <li>Automatic showing of inline panel when popup is closed</li>
+                <li>All property editing functionality works in popup mode</li>
+                <li>Add/Edit/Delete properties supported in popup</li>
+                <li>Vector3 properties with individual axis editing</li>
+                <li>Pin functionality preserved in popup view</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h3>How to Test:</h3>
+            <ol>
+                <li>Open the Unity Scene Inspector in your VR environment</li>
+                <li>Navigate to the Space Properties panel</li>
+                <li>Look for the new ⛶ button in the Public Properties or Protected Properties header</li>
+                <li>Click the ⛶ button to open the popup window</li>
+                <li>Try dragging the popup window by its header</li>
+                <li>Resize the window using the bottom-right corner handle</li>
+                <li>Add, edit, or delete properties in the popup</li>
+                <li>Close the popup using the × button</li>
+                <li>Verify the inline panel reappears when popup is closed</li>
+            </ol>
+        </div>
+
+        <div class="info-box">
+            <h3>Implementation Details:</h3>
+            <p>The popup window implementation follows the pattern from the Chess.js extension, with the following key components:</p>
+            <ul>
+                <li><strong>Dragging:</strong> Mouse events on header for drag functionality</li>
+                <li><strong>Resizing:</strong> Corner handle with mouse events for resize</li>
+                <li><strong>State Management:</strong> isPopupOpen flag to track popup state</li>
+                <li><strong>Dual Rendering:</strong> Properties can render in both inline and popup modes</li>
+                <li><strong>Event Handling:</strong> All property interactions work in both modes</li>
+                <li><strong>Style Injection:</strong> Dynamic CSS for popup styling</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

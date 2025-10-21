@@ -380,7 +380,7 @@
                 SM.scene.On("user-joined", (event) => {
                     log('scene-event', "[USER JOINED] fired", event)
                     
-                    //SM.handleUserJoined(event);
+                    SM.handleUserJoined(event);
                 })
 
                 scene.On("button-released", e => {

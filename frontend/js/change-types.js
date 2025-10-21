@@ -92,7 +92,16 @@ export class EntityPropertyChange extends Change{
                 this.void("Cannot change the name of 'People'");
                 return;
             }
-            let newId = SM.getEntityById(this.entityId).parentId+"/"+this.newValue;
+            let entity = SM.getEntityById(this.entityId);
+            if(!entity){
+                this.void("Entity not found");
+                return;
+            }
+            if(entity.parentId === "People"){
+                this.void("Cannot change the name of 'People'");
+                return;
+            }
+            let newId = entity.parentId+"/"+this.newValue;
             let existsAlready = SM.getEntityById(newId, false);
             if(existsAlready){
                 this.void("Entity with that name already exists");

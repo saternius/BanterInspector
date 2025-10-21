@@ -1,0 +1,343 @@
+{
+  "author": "Technocrat",
+  "created": 1760766859841,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "enableWordWrapping": true,
+          "fontSize": 1,
+          "horizontalAlignment": 1,
+          "richText": false,
+          "text": "$1",
+          "verticalAlignment": 1
+        },
+        "type": "Text"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.01
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "angularDrag": 0.05,
+          "angularVelocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "centerOfMass": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "collisionDetectionMode": 0,
+          "drag": 0,
+          "freezePositionX": false,
+          "freezePositionY": false,
+          "freezePositionZ": false,
+          "freezeRotationX": false,
+          "freezeRotationY": false,
+          "freezeRotationZ": false,
+          "isKinematic": false,
+          "mass": 1,
+          "useGravity": true,
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        "type": "Rigidbody"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Gains",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 2.1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity",
+    "uuid": 7674583365382
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_73893",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_73893",
+      "newValue": "Gains",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "Text_5265"
+      },
+      "componentType": "Text",
+      "entityId": "Scene/Gains",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Gains",
+      "newValue": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Text_5265",
+      "newValue": 1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "fontSize"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Text_5265",
+      "newValue": "$1",
+      "options": {
+        "source": "ui"
+      },
+      "property": "text"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BoxCollider_5004"
+      },
+      "componentType": "BoxCollider",
+      "entityId": "Scene/Gains",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "ColliderEvents_9870"
+      },
+      "componentType": "ColliderEvents",
+      "entityId": "Scene/Gains",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Gains",
+      "newValue": {
+        "x": 0,
+        "y": 2.1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 2,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "center"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 1,
+        "y": 0.1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 1,
+        "y": 0.1,
+        "z": 0.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 0.1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 1,
+        "y": 0.1,
+        "z": 0.01
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 0.1,
+          "z": 0.1
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 0.2,
+        "y": 0.1,
+        "z": 0.01
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 0.1,
+          "z": 0.01
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BoxCollider_5004",
+      "newValue": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.01
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.2,
+          "y": 0.1,
+          "z": 0.01
+        },
+        "source": "ui"
+      },
+      "property": "size"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "Rigidbody_1067"
+      },
+      "componentType": "Rigidbody",
+      "entityId": "Scene/Gains",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760766859841,
+  "name": "Gains"
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" android-bundle windows-bundle hide-space-info>
 <head>
     <meta name="sidequest-space-verification" content="4e20d730-763a-449a-9902-2f3534c48b5c">
     <meta charset="UTF-8">
@@ -7,19 +7,23 @@
     <title>Inspector Injection Example</title>
 </head>
 <body>
-    <!-- Container where the inspector will be injected -->
     <div id="inspectorContainer"></div>
 
     <script type="module">
         let importUrl = 'https://suitable-bulldog-flying.ngrok-free.app'
         const { InspectorInjector } = await import(`${importUrl}/inspector-injector.js`);
 
+
         // Initialize the inspector with custom configuration
         const inspector = new InspectorInjector({
             targetElement: document.getElementById('inspectorContainer'),
             config: {
                 ngrokUrl: importUrl,
-                fileServer: 'ngrok' // Options: 'stable', 'ngrok', 'local', 'unity'
+                fileServer: 'ngrok', // Options: 'stable', 'ngrok', 'local', 'unity'
+                inventoryDeps: [
+                    {'path':'inventory/Technocrat/Scripts', minUpdateTime: 1761007569000},
+                    {'path':'inventory/Technocrat/BanterBrush', minUpdateTime: 1761007569000}
+                ]
             }
         });
 

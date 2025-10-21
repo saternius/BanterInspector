@@ -1,0 +1,246 @@
+{
+  "author": "Technocrat",
+  "created": 1760760114755,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": true,
+          "created": 1760667161229,
+          "data": "class GameUI {\n    constructor(ctx, windowName){\n        this.ctx = ctx;\n        this.windowName = windowName;\n        this.held = false;\n        this.lastParent = \"Scene\";\n        this.user = SM.myName();\n        this.container = null;\n        this.contentArea = null;\n        this.PaneEntity = null;\n        this.doc = null;\n        this.flipLogArea = null;\n        this.flipResultHandler = null;\n\n        this.ctx.onStart = async ()=>{\n            console.log(\"GameUI\", \"onLoaded\")\n            this.PaneEntity = await AddEntity(this.ctx._entity.id, \"UI_\"+Math.random().toString(36).substring(2, 8))\n            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));\n            window.gameUI = this.doc;\n            this.generateUI();\n\n            // Listen for flip result events\n            this.flipResultHandler = (event) => {\n                log(\"GameUI\", \"flipResultHandler\", event.detail)\n                this.handleFlipResult(event.detail);\n            };\n            window.addEventListener('coinFlipResult', this.flipResultHandler);\n\n            log(`${this.windowName} UI`, \"onLoaded\")\n        }\n\n        this.ctx.onDestroy = async()=>{\n            log(`${this.windowName} UI`, \"onDestroy\")\n\n            // Remove event listener\n            if (this.flipResultHandler) {\n                window.removeEventListener('coinFlipResult', this.flipResultHandler);\n            }\n\n            if(this.PaneEntity){\n                await RemoveEntity(this.PaneEntity.id)\n            }\n        }\n        \n    }\n\n    generateUI(){\n        log(`${this.windowName} UI`, \"generating UI\")\n        if(this.container){\n            this.container.Destroy();\n        }\n        log(`${this.windowName} UI`, \"generating UI\")\n        this.container = this.doc.CreateVisualElement();\n        this.container.style.display = \"flex\";\n        this.container.style.flexDirection = \"column\";\n        this.container.style.height = \"100%\";\n        this.container.style.width = \"100%\";\n\n        // Create content area for undo/redo items\n        this.contentArea = this.doc.CreateVisualElement();\n        this.contentArea.style.overflowY = \"auto\";\n        this.contentArea.style.margin = \"4px\";\n        this.contentArea.style.height = \"100%\"\n        this.container.AppendChild(this.contentArea);\n\n\n      \n\n        this.doublePaneContainer = this.doc.CreateVisualElement();\n        this.doublePaneContainer.style.display = \"flex\";\n        this.doublePaneContainer.style.flexDirection = \"row\";\n        this.doublePaneContainer.style.height = \"400px\";\n        this.doublePaneContainer.style.width = \"500px\";\n        \n\n\n        // Create flip log area\n        this.flipAreaContainer = this.doc.CreateVisualElement();\n        this.flipAreaContainer.style.height = \"400px\";\n        this.flipAreaContainer.style.width = \"50%\";\n        this.flipAreaContainer.style.overflowY = \"auto\";\n        this.flipAreaContainer.style.flexDirection = \"column-reverse\";\n        this.doublePaneContainer.AppendChild(this.flipAreaContainer);\n\n        this.upgradeAreaContainer = this.doc.CreateVisualElement();\n        this.upgradeAreaContainer.style.height = \"400px\";\n        this.upgradeAreaContainer.style.width = \"50%\";\n        this.upgradeAreaContainer.style.backgroundColor = \"rgba(1, 0, 0, 0.95)\";\n\n\n        const title = this.doc.CreateLabel();\n        title.text = \"VR Game Menu\";\n        title.elementName = \"title\";\n        this.upgradeAreaContainer.AppendChild(title);\n\n\n        this.doublePaneContainer.AppendChild(this.upgradeAreaContainer);\n\n\n        this.contentArea.AppendChild(this.doublePaneContainer);\n\n        // Initialize flip log with placeholder\n        this.bankElement = this.doc.CreateLabel();\n        this.bankElement.text = \"CASH\";\n        this.bankElement.style.fontSize = \"32px\";\n        this.bankElement.style.textAlign = \"center\";\n        this.bankElement.style.fontWeight = \"bold\";\n        this.bankElement.style.color = \"#4ade80\";\n        this.bankElement.style.backgroundColor = \"rgba(0, 0, 0, 0.95)\";\n        this.bankElement.style.padding = \"8px 8px\";\n        this.bankElement.style.borderRadius = \"4px\";\n        this.bankElement.style.marginBottom = \"0px\";\n        this.contentArea.AppendChild(this.bankElement);\n    }\n\n    handleFlipResult(detail) {\n        if (!this.contentArea || !this.doc || !this.flipAreaContainer) return;\n\n        log(\"GameUI\", \"updateFlipLog\", this.flipHistory, this.flipLogArea)\n        // Create result label\n        const resultLabel = this.doc.CreateLabel();\n        if (detail.result === 'heads') {\n            const exclamations = detail.streak > 1 ? '!'.repeat(detail.streak - 1) : '';\n            resultLabel.text = `HEADS${exclamations}`;\n            resultLabel.style.color = \"#22c55e\";\n            resultLabel.style.fontWeight = \"bold\";\n        } else {\n            resultLabel.text = \"TAILS\";\n            resultLabel.style.color = \"#888888\";\n        }\n        resultLabel.style.fontSize = \"24px\";\n\n        if(this.flipAreaContainer.children.length > 11){\n            this.flipAreaContainer.children[this.flipAreaContainer.children.length - 1].Destroy();\n        }\n\n        this.flipAreaContainer.InsertBefore(resultLabel, this.flipAreaContainer.children[0]);\n        this.bankElement.text = `$${detail.bankroll}`;\n    }\n\n    async DestroySelf(){\n        log(`${this.windowName} UI`, \"Destroying Blank UI\");\n        await RemoveEntity(this.ctx._entity.id);\n    }\n}\n\nthis.UI = new GameUI(this, \"Game\");\n\n\n",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": true,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1760667161229,
+          "last_used": 1760759988866,
+          "name": "GameUI.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "file": "GameUI.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "3DUI",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1.85,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.4,
+        "y": 0.4,
+        "z": 0.4
+      }
+    },
+    "type": "Entity",
+    "uuid": 4413821829193
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "id": "Scene/3DUI_3058/UI",
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "UI",
+            "parentId": "Scene/3DUI_3058",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity",
+            "uuid": 354779493555
+          }
+        ],
+        "components": [
+          {
+            "id": "MonoBehavior_41986",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": true,
+              "created": 1760667161229,
+              "data": "class GameUI {\n    constructor(ctx, windowName){\n        this.ctx = ctx;\n        this.windowName = windowName;\n        this.held = false;\n        this.lastParent = \"Scene\";\n        this.user = SM.myName();\n        this.container = null;\n        this.contentArea = null;\n        this.PaneEntity = null;\n        this.doc = null;\n\n        this.ctx.onStart = async ()=>{\n            console.log(\"GameUI\", \"onLoaded\")\n            this.PaneEntity = await AddEntity(this.ctx._entity.id, \"UI\")\n            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(512,512), false));\n            //this.doc.SetBackgroundColor(new BS.Vector4(0.00, 0.31, 0.89, 1));\n            window.gameUI = this.doc;\n            this.controller = SM.getScriptByName(\"FlipController\") //this.ctx._entity.GetScript(\"FlipController\");\n            this.generateUI();\n            log(`${this.windowName} UI`, \"onLoaded\")\n        }\n\n        this.ctx.onDestroy = async()=>{\n            log(`${this.windowName} UI`, \"onDestroy\")\n            if(this.PaneEntity){\n                await RemoveEntity(this.PaneEntity.id)\n            }\n        }\n        \n    }\n\n    generateUI(){\n        log(`${this.windowName} UI`, \"generating UI\")\n        if(this.container){\n            this.container.Destroy();\n        }\n        log(`${this.windowName} UI`, \"generating UI\")\n        this.container = this.doc.CreateVisualElement();\n        this.container.style.display = \"flex\";\n        this.container.style.flexDirection = \"column\";\n        this.container.style.height = \"100%\";\n        this.container.style.width = \"100%\";\n        //container.style.backgroundColor = \"red\";\n    \n        // Create Windows-style header\n        const header = this.doc.CreateVisualElement();\n        header.style.display = \"flex\";\n        header.style.flexDirection = \"row\";\n        header.style.justifyContent = \"space-between\";\n        header.style.backgroundColor = \"#0051e5\";\n        header.style.paddingLeft = \"8px\";\n        header.style.borderBottom = \"1px solid #333\";\n        \n    \n        const title = this.doc.CreateLabel();\n        title.text = this.windowName;\n        title.style.color = \"#ffffff\";\n        title.style.fontSize = \"14px\";\n        title.style.fontWeight = \"bold\";\n    \n    \n        const closeButton = this.doc.CreateLabel();\n        closeButton.text = \"x\";\n        closeButton.style.backgroundColor = \"red\";\n        closeButton.style.color = \"#ffffff\";\n        closeButton.style.border = \"none\";\n        closeButton.style.borderRadius = \"0px\";\n        closeButton.style.fontSize = \"12px\";\n        closeButton.style.padding = \"4px\";\n        closeButton.style.paddingRight = \"8px\";\n        closeButton.style.paddingLeft = \"8px\";\n        closeButton.style.cursor = \"pointer\";\n        closeButton.OnClick(() => {\n            this.DestroySelf();\n        });\n        closeButton.OnMouseEnter(() => {\n            closeButton.style.backgroundColor = \"#e81123\";\n        });\n        closeButton.OnMouseLeave(() => {\n            closeButton.style.backgroundColor = \"transparent\";\n        });\n    \n        header.AppendChild(title);\n        header.AppendChild(closeButton);\n        this.container.AppendChild(header);\n    \n        // Create content area for undo/redo items\n        this.contentArea = this.doc.CreateVisualElement();\n        this.contentArea.style.overflowY = \"auto\";\n        this.contentArea.style.margin = \"4px\";\n        this.contentArea.style.backgroundColor = \"white\";\n        this.contentArea.style.height = \"100%\"\n        this.container.AppendChild(this.contentArea);\n\n        this.coinFlipButton = this.doc.CreateButton();\n        this.coinFlipButton.text = \"Flip Coin\";\n        this.coinFlipButton.style.backgroundColor = \"#0051e5\";\n        this.coinFlipButton.style.color = \"#ffffff\";\n        this.coinFlipButton.style.border = \"none\";\n        this.coinFlipButton.style.borderRadius = \"4px\";\n        this.coinFlipButton.style.fontSize = \"14px\";\n        this.coinFlipButton.style.padding = \"8px\";\n        this.coinFlipButton.OnClick(() => {\n            console.log(\"coinFlipButton clicked\");\n            this.controller.performFlip();\n        });\n        this.contentArea.AppendChild(this.coinFlipButton);\n    }\n\n\n\n    async DestroySelf(){\n        log(`${this.windowName} UI`, \"Destroying Blank UI\");\n        await RemoveEntity(this.ctx._entity.id);\n    }\n}\n\nthis.UI = new GameUI(this, \"Game\");\n\n\n",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": true,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1760667161229,
+              "last_used": 1760737640945,
+              "name": "GameUI.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "file": "GameUI.js",
+              "name": "myScript"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/3DUI_3058",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "3DUI_3058",
+        "parentId": "Scene",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 5998000834719
+      },
+      "itemName": "3DUI",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/3DUI_3058",
+      "newValue": "3DUI",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/3DUI",
+      "newValue": {
+        "x": 0.4,
+        "y": 0.4,
+        "z": 0.4
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/3DUI",
+      "newValue": {
+        "x": 0,
+        "y": 1.8,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/3DUI",
+      "newValue": {
+        "x": 0,
+        "y": 1.85,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.8,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/3DUI",
+      "folder": "CoinFlip",
+      "itemName": "3DUI",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1760760114755,
+  "name": "3DUI"
+}

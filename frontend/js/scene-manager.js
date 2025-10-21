@@ -8,7 +8,7 @@
 
     export class SceneManager {
         constructor() {
-            this.iamHost = false;
+            this._iamHost = false;
             this.scene = null;
             this.entityData = {
                 entities: [],
@@ -28,6 +28,11 @@
             }, 5000)
         }
         
+        get iamHost(){
+            let res = this.scene?.spaceState?.public?.hostUser === this.myName()
+            this._iamHost = res
+            return res;
+        }
 
         myName(){
             return this.scene.localUser.name ///`${}_${this.scene.localUser.id.slice(0,3)}`
@@ -189,27 +194,27 @@
                         if(lastSpaceState){
                             this.scene.spaceState = JSON.parse(lastSpaceState);
                         }
-                        this.iamHost = true;
+                        this._iamHost = true;
                     }
                     log('init', "spaceState =>", this.scene.spaceState)            
                     if(!this.scene.spaceState.public.hostUser){
                         log('init', "Server has no host user, so I guess it's me", this.myName())
                         networking.setSpaceProperty("hostUser", this.myName(), false);
-                        this.iamHost = true;
+                        this._iamHost = true;
                     }else{
                         let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
                         if(!hostHere){
                             log('init', "Host user not here, so I'll make myself the host", this.myName())
                             networking.setSpaceProperty("hostUser", this.myName(), false);
-                            this.iamHost = true;
+                            this._iamHost = true;
                         }
                         if(this.scene.spaceState.public.hostUser === this.myName()){
                             log('init', "I am the host ( according to the server )")
-                            this.iamHost = true;
+                            this._iamHost = true;
                         }
                     }
 
-                    if(this.iamHost){
+                    if(this._iamHost){
                         log('init', "I am the host, so I'll load the scene hierarchy")
                         let lastProps = localStorage.getItem('lastProps');
                         if(lastProps){
@@ -282,12 +287,23 @@
             window.location.reload();
         }
 
+      
 
         claimHost(){
             networking.setSpaceProperty("hostUser", this.myName(), false);
             setTimeout(()=>{
                 networking.sendOneShot('reset');
             }, 1000)
+        }
+
+        handleUserJoined(event){
+            log('scene-event', "[USER JOINED] fired", event)
+            // let userName = event.detail.userName;
+            // let userEntity = await this.loadHierarchy("People/"+userName, {
+            //     name: userName,
+            //     layer: 0,
+            //     components: [],
+            // })
         }
 
         async saveScene(){
@@ -488,7 +504,7 @@
                 networking.sendOneShot(`hierarchy_entity¶${path}¶${JSON.stringify(entity.export(['id']))}`)
             }
             sendHier("People/"+this.myName())
-            if(this.iamHost){
+            if(this._iamHost){
                 sendHier("Scene")
             }
         }
@@ -496,7 +512,7 @@
         async onRecievedHierarchyEntity(path, entityData){
             if(this.getEntityById(path)){ return }
             log("init", "recieved hierarchy for: ", path, "=>", entityData)
-            if(path == "Scene" && !this.iamHost){
+            if(path == "Scene" && !this._iamHost){
                 window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
                 window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
                 log('init', "loading scene...")
@@ -970,6 +986,7 @@
                     })
                 }, 3000)
             }
+            
             return entityComponent;
         }
 

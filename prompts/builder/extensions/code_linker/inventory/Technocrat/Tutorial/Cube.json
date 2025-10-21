@@ -1,0 +1,123 @@
+{
+  "author": "Technocrat",
+  "created": 1755256983331,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "initialized": true,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "generateMipMaps": true,
+          "shaderName": [
+            "U",
+            "n",
+            "l",
+            "i",
+            "t",
+            "/",
+            "D",
+            "i",
+            "f",
+            "f",
+            "u",
+            "s",
+            "e"
+          ],
+          "side": 0
+        },
+        "type": "Material"
+      },
+      {
+        "initialized": true,
+        "properties": {
+          "arc": 6.283185,
+          "depth": 1,
+          "depthSegments": 1,
+          "geometryType": 0,
+          "height": 1,
+          "heightSegments": 1,
+          "innerRadius": 0.2,
+          "openEnded": false,
+          "outerRadius": 0.5,
+          "p": 2,
+          "parametricType": 0,
+          "phiLength": 6.283185,
+          "phiSegments": 8,
+          "phiStart": 0,
+          "q": 3,
+          "radialSegments": 32,
+          "radius": 0.5,
+          "radiusBottom": 0.5,
+          "radiusTop": 0.5,
+          "segments": 64,
+          "thetaLength": 6.283185,
+          "thetaSegments": 6,
+          "thetaStart": 0,
+          "tube": 0.4,
+          "tubularSegments": 64,
+          "width": 1,
+          "widthSegments": 1
+        },
+        "type": "Geometry"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "name": "Cube",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "Tutorial",
+  "history": [
+    {
+      "action": "save_item",
+      "entityId": "Scene/Cube",
+      "folder": "Tutorial",
+      "itemName": "Cube",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/Cube",
+      "folder": "Tutorial",
+      "itemName": "Cube",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "itemType": "entity",
+  "last_used": 1755256983331,
+  "name": "Cube"
+}

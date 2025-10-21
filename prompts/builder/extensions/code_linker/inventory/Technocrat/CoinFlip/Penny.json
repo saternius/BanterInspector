@@ -1,0 +1,106 @@
+{
+  "author": "Technocrat",
+  "created": 1760054036348,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "addColliders": true,
+          "climbable": false,
+          "generateMipMaps": true,
+          "legacyRotate": false,
+          "nonConvexColliders": false,
+          "slippery": false,
+          "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=652c4391f332186d269af01c1e61d2378d88d74b99e8d7a8b5902e5c165c176b"
+        },
+        "type": "BanterGLTF"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1757922834432,
+          "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+          "folder": "Scripts",
+          "imported": true,
+          "importedAt": 1758699638306,
+          "importedFrom": "inventory/Technocrat/Scripts",
+          "itemType": "script",
+          "last_used": 1757922834432,
+          "name": "GLTFGrabbable.js",
+          "remote": true,
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "GLTFGrabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "Penny",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": "1",
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity"
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Penny",
+      "newValue": {
+        "x": 0,
+        "y": "1",
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    }
+  ],
+  "icon": "📦",
+  "imported": true,
+  "importedAt": 1760424216324,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
+  "itemType": "entity",
+  "last_used": 1760054036348,
+  "name": "Penny",
+  "remote": true
+}

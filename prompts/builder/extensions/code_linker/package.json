@@ -1,0 +1,17 @@
+{
+  "name": "linker",
+  "version": "1.0.0",
+  "description": "Firebase real-time database linker service",
+  "main": "linker.js",
+  "scripts": {
+    "start": "node linker.js"
+  },
+  "dependencies": {
+    "firebase": "^10.7.0"
+  }
+}
+
+
+
+
+
