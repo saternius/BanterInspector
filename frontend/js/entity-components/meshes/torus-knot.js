@@ -45,5 +45,6 @@ export class TorusKnotComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on TorusKnot:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

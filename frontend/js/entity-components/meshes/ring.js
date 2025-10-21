@@ -53,5 +53,6 @@ export class RingComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Ring:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

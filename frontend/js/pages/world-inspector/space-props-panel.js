@@ -22,6 +22,12 @@
             this.renders = 0; // Track number of render calls
             this.viewMode = 'flat'; // 'flat' or 'struct'
             this.expandedNodes = new Set(); // Track expanded nodes in struct view
+            this.showAllInline = false; // Whether to show all properties inline (default: only pinned)
+            this.searchQuery = ''; // Search filter for flat view
+            // Property filters for struct view - default show common structure properties
+            this.propertyFilters = new Set(['active', 'layer', 'position', 'rotation', 'scale',
+                                           'localPosition', 'localRotation', 'localScale',
+                                           'components', 'children']);
             this.loadPinnedProps();
             this.loadViewPreferences();
             this.setupEventListeners();
@@ -63,6 +69,29 @@
                         renderCount.innerHTML = `R: <span id="publicPropsRenderCount">${this.renders}</span>`;
                         publicHeader.appendChild(renderCount);
                     }
+
+                    // Add Show All toggle if not already there
+                    if (!publicHeader.querySelector('.show-all-toggle')) {
+                        const toggleBtn = document.createElement('button');
+                        toggleBtn.className = 'show-all-toggle';
+                        toggleBtn.style.cssText = 'margin-left: 10px; font-size: 12px; padding: 2px 8px; border-radius: 3px; background: #444; border: 1px solid #555; color: #888; cursor: pointer;';
+                        toggleBtn.innerHTML = this.showAllInline ? 'Show Pinned Only' : 'Show All';
+                        toggleBtn.title = this.showAllInline ? 'Show only pinned properties' : 'Show all properties';
+                        toggleBtn.onmousedown = (e) => {
+                            e.stopPropagation();
+                            this.showAllInline = !this.showAllInline;
+                            toggleBtn.innerHTML = this.showAllInline ? 'Show Pinned Only' : 'Show All';
+                            toggleBtn.title = this.showAllInline ? 'Show only pinned properties' : 'Show all properties';
+                            // Also update the protected button if it exists
+                            const protToggle = document.querySelector('#protectedPropsSection .show-all-toggle');
+                            if (protToggle) {
+                                protToggle.innerHTML = toggleBtn.innerHTML;
+                                protToggle.title = toggleBtn.title;
+                            }
+                            this.render();
+                        };
+                        publicHeader.appendChild(toggleBtn);
+                    }
                 }
 
                 // Add to protected header
@@ -88,6 +117,29 @@
                         renderCount.style.cssText = 'margin-left: 10px; font-size: 12px; color: #888; background: #333; padding: 2px 6px; border-radius: 3px;';
                         renderCount.innerHTML = `R: <span id="protectedPropsRenderCount">${this.renders}</span>`;
                         protectedHeader.appendChild(renderCount);
+                    }
+
+                    // Add Show All toggle if not already there
+                    if (!protectedHeader.querySelector('.show-all-toggle')) {
+                        const toggleBtn = document.createElement('button');
+                        toggleBtn.className = 'show-all-toggle';
+                        toggleBtn.style.cssText = 'margin-left: 10px; font-size: 12px; padding: 2px 8px; border-radius: 3px; background: #444; border: 1px solid #555; color: #888; cursor: pointer;';
+                        toggleBtn.innerHTML = this.showAllInline ? 'Show Pinned Only' : 'Show All';
+                        toggleBtn.title = this.showAllInline ? 'Show only pinned properties' : 'Show all properties';
+                        toggleBtn.onmousedown = (e) => {
+                            e.stopPropagation();
+                            this.showAllInline = !this.showAllInline;
+                            toggleBtn.innerHTML = this.showAllInline ? 'Show Pinned Only' : 'Show All';
+                            toggleBtn.title = this.showAllInline ? 'Show only pinned properties' : 'Show all properties';
+                            // Also update the public button if it exists
+                            const pubToggle = document.querySelector('#publicPropsSection .show-all-toggle');
+                            if (pubToggle) {
+                                pubToggle.innerHTML = toggleBtn.innerHTML;
+                                pubToggle.title = toggleBtn.title;
+                            }
+                            this.render();
+                        };
+                        protectedHeader.appendChild(toggleBtn);
                     }
                 }
             }, 100);
@@ -155,6 +207,32 @@
         }
 
         /**
+         * Create property filter buttons HTML
+         */
+        createPropertyFilterButtons() {
+            const properties = ['active', 'layer', 'position', 'rotation', 'scale',
+                              'localPosition', 'localRotation', 'localScale',
+                              'components', 'children'];
+
+            return properties.map(prop => {
+                const isActive = this.propertyFilters.has(prop);
+                return `
+                    <button class="property-filter-btn ${isActive ? 'active' : ''}"
+                            data-property="${prop}"
+                            style="padding: 4px 10px;
+                                   border-radius: 4px;
+                                   border: 1px solid ${isActive ? '#3b82c4' : '#555'};
+                                   background: ${isActive ? '#3b82c4' : '#2a2a2a'};
+                                   color: ${isActive ? 'white' : '#888'};
+                                   cursor: pointer;
+                                   font-size: 12px;
+                                   transition: all 0.2s;">
+                        ${prop}
+                    </button>`;
+            }).join('');
+        }
+
+        /**
          * Create popup window
          */
         createPopupWindow(type) {
@@ -193,6 +271,20 @@
                                 <h3>${capitalized} Properties</h3>
                                 <span class="props-count" id="${propsKey}PropsCountPopup">0</span>
                                 <span class="render-count" style="margin-left: 10px; font-size: 12px; color: #888; background: #333; padding: 2px 6px; border-radius: 3px;" title="Render calls">R: <span id="SpacePropsRenderCount">${this.renders}</span></span>
+                            </div>
+                            <div class="search-bar-container" id="searchBarContainer" style="display: ${this.viewMode === 'flat' ? 'block' : 'none'}; padding: 10px; border-bottom: 1px solid #333;">
+                                <input type="text"
+                                    id="propSearchInput"
+                                    class="prop-search-input"
+                                    placeholder="🔍 Search properties..."
+                                    value="${this.searchQuery}"
+                                    style="width: 100%; padding: 8px 12px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #e0e0e0; font-size: 14px;">
+                            </div>
+                            <div class="property-filters-container" id="propertyFiltersContainer" style="display: ${this.viewMode === 'struct' ? 'block' : 'none'}; padding: 10px; border-bottom: 1px solid #333;">
+                                <div style="font-size: 11px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">Show Properties:</div>
+                                <div class="property-filter-buttons" id="propertyFilterButtons" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                    ${this.createPropertyFilterButtons()}
+                                </div>
                             </div>
                             <div class="props-list" id="${propsKey}PropsListPopup">
                                 <div class="empty-props">No ${propsKey} properties</div>
@@ -250,9 +342,75 @@
                         this.saveViewPreferences();
                         // Update active state
                         viewToggleBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === mode));
+
+                        // Show/hide search bar and filters based on view mode
+                        const searchBarContainer = this.popupWindow.querySelector('#searchBarContainer');
+                        if (searchBarContainer) {
+                            searchBarContainer.style.display = mode === 'flat' ? 'block' : 'none';
+                        }
+
+                        const propertyFiltersContainer = this.popupWindow.querySelector('#propertyFiltersContainer');
+                        if (propertyFiltersContainer) {
+                            propertyFiltersContainer.style.display = mode === 'struct' ? 'block' : 'none';
+                        }
+
+                        // Clear search when switching to struct view
+                        if (mode === 'struct') {
+                            this.searchQuery = '';
+                            const searchInput = this.popupWindow.querySelector('#propSearchInput');
+                            if (searchInput) searchInput.value = '';
+                        }
+
                         // Re-render with new view mode
                         this.render();
                     }
+                });
+            });
+
+            // Search input
+            const searchInput = this.popupWindow.querySelector('#propSearchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    this.searchQuery = e.target.value.toLowerCase();
+                    // Re-render to apply filter
+                    this.render();
+                });
+
+                // Clear search on Escape
+                searchInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.searchQuery = '';
+                        searchInput.value = '';
+                        this.render();
+                    }
+                });
+            }
+
+            // Property filter buttons
+            const propertyFilterButtons = this.popupWindow.querySelectorAll('.property-filter-btn');
+            propertyFilterButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const property = btn.dataset.property;
+
+                    // Toggle filter
+                    if (this.propertyFilters.has(property)) {
+                        this.propertyFilters.delete(property);
+                        btn.classList.remove('active');
+                        btn.style.background = '#2a2a2a';
+                        btn.style.borderColor = '#555';
+                        btn.style.color = '#888';
+                    } else {
+                        this.propertyFilters.add(property);
+                        btn.classList.add('active');
+                        btn.style.background = '#3b82c4';
+                        btn.style.borderColor = '#3b82c4';
+                        btn.style.color = 'white';
+                    }
+
+                    this.saveViewPreferences();
+                    // Re-render to apply filters
+                    this.render();
                 });
             });
 
@@ -426,6 +584,42 @@
         /**
          * Render space properties
          */
+        /**
+         * Check if we should render based on property changes
+         */
+        shouldRenderForProperty(propertyKey, isProtected = false) {
+            // Always render if popup is open
+            if (this.isPopupOpen) {
+                return true;
+            }
+
+            // If showing all inline, always render
+            if (this.showAllInline) {
+                return true;
+            }
+
+            // Otherwise, only render if property is pinned
+            const type = isProtected ? 'protected' : 'public';
+            const propKey = `${type}_${propertyKey}`;
+            return this.pinnedProps.has(propKey);
+        }
+
+        /**
+         * Smart render - only renders if necessary
+         */
+        smartRender(propertyKey = null, isProtected = false) {
+            // If no property specified, always render (for general updates)
+            if (!propertyKey) {
+                this.render();
+                return;
+            }
+
+            // Check if we should render for this property
+            if (this.shouldRenderForProperty(propertyKey, isProtected)) {
+                this.render();
+            }
+        }
+
         render() {
             // Increment render counter
             this.renders++;
@@ -490,17 +684,49 @@
             if (!listElement || !countElement) return;
 
             const propKeys = Object.keys(props);
-            countElement.textContent = propKeys.length;
 
-            if (propKeys.length === 0) {
-                listElement.innerHTML = `<div class="empty-props">No ${type} properties</div>`;
+            // Filter properties for inline view
+            let filteredKeys = propKeys;
+            if (!isPopup && !this.showAllInline) {
+                // Only show pinned properties in inline view
+                filteredKeys = propKeys.filter(key => {
+                    const propKey = `${type}_${key}`;
+                    return this.pinnedProps.has(propKey);
+                });
+            }
+
+            // Apply search filter for popup flat view
+            if (isPopup && this.searchQuery && this.viewMode === 'flat') {
+                filteredKeys = filteredKeys.filter(key =>
+                    key.toLowerCase().includes(this.searchQuery)
+                );
+            }
+
+            // Update count display
+            if (!isPopup && !this.showAllInline) {
+                countElement.textContent = `${filteredKeys.length} pinned / ${propKeys.length} total`;
+            } else if (isPopup && this.searchQuery && this.viewMode === 'flat') {
+                // Show filtered count when searching
+                countElement.textContent = `${filteredKeys.length} / ${propKeys.length}`;
+            } else {
+                countElement.textContent = propKeys.length;
+            }
+
+            if (filteredKeys.length === 0) {
+                if (!isPopup && !this.showAllInline && propKeys.length > 0) {
+                    listElement.innerHTML = `<div class="empty-props">No pinned ${type} properties<br><small style="opacity:0.7">${propKeys.length} total available</small></div>`;
+                } else if (isPopup && this.searchQuery && this.viewMode === 'flat') {
+                    listElement.innerHTML = `<div class="empty-props">No properties matching "<strong>${this.searchQuery}</strong>"<br><small style="opacity:0.7">${propKeys.length} total properties</small></div>`;
+                } else {
+                    listElement.innerHTML = `<div class="empty-props">No ${type} properties</div>`;
+                }
                 return;
             }
 
             listElement.innerHTML = '';
 
             // Sort properties: pinned first, then alphabetical
-            const sortedKeys = propKeys.sort((a, b) => {
+            const sortedKeys = filteredKeys.sort((a, b) => {
                 const aKey = `${type}_${a}`;
                 const bKey = `${type}_${b}`;
                 const aPinned = this.pinnedProps.has(aKey);
@@ -703,6 +929,7 @@
          */
         editProp(type, key, isPopup = false) {
             this.editingProps.set(`${type}_${key}`, true);
+            // Always render when starting edit mode to show the edit UI
             this.render();
 
             // Focus the input after render
@@ -773,7 +1000,8 @@
          */
         cancelEditProp(type, key) {
             this.editingProps.delete(`${type}_${key}`);
-            this.render();
+            // Use smart render - only render if property is visible
+            this.smartRender(key, type === 'protected');
         }
 
         /**
@@ -788,7 +1016,8 @@
                 } else {
                     delete SM.scene.spaceState.protected[key];
                 }
-                this.render();
+                // Use smart render to only render if needed
+                this.smartRender(key, type === 'protected');
             }
         }
 
@@ -810,7 +1039,8 @@
                 SM.scene.spaceState.public[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
-                this.render();
+                // New properties should be rendered if we're showing all or if they're auto-pinned
+                this.smartRender(key, false);
             }
         }
 
@@ -832,7 +1062,8 @@
                 SM.scene.spaceState.public[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
-                this.render();
+                // New properties should be rendered if we're showing all or if they're auto-pinned
+                this.smartRender(key, false);
             }
         }
 
@@ -854,7 +1085,8 @@
                 SM.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
-                this.render();
+                // New properties should be rendered if we're showing all or if they're auto-pinned
+                this.smartRender(key, true);
             }
         }
 
@@ -876,7 +1108,8 @@
                 SM.scene.spaceState.protected[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
-                this.render();
+                // New properties should be rendered if we're showing all or if they're auto-pinned
+                this.smartRender(key, true);
             }
         }
 
@@ -1011,6 +1244,21 @@
                     this.expandedNodes = new Set();
                 }
             }
+
+            // Load property filters
+            const filtersSaved = localStorage.getItem('spacePropsPropertyFilters');
+            if (filtersSaved) {
+                try {
+                    const filters = JSON.parse(filtersSaved);
+                    // Only use saved filters if it's a non-empty array
+                    if (Array.isArray(filters) && filters.length > 0) {
+                        this.propertyFilters = new Set(filters);
+                    }
+                    // Otherwise keep the default filters that were set in the constructor
+                } catch (e) {
+                    // Keep default filters on error
+                }
+            }
         }
 
         /**
@@ -1019,38 +1267,33 @@
         saveViewPreferences() {
             localStorage.setItem('spacePropsViewMode', this.viewMode);
             localStorage.setItem('spacePropsExpandedNodes', JSON.stringify([...this.expandedNodes]));
+            localStorage.setItem('spacePropsPropertyFilters', JSON.stringify([...this.propertyFilters]));
         }
 
         /**
          * Parse flat key-value properties into a tree structure
+         * Handles Banter's property structure:
+         * - $ prefix for entities with / path separator and : property separator
+         * - __ prefix for components with : property separator
+         * - Simple properties with no prefix
          */
         parseKeysToTree(props) {
-            const tree = {};
+            const tree = {
+                simple: {},      // Properties with no prefix
+                entities: {},    // $ prefixed (entity properties)
+                components: {}   // __ prefixed (component properties)
+            };
 
             for (const [key, value] of Object.entries(props)) {
-                // Split by dots, but handle array notation
-                const parts = key.split(/\.|\[|\]/g).filter(p => p !== '');
-                let current = tree;
-
-                for (let i = 0; i < parts.length; i++) {
-                    const part = parts[i];
-                    const isLast = i === parts.length - 1;
-
-                    if (!current[part]) {
-                        current[part] = {
-                            _value: isLast ? value : null,
-                            _children: isLast ? null : {},
-                            _fullKey: parts.slice(0, i + 1).join('.'),
-                            _originalKey: key
-                        };
-                    } else if (!isLast && !current[part]._children) {
-                        // Convert leaf to branch if needed
-                        current[part]._children = {};
-                    }
-
-                    if (!isLast) {
-                        current = current[part]._children;
-                    }
+                if (key.startsWith('$')) {
+                    // Entity property: $Scene/Ground:position
+                    this.parseEntityProperty(tree.entities, key, value);
+                } else if (key.startsWith('__')) {
+                    // Component property: __BoxCollider_87459:center
+                    this.parseComponentProperty(tree.components, key, value);
+                } else {
+                    // Simple property: passcode
+                    tree.simple[key] = value;
                 }
             }
 
@@ -1058,7 +1301,112 @@
         }
 
         /**
-         * Render struct view
+         * Parse entity properties with $ prefix
+         * Format: $EntityPath/SubPath:PropertyName
+         */
+        parseEntityProperty(tree, key, value) {
+            // Remove $ prefix
+            const cleanKey = key.substring(1);
+
+            // Split by : to separate path from property
+            const colonIndex = cleanKey.lastIndexOf(':');
+
+            if (colonIndex === -1) {
+                // No property part, just entity path
+                tree[cleanKey] = {
+                    _value: value,
+                    _originalKey: key,
+                    _type: 'entity'
+                };
+            } else {
+                const entityPath = cleanKey.substring(0, colonIndex);
+                const propertyName = cleanKey.substring(colonIndex + 1);
+
+                // Split entity path by /
+                const pathParts = entityPath.split('/');
+
+                // Build nested structure
+                let current = tree;
+                for (let i = 0; i < pathParts.length; i++) {
+                    const part = pathParts[i];
+                    if (!current[part]) {
+                        current[part] = {
+                            _properties: {},
+                            _children: {},
+                            _type: 'entity',
+                            _path: pathParts.slice(0, i + 1).join('/')
+                        };
+                    }
+                    if (i < pathParts.length - 1) {
+                        current = current[part]._children || (current[part]._children = {});
+                    } else {
+                        // Last part - add the property
+                        current[part]._properties = current[part]._properties || {};
+                        current[part]._properties[propertyName] = {
+                            value: value,
+                            originalKey: key
+                        };
+                    }
+                }
+            }
+        }
+
+        /**
+         * Parse component properties with __ prefix
+         * Format: __ComponentType_ID:PropertyName
+         */
+        parseComponentProperty(tree, key, value) {
+            // Remove __ prefix
+            const cleanKey = key.substring(2);
+
+            // Split by : to separate component from property
+            const colonIndex = cleanKey.indexOf(':');
+
+            if (colonIndex === -1) {
+                tree[cleanKey] = {
+                    _value: value,
+                    _originalKey: key,
+                    _type: 'component'
+                };
+            } else {
+                const componentName = cleanKey.substring(0, colonIndex);
+                const propertyName = cleanKey.substring(colonIndex + 1);
+
+                // Extract component type and ID
+                const lastUnderscore = componentName.lastIndexOf('_');
+                let componentType, componentId;
+
+                if (lastUnderscore !== -1) {
+                    componentType = componentName.substring(0, lastUnderscore);
+                    componentId = componentName.substring(lastUnderscore + 1);
+                } else {
+                    componentType = componentName;
+                    componentId = 'default';
+                }
+
+                // Group by component type
+                if (!tree[componentType]) {
+                    tree[componentType] = {
+                        _type: 'componentGroup',
+                        _instances: {}
+                    };
+                }
+                if (!tree[componentType]._instances[componentId]) {
+                    tree[componentType]._instances[componentId] = {
+                        _properties: {},
+                        _originalName: componentName
+                    };
+                }
+
+                tree[componentType]._instances[componentId]._properties[propertyName] = {
+                    value: value,
+                    originalKey: key
+                };
+            }
+        }
+
+        /**
+         * Render struct view with three sections
          */
         renderStructView(type, props, isPopup = false) {
             const suffix = isPopup ? 'Popup' : '';
@@ -1083,123 +1431,366 @@
             const treeContainer = document.createElement('div');
             treeContainer.className = 'struct-tree';
 
-            // Render root level nodes
-            for (const [key, node] of Object.entries(tree)) {
-                const nodeElement = this.renderTreeNode(type, key, node, 0, '', isPopup);
-                treeContainer.appendChild(nodeElement);
+            // Section 1: Simple Properties
+            if (Object.keys(tree.simple).length > 0) {
+                const simpleSection = document.createElement('div');
+                simpleSection.className = 'tree-section';
+
+                const simpleHeader = document.createElement('div');
+                simpleHeader.className = 'tree-section-header';
+                simpleHeader.innerHTML = '<span class="section-icon">📝</span> Simple Properties';
+                simpleSection.appendChild(simpleHeader);
+
+                const simpleContent = document.createElement('div');
+                simpleContent.className = 'tree-section-content';
+                for (const [key, value] of Object.entries(tree.simple)) {
+                    const propElement = this.renderSimpleProperty(type, key, value, isPopup);
+                    simpleContent.appendChild(propElement);
+                }
+                simpleSection.appendChild(simpleContent);
+                treeContainer.appendChild(simpleSection);
+            }
+
+            // Section 2: Entity Hierarchy
+            if (Object.keys(tree.entities).length > 0) {
+                const entitySection = document.createElement('div');
+                entitySection.className = 'tree-section';
+
+                const entityHeader = document.createElement('div');
+                entityHeader.className = 'tree-section-header';
+                entityHeader.innerHTML = '<span class="section-icon">📦</span> Entity Properties';
+                entitySection.appendChild(entityHeader);
+
+                const entityContent = document.createElement('div');
+                entityContent.className = 'tree-section-content';
+                for (const [key, node] of Object.entries(tree.entities)) {
+                    const nodeElement = this.renderEntityNode(type, key, node, 0, '', isPopup);
+                    entityContent.appendChild(nodeElement);
+                }
+                entitySection.appendChild(entityContent);
+                treeContainer.appendChild(entitySection);
+            }
+
+            // Section 3: Components
+            if (Object.keys(tree.components).length > 0) {
+                const componentSection = document.createElement('div');
+                componentSection.className = 'tree-section';
+
+                const componentHeader = document.createElement('div');
+                componentHeader.className = 'tree-section-header';
+                componentHeader.innerHTML = '<span class="section-icon">⚙️</span> Component Properties';
+                componentSection.appendChild(componentHeader);
+
+                const componentContent = document.createElement('div');
+                componentContent.className = 'tree-section-content';
+                for (const [componentType, componentGroup] of Object.entries(tree.components)) {
+                    const groupElement = this.renderComponentGroup(type, componentType, componentGroup, isPopup);
+                    componentContent.appendChild(groupElement);
+                }
+                componentSection.appendChild(componentContent);
+                treeContainer.appendChild(componentSection);
             }
 
             listElement.appendChild(treeContainer);
         }
 
         /**
-         * Render a single tree node
+         * Render a simple property (no prefix)
          */
-        renderTreeNode(type, key, node, depth, parentPath, isPopup = false) {
-            const fullPath = parentPath ? `${parentPath}.${key}` : key;
-            const isExpanded = this.expandedNodes.has(fullPath);
-            const hasChildren = node._children && Object.keys(node._children).length > 0;
-            const isLeaf = !hasChildren;
+        renderSimpleProperty(type, key, value, isPopup = false) {
+            const propElement = document.createElement('div');
+            propElement.className = 'tree-simple-prop';
 
-            const nodeDiv = document.createElement('div');
-            nodeDiv.className = `tree-node ${isLeaf ? 'leaf' : ''}`;
-            nodeDiv.dataset.depth = depth;
-            nodeDiv.dataset.path = fullPath;
-
-            // Create node header
-            const nodeHeader = document.createElement('div');
-            nodeHeader.className = 'tree-node-header';
-            nodeHeader.style.paddingLeft = `${depth * 20}px`;
-
-            // Expand/collapse arrow
-            const arrow = document.createElement('span');
-            arrow.className = hasChildren ? 'tree-arrow' : 'tree-arrow invisible';
-            arrow.textContent = hasChildren ? (isExpanded ? '▼' : '▶') : '';
-            arrow.onclick = (e) => {
-                e.stopPropagation();
-                if (hasChildren) {
-                    this.toggleTreeNode(fullPath);
-                }
-            };
-
-            // Node key
             const keySpan = document.createElement('span');
-            keySpan.className = 'tree-key';
+            keySpan.className = 'tree-key simple-key';
             keySpan.textContent = key;
 
-            nodeHeader.appendChild(arrow);
-            nodeHeader.appendChild(keySpan);
+            const valueSpan = document.createElement('span');
+            valueSpan.className = 'tree-value';
+            valueSpan.textContent = this.formatValue(value);
 
-            // Add value and actions for leaf nodes
-            if (isLeaf) {
-                const valueSpan = document.createElement('span');
-                valueSpan.className = 'tree-value';
+            const actions = document.createElement('span');
+            actions.className = 'tree-actions';
+            actions.innerHTML = `
+                <button onclick="spacePropsPanel.editProp('${type}', '${key}', ${isPopup})" class="edit-btn" title="Edit">✎</button>
+                <button onclick="spacePropsPanel.deleteProp('${type}', '${key}')" class="delete-btn" title="Delete">×</button>
+            `;
 
-                if (isVector3Object(node._value)) {
-                    valueSpan.textContent = `(${formatNumber(node._value.x, 2)}, ${formatNumber(node._value.y, 2)}, ${formatNumber(node._value.z, 2)})`;
-                } else if (typeof node._value === 'object') {
-                    valueSpan.textContent = JSON.stringify(node._value);
-                } else {
-                    valueSpan.textContent = node._value;
-                }
+            propElement.appendChild(keySpan);
+            propElement.appendChild(valueSpan);
+            propElement.appendChild(actions);
 
-                // Actions
-                const actions = document.createElement('span');
-                actions.className = 'tree-actions';
-
-                const editBtn = document.createElement('button');
-                editBtn.className = 'tree-action-btn';
-                editBtn.innerHTML = '✎';
-                editBtn.title = 'Edit';
-                editBtn.onclick = (e) => {
-                    e.stopPropagation();
-                    // TODO: Implement edit in struct view
-                    console.log('Edit:', node._originalKey);
-                };
-
-                const deleteBtn = document.createElement('button');
-                deleteBtn.className = 'tree-action-btn delete';
-                deleteBtn.innerHTML = '×';
-                deleteBtn.title = 'Delete';
-                deleteBtn.onclick = async (e) => {
-                    e.stopPropagation();
-                    if (await confirm(`Delete property "${node._originalKey}"?`)) {
-                        const change = new SpacePropertyChange(node._originalKey, undefined, type === 'protected', { source: 'ui' });
-                        changeManager.applyChange(change);
-                        if (type === 'public') {
-                            delete SM.scene.spaceState.public[node._originalKey];
-                        } else {
-                            delete SM.scene.spaceState.protected[node._originalKey];
-                        }
-                        this.render();
-                    }
-                };
-
-                actions.appendChild(editBtn);
-                actions.appendChild(deleteBtn);
-
-                nodeHeader.appendChild(valueSpan);
-                nodeHeader.appendChild(actions);
-            }
-
-            nodeDiv.appendChild(nodeHeader);
-
-            // Add children container if has children
-            if (hasChildren) {
-                const childrenDiv = document.createElement('div');
-                childrenDiv.className = 'tree-children';
-                childrenDiv.style.display = isExpanded ? 'block' : 'none';
-
-                for (const [childKey, childNode] of Object.entries(node._children)) {
-                    const childElement = this.renderTreeNode(type, childKey, childNode, depth + 1, fullPath, isPopup);
-                    childrenDiv.appendChild(childElement);
-                }
-
-                nodeDiv.appendChild(childrenDiv);
-            }
-
-            return nodeDiv;
+            return propElement;
         }
+
+        /**
+         * Render an entity node with hierarchy
+         */
+        renderEntityNode(type, key, node, depth, parentPath, isPopup = false) {
+            const nodeElement = document.createElement('div');
+            nodeElement.className = 'tree-node entity-node';
+            nodeElement.setAttribute('data-depth', depth);
+
+            const fullPath = parentPath ? `${parentPath}/${key}` : key;
+            const nodeId = `entity_${fullPath}`;
+
+            // Node header
+            const headerElement = document.createElement('div');
+            headerElement.className = 'tree-node-header';
+            headerElement.style.paddingLeft = `${depth * 20}px`;
+
+            // Check if node has children or properties
+            const hasChildren = node._children && Object.keys(node._children).length > 0;
+            const hasProperties = node._properties && Object.keys(node._properties).length > 0;
+            const canExpand = hasChildren || hasProperties;
+
+            // Expand/collapse arrow
+            if (canExpand) {
+                const arrow = document.createElement('span');
+                arrow.className = 'tree-arrow';
+                arrow.textContent = this.expandedNodes.has(nodeId) ? '▼' : '▶';
+                arrow.onclick = () => this.toggleTreeNode(nodeId);
+                headerElement.appendChild(arrow);
+            } else {
+                const spacer = document.createElement('span');
+                spacer.className = 'tree-arrow invisible';
+                headerElement.appendChild(spacer);
+            }
+
+            // Node name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'tree-key entity-key';
+            nameSpan.textContent = key;
+            headerElement.appendChild(nameSpan);
+
+            nodeElement.appendChild(headerElement);
+
+            // Children container
+            if (canExpand) {
+                const childrenContainer = document.createElement('div');
+                childrenContainer.className = 'tree-children';
+                childrenContainer.id = nodeId;
+                childrenContainer.style.display = this.expandedNodes.has(nodeId) ? 'block' : 'none';
+
+                // Render properties
+                if (hasProperties) {
+                    for (const [propName, propData] of Object.entries(node._properties)) {
+                        // Check if property should be shown based on filters
+                        if (this.propertyFilters.has(propName)) {
+                            const propElement = this.renderEntityProperty(type, propName, propData, depth + 1, isPopup);
+                            childrenContainer.appendChild(propElement);
+                        }
+                    }
+                }
+
+                // Render child entities
+                if (hasChildren) {
+                    for (const [childKey, childNode] of Object.entries(node._children)) {
+                        const childElement = this.renderEntityNode(type, childKey, childNode, depth + 1, fullPath, isPopup);
+                        childrenContainer.appendChild(childElement);
+                    }
+                }
+
+                nodeElement.appendChild(childrenContainer);
+            }
+
+            return nodeElement;
+        }
+
+        /**
+         * Render an entity property
+         */
+        renderEntityProperty(type, propName, propData, depth, isPopup = false) {
+            const propElement = document.createElement('div');
+            propElement.className = 'tree-entity-prop';
+            propElement.style.paddingLeft = `${depth * 20}px`;
+
+            const spacer = document.createElement('span');
+            spacer.className = 'tree-arrow invisible';
+
+            const keySpan = document.createElement('span');
+            keySpan.className = 'tree-key entity-prop-key';
+            keySpan.textContent = propName;
+
+            const valueSpan = document.createElement('span');
+            valueSpan.className = 'tree-value';
+            valueSpan.textContent = this.formatValue(propData.value);
+
+            const actions = document.createElement('span');
+            actions.className = 'tree-actions';
+            actions.innerHTML = `
+                <button onclick="spacePropsPanel.editProp('${type}', '${propData.originalKey}', ${isPopup})" class="edit-btn" title="Edit">✎</button>
+                <button onclick="spacePropsPanel.deleteProp('${type}', '${propData.originalKey}')" class="delete-btn" title="Delete">×</button>
+            `;
+
+            propElement.appendChild(spacer);
+            propElement.appendChild(keySpan);
+            propElement.appendChild(valueSpan);
+            propElement.appendChild(actions);
+
+            return propElement;
+        }
+
+        /**
+         * Render a component group
+         */
+        renderComponentGroup(type, componentType, componentGroup, isPopup = false) {
+            const groupElement = document.createElement('div');
+            groupElement.className = 'tree-component-group';
+
+            const groupId = `component_${componentType}`;
+
+            // Group header
+            const headerElement = document.createElement('div');
+            headerElement.className = 'tree-node-header component-group-header';
+
+            const hasInstances = Object.keys(componentGroup._instances).length > 0;
+
+            if (hasInstances) {
+                const arrow = document.createElement('span');
+                arrow.className = 'tree-arrow';
+                arrow.textContent = this.expandedNodes.has(groupId) ? '▼' : '▶';
+                arrow.onclick = () => this.toggleTreeNode(groupId);
+                headerElement.appendChild(arrow);
+            } else {
+                const spacer = document.createElement('span');
+                spacer.className = 'tree-arrow invisible';
+                headerElement.appendChild(spacer);
+            }
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'tree-key component-type';
+            nameSpan.textContent = componentType;
+            headerElement.appendChild(nameSpan);
+
+            const countSpan = document.createElement('span');
+            countSpan.className = 'component-count';
+            countSpan.textContent = `(${Object.keys(componentGroup._instances).length})`;
+            headerElement.appendChild(countSpan);
+
+            groupElement.appendChild(headerElement);
+
+            // Instances container
+            if (hasInstances) {
+                const instancesContainer = document.createElement('div');
+                instancesContainer.className = 'tree-children';
+                instancesContainer.id = groupId;
+                instancesContainer.style.display = this.expandedNodes.has(groupId) ? 'block' : 'none';
+
+                for (const [instanceId, instance] of Object.entries(componentGroup._instances)) {
+                    const instanceElement = this.renderComponentInstance(type, componentType, instanceId, instance, isPopup);
+                    instancesContainer.appendChild(instanceElement);
+                }
+
+                groupElement.appendChild(instancesContainer);
+            }
+
+            return groupElement;
+        }
+
+        /**
+         * Render a component instance as an expandable node
+         */
+        renderComponentInstance(type, componentType, instanceId, instance, isPopup = false) {
+            const instanceElement = document.createElement('div');
+            instanceElement.className = 'tree-component-instance';
+
+            const instanceIdDisplay = instanceId !== 'default' ? instanceId : instance._originalName;
+            const instanceNodeId = `component_${componentType}_${instanceId}`;
+
+            // Create instance header (expandable)
+            const instanceHeader = document.createElement('div');
+            instanceHeader.className = 'tree-node-header component-instance-header';
+            instanceHeader.style.paddingLeft = '20px';
+
+            // Check if instance has properties
+            const hasProperties = Object.keys(instance._properties).length > 0;
+
+            if (hasProperties) {
+                const arrow = document.createElement('span');
+                arrow.className = 'tree-arrow';
+                arrow.textContent = this.expandedNodes.has(instanceNodeId) ? '▼' : '▶';
+                arrow.onclick = () => this.toggleTreeNode(instanceNodeId);
+                instanceHeader.appendChild(arrow);
+            } else {
+                const spacer = document.createElement('span');
+                spacer.className = 'tree-arrow invisible';
+                instanceHeader.appendChild(spacer);
+            }
+
+            // Instance name/ID
+            const instanceNameSpan = document.createElement('span');
+            instanceNameSpan.className = 'tree-key component-instance-key';
+            instanceNameSpan.textContent = `Instance ${instanceIdDisplay}`;
+            instanceHeader.appendChild(instanceNameSpan);
+
+            // Property count
+            const propCountSpan = document.createElement('span');
+            propCountSpan.className = 'component-prop-count';
+            propCountSpan.textContent = ` (${Object.keys(instance._properties).length} props)`;
+            instanceHeader.appendChild(propCountSpan);
+
+            instanceElement.appendChild(instanceHeader);
+
+            // Properties container
+            if (hasProperties) {
+                const propertiesContainer = document.createElement('div');
+                propertiesContainer.className = 'tree-children component-properties';
+                propertiesContainer.id = instanceNodeId;
+                propertiesContainer.style.display = this.expandedNodes.has(instanceNodeId) ? 'block' : 'none';
+
+                // Render each property
+                for (const [propName, propData] of Object.entries(instance._properties)) {
+                    const propElement = document.createElement('div');
+                    propElement.className = 'tree-component-prop';
+                    propElement.style.paddingLeft = '40px';
+
+                    const spacer = document.createElement('span');
+                    spacer.className = 'tree-arrow invisible';
+
+                    const keySpan = document.createElement('span');
+                    keySpan.className = 'tree-key component-prop-key';
+                    keySpan.textContent = propName;
+
+                    const valueSpan = document.createElement('span');
+                    valueSpan.className = 'tree-value';
+                    valueSpan.textContent = this.formatValue(propData.value);
+
+                    const actions = document.createElement('span');
+                    actions.className = 'tree-actions';
+                    actions.innerHTML = `
+                        <button onclick="spacePropsPanel.editProp('${type}', '${propData.originalKey}', ${isPopup})" class="edit-btn" title="Edit">✎</button>
+                        <button onclick="spacePropsPanel.deleteProp('${type}', '${propData.originalKey}')" class="delete-btn" title="Delete">×</button>
+                    `;
+
+                    propElement.appendChild(spacer);
+                    propElement.appendChild(keySpan);
+                    propElement.appendChild(valueSpan);
+                    propElement.appendChild(actions);
+
+                    propertiesContainer.appendChild(propElement);
+                }
+
+                instanceElement.appendChild(propertiesContainer);
+            }
+
+            return instanceElement;
+        }
+
+        /**
+         * Format value for display
+         */
+        formatValue(value) {
+            if (value === null || value === undefined) return 'null';
+            if (typeof value === 'object') {
+                if (value.x !== undefined && value.y !== undefined && value.z !== undefined) {
+                    return `(${value.x}, ${value.y}, ${value.z})`;
+                }
+                return JSON.stringify(value);
+            }
+            return String(value);
+        }
+
 
         /**
          * Toggle tree node expansion
@@ -1258,6 +1849,35 @@
                     padding: 5px;
                 }
 
+                /* Section styles */
+                .tree-section {
+                    margin-bottom: 16px;
+                    border: 1px solid #333;
+                    border-radius: 4px;
+                    overflow: hidden;
+                }
+
+                .tree-section-header {
+                    background: #2a2a2a;
+                    padding: 8px 12px;
+                    font-weight: bold;
+                    color: #e0e0e0;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    border-bottom: 1px solid #333;
+                }
+
+                .section-icon {
+                    font-size: 16px;
+                }
+
+                .tree-section-content {
+                    padding: 8px;
+                    background: #1a1a1a;
+                }
+
+                /* Tree nodes */
                 .tree-node {
                     margin: 1px 0;
                 }
@@ -1289,24 +1909,83 @@
                     visibility: hidden;
                 }
 
+                /* Key styles by type */
                 .tree-key {
                     font-weight: 600;
-                    color: #3b82c4;
                     margin-right: 8px;
                 }
 
+                .simple-key {
+                    color: #888;
+                }
+
+                .entity-key {
+                    color: #3b82c4;
+                }
+
+                .entity-prop-key {
+                    color: #60a5fa;
+                    font-weight: normal;
+                }
+
+                .component-type {
+                    color: #10b981;
+                }
+
+                .component-prop-key {
+                    color: #34d399;
+                    font-weight: normal;
+                }
+
+                .component-count {
+                    color: #666;
+                    font-size: 12px;
+                    margin-left: 4px;
+                }
+
+                /* Value display */
                 .tree-value {
                     color: #e0e0e0;
                     flex: 1;
                     margin-left: 8px;
                     word-break: break-all;
+                    font-family: monospace;
                 }
 
+                /* Property rows */
+                .tree-simple-prop,
+                .tree-entity-prop,
+                .tree-component-prop {
+                    display: flex;
+                    align-items: center;
+                    padding: 4px 8px;
+                    border-radius: 3px;
+                    transition: background 0.2s;
+                }
+
+                .tree-simple-prop:hover,
+                .tree-entity-prop:hover,
+                .tree-component-prop:hover {
+                    background: rgba(255, 255, 255, 0.05);
+                }
+
+                /* Hierarchy indentation */
                 .tree-children {
                     border-left: 1px solid #333;
                     margin-left: 8px;
                 }
 
+                .entity-node .tree-children {
+                    margin-left: 12px;
+                    border-left-color: #2563eb;
+                }
+
+                .tree-component-group .tree-children {
+                    margin-left: 12px;
+                    border-left-color: #10b981;
+                }
+
+                /* Actions */
                 .tree-actions {
                     display: flex;
                     gap: 4px;
@@ -1315,11 +1994,14 @@
                     margin-left: auto;
                 }
 
+                .tree-simple-prop:hover .tree-actions,
+                .tree-entity-prop:hover .tree-actions,
+                .tree-component-prop:hover .tree-actions,
                 .tree-node-header:hover .tree-actions {
                     opacity: 1;
                 }
 
-                .tree-action-btn {
+                .edit-btn, .delete-btn {
                     background: transparent;
                     border: 1px solid #444;
                     color: #888;
@@ -1330,15 +2012,60 @@
                     transition: all 0.2s;
                 }
 
-                .tree-action-btn:hover {
+                .edit-btn:hover {
                     background: #444;
                     color: #e0e0e0;
+                    border-color: #555;
                 }
 
-                .tree-action-btn.delete:hover {
+                .delete-btn:hover {
                     background: #c44;
                     border-color: #c44;
                     color: white;
+                }
+
+                /* Component instance styles */
+                .tree-component-instance {
+                    margin-bottom: 4px;
+                }
+
+                .tree-component-group-header {
+                    font-weight: bold;
+                }
+
+                .component-instance-header {
+                    background: rgba(16, 185, 129, 0.1);
+                    border-left: 2px solid #10b981;
+                    margin: 2px 0;
+                }
+
+                .component-instance-header:hover {
+                    background: rgba(16, 185, 129, 0.15);
+                }
+
+                .component-instance-key {
+                    color: #10b981;
+                    font-weight: 600;
+                }
+
+                .component-prop-count {
+                    color: #666;
+                    font-size: 11px;
+                    margin-left: 8px;
+                    opacity: 0.8;
+                }
+
+                .component-properties {
+                    border-left: 1px dashed #10b98133;
+                    margin-left: 12px;
+                }
+
+                /* Empty state */
+                .empty-props {
+                    color: #666;
+                    font-style: italic;
+                    padding: 20px;
+                    text-align: center;
                 }
             `;
             document.head.appendChild(styleEl);

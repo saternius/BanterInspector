@@ -53,5 +53,6 @@ export class BrowserComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Browser:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

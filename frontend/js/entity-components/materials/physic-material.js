@@ -42,5 +42,6 @@ export class PhysicMaterialComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on PhysicMaterial:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

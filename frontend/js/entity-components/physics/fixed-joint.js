@@ -23,5 +23,6 @@ export class FixedJointComponent extends JointComponent {
         this.properties[property] = value;
 
         this._setJointProperty(property, value);
+        this.checkSpaceDiff();
     }
 }

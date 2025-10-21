@@ -47,5 +47,6 @@ export class BillboardComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Billboard:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

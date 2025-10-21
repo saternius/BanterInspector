@@ -118,5 +118,6 @@ export class BoxColliderComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on BoxCollider:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

@@ -42,5 +42,6 @@ export class PortalComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Portal:`, e);
         }
+        this.checkSpaceDiff();
     }
 }

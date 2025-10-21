@@ -73,7 +73,7 @@ export class Entity{
             localScale: this.transform.localScale,
             position: this.transform.position,
             rotation: this.transform.rotation,
-            scale: this.transform.scale,
+            // scale: this.transform.scale,
             components: this.components.map(c=>c.id),
             children: this.children.map(c=>c.id)
         }

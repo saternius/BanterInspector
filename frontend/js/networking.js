@@ -317,7 +317,8 @@ export class Networking {
         changes.forEach(async (change) => {
             let { property, newValue, isProtected } = change;
             if(window.logger.include.spaceProps){
-                appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
+                log("net-down", "handleSpaceStateChange: ", property, newValue);
+                //appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
             }
             try{
                 if(newValue[0] === "{" || newValue[0] === "["){
@@ -556,6 +557,8 @@ export class Networking {
         if(hostOnly && !SM.iamHost){
             return;
         }
+
+        log("net-up", "setSpaceProperty: ", key, value, hostOnly);
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
@@ -596,14 +599,21 @@ export class Networking {
             log("net", "cleanupSceneOrphans: not host")
             return;
         }
+        this.cleanSpaceState();
         Object.keys(SM.scene.spaceState.public).forEach(key=>{
-            if(!key.startsWith("$")){
-                return;
+            if(key.startsWith("$")){
+                let entityId = key.split(":")[0].slice(1);
+                if(!SM.getEntityById(entityId, false)){
+                    log("net", "cleanupSceneOrphans: deleting orphan: ", entityId)
+                    this.deleteSpaceProperty(key, true);
+                }
             }
-            let entityId = key.split(":")[0].slice(1);
-            if(!SM.getEntityById(entityId)){
-                log("net", "cleanupSceneOrphans: deleting orphan: ", entityId)
-                this.deleteSpaceProperty(key, true);
+            if(key.startsWith("__")){
+                let componentId = key.split(":")[0].slice(2);
+                if(!SM.getEntityComponentById(componentId, false)){
+                    log("net", "cleanupSceneOrphans: deleting orphan: ", componentId)
+                    this.deleteSpaceProperty(key, true);
+                }
             }
         })
     }

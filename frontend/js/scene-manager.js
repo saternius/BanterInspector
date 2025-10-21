@@ -23,9 +23,9 @@
             this.loaded = false;
             
 
-            setInterval(()=>{
-                this.saveScene();
-            }, 5000)
+            // setInterval(()=>{
+            //     this.saveScene();
+            // }, 5000)
         }
         
         get iamHost(){
@@ -182,6 +182,12 @@
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
                         await this.executeStartupScripts("onSceneLoaded");
+                        setInterval(()=>{
+                            if(this.iamHost){
+                                networking.cleanupSceneOrphans();
+                            }
+                            this.saveScene();
+                        }, 10000)
                     }
 
        
@@ -307,7 +313,7 @@
         }
 
         async saveScene(){
-            await this.updateHierarchy(false);
+            //await this.updateHierarchy(false);
             localStorage.setItem('lastProps', JSON.stringify(this.props));
             //showNotification("Scene saved")
         }
