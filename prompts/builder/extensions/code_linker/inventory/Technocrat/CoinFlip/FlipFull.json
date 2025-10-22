@@ -1,0 +1,1932 @@
+{
+  "author": "Technocrat",
+  "created": 1761049905716,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "addColliders": false,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+                },
+                "spaceProps": {
+                  "addColliders": false,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+                },
+                "type": "GLTF"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "PennyMesh",
+            "parentId": "Scene/FlipFull/Penny",
+            "persistent": true,
+            "spaceProps": {
+              "active": true,
+              "components": [
+                "GLTF_43263"
+              ],
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+              }
+            },
+            "type": "Entity",
+            "uuid": 603990723260
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "type": "AudioSource"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "flip",
+                "parentId": "Scene/FlipFull/Penny/sfx",
+                "persistent": true,
+                "spaceProps": {
+                  "active": true,
+                  "components": [
+                    "AudioSource_93656"
+                  ],
+                  "layer": 0,
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  },
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "rotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 2340569524548
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "type": "AudioSource"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "success",
+                "parentId": "Scene/FlipFull/Penny/sfx",
+                "persistent": true,
+                "spaceProps": {
+                  "active": true,
+                  "components": [
+                    "AudioSource_26972"
+                  ],
+                  "layer": 0,
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  },
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "rotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 8331018192813
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "type": "AudioSource"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "nothing",
+                "parentId": "Scene/FlipFull/Penny/sfx",
+                "persistent": true,
+                "spaceProps": {
+                  "active": true,
+                  "components": [
+                    "AudioSource_74805"
+                  ],
+                  "layer": 0,
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  },
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "rotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 35076939268
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 0
+                    },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 0
+                    },
+                    "type": "AudioSource"
+                  }
+                ],
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "preloader",
+                "parentId": "Scene/FlipFull/Penny/sfx",
+                "persistent": true,
+                "spaceProps": {
+                  "active": true,
+                  "components": [
+                    "AudioSource_99141"
+                  ],
+                  "layer": 0,
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  },
+                  "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "rotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 9036401747568
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "sfx",
+            "parentId": "Scene/FlipFull/Penny",
+            "persistent": true,
+            "spaceProps": {
+              "active": true,
+              "children": [
+                "Scene/Table_4039/Penny/sfx/flip",
+                "Scene/Table_4039/Penny/sfx/success",
+                "Scene/Table_4039/Penny/sfx/nothing",
+                "Scene/Table_4039/Penny/sfx/preloader"
+              ],
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity",
+            "uuid": 1973509487666
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "kinematicIfNotOwned": true,
+              "syncPosition": true,
+              "syncRotation": true,
+              "takeOwnershipOnCollision": false,
+              "takeOwnershipOnGrab": true
+            },
+            "spaceProps": {
+              "kinematicIfNotOwned": true,
+              "syncPosition": true,
+              "syncRotation": true,
+              "takeOwnershipOnCollision": false,
+              "takeOwnershipOnGrab": true
+            },
+            "type": "SyncedObject"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "height": 0.02,
+              "radialSegments": 32,
+              "radius": 0.1
+            },
+            "spaceProps": {
+              "height": 0.02,
+              "radialSegments": 32,
+              "radius": 0.1
+            },
+            "type": "Cylinder"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "convex": true,
+              "isTrigger": false
+            },
+            "spaceProps": {
+              "convex": true,
+              "isTrigger": false
+            },
+            "type": "MeshCollider"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "spaceProps": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "Rigidbody"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": true,
+              "created": 1759783702790,
+              "data": "\n\nthis._entity.penny = true;\nlet consecutive_heads = 0;\nconst tracks = {\n    'flip_1': 'flips/flip_1.wav',\n    'flip_2': 'flips/flip_2.wav',\n    'flip_3': 'flips/flip_3.wav',\n    'flip_4': 'flips/flip_4.wav',\n    'flip_5': 'flips/flip_5.wav',\n    'flip_6': 'flips/flip_6.wav',\n    'flip_7': 'flips/flip_7.wav',\n    'flip_8': 'flips/flip_8.wav',\n    'flip_9': 'flips/flip_9.wav',\n    'flip_10': 'flips/flip_10.wav',\n    'flip_11': 'flips/flip_11.wav',\n    'flip_12': 'flips/flip_12.wav',\n    'flip_13': 'flips/flip_13.wav',\n    'flip_14': 'flips/flip_14.wav',\n    'flip_15': 'flips/flip_15.wav',\n    'flip_16': 'flips/flip_16.wav',\n    'flip_17': 'flips/flip_17.wav',\n    'flip_18': 'flips/flip_18.wav',\n    'flip_19': 'flips/flip_19.wav',\n    'flip_20': 'flips/flip_20.wav',\n    'flip_21': 'flips/flip_21.wav',\n    'flip_22': 'flips/flip_22.wav',\n    'flip_23': 'flips/flip_23.wav',\n    'flip_24': 'flips/flip_24.wav',\n    'flip_25': 'flips/flip_25.wav',\n    'success_1': 'success/success_1.wav',\n    'success_2': 'success/success_2.wav',\n    'success_3': 'success/success_3.wav',\n    'success_4': 'success/success_4.wav',\n    'success_5': 'success/success_5.wav',\n    'success_6': 'success/success_6.wav',\n    'success_7': 'success/success_7.wav',\n    'success_8': 'success/success_8.wav',\n    'success_9': 'success/success_9.wav',\n    'success_10': 'success/success_10.wav',\n    'success_11': 'success/success_11.wav',\n    'success_12': 'success/success_12.wav',\n    'success_13': 'success/success_13.wav',\n    'success_14': 'success/success_14.wav',\n    'nothing': 'tap.mp3'\n}\n\nthis.onLoaded = ()=>{\n    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent(\"AudioSource\")\n    Object.values(tracks).forEach((suburl)=>{\n        preloadAudio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${suburl}`)\n    })\n}\n\n\nlet play_audio = (track)=>{\n    let source = track.split('_')[0]\n    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent(\"AudioSource\")\n    audio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${tracks[track]}`)\n}\n\nlet audio = this._entity.getComponent(\"AudioSource\")\nthis.flip = async ()=>{\n    //SM.getScriptByName(\"Gains\")?.clear()\n    let up_force = Math.random()*2+2\n    let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let y_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let z_torque = (Math.random() - 0.5) * 10 + 1  // Range: -4 to +6 \n    log(\"flipable\", up_force, x_torque, y_torque, z_torque)\n\n    let rigidBody = this._entity.getComponent(\"Rigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return null;\n    }\n\n    // Apply flip forces\n    rigidBody._bs.AddForce({x: 0, y: up_force, z: 0}, BS.ForceMode.Impulse);\n    rigidBody._bs.AddTorque({x: x_torque, y:y_torque,  z: z_torque}, BS.ForceMode.Impulse);\n    play_audio('flip_'+Math.floor(Math.random()*25+1))\n    // Track the coin and return result\n    return await this.trackCoin();\n}\n\n// Function to check if coin is heads or tails\nthis.isCoinHeads = () => {\n    // Get the rotation of the coin\n    const rotation = this._entity.Get(\"rotation\");\n\n    if (!rotation) {\n        return false;\n    }\n\n    // Convert quaternion to up vector\n    // For a coin, we check if the local \"up\" vector points upward in world space\n    // Quaternion to matrix conversion for the up vector (0,1,0)\n    const { x, z } = rotation;\n\n    // Calculate the world \"up\" direction from the coin's local up axis\n    // We only need the Y component to determine if the coin is facing up or down\n    const upY = 1 - 2 * (x*x + z*z);\n\n    // If the coin's up vector points upward (positive Y), it's heads\n    // If it points downward (negative Y), it's tails\n    return !(upY > 0);\n}\n\n// Async function to track the coin until it settles\nthis.trackCoin = () => {\n    log('flipable', 'Tracking coin');\n    return new Promise((resolve) => {\n        // Wait 500ms before starting to track to let physics kick in\n        setTimeout(() => {\n            let checkCount = 0;\n            let hasMovedSignificantly = false;\n            let lastPos = null;\n\n            const checkInterval = setInterval(() => {\n                const rigidBody = this._entity.getComponent(\"Rigidbody\");\n                if (!rigidBody) {\n                    clearInterval(checkInterval);\n                    resolve(null);\n                    return;\n                }\n\n                // Try to get angular velocity from the BanterScript rigidbody\n                let angularVelocity = rigidBody._bs.angularVelocity;\n                let velocity = rigidBody._bs.velocity;\n\n                if (!angularVelocity) {\n                    // Fallback: check rotation changes\n                    const currentRot = this._entity.Get(\"rotation\");\n\n                    if (lastPos && lastPos.rotation) {\n                        const dx = currentRot.x - lastPos.rotation.x;\n                        const dy = currentRot.y - lastPos.rotation.y;\n                        const dz = currentRot.z - lastPos.rotation.z;\n                        const dw = currentRot.w - lastPos.rotation.w;\n                        angularVelocity = { x: dx * 10, y: dy * 10, z: dz * 10 }; // Approximate angular velocity\n                    } else {\n                        angularVelocity = { x: 100, y: 100, z: 100 }; // Force movement detection on first check\n                    }\n                    lastPos = { position: this._entity.Get(\"position\"), rotation: currentRot };\n                }\n\n                // Check both angular and linear velocity for settling\n                const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n                const linearSpeed = velocity ? Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2) : 0;\n\n                // Track if coin has moved/rotated significantly\n                if (!hasMovedSignificantly && (angularSpeed > 0.35 || linearSpeed > 0.35)) {\n                    hasMovedSignificantly = true;\n                    log('flipable', `Coin has moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n                if(!hasMovedSignificantly){\n                    log('flipable', `Coin has not moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n\n\n                checkCount++;\n\n                // Only consider it settled if it has moved significantly AND both angular and linear speeds are low\n                if (hasMovedSignificantly && angularSpeed < 0.25 && linearSpeed < 0.25) {\n                    clearInterval(checkInterval);\n\n                    // Check if it's heads or tails\n                    const isHeads = this.isCoinHeads();\n                    if(isHeads){\n                        consecutive_heads++;\n                    }else{\n                        consecutive_heads = 0;\n                    }\n                    const result = isHeads ? 'heads' : 'tails';\n                    log('flipable', `Coin landed: ${result.toUpperCase()}`);\n                    if(isHeads){\n                        play_audio('success_'+consecutive_heads)\n                    }else{\n                        play_audio('nothing')\n                    }\n                    SM.getScriptByName(\"Gains\")?.pop?.(this._entity.Get(\"position\"))\n                    resolve(result);\n                }\n\n                // Timeout after 10 seconds\n                if (checkCount > 200) {\n                    log('flipable', `Coin tracking timeout`);\n                    clearInterval(checkInterval);\n                    // Still check the final position\n                    const isHeads = this.isCoinHeads();\n                    const result = isHeads ? 'heads' : 'tails';\n                    resolve(result);\n                }\n            }, 50); // Check every 100ms\n        }, 100); // Wait 500ms before starting tracking\n    });\n}\n\n\nthis.onStart = ()=>{\n    log(\"flipable\", \"onStart called - setting up watchers\");\n\n    // Test WatchTransform with detailed logging\n    const watchResult = this._entity.WatchTransform([\"position\", \"rotation\"], (data)=>{\n        log(\"flipable\", \"WatchTransform callback fired!\");\n        log(\"flipable\", \"Callback data received:\", data);\n        log(\"flipable\", \"Current position:\", this._entity.Get(\"position\"));\n        log(\"flipable\", \"Current rotation:\", this._entity.Get(\"rotation\"));\n    });\n\n    log(\"flipable\", \"WatchTransform returned:\", watchResult);\n    log(\"flipable\", \"Return type:\", typeof watchResult);\n    log(\"flipable\", \"Is Promise?\", watchResult instanceof Promise);\n\n    // Also test the rigidbody watcher\n    const rigidBody = this._entity.getComponent(\"Rigidbody\");\n    if(rigidBody) {\n        rigidBody.WatchProperties(['velocity', 'angularVelocity'], (data)=>{\n            log(\"flipable\", \"velocity changed, data:\", data);\n            log(\"flipable\", \"Current velocity:\", rigidBody._bs.velocity);\n        });\n        log(\"flipable\", \"Rigidbody velocity watcher set up\");\n    } else {\n        log(\"flipable\", \"WARNING: No rigidbody found!\");\n    }\n\n    log(\"flipable\", \"onStart completed - all watchers should be active\");\n\n    this._entity._bs.On(\"click\", (e)=>{\n        log(\"flipable\", \"click\", e.detail)\n        this.flip();\n    });\n}\n\nthis.onDestroy = ()=>{\n    // this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": true,
+              "icon": "📜",
+              "imported": true,
+              "importedAt": 1760424216324,
+              "importedFrom": "inventory/Technocrat/CoinFlip",
+              "itemType": "script",
+              "lastUsed": 1759855136851,
+              "last_used": 1761049581607,
+              "name": "Flipable.js",
+              "remote": true,
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Flipable.js",
+              "name": "Flipable"
+            },
+            "spaceProps": {
+              "file": "Flipable.js",
+              "name": "Flipable"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "Penny",
+        "parentId": "Scene/FlipFull",
+        "penny": true,
+        "persistent": true,
+        "spaceProps": {
+          "active": true,
+          "children": [
+            "Scene/Table_4039/Penny/PennyMesh",
+            "Scene/Table_4039/Penny/sfx"
+          ],
+          "components": [
+            "SyncedObject_54982",
+            "Cylinder_66758",
+            "MeshCollider_77928",
+            "Rigidbody_29049",
+            "MonoBehavior_12115"
+          ],
+          "layer": 5,
+          "localPosition": {
+            "x": 0,
+            "y": 0.65,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "position": {
+            "x": -1.243011,
+            "y": 0.260046,
+            "z": -1.234344
+          },
+          "rotation": {
+            "w": 0.3762418,
+            "x": -0.0002059784,
+            "y": -0.9265214,
+            "z": -0.0001901385
+          }
+        },
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.65,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 5101208493960
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 0.94,
+                "b": 0.984313725490196,
+                "g": 0.984313725490196,
+                "r": 0.984313725490196
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1,
+              "horizontalAlignment": 1,
+              "richText": false,
+              "text": "$1",
+              "verticalAlignment": 1
+            },
+            "spaceProps": {
+              "color": {
+                "a": 0.94,
+                "b": 0.984313725490196,
+                "g": 0.984313725490196,
+                "r": 0.984313725490196
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1,
+              "horizontalAlignment": 1,
+              "richText": false,
+              "text": "$1",
+              "verticalAlignment": 1
+            },
+            "type": "Text"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1760766896453,
+              "data": "// This is a global script thus we will use ._bs to manipulate the entity properties instead of Set() since we do not need to sync anything.\nthis.default = {}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\n\n\nthis.pop = (position)=>{\n    clearInterval(this.upDriftInterval)\n    this._entity._bs.active = true\n    let startX = position.x\n    let startY = position.y\n    let startZ = position.z\n    this._entity.transform.position = {x: startX, y: startY, z: startZ}\n    this._entity.transform.rotation = {x: 0, y: 0, z: 0} // make it trasck player\n    let upDrift = 0;\n    let accel = 0.08;\n    let ticks = 0;\n    this.upDriftInterval = setInterval(()=>{\n        upDrift += accel;\n        accel = accel*.88;\n        this._entity.transform.position = {x: startX, y: startY + upDrift, z: startZ}\n        this._entity.getComponent(\"Text\")._bs.color.w = 1 - upDrift\n        //console.log(ticks, accel, this._entity.getComponent(\"Text\")._bs.w)\n        ticks += 1;\n        if(ticks > 30){\n            this.clear()\n        }\n    }, 40)\n    \n}\n\nthis.clear = ()=>{\n    clearInterval(this.upDriftInterval)\n    this._entity._bs.active = false\n}\n\nthis.onStart = ()=>{\n    //this.pop({x: 0, y: 0, z: 0})\n}\n\nthis.onDestroy = ()=>{\n    this.clear()\n    clearInterval(this.upDriftInterval)\n}\n",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1760766896453,
+              "last_used": 1761049681562,
+              "name": "Gains.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "file": "Gains.js",
+              "name": "Gains"
+            },
+            "spaceProps": {
+              "file": "Gains.js",
+              "name": "Gains"
+            },
+            "type": "MonoBehavior"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "enableXAxis": true,
+              "enableYAxis": true,
+              "enableZAxis": false,
+              "smoothing": 0.1
+            },
+            "spaceProps": {
+              "enableXAxis": true,
+              "enableYAxis": true,
+              "enableZAxis": false,
+              "smoothing": 0.1
+            },
+            "type": "Billboard"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Gains",
+        "parentId": "Scene/FlipFull",
+        "persistent": true,
+        "spaceProps": {
+          "active": true,
+          "components": [
+            "Text_33701",
+            "MonoBehavior_6017",
+            "Billboard_6123"
+          ],
+          "layer": 0,
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "position": {
+            "x": -1.213246,
+            "y": 0.9139951959449187,
+            "z": -1.241294
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 8974606321184
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "depth": 1,
+          "height": 0.05,
+          "width": 2
+        },
+        "spaceProps": {
+          "depth": 1,
+          "height": 0.05,
+          "width": 2
+        },
+        "type": "Box"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0.08627450980392157,
+            "g": 0.1411764705882353,
+            "r": 0.16470588235294117
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "spaceProps": {
+          "color": {
+            "a": 1,
+            "b": 0.08627450980392157,
+            "g": 0.1411764705882353,
+            "r": 0.16470588235294117
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "Material"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": -0.475,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1.5,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "spaceProps": {
+          "center": {
+            "x": 0,
+            "y": -0.475,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1.5,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": true,
+          "created": 1759851309566,
+          "data": "// CoinFlip Extension\n// Adds a draggable popup window with a flip button\nthis.default = {\n    flipTarget: {\n        \"type\": \"string\",\n        \"value\": \"Penny\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\n\nclass CoinFlip {\n    constructor(ctx) {\n        this.popup = null;\n        this.isDragging = false;\n        this.dragOffset = { x: 0, y: 0 };\n        this.isFlipping = false; // Track if a flip is in progress\n        this.autoMode = false; // Track if auto mode is enabled\n        this.autoFlipInterval = null; // Store the interval ID for auto flipping\n        // Preserve bankroll between instances if it exists\n        this.bankroll = (window.coinFlipInstance && window.coinFlipInstance.bankroll) || 0; // Bankroll in cents\n        // Preserve flip history and statistics between instances\n        this.flipHistory = (window.coinFlipInstance && window.coinFlipInstance.flipHistory) || [];\n        this.totalFlips = (window.coinFlipInstance && window.coinFlipInstance.totalFlips) || 0;\n        this.headsCount = (window.coinFlipInstance && window.coinFlipInstance.headsCount) || 0;\n        this.currentStreak = (window.coinFlipInstance && window.coinFlipInstance.currentStreak) || 0;\n        this.longestStreak = (window.coinFlipInstance && window.coinFlipInstance.longestStreak) || 0;\n        // Preserve airtime statistics\n        this.airtimes = (window.coinFlipInstance && window.coinFlipInstance.airtimes) || [];\n        this.airtimeQuartiles = (window.coinFlipInstance && window.coinFlipInstance.airtimeQuartiles) || {\n            min: 0,\n            q1: 0,\n            median: 0,\n            q3: 0,\n            max: 0\n        };\n        this.ctx = ctx;\n        this.updatePropsInterval = null;\n    }\n\n    init() {\n        this.createPopup();\n        this.injectStyles();\n        this.startStatsUpdate();\n        return this.popup;\n    }\n\n    createPopup() {\n        // Remove any existing popup first (singleton pattern)\n        const existingPopup = document.getElementById('coinflip-popup');\n        if (existingPopup) {\n            existingPopup.remove();\n        }\n\n        // Create popup container\n        this.popup = document.createElement('div');\n        this.popup.id = 'coinflip-popup';\n        this.popup.className = 'coinflip-popup';\n        this.popup.innerHTML = `\n            <div class=\"coinflip-header\">\n                <span class=\"coinflip-title\">🪙 ${this.ctx._entity.name}</span>\n                <button class=\"coinflip-close\" title=\"Close\">&times;</button>\n            </div>\n            <div class=\"coinflip-content\">\n                <div class=\"coinflip-section coinflip-controls\">\n                    <div class=\"coinflip-bankroll\">$ <span id=\"bankroll-amount\">0.00</span></div>\n                    <div class=\"coinflip-buttons\">\n                        <button class=\"coinflip-btn\">Flip!</button>\n                        <button class=\"coinflip-auto-btn\">Auto</button>\n                    </div>\n                </div>\n                <div class=\"coinflip-section coinflip-log-section\">\n                    <h3>Flip Log</h3>\n                    <div class=\"coinflip-log\" id=\"flip-log\"></div>\n                </div>\n                <div class=\"coinflip-section coinflip-stats\">\n                    <h3>Statistics</h3>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Total Flips:</span>\n                        <span class=\"stat-value\" id=\"total-flips\">0</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Heads:</span>\n                        <span class=\"stat-value\" id=\"heads-count\">0</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Longest Streak:</span>\n                        <span class=\"stat-value\" id=\"longest-streak\">0</span>\n                    </div>\n                    <div class=\"stat-divider\"></div>\n                    <h3>Airtime (sec)</h3>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Min:</span>\n                        <span class=\"stat-value\" id=\"airtime-min\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Q1:</span>\n                        <span class=\"stat-value\" id=\"airtime-q1\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Median:</span>\n                        <span class=\"stat-value\" id=\"airtime-median\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Q3:</span>\n                        <span class=\"stat-value\" id=\"airtime-q3\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Max:</span>\n                        <span class=\"stat-value\" id=\"airtime-max\">0.00</span>\n                    </div>\n                </div>\n            </div>\n        `;\n\n        // Position popup in center of screen initially\n        this.popup.style.left = '50%';\n        this.popup.style.top = '50%';\n        this.popup.style.transform = 'translate(-50%, -50%)';\n\n        // Add to document body\n        document.body.appendChild(this.popup);\n\n        // Set up event listeners\n        this.setupEventListeners();\n\n        // Initialize displays\n        this.updateBankrollDisplay();\n        this.updateStatisticsDisplay();\n        this.updateFlipLog();\n    }\n\n    setupEventListeners() {\n        const header = this.popup.querySelector('.coinflip-header');\n        const closeBtn = this.popup.querySelector('.coinflip-close');\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n        const autoBtn = this.popup.querySelector('.coinflip-auto-btn');\n\n        // Dragging functionality\n        header.addEventListener('mousedown', (e) => {\n            if (e.target.classList.contains('coinflip-close')) return;\n\n            this.isDragging = true;\n\n            // Get current position\n            const rect = this.popup.getBoundingClientRect();\n            this.dragOffset.x = e.clientX - rect.left;\n            this.dragOffset.y = e.clientY - rect.top;\n\n            // Remove transform for absolute positioning\n            this.popup.style.transform = 'none';\n\n            header.style.cursor = 'grabbing';\n        });\n\n        document.addEventListener('mousemove', (e) => {\n            if (!this.isDragging) return;\n\n            const x = e.clientX - this.dragOffset.x;\n            const y = e.clientY - this.dragOffset.y;\n\n            this.popup.style.left = `${x}px`;\n            this.popup.style.top = `${y}px`;\n        });\n\n        document.addEventListener('mouseup', () => {\n            if (this.isDragging) {\n                this.isDragging = false;\n                header.style.cursor = 'grab';\n            }\n        });\n\n        // Close button\n        closeBtn.addEventListener('mousedown', (e) => {\n            e.stopPropagation();\n            this.close();\n        });\n\n        // Flip button\n        flipBtn.addEventListener('mousedown', async () => {\n            if (!this.autoMode) { // Only allow manual flip when not in auto mode\n                await this.performFlip();\n            }\n        });\n\n        // Auto button\n        autoBtn.addEventListener('mousedown', () => {\n            this.toggleAutoMode();\n        });\n\n    }\n\n    getCoin(){\n        log(\"FlipController\", \"getCoin\", this.ctx.vars.flipTarget.value);\n        let targetPath = `${this.ctx._entity.id}/${this.ctx.vars.flipTarget.value}`;\n        let targetEntity = SM.getEntityById(targetPath);\n        log(\"FlipController\", \"targetEntity\", targetEntity);\n        if(!targetEntity){\n            showNotification(`Error: ${this.ctx.vars.flipTarget.value} not found`);\n            return null;\n        }\n        return targetEntity.GetScript(\"Flipable\");\n        // return SM.getScriptByName(\"Flipable\");\n    }\n\n    async performFlip() {\n        this.getCoin()._entity.getComponent(\"SyncedObject\")._bs.TakeOwnership()\n        await new Promise(resolve => setTimeout(resolve, 50));\n        // Prevent multiple flips\n        if (this.isFlipping) {\n            return;\n        }\n\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n\n        // Set flipping state and disable button\n        this.isFlipping = true;\n        if (!this.autoMode) { // Only disable button in manual mode\n            flipBtn.disabled = true;\n            flipBtn.classList.add('disabled');\n            flipBtn.textContent = 'Flipping...';\n        }\n\n        try {\n            //console.log(\"FLIP!\");\n            let coin = this.getCoin()\n            if(!coin){\n                // Re-enable button if flip can't proceed\n                this.isFlipping = false;\n                if (!this.autoMode && flipBtn) {\n                    flipBtn.disabled = false;\n                    flipBtn.classList.remove('disabled');\n                    flipBtn.textContent = 'Flip!';\n                }\n                return;\n            }\n            log(\"FlipController\", \"coin\", coin);\n            const flipResult = await coin.flip();\n            if (flipResult) {\n                // Handle both simple result string and object with airtime\n                const result = typeof flipResult === 'string' ? flipResult : flipResult.result;\n                const airtime = typeof flipResult === 'object' ? flipResult.airtime : Math.random() * 2 + 0.5; // Fallback to random if not provided\n\n                // Update statistics\n                this.totalFlips++;\n\n                if (result === 'heads') {\n                    this.bankroll += 0.01; // Add 1 cent\n                    this.headsCount++;\n                    this.currentStreak++;\n                    if (this.currentStreak > this.longestStreak) {\n                        this.longestStreak = this.currentStreak;\n                    }\n                } else {\n                    this.currentStreak = 0;\n                }\n\n                // Track airtime\n                this.airtimes.push(airtime);\n                this.calculateAirtimeQuartiles();\n\n                // Add to history\n                const flipData = {\n                    result: result,\n                    streak: result === 'heads' ? this.currentStreak : 0,\n                    airtime: airtime,\n                    timestamp: Date.now(),\n                    bankroll: this.bankroll\n                };\n                this.flipHistory.push(flipData);\n\n                // Broadcast flip result event for GameUI and other components\n                window.dispatchEvent(new CustomEvent('coinFlipResult', {\n                    detail: flipData\n                }));\n\n                // Update all displays\n                this.updateBankrollDisplay();\n                this.updateStatisticsDisplay();\n                this.updateFlipLog();\n            }\n        } finally {\n            // Re-enable button after flip completes\n            this.isFlipping = false;\n            if (!this.autoMode) { // Only re-enable button in manual mode\n                flipBtn.disabled = false;\n                flipBtn.classList.remove('disabled');\n                flipBtn.textContent = 'Flip!';\n            }\n        }\n    }\n\n    toggleAutoMode() {\n        const autoBtn = this.popup.querySelector('.coinflip-auto-btn');\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n\n        this.autoMode = !this.autoMode;\n\n        if (this.autoMode) {\n            // Enable auto mode\n            autoBtn.classList.add('active');\n            autoBtn.textContent = 'Stop';\n            flipBtn.disabled = true;\n            flipBtn.classList.add('disabled');\n            flipBtn.textContent = 'Auto...';\n\n            // Start auto flipping\n            this.startAutoFlip();\n        } else {\n            // Disable auto mode\n            autoBtn.classList.remove('active');\n            autoBtn.textContent = 'Auto';\n            flipBtn.disabled = false;\n            flipBtn.classList.remove('disabled');\n            flipBtn.textContent = 'Flip!';\n\n            // Stop auto flipping\n            this.stopAutoFlip();\n        }\n    }\n\n    startAutoFlip() {\n        // Clear any existing interval\n        this.stopAutoFlip();\n\n        // Perform immediate flip\n        this.performFlip();\n\n        // Set up interval for automatic flips every 3 seconds\n        this.autoFlipInterval = setInterval(async () => {\n            if (this.autoMode && !this.isFlipping) {\n                await this.performFlip();\n            }\n        }, 3000);\n    }\n\n    stopAutoFlip() {\n        if (this.autoFlipInterval) {\n            clearInterval(this.autoFlipInterval);\n            this.autoFlipInterval = null;\n        }\n    }\n\n    injectStyles() {\n        if (document.getElementById('coinflip-styles')) return;\n\n        const styleEl = document.createElement('style');\n        styleEl.id = 'coinflip-styles';\n        styleEl.textContent = `\n            .coinflip-popup {\n                position: fixed;\n                width: 700px;\n                background: rgba(30, 30, 30, 0.95);\n                border: 1px solid rgba(255, 255, 255, 0.2);\n                border-radius: 8px;\n                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);\n                z-index: 10000;\n                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n            }\n\n            .coinflip-header {\n                display: flex;\n                justify-content: space-between;\n                align-items: center;\n                padding: 10px 15px;\n                background: rgba(255, 255, 255, 0.05);\n                border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n                border-radius: 8px 8px 0 0;\n                cursor: grab;\n                user-select: none;\n            }\n\n            .coinflip-title {\n                color: #fff;\n                font-size: 14px;\n                font-weight: 600;\n            }\n\n            .coinflip-close {\n                background: transparent;\n                border: none;\n                color: #aaa;\n                font-size: 24px;\n                line-height: 1;\n                cursor: pointer;\n                padding: 0;\n                width: 24px;\n                height: 24px;\n                display: flex;\n                align-items: center;\n                justify-content: center;\n                transition: color 0.2s;\n            }\n\n            .coinflip-close:hover {\n                color: #fff;\n            }\n\n            .coinflip-content {\n                padding: 15px;\n                display: flex;\n                flex-direction: row;\n                gap: 15px;\n                min-height: 250px;\n            }\n\n            .coinflip-section {\n                flex: 1;\n                display: flex;\n                flex-direction: column;\n                align-items: center;\n                padding: 10px;\n                border-right: 1px solid rgba(255, 255, 255, 0.1);\n            }\n\n            .coinflip-section:last-child {\n                border-right: none;\n            }\n\n            .coinflip-section h3 {\n                color: #fff;\n                font-size: 12px;\n                font-weight: 600;\n                margin: 0 0 10px 0;\n                text-transform: uppercase;\n                opacity: 0.8;\n            }\n\n            .coinflip-controls {\n                justify-content: center;\n                gap: 20px;\n            }\n\n            .coinflip-bankroll {\n                color: #fff;\n                font-size: 18px;\n                font-weight: 600;\n                text-align: center;\n                padding: 10px 20px;\n                background: rgba(255, 255, 255, 0.1);\n                border-radius: 6px;\n                min-width: 120px;\n            }\n\n            #bankroll-amount {\n                color: #4ade80;\n                font-family: 'Courier New', monospace;\n            }\n\n            .coinflip-buttons {\n                display: flex;\n                gap: 10px;\n            }\n\n            .coinflip-btn,\n            .coinflip-auto-btn {\n                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n                border: none;\n                border-radius: 6px;\n                padding: 12px 30px;\n                color: #fff;\n                font-size: 16px;\n                font-weight: 600;\n                cursor: pointer;\n                transition: transform 0.1s, box-shadow 0.2s;\n                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);\n            }\n\n            .coinflip-btn:hover,\n            .coinflip-auto-btn:hover {\n                transform: translateY(-1px);\n                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);\n            }\n\n            .coinflip-btn:active,\n            .coinflip-auto-btn:active {\n                transform: translateY(0);\n            }\n\n            .coinflip-btn:disabled,\n            .coinflip-btn.disabled {\n                background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);\n                cursor: not-allowed;\n                opacity: 0.6;\n                transform: none;\n                box-shadow: none;\n            }\n\n            .coinflip-btn:disabled:hover,\n            .coinflip-btn.disabled:hover {\n                transform: none;\n                box-shadow: none;\n            }\n\n            .coinflip-auto-btn.active {\n                background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);\n                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                animation: pulse 1.5s ease-in-out infinite;\n            }\n\n            @keyframes pulse {\n                0% {\n                    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                }\n                50% {\n                    box-shadow: 0 2px 15px rgba(245, 158, 11, 0.8);\n                }\n                100% {\n                    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                }\n            }\n\n            .coinflip-log-section {\n                flex: 1.5;\n            }\n\n            .coinflip-log {\n                width: 100%;\n                overflow-y: auto;\n                padding: 5px;\n                background: rgba(0, 0, 0, 0.2);\n                border-radius: 4px;\n            }\n\n            .flip-entry {\n                padding: 4px 8px;\n                margin: 2px 0;\n                border-radius: 3px;\n                font-size: 12px;\n                font-weight: 600;\n                text-align: center;\n            }\n\n            .flip-entry .heads {\n                color: #4ade80;\n                text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);\n            }\n\n            .flip-entry .tails {\n                color: #888;\n            }\n\n            .coinflip-stats {\n                gap: 8px;\n            }\n\n            .stat-item {\n                display: flex;\n                justify-content: space-between;\n                width: 100%;\n                padding: 5px 10px;\n                background: rgba(255, 255, 255, 0.05);\n                border-radius: 4px;\n                margin: 3px 0;\n            }\n\n            .stat-label {\n                color: #aaa;\n                font-size: 11px;\n                font-weight: 500;\n            }\n\n            .stat-value {\n                color: #fff;\n                font-size: 11px;\n                font-weight: 700;\n                font-family: 'Courier New', monospace;\n            }\n\n            .stat-divider {\n                width: 100%;\n                height: 1px;\n                background: rgba(255, 255, 255, 0.1);\n                margin: 10px 0;\n            }\n\n            /* Scrollbar styling */\n            .coinflip-log::-webkit-scrollbar {\n                width: 6px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-track {\n                background: rgba(255, 255, 255, 0.05);\n                border-radius: 3px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-thumb {\n                background: rgba(255, 255, 255, 0.2);\n                border-radius: 3px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-thumb:hover {\n                background: rgba(255, 255, 255, 0.3);\n            }\n        `;\n        document.head.appendChild(styleEl);\n    }\n\n    updateBankrollDisplay() {\n        // Only update the bankroll display for our popup\n        if (!this.popup) return;\n\n        const bankrollElement = this.popup.querySelector('#bankroll-amount');\n\n        if (bankrollElement) {\n            bankrollElement.textContent = (this.bankroll).toFixed(2);\n        }\n    }\n\n    updateStatisticsDisplay() {\n        if (!this.popup) return;\n\n        const totalFlipsEl = this.popup.querySelector('#total-flips');\n        const headsCountEl = this.popup.querySelector('#heads-count');\n        const longestStreakEl = this.popup.querySelector('#longest-streak');\n\n        if (totalFlipsEl) totalFlipsEl.textContent = this.totalFlips;\n        if (headsCountEl) headsCountEl.textContent = this.headsCount;\n        if (longestStreakEl) longestStreakEl.textContent = this.longestStreak;\n\n        // Update airtime statistics\n        const airtimeMinEl = this.popup.querySelector('#airtime-min');\n        const airtimeQ1El = this.popup.querySelector('#airtime-q1');\n        const airtimeMedianEl = this.popup.querySelector('#airtime-median');\n        const airtimeQ3El = this.popup.querySelector('#airtime-q3');\n        const airtimeMaxEl = this.popup.querySelector('#airtime-max');\n\n        if (airtimeMinEl) airtimeMinEl.textContent = this.airtimeQuartiles.min.toFixed(2);\n        if (airtimeQ1El) airtimeQ1El.textContent = this.airtimeQuartiles.q1.toFixed(2);\n        if (airtimeMedianEl) airtimeMedianEl.textContent = this.airtimeQuartiles.median.toFixed(2);\n        if (airtimeQ3El) airtimeQ3El.textContent = this.airtimeQuartiles.q3.toFixed(2);\n        if (airtimeMaxEl) airtimeMaxEl.textContent = this.airtimeQuartiles.max.toFixed(2);\n    }\n\n    updateFlipLog() {\n        if (!this.popup) return;\n\n        const logContainer = this.popup.querySelector('#flip-log');\n        if (!logContainer) return;\n\n        // Clear and rebuild the log\n        logContainer.innerHTML = '';\n\n        // Show last 10 flips (most recent first)\n        const recentFlips = this.flipHistory.slice(-10).reverse();\n\n        recentFlips.forEach(flip => {\n            const logEntry = document.createElement('div');\n            logEntry.className = 'flip-entry';\n\n            if (flip.result === 'heads') {\n                const exclamations = '!'.repeat(flip.streak - 1);\n                logEntry.innerHTML = `<span class=\"heads\">HEADS${exclamations}</span>`;\n            } else {\n                logEntry.innerHTML = `<span class=\"tails\">TAILS</span>`;\n            }\n\n            logContainer.appendChild(logEntry);\n        });\n\n        // Auto-scroll to top (latest flip)\n        logContainer.scrollTop = 0;\n    }\n\n    calculateAirtimeQuartiles() {\n        if (this.airtimes.length === 0) {\n            this.airtimeQuartiles = { min: 0, q1: 0, median: 0, q3: 0, max: 0 };\n            return;\n        }\n\n        // Sort airtimes in ascending order\n        const sorted = [...this.airtimes].sort((a, b) => a - b);\n        const n = sorted.length;\n\n        // Calculate quartiles\n        this.airtimeQuartiles = {\n            min: sorted[0],\n            q1: this.percentile(sorted, 0.25),\n            median: this.percentile(sorted, 0.5),\n            q3: this.percentile(sorted, 0.75),\n            max: sorted[n - 1]\n        };\n    }\n\n    percentile(sortedArray, percentile) {\n        const index = percentile * (sortedArray.length - 1);\n        const lower = Math.floor(index);\n        const upper = Math.ceil(index);\n        const weight = index % 1;\n\n        if (lower === upper) {\n            return sortedArray[lower];\n        }\n\n        return sortedArray[lower] * (1 - weight) + sortedArray[upper] * weight;\n    }\n\n    startStatsUpdate() {\n        // Clear any existing interval\n        if (this.updatePropsInterval) {\n            clearInterval(this.updatePropsInterval);\n        }\n\n        // // Start updating speed and angular speed stats\n        // this.updatePropsInterval = setInterval(() => {\n        //     const rigidBody = this.ctx._entity.getComponent(\"BanterRigidbody\");\n\n        //     if (rigidBody && this.popup) {\n        //         // Calculate speed\n        //         const velocity = rigidBody._bs.velocity || { x: 0, y: 0, z: 0 };\n        //         const speed = Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2);\n        //         const speedElement = this.popup.querySelector('#speed');\n        //         if (speedElement) {\n        //             speedElement.textContent = speed.toFixed(3);\n        //         }\n\n        //         // Calculate angular speed\n        //         const angularVelocity = rigidBody._bs.angularVelocity || { x: 0, y: 0, z: 0 };\n        //         const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n        //         const angularSpeedElement = this.popup.querySelector('#angular-speed');\n        //         if (angularSpeedElement) {\n        //             angularSpeedElement.textContent = angularSpeed.toFixed(3);\n        //         }\n        //     }\n        // }, 10); // Update every 10ms\n    }\n\n    stopStatsUpdate() {\n        if (this.updatePropsInterval) {\n            clearInterval(this.updatePropsInterval);\n            this.updatePropsInterval = null;\n        }\n    }\n\n    close() {\n        this.stopStatsUpdate();\n        this.stopAutoFlip(); // Stop auto mode if running\n        if (this.popup && this.popup.parentNode) {\n            this.popup.remove();\n        }\n    }\n\n    destroy() {\n        this.stopAutoFlip(); // Stop auto mode if running\n        this.close();\n\n        // Remove styles\n        const styles = document.getElementById('coinflip-styles');\n        if (styles && styles.parentNode) {\n            styles.remove();\n        }\n\n        if (window.coinFlipInstance) {\n            delete window.coinFlipInstance;\n        }\n    }\n}\n\n// Initialize extension\nlet coinFlipInstance = null;\nlet popupElement = null;\n\nthis.default = {};\n\nObject.entries(this.default).forEach(([key, val]) => {\n    if (!this.vars[key]) this.vars[key] = val;\n});\n\nthis.onStart = () => {\n    console.log(\"CoinFlip extension starting...\");\n\n    // Singleton pattern: Destroy any existing instance first\n    if (window.coinFlipInstance) {\n        console.log(\"Found existing CoinFlip instance, destroying it...\");\n        window.coinFlipInstance.destroy();\n        window.coinFlipInstance = null;\n    }\n\n    // Also check for orphaned popups in the DOM\n    const orphanedPopups = document.querySelectorAll('#coinflip-popup, .coinflip-popup');\n    orphanedPopups.forEach(popup => {\n        console.log(\"Removing orphaned popup from DOM\");\n        popup.remove();\n    });\n\n    // Create new instance\n    coinFlipInstance = new CoinFlip(this);\n    popupElement = coinFlipInstance.init();\n\n    // Make instance globally accessible\n    window.coinFlipInstance = coinFlipInstance;\n};\n\nthis.onUpdate = () => {\n    // No update logic needed\n};\n\nthis.onDestroy = () => {\n    console.log(\"CoinFlip extension destroying...\");\n    if (coinFlipInstance) {\n        coinFlipInstance.destroy();\n        coinFlipInstance = null;\n        popupElement = null;\n    }\n};",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": true,
+          "icon": "📜",
+          "imported": true,
+          "importedAt": 1760424216324,
+          "importedFrom": "inventory/Technocrat/CoinFlip",
+          "itemType": "script",
+          "lastUsed": 1759851309566,
+          "last_used": 1761048904149,
+          "name": "FlipController.js",
+          "remote": true,
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "file": "FlipController.js",
+          "name": "FlipController"
+        },
+        "spaceProps": {
+          "file": "FlipController.js",
+          "name": "FlipController"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "FlipFull",
+    "parentId": "Scene",
+    "persistent": true,
+    "spaceProps": {
+      "active": true,
+      "children": [
+        "Scene/FlipFull/Penny",
+        "Scene/FlipFull/Gains"
+      ],
+      "components": [
+        "Box_28510",
+        "Material_63019",
+        "BoxCollider_20649",
+        "MonoBehavior_48456"
+      ],
+      "layer": 0,
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity",
+    "uuid": 6632952594725
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "GLTF_43263",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": false,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+                    },
+                    "type": "GLTF"
+                  }
+                ],
+                "id": "Scene/Table_4039/Penny/PennyMesh",
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "PennyMesh",
+                "parentId": "Scene/Table_4039/Penny",
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.1,
+                    "y": 0.1,
+                    "z": 0.1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 3443067178692
+              },
+              {
+                "active": true,
+                "children": [
+                  {
+                    "active": true,
+                    "components": [
+                      {
+                        "id": "AudioSource_93656",
+                        "loadAsync": false,
+                        "options": {
+                          "cmdUser": "Technocrat",
+                          "context": "item",
+                          "loadAsync": false
+                        },
+                        "properties": {
+                          "bypassEffects": false,
+                          "bypassListenerEffects": false,
+                          "bypassReverbZones": false,
+                          "loop": false,
+                          "mute": false,
+                          "pitch": 1,
+                          "playOnAwake": true,
+                          "spatialBlend": 1,
+                          "volume": 1
+                        },
+                        "type": "AudioSource"
+                      }
+                    ],
+                    "id": "Scene/Table_4039/Penny/sfx/flip",
+                    "initialized": true,
+                    "layer": 0,
+                    "loadAsync": false,
+                    "name": "flip",
+                    "parentId": "Scene/Table_4039/Penny/sfx",
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Entity",
+                    "uuid": 4776501716300
+                  },
+                  {
+                    "active": true,
+                    "components": [
+                      {
+                        "id": "AudioSource_26972",
+                        "loadAsync": false,
+                        "options": {
+                          "cmdUser": "Technocrat",
+                          "context": "item",
+                          "loadAsync": false
+                        },
+                        "properties": {
+                          "bypassEffects": false,
+                          "bypassListenerEffects": false,
+                          "bypassReverbZones": false,
+                          "loop": false,
+                          "mute": false,
+                          "pitch": 1,
+                          "playOnAwake": true,
+                          "spatialBlend": 1,
+                          "volume": 1
+                        },
+                        "type": "AudioSource"
+                      }
+                    ],
+                    "id": "Scene/Table_4039/Penny/sfx/success",
+                    "initialized": true,
+                    "layer": 0,
+                    "loadAsync": false,
+                    "name": "success",
+                    "parentId": "Scene/Table_4039/Penny/sfx",
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Entity",
+                    "uuid": 6624647363661
+                  },
+                  {
+                    "active": true,
+                    "components": [
+                      {
+                        "id": "AudioSource_74805",
+                        "loadAsync": false,
+                        "options": {
+                          "cmdUser": "Technocrat",
+                          "context": "item",
+                          "loadAsync": false
+                        },
+                        "properties": {
+                          "bypassEffects": false,
+                          "bypassListenerEffects": false,
+                          "bypassReverbZones": false,
+                          "loop": false,
+                          "mute": false,
+                          "pitch": 1,
+                          "playOnAwake": true,
+                          "spatialBlend": 1,
+                          "volume": 1
+                        },
+                        "type": "AudioSource"
+                      }
+                    ],
+                    "id": "Scene/Table_4039/Penny/sfx/nothing",
+                    "initialized": true,
+                    "layer": 0,
+                    "loadAsync": false,
+                    "name": "nothing",
+                    "parentId": "Scene/Table_4039/Penny/sfx",
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Entity",
+                    "uuid": 97225688755
+                  },
+                  {
+                    "active": true,
+                    "components": [
+                      {
+                        "id": "AudioSource_99141",
+                        "loadAsync": false,
+                        "options": {
+                          "cmdUser": "Technocrat",
+                          "context": "item",
+                          "loadAsync": false
+                        },
+                        "properties": {
+                          "bypassEffects": false,
+                          "bypassListenerEffects": false,
+                          "bypassReverbZones": false,
+                          "loop": false,
+                          "mute": false,
+                          "pitch": 1,
+                          "playOnAwake": true,
+                          "spatialBlend": 1,
+                          "volume": 0
+                        },
+                        "type": "AudioSource"
+                      }
+                    ],
+                    "id": "Scene/Table_4039/Penny/sfx/preloader",
+                    "initialized": true,
+                    "layer": 0,
+                    "loadAsync": false,
+                    "name": "preloader",
+                    "parentId": "Scene/Table_4039/Penny/sfx",
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Entity",
+                    "uuid": 6829320216758
+                  }
+                ],
+                "id": "Scene/Table_4039/Penny/sfx",
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "sfx",
+                "parentId": "Scene/Table_4039/Penny",
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Entity",
+                "uuid": 1851989670566
+              }
+            ],
+            "components": [
+              {
+                "id": "SyncedObject_54982",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "kinematicIfNotOwned": true,
+                  "syncPosition": true,
+                  "syncRotation": true,
+                  "takeOwnershipOnCollision": false,
+                  "takeOwnershipOnGrab": true
+                },
+                "type": "SyncedObject"
+              },
+              {
+                "id": "Cylinder_66758",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "height": 0.02,
+                  "radialSegments": 32,
+                  "radius": 0.1
+                },
+                "type": "Cylinder"
+              },
+              {
+                "id": "MeshCollider_77928",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "convex": true,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              },
+              {
+                "id": "Rigidbody_29049",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "angularDrag": 0.05,
+                  "angularVelocity": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "centerOfMass": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "collisionDetectionMode": 0,
+                  "drag": 0,
+                  "freezePositionX": false,
+                  "freezePositionY": false,
+                  "freezePositionZ": false,
+                  "freezeRotationX": false,
+                  "freezeRotationY": false,
+                  "freezeRotationZ": false,
+                  "isKinematic": false,
+                  "mass": 1,
+                  "useGravity": true,
+                  "velocity": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  }
+                },
+                "type": "Rigidbody"
+              },
+              {
+                "id": "MonoBehavior_12115",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": true,
+                  "created": 1759783702790,
+                  "data": "\n\nthis._entity.penny = true;\nlet consecutive_heads = 0;\nconst tracks = {\n    'flip_1': 'flips/flip_1.wav',\n    'flip_2': 'flips/flip_2.wav',\n    'flip_3': 'flips/flip_3.wav',\n    'flip_4': 'flips/flip_4.wav',\n    'flip_5': 'flips/flip_5.wav',\n    'flip_6': 'flips/flip_6.wav',\n    'flip_7': 'flips/flip_7.wav',\n    'flip_8': 'flips/flip_8.wav',\n    'flip_9': 'flips/flip_9.wav',\n    'flip_10': 'flips/flip_10.wav',\n    'flip_11': 'flips/flip_11.wav',\n    'flip_12': 'flips/flip_12.wav',\n    'flip_13': 'flips/flip_13.wav',\n    'flip_14': 'flips/flip_14.wav',\n    'flip_15': 'flips/flip_15.wav',\n    'flip_16': 'flips/flip_16.wav',\n    'flip_17': 'flips/flip_17.wav',\n    'flip_18': 'flips/flip_18.wav',\n    'flip_19': 'flips/flip_19.wav',\n    'flip_20': 'flips/flip_20.wav',\n    'flip_21': 'flips/flip_21.wav',\n    'flip_22': 'flips/flip_22.wav',\n    'flip_23': 'flips/flip_23.wav',\n    'flip_24': 'flips/flip_24.wav',\n    'flip_25': 'flips/flip_25.wav',\n    'success_1': 'success/success_1.wav',\n    'success_2': 'success/success_2.wav',\n    'success_3': 'success/success_3.wav',\n    'success_4': 'success/success_4.wav',\n    'success_5': 'success/success_5.wav',\n    'success_6': 'success/success_6.wav',\n    'success_7': 'success/success_7.wav',\n    'success_8': 'success/success_8.wav',\n    'success_9': 'success/success_9.wav',\n    'success_10': 'success/success_10.wav',\n    'success_11': 'success/success_11.wav',\n    'success_12': 'success/success_12.wav',\n    'success_13': 'success/success_13.wav',\n    'success_14': 'success/success_14.wav',\n    'nothing': 'tap.mp3'\n}\n\nthis.onLoaded = ()=>{\n    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent(\"AudioSource\")\n    Object.values(tracks).forEach((suburl)=>{\n        preloadAudio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${suburl}`)\n    })\n}\n\n\nlet play_audio = (track)=>{\n    let source = track.split('_')[0]\n    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent(\"AudioSource\")\n    audio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${tracks[track]}`)\n}\n\nlet audio = this._entity.getComponent(\"AudioSource\")\nthis.flip = async ()=>{\n    let up_force = Math.random()*2+2\n    let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let y_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let z_torque = (Math.random() - 0.5) * 10 + 1  // Range: -4 to +6 \n    log(\"flipable\", up_force, x_torque, y_torque, z_torque)\n\n    let rigidBody = this._entity.getComponent(\"Rigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return null;\n    }\n\n    // Apply flip forces\n    rigidBody._bs.AddForce({x: 0, y: up_force, z: 0}, BS.ForceMode.Impulse);\n    rigidBody._bs.AddTorque({x: x_torque, y:y_torque,  z: z_torque}, BS.ForceMode.Impulse);\n    play_audio('flip_'+Math.floor(Math.random()*25+1))\n    // Track the coin and return result\n    return await this.trackCoin();\n}\n\n// Function to check if coin is heads or tails\nthis.isCoinHeads = () => {\n    // Get the rotation of the coin\n    const rotation = this._entity.Get(\"rotation\");\n\n    if (!rotation) {\n        return false;\n    }\n\n    // Convert quaternion to up vector\n    // For a coin, we check if the local \"up\" vector points upward in world space\n    // Quaternion to matrix conversion for the up vector (0,1,0)\n    const { x, z } = rotation;\n\n    // Calculate the world \"up\" direction from the coin's local up axis\n    // We only need the Y component to determine if the coin is facing up or down\n    const upY = 1 - 2 * (x*x + z*z);\n\n    // If the coin's up vector points upward (positive Y), it's heads\n    // If it points downward (negative Y), it's tails\n    return !(upY > 0);\n}\n\n// Async function to track the coin until it settles\nthis.trackCoin = () => {\n    log('flipable', 'Tracking coin');\n    return new Promise((resolve) => {\n        // Wait 500ms before starting to track to let physics kick in\n        setTimeout(() => {\n            let checkCount = 0;\n            let hasMovedSignificantly = false;\n            let lastPos = null;\n\n            const checkInterval = setInterval(() => {\n                const rigidBody = this._entity.getComponent(\"Rigidbody\");\n                if (!rigidBody) {\n                    clearInterval(checkInterval);\n                    resolve(null);\n                    return;\n                }\n\n                // Try to get angular velocity from the BanterScript rigidbody\n                let angularVelocity = rigidBody._bs.angularVelocity;\n                let velocity = rigidBody._bs.velocity;\n\n                if (!angularVelocity) {\n                    // Fallback: check rotation changes\n                    const currentRot = this._entity.Get(\"rotation\");\n\n                    if (lastPos && lastPos.rotation) {\n                        const dx = currentRot.x - lastPos.rotation.x;\n                        const dy = currentRot.y - lastPos.rotation.y;\n                        const dz = currentRot.z - lastPos.rotation.z;\n                        const dw = currentRot.w - lastPos.rotation.w;\n                        angularVelocity = { x: dx * 10, y: dy * 10, z: dz * 10 }; // Approximate angular velocity\n                    } else {\n                        angularVelocity = { x: 100, y: 100, z: 100 }; // Force movement detection on first check\n                    }\n                    lastPos = { position: this._entity.Get(\"position\"), rotation: currentRot };\n                }\n\n                // Check both angular and linear velocity for settling\n                const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n                const linearSpeed = velocity ? Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2) : 0;\n\n                // Track if coin has moved/rotated significantly\n                if (!hasMovedSignificantly && (angularSpeed > 0.35 || linearSpeed > 0.35)) {\n                    hasMovedSignificantly = true;\n                    log('flipable', `Coin has moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n                if(!hasMovedSignificantly){\n                    log('flipable', `Coin has not moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n\n\n                checkCount++;\n\n                // Only consider it settled if it has moved significantly AND both angular and linear speeds are low\n                if (hasMovedSignificantly && angularSpeed < 0.25 && linearSpeed < 0.25) {\n                    clearInterval(checkInterval);\n\n                    // Check if it's heads or tails\n                    const isHeads = this.isCoinHeads();\n                    if(isHeads){\n                        consecutive_heads++;\n                    }else{\n                        consecutive_heads = 0;\n                    }\n                    const result = isHeads ? 'heads' : 'tails';\n                    log('flipable', `Coin landed: ${result.toUpperCase()}`);\n                    if(isHeads){\n                        play_audio('success_'+consecutive_heads)\n                    }else{\n                        play_audio('nothing')\n                    }\n                    resolve(result);\n                }\n\n                // Timeout after 10 seconds\n                if (checkCount > 200) {\n                    log('flipable', `Coin tracking timeout`);\n                    clearInterval(checkInterval);\n                    // Still check the final position\n                    const isHeads = this.isCoinHeads();\n                    const result = isHeads ? 'heads' : 'tails';\n                    resolve(result);\n                }\n            }, 50); // Check every 100ms\n        }, 100); // Wait 500ms before starting tracking\n    });\n}\n\n\nthis.onStart = ()=>{\n    log(\"flipable\", \"onStart called - setting up watchers\");\n\n    // Test WatchTransform with detailed logging\n    const watchResult = this._entity.WatchTransform([\"position\", \"rotation\"], (data)=>{\n        log(\"flipable\", \"WatchTransform callback fired!\");\n        log(\"flipable\", \"Callback data received:\", data);\n        log(\"flipable\", \"Current position:\", this._entity.Get(\"position\"));\n        log(\"flipable\", \"Current rotation:\", this._entity.Get(\"rotation\"));\n    });\n\n    log(\"flipable\", \"WatchTransform returned:\", watchResult);\n    log(\"flipable\", \"Return type:\", typeof watchResult);\n    log(\"flipable\", \"Is Promise?\", watchResult instanceof Promise);\n\n    // Also test the rigidbody watcher\n    const rigidBody = this._entity.getComponent(\"Rigidbody\");\n    if(rigidBody) {\n        rigidBody.WatchProperties(['velocity', 'angularVelocity'], (data)=>{\n            log(\"flipable\", \"velocity changed, data:\", data);\n            log(\"flipable\", \"Current velocity:\", rigidBody._bs.velocity);\n        });\n        log(\"flipable\", \"Rigidbody velocity watcher set up\");\n    } else {\n        log(\"flipable\", \"WARNING: No rigidbody found!\");\n    }\n\n    log(\"flipable\", \"onStart completed - all watchers should be active\");\n\n    this._entity._bs.On(\"click\", (e)=>{\n        log(\"flipable\", \"click\", e.detail)\n        this.flip();\n    });\n}\n\nthis.onDestroy = ()=>{\n    // this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
+                  "description": "",
+                  "folder": "CoinFlip",
+                  "global": true,
+                  "icon": "📜",
+                  "imported": true,
+                  "importedAt": 1760424216324,
+                  "importedFrom": "inventory/Technocrat/CoinFlip",
+                  "itemType": "script",
+                  "lastUsed": 1759855136851,
+                  "last_used": 1760680692063,
+                  "name": "Flipable.js",
+                  "remote": true,
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "file": "Flipable.js",
+                  "name": "Flipable"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/Table_4039/Penny",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "Penny",
+            "parentId": "Scene/Table_4039",
+            "penny": true,
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.65,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Entity",
+            "uuid": 9928656532149
+          }
+        ],
+        "components": [
+          {
+            "id": "Box_28510",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "depth": 1,
+              "height": 0.05,
+              "width": 2
+            },
+            "type": "Box"
+          },
+          {
+            "id": "Material_63019",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 0.08627450980392157,
+                "g": 0.1411764705882353,
+                "r": 0.16470588235294117
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "Material"
+          },
+          {
+            "id": "BoxCollider_20649",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": -0.475,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 1.5,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "MonoBehavior_48456",
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": true,
+              "created": 1759851309566,
+              "data": "// CoinFlip Extension\n// Adds a draggable popup window with a flip button\nthis.default = {\n    flipTarget: {\n        \"type\": \"string\",\n        \"value\": \"Penny\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\n\nclass CoinFlip {\n    constructor(ctx) {\n        this.popup = null;\n        this.isDragging = false;\n        this.dragOffset = { x: 0, y: 0 };\n        this.isFlipping = false; // Track if a flip is in progress\n        this.autoMode = false; // Track if auto mode is enabled\n        this.autoFlipInterval = null; // Store the interval ID for auto flipping\n        // Preserve bankroll between instances if it exists\n        this.bankroll = (window.coinFlipInstance && window.coinFlipInstance.bankroll) || 0; // Bankroll in cents\n        // Preserve flip history and statistics between instances\n        this.flipHistory = (window.coinFlipInstance && window.coinFlipInstance.flipHistory) || [];\n        this.totalFlips = (window.coinFlipInstance && window.coinFlipInstance.totalFlips) || 0;\n        this.headsCount = (window.coinFlipInstance && window.coinFlipInstance.headsCount) || 0;\n        this.currentStreak = (window.coinFlipInstance && window.coinFlipInstance.currentStreak) || 0;\n        this.longestStreak = (window.coinFlipInstance && window.coinFlipInstance.longestStreak) || 0;\n        // Preserve airtime statistics\n        this.airtimes = (window.coinFlipInstance && window.coinFlipInstance.airtimes) || [];\n        this.airtimeQuartiles = (window.coinFlipInstance && window.coinFlipInstance.airtimeQuartiles) || {\n            min: 0,\n            q1: 0,\n            median: 0,\n            q3: 0,\n            max: 0\n        };\n        this.ctx = ctx;\n        this.updatePropsInterval = null;\n    }\n\n    init() {\n        this.createPopup();\n        this.injectStyles();\n        this.startStatsUpdate();\n        return this.popup;\n    }\n\n    createPopup() {\n        // Remove any existing popup first (singleton pattern)\n        const existingPopup = document.getElementById('coinflip-popup');\n        if (existingPopup) {\n            existingPopup.remove();\n        }\n\n        // Create popup container\n        this.popup = document.createElement('div');\n        this.popup.id = 'coinflip-popup';\n        this.popup.className = 'coinflip-popup';\n        this.popup.innerHTML = `\n            <div class=\"coinflip-header\">\n                <span class=\"coinflip-title\">🪙 ${this.ctx._entity.name}</span>\n                <button class=\"coinflip-close\" title=\"Close\">&times;</button>\n            </div>\n            <div class=\"coinflip-content\">\n                <div class=\"coinflip-section coinflip-controls\">\n                    <div class=\"coinflip-bankroll\">$ <span id=\"bankroll-amount\">0.00</span></div>\n                    <div class=\"coinflip-buttons\">\n                        <button class=\"coinflip-btn\">Flip!</button>\n                        <button class=\"coinflip-auto-btn\">Auto</button>\n                    </div>\n                </div>\n                <div class=\"coinflip-section coinflip-log-section\">\n                    <h3>Flip Log</h3>\n                    <div class=\"coinflip-log\" id=\"flip-log\"></div>\n                </div>\n                <div class=\"coinflip-section coinflip-stats\">\n                    <h3>Statistics</h3>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Total Flips:</span>\n                        <span class=\"stat-value\" id=\"total-flips\">0</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Heads:</span>\n                        <span class=\"stat-value\" id=\"heads-count\">0</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Longest Streak:</span>\n                        <span class=\"stat-value\" id=\"longest-streak\">0</span>\n                    </div>\n                    <div class=\"stat-divider\"></div>\n                    <h3>Airtime (sec)</h3>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Min:</span>\n                        <span class=\"stat-value\" id=\"airtime-min\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Q1:</span>\n                        <span class=\"stat-value\" id=\"airtime-q1\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Median:</span>\n                        <span class=\"stat-value\" id=\"airtime-median\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Q3:</span>\n                        <span class=\"stat-value\" id=\"airtime-q3\">0.00</span>\n                    </div>\n                    <div class=\"stat-item\">\n                        <span class=\"stat-label\">Max:</span>\n                        <span class=\"stat-value\" id=\"airtime-max\">0.00</span>\n                    </div>\n                </div>\n            </div>\n        `;\n\n        // Position popup in center of screen initially\n        this.popup.style.left = '50%';\n        this.popup.style.top = '50%';\n        this.popup.style.transform = 'translate(-50%, -50%)';\n\n        // Add to document body\n        document.body.appendChild(this.popup);\n\n        // Set up event listeners\n        this.setupEventListeners();\n\n        // Initialize displays\n        this.updateBankrollDisplay();\n        this.updateStatisticsDisplay();\n        this.updateFlipLog();\n    }\n\n    setupEventListeners() {\n        const header = this.popup.querySelector('.coinflip-header');\n        const closeBtn = this.popup.querySelector('.coinflip-close');\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n        const autoBtn = this.popup.querySelector('.coinflip-auto-btn');\n\n        // Dragging functionality\n        header.addEventListener('mousedown', (e) => {\n            if (e.target.classList.contains('coinflip-close')) return;\n\n            this.isDragging = true;\n\n            // Get current position\n            const rect = this.popup.getBoundingClientRect();\n            this.dragOffset.x = e.clientX - rect.left;\n            this.dragOffset.y = e.clientY - rect.top;\n\n            // Remove transform for absolute positioning\n            this.popup.style.transform = 'none';\n\n            header.style.cursor = 'grabbing';\n        });\n\n        document.addEventListener('mousemove', (e) => {\n            if (!this.isDragging) return;\n\n            const x = e.clientX - this.dragOffset.x;\n            const y = e.clientY - this.dragOffset.y;\n\n            this.popup.style.left = `${x}px`;\n            this.popup.style.top = `${y}px`;\n        });\n\n        document.addEventListener('mouseup', () => {\n            if (this.isDragging) {\n                this.isDragging = false;\n                header.style.cursor = 'grab';\n            }\n        });\n\n        // Close button\n        closeBtn.addEventListener('mousedown', (e) => {\n            e.stopPropagation();\n            this.close();\n        });\n\n        // Flip button\n        flipBtn.addEventListener('mousedown', async () => {\n            if (!this.autoMode) { // Only allow manual flip when not in auto mode\n                await this.performFlip();\n            }\n        });\n\n        // Auto button\n        autoBtn.addEventListener('mousedown', () => {\n            this.toggleAutoMode();\n        });\n\n    }\n\n    getCoin(){\n        log(\"FlipController\", \"getCoin\", this.ctx.vars.flipTarget.value);\n        let targetPath = `${this.ctx._entity.id}/${this.ctx.vars.flipTarget.value}`;\n        let targetEntity = SM.getEntityById(targetPath);\n        log(\"FlipController\", \"targetEntity\", targetEntity);\n        if(!targetEntity){\n            showNotification(`Error: ${this.ctx.vars.flipTarget.value} not found`);\n            return null;\n        }\n        return targetEntity.GetScript(\"Flipable\");\n    }\n\n    async performFlip() {\n        // Prevent multiple flips\n        if (this.isFlipping) {\n            return;\n        }\n\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n\n        // Set flipping state and disable button\n        this.isFlipping = true;\n        if (!this.autoMode) { // Only disable button in manual mode\n            flipBtn.disabled = true;\n            flipBtn.classList.add('disabled');\n            flipBtn.textContent = 'Flipping...';\n        }\n\n        try {\n            //console.log(\"FLIP!\");\n            let coin = this.getCoin()\n            if(!coin){\n                return;\n            }\n            log(\"FlipController\", \"coin\", coin);\n            const flipData = await coin.flip();\n            if (flipData) {\n                // Handle both simple result string and object with airtime\n                const result = typeof flipData === 'string' ? flipData : flipData.result;\n                const airtime = typeof flipData === 'object' ? flipData.airtime : Math.random() * 2 + 0.5; // Fallback to random if not provided\n\n                // Update statistics\n                this.totalFlips++;\n\n                if (result === 'heads') {\n                    this.bankroll += 1; // Add 1 cent\n                    this.headsCount++;\n                    this.currentStreak++;\n                    if (this.currentStreak > this.longestStreak) {\n                        this.longestStreak = this.currentStreak;\n                    }\n                } else {\n                    this.currentStreak = 0;\n                }\n\n                // Track airtime\n                this.airtimes.push(airtime);\n                this.calculateAirtimeQuartiles();\n\n                // Add to history\n                this.flipHistory.push({\n                    result: result,\n                    streak: result === 'heads' ? this.currentStreak : 0,\n                    airtime: airtime,\n                    timestamp: Date.now()\n                });\n\n                // Update all displays\n                this.updateBankrollDisplay();\n                this.updateStatisticsDisplay();\n                this.updateFlipLog();\n            }\n        } finally {\n            // Re-enable button after flip completes\n            this.isFlipping = false;\n            if (!this.autoMode) { // Only re-enable button in manual mode\n                flipBtn.disabled = false;\n                flipBtn.classList.remove('disabled');\n                flipBtn.textContent = 'Flip!';\n            }\n        }\n    }\n\n    toggleAutoMode() {\n        const autoBtn = this.popup.querySelector('.coinflip-auto-btn');\n        const flipBtn = this.popup.querySelector('.coinflip-btn');\n\n        this.autoMode = !this.autoMode;\n\n        if (this.autoMode) {\n            // Enable auto mode\n            autoBtn.classList.add('active');\n            autoBtn.textContent = 'Stop';\n            flipBtn.disabled = true;\n            flipBtn.classList.add('disabled');\n            flipBtn.textContent = 'Auto...';\n\n            // Start auto flipping\n            this.startAutoFlip();\n        } else {\n            // Disable auto mode\n            autoBtn.classList.remove('active');\n            autoBtn.textContent = 'Auto';\n            flipBtn.disabled = false;\n            flipBtn.classList.remove('disabled');\n            flipBtn.textContent = 'Flip!';\n\n            // Stop auto flipping\n            this.stopAutoFlip();\n        }\n    }\n\n    startAutoFlip() {\n        // Clear any existing interval\n        this.stopAutoFlip();\n\n        // Perform immediate flip\n        this.performFlip();\n\n        // Set up interval for automatic flips every 3 seconds\n        this.autoFlipInterval = setInterval(async () => {\n            if (this.autoMode && !this.isFlipping) {\n                await this.performFlip();\n            }\n        }, 3000);\n    }\n\n    stopAutoFlip() {\n        if (this.autoFlipInterval) {\n            clearInterval(this.autoFlipInterval);\n            this.autoFlipInterval = null;\n        }\n    }\n\n    injectStyles() {\n        if (document.getElementById('coinflip-styles')) return;\n\n        const styleEl = document.createElement('style');\n        styleEl.id = 'coinflip-styles';\n        styleEl.textContent = `\n            .coinflip-popup {\n                position: fixed;\n                width: 700px;\n                background: rgba(30, 30, 30, 0.95);\n                border: 1px solid rgba(255, 255, 255, 0.2);\n                border-radius: 8px;\n                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);\n                z-index: 10000;\n                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;\n            }\n\n            .coinflip-header {\n                display: flex;\n                justify-content: space-between;\n                align-items: center;\n                padding: 10px 15px;\n                background: rgba(255, 255, 255, 0.05);\n                border-bottom: 1px solid rgba(255, 255, 255, 0.1);\n                border-radius: 8px 8px 0 0;\n                cursor: grab;\n                user-select: none;\n            }\n\n            .coinflip-title {\n                color: #fff;\n                font-size: 14px;\n                font-weight: 600;\n            }\n\n            .coinflip-close {\n                background: transparent;\n                border: none;\n                color: #aaa;\n                font-size: 24px;\n                line-height: 1;\n                cursor: pointer;\n                padding: 0;\n                width: 24px;\n                height: 24px;\n                display: flex;\n                align-items: center;\n                justify-content: center;\n                transition: color 0.2s;\n            }\n\n            .coinflip-close:hover {\n                color: #fff;\n            }\n\n            .coinflip-content {\n                padding: 15px;\n                display: flex;\n                flex-direction: row;\n                gap: 15px;\n                min-height: 250px;\n            }\n\n            .coinflip-section {\n                flex: 1;\n                display: flex;\n                flex-direction: column;\n                align-items: center;\n                padding: 10px;\n                border-right: 1px solid rgba(255, 255, 255, 0.1);\n            }\n\n            .coinflip-section:last-child {\n                border-right: none;\n            }\n\n            .coinflip-section h3 {\n                color: #fff;\n                font-size: 12px;\n                font-weight: 600;\n                margin: 0 0 10px 0;\n                text-transform: uppercase;\n                opacity: 0.8;\n            }\n\n            .coinflip-controls {\n                justify-content: center;\n                gap: 20px;\n            }\n\n            .coinflip-bankroll {\n                color: #fff;\n                font-size: 18px;\n                font-weight: 600;\n                text-align: center;\n                padding: 10px 20px;\n                background: rgba(255, 255, 255, 0.1);\n                border-radius: 6px;\n                min-width: 120px;\n            }\n\n            #bankroll-amount {\n                color: #4ade80;\n                font-family: 'Courier New', monospace;\n            }\n\n            .coinflip-buttons {\n                display: flex;\n                gap: 10px;\n            }\n\n            .coinflip-btn,\n            .coinflip-auto-btn {\n                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);\n                border: none;\n                border-radius: 6px;\n                padding: 12px 30px;\n                color: #fff;\n                font-size: 16px;\n                font-weight: 600;\n                cursor: pointer;\n                transition: transform 0.1s, box-shadow 0.2s;\n                box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);\n            }\n\n            .coinflip-btn:hover,\n            .coinflip-auto-btn:hover {\n                transform: translateY(-1px);\n                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.6);\n            }\n\n            .coinflip-btn:active,\n            .coinflip-auto-btn:active {\n                transform: translateY(0);\n            }\n\n            .coinflip-btn:disabled,\n            .coinflip-btn.disabled {\n                background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);\n                cursor: not-allowed;\n                opacity: 0.6;\n                transform: none;\n                box-shadow: none;\n            }\n\n            .coinflip-btn:disabled:hover,\n            .coinflip-btn.disabled:hover {\n                transform: none;\n                box-shadow: none;\n            }\n\n            .coinflip-auto-btn.active {\n                background: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);\n                box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                animation: pulse 1.5s ease-in-out infinite;\n            }\n\n            @keyframes pulse {\n                0% {\n                    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                }\n                50% {\n                    box-shadow: 0 2px 15px rgba(245, 158, 11, 0.8);\n                }\n                100% {\n                    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);\n                }\n            }\n\n            .coinflip-log-section {\n                flex: 1.5;\n            }\n\n            .coinflip-log {\n                width: 100%;\n                overflow-y: auto;\n                padding: 5px;\n                background: rgba(0, 0, 0, 0.2);\n                border-radius: 4px;\n            }\n\n            .flip-entry {\n                padding: 4px 8px;\n                margin: 2px 0;\n                border-radius: 3px;\n                font-size: 12px;\n                font-weight: 600;\n                text-align: center;\n            }\n\n            .flip-entry .heads {\n                color: #4ade80;\n                text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);\n            }\n\n            .flip-entry .tails {\n                color: #888;\n            }\n\n            .coinflip-stats {\n                gap: 8px;\n            }\n\n            .stat-item {\n                display: flex;\n                justify-content: space-between;\n                width: 100%;\n                padding: 5px 10px;\n                background: rgba(255, 255, 255, 0.05);\n                border-radius: 4px;\n                margin: 3px 0;\n            }\n\n            .stat-label {\n                color: #aaa;\n                font-size: 11px;\n                font-weight: 500;\n            }\n\n            .stat-value {\n                color: #fff;\n                font-size: 11px;\n                font-weight: 700;\n                font-family: 'Courier New', monospace;\n            }\n\n            .stat-divider {\n                width: 100%;\n                height: 1px;\n                background: rgba(255, 255, 255, 0.1);\n                margin: 10px 0;\n            }\n\n            /* Scrollbar styling */\n            .coinflip-log::-webkit-scrollbar {\n                width: 6px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-track {\n                background: rgba(255, 255, 255, 0.05);\n                border-radius: 3px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-thumb {\n                background: rgba(255, 255, 255, 0.2);\n                border-radius: 3px;\n            }\n\n            .coinflip-log::-webkit-scrollbar-thumb:hover {\n                background: rgba(255, 255, 255, 0.3);\n            }\n        `;\n        document.head.appendChild(styleEl);\n    }\n\n    updateBankrollDisplay() {\n        // Only update the bankroll display for our popup\n        if (!this.popup) return;\n\n        const bankrollElement = this.popup.querySelector('#bankroll-amount');\n\n        if (bankrollElement) {\n            bankrollElement.textContent = (this.bankroll / 100).toFixed(2);\n        }\n    }\n\n    updateStatisticsDisplay() {\n        if (!this.popup) return;\n\n        const totalFlipsEl = this.popup.querySelector('#total-flips');\n        const headsCountEl = this.popup.querySelector('#heads-count');\n        const longestStreakEl = this.popup.querySelector('#longest-streak');\n\n        if (totalFlipsEl) totalFlipsEl.textContent = this.totalFlips;\n        if (headsCountEl) headsCountEl.textContent = this.headsCount;\n        if (longestStreakEl) longestStreakEl.textContent = this.longestStreak;\n\n        // Update airtime statistics\n        const airtimeMinEl = this.popup.querySelector('#airtime-min');\n        const airtimeQ1El = this.popup.querySelector('#airtime-q1');\n        const airtimeMedianEl = this.popup.querySelector('#airtime-median');\n        const airtimeQ3El = this.popup.querySelector('#airtime-q3');\n        const airtimeMaxEl = this.popup.querySelector('#airtime-max');\n\n        if (airtimeMinEl) airtimeMinEl.textContent = this.airtimeQuartiles.min.toFixed(2);\n        if (airtimeQ1El) airtimeQ1El.textContent = this.airtimeQuartiles.q1.toFixed(2);\n        if (airtimeMedianEl) airtimeMedianEl.textContent = this.airtimeQuartiles.median.toFixed(2);\n        if (airtimeQ3El) airtimeQ3El.textContent = this.airtimeQuartiles.q3.toFixed(2);\n        if (airtimeMaxEl) airtimeMaxEl.textContent = this.airtimeQuartiles.max.toFixed(2);\n    }\n\n    updateFlipLog() {\n        if (!this.popup) return;\n\n        const logContainer = this.popup.querySelector('#flip-log');\n        if (!logContainer) return;\n\n        // Clear and rebuild the log\n        logContainer.innerHTML = '';\n\n        // Show last 10 flips (most recent first)\n        const recentFlips = this.flipHistory.slice(-10).reverse();\n\n        recentFlips.forEach(flip => {\n            const logEntry = document.createElement('div');\n            logEntry.className = 'flip-entry';\n\n            if (flip.result === 'heads') {\n                const exclamations = '!'.repeat(flip.streak - 1);\n                logEntry.innerHTML = `<span class=\"heads\">HEADS${exclamations}</span>`;\n            } else {\n                logEntry.innerHTML = `<span class=\"tails\">TAILS</span>`;\n            }\n\n            logContainer.appendChild(logEntry);\n        });\n\n        // Auto-scroll to top (latest flip)\n        logContainer.scrollTop = 0;\n    }\n\n    calculateAirtimeQuartiles() {\n        if (this.airtimes.length === 0) {\n            this.airtimeQuartiles = { min: 0, q1: 0, median: 0, q3: 0, max: 0 };\n            return;\n        }\n\n        // Sort airtimes in ascending order\n        const sorted = [...this.airtimes].sort((a, b) => a - b);\n        const n = sorted.length;\n\n        // Calculate quartiles\n        this.airtimeQuartiles = {\n            min: sorted[0],\n            q1: this.percentile(sorted, 0.25),\n            median: this.percentile(sorted, 0.5),\n            q3: this.percentile(sorted, 0.75),\n            max: sorted[n - 1]\n        };\n    }\n\n    percentile(sortedArray, percentile) {\n        const index = percentile * (sortedArray.length - 1);\n        const lower = Math.floor(index);\n        const upper = Math.ceil(index);\n        const weight = index % 1;\n\n        if (lower === upper) {\n            return sortedArray[lower];\n        }\n\n        return sortedArray[lower] * (1 - weight) + sortedArray[upper] * weight;\n    }\n\n    startStatsUpdate() {\n        // Clear any existing interval\n        if (this.updatePropsInterval) {\n            clearInterval(this.updatePropsInterval);\n        }\n\n        // // Start updating speed and angular speed stats\n        // this.updatePropsInterval = setInterval(() => {\n        //     const rigidBody = this.ctx._entity.getComponent(\"BanterRigidbody\");\n\n        //     if (rigidBody && this.popup) {\n        //         // Calculate speed\n        //         const velocity = rigidBody._bs.velocity || { x: 0, y: 0, z: 0 };\n        //         const speed = Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2);\n        //         const speedElement = this.popup.querySelector('#speed');\n        //         if (speedElement) {\n        //             speedElement.textContent = speed.toFixed(3);\n        //         }\n\n        //         // Calculate angular speed\n        //         const angularVelocity = rigidBody._bs.angularVelocity || { x: 0, y: 0, z: 0 };\n        //         const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n        //         const angularSpeedElement = this.popup.querySelector('#angular-speed');\n        //         if (angularSpeedElement) {\n        //             angularSpeedElement.textContent = angularSpeed.toFixed(3);\n        //         }\n        //     }\n        // }, 10); // Update every 10ms\n    }\n\n    stopStatsUpdate() {\n        if (this.updatePropsInterval) {\n            clearInterval(this.updatePropsInterval);\n            this.updatePropsInterval = null;\n        }\n    }\n\n    close() {\n        this.stopStatsUpdate();\n        this.stopAutoFlip(); // Stop auto mode if running\n        if (this.popup && this.popup.parentNode) {\n            this.popup.remove();\n        }\n    }\n\n    destroy() {\n        this.stopAutoFlip(); // Stop auto mode if running\n        this.close();\n\n        // Remove styles\n        const styles = document.getElementById('coinflip-styles');\n        if (styles && styles.parentNode) {\n            styles.remove();\n        }\n\n        if (window.coinFlipInstance) {\n            delete window.coinFlipInstance;\n        }\n    }\n}\n\n// Initialize extension\nlet coinFlipInstance = null;\nlet popupElement = null;\n\nthis.default = {};\n\nObject.entries(this.default).forEach(([key, val]) => {\n    if (!this.vars[key]) this.vars[key] = val;\n});\n\nthis.onStart = () => {\n    console.log(\"CoinFlip extension starting...\");\n\n    // Singleton pattern: Destroy any existing instance first\n    if (window.coinFlipInstance) {\n        console.log(\"Found existing CoinFlip instance, destroying it...\");\n        window.coinFlipInstance.destroy();\n        window.coinFlipInstance = null;\n    }\n\n    // Also check for orphaned popups in the DOM\n    const orphanedPopups = document.querySelectorAll('#coinflip-popup, .coinflip-popup');\n    orphanedPopups.forEach(popup => {\n        console.log(\"Removing orphaned popup from DOM\");\n        popup.remove();\n    });\n\n    // Create new instance\n    coinFlipInstance = new CoinFlip(this);\n    popupElement = coinFlipInstance.init();\n\n    // Make instance globally accessible\n    window.coinFlipInstance = coinFlipInstance;\n};\n\nthis.onUpdate = () => {\n    // No update logic needed\n};\n\nthis.onDestroy = () => {\n    console.log(\"CoinFlip extension destroying...\");\n    if (coinFlipInstance) {\n        coinFlipInstance.destroy();\n        coinFlipInstance = null;\n        popupElement = null;\n    }\n};",
+              "description": "",
+              "folder": "CoinFlip",
+              "global": true,
+              "icon": "📜",
+              "imported": true,
+              "importedAt": 1760424216324,
+              "importedFrom": "inventory/Technocrat/CoinFlip",
+              "itemType": "script",
+              "lastUsed": 1759851309566,
+              "last_used": 1760680691990,
+              "name": "FlipController.js",
+              "remote": true,
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "FlipController.js",
+              "name": "FlipController"
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "id": "Scene/Table_4039",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Table_4039",
+        "parentId": "Scene",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 6896587123650
+      },
+      "itemName": "Table",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Text_33701",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1,
+              "horizontalAlignment": 1,
+              "richText": false,
+              "text": "$1",
+              "verticalAlignment": 1
+            },
+            "type": "Text"
+          },
+          {
+            "id": "BoxCollider_48737",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.01
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "Rigidbody_91127",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "Rigidbody"
+          }
+        ],
+        "id": "Scene/Gains_7021",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Gains_7021",
+        "parentId": "Scene",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 7674583365382
+      },
+      "itemName": "Gains",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_6017"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Gains_7021",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_6017",
+      "newValue": "Gains.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_6017",
+      "newValue": "Gains",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "Billboard_6123"
+      },
+      "componentType": "Billboard",
+      "entityId": "Scene/Gains_7021",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Gains_7021",
+      "newValue": "Gains",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/Gains",
+      "folder": "CoinFlip",
+      "itemName": "Gains",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Table_4039",
+      "newValue": "Table",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/Table",
+      "newValue": "FlipFull",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1761049905716,
+  "name": "FlipFull"
+}

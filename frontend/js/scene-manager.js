@@ -302,14 +302,11 @@
             }, 1000)
         }
 
-        handleUserJoined(event){
+        async handleUserJoined(event){
             log('scene-event', "[USER JOINED] fired", event)
-            // let userName = event.detail.userName;
-            // let userEntity = await this.loadHierarchy("People/"+userName, {
-            //     name: userName,
-            //     layer: 0,
-            //     components: [],
-            // })
+            let name = event.detail.name;
+            await AddEntity("People", name)
+            
         }
 
         async saveScene(){
@@ -548,7 +545,8 @@
                     loadAsync: item.loadAsync,
                     localPosition: item.transform.localPosition,
                     localRotation: item.transform.localRotation,
-                    localScale: item.transform.localScale
+                    localScale: item.transform.localScale,
+                    networkId: `${parentId}/${item.name}`
                 });
     
                 
@@ -561,7 +559,7 @@
                                 id: component.id
                             }
                         }
-                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync, cmdUser: options?.owner});
+                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync, owner: options?.owner});
                         if(!component.loadAsync){
                             log("loadEntity", "component [AWAIT]", component.type, item.name+"/"+component.type+":"+component.id)
                             await result;
@@ -1112,4 +1110,9 @@
     window.sel = ()=>{
         return window.SM.getSelectedEntity()
     }
+    window.doIOwnCallback = (unityId, owned) => console.log(unityId, owned);
+    window.getUserColor = (name)=>{
+        return Object.values(scene.users).find(x=>x.name===name)?.color || "#8b8f9e"
+    }
+
 //})()

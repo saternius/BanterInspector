@@ -1,20 +1,36 @@
 {
   "author": "Technocrat",
-  "created": 1760766859841,
+  "created": 1761049851912,
   "data": {
     "active": true,
     "components": [
       {
         "loadAsync": false,
         "options": {
-          "source": "ui"
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
         },
         "properties": {
           "color": {
-            "a": 1,
-            "b": 1,
-            "g": 1,
-            "r": 1
+            "a": 0.94,
+            "b": 0.984313725490196,
+            "g": 0.984313725490196,
+            "r": 0.984313725490196
+          },
+          "enableWordWrapping": true,
+          "fontSize": 1,
+          "horizontalAlignment": 1,
+          "richText": false,
+          "text": "$1",
+          "verticalAlignment": 1
+        },
+        "spaceProps": {
+          "color": {
+            "a": 0.94,
+            "b": 0.984313725490196,
+            "g": 0.984313725490196,
+            "r": 0.984313725490196
           },
           "enableWordWrapping": true,
           "fontSize": 1,
@@ -26,24 +42,36 @@
         "type": "Text"
       },
       {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1760766896453,
+          "data": "// This is a global script thus we will use ._bs to manipulate the entity properties instead of Set() since we do not need to sync anything.\nthis.default = {}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\n\n\nthis.pop = (position)=>{\n    clearInterval(this.upDriftInterval)\n    this._entity._bs.active = true\n    let startX = position.x\n    let startY = position.y\n    let startZ = position.z\n    this._entity.transform.position = {x: startX, y: startY, z: startZ}\n    this._entity.transform.rotation = {x: 0, y: 0, z: 0} // make it trasck player\n    let upDrift = 0;\n    let accel = 0.08;\n    let ticks = 0;\n    this.upDriftInterval = setInterval(()=>{\n        upDrift += accel;\n        accel = accel*.88;\n        this._entity.transform.position = {x: startX, y: startY + upDrift, z: startZ}\n        this._entity.getComponent(\"Text\")._bs.color.w = 1 - upDrift\n        //console.log(ticks, accel, this._entity.getComponent(\"Text\")._bs.w)\n        ticks += 1;\n        if(ticks > 30){\n            this.clear()\n        }\n    }, 40)\n    \n}\n\nthis.clear = ()=>{\n    clearInterval(this.upDriftInterval)\n    this._entity._bs.active = false\n}\n\nthis.onStart = ()=>{\n    //this.pop({x: 0, y: 0, z: 0})\n}\n\nthis.onDestroy = ()=>{\n    this.clear()\n    clearInterval(this.upDriftInterval)\n}\n",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1760766896453,
+          "last_used": 1761049681562,
+          "name": "Gains.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
         "loadAsync": false,
         "options": {
           "source": "ui"
         },
         "properties": {
-          "center": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "isTrigger": false,
-          "size": {
-            "x": 0.1,
-            "y": 0.1,
-            "z": 0.01
-          }
+          "file": "Gains.js",
+          "name": "Gains"
         },
-        "type": "BoxCollider"
+        "spaceProps": {
+          "file": "Gains.js",
+          "name": "Gains"
+        },
+        "type": "MonoBehavior"
       },
       {
         "loadAsync": false,
@@ -51,35 +79,18 @@
           "source": "ui"
         },
         "properties": {
-          "angularDrag": 0.05,
-          "angularVelocity": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "centerOfMass": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "collisionDetectionMode": 0,
-          "drag": 0,
-          "freezePositionX": false,
-          "freezePositionY": false,
-          "freezePositionZ": false,
-          "freezeRotationX": false,
-          "freezeRotationY": false,
-          "freezeRotationZ": false,
-          "isKinematic": false,
-          "mass": 1,
-          "useGravity": true,
-          "velocity": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          }
+          "enableXAxis": true,
+          "enableYAxis": true,
+          "enableZAxis": false,
+          "smoothing": 0.1
         },
-        "type": "Rigidbody"
+        "spaceProps": {
+          "enableXAxis": true,
+          "enableYAxis": true,
+          "enableZAxis": false,
+          "smoothing": 0.1
+        },
+        "type": "Billboard"
       }
     ],
     "initialized": true,
@@ -88,6 +99,41 @@
     "name": "Gains",
     "parentId": "Scene",
     "persistent": true,
+    "spaceProps": {
+      "active": true,
+      "components": [
+        "Text_33701",
+        "MonoBehavior_6017",
+        "Billboard_6123"
+      ],
+      "layer": 0,
+      "localPosition": {
+        "x": 0,
+        "y": 2.1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "position": {
+        "x": -1.213246,
+        "y": 0.9139951959449187,
+        "z": -1.241294
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
     "transform": {
       "localPosition": {
         "x": 0,
@@ -107,22 +153,154 @@
       }
     },
     "type": "Entity",
-    "uuid": 7674583365382
+    "uuid": 8974606321184
   },
   "description": "",
   "folder": "CoinFlip",
   "history": [
     {
-      "action": "add_entity",
-      "entityName": "NewEntity_73893",
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Text_33701",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1,
+              "horizontalAlignment": 1,
+              "richText": false,
+              "text": "$1",
+              "verticalAlignment": 1
+            },
+            "type": "Text"
+          },
+          {
+            "id": "BoxCollider_48737",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.01
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "Rigidbody_91127",
+            "loadAsync": false,
+            "options": {
+              "source": "ui"
+            },
+            "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "Rigidbody"
+          }
+        ],
+        "id": "Scene/Gains_7021",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "Gains_7021",
+        "parentId": "Scene",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Entity",
+        "uuid": 7674583365382
+      },
+      "itemName": "Gains",
       "options": {
         "source": "ui"
       },
       "parentId": "Scene"
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/NewEntity_73893",
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_6017"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/Gains_7021",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_6017",
+      "newValue": "Gains.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_6017",
       "newValue": "Gains",
       "options": {
         "source": "ui"
@@ -132,205 +310,28 @@
     {
       "action": "add_component",
       "componentProperties": {
-        "id": "Text_5265"
+        "id": "Billboard_6123"
       },
-      "componentType": "Text",
-      "entityId": "Scene/Gains",
+      "componentType": "Billboard",
+      "entityId": "Scene/Gains_7021",
       "options": {
         "source": "ui"
       }
     },
     {
       "action": "set_entity_property",
+      "entityId": "Scene/Gains_7021",
+      "newValue": "Gains",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
       "entityId": "Scene/Gains",
-      "newValue": {
-        "x": 0,
-        "y": 2,
-        "z": 0
-      },
-      "options": {
-        "oldValue": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "source": "ui"
-      },
-      "property": "localPosition"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "Text_5265",
-      "newValue": 1,
-      "options": {
-        "source": "ui"
-      },
-      "property": "fontSize"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "Text_5265",
-      "newValue": "$1",
-      "options": {
-        "source": "ui"
-      },
-      "property": "text"
-    },
-    {
-      "action": "add_component",
-      "componentProperties": {
-        "id": "BoxCollider_5004"
-      },
-      "componentType": "BoxCollider",
-      "entityId": "Scene/Gains",
-      "options": {
-        "source": "ui"
-      }
-    },
-    {
-      "action": "add_component",
-      "componentProperties": {
-        "id": "ColliderEvents_9870"
-      },
-      "componentType": "ColliderEvents",
-      "entityId": "Scene/Gains",
-      "options": {
-        "source": "ui"
-      }
-    },
-    {
-      "action": "set_entity_property",
-      "entityId": "Scene/Gains",
-      "newValue": {
-        "x": 0,
-        "y": 2.1,
-        "z": 0
-      },
-      "options": {
-        "oldValue": {
-          "x": 0,
-          "y": 2,
-          "z": 0
-        },
-        "source": "ui"
-      },
-      "property": "localPosition"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "options": {
-        "oldValue": {
-          "x": 0,
-          "y": 0,
-          "z": 0
-        },
-        "source": "ui"
-      },
-      "property": "center"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 1,
-        "y": 0.1,
-        "z": 1
-      },
-      "options": {
-        "oldValue": {
-          "x": 1,
-          "y": 1,
-          "z": 1
-        },
-        "source": "ui"
-      },
-      "property": "size"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 1,
-        "y": 0.1,
-        "z": 0.1
-      },
-      "options": {
-        "oldValue": {
-          "x": 1,
-          "y": 0.1,
-          "z": 1
-        },
-        "source": "ui"
-      },
-      "property": "size"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 1,
-        "y": 0.1,
-        "z": 0.01
-      },
-      "options": {
-        "oldValue": {
-          "x": 1,
-          "y": 0.1,
-          "z": 0.1
-        },
-        "source": "ui"
-      },
-      "property": "size"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 0.2,
-        "y": 0.1,
-        "z": 0.01
-      },
-      "options": {
-        "oldValue": {
-          "x": 1,
-          "y": 0.1,
-          "z": 0.01
-        },
-        "source": "ui"
-      },
-      "property": "size"
-    },
-    {
-      "action": "set_component_property",
-      "componentId": "BoxCollider_5004",
-      "newValue": {
-        "x": 0.1,
-        "y": 0.1,
-        "z": 0.01
-      },
-      "options": {
-        "oldValue": {
-          "x": 0.2,
-          "y": 0.1,
-          "z": 0.01
-        },
-        "source": "ui"
-      },
-      "property": "size"
-    },
-    {
-      "action": "add_component",
-      "componentProperties": {
-        "id": "Rigidbody_1067"
-      },
-      "componentType": "Rigidbody",
-      "entityId": "Scene/Gains",
+      "folder": "CoinFlip",
+      "itemName": "Gains",
       "options": {
         "source": "ui"
       }
@@ -338,6 +339,6 @@
   ],
   "icon": "📦",
   "itemType": "entity",
-  "last_used": 1760766859841,
+  "last_used": 1761049851912,
   "name": "Gains"
 }

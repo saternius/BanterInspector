@@ -271,6 +271,7 @@
                                 <h3>${capitalized} Properties</h3>
                                 <span class="props-count" id="${propsKey}PropsCountPopup">0</span>
                                 <span class="render-count" style="margin-left: 10px; font-size: 12px; color: #888; background: #333; padding: 2px 6px; border-radius: 3px;" title="Render calls">R: <span id="SpacePropsRenderCount">${this.renders}</span></span>
+                                <button class="refresh-popup-btn" id="refreshPopupBtn" style="margin-left: 8px; font-size: 12px; padding: 2px 6px; border-radius: 3px; background: #444; border: 1px solid #555; color: #888; cursor: pointer;" title="Refresh all values">🔄</button>
                             </div>
                             <div class="search-bar-container" id="searchBarContainer" style="display: ${this.viewMode === 'flat' ? 'block' : 'none'}; padding: 10px; border-bottom: 1px solid #333;">
                                 <input type="text"
@@ -383,6 +384,16 @@
                         searchInput.value = '';
                         this.render();
                     }
+                });
+            }
+
+            // Refresh button
+            const refreshBtn = this.popupWindow.querySelector('#refreshPopupBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    // Force a full refresh of all properties
+                    this.fullRefresh();
                 });
             }
 
@@ -617,6 +628,29 @@
             // Check if we should render for this property
             if (this.shouldRenderForProperty(propertyKey, isProtected)) {
                 this.render();
+            }
+        }
+
+        /**
+         * Force a full refresh of all property values from the scene
+         */
+        fullRefresh() {
+            // Clear any cached values or editing states
+            this.editingProps.clear();
+
+            // Force re-fetch all properties from the scene
+            // The SM.scene.spaceState already contains the latest values
+            // Just force a full re-render
+            this.render();
+
+            // Show a brief visual feedback that refresh occurred
+            const refreshBtn = this.popupWindow?.querySelector('#refreshPopupBtn');
+            if (refreshBtn) {
+                const originalColor = refreshBtn.style.color;
+                refreshBtn.style.color = '#3b82c4';
+                setTimeout(() => {
+                    refreshBtn.style.color = originalColor;
+                }, 300);
             }
         }
 

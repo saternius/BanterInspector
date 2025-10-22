@@ -595,11 +595,11 @@ export class Networking {
     }
 
     async cleanupSceneOrphans(){
+        this.cleanSpaceState();
         if(!SM.iamHost){
             log("net", "cleanupSceneOrphans: not host")
             return;
         }
-        this.cleanSpaceState();
         Object.keys(SM.scene.spaceState.public).forEach(key=>{
             if(key.startsWith("$")){
                 let entityId = key.split(":")[0].slice(1);
