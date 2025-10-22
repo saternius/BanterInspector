@@ -1186,7 +1186,7 @@ export class Inventory {
         return { updated: updatedCount, alreadyUpdated: alreadyUpdatedCount };
     }
 
-    boradcastLoadDep(path, minUpdateTime){
+    installAll(path, minUpdateTime){
         let data = `import¶${path}¶${minUpdateTime}`;
         networking.sendOneShot(data);
     }

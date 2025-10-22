@@ -574,7 +574,7 @@ export class EntityRemoveChange extends Change{
     async apply() {
         super.apply();
 
-        if(this.entity.parentId === "People"){
+        if(this.entity.parentId && this.entity.parentId === "People"){
             showNotification("People entities cannot be removed");
             return;
         }

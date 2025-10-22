@@ -377,9 +377,7 @@
                     
                 })
 
-                SM.scene.On("user-joined", (event) => {
-                    log('scene-event', "[USER JOINED] fired", event)
-                    
+                SM.scene.On("user-joined", (event) => {                    
                     SM.handleUserJoined(event);
                 })
 

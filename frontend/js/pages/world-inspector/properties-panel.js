@@ -1173,6 +1173,7 @@
             titleDiv.innerHTML = `
                 <span class="component-name">MonoBehavior</span>
                 <span class="component-type">${component.id}</span>
+                <span class="component-owner" style="color:${getUserColor(component.properties._owner)}">${component.properties._owner}</span>
             `;
             
             const actionsDiv = document.createElement('div');

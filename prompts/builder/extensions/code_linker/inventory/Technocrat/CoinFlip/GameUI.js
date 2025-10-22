@@ -7,7 +7,7 @@ class GameUI {
         this.user = SM.myName();
         this.container = null;
         this.contentArea = null;
-        this.PaneEntity = null;
+        // this.PaneEntity = null;
         this.doc = null;
         this.flipLogArea = null;
         this.flipResultHandler = null;
@@ -15,11 +15,11 @@ class GameUI {
 
         this.ctx.onStart = async ()=>{
             console.log("GameUI", "onLoaded")
-            this.PaneEntity = await AddEntity(this.ctx._entity.id, "UI_"+Math.random().toString(36).substring(2, 8))
-            this.doc = await this.PaneEntity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(680,512), false));
+            //this.PaneEntity = await AddEntity(this.ctx._entity.id, "UI")
+            this.doc = await this.ctx._entity._bs.AddComponent(new BS.BanterUI(new BS.Vector2(680,512), false));
             window.gameUI = this.doc;
             this.generateUI();
-
+            
             // Listen for flip result events
             this.flipResultHandler = (event) => {
                 log("GameUI", "flipResultHandler", event.detail)
@@ -38,9 +38,13 @@ class GameUI {
                 window.removeEventListener('coinFlipResult', this.flipResultHandler);
             }
 
-            if(this.PaneEntity){
-                await RemoveEntity(this.PaneEntity.id)
+            // if(this.PaneEntity){
+            //     await RemoveEntity(this.PaneEntity.id)
+            // }
+            if(this.doc){
+                this.doc.Destroy();
             }
+            
         }
         
     }

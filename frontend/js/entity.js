@@ -34,6 +34,8 @@ export class Entity{
             let newGameObject = new BS.GameObject(params);
             this._bs = newGameObject;
         }
+
+        this._bs.neworkId = entityData.networkId;
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         this.identifiers.add(this.id);
@@ -130,6 +132,7 @@ export class Entity{
         scripts.forEach(async script=>{
             await script.ctx.onLoaded();
         })
+        this.checkSpaceDiff();
     }
 
     async _checkForGhostComponents(id){

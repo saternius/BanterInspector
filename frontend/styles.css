@@ -1203,6 +1203,12 @@ input:hover{
     color: #e8e8e8;
 }
 
+.component-owner {
+    color: #888;
+    margin-left: 8px;
+    font-size: 12px;
+}
+
 .component-props {
     display: flex;
     flex-direction: column;

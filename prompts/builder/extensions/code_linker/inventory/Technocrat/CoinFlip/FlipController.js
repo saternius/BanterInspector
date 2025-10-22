@@ -205,9 +205,12 @@ class CoinFlip {
             return null;
         }
         return targetEntity.GetScript("Flipable");
+        // return SM.getScriptByName("Flipable");
     }
 
     async performFlip() {
+        this.getCoin()._entity.getComponent("SyncedObject")._bs.TakeOwnership()
+        await new Promise(resolve => setTimeout(resolve, 50));
         // Prevent multiple flips
         if (this.isFlipping) {
             return;

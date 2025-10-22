@@ -444,6 +444,8 @@
     "layer": 5,
     "loadAsync": false,
     "name": "Penny7",
+    "networkId": "Penny7",
+    "neworkId": "Penny7",
     "parentId": "Scene",
     "penny": true,
     "persistent": true,

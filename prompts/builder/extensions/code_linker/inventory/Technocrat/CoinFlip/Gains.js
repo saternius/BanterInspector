@@ -20,12 +20,12 @@ this.pop = (position)=>{
     let ticks = 0;
     this.upDriftInterval = setInterval(()=>{
         upDrift += accel;
-        accel = accel*.85;
+        accel = accel*.88;
         this._entity.transform.position = {x: startX, y: startY + upDrift, z: startZ}
-        this._entity.getComponent("Text")._bs.w =  1 - upDrift
+        this._entity.getComponent("Text")._bs.color.w = 1 - upDrift
         //console.log(ticks, accel, this._entity.getComponent("Text")._bs.w)
         ticks += 1;
-        if(ticks > 45){
+        if(ticks > 30){
             this.clear()
         }
     }, 40)

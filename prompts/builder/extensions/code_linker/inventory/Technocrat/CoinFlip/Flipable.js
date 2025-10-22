@@ -61,6 +61,7 @@ let play_audio = (track)=>{
 
 let audio = this._entity.getComponent("AudioSource")
 this.flip = async ()=>{
+    //SM.getScriptByName("Gains")?.clear()
     let up_force = Math.random()*2+2
     let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2
     let y_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2
