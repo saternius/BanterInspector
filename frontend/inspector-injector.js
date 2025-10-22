@@ -371,10 +371,8 @@ export class InspectorInjector {
                                     <div class="shell-header">
                                         <span>Shell</span>
                                         <div class="shell-toggles">
-                                            <button class="shell-toggle active" data-toggle="command" title="Command">Command</button>
-                                            <button class="shell-toggle active" data-toggle="script" title="Scripts">Scripts</button>
-                                            <button class="shell-toggle" data-toggle="oneShot" title="OneShot">OneShot</button>
-                                            <button class="shell-toggle" data-toggle="spaceProps" title="SpaceProps">SpaceProps</button>
+                                            <button class="shell-toggle" data-toggle="command" title="Command">Command</button>
+                                            <button class="shell-toggle active" data-toggle="oneShot" title="OneShot">OneShot</button>
                                             <button class="shell-clear-button" id="clearShellBtn2" title="Clear Shell" data-panel="lifecyclePanelClearShellBtn">🗑️</button>
                                         </div>
                                     </div>

@@ -1,5 +1,4 @@
-
-log("Trackers", "Trackers scsript loaded");
+log("Trackers", "Trackers script loaded");
 
 window.GetTracker = async (name)=>{
     let tracker = SM.getEntityById(`People/${me}/Trackers/${name}`, false);
@@ -51,21 +50,51 @@ let getOrMakeTracker = async (name)=>{
     return tracker;
 }
 
+async function VerifyExistance(path){
+    let entKey = `$${path}:active`
+    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
+    if(scene.spaceState.public[entKey]){
+        return true;
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return await VerifyExistance(path);
+}
+
+
 let headTracker = null;
-let bodyTracker = null;
 let leftHandTracker = null;
 let rightHandTracker = null;
-let cockpitTracker = null;
 
 (async ()=>{
-    let trackers = SM.getEntityById(`People/${me}/Trackers`, false);
-    if(!trackers){
+    log("Trackers", "[START]");
+    await VerifyExistance("People");
+    log("Trackers", "'People' exists, checking my dir..", me);
+    if(!scene.spaceState.public['$People/'+me+':active']){
+        log("Trackers", `$People/${me} does not exist, creating..`);
+        await AddEntity("People", me);
+    }
+    log("Trackers", "Lets verify that it actually exists");
+    await VerifyExistance("People/"+me);
+    log("Trackers", "$People/${me} exists, checking trackers dir..");
+    
+
+    if(!scene.spaceState.public['$People/'+me+'/Trackers:active']){
+        log("Trackers", `$People/${me}/Trackers does not exist, creating..`);
         await AddEntity("People/"+me, "Trackers");
     }
-    headTracker = await getOrMakeTracker("HEAD");
-    leftHandTracker = await getOrMakeTracker("LEFT_HAND");
-    rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
+    await VerifyExistance(`People/${me}/Trackers`);
+    log("Trackers", "$People/${me}/Trackers exists, loading trackers..");
 
+
+    headTracker = await getOrMakeTracker("HEAD");
+    log("Trackers", "HEAD tracker loaded");
+    leftHandTracker = await getOrMakeTracker("LEFT_HAND");
+    log("Trackers", "LEFT_HAND tracker loaded");
+    rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
+    log("Trackers", "RIGHT_HAND tracker loaded");
+
+    log("Trackers", "[END]");
 })()
 
 

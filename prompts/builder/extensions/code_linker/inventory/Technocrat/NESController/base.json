@@ -1,0 +1,3108 @@
+{
+  "author": "Technocrat",
+  "created": 1759211284294,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": -0.15,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "left",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0.15,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "right",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.15,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "up",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -0.15,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "down",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "center",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0.07203423547592312,
+                    "y": 0.8286567601180508,
+                    "z": 2.7942988446986234
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.07,
+                  "width": 0.2
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "start",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": -0.2949001517026634,
+                    "y": 0.8286567,
+                    "z": 2.794299
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.07,
+                  "width": 0.2
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "select",
+            "parentId": "Scene/base/keys",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": -0.8387761090105809,
+                "y": 0.9363898068312014,
+                "z": 2.7981580928180922
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "keys",
+        "parentId": "Scene/base",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.9496104824561211,
+                    "z": 2.854951565722298
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.75,
+                  "width": 2.36
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "panel",
+            "parentId": "Scene/base/printing",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": -0.10546667808440274,
+                    "y": 0.8291467770931376,
+                    "z": 2.83577258941409
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.22018016899257292,
+                  "width": 0.6925648453596803
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.9176471,
+                    "g": 0.9176471,
+                    "r": 0.9647059
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "select_start_panel",
+            "parentId": "Scene/base/printing",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": -0.13693099969274206,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "depth": 0.15,
+                      "height": 0.15,
+                      "width": 0.15
+                    },
+                    "type": "BanterBox"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0.9607843137254902,
+                        "g": 0.9607843137254902,
+                        "r": 0.984313725490196
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": [
+                        "U",
+                        "n",
+                        "l",
+                        "i",
+                        "t",
+                        "/",
+                        "D",
+                        "i",
+                        "f",
+                        "f",
+                        "u",
+                        "s",
+                        "e"
+                      ],
+                      "side": 0
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "convex": false,
+                      "isTrigger": false
+                    },
+                    "type": "MeshCollider"
+                  }
+                ],
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "left",
+                "parentId": "Scene/base/printing/arrow_keys_highlight",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0.13662046112697515,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "depth": 0.15,
+                      "height": 0.15,
+                      "width": 0.15
+                    },
+                    "type": "BanterBox"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0.9490196078431372,
+                        "g": 0.9490196078431372,
+                        "r": 0.9764705882352941
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": [
+                        "U",
+                        "n",
+                        "l",
+                        "i",
+                        "t",
+                        "/",
+                        "D",
+                        "i",
+                        "f",
+                        "f",
+                        "u",
+                        "s",
+                        "e"
+                      ],
+                      "side": 0
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "convex": false,
+                      "isTrigger": false
+                    },
+                    "type": "MeshCollider"
+                  }
+                ],
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "right",
+                "parentId": "Scene/base/printing/arrow_keys_highlight",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0.14,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "depth": 0.15,
+                      "height": 0.15,
+                      "width": 0.15
+                    },
+                    "type": "BanterBox"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0.9450980392156862,
+                        "g": 0.9450980392156862,
+                        "r": 0.9803921568627451
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": [
+                        "U",
+                        "n",
+                        "l",
+                        "i",
+                        "t",
+                        "/",
+                        "D",
+                        "i",
+                        "f",
+                        "f",
+                        "u",
+                        "s",
+                        "e"
+                      ],
+                      "side": 0
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "convex": false,
+                      "isTrigger": false
+                    },
+                    "type": "MeshCollider"
+                  }
+                ],
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "up",
+                "parentId": "Scene/base/printing/arrow_keys_highlight",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -0.14,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "depth": 0.15,
+                      "height": 0.15,
+                      "width": 0.15
+                    },
+                    "type": "BanterBox"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0.9450980392156862,
+                        "g": 0.9450980392156862,
+                        "r": 0.9764705882352941
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": [
+                        "U",
+                        "n",
+                        "l",
+                        "i",
+                        "t",
+                        "/",
+                        "D",
+                        "i",
+                        "f",
+                        "f",
+                        "u",
+                        "s",
+                        "e"
+                      ],
+                      "side": 0
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "convex": false,
+                      "isTrigger": false
+                    },
+                    "type": "MeshCollider"
+                  }
+                ],
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "down",
+                "parentId": "Scene/base/printing/arrow_keys_highlight",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "depth": 0.15,
+                      "height": 0.15,
+                      "width": 0.15
+                    },
+                    "type": "BanterBox"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "color": {
+                        "a": 1,
+                        "b": 0.9176470588235294,
+                        "g": 0.9176470588235294,
+                        "r": 0.9647058823529412
+                      },
+                      "generateMipMaps": true,
+                      "shaderName": [
+                        "U",
+                        "n",
+                        "l",
+                        "i",
+                        "t",
+                        "/",
+                        "D",
+                        "i",
+                        "f",
+                        "f",
+                        "u",
+                        "s",
+                        "e"
+                      ],
+                      "side": 0
+                    },
+                    "type": "BanterMaterial"
+                  },
+                  {
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "convex": false,
+                      "isTrigger": false
+                    },
+                    "type": "MeshCollider"
+                  }
+                ],
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "center",
+                "parentId": "Scene/base/printing/arrow_keys_highlight",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -0.83614099155094,
+                    "y": 0.9352362358457921,
+                    "z": 2.85126673025606
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1.15,
+                    "y": 1.1,
+                    "z": 1.1
+                  }
+                },
+                "type": "Transform"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "loadAsync": false,
+            "name": "arrow_keys_highlight",
+            "parentId": "Scene/base/printing",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0.493267674010094,
+                    "y": 0.8402174203224021,
+                    "z": 2.842044274903657
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.9999999,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.275,
+                  "width": 0.275
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.9176471,
+                    "g": 0.9176471,
+                    "r": 0.9647059
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "b_panel",
+            "parentId": "Scene/base/printing",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0.8165530410076004,
+                    "y": 0.84,
+                    "z": 2.842044
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.9999999,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.275,
+                  "width": 0.275
+                },
+                "type": "BanterBox"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.9176471,
+                    "g": 0.9176471,
+                    "r": 0.9647059
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "a_panel",
+            "parentId": "Scene/base/printing",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "printing",
+        "parentId": "Scene/base",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 3
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "depth": 0.4,
+          "height": 1,
+          "width": 2.5
+        },
+        "type": "BanterBox"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0.996078431372549,
+            "g": 0.996078431372549,
+            "r": 0.996078431372549
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "convex": false,
+          "isTrigger": false
+        },
+        "type": "MeshCollider"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1756190175304,
+          "data": "this.default = {}\n\nlet getEntity = (entityPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+entityPath\n    return SM.getEntityById(rel_path)\n}\n\n\nlet user = SM.myName()\nlet held = false;\nlet lastParent = \"Scene\";\nthis.onStart = ()=>{\n    let user = SM.myName()\n    this._entity._bs.On(\"click\", async (e) => {\n        if(held){\n            await this._entity.SetParent(lastParent)\n            let transform = this._entity.getTransform()\n            await transform._bs.Q([13])\n            await transform.Set(\"localPosition\", transform._bs._position)\n            await transform.Set(\"localRotation\", transform._bs._rotation)\n        }else{\n            console.log(\"click\", e.detail)\n            let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n            let tippyHolder = SM.getEntityById(tippyHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n            if(!tippyHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            tippyHolder.getTransform().Set(\"position\", e.detail.point)\n            lastParent = this._entity.parentId;\n            this._entity.SetParent(tippyHolderPath)\n        }\n        held = !held;\n        // holdingBarHack()\n    })\n}\n\nthis.onUpdate = ()=>{\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+          "description": "",
+          "folder": "Scripts",
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1756190175304,
+          "last_used": 1759191111341,
+          "name": "Grabbable.js",
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "Grabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "base",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "NESController",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/arrow_90281_35668",
+      "newValue": "left",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/left",
+      "newParentId": "Scene/arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/right",
+      "newParentId": "Scene/arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/up",
+      "newParentId": "Scene/arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/down",
+      "newParentId": "Scene/arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/arrow_keys",
+      "folder": "NESController",
+      "itemName": "arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/arrow_90281",
+      "newValue": "center",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/center",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/center",
+      "newParentId": "Scene/arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_68254",
+      "newValue": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_68254",
+      "newValue": {
+        "x": 0,
+        "y": 2,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 2,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_57842",
+      "newValue": 2.25,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_57842",
+      "newValue": 2.4,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_57842",
+      "newValue": 2.36,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_57842",
+      "newValue": 0.75,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_57842",
+      "newValue": 0.75,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_68254",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 2.834304899761497
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": -12.191719820805208,
+          "z": 2.834304899761497
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/center_71751",
+      "newValue": "panel",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/panel",
+      "newParentId": "Scene/base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/arrow_keys",
+      "folder": "NESController",
+      "itemName": "arrow_keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_25298",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": -0.15,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterBox_74620",
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "id": "BanterMaterial_17077",
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "MeshCollider_76220",
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "id": "Scene/arrow_keys_21282/left",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "left",
+            "parentId": "Scene/arrow_keys_21282",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_25782",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0.15,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterBox_16745",
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "id": "BanterMaterial_91828",
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "MeshCollider_39529",
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "id": "Scene/arrow_keys_21282/right",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "right",
+            "parentId": "Scene/arrow_keys_21282",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_35742",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.15,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterBox_51356",
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "id": "BanterMaterial_80756",
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "MeshCollider_48147",
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "id": "Scene/arrow_keys_21282/up",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "up",
+            "parentId": "Scene/arrow_keys_21282",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_47138",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -0.15,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterBox_11041",
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "id": "BanterMaterial_57488",
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "MeshCollider_61404",
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "id": "Scene/arrow_keys_21282/down",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "down",
+            "parentId": "Scene/arrow_keys_21282",
+            "persistent": true
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "id": "Transform_60530",
+                "loadAsync": false,
+                "properties": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterBox_87631",
+                "loadAsync": false,
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.15,
+                  "width": 0.15
+                },
+                "type": "BanterBox"
+              },
+              {
+                "id": "BanterMaterial_21342",
+                "loadAsync": false,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0.007843138,
+                    "g": 0.007843138,
+                    "r": 0.01176471
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0
+                },
+                "type": "BanterMaterial"
+              },
+              {
+                "id": "MeshCollider_17360",
+                "loadAsync": false,
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              }
+            ],
+            "id": "Scene/arrow_keys_21282/center",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "center",
+            "parentId": "Scene/arrow_keys_21282",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "id": "Transform_83865",
+            "loadAsync": false,
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "id": "Scene/arrow_keys_21282",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "arrow_keys_21282",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "arrow_keys",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/arrow_keys_21282",
+      "newValue": "arrow_keys_highlight",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 2
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0.6742571058049396
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 2
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 1.1,
+        "y": 1,
+        "z": 1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 1.2100000000000002,
+        "y": 1.1,
+        "z": 1.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1.1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 1.1,
+        "y": 1.1,
+        "z": 1.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1.2100000000000002,
+          "y": 1.1,
+          "z": 1.1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.9841772858861647,
+          "z": 3
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 0,
+        "y": 0.1,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.961833223262358,
+          "z": 3
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_2729410",
+      "newValue": {
+        "x": 0.9461325305442787,
+        "y": 1.0398034612331923,
+        "z": 2
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.9461325305442787,
+          "y": 1.0398034612331923,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_2729410",
+      "newValue": {
+        "x": -0.803058578484037,
+        "y": 1.0398034612331923,
+        "z": 2.5
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.803058578484037,
+          "y": 1.0398034612331923,
+          "z": 3.2398568130768672
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_35742",
+      "newValue": {
+        "x": 0,
+        "y": 0.14,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.14223257820652938,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_47138",
+      "newValue": {
+        "x": 0,
+        "y": -0.14,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": -0.15,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_25782",
+      "newValue": {
+        "x": 0.14,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.15,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_25298",
+      "newValue": {
+        "x": -0.14,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.15,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_83865",
+      "newValue": {
+        "x": 1.15,
+        "y": 1.1,
+        "z": 1.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1.1,
+          "y": 1.1,
+          "z": 1.1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_25298",
+      "newValue": {
+        "x": -0.13,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.14,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/arrow_keys_highlight",
+      "newParentId": "Scene/base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/arrow_keys",
+      "newParentId": "Scene/base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/base",
+      "folder": "NESController",
+      "itemName": "base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/base/arrow_keys/right",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/base/arrow_keys/right_8958",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_72662",
+      "newValue": {
+        "x": 0.20810652027178414,
+        "y": 0,
+        "z": 2.8
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.20810652027178414,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/base/arrow_keys_highlight/center",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/base/arrow_keys_highlight/center_77915",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_95365",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 2.8
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/center_77915",
+      "newValue": "select_start_panel",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/select_start_panel",
+      "newParentId": "Scene/base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_4442",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/base"
+    },
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_4442",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene/base"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/NewEntity_4442",
+      "newValue": "printing",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/base/panel",
+      "newParentId": "Scene/base/printing",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/base/select_start_panel",
+      "newParentId": "Scene/base/printing",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/base/arrow_keys_highlight",
+      "newParentId": "Scene/base/printing",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/base",
+      "folder": "NESController",
+      "itemName": "base",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/right_8958",
+      "newValue": "select",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.16,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.17,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.18,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.2,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.1,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.08,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_25325",
+      "newValue": 0.07,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/select",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/select",
+      "newValue": "start",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/select_54679",
+      "newValue": "select",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/arrow_keys",
+      "newValue": "keys",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/start",
+      "newParentId": "Scene/base/keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/select",
+      "newParentId": "Scene/base/keys",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/keys",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/keys",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/printing",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/keys",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/keys",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/printing",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base",
+      "newValue": false,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "active"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_55235041",
+      "newValue": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_55235041",
+      "newValue": {
+        "x": 0,
+        "y": 0.9368149,
+        "z": 3.11054
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.429741,
+          "y": 0.9368149,
+          "z": 3.11054
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_55235041",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 3.11054
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0.9368149,
+          "z": 3.11054
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_55235041",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1,
+          "z": 3.11054
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/base/printing/select_start_panel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_67929",
+      "newValue": {
+        "x": -0.1054667,
+        "y": -0.1708532,
+        "z": 2.835
+      },
+      "options": {
+        "oldValue": {
+          "x": -0.1054667,
+          "y": -0.1708532,
+          "z": -0.1642275
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_93593",
+      "newValue": 0.25,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_93593",
+      "newValue": 0.25,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_93593",
+      "newValue": 0.275,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_93593",
+      "newValue": 0.275,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/printing/select_start_panel_26965",
+      "newValue": "b_panel",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "clone_entity",
+      "entityId": "Scene/base/printing/b_panel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_49094",
+      "newValue": {
+        "x": 0.8165530410076004,
+        "y": 0.84,
+        "z": 2.842044
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.8165530410076004,
+          "y": 0.8385804,
+          "z": 2.842044
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/printing/b_panel_38138",
+      "newValue": "a_panel_38138",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/base/printing/a_panel_38138",
+      "newValue": "a_panel",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/base",
+      "folder": "NESController",
+      "itemName": "base",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759211284294,
+  "name": "base"
+}

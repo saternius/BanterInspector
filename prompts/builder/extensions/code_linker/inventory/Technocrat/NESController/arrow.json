@@ -1,0 +1,232 @@
+{
+  "author": "Technocrat",
+  "created": 1759208746166,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "localPosition": {
+            "x": -0.8383930463028298,
+            "y": 1.8909215308202107,
+            "z": 2.9338843285025122
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "depth": 0.2,
+          "height": 0.15,
+          "width": 0.15
+        },
+        "type": "BanterBox"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 0.00784313725490196,
+            "g": 0.00784313725490196,
+            "r": 0.011764705882352941
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "convex": false,
+          "isTrigger": false
+        },
+        "type": "MeshCollider"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1756190175304,
+          "data": "this.default = {}\n\nlet getEntity = (entityPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+entityPath\n    return SM.getEntityById(rel_path)\n}\n\n\nlet user = SM.myName()\nlet held = false;\nlet lastParent = \"Scene\";\nthis.onStart = ()=>{\n    let user = SM.myName()\n    this._entity._bs.On(\"click\", async (e) => {\n        if(held){\n            await this._entity.SetParent(lastParent)\n            let transform = this._entity.getTransform()\n            await transform._bs.Q([13])\n            await transform.Set(\"localPosition\", transform._bs._position)\n            await transform.Set(\"localRotation\", transform._bs._rotation)\n        }else{\n            console.log(\"click\", e.detail)\n            let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n            let tippyHolder = SM.getEntityById(tippyHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n            if(!tippyHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            tippyHolder.getTransform().Set(\"position\", e.detail.point)\n            lastParent = this._entity.parentId;\n            this._entity.SetParent(tippyHolderPath)\n        }\n        held = !held;\n        // holdingBarHack()\n    })\n}\n\nthis.onUpdate = ()=>{\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+          "description": "",
+          "folder": "Scripts",
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1756190175304,
+          "last_used": 1759191111341,
+          "name": "Grabbable.js",
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "Grabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "arrow",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "NESController",
+  "history": [
+    {
+      "action": "add_entity",
+      "entityName": "NewEntity_55197",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterBox_3656"
+      },
+      "componentType": "BanterBox",
+      "entityId": "Scene/NewEntity_55197",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMaterial_1267"
+      },
+      "componentType": "BanterMaterial",
+      "entityId": "Scene/NewEntity_55197",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_91516995",
+      "newValue": {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_91516995",
+      "newValue": {
+        "x": 1,
+        "y": 0,
+        "z": 3
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_3656",
+      "newValue": 0.2,
+      "options": {
+        "source": "ui"
+      },
+      "property": "depth"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_91516995",
+      "newValue": {
+        "x": 1,
+        "y": 0,
+        "z": 2.5
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 0,
+          "z": 3
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_3656",
+      "newValue": 0.15,
+      "options": {
+        "source": "ui"
+      },
+      "property": "width"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterBox_3656",
+      "newValue": 0.15,
+      "options": {
+        "source": "ui"
+      },
+      "property": "height"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_55197",
+      "newValue": "arrow",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759208746166,
+  "name": "arrow"
+}

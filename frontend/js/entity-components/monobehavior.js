@@ -1,3 +1,4 @@
+
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`); 
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
@@ -21,7 +22,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         if(this.properties.file && this.properties.file.length > 0){
             if(SM.props["__" + this.id + "/_running:component"] !== false){
                 if(!this.ctx._running){
-                    await this._loadScript(this.properties.file);
+                    await this.LoadScript(this.properties.file);
                 }
             }else{
                 this.ctx._running = false;
@@ -48,7 +49,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         log("mono", "[MONO] updating property =>", property, value)
         value = parseBest(value);
         if(property === 'file'){
-            await this._loadScript(value);
+            await this.LoadScript(value);
         }
         this.properties[property] = value;
         this.checkSpaceDiff();
@@ -73,23 +74,42 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     hasOwnership(){
         if(!this.inventoryItem) return false;
-        if(this.inventoryItem.global) return true;
+        // if(this.inventoryItem.global) return true;
         return this.properties._owner === SM.myName()
     }
 
-    async _loadScript(fileName) {        
+    async LoadScript(fileName) {
         if(!this._entity.active) return;
+        if(!this.hasOwnership()){
+            return;
+        }
+
         this.inventoryItem = window.inventory?.items?.[fileName];
         if (!this.inventoryItem || this.inventoryItem.itemType !== 'script') {
             log("mono", `Script "${fileName}" not found in inventory`);
             return;
         }
 
-        if(!this.hasOwnership()){
-            log("mono", `Script "${fileName}" is not owned by ${SM.myName()}`);
-            return;
+        let scriptContent = this.inventoryItem.data;
+        let scriptKey = '#'+fileName;
+        if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== scriptContent){
+            networking.setSpaceProperty(scriptKey, scriptContent, false);
         }
+        networking.sendOneShot("load_script¶"+fileName+"¶"+this.id);
+    }
 
+    async _loadScript(fileName, attempts = 0) {
+        let scriptKey = '#'+fileName;
+        let scriptContent = scene.spaceState.public[scriptKey];
+        if(!scriptContent){
+            log("mono", `Script "${fileName}" not found in space state, retrying... (${attempts})`);
+            await new Promise(r => setTimeout(r, 200));
+            if(attempts > 10){
+                log("mono", `Script "${fileName}" not found in space state, giving up...`);
+                return;
+            }
+            return await this._loadScript(fileName, attempts + 1);
+        }
         
         if(this.ctx && this.ctx._running){
             await this.ctx.onDestroy();
@@ -97,7 +117,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
         this.ctx = this.newScriptContext();
         this._scriptFunction = new Function(`
-            ${this.inventoryItem.data}
+            ${scriptContent}
         `);
         
         // Extract vars definition if present
@@ -162,6 +182,19 @@ export class MonoBehaviorComponent extends EntityComponent {
                 inspector.propertiesPanel.render(SM.selectedEntity);
             }
         }
+
+        const event = new CustomEvent('script-refreshed', {
+            detail: {
+                componentId: this.id,
+                name: this.properties.name,
+                file: this.properties.file
+            },
+            
+        });
+        window.dispatchEvent(event);
+        if(this._entity._finished_loading){
+            await this.ctx.onLoaded();
+        }
     }
 
     async _start(){
@@ -208,19 +241,8 @@ export class MonoBehaviorComponent extends EntityComponent {
             await this.ctx.onDestroy();
         }
         
-        await this._loadScript(this.properties.file);
-        const event = new CustomEvent('script-refreshed', {
-            detail: {
-                componentId: this.id,
-                name: this.properties.name,
-                file: this.properties.file
-            },
-            
-        });
-        window.dispatchEvent(event);
-        if(this._entity._finished_loading){
-            await this.ctx.onLoaded();
-        }
+        await this.LoadScript(this.properties.file);
+       
         log("mono", "refreshed", this.id)
     }
 

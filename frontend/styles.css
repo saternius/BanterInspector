@@ -2031,12 +2031,15 @@ input:hover{
 }
 
 .lifecycle-shell {
-    flex: 1;
-    overflow-y: auto;
-    background: #0f0f0f;
+    overflow-y: scroll;
+    background: #020202;
     padding: 8px;
     font-family: 'Consolas', 'Monaco', monospace;
     font-size: 11px;
+    height: 92%;
+    overflow-x: clip;
+    width: 15000px;
+    line-height: 23px;
 }
 
 .console-line {

@@ -1,0 +1,2238 @@
+{
+  "author": "Technocrat",
+  "created": 1759670814535,
+  "data": {
+    "active": true,
+    "children": [
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=06277f8b386e96ae0414f29864cdf5b96eaf4ca1244dfe5034c82b253ce661e3"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "A"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "ButtonA",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d01c19fd9ccd5070a86df0233c1f532091f2f877345b5924869f722e59eacedd"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "B"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "ButtonB",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=1901e61d87f1efd06ede3447f7c4c1a52355810675d339415b2fa135da0ef8be"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "CableConnector",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=b94d3f6c4be2411702c3086427698a6b1e36345b7c265fcbac6f359cd0cdff2d"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "DPadCenter",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=451108c10dddc8dae978f69d0bcd9f58f3dd54793691e816b0eae017e6068b95"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "DOWN"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "DPadDown",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f257a4f9569e60ccb834040ce95ed466203c1f530e2a018aabaf6fdcc72928cb"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "LEFT"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "DPadLeft",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=c71765ce08ef5399095f053f105ac1e46ad7485d97890f27a5907fe48fd97413"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "RIGHT"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "DPadRight",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=c22bcb664f13ba7c5994ecae015b763dde5f4744c28cd0b479bd3aac34828c24"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "UP"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "DPadUp",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=1ab54e1bc475f100512ab33fdcb798f7c69994d5ce63759533e6d17cd9b1f85c"
+            },
+            "type": "BanterGLTF"
+          }
+        ],
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "LogoArea",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a2ac7c20fc7d6cd120947200424b805e7cc6804d184db66ab945528ea179cca9"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "SELECT"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "SelectButton",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      },
+      {
+        "active": true,
+        "components": [
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "addColliders": true,
+              "climbable": false,
+              "generateMipMaps": true,
+              "legacyRotate": false,
+              "nonConvexColliders": false,
+              "slippery": false,
+              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=528cdde91bc1754cf1c24f96e5de15c397b53449a7e115563b832adaa6c735c2"
+            },
+            "type": "BanterGLTF"
+          },
+          {
+            "inventoryItem": {
+              "active": false,
+              "author": "Technocrat",
+              "autoUpdate": false,
+              "created": 1758844109618,
+              "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+              "description": "",
+              "folder": "Scripts",
+              "global": false,
+              "icon": "📜",
+              "itemType": "script",
+              "lastUsed": 1758844109618,
+              "last_used": 1759289672134,
+              "name": "Clickable.js",
+              "startup": false,
+              "startupSequence": "onSceneLoaded"
+            },
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "file": "Clickable.js",
+              "name": "myScript",
+              "vars": {
+                "tag": {
+                  "type": "string",
+                  "value": "START"
+                }
+              }
+            },
+            "type": "MonoBehavior"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "loadAsync": false,
+        "name": "StartButton",
+        "parentId": "Scene/NES3",
+        "persistent": true
+      }
+    ],
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "addColliders": true,
+          "climbable": false,
+          "generateMipMaps": true,
+          "legacyRotate": false,
+          "nonConvexColliders": false,
+          "slippery": false,
+          "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9eb53e5c3c235ab66dd29ac520f87fa9eb3059ed627cbbe02739677124bfa394"
+        },
+        "type": "BanterGLTF"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 0.1414760932197531,
+            "y": 0.0720968297885734,
+            "z": 0.06200721681156564
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1756190175304,
+          "data": "this.default = {}\n\nlet getEntity = (entityPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+entityPath\n    return SM.getEntityById(rel_path)\n}\n\n\nlet user = SM.myName()\nlet held = false;\nlet lastParent = \"Scene\";\nthis.onStart = ()=>{\n    let user = SM.myName()\n    this._entity._bs.On(\"click\", async (e) => {\n        if(held){\n            await this._entity.SetParent(lastParent)\n            let transform = this._entity.getTransform()\n            await transform._bs.Q([13])\n            await transform.Set(\"localPosition\", transform._bs._position)\n            await transform.Set(\"localRotation\", transform._bs._rotation)\n        }else{\n            console.log(\"click\", e.detail)\n            let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n            let tippyHolder = SM.getEntityById(tippyHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n            if(!tippyHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            tippyHolder.getTransform().Set(\"position\", e.detail.point)\n            lastParent = this._entity.parentId;\n            this._entity.SetParent(tippyHolderPath)\n        }\n        held = !held;\n        // holdingBarHack()\n    })\n}\n\nthis.onUpdate = ()=>{\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+          "description": "",
+          "folder": "Scripts",
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1756190175304,
+          "last_used": 1759191111341,
+          "name": "Grabbable.js",
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "file": "Grabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "NES3",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "NESController",
+  "history": [
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "children": [
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_84624",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_18520",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=06277f8b386e96ae0414f29864cdf5b96eaf4ca1244dfe5034c82b253ce661e3"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_68403",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "context": "new"
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "A"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/ButtonA",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "ButtonA",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_67620",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_22302",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=d01c19fd9ccd5070a86df0233c1f532091f2f877345b5924869f722e59eacedd"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_50111",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "B"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/ButtonB",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "ButtonB",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_20668",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_13829",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=1901e61d87f1efd06ede3447f7c4c1a52355810675d339415b2fa135da0ef8be"
+                    },
+                    "type": "BanterGLTF"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/CableConnector",
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "CableConnector",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_47092",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_29370",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=b94d3f6c4be2411702c3086427698a6b1e36345b7c265fcbac6f359cd0cdff2d"
+                    },
+                    "type": "BanterGLTF"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/DPadCenter",
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "DPadCenter",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_28507",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_903",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=451108c10dddc8dae978f69d0bcd9f58f3dd54793691e816b0eae017e6068b95"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_52048",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "DOWN"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/DPadDown",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "DPadDown",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_44011",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_19994",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f257a4f9569e60ccb834040ce95ed466203c1f530e2a018aabaf6fdcc72928cb"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_81138",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "LEFT"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/DPadLeft",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "DPadLeft",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_40713",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_26907",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=c71765ce08ef5399095f053f105ac1e46ad7485d97890f27a5907fe48fd97413"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_58971",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "RIGHT"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/DPadRight",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "DPadRight",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_77398",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_42342",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=c22bcb664f13ba7c5994ecae015b763dde5f4744c28cd0b479bd3aac34828c24"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_39399",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "UP"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/DPadUp",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "DPadUp",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_77029",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_55469",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=1ab54e1bc475f100512ab33fdcb798f7c69994d5ce63759533e6d17cd9b1f85c"
+                    },
+                    "type": "BanterGLTF"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/LogoArea",
+                "initialized": true,
+                "layer": 0,
+                "loadAsync": false,
+                "name": "LogoArea",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_81747",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_80574",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a2ac7c20fc7d6cd120947200424b805e7cc6804d184db66ab945528ea179cca9"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_53576",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "SELECT"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/SelectButton",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "SelectButton",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              },
+              {
+                "active": true,
+                "components": [
+                  {
+                    "id": "Transform_41186",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    },
+                    "type": "Transform"
+                  },
+                  {
+                    "id": "BanterGLTF_75558",
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "addColliders": true,
+                      "climbable": false,
+                      "generateMipMaps": true,
+                      "legacyRotate": false,
+                      "nonConvexColliders": false,
+                      "slippery": false,
+                      "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=528cdde91bc1754cf1c24f96e5de15c397b53449a7e115563b832adaa6c735c2"
+                    },
+                    "type": "BanterGLTF"
+                  },
+                  {
+                    "id": "MonoBehavior_58056",
+                    "inventoryItem": {
+                      "active": false,
+                      "author": "Technocrat",
+                      "autoUpdate": false,
+                      "created": 1758844109618,
+                      "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                      "description": "",
+                      "folder": "Scripts",
+                      "global": false,
+                      "icon": "📜",
+                      "itemType": "script",
+                      "lastUsed": 1758844109618,
+                      "last_used": 1759289672134,
+                      "name": "Clickable.js",
+                      "startup": false,
+                      "startupSequence": "onSceneLoaded"
+                    },
+                    "loadAsync": false,
+                    "options": {
+                      "cmdUser": "Technocrat",
+                      "context": "item",
+                      "loadAsync": false
+                    },
+                    "properties": {
+                      "file": "Clickable.js",
+                      "name": "myScript",
+                      "vars": {
+                        "tag": {
+                          "type": "string",
+                          "value": "START"
+                        }
+                      }
+                    },
+                    "type": "MonoBehavior"
+                  }
+                ],
+                "id": "Scene/NES3_69341/ControllerBody/StartButton",
+                "initialized": true,
+                "layer": 5,
+                "loadAsync": false,
+                "name": "StartButton",
+                "parentId": "Scene/NES3_69341/ControllerBody",
+                "persistent": true
+              }
+            ],
+            "components": [
+              {
+                "id": "Transform_81082",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "localPosition": {
+                    "x": -3.573913,
+                    "y": 1.304024,
+                    "z": -1.674832
+                  },
+                  "localRotation": {
+                    "w": -0.1261967,
+                    "x": -0.05064501,
+                    "y": -0.7976848,
+                    "z": 0.5875445
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                },
+                "type": "Transform"
+              },
+              {
+                "id": "BanterGLTF_44171",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "addColliders": true,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9eb53e5c3c235ab66dd29ac520f87fa9eb3059ed627cbbe02739677124bfa394"
+                },
+                "type": "BanterGLTF"
+              },
+              {
+                "id": "BoxCollider_60773",
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "center": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "isTrigger": false,
+                  "size": {
+                    "x": 0.1414760932197531,
+                    "y": 0.0720968297885734,
+                    "z": 0.06200721681156564
+                  }
+                },
+                "type": "BoxCollider"
+              },
+              {
+                "id": "MonoBehavior_34778",
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "created": 1756190175304,
+                  "data": "this.default = {}\n\nlet getEntity = (entityPath)=>{\n    let rel_path = this._entity.parentId+\"/\"+entityPath\n    return SM.getEntityById(rel_path)\n}\n\n\nlet user = SM.myName()\nlet held = false;\nlet lastParent = \"Scene\";\nthis.onStart = ()=>{\n    let user = SM.myName()\n    this._entity._bs.On(\"click\", async (e) => {\n        if(held){\n            await this._entity.SetParent(lastParent)\n            let transform = this._entity.getTransform()\n            await transform._bs.Q([13])\n            await transform.Set(\"localPosition\", transform._bs._position)\n            await transform.Set(\"localRotation\", transform._bs._rotation)\n        }else{\n            console.log(\"click\", e.detail)\n            let tippyHolderPath = \"People/\"+user+\"/Trackers/RIGHT_HAND/Holder\";\n            let tippyHolder = SM.getEntityById(tippyHolderPath)\n            console.log(`RIGHT_HAND HOLDER => ${tippyHolderPath}`, tippyHolder)\n            if(!tippyHolder){\n                showNotification(\"Error: RIGHT_HAND Holder not found\")\n                return;\n            }\n            tippyHolder.getTransform().Set(\"position\", e.detail.point)\n            lastParent = this._entity.parentId;\n            this._entity.SetParent(tippyHolderPath)\n        }\n        held = !held;\n        // holdingBarHack()\n    })\n}\n\nthis.onUpdate = ()=>{\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                  "description": "",
+                  "folder": "Scripts",
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1756190175304,
+                  "last_used": 1759191111341,
+                  "name": "Grabbable.js",
+                  "startup": false
+                },
+                "loadAsync": false,
+                "options": {
+                  "context": "new"
+                },
+                "properties": {
+                  "file": "Grabbable.js",
+                  "name": "myScript"
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "id": "Scene/NES3_69341/ControllerBody",
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "ControllerBody",
+            "parentId": "Scene/NES3_69341",
+            "persistent": true
+          }
+        ],
+        "components": [
+          {
+            "id": "Transform_41799",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": -3.429316235000631,
+                "y": -2.112823068357394,
+                "z": 0.32127196203251146
+              },
+              "localRotation": {
+                "w": 1,
+                "x": -0.36445546996050365,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 4,
+                "y": 4,
+                "z": 4
+              }
+            },
+            "type": "Transform"
+          }
+        ],
+        "id": "Scene/NES3_69341",
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "NES3_69341",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "NES3",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "move_entity",
+      "entityId": "Scene/NES3_69341/ControllerBody",
+      "newParentId": "Scene",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_81082",
+      "newValue": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "source": "ui"
+      },
+      "property": "localRotation"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_81082",
+      "newValue": {
+        "x": 0,
+        "y": 1.304024,
+        "z": -1.674832
+      },
+      "options": {
+        "oldValue": {
+          "x": -3.573913,
+          "y": 1.304024,
+          "z": -1.674832
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_81082",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": -1.674832
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 1.304024,
+          "z": -1.674832
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_81082",
+      "newValue": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": -1.674832
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/ControllerBody",
+      "newValue": "NES3",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "Transform_81082",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/NES3",
+      "folder": "NESController",
+      "itemName": "NES3",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759670814535,
+  "name": "NES3"
+}

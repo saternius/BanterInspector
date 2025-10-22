@@ -1,4 +1,4 @@
-const { appendToConsole } = await import(`${window.repoUrl}/utils.js`);
+const { appendToShell, parseBest } = await import(`${window.repoUrl}/utils.js`);
 const {attachAuthToDatabase} = await import(`${window.repoUrl}/firebase-auth-helper.js`);
 
 function safeParse(value) {
@@ -490,6 +490,14 @@ export class Networking {
             await SM.updateHierarchy();
         }
 
+        if(items[0] === "load_script"){
+            let [fileName, componentId] = items.slice(1)
+            let monobehavior = SM.getEntityComponentById(componentId);
+            if(monobehavior){
+                await monobehavior._loadScript(fileName);
+            }
+        }
+
         if(items[0] === "monobehavior_start"){
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
@@ -531,10 +539,6 @@ export class Networking {
     async handleOneShot(event){
 
         let message = event.detail.data;
-        
-        if(window.logger.include.oneShot){
-            appendToConsole("oneShot", "oneShot_"+Math.floor(Math.random()*1000000), message);
-        }
         let firstColon = message.indexOf(":");
         let timestamp = parseInt(message.slice(0, firstColon));
         
@@ -547,6 +551,7 @@ export class Networking {
         }
       
         let data = message.slice(secondColon+1);
+        appendToShell("oneShot", sender, data);
         await this.routeOneShot(data, timestamp, sender)
     }
 
@@ -634,11 +639,129 @@ export class Networking {
 
     async sendOneShot(data){
         let now = Date.now();
-        let remote_message = `${now}:${SM.myName()}:${data}`
+        let name = SM.myName();
+        let remote_message = `${now}:${name}:${data}`
         SM.scene.OneShot(remote_message);
-        await this.routeOneShot(data, now, SM.myName())
+        appendToShell("oneShot", name, data);
+        await this.routeOneShot(data, now, name)
     }
 
+    getSpaceHeir(){
+        // Convert flat space state to nested hierarchy
+        if (!SM.scene || !SM.scene.spaceState || !SM.scene.spaceState.public) {
+            console.warn('getSpaceHeir: Scene or space state not available');
+            return null;
+        }
+
+        const flatState = SM.scene.spaceState.public;
+        const nodes = {};
+
+        // First pass: Create all nodes and assign their properties
+        Object.keys(flatState).forEach(key => {
+            // Skip non-entity keys (those that don't start with $)
+            if (!key.startsWith('$')) return;
+
+            // Parse the key: $Scene/Ground/Sigil:position -> path: Scene/Ground/Sigil, prop: position
+            const colonIndex = key.indexOf(':');
+            if (colonIndex === -1) return; // Skip malformed keys
+
+            const path = key.substring(1, colonIndex); // Remove $ prefix
+            const property = key.substring(colonIndex + 1);
+            const value = flatState[key];
+
+            // Create node if it doesn't exist
+            if (!nodes[path]) {
+                const pathParts = path.split('/');
+                const name = pathParts[pathParts.length - 1];
+                nodes[path] = {
+                    name: name,
+                    path: path,
+                    children: [],
+                    components: []
+                };
+            }
+
+            // Assign property to node
+            if (property === 'children') {
+                // Children is an array of paths, we'll process these in second pass
+                nodes[path]._childPaths = parseBest(value) || [];
+            } else if (property === 'components') {
+                nodes[path].components = parseBest(value) || [];
+            } else if (property === 'layer') {
+                // Convert layer string to number
+                nodes[path].layer = parseInt(value, 10);
+            } else if (property === 'active') {
+                // Skip active property if it's not a boolean string
+                nodes[path].active = parseBest(value);
+            } else if (property === 'scale' && value === 'undefined') {
+                // Skip undefined scale
+            } else {
+                // Handle all other properties (position, rotation, localScale, etc.)
+                nodes[path][property] = parseBest(value);
+            }
+        });
+
+        // Second pass: Build parent-child relationships
+        Object.keys(nodes).forEach(path => {
+            const node = nodes[path];
+
+            // Process children if they exist
+            if (node._childPaths && Array.isArray(node._childPaths)) {
+                node._childPaths.forEach(childPath => {
+                    // Child paths might not have the $ prefix in the array
+                    const cleanChildPath = childPath.startsWith('$') ? childPath.substring(1) : childPath;
+                    const childNode = nodes[cleanChildPath];
+
+                    if (childNode) {
+                        // Add child node reference
+                        node.children.push(childNode);
+                        // Mark that this node has been added as a child
+                        childNode._hasParent = true;
+                    }
+                });
+            }
+
+            // Clean up temporary property
+            delete node._childPaths;
+        });
+
+        // Third pass: Find root nodes (nodes without parents) and clean up
+        const rootNodes = [];
+        Object.keys(nodes).forEach(path => {
+            const node = nodes[path];
+
+            // If this node has no parent and is a top-level path (no slashes), it's a root
+            if (!node._hasParent && !path.includes('/')) {
+                rootNodes.push(node);
+            }
+
+            // Clean up internal properties
+            delete node._hasParent;
+            delete node.path;
+        });
+
+        // If we have a single root node, return it directly
+        // Otherwise return an object with all root nodes
+        if (rootNodes.length === 1) {
+            return rootNodes[0];
+        } else if (rootNodes.length > 1) {
+            // Return an object with multiple roots
+            return {
+                roots: rootNodes
+            };
+        } else {
+            // Try to find Scene as the root if no clear roots found
+            const sceneNode = nodes['Scene'];
+            if (sceneNode) {
+                delete sceneNode._hasParent;
+                return sceneNode;
+            }
+
+            // Fallback: return first available node
+            const firstNodeKey = Object.keys(nodes)[0];
+            return firstNodeKey ? nodes[firstNodeKey] : null;
+        }
+    }
 }
 
 export const networking = new Networking();
