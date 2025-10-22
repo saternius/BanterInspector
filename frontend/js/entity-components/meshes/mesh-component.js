@@ -13,6 +13,7 @@ export class MeshComponent extends EntityComponent {
     }
 
     async initGrabbable(){
+        if(!SM.iamHost) return;
         let material = this._entity?.getComponent("Material");
         if(!material){
             setTimeout(this.initGrabbable.bind(this), 50);

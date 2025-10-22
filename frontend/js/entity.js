@@ -27,8 +27,10 @@ export class Entity{
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
             
     
+          
             let parentEntity = SM.getEntityOrScene(this.parentId);
             params.parent = parentEntity._bs;
+            
             params.layer = this.layer;
             params.active = this.active;
             let newGameObject = new BS.GameObject(params);

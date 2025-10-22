@@ -523,42 +523,60 @@ export function showNotification(message) {
 
 
 export function appendToShell(tag, id, str){
-    if(window.logger && window.logger.include[tag]){
-        let shellEl = document.getElementById("lifecycleShell");
-        if(!shellEl) return;
+    if(!window.logger || !window.logger.include[tag]) return;
+    
+    let shellEl = document.getElementById("lifecycleShell");
+    if(!shellEl) return;
 
-        const children = shellEl.children;
-        if (children.length >= 500) {
-            shellEl.removeChild(children[0]);
-        }
-
-        const div = document.createElement('div');
-        div.className = 'change-item';
-        div.id = id;
-        div.style.whiteSpace = 'pre-wrap';
-        div.style.fontFamily = 'monospace';
-
-        if(window.logger && window.logger.getTagColor){
-            const color = tag === "error" ? "red" : window.logger.getTagColor(tag);
-            div.innerHTML = `<span style="color: ${color}; font-weight: bold">[${tag.toUpperCase()}]:</span> ${str}`;
-        } else {
-            div.textContent = str;
-            if(tag === "error"){
-                div.style.color = "red";
-            }
-        }
-
-        shellEl.appendChild(div);
-        shellEl.scrollTop = shellEl.scrollHeight;
+    const children = shellEl.children;
+    if (children.length >= 500) {
+        shellEl.removeChild(children[0]);
     }
+
+
+    const div = document.createElement('div');
+    div.className = 'change-item';
+    div.style.whiteSpace = 'pre-wrap';
+    div.style.fontFamily = 'monospace';
+
+    let color = "white";
+    let subject = tag.toUpperCase();
+    
+    if(tag === "command"){
+        color = window.logger.getTagColor(tag);
+        div.id = id
+        subject = "COMMAND";
+        div.innerHTML = `${new Date().toTimeString().split(' ')[0].slice(3, 8)} <span style="color: ${color}; font-weight: bold">[${subject}]:</span> ${str}`;
+    }
+
+    if(tag === "oneShot"){
+        color = getUserColor(id);
+        subject = id;
+        let innerHTML = `${new Date().toTimeString().split(' ')[0].slice(3, 8)} <span style="color: ${color}; font-weight: bold">[${subject}] </span> `;
+        let items = str.split("¶");
+        let color_arr = ["#ffaa00", "#88ddff", "#ff88ff", "#ff4444", "#4488ff", "#ff44ff", "#ffff44", "#444444", "#ffffff"];
+        let style_arr = ["font-weight: bold", "font-weight: normal", "font-weight: italic", "font-weight: bold italic", "font-weight: bold normal", "font-weight: normal bold", "font-weight: bold normal italic", "font-weight: normal bold italic"];
+        let i = 0;
+        items.forEach(item=>{
+            innerHTML += `<span style="color: ${color_arr[i]}; ${style_arr[i]}">${item} </span>`;
+            i++;
+        });
+        div.innerHTML = innerHTML;
+    }
+    
+    
+
+    shellEl.appendChild(div);
+    shellEl.scrollTop = shellEl.scrollHeight;
+    
 }
 export class Logger{
     constructor(){
         this.include = {
-            error: true,
-            command: true,
-            script: true,
-            oneShot: false,
+            error: false,
+            command: false,
+            script: false,
+            oneShot: true,
             spaceProps: false
         }
         this.broadcastTags = [];

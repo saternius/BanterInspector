@@ -3,6 +3,7 @@
  * Handles Unity scene connection, state management, and data synchronization
  */
 // (async () => {
+
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
 
@@ -151,43 +152,50 @@
                     networking.initFirebase()
 
                     log('init', "setting up inspector")
+                    networking.cleanSpaceState();
 
+                    log("pre-setup", 'spaceState =>', JSON.parse(JSON.stringify(this.scene.spaceState)))
+
+                   
 
                     log("init", "Lets create people hierarchy and fetch info from those here")
-                    networking.sendOneShot(`hierarchy_plz`)
-                    let people_hier = {
-                        name: "People",
-                        layer: 0,
-                        components: [],
-                        children: [
-                            {
-                                name: this.myName(),
-                                layer: 0,
-                                components: [],
-                                children: []
-                            }
-                        ]
-                    }
+                    // networking.sendOneShot(`hierarchy_plz`)
+                    // let people_hier = {
+                    //     name: "People",
+                    //     layer: 0,
+                    //     components: [],
+                    //     children: [
+                    //         {
+                    //             name: this.myName(),
+                    //             layer: 0,
+                    //             components: [],
+                    //             children: []
+                    //         }
+                    //     ]
+                    // }
 
-                    let people_entity = await this.loadHierarchy("People", people_hier);
-                    log("init", "loaded default people entity =>", people_entity)
-                    this.entityData.entities = [people_entity];
+                    // let people_entity = await this.loadHierarchy("People", people_hier);
+                    // log("init", "loaded default people entity =>", people_entity)
+                    // this.entityData.entities = [people_entity];
 
-                    this.finalizeSceneLoad = async (scene_entity)=>{
+                    this.finalizeSceneLoad = async (scene_entity, people_entity)=>{
                         log('init', "finalizing scene load =>", scene_entity)
-                        this.entityData.entities.unshift(scene_entity);
+                        let cleanup = ()=>{
+                            if(this.iamHost){
+                                networking.cleanupSceneOrphans();
+                            }else{
+                                networking.cleanSpaceState()
+                            }
+                        }
+                        cleanup();
+                        this.entityData.entities = [scene_entity, people_entity];
                         this.initializeExpandedNodes();
                         window.loadingScreen.updateStage('entities', 100, 'All entities generated');
                         inspector?.hierarchyPanel?.render()
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
                         await this.executeStartupScripts("onSceneLoaded");
-                        setInterval(()=>{
-                            if(this.iamHost){
-                                networking.cleanupSceneOrphans();
-                            }
-                            this.saveScene();
-                        }, 10000)
+                        setInterval(cleanup, 10000)
                     }
 
        
@@ -202,6 +210,7 @@
                         }
                         this._iamHost = true;
                     }
+
                     log('init', "spaceState =>", this.scene.spaceState)            
                     if(!this.scene.spaceState.public.hostUser){
                         log('init', "Server has no host user, so I guess it's me", this.myName())
@@ -220,40 +229,105 @@
                         }
                     }
 
-                    if(this._iamHost){
-                        log('init', "I am the host, so I'll load the scene hierarchy")
-                        let lastProps = localStorage.getItem('lastProps');
-                        if(lastProps){
-                            this.props = JSON.parse(lastProps);
-                        }
-                        let hierarchy = null;
-                        if(!this.props.hierarchy){
-                            window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
-                            hierarchy = await this.gatherSceneHierarchy();
-                            log('init', "gathered Scene's hierarchy =>", hierarchy)
-                        }else{
-                            let h = this.props.hierarchy;
-                            if(typeof h == "string"){
-                                h = JSON.parse(h);
-                            }
-                            hierarchy = h;
-                            log('init', "using cached hierarchy =>", hierarchy)
-                        }
+                    // if(this._iamHost){
+                    //     log('init', "I am the host, so I'll load the scene hierarchy")
+                    //     let lastProps = localStorage.getItem('lastProps');
+                    //     if(lastProps){
+                    //         this.props = JSON.parse(lastProps);
+                    //     }
+                    //     let hierarchy = null;
+                    //     if(!this.props.hierarchy){
+                    //         // window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
+                    //         // hierarchy = await this.gatherSceneHierarchy();
+                    //         // log('init', "gathered Scene's hierarchy =>", hierarchy)
+                    //     }else{
+                    //         // let h = this.props.hierarchy;
+                    //         // if(typeof h == "string"){
+                    //         //     h = JSON.parse(h);
+                    //         // }
+                    //         // hierarchy = h;
+                    //         // log('init', "using cached hierarchy =>", hierarchy)
+                    //     }
                         
-                        log('init', "loading scene hierarchy =>", hierarchy)
+                    //     log('init', "loading scene hierarchy =>", hierarchy)
+                    //     this.props.hierarchy = hierarchy;
+                    //     window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+                    //     window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+                    //     let scene_entity = await this.loadHierarchy("Scene", hierarchy);
+
+                        
+                    //     this.finalizeSceneLoad(scene_entity);
+                    // }
+
+                    this.resetLoadAttempt = ()=>{
+                        networking.setSpaceProperty("_MUTEX_CRAWL", false, false);
+                        networking.setSpaceProperty("$Scene:active", false, false);
+                        setTimeout(()=>{
+                            window.location.reload();
+                        }, 10000)
+                    }
+                    let tries = 0;
+                    let hasSavedScene = this.scene.spaceState.public['$Scene:active'] === 'true'
+                    if(hasSavedScene){
+                        // load scene via space props
+
+                        let loadFromSpaceProps = async ()=>{
+                            log("init", "loadFromSpaceProps")
+                            let crawlMutex = this.scene.spaceState.public["_MUTEX_CRAWL"]
+                            if(crawlMutex !== 'false' || !crawlMutex){
+                                let lastReq = parseInt(crawlMutex.split("_")[1]);
+                                if(Date.now() - lastReq > 10000){
+                                    this.resetLoadAttempt();
+                                }
+                                window.loadingScreen.updateStage('hierarchy', tries*5, 'Waiting for host to finish building (try '+tries+')..');
+                                log("init", "waiting for host to finish building", crawlMutex, Date.now() - lastReq)
+                                tries++;
+                                await new Promise(resolve => setTimeout(resolve, 1000));
+                                return loadFromSpaceProps();
+                            }
+                           
+                            let hiers = networking.getSpaceHeir();
+                            log("init", "gathered Scene's hierarchy =>", hiers)
+                            if(!hiers.roots || hiers.roots.length !== 2){
+                                window.loadingScreen.updateStage('hierarchy', tries*5, 'Space scene is broken. Run Reset()');
+                                log("init", "space scene is broken", hiers)
+                                this.resetLoadAttempt();
+                                return 
+                            }
+                            let scene_hier = hiers.roots.find(x=>x.name === "Scene");
+                            let people_hier = hiers.roots.find(x=>x.name === "People");
+                            this.props.hierarchy = scene_hier;
+                            let scene_entity = await this.loadHierarchy("Scene", scene_hier);
+                            log("init", "loaded Scene's entity =>", scene_entity)
+                            let people_entity = await this.loadHierarchy("People", people_hier);
+                            log("init", "loaded People's entity =>", people_entity)
+                            this.finalizeSceneLoad(scene_entity, people_entity);
+                        }
+                        loadFromSpaceProps();
+
+
+                    }else{
+                        // load by crawling.
+                        networking.setSpaceProperty("_MUTEX_CRAWL", this.myName()+"_"+Date.now(), false);
+                        window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
+                        let hierarchy = await this.gatherSceneHierarchy();
+                        log('init', "gathered Scene's hierarchy =>", hierarchy)
                         this.props.hierarchy = hierarchy;
                         window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
                         window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
                         let scene_entity = await this.loadHierarchy("Scene", hierarchy);
-                        this.finalizeSceneLoad(scene_entity);
-                    }else{
-                        log('init', "I am not the host, so I'll wait for the host to provide the scene hierarchy")
-                        // this.onRecievedSceneHierarchy = async (hierarchy)=>{
-                        //     this.props.hierarchy = hierarchy;
-                        //     let scene_entity = await this.loadHierarchy("Scene", hierarchy);
-                        //     this.entityData.entities.unshift(scene_entity);
-                        //     this.loadSceneHierarchy(hierarchy);
-                        // }
+                        let people_hier = {
+                            name: "People",
+                            layer: 0,
+                            components: [],
+                            children: []
+                        }
+
+                        let people_entity = await this.loadHierarchy("People", people_hier);
+
+                        
+                        this.finalizeSceneLoad(scene_entity, people_entity);
+                        networking.setSpaceProperty("_MUTEX_CRAWL", false, false);
                     }
                 }
             } catch (error) {
@@ -266,6 +340,7 @@
         async Reset(ui){
             let r = async ()=>{
                 networking.sendOneShot('reset');
+                this.resetLoadAttempt();
                 setTimeout(async ()=>{
                     await this._reset();
                 }, 1000)
@@ -587,7 +662,11 @@
                         await Promise.all(childPromises);
                     }
                 }
-                await newEntity._setParent(parentEnt);
+
+                if(newEntity.name !== "Scene"){
+                    await newEntity._setParent(parentEnt);
+                }
+                
                 // Call _loaded() after all children are fully instantiated
                 newEntity._loaded();
                 return newEntity;
@@ -606,13 +685,13 @@
 
         getHistoricalProps(component_ref){
             let type = component_ref.split("_")[0]
-            let space_keys = Object.keys(this.props)
+            let space_keys = Object.keys(scene.spaceState.public)
             let props = {}
             space_keys.forEach(key=>{
-                if(key.startsWith(`__${component_ref}/`)){
-                    let path = key.split(":")[0].split("/")
-                    let prop = path[path.length-1]
-                    props[prop] = this.props[key]
+                if(key.startsWith(`__${component_ref}`)){
+                    let prop = key.split(":")[1]
+                    //let prop = path[path.length-1]
+                    props[prop] = scene.spaceState.public[key] //this.props[key]
                 }
             })
             return{

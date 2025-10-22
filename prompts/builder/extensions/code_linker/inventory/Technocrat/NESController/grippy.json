@@ -1,0 +1,865 @@
+{
+  "author": "Technocrat",
+  "created": 1759490648905,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "type": "Transform"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "depth": 0.1,
+          "height": 0.1,
+          "width": 0.1
+        },
+        "type": "BanterBox"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "BanterMaterial"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "angularDrag": 5,
+          "angularVelocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "centerOfMass": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "collisionDetectionMode": 0,
+          "drag": 5,
+          "freezePositionX": false,
+          "freezePositionY": false,
+          "freezePositionZ": false,
+          "freezeRotationX": false,
+          "freezeRotationY": false,
+          "freezeRotationZ": false,
+          "isKinematic": false,
+          "mass": 1,
+          "useGravity": false,
+          "velocity": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          }
+        },
+        "type": "BanterRigidbody"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "properties": {
+          "center": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 0.1,
+            "y": 0.1,
+            "z": 0.1
+          }
+        },
+        "type": "BoxCollider"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "cmdUser": "Technocrat",
+          "context": "item",
+          "loadAsync": false
+        },
+        "type": "BanterColliderEvents"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "auto": false,
+          "blockLeftPrimary": true,
+          "blockLeftSecondary": true,
+          "blockLeftThumbstick": true,
+          "blockLeftThumbstickClick": true,
+          "blockRightPrimary": true,
+          "blockRightSecondary": true,
+          "blockRightThumbstick": true,
+          "blockRightThumbstickClick": true,
+          "fireRate": 0.1,
+          "sensitivity": 1
+        },
+        "type": "BanterHeldEvents"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759489565620,
+          "data": "const sceneListener = (e)=>{\n    if(e.detail.button == BS.ButtonType.Primary && e.detail.side == BS.HandSide.Right){\n        log(\"held event broadcast\", \"primary pressed right hand\")\n    }\n    if(e.detail.button == BS.ButtonType.Secondary && e.detail.side == BS.HandSide.Left){\n        log(\"held event broadcast\", \"secondary pressed left hand\")\n    }\n}\n\nthis.onStart = ()=>{\n    scene.On(\"button-pressed\", sceneListener)\n}\n\nthis.onDestroy = ()=>{\n    scene.listeners.get('button-pressed').delete(sceneListener)\n}\n\n",
+          "description": "",
+          "folder": "Scripts",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1759489565620,
+          "last_used": 1759490622533,
+          "name": "HeldEventBroadcast.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "context": "new"
+        },
+        "properties": {
+          "file": "HeldEventBroadcast.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 20,
+    "loadAsync": false,
+    "name": "grippy",
+    "parentId": "Scene",
+    "persistent": true
+  },
+  "description": "",
+  "folder": "NESController",
+  "history": [
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterBox_9595"
+      },
+      "componentType": "BanterBox",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterMaterial_1798"
+      },
+      "componentType": "BanterMaterial",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/grippy",
+      "newValue": "20",
+      "options": {
+        "source": "ui"
+      },
+      "property": "layer"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterRigidbody_5838"
+      },
+      "componentType": "BanterRigidbody",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/grippy",
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/grippy",
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterGrabHandle_964"
+      },
+      "componentType": "BanterGrabHandle",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "remove_entity",
+      "entityId": "Scene/grippy",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_63660",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterBox_54822",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "depth": 0.1,
+              "height": 0.1,
+              "width": 0.1
+            },
+            "type": "BanterBox"
+          },
+          {
+            "id": "BanterMaterial_58608",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BanterRigidbody_15887",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 5,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 5,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": false,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "BanterRigidbody"
+          },
+          {
+            "id": "BoxCollider_55323",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_11715",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "id": "Scene/grippy_97009",
+        "initialized": true,
+        "layer": 20,
+        "loadAsync": false,
+        "name": "grippy_97009",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_63660",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterBox_54822",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "depth": 0.1,
+              "height": 0.1,
+              "width": 0.1
+            },
+            "type": "BanterBox"
+          },
+          {
+            "id": "BanterMaterial_58608",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BanterRigidbody_15887",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 5,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 5,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": false,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "BanterRigidbody"
+          },
+          {
+            "id": "BoxCollider_55323",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_11715",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "id": "Scene/grippy_97009",
+        "initialized": true,
+        "layer": 20,
+        "loadAsync": false,
+        "name": "grippy_97009",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "load_item",
+      "itemData": {
+        "active": true,
+        "components": [
+          {
+            "id": "Transform_63660",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            },
+            "type": "Transform"
+          },
+          {
+            "id": "BanterBox_54822",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "depth": 0.1,
+              "height": 0.1,
+              "width": 0.1
+            },
+            "type": "BanterBox"
+          },
+          {
+            "id": "BanterMaterial_58608",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "color": {
+                "a": 1,
+                "b": 1,
+                "g": 1,
+                "r": 1
+              },
+              "generateMipMaps": true,
+              "shaderName": "Standard",
+              "side": 0,
+              "texture": ""
+            },
+            "type": "BanterMaterial"
+          },
+          {
+            "id": "BanterRigidbody_15887",
+            "loadAsync": false,
+            "options": {
+              "cmdUser": "Technocrat",
+              "context": "item",
+              "loadAsync": false
+            },
+            "properties": {
+              "angularDrag": 5,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 5,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": false,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "type": "BanterRigidbody"
+          },
+          {
+            "id": "BoxCollider_55323",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "id": "BanterColliderEvents_11715",
+            "loadAsync": false,
+            "options": {
+              "context": "new"
+            },
+            "type": "BanterColliderEvents"
+          }
+        ],
+        "id": "Scene/grippy_97009",
+        "initialized": true,
+        "layer": 20,
+        "loadAsync": false,
+        "name": "grippy_97009",
+        "parentId": "Scene",
+        "persistent": true
+      },
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      },
+      "parentId": "Scene"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "BanterHeldEvents_4028"
+      },
+      "componentType": "BanterHeldEvents",
+      "entityId": "Scene/grippy_97009",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockRightThumbstickClick"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockLeftThumbstickClick"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockRightThumbstick"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockLeftThumbstick"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockRightSecondary"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockRightPrimary"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockLeftSecondary"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "BanterHeldEvents_4028",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "blockLeftPrimary"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_7554"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/grippy_97009",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_7554",
+      "newValue": "HeldEventBroadcast.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/grippy_97009",
+      "newValue": "grippy",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/grippy",
+      "folder": "NESController",
+      "itemName": "grippy",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1759490648905,
+  "name": "grippy"
+}
