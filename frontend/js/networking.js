@@ -317,7 +317,7 @@ export class Networking {
         changes.forEach(async (change) => {
             let { property, newValue, isProtected } = change;
             if(window.logger.include.spaceProps){
-                log("net-down", "handleSpaceStateChange: ", property, newValue);
+                //log("net-down", "handleSpaceStateChange: ", property, newValue);
                 //appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
             }
             try{
@@ -328,9 +328,19 @@ export class Networking {
                     return;
                 }
                 if (isProtected) {
-                    SM.scene.spaceState.protected[property] = newValue;
+                    SM.scene.spaceState.protected[property] = parseBest(newValue);
                 } else {
-                    SM.scene.spaceState.public[property] = newValue;
+                    SM.scene.spaceState.public[property] = parseBest(newValue);
+                }
+                if(property[0] === "#"){
+                    log("mono", "space state change =>", property, newValue);
+                    
+                    let monobehaviors = SM.getAllMonoBehaviors();
+                    monobehaviors.forEach(async (monoBehavior)=>{
+                        if(monoBehavior.properties.file === property.slice(1)){
+                            monoBehavior._refresh();
+                        }
+                    });
                 }
             }catch(e){
                 log('net', "Failed to handle space state change:", event);
@@ -453,10 +463,12 @@ export class Networking {
 
         if(items[0] === "entity_removed"){
             let entityId = items[1];
-            let entity = SM.getEntityById(entityId);
+            let entity = SM.getEntityById(entityId, false);
             if(entity){
                 await entity._destroy();
                 await SM.updateHierarchy();
+            }else{
+                networking.deleteSpaceProperty(`$${entityId}:active`, true);
             }
         }
 
@@ -563,7 +575,7 @@ export class Networking {
             return;
         }
 
-        log("net-up", "setSpaceProperty: ", key, value, hostOnly);
+        //log("net-up", "setSpaceProperty: ", key, value, hostOnly);
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
@@ -594,9 +606,9 @@ export class Networking {
             SM.scene.SetPublicSpaceProps({ [key]: null });
             delete SM.scene.spaceState.public[key];
         }
-        if(window.isLocalHost){
-            localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
-        }
+        // if(window.isLocalHost){
+        //     localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
+        // }
     }
 
     async cleanupSceneOrphans(){

@@ -7,6 +7,7 @@
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
     const { SpacePropertyChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { SyncStatusComparator } = await import(`${window.repoUrl}/pages/world-inspector/sync-status-comparator.js`);
 
     export class SpacePropsPanel {
         constructor() {
@@ -20,7 +21,8 @@
             this.dragOffset = { x: 0, y: 0 };
             this.resizeStartPos = { x: 0, y: 0, width: 0, height: 0 };
             this.renders = 0; // Track number of render calls
-            this.viewMode = 'flat'; // 'flat' or 'struct'
+            this.viewMode = 'flat'; // 'flat', 'struct', or 'sync'
+            this.syncComparator = new SyncStatusComparator(); // Sync status comparator instance
             this.expandedNodes = new Set(); // Track expanded nodes in struct view
             this.showAllInline = false; // Whether to show all properties inline (default: only pinned)
             this.searchQuery = ''; // Search filter for flat view
@@ -261,6 +263,9 @@
                         <button class="view-toggle-btn ${this.viewMode === 'struct' ? 'active' : ''}" data-mode="struct" title="Structured view">
                             <span>🌳</span> Struct
                         </button>
+                        <button class="view-toggle-btn ${this.viewMode === 'sync' ? 'active' : ''}" data-mode="sync" title="Sync Status view">
+                            <span>🔄</span> Sync Status
+                        </button>
                         <button class="popup-close" title="Close">&times;</button>
                     </div>
                 </div>
@@ -281,7 +286,7 @@
                                     value="${this.searchQuery}"
                                     style="width: 100%; padding: 8px 12px; background: #2a2a2a; border: 1px solid #444; border-radius: 4px; color: #e0e0e0; font-size: 14px;">
                             </div>
-                            <div class="property-filters-container" id="propertyFiltersContainer" style="display: ${this.viewMode === 'struct' ? 'block' : 'none'}; padding: 10px; border-bottom: 1px solid #333;">
+                            <div class="property-filters-container" id="propertyFiltersContainer" style="display: ${this.viewMode === 'struct' || this.viewMode === 'sync' ? 'block' : 'none'}; padding: 10px; border-bottom: 1px solid #333;">
                                 <div style="font-size: 11px; color: #888; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px;">Show Properties:</div>
                                 <div class="property-filter-buttons" id="propertyFilterButtons" style="display: flex; flex-wrap: wrap; gap: 6px;">
                                     ${this.createPropertyFilterButtons()}
@@ -352,7 +357,7 @@
 
                         const propertyFiltersContainer = this.popupWindow.querySelector('#propertyFiltersContainer');
                         if (propertyFiltersContainer) {
-                            propertyFiltersContainer.style.display = mode === 'struct' ? 'block' : 'none';
+                            propertyFiltersContainer.style.display = (mode === 'struct' || mode === 'sync') ? 'block' : 'none';
                         }
 
                         // Clear search when switching to struct view
@@ -667,6 +672,13 @@
                         this.renderStructView('public', SM.scene.spaceState.public, true);
                     } else if (this.popupType === 'protected') {
                         this.renderStructView('protected', SM.scene.spaceState.protected, true);
+                    }
+                } else if (this.viewMode === 'sync') {
+                    // Render in sync status view
+                    if (this.popupType === 'public') {
+                        this.renderSyncView('public', SM.scene.spaceState.public, true);
+                    } else if (this.popupType === 'protected') {
+                        this.renderSyncView('protected', SM.scene.spaceState.protected, true);
                     }
                 } else {
                     // Render in flat view
@@ -2103,6 +2115,257 @@
                 }
             `;
             document.head.appendChild(styleEl);
+        }
+
+        /**
+         * Render sync status view showing divergences between local and network state
+         */
+        async renderSyncView(type, _props, isPopup = false) {
+            const suffix = isPopup ? 'Popup' : '';
+            const listElement = document.getElementById(`${type}PropsList${suffix}`);
+            const countElement = document.getElementById(`${type}PropsCount${suffix}`);
+
+            if (!listElement || !countElement) return;
+
+            // Get divergences
+            const divergences = await this.syncComparator.compare();
+            const summary = this.syncComparator.getSummary();
+
+            // Update count
+            countElement.textContent = `${summary.total} divergences`;
+
+            if (divergences.size === 0) {
+                listElement.innerHTML = `
+                    <div class="sync-status-header" style="padding: 20px; text-align: center; color: #10b981;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">✅</div>
+                        <div style="font-size: 16px; font-weight: bold;">All Synced!</div>
+                        <div style="font-size: 14px; color: #888; margin-top: 5px;">Local and network hierarchies are identical</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Build tree structure from divergences
+            const treeHTML = this.renderSyncTree(divergences);
+
+            listElement.innerHTML = `
+                <div class="sync-status-container">
+                    <div class="sync-summary" style="padding: 10px; background: #1e1e1e; border-bottom: 1px solid #333;">
+                        <div style="font-size: 12px; color: #888; margin-bottom: 8px;">DIVERGENCE SUMMARY</div>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            ${summary.bySeverity.high > 0 ? `<div style="color: #ef4444;">🔴 High: ${summary.bySeverity.high}</div>` : ''}
+                            ${summary.bySeverity.medium > 0 ? `<div style="color: #f59e0b;">🟡 Medium: ${summary.bySeverity.medium}</div>` : ''}
+                            ${summary.bySeverity.low > 0 ? `<div style="color: #3b82f6;">🔵 Low: ${summary.bySeverity.low}</div>` : ''}
+                            ${summary.bySeverity.info > 0 ? `<div style="color: #6b7280;">ℹ️ Info: ${summary.bySeverity.info}</div>` : ''}
+                        </div>
+                    </div>
+                    <div class="sync-tree" style="padding: 10px;">
+                        ${treeHTML}
+                    </div>
+                </div>
+            `;
+
+            // Add event listeners for resolution buttons
+            this.attachSyncResolutionListeners();
+        }
+
+        /**
+         * Render the sync status tree
+         */
+        renderSyncTree(divergences) {
+            // Get both hierarchies for structure
+            const localHierarchy = entities();
+            const networkHierarchy = networking.getSpaceHeir();
+
+            // Build a unified tree with divergence indicators
+            const treeHTML = [];
+
+            // Helper function to render entity with sync status
+            const renderEntity = (entity, path = '', depth = 0) => {
+                const currentPath = path ? `${path}/${entity.name}` : entity.name;
+                const divergence = divergences.get(currentPath);
+                const status = this.syncComparator.getEntityStatus(currentPath);
+
+                const indent = depth * 20;
+                let statusIcon = '🟢';
+                let statusClass = 'sync-status-synced';
+                let statusTooltip = 'Synced';
+
+                if (status === 'missing') {
+                    statusIcon = '🟡';
+                    statusClass = 'sync-status-missing';
+                    if (divergence && divergence.types.has('missing-local')) {
+                        statusTooltip = 'Only in network';
+                    } else {
+                        statusTooltip = 'Only in local';
+                    }
+                } else if (status === 'error') {
+                    statusIcon = '🔴';
+                    statusClass = 'sync-status-conflict';
+                    statusTooltip = 'Property conflicts';
+                } else if (status === 'warning') {
+                    statusIcon = '⚠️';
+                    statusClass = 'sync-status-warning';
+                    statusTooltip = 'Has divergences';
+                }
+
+                let html = `
+                    <div class="sync-tree-node ${statusClass}" style="margin-left: ${indent}px; padding: 4px; border-radius: 3px; margin-bottom: 2px;">
+                        <div class="sync-node-header" style="display: flex; align-items: center; gap: 8px;">
+                            <span class="sync-status-icon" title="${statusTooltip}">${statusIcon}</span>
+                            <span class="sync-entity-name" style="font-weight: bold; color: #64b5f6;">${entity.name}</span>
+                `;
+
+                // Add divergence details if any
+                if (divergence) {
+                    html += `<div class="sync-divergence-details" style="margin-left: 10px; font-size: 12px; color: #888;">`;
+
+                    if (divergence.details.active) {
+                        html += `<span style="color: #ef4444;">active: local=${divergence.details.active.local}, network=${divergence.details.active.network}</span>`;
+                    }
+
+                    if (divergence.details.layer) {
+                        html += `<span style="color: #f59e0b; margin-left: 10px;">layer: local=${divergence.details.layer.local}, network=${divergence.details.layer.network}</span>`;
+                    }
+
+                    if (divergence.details.components) {
+                        html += `<span style="color: #3b82f6; margin-left: 10px;">components: local=${divergence.details.components.localCount}, network=${divergence.details.components.networkCount}</span>`;
+                    }
+
+                    if (divergence.details.children) {
+                        html += `<span style="color: #f59e0b; margin-left: 10px;">children: local=${divergence.details.children.localCount}, network=${divergence.details.children.networkCount}</span>`;
+                    }
+
+                    html += `</div>`;
+
+                    // Show component property divergences
+                    if (divergence.details.componentProperties) {
+                        html += `<div style="margin-left: 20px; margin-top: 5px; padding: 5px; background: rgba(0,0,0,0.2); border-radius: 3px;">`;
+                        html += `<div style="font-size: 11px; color: #888; margin-bottom: 4px;">Component Property Divergences:</div>`;
+
+                        divergence.details.componentProperties.forEach(compDivergence => {
+                            html += `<div style="margin-bottom: 8px; padding: 4px; background: rgba(255,255,255,0.05); border-radius: 2px;">`;
+                            html += `<div style="font-weight: bold; color: #64b5f6; font-size: 12px; margin-bottom: 4px;">${compDivergence.type} (${compDivergence.componentId})</div>`;
+
+                            Object.entries(compDivergence.differences).forEach(([propName, values]) => {
+                                let localVal = values.local;
+                                let networkVal = values.network;
+
+                                // Format values for display
+                                if (typeof localVal === 'object' && localVal !== null) {
+                                    if (localVal.r !== undefined && localVal.g !== undefined && localVal.b !== undefined) {
+                                        // Color - show as color swatch
+                                        const localColor = `rgba(${Math.round(localVal.r * 255)}, ${Math.round(localVal.g * 255)}, ${Math.round(localVal.b * 255)}, ${localVal.a || 1})`;
+                                        const networkColor = networkVal ? `rgba(${Math.round(networkVal.r * 255)}, ${Math.round(networkVal.g * 255)}, ${Math.round(networkVal.b * 255)}, ${networkVal.a || 1})` : 'none';
+
+                                        html += `<div style="margin-left: 10px; font-size: 11px; display: flex; align-items: center; gap: 10px;">`;
+                                        html += `<span style="color: #888;">${propName}:</span>`;
+                                        html += `<div style="display: flex; align-items: center; gap: 5px;">`;
+                                        html += `<span style="color: #888;">local:</span>`;
+                                        html += `<div style="width: 20px; height: 20px; background: ${localColor}; border: 1px solid #555; border-radius: 2px;" title="${JSON.stringify(localVal)}"></div>`;
+                                        html += `</div>`;
+                                        html += `<div style="display: flex; align-items: center; gap: 5px;">`;
+                                        html += `<span style="color: #888;">network:</span>`;
+                                        html += `<div style="width: 20px; height: 20px; background: ${networkColor}; border: 1px solid #555; border-radius: 2px;" title="${JSON.stringify(networkVal)}"></div>`;
+                                        html += `</div>`;
+                                        html += `</div>`;
+                                    } else if (localVal.x !== undefined || localVal.y !== undefined || localVal.z !== undefined) {
+                                        // Vector3 or similar
+                                        html += `<div style="margin-left: 10px; font-size: 11px;">`;
+                                        html += `<span style="color: #888;">${propName}:</span>`;
+                                        html += `<span style="color: #ef4444; margin-left: 5px;">local: (${localVal.x?.toFixed(2) || 0}, ${localVal.y?.toFixed(2) || 0}, ${localVal.z?.toFixed(2) || 0})</span>`;
+                                        html += `<span style="color: #10b981; margin-left: 10px;">network: ${networkVal ? `(${networkVal.x?.toFixed(2) || 0}, ${networkVal.y?.toFixed(2) || 0}, ${networkVal.z?.toFixed(2) || 0})` : 'null'}</span>`;
+                                        html += `</div>`;
+                                    } else {
+                                        // Other objects
+                                        html += `<div style="margin-left: 10px; font-size: 11px;">`;
+                                        html += `<span style="color: #888;">${propName}:</span>`;
+                                        html += `<span style="color: #ef4444; margin-left: 5px;">local: ${JSON.stringify(localVal)}</span>`;
+                                        html += `<span style="color: #10b981; margin-left: 10px;">network: ${JSON.stringify(networkVal)}</span>`;
+                                        html += `</div>`;
+                                    }
+                                } else {
+                                    // Simple values
+                                    html += `<div style="margin-left: 10px; font-size: 11px;">`;
+                                    html += `<span style="color: #888;">${propName}:</span>`;
+                                    html += `<span style="color: #ef4444; margin-left: 5px;">local: ${localVal}</span>`;
+                                    html += `<span style="color: #10b981; margin-left: 10px;">network: ${networkVal}</span>`;
+                                    html += `</div>`;
+                                }
+                            });
+
+                            html += `</div>`;
+                        });
+
+                        html += `</div>`;
+                    }
+
+                    // Add resolution buttons for conflicts
+                    if (status === 'error' || status === 'missing') {
+                        html += `
+                            <div class="sync-resolution-buttons" style="margin-left: auto; display: flex; gap: 5px;">
+                                <button class="sync-push-btn" data-path="${currentPath}" style="padding: 2px 8px; font-size: 11px; background: #065f46; border: 1px solid #10b981; border-radius: 3px; color: #10b981; cursor: pointer;" title="Push local to network">→ Push</button>
+                                <button class="sync-pull-btn" data-path="${currentPath}" style="padding: 2px 8px; font-size: 11px; background: #7c2d12; border: 1px solid #f59e0b; border-radius: 3px; color: #f59e0b; cursor: pointer;" title="Pull from network">← Pull</button>
+                            </div>
+                        `;
+                    }
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+
+                treeHTML.push(html);
+
+                // Render children
+                if (entity.children && entity.children.length > 0) {
+                    entity.children.forEach(child => renderEntity(child, currentPath, depth + 1));
+                }
+            };
+
+            // Render all root entities
+            if (Array.isArray(localHierarchy)) {
+                localHierarchy.forEach(entity => renderEntity(entity));
+            }
+
+            // Also check for entities only in network
+            if (networkHierarchy && networkHierarchy.roots) {
+                networkHierarchy.roots.forEach(netEntity => {
+                    // Check if this entity exists in local
+                    const existsInLocal = localHierarchy && localHierarchy.some(e => e.name === netEntity.name);
+                    if (!existsInLocal) {
+                        renderEntity(netEntity);
+                    }
+                });
+            }
+
+            return treeHTML.join('');
+        }
+
+        /**
+         * Attach event listeners for sync resolution buttons
+         */
+        attachSyncResolutionListeners() {
+            // Push buttons
+            document.querySelectorAll('.sync-push-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const path = e.target.dataset.path;
+                    console.log(`Push local state to network for: ${path}`);
+                    // TODO: Implement push logic
+                    alert(`Push to network: ${path}\n(Not yet implemented)`);
+                });
+            });
+
+            // Pull buttons
+            document.querySelectorAll('.sync-pull-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const path = e.target.dataset.path;
+                    console.log(`Pull network state to local for: ${path}`);
+                    // TODO: Implement pull logic
+                    alert(`Pull from network: ${path}\n(Not yet implemented)`);
+                });
+            });
         }
     }
 

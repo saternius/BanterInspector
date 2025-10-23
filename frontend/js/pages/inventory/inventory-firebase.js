@@ -350,14 +350,7 @@ export class InventoryFirebase {
                        
                         (async ()=>{
                             await EditScript(itemName, item.data, {source: 'firebaseHandler'});
-                            let monobehaviors = SM.getAllMonoBehaviors();
-                            let targets = [];
-                            monobehaviors.forEach(async (monoBehavior)=>{
-                                if(monoBehavior.properties.file === itemName){
-                                    targets.push(monoBehavior._entity.id);
-                                    monoBehavior._refresh();
-                                }
-                            });
+                            
                             log("script", `no editor opened for ${itemName}, updating all instances: `, targets)
                         })();
                         

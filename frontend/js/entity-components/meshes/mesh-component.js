@@ -13,17 +13,16 @@ export class MeshComponent extends EntityComponent {
     }
 
     async initGrabbable(){
-        if(!SM.iamHost) return;
         let material = this._entity?.getComponent("Material");
         if(!material){
             setTimeout(this.initGrabbable.bind(this), 50);
             return;
         }
-        material.Set("shaderName", "Standard");
-        material.Set("color", material.properties.color);
-        this._entity.Set("layer", 5);
-        await AddComponent(this._entity.id, "MeshCollider")
-        await AddComponent(this._entity.id, "MonoBehavior", {
+        material._set("shaderName", "Standard");
+        material._set("color", material.properties.color);
+        this._entity._set("layer", 5);
+        SM._addComponent(this._entity, "MeshCollider");
+        SM._addComponent(this._entity, "MonoBehavior", {
             componentProperties:{
                 file: "Grabbable.js"
             }

@@ -1,0 +1,340 @@
+/**
+ * Sync Status View Styles
+ * Styles for the divergence visualization between local and network states
+ */
+
+/* Container */
+.sync-status-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Summary Section */
+.sync-summary {
+    padding: 10px;
+    background: #1e1e1e;
+    border-bottom: 1px solid #333;
+}
+
+.sync-summary-title {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sync-summary-stats {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Tree Container */
+.sync-tree {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Tree Nodes */
+.sync-tree-node {
+    margin-bottom: 2px;
+    padding: 4px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.sync-node-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+/* Status Classes */
+.sync-status-synced {
+    background: rgba(34, 197, 94, 0.05);
+}
+
+.sync-status-synced:hover {
+    background: rgba(34, 197, 94, 0.1);
+}
+
+.sync-status-missing {
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px dashed #fbbf24;
+}
+
+.sync-status-missing:hover {
+    background: rgba(251, 191, 36, 0.15);
+}
+
+.sync-status-conflict {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+}
+
+.sync-status-conflict:hover {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.sync-status-warning {
+    background: rgba(245, 158, 11, 0.05);
+    border-left: 3px solid #f59e0b;
+}
+
+.sync-status-warning:hover {
+    background: rgba(245, 158, 11, 0.1);
+}
+
+/* Status Icons */
+.sync-status-icon {
+    font-size: 14px;
+    cursor: help;
+}
+
+/* Entity Name */
+.sync-entity-name {
+    font-weight: bold;
+    color: #64b5f6;
+    font-family: 'Courier New', monospace;
+}
+
+/* Divergence Details */
+.sync-divergence-details {
+    margin-left: 10px;
+    font-size: 12px;
+    color: #888;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.sync-divergence-details span {
+    padding: 2px 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Resolution Buttons */
+.sync-resolution-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.sync-push-btn,
+.sync-pull-btn {
+    padding: 2px 8px;
+    font-size: 11px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+.sync-push-btn {
+    background: #065f46;
+    border: 1px solid #10b981;
+    color: #10b981;
+}
+
+.sync-push-btn:hover {
+    background: #10b981;
+    color: white;
+}
+
+.sync-pull-btn {
+    background: #7c2d12;
+    border: 1px solid #f59e0b;
+    color: #f59e0b;
+}
+
+.sync-pull-btn:hover {
+    background: #f59e0b;
+    color: white;
+}
+
+/* Status Badge */
+.sync-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 6px;
+    border-radius: 12px;
+    font-size: 11px;
+    margin-left: 8px;
+    font-weight: 500;
+}
+
+.sync-status-badge.high {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.sync-status-badge.medium {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+}
+
+.sync-status-badge.low {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+
+.sync-status-badge.info {
+    background: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+/* Animated pulse for active divergences */
+@keyframes divergence-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.sync-status-active-divergence {
+    animation: divergence-pulse 2s infinite;
+}
+
+/* All synced state */
+.sync-status-header {
+    padding: 20px;
+    text-align: center;
+}
+
+.sync-status-header .icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.sync-status-header .title {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.sync-status-header .subtitle {
+    font-size: 14px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Filters for sync view */
+.sync-filter-container {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.sync-filter-label {
+    font-size: 12px;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.sync-filter-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.sync-filter-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 3px;
+    color: #888;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sync-filter-btn:hover {
+    background: #333;
+    border-color: #555;
+    color: #aaa;
+}
+
+.sync-filter-btn.active {
+    background: #444;
+    border-color: #666;
+    color: #fff;
+}
+
+/* Hierarchy lines for better visualization */
+.sync-tree-node.has-children {
+    position: relative;
+}
+
+.sync-tree-node.has-children::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 25px;
+    bottom: 0;
+    width: 1px;
+    background: #333;
+}
+
+/* Tooltips */
+.sync-tooltip {
+    position: absolute;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #e0e0e0;
+    z-index: 10000;
+    max-width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+
+/* Loading state */
+.sync-loading {
+    padding: 20px;
+    text-align: center;
+    color: #888;
+}
+
+.sync-loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #333;
+    border-top: 3px solid #64b5f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.sync-error {
+    padding: 20px;
+    text-align: center;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid #ef4444;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.sync-error-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #ef4444;
+}
+
+.sync-error-message {
+    color: #fca5a5;
+    font-size: 14px;
+}

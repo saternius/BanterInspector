@@ -18,12 +18,12 @@ export class MonoBehaviorComponent extends EntityComponent {
         this._scriptFunction = (this._scriptFunction) ? this._scriptFunction : null;
         this.type = "MonoBehavior";
         this.setId(this.id.replace("undefined","MonoBehavior"));
-
-        if(this.properties.file && this.properties.file.length > 0){
-            if(SM.props["__" + this.id + "/_running:component"] !== false){
-                if(!this.ctx._running){
-                    await this.LoadScript(this.properties.file);
-                }
+        let fileName = this.properties.file;
+        if(fileName && fileName.length > 0){
+            if(scene.spaceState.public["#"+fileName]){
+                await this._loadScript(fileName);
+            }else if(window.inventory?.items?.[fileName]){
+                this.LoadScript(fileName);
             }else{
                 this.ctx._running = false;
             }
@@ -80,11 +80,10 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     async LoadScript(fileName) {
         if(!this._entity.active) return;
-        if(!this.hasOwnership()){
-            return;
-        }
-
         this.inventoryItem = window.inventory?.items?.[fileName];
+        // if(!this.hasOwnership()){
+        //     return;
+        // }
         if (!this.inventoryItem || this.inventoryItem.itemType !== 'script') {
             log("mono", `Script "${fileName}" not found in inventory`);
             return;
@@ -94,13 +93,18 @@ export class MonoBehaviorComponent extends EntityComponent {
         let scriptKey = '#'+fileName;
         if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== scriptContent){
             networking.setSpaceProperty(scriptKey, scriptContent, false);
+        }else{
+            networking.sendOneShot("load_script¶"+fileName+"¶"+this.id);
         }
-        networking.sendOneShot("load_script¶"+fileName+"¶"+this.id);
     }
 
     async _loadScript(fileName, attempts = 0) {
         let scriptKey = '#'+fileName;
         let scriptContent = scene.spaceState.public[scriptKey];
+        log("mono", "scriptContent", scriptContent)
+        if(!scriptContent && inventory?.items?.[fileName]){
+            scriptContent = inventory.items[fileName].data;
+        }
         if(!scriptContent){
             log("mono", `Script "${fileName}" not found in space state, retrying... (${attempts})`);
             await new Promise(r => setTimeout(r, 200));
@@ -198,7 +202,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _start(){
-        if(!this.hasOwnership()) return;
+        // if(!this.hasOwnership()) return;
         if(this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = true;
@@ -213,7 +217,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _stop(){
-        if(!this.hasOwnership()) return;
+        // if(!this.hasOwnership()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         this.ctx._running = false;
@@ -225,7 +229,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _update(){
-        if(!this.hasOwnership()) return;
+        // if(!this.hasOwnership()) return;
         if(!this.ctx._running) return;
         if(!this._entity.active) return;
         await this.ctx.onUpdate();
@@ -233,7 +237,7 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     async _refresh(){
-        if(!this.hasOwnership()) return;
+        // if(!this.hasOwnership()) return;
         if(!this._entity.active) return;
         log("mono", "refreshing script [", this.ctx._running, "]..")
         if(this.ctx._running){
@@ -241,7 +245,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             await this.ctx.onDestroy();
         }
         
-        await this.LoadScript(this.properties.file);
+        await this._loadScript(this.properties.file);
        
         log("mono", "refreshed", this.id)
     }

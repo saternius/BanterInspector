@@ -560,13 +560,13 @@ export class EntityRemoveChange extends Change{
     constructor(entityId, options) {
         super();
         this.timeout = 5000;
-        this.entity = SM.getEntityById(entityId);
-        if(!this.entity){
-            err("command", "Entity not found =>", entityId)
-            return;
-        }
+        // this.entity = SM.getEntityById(entityId);
+        // if(!this.entity){
+        //     err("command", "Entity not found =>", entityId)
+        //     return;
+        // }
         this.entityId = entityId;
-        this.entityExport = this.entity.export();
+        // this.entityExport = this.entity.export();
         this.siblingIndex = null;
         this.options = options || {};
     }
@@ -574,10 +574,10 @@ export class EntityRemoveChange extends Change{
     async apply() {
         super.apply();
 
-        if(this.entity.parentId && this.entity.parentId === "People"){
-            showNotification("People entities cannot be removed");
-            return;
-        }
+        // if(this.entity.parentId && this.entity.parentId === "People"){
+        //     showNotification("People entities cannot be removed");
+        //     return;
+        // }
 
         // // Check if any parent entity is staged for destruction
         // let currentEntity = this.entity;
@@ -595,7 +595,7 @@ export class EntityRemoveChange extends Change{
         // }
 
         // No parent is being destroyed, send the oneShot
-        let data = `entity_removed¶${this.entity.id}`
+        let data = `entity_removed¶${this.entityId}`
         networking.sendOneShot(data);
     }
 
@@ -801,47 +801,47 @@ export class LoadItemChange extends Change{
         networking.sendOneShot(data);
 
         //Additionally send all of the entity properties to space props
-        if(!this.options.ephemeral){
+        // if(!this.options.ephemeral){
 
-            let getEntitySpaceProperties = (entity)=>{
-                let props = {}
-                let getSubEntityProps = (entity)=>{
-                    props[`__${entity.id}/active:entity`] = entity.active
-                    props[`__${entity.id}/persistent:entity`] = entity.persistent
-                    props[`__${entity.id}/name:entity`] = entity.name
-                    props[`__${entity.id}/layer:entity`] = entity.layer
-                    props[`__${entity.id}/localPosition:entity`] = entity.transform.localPosition
-                    props[`__${entity.id}/localRotation:entity`] = entity.transform.localRotation
-                    props[`__${entity.id}/localScale:entity`] = entity.transform.localScale
-                    if(entity.components){
-                        entity.components.forEach(component=>{
-                            if(component.properties){   
-                                Object.keys(component.properties).forEach(prop=>{
-                                    props[`__${component.id}/${prop}:component`] = component.properties[prop]
-                                })
-                            }
-                        })
-                    }
+        //     let getEntitySpaceProperties = (entity)=>{
+        //         let props = {}
+        //         let getSubEntityProps = (entity)=>{
+        //             props[`__${entity.id}/active:entity`] = entity.active
+        //             props[`__${entity.id}/persistent:entity`] = entity.persistent
+        //             props[`__${entity.id}/name:entity`] = entity.name
+        //             props[`__${entity.id}/layer:entity`] = entity.layer
+        //             props[`__${entity.id}/localPosition:entity`] = entity.transform.localPosition
+        //             props[`__${entity.id}/localRotation:entity`] = entity.transform.localRotation
+        //             props[`__${entity.id}/localScale:entity`] = entity.transform.localScale
+        //             if(entity.components){
+        //                 entity.components.forEach(component=>{
+        //                     if(component.properties){   
+        //                         Object.keys(component.properties).forEach(prop=>{
+        //                             props[`__${component.id}/${prop}:component`] = component.properties[prop]
+        //                         })
+        //                     }
+        //                 })
+        //             }
                     
 
-                    if(entity.children){
-                        entity.children.forEach(child=>{
-                            getSubEntityProps(child)
-                        })
-                    }
+        //             if(entity.children){
+        //                 entity.children.forEach(child=>{
+        //                     getSubEntityProps(child)
+        //                 })
+        //             }
                     
-                }
+        //         }
     
-                getSubEntityProps(entity)
-                return props
-            }
+        //         getSubEntityProps(entity)
+        //         return props
+        //     }
 
 
-            let itemProps = getEntitySpaceProperties(this.itemData);
-            Object.keys(itemProps).forEach(key=>{
-                SM.props[key] = itemProps[key]
-            })
-        }
+        //     let itemProps = getEntitySpaceProperties(this.itemData);
+        //     Object.keys(itemProps).forEach(key=>{
+        //         SM.props[key] = itemProps[key]
+        //     })
+        // }
 
         this.entityId = `${this.parentId}/${this.itemData.name}`
         let checks = 0;
@@ -1695,7 +1695,7 @@ export class EditScriptItemChange extends Change{
                     inventory.ui.showPreview(this.scriptName);
                 }
                 showNotification(`Saved changes to "${this.scriptName}"`);
-                if(this.options.source === 'ui' && item.folder){
+                if(this.options.source === 'ui' && item.folder){ 
                     let folder = inventory.folders[item.folder];
                     if(folder){
                         folder.last_used = Date.now();
@@ -1710,7 +1710,17 @@ export class EditScriptItemChange extends Change{
                             networking.setData(ref, item);
                         }
                     }
+                }else if(this.options.source === 'firebaseHandler'){ // Firebase=>here=>mono=>SpaceProps=>mono
+                    let scriptKey = '#'+this.scriptName;
+                    if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== this.scriptContent){
+                        networking.setSpaceProperty(scriptKey, this.scriptContent, false);
+                    }
                 }
+                
+
+                
+
+                
             }
         }
 

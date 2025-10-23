@@ -677,9 +677,14 @@ const _originalLog = console.log;
 const _originalError = console.error;
 
 // Create custom log that shows correct source location
+window.logFrequency = {};
 window.log = function(tag, ...args) {
     if(!window.logger.active) return;
     const color = window.logger.getTagColor(tag);
+    if(!window.logFrequency[tag]){
+        window.logFrequency[tag] = 0;
+    }
+    window.logFrequency[tag]++;
     const callerInfo = window.logger.getCallerInfo();
 
     // Truncate excessively long arguments for console display
