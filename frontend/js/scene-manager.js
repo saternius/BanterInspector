@@ -202,14 +202,14 @@
 
 
                     log('init', "Lets find out who the host is")
-                    if(window.isLocalHost){
-                        log('init', "I am running locally so I must be the host")
-                        let lastSpaceState = localStorage.getItem('lastSpaceState');
-                        if(lastSpaceState){
-                            this.scene.spaceState = JSON.parse(lastSpaceState);
-                        }
-                        this._iamHost = true;
-                    }
+                    // if(window.isLocalHost){
+                    //     log('init', "I am running locally so I must be the host")
+                    //     let lastSpaceState = localStorage.getItem('lastSpaceState');
+                    //     if(lastSpaceState){
+                    //         this.scene.spaceState = JSON.parse(lastSpaceState);
+                    //     }
+                    //     this._iamHost = true;
+                    // }
 
                     log('init', "spaceState =>", this.scene.spaceState)            
                     if(!this.scene.spaceState.public.hostUser){
@@ -361,9 +361,9 @@
         }
         
         async _reset(){
-            if(window.isLocalHost){
-                localStorage.removeItem('lastSpaceState');
-            }
+            // if(window.isLocalHost){
+            //     localStorage.removeItem('lastSpaceState');
+            // }
             localStorage.removeItem('lastProps');
             window.location.reload();
         }

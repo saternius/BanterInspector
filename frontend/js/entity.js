@@ -102,6 +102,16 @@ export class Entity{
         }
     }
 
+    async GetComponent(componentType, index = 0, attempts = 0){
+        let component = this.components.filter(component => component.type === componentType)[index];
+        if(!component && attempts < 100){
+            await new Promise(resolve => setTimeout(resolve, 100));
+            log("entity", "GetComponent", "Retrying", componentType, index, attempts);
+            return this.GetComponent(componentType, index, attempts + 1);
+        }
+        return component;
+    }
+
     getComponent(componentType, index = 0){
         return this.components.filter(component => component.type === componentType)[index];
     }

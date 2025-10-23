@@ -33,22 +33,28 @@ let rgba = hexToRgb(color);
 log("Trackers", "color", rgba);
 
 let getOrMakeTracker = async (name)=>{
-    let tracker = SM.getEntityById(`People/${me}/Trackers/${name}`, false);
-    if(!tracker){
-        log("Trackers", "Tracker not found, loading =>", name);
-        tracker = await LoadItem('Tracker', `People/${me}/Trackers`, {name: name});
-        let material = tracker.getComponent("Material");
-        material.Set("color", rgba);
-        let attachment = tracker.getComponent("AttachedObject");
-        attachment.Set("attachmentPoint", attachmentPoints[name]);
-        attachment.Set("uid", scene.localUser.uid);
-
-        // tracker._bs.WatchTransform(e=>{
-        //     console.log("Trackers", "Tracker transform changed", e);
-        // })
-    }
+    let tracker = await LoadItem('Tracker', `People/${me}/Trackers`, {name: name});
+    let material = tracker.getComponent("Material");
+    log("Trackers", "Material found, setting color", rgba);
+    material.Set("color", rgba);
+    log("Trackers", "Attachment found, setting attachment point", attachmentPoints[name]);
+    let attachment = tracker.getComponent("AttachedObject");
+    attachment.Set("attachmentPoint", attachmentPoints[name]);
+    attachment.Set("uid", scene.localUser.uid);
     return tracker;
 }
+
+async function VerifyComponentExistance(path){
+    let entKey = `$${path}:active`
+    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
+    if(scene.spaceState.public[entKey]){
+        return true;
+    }
+    
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return await VerifyExistance(path);
+}
+
 
 async function VerifyExistance(path){
     let entKey = `$${path}:active`
@@ -61,29 +67,41 @@ async function VerifyExistance(path){
     return await VerifyExistance(path);
 }
 
+async function VerifyInexistance(path){
+    let entKey = `$${path}:active`
+    log("Trackers", "Verifying inexistence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
+    if(!scene.spaceState.public[entKey] || scene.spaceState.public[entKey] === "null"){
+        return true;
+    }
+    await RemoveEntity(path);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return await VerifyInexistance(path);
+}
 
 let headTracker = null;
 let leftHandTracker = null;
 let rightHandTracker = null;
 
+//conditions
+// it doesnt exist in spaceprops, but exist in local
+// it exists in spaceprops, but not in local
+// it exists in spaceprops and local
+// it exists in neither
+
+
 (async ()=>{
     log("Trackers", "[START]");
     await VerifyExistance("People");
-    log("Trackers", "'People' exists, checking my dir..", me);
-    if(!scene.spaceState.public['$People/'+me+':active']){
-        log("Trackers", `$People/${me} does not exist, creating..`);
-        await AddEntity("People", me);
-    }
-    log("Trackers", "Lets verify that it actually exists");
-    await VerifyExistance("People/"+me);
-    log("Trackers", "$People/${me} exists, checking trackers dir..");
-    
 
-    if(!scene.spaceState.public['$People/'+me+'/Trackers:active']){
-        log("Trackers", `$People/${me}/Trackers does not exist, creating..`);
-        await AddEntity("People/"+me, "Trackers");
-    }
-    await VerifyExistance(`People/${me}/Trackers`);
+    log("Trackers", "'People' exists, checking my dir..", me);
+
+    await RemoveEntity("People/"+me);
+    await VerifyInexistance("People/"+me);
+    await AddEntity("People", me);
+    await VerifyExistance("People/"+me);
+    await AddEntity("People/"+me, "Trackers");
+    await VerifyExistance("People/"+me+"/Trackers");
+
     log("Trackers", "$People/${me}/Trackers exists, loading trackers..");
 
 
@@ -96,57 +114,3 @@ let rightHandTracker = null;
 
     log("Trackers", "[END]");
 })()
-
-
-
-
-// let onUpdate = async ()=>{
-//     if(headTracker){
-//         let headTransform = headTracker.getTransform();
-//         await headTransform._bs.Q([13])
-//         headTransform._update("localPosition", headTransform._bs._localPosition);
-//         headTransform._update("localRotation", headTransform._bs._localRotation);
-//     }
-//     if(bodyTracker){
-//         let bodyTransform = bodyTracker.getTransform();
-//         await bodyTransform._bs.Q([13])
-//         bodyTransform._update("localPosition", bodyTransform._bs._localPosition);
-//         bodyTransform._update("localRotation", bodyTransform._bs._localRotation);
-//     }
-//     if(leftHandTracker){
-//         let leftHandTransform = leftHandTracker.getTransform();
-//         await leftHandTransform._bs.Q([13])
-//         leftHandTransform._update("localPosition", leftHandTransform._bs._localPosition);
-//         leftHandTransform._update("localRotation", leftHandTransform._bs._localRotation);
-//     }
-//     if(rightHandTracker){
-//         let rightHandTransform = rightHandTracker.getTransform();
-//         await rightHandTransform._bs.Q([13])
-//         rightHandTransform._update("localPosition", rightHandTransform._bs._localPosition);
-//         rightHandTransform._update("localRotation", rightHandTransform._bs._localRotation);
-//     }
-//     if(cockpitTracker){
-//         let cockpitTransform = cockpitTracker.getTransform();
-//         await cockpitTransform._bs.Q([13])
-//         cockpitTransform._update("localPosition", cockpitTransform._bs._localPosition);
-//         cockpitTransform._update("localRotation", cockpitTransform._bs._localRotation);
-//     }
-// }
-
-// setInterval(onUpdate, (1000/lifecycle.fps));
-
-// let loadTrackers = async ()=>{
-//     let trackersEnt = SM.getEntityById("People/Technocrat/Trackers", false);
-//     let headTracker = await getOrMakeTracker("LEFT_HAND");
-//     headTracker.Set("color", rgb);
-// }
-
-// let StartWhenHeirLoaded = ()=>{
-//    let myheir = SM.getEntityById("People/"+me);
-//    if(myheir){
-//     loadTrackers();
-//     clearInterval(StartWhenHeirLoaded);
-//    }
-// }
-// setInterval(StartWhenHeirLoaded, 500);
-// //Create an Event On everything loaded
