@@ -97,7 +97,7 @@
                 
                 // Set up change manager to scene manager integration
                 changeManager.addChangeListener(async (change) => {
-                    this.spacePropsPanel.render();
+                    this.spacePropsPanel.render('changeManager');
                     this.propertiesPanel.render(SM.selectedEntity);
                 });
                 
@@ -129,7 +129,7 @@
                 window.feedback = this.feedback;
                 // Initial render
                 this.hierarchyPanel.render();
-                this.spacePropsPanel.render();
+                this.spacePropsPanel.render('initialization');
                 this.lifecyclePanel.render();
                 this.setupGlobalEventHandlers();
                 
@@ -244,7 +244,7 @@
                 // Refresh relevant panels
                 const change = event.detail.change;
                 if (change.type === 'spaceProperty') {
-                    this.spacePropsPanel.render();
+                    this.spacePropsPanel.render('historyChangeApplied');
                 } else if (change.type === 'component' || change.type === 'entity' ||
                           change.type === 'componentAdd' || change.type === 'componentRemove') {
                     this.propertiesPanel.render(SM.selectedEntity);

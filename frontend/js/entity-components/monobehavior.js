@@ -72,9 +72,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         }
     }
 
-    hasOwnership(){
-        if(!this.inventoryItem) return false;
-        // if(this.inventoryItem.global) return true;
+    amOwner(){
         return this.properties._owner === SM.myName()
     }
 
@@ -93,6 +91,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         let scriptKey = '#'+fileName;
         if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== scriptContent){
             networking.setSpaceProperty(scriptKey, scriptContent, false);
+            log("Mono", "Setting script content", scriptKey, scriptContent)
         }else{
             networking.sendOneShot("load_script¶"+fileName+"¶"+this.id);
         }

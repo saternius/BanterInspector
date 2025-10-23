@@ -142,11 +142,11 @@ export class EntityComponent{
     }
     async verifyComponentExistance(attempts = 0, cancellationToken = null){
         let entKey = `__${this.id}:enabled`
-        log("verifyComponentExistance", "Verifying existence of", this.id, "with key", entKey, "and value", scene.spaceState.public[entKey]);
+        //log("verifyComponentExistance", "Verifying existence of", this.id, "with key", entKey, "and value", scene.spaceState.public[entKey]);
 
         // Check if verification was cancelled
         if(cancellationToken && cancellationToken.cancelled){
-            log("verifyComponentExistance", "Verification cancelled for", this.id);
+            //log("verifyComponentExistance", "Verification cancelled for", this.id);
             return false;
         }
 
@@ -159,7 +159,7 @@ export class EntityComponent{
 
         // Check cancellation before waiting
         if(cancellationToken && cancellationToken.cancelled){
-            log("verifyComponentExistance", "Verification cancelled before wait for", this.id);
+           // log("verifyComponentExistance", "Verification cancelled before wait for", this.id);
             return false;
         }
 
@@ -167,7 +167,7 @@ export class EntityComponent{
 
         // Check cancellation after waiting
         if(cancellationToken && cancellationToken.cancelled){
-            log("verifyComponentExistance", "Verification cancelled after wait for", this.id);
+            //log("verifyComponentExistance", "Verification cancelled after wait for", this.id);
             return false;
         }
 

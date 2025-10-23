@@ -349,9 +349,7 @@ export class InventoryFirebase {
 						}
                        
                         (async ()=>{
-                            await EditScript(itemName, item.data, {source: 'firebaseHandler'});
-                            
-                            log("script", `no editor opened for ${itemName}, updating all instances: `, targets)
+                            await EditScript(itemName, item.data, {source: 'firebaseHandler'});                            
                         })();
                         
 					} catch (e) {

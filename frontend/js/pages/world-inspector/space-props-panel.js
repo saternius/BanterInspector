@@ -21,6 +21,7 @@
             this.dragOffset = { x: 0, y: 0 };
             this.resizeStartPos = { x: 0, y: 0, width: 0, height: 0 };
             this.renders = 0; // Track number of render calls
+            this.renderOrigins = {}
             this.viewMode = 'flat'; // 'flat', 'struct', or 'sync'
             this.syncComparator = new SyncStatusComparator(); // Sync status comparator instance
             this.expandedNodes = new Set(); // Track expanded nodes in struct view
@@ -659,9 +660,11 @@
             }
         }
 
-        render() {
+        render(origin) {
             // Increment render counter
             this.renders++;
+            origin = origin || 'unknown';
+            this.renderOrigins[origin] = (this.renderOrigins[origin] || 0) + 1;
             this.updateRenderCount();
 
             if (this.isPopupOpen && this.popupWindow) {
@@ -1051,6 +1054,114 @@
         }
 
         /**
+         * View script content in a modal
+         */
+        viewScript(type, key) {
+            const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
+            const scriptContent = props[key];
+            const scriptName = key.substring(1); // Remove # prefix
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.className = 'script-view-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 80%;
+                max-width: 800px;
+                height: 80%;
+                background: #1e1e1e;
+                border: 1px solid #444;
+                border-radius: 8px;
+                z-index: 10000;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+            `;
+
+            // Modal header
+            const header = document.createElement('div');
+            header.style.cssText = `
+                padding: 12px 16px;
+                background: #2a2a2a;
+                border-bottom: 1px solid #444;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            `;
+            header.innerHTML = `
+                <h3 style="margin: 0; color: #e0e0e0;">📄 ${scriptName}</h3>
+                <button onclick="this.closest('.script-view-modal').remove()" style="background: none; border: none; color: #888; cursor: pointer; font-size: 20px;">×</button>
+            `;
+
+            // Script content with line numbers
+            const contentContainer = document.createElement('div');
+            contentContainer.style.cssText = `
+                flex: 1;
+                overflow: auto;
+                padding: 16px;
+                font-family: 'Consolas', 'Monaco', monospace;
+                font-size: 12px;
+            `;
+
+            // Add line numbers and content
+            const lines = scriptContent.split('\n');
+            const lineNumberWidth = lines.length.toString().length;
+
+            const pre = document.createElement('pre');
+            pre.style.cssText = 'margin: 0; color: #888;';
+
+            lines.forEach((line, index) => {
+                const lineNumber = (index + 1).toString().padStart(lineNumberWidth, ' ');
+                const lineElement = document.createElement('div');
+                lineElement.style.cssText = 'white-space: pre-wrap; word-break: break-word;';
+                lineElement.innerHTML = `<span style="color: #555; margin-right: 12px;">${lineNumber}</span><span style="color: #e0e0e0;">${this.escapeHtml(line)}</span>`;
+                pre.appendChild(lineElement);
+            });
+
+            contentContainer.appendChild(pre);
+
+            // Modal footer with metadata
+            const footer = document.createElement('div');
+            footer.style.cssText = `
+                padding: 8px 16px;
+                background: #2a2a2a;
+                border-top: 1px solid #444;
+                color: #888;
+                font-size: 11px;
+            `;
+            const sizeKB = (scriptContent.length / 1024).toFixed(1);
+            footer.textContent = `${lines.length} lines • ${sizeKB} KB`;
+
+            modal.appendChild(header);
+            modal.appendChild(contentContainer);
+            modal.appendChild(footer);
+
+            // Add to document
+            document.body.appendChild(modal);
+
+            // Close on Escape key
+            const closeOnEscape = (e) => {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', closeOnEscape);
+                }
+            };
+            document.addEventListener('keydown', closeOnEscape);
+        }
+
+        /**
+         * Escape HTML for safe display
+         */
+        escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        /**
          * Delete a property
          */
         async deleteProp(type, key) {
@@ -1319,6 +1430,7 @@
         /**
          * Parse flat key-value properties into a tree structure
          * Handles Banter's property structure:
+         * - # prefix for scripts
          * - $ prefix for entities with / path separator and : property separator
          * - __ prefix for components with : property separator
          * - Simple properties with no prefix
@@ -1326,12 +1438,22 @@
         parseKeysToTree(props) {
             const tree = {
                 simple: {},      // Properties with no prefix
+                scripts: {},     // # prefixed (script files)
                 entities: {},    // $ prefixed (entity properties)
                 components: {}   // __ prefixed (component properties)
             };
 
             for (const [key, value] of Object.entries(props)) {
-                if (key.startsWith('$')) {
+                if (key.startsWith('#')) {
+                    // Script file: #FlipController.js
+                    const scriptName = key.substring(1); // Remove # prefix
+                    tree.scripts[scriptName] = {
+                        content: value,
+                        size: value ? value.length : 0,
+                        lines: value ? value.split('\n').length : 0,
+                        _originalKey: key
+                    };
+                } else if (key.startsWith('$')) {
                     // Entity property: $Scene/Ground:position
                     this.parseEntityProperty(tree.entities, key, value);
                 } else if (key.startsWith('__')) {
@@ -1497,7 +1619,27 @@
                 treeContainer.appendChild(simpleSection);
             }
 
-            // Section 2: Entity Hierarchy
+            // Section 2: Scripts
+            if (Object.keys(tree.scripts).length > 0) {
+                const scriptsSection = document.createElement('div');
+                scriptsSection.className = 'tree-section';
+
+                const scriptsHeader = document.createElement('div');
+                scriptsHeader.className = 'tree-section-header';
+                scriptsHeader.innerHTML = '<span class="section-icon">📜</span> Scripts';
+                scriptsSection.appendChild(scriptsHeader);
+
+                const scriptsContent = document.createElement('div');
+                scriptsContent.className = 'tree-section-content';
+                for (const [scriptName, scriptData] of Object.entries(tree.scripts)) {
+                    const scriptElement = this.renderScriptProperty(type, scriptName, scriptData, isPopup);
+                    scriptsContent.appendChild(scriptElement);
+                }
+                scriptsSection.appendChild(scriptsContent);
+                treeContainer.appendChild(scriptsSection);
+            }
+
+            // Section 3: Entity Hierarchy
             if (Object.keys(tree.entities).length > 0) {
                 const entitySection = document.createElement('div');
                 entitySection.className = 'tree-section';
@@ -1517,7 +1659,7 @@
                 treeContainer.appendChild(entitySection);
             }
 
-            // Section 3: Components
+            // Section 4: Components
             if (Object.keys(tree.components).length > 0) {
                 const componentSection = document.createElement('div');
                 componentSection.className = 'tree-section';
@@ -1567,6 +1709,94 @@
             propElement.appendChild(actions);
 
             return propElement;
+        }
+
+        /**
+         * Render a script property (# prefix)
+         */
+        renderScriptProperty(type, scriptName, scriptData, isPopup = false) {
+            const propElement = document.createElement('div');
+            propElement.className = 'tree-script-prop';
+            propElement.style.cssText = 'display: flex; align-items: center; padding: 4px 0;';
+
+            // Expandable preview arrow
+            const previewId = `script_preview_${scriptName.replace(/\./g, '_')}`;
+            const expandBtn = document.createElement('button');
+            expandBtn.className = 'tree-arrow';
+            expandBtn.textContent = this.expandedNodes.has(previewId) ? '▼' : '▶';
+            expandBtn.style.cssText = 'background: none; border: none; color: #888; cursor: pointer; padding: 0 4px;';
+            expandBtn.onclick = () => {
+                this.toggleTreeNode(previewId);
+                // Update arrow
+                expandBtn.textContent = this.expandedNodes.has(previewId) ? '▼' : '▶';
+            };
+
+            // Script icon and name
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'tree-key script-key';
+            nameSpan.innerHTML = `📄 ${scriptName}`;
+            nameSpan.style.cssText = 'flex: 0 0 auto; margin-right: 10px;';
+
+            // Script metadata
+            const metaSpan = document.createElement('span');
+            metaSpan.className = 'tree-value script-meta';
+            const sizeKB = (scriptData.size / 1024).toFixed(1);
+            metaSpan.innerHTML = `<span style="color: #888; font-size: 11px;">${scriptData.lines} lines • ${sizeKB} KB</span>`;
+            metaSpan.style.cssText = 'flex: 1; margin-right: 10px;';
+
+            // Actions (view/edit/delete) - make them more visible
+            const actions = document.createElement('span');
+            actions.className = 'tree-actions';
+            actions.style.cssText = 'display: flex; gap: 4px; opacity: 1;';
+            actions.innerHTML = `
+                <button onclick="spacePropsPanel.viewScript('${type}', '${scriptData._originalKey}')"
+                        class="view-btn"
+                        title="View full script"
+                        style="background: #3b82c4; border: none; color: white; cursor: pointer; padding: 2px 6px; border-radius: 3px; font-size: 14px;">
+                    👁 View
+                </button>
+                <button onclick="spacePropsPanel.editProp('${type}', '${scriptData._originalKey}', ${isPopup})"
+                        class="edit-btn"
+                        title="Edit script"
+                        style="background: #444; border: none; color: #888; cursor: pointer; padding: 2px 6px; border-radius: 3px;">
+                    ✎
+                </button>
+                <button onclick="spacePropsPanel.deleteProp('${type}', '${scriptData._originalKey}')"
+                        class="delete-btn"
+                        title="Delete script"
+                        style="background: #444; border: none; color: #888; cursor: pointer; padding: 2px 6px; border-radius: 3px;">
+                    ×
+                </button>
+            `;
+
+            propElement.appendChild(expandBtn);
+            propElement.appendChild(nameSpan);
+            propElement.appendChild(metaSpan);
+            propElement.appendChild(actions);
+
+            // Create a wrapper for the whole script item including preview
+            const wrapperElement = document.createElement('div');
+            wrapperElement.appendChild(propElement);
+
+            // Preview container
+            const previewContainer = document.createElement('div');
+            previewContainer.className = 'script-preview-container';
+            previewContainer.id = previewId;
+            previewContainer.style.display = this.expandedNodes.has(previewId) ? 'block' : 'none';
+            previewContainer.style.marginLeft = '20px';
+            previewContainer.style.marginTop = '5px';
+
+            // Show first 10 lines of script
+            const lines = scriptData.content.split('\n').slice(0, 10);
+            const preview = document.createElement('pre');
+            preview.className = 'script-preview';
+            preview.style.cssText = 'background: #1a1a1a; padding: 8px; border-radius: 4px; font-size: 11px; color: #888; overflow-x: auto; margin: 0;';
+            preview.textContent = lines.join('\n') + (scriptData.lines > 10 ? '\n...' : '');
+            previewContainer.appendChild(preview);
+
+            wrapperElement.appendChild(previewContainer);
+
+            return wrapperElement;
         }
 
         /**
@@ -2361,6 +2591,7 @@
             document.querySelectorAll('.sync-pull-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const path = e.target.dataset.path;
+                    console.log(e)
                     console.log(`Pull network state to local for: ${path}`);
                     // TODO: Implement pull logic
                     alert(`Pull from network: ${path}\n(Not yet implemented)`);

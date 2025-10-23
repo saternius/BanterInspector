@@ -37,7 +37,7 @@ export class Entity{
             this._bs = newGameObject;
         }
 
-        this._bs.neworkId = entityData.networkId;
+        this._bs.networkId = entityData.networkId;
         
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         this.identifiers.add(this.id);
