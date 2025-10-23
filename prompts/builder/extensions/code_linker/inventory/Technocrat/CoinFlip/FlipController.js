@@ -1,4 +1,5 @@
 // CoinFlip Extension
+
 // Adds a draggable popup window with a flip button
 this.default = {
     flipTarget: {
@@ -209,8 +210,12 @@ class CoinFlip {
     }
 
     async performFlip() {
-        this.getCoin()._entity.getComponent("SyncedObject")._bs.TakeOwnership()
-        await new Promise(resolve => setTimeout(resolve, 50));
+        let syncedObject = this.getCoin()._entity.getComponent("SyncedObject")._bs;
+        if(!syncedObject.DoIOwn()){
+            syncedObject.TakeOwnership();
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+        
         // Prevent multiple flips
         if (this.isFlipping) {
             return;
@@ -705,29 +710,6 @@ class CoinFlip {
         if (this.updatePropsInterval) {
             clearInterval(this.updatePropsInterval);
         }
-
-        // // Start updating speed and angular speed stats
-        // this.updatePropsInterval = setInterval(() => {
-        //     const rigidBody = this.ctx._entity.getComponent("BanterRigidbody");
-
-        //     if (rigidBody && this.popup) {
-        //         // Calculate speed
-        //         const velocity = rigidBody._bs.velocity || { x: 0, y: 0, z: 0 };
-        //         const speed = Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2);
-        //         const speedElement = this.popup.querySelector('#speed');
-        //         if (speedElement) {
-        //             speedElement.textContent = speed.toFixed(3);
-        //         }
-
-        //         // Calculate angular speed
-        //         const angularVelocity = rigidBody._bs.angularVelocity || { x: 0, y: 0, z: 0 };
-        //         const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);
-        //         const angularSpeedElement = this.popup.querySelector('#angular-speed');
-        //         if (angularSpeedElement) {
-        //             angularSpeedElement.textContent = angularSpeed.toFixed(3);
-        //         }
-        //     }
-        // }, 10); // Update every 10ms
     }
 
     stopStatsUpdate() {
@@ -772,6 +754,20 @@ Object.entries(this.default).forEach(([key, val]) => {
 });
 
 this.onStart = () => {
+    if(this._component.amOwner()){ //initialize app scene vars
+        networking.setSpaceProperty("CoinFlip_Bankroll", 0);
+        networking.setSpaceProperty("CoinFlip_TotalFlips", 0);
+        networking.setSpaceProperty("CoinFlip_Multiplier", 0);
+        networking.setSpaceProperty("CoinFlip_MultBase", 0);
+        networking.setSpaceProperty("CoinFlip_CoinVal", 0.01);
+        networking.setSpaceProperty("CoinFlip_Offset", 0);
+        networking.setSpaceProperty("CoinFlip_FlipStrength", 3);
+        networking.setSpaceProperty("CoinFlip_MultPrice", 0.01);
+        networking.setSpaceProperty("CoinFlip_BasePrice", 0.01);
+        networking.setSpaceProperty("CoinFlip_OffsetPrice", 0.01);
+        networking.setSpaceProperty("CoinFlip_StrengthPrice", 0.01);
+    }
+
     console.log("CoinFlip extension starting...");
 
     // Singleton pattern: Destroy any existing instance first

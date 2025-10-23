@@ -1,0 +1,155 @@
+{
+  "author": "Technocrat",
+  "created": 1761235434698,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "options": {
+          "componentProperties": {
+            "addColliders": true,
+            "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=26aaad6b4dac57523a6151f319b99f58a24472e1cb41c339995e8ed2b76fc3dc"
+          }
+        },
+        "properties": {
+          "addColliders": true,
+          "climbable": false,
+          "enabled": true,
+          "generateMipMaps": true,
+          "legacyRotate": false,
+          "nonConvexColliders": false,
+          "slippery": false,
+          "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=26aaad6b4dac57523a6151f319b99f58a24472e1cb41c339995e8ed2b76fc3dc"
+        },
+        "type": "GLTF"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "created": 1757922834432,
+          "data": "log(\"GLTFGrabbable\", \"GLTFGrabbable\")",
+          "folder": "Scripts",
+          "imported": true,
+          "importedAt": 1761119962186,
+          "importedFrom": "inventory/Technocrat/Scripts",
+          "itemType": "script",
+          "last_used": 1761007379891,
+          "name": "GLTFGrabbable.js",
+          "remote": true,
+          "startup": false
+        },
+        "loadAsync": false,
+        "options": {
+          "componentProperties": {
+            "file": "GLTFGrabbable.js"
+          }
+        },
+        "properties": {
+          "enabled": true,
+          "file": "GLTFGrabbable.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      }
+    ],
+    "initialized": true,
+    "layer": 0,
+    "loadAsync": false,
+    "name": "log",
+    "parentId": "Scene",
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.4,
+        "y": 0.4,
+        "z": 0.4
+      }
+    },
+    "type": "Entity",
+    "uuid": 2539730339209
+  },
+  "description": "",
+  "folder": "Scripts",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/log_low_Material.001_0",
+      "newValue": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.1
+      },
+      "options": {
+        "oldValue": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/log_low_Material.001_0",
+      "newValue": {
+        "x": 0.4,
+        "y": 0.4,
+        "z": 0.4
+      },
+      "options": {
+        "oldValue": {
+          "x": 0.1,
+          "y": 0.1,
+          "z": 0.1
+        },
+        "source": "ui"
+      },
+      "property": "localScale"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/log_low_Material.001_0",
+      "newValue": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "options": {
+        "oldValue": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "source": "ui"
+      },
+      "property": "localPosition"
+    },
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/log_low_Material.001_0",
+      "newValue": "log",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1761235434698,
+  "name": "log"
+}

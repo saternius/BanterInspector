@@ -1,0 +1,278 @@
+{
+  "author": "Technocrat",
+  "created": 1761216512545,
+  "data": {
+    "active": true,
+    "components": [
+      {
+        "loadAsync": false,
+        "properties": {
+          "enabled": true,
+          "height": 1,
+          "radialSegments": 32,
+          "radius": 1
+        },
+        "spaceProps": {
+          "enabled": true,
+          "height": 1,
+          "radialSegments": 32,
+          "radius": 1
+        },
+        "type": "Cylinder"
+      },
+      {
+        "loadAsync": false,
+        "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "enabled": true,
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "spaceProps": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "enabled": true,
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "type": "Material"
+      },
+      {
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1761213291574,
+          "data": "this.default = {}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]) this.vars[key] = val\n})\n\nlet toggleIn = ()=>{\n    console.log(\"HELLO\")\n}\n\nlet toggleOut = ()=>{\n    console.log(\"HELLO\")\n}\n\n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"trigger-enter\", toggleIn)\n    this._entity._bs.On(\"trigger-exit\", toggleOut)\n}\n\nthis.onUpdate = ()=>{\n    //console.log(\"onUpdate\")\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.clear()\n}\n",
+          "description": "",
+          "folder": "PanelSpawner",
+          "global": false,
+          "icon": "📜",
+          "itemType": "script",
+          "lastUsed": 1761213291575,
+          "last_used": 1761216431967,
+          "name": "PanelSpawner.js",
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "enabled": true,
+          "file": "PanelSpawner.js",
+          "name": "myScript"
+        },
+        "spaceProps": {
+          "enabled": true,
+          "file": "PanelSpawner.js",
+          "name": "myScript"
+        },
+        "type": "MonoBehavior"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "convex": true,
+          "enabled": true,
+          "isTrigger": true
+        },
+        "spaceProps": {
+          "convex": true,
+          "enabled": true,
+          "isTrigger": true
+        },
+        "type": "MeshCollider"
+      },
+      {
+        "loadAsync": false,
+        "options": {
+          "source": "ui"
+        },
+        "properties": {
+          "enabled": true
+        },
+        "spaceProps": {
+          "enabled": true
+        },
+        "type": "ColliderEvents"
+      }
+    ],
+    "initialized": true,
+    "layer": 5,
+    "loadAsync": false,
+    "name": "SpawnPanel",
+    "parentId": "Scene",
+    "persistent": true,
+    "spaceProps": {
+      "active": true,
+      "components": [
+        "Cylinder_6154",
+        "Material_3501",
+        "MonoBehavior_9845",
+        "MeshCollider_8145",
+        "ColliderEvents_5089"
+      ],
+      "layer": 5,
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "position": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "rotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      }
+    },
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    },
+    "type": "Entity",
+    "uuid": 4818059139033
+  },
+  "description": "",
+  "folder": "PanelSpawner",
+  "history": [
+    {
+      "action": "set_entity_property",
+      "entityId": "Scene/NewEntity_97426",
+      "newValue": "SpawnPanel",
+      "options": {
+        "source": "ui"
+      },
+      "property": "name"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/SpawnPanel",
+      "folder": "PanelSpawner",
+      "itemName": "SpawnPanel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_9845"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/SpawnPanel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_9845",
+      "newValue": "PanelSpawner.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MeshCollider_8145"
+      },
+      "componentType": "MeshCollider",
+      "entityId": "Scene/SpawnPanel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "ColliderEvents_5089"
+      },
+      "componentType": "ColliderEvents",
+      "entityId": "Scene/SpawnPanel",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MeshCollider_8145",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "isTrigger"
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MeshCollider_8145",
+      "newValue": true,
+      "options": {
+        "source": "ui"
+      },
+      "property": "convex"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/SpawnPanel",
+      "folder": "PanelSpawner",
+      "itemName": "SpawnPanel",
+      "options": {
+        "source": "ui"
+      }
+    }
+  ],
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1761216512545,
+  "name": "SpawnPanel"
+}

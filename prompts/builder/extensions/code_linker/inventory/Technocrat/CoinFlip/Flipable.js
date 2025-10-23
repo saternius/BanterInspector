@@ -1,5 +1,3 @@
-
-
 this._entity.penny = true;
 let consecutive_heads = 0;
 const tracks = {
@@ -174,10 +172,17 @@ this.trackCoin = () => {
                     log('flipable', `Coin landed: ${result.toUpperCase()}`);
                     if(isHeads){
                         play_audio('success_'+consecutive_heads)
+
+                        let position = this._entity.Get("position")
+                        let positionStr = JSON.stringify(position);
+                        networking.runJS(`
+                            SM.getScriptByName("Gains").pop(${positionStr})
+                        `)
+
                     }else{
                         play_audio('nothing')
                     }
-                    SM.getScriptByName("Gains")?.pop?.(this._entity.Get("position"))
+                    
                     resolve(result);
                 }
 

@@ -44,6 +44,7 @@ export class Networking {
         this.db = null;
         this.storage = null;
         this.secret = this.getSecret();
+        this.logs = [];
         // Delay Firebase initialization to ensure all dependencies are loaded
       
     }
@@ -316,6 +317,7 @@ export class Networking {
         const { changes } = event.detail;
         changes.forEach(async (change) => {
             let { property, newValue, isProtected } = change;
+            this.logs.push({type:'down', key: property, value: newValue, isProtected: isProtected});
             if(window.logger.include.spaceProps){
                 //log("net-down", "handleSpaceStateChange: ", property, newValue);
                 //appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
@@ -352,6 +354,12 @@ export class Networking {
 
     async routeOneShot(data, timestamp, sender){
         let items = data.split("¶")
+
+        if(items[0] === "runJS"){
+            let code = items[1];
+            new Function(code)();
+            return;
+        }
 
         if(data === "reset"){
             await SM._reset();
@@ -576,6 +584,8 @@ export class Networking {
         }
 
         //log("net-up", "setSpaceProperty: ", key, value, hostOnly);
+        this.logs.push({type:'up', key: key, value: value, hostOnly: hostOnly, isProtected: isProtected});
+        
         if(typeof value === "object"){
             value = JSON.stringify(value);
         }
@@ -584,8 +594,11 @@ export class Networking {
             SM.scene.SetProtectedSpaceProps({ [key]: value });
             SM.scene.spaceState.protected[key] = value;
         } else {
-            SM.scene.SetPublicSpaceProps({ [key]: value });
-            SM.scene.spaceState.public[key] = value;
+            if(SM.scene.spaceState.public[key] === undefined || SM.scene.spaceState.public[key] !== value){
+                log("net", "Setting public space property =>", key, value)
+                SM.scene.SetPublicSpaceProps({ [key]: value });
+                SM.scene.spaceState.public[key] = value;
+            }
         }
         
         if(window.isLocalHost){
@@ -773,6 +786,10 @@ export class Networking {
             const firstNodeKey = Object.keys(nodes)[0];
             return firstNodeKey ? nodes[firstNodeKey] : null;
         }
+    }
+
+    runJS(code){
+        this.sendOneShot(`runJS¶${code}`);
     }
 }
 

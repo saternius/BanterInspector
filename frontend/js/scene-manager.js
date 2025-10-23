@@ -365,7 +365,8 @@
             //     localStorage.removeItem('lastSpaceState');
             // }
             localStorage.removeItem('lastProps');
-            window.location.reload();
+            // window.location.reload();
+            scene.OpenPage(`banter://${location.host}`)
         }
 
       

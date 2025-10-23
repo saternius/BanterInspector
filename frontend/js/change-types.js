@@ -177,9 +177,9 @@ export class ComponentPropertyChange extends Change{
         await this.component.Set(this.property, value);
 
         // Refresh UI if needed
-        if (inspector?.spacePropsPanel) {
-            inspector.spacePropsPanel.render();
-        }
+        // if (inspector?.spacePropsPanel) {
+        //     inspector.spacePropsPanel.render();
+        // }
     }
 
     getDescription() {
@@ -235,7 +235,7 @@ export class SpacePropertyChange extends Change{
         await networking.setSpaceProperty(this.property, value, this.protected);
         // Update space props panel
         if (inspector?.spacePropsPanel) {
-            inspector.spacePropsPanel.render();
+            inspector.spacePropsPanel.render('spacePropChanged');
         }
     }
 
@@ -1712,14 +1712,9 @@ export class EditScriptItemChange extends Change{
                     }
                 }else if(this.options.source === 'firebaseHandler'){ // Firebase=>here=>mono=>SpaceProps=>mono
                     let scriptKey = '#'+this.scriptName;
-                    if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== this.scriptContent){
-                        networking.setSpaceProperty(scriptKey, this.scriptContent, false);
-                    }
+                    log("Inventory", "Setting script content", scriptKey, this.scriptContent)
+                    networking.setSpaceProperty(scriptKey, this.scriptContent, false);
                 }
-                
-
-                
-
                 
             }
         }

@@ -511,7 +511,7 @@ export class SyncStatusComparator {
                     );
 
                     if (networkComp && localComp.properties && networkComp.properties) {
-                        const propDiffs = this.compareProperties(localComp.properties, networkComp.properties);
+                        const propDiffs = this.compareComponentPropertyValues(localComp.properties, networkComp.properties);
                         if (Object.keys(propDiffs).length > 0) {
                             componentPropDivergences.push({
                                 componentId: localComp.id || networkComp.id,
@@ -566,7 +566,7 @@ export class SyncStatusComparator {
      * @param {Object} networkProps - Network properties
      * @returns {Object} Differences between properties
      */
-    compareProperties(localProps, networkProps) {
+    compareComponentPropertyValues(localProps, networkProps) {
         const differences = {};
 
         // Check all properties from both local and network
