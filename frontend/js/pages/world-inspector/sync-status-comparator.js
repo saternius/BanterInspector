@@ -392,18 +392,18 @@ export class SyncStatusComparator {
      * @returns {Object} Component properties
      */
     getNetworkComponentProperties(componentId) {
-        if (!SM?.scene?.spaceState?.public) return {};
+        if (!networking.spaceState) return {};
 
-        const publicProps = SM.scene.spaceState.public;
+        const publicProps = networking.spaceState;
         const properties = {};
 
         // Component properties are stored with __ prefix
         const prefix = `__${componentId}:`;
 
-        Object.keys(publicProps).forEach(key => {
+        Object.keys(networking.spaceState).forEach(key => {
             if (key.startsWith(prefix)) {
                 const propName = key.substring(prefix.length);
-                const value = publicProps[key];
+                const value = networking.spaceState[key];
 
                 // Parse the value if it's a string representation
                 properties[propName] = parseBest ? parseBest(value) : value;

@@ -46,8 +46,8 @@ let getOrMakeTracker = async (name)=>{
 
 async function VerifyComponentExistance(path){
     let entKey = `$${path}:active`
-    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
-    if(scene.spaceState.public[entKey]){
+    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", networking.spaceState[entKey]);
+    if(networking.spaceState[entKey]){
         return true;
     }
     
@@ -58,8 +58,8 @@ async function VerifyComponentExistance(path){
 
 async function VerifyExistance(path){
     let entKey = `$${path}:active`
-    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
-    if(scene.spaceState.public[entKey]){
+    log("Trackers", "Verifying existence of", path, "with key", entKey, "and value", networking.spaceState[entKey]);
+    if(networking.spaceState[entKey]){
         return true;
     }
     
@@ -69,8 +69,8 @@ async function VerifyExistance(path){
 
 async function VerifyInexistance(path){
     let entKey = `$${path}:active`
-    log("Trackers", "Verifying inexistence of", path, "with key", entKey, "and value", scene.spaceState.public[entKey]);
-    if(!scene.spaceState.public[entKey] || scene.spaceState.public[entKey] === "null"){
+    log("Trackers", "Verifying inexistence of", path, "with key", entKey, "and value", networking.spaceState[entKey]);
+    if(!networking.spaceState[entKey] || networking.spaceState[entKey] === "null"){
         return true;
     }
     await RemoveEntity(path);

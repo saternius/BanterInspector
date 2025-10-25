@@ -697,4 +697,4 @@ like the following:
 ```
 
 Create a function in networking.js called getSpaceHeir() that processes
-scene.spaceState.public and returns the nested heirarchy.
+networking.spaceState and returns the nested heirarchy.

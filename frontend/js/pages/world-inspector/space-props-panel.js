@@ -36,7 +36,7 @@
             this.setupEventListeners();
             this.setupCollapsible();
             this.addPopupButtons();
-            this.render();
+            this.render('spaceprop:init');
         }
 
         /**
@@ -91,7 +91,7 @@
                                 protToggle.innerHTML = toggleBtn.innerHTML;
                                 protToggle.title = toggleBtn.title;
                             }
-                            this.render();
+                            this.render('spaceprop:showAllToggle');
                         };
                         publicHeader.appendChild(toggleBtn);
                     }
@@ -140,7 +140,7 @@
                                 pubToggle.innerHTML = toggleBtn.innerHTML;
                                 pubToggle.title = toggleBtn.title;
                             }
-                            this.render();
+                            this.render('spaceprop:showAllToggle2');
                         };
                         protectedHeader.appendChild(toggleBtn);
                     }
@@ -183,7 +183,7 @@
             this.isPopupOpen = true;
 
             // Render content in popup
-            this.render();
+            this.render('spaceprop:openPopup');
         }
 
         /**
@@ -204,7 +204,7 @@
             }
 
             // Re-render in inline panel
-            this.render();
+            this.render('spaceprop:closePopup');
             // Re-add popup buttons after rendering
             this.addPopupButtons();
         }
@@ -369,7 +369,7 @@
                         }
 
                         // Re-render with new view mode
-                        this.render();
+                        this.render("spaceprop:viewModeChanged");
                     }
                 });
             });
@@ -380,7 +380,7 @@
                 searchInput.addEventListener('input', (e) => {
                     this.searchQuery = e.target.value.toLowerCase();
                     // Re-render to apply filter
-                    this.render();
+                    this.render("spaceprop:searchInputChanged");
                 });
 
                 // Clear search on Escape
@@ -388,7 +388,7 @@
                     if (e.key === 'Escape') {
                         this.searchQuery = '';
                         searchInput.value = '';
-                        this.render();
+                        this.render("spaceprop:searchInputCleared");
                     }
                 });
             }
@@ -427,7 +427,7 @@
 
                     this.saveViewPreferences();
                     // Re-render to apply filters
-                    this.render();
+                    this.render("spaceprop:propertyFilterChanged");
                 });
             });
 
@@ -562,7 +562,7 @@
         setupEventListeners() {
             // Listen for space state changes
             document.addEventListener('spaceStateChanged', () => {
-                this.render();
+                this.render("spaceprop:spaceStateChanged");
             });
 
             // Add property key press handlers
@@ -573,7 +573,7 @@
             const refreshSpacePropsBtn = document.getElementById('refreshSpacePropsBtn');
             if(refreshSpacePropsBtn){
                 refreshSpacePropsBtn.addEventListener('mousedown', () => {
-                    this.render();
+                    this.render("spaceprop:refreshSpacePropsBtn");
                 });
             }
 
@@ -627,13 +627,13 @@
         smartRender(propertyKey = null, isProtected = false) {
             // If no property specified, always render (for general updates)
             if (!propertyKey) {
-                this.render();
+                this.render("spaceprop:smartRender");
                 return;
             }
 
             // Check if we should render for this property
             if (this.shouldRenderForProperty(propertyKey, isProtected)) {
-                this.render();
+                this.render("spaceprop:smartRender2");
             }
         }
 
@@ -647,7 +647,7 @@
             // Force re-fetch all properties from the scene
             // The SM.scene.spaceState already contains the latest values
             // Just force a full re-render
-            this.render();
+            this.render('spaceprop:fullRefresh');
 
             // Show a brief visual feedback that refresh occurred
             const refreshBtn = this.popupWindow?.querySelector('#refreshPopupBtn');
@@ -672,29 +672,29 @@
                 if (this.viewMode === 'struct') {
                     // Render in struct view
                     if (this.popupType === 'public') {
-                        this.renderStructView('public', SM.scene.spaceState.public, true);
+                        this.renderStructView('public', networking.spaceState, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderStructView('protected', SM.scene.spaceState.protected, true);
+                        this.renderStructView('protected', networking.spaceState, true);
                     }
                 } else if (this.viewMode === 'sync') {
                     // Render in sync status view
                     if (this.popupType === 'public') {
-                        this.renderSyncView('public', SM.scene.spaceState.public, true);
+                        this.renderSyncView('public', networking.spaceState, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderSyncView('protected', SM.scene.spaceState.protected, true);
+                        this.renderSyncView('protected', networking.spaceState, true);
                     }
                 } else {
                     // Render in flat view
                     if (this.popupType === 'public') {
-                        this.renderPropsList('public', SM.scene.spaceState.public, true);
+                        this.renderPropsList('public', networking.spaceState, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderPropsList('protected', SM.scene.spaceState.protected, true);
+                        this.renderPropsList('protected', networking.spaceState, true);
                     }
                 }
             } else {
                 // Render both in inline panel (always flat view for inline)
-                this.renderPropsList('public', SM.scene.spaceState.public, false);
-                this.renderPropsList('protected', SM.scene.spaceState.protected, false);
+                this.renderPropsList('public', networking.spaceState, false);
+                this.renderPropsList('protected', networking.spaceState, false);
             }
         }
 
@@ -983,8 +983,7 @@
 
             // Focus the input after render
             setTimeout(() => {
-                const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
-                const value = props[key];
+                const value = networking.spaceState [key];
                 const suffix = isPopup ? '_popup' : '';
 
                 if (isVector3Object(value)) {
@@ -1011,8 +1010,7 @@
          * Save edited property
          */
         saveProp(type, key, isPopup = false) {
-            const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
-            const currentValue = props[key];
+            const currentValue = networking.spaceState[key];
             const suffix = isPopup ? '_popup' : '';
 
             if (isVector3Object(currentValue)) {
@@ -1057,8 +1055,7 @@
          * View script content in a modal
          */
         viewScript(type, key) {
-            const props = type === 'public' ? SM.scene.spaceState.public : SM.scene.spaceState.protected;
-            const scriptContent = props[key];
+            const scriptContent = networking.spaceState[key];
             const scriptName = key.substring(1); // Remove # prefix
 
             // Create modal
@@ -1169,9 +1166,9 @@
                 const change = new SpacePropertyChange(key, undefined, type === 'protected', { source: 'ui' });
                 changeManager.applyChange(change);
                 if (type === 'public') {
-                    delete SM.scene.spaceState.public[key];
+                    delete networking.spaceState[key];
                 } else {
-                    delete SM.scene.spaceState.protected[key];
+                    delete networking.spaceState[key];
                 }
                 // Use smart render to only render if needed
                 this.smartRender(key, type === 'protected');
@@ -1193,7 +1190,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
                 changeManager.applyChange(change);
-                SM.scene.spaceState.public[key] = value;
+                networking.spaceState[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1216,7 +1213,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
                 changeManager.applyChange(change);
-                SM.scene.spaceState.public[key] = value;
+                networking.spaceState[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1239,7 +1236,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
                 changeManager.applyChange(change);
-                SM.scene.spaceState.protected[key] = value;
+                networking.spaceState[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1262,7 +1259,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
                 changeManager.applyChange(change);
-                SM.scene.spaceState.protected[key] = value;
+                networking.spaceState[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1329,9 +1326,9 @@
 
                 // Update local state
                 if (type === 'public') {
-                    SM.scene.spaceState.public[key] = newValue;
+                    networking.spaceState[key] = newValue;
                 } else {
-                    SM.scene.spaceState.protected[key] = newValue;
+                    networking.spaceState[key] = newValue;
                 }
             }
         }
@@ -2078,7 +2075,7 @@
                 this.expandedNodes.add(path);
             }
             this.saveViewPreferences();
-            this.render();
+            this.render('spaceprop:toggleTreeNode');
         }
 
         /**
@@ -2591,10 +2588,144 @@
             document.querySelectorAll('.sync-pull-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const path = e.target.dataset.path;
-                    console.log(e)
                     console.log(`Pull network state to local for: ${path}`);
-                    // TODO: Implement pull logic
-                    alert(`Pull from network: ${path}\n(Not yet implemented)`);
+
+                    try {
+                        // Get the divergence for this path
+                        const divergences = await this.syncComparator.compare();
+                        const divergence = divergences.get(path);
+
+                        if (!divergence) {
+                            console.warn(`No divergence found for path: ${path}`);
+                            return;
+                        }
+
+                        // Find the local entity
+                        const pathParts = path.split('/');
+                        let entity = null;
+
+                        // Navigate through the hierarchy to find the entity
+                        const localHierarchy = entities();
+                        if (localHierarchy && Array.isArray(localHierarchy)) {
+                            // Start with root entities
+                            const rootName = pathParts[0];
+                            entity = localHierarchy.find(e => e.name === rootName);
+
+                            // Navigate through children
+                            for (let i = 1; i < pathParts.length && entity; i++) {
+                                if (entity.children) {
+                                    entity = entity.children.find(c => c.name === pathParts[i]);
+                                }
+                            }
+                        }
+
+                        if (!entity) {
+                            console.error(`Entity not found for path: ${path}`);
+                            alert(`Cannot find entity: ${path}`);
+                            return;
+                        }
+
+                        // Get network state for this entity
+                        const networkHierarchy = networking.getSpaceHeir();
+                        let networkEntity = null;
+
+                        if (networkHierarchy && networkHierarchy.roots) {
+                            const rootName = pathParts[0];
+                            networkEntity = networkHierarchy.roots.find(e => e.name === rootName);
+
+                            for (let i = 1; i < pathParts.length && networkEntity; i++) {
+                                if (networkEntity.children) {
+                                    networkEntity = networkEntity.children.find(c => c.name === pathParts[i]);
+                                }
+                            }
+                        }
+
+                        if (!networkEntity) {
+                            console.error(`Network entity not found for path: ${path}`);
+                            alert(`Cannot find network state for: ${path}`);
+                            return;
+                        }
+
+                        // Apply updates directly to the local entity using _set (local-only updates)
+                        let updateCount = 0;
+
+                        // Handle active state divergence
+                        if (divergence.details.active && divergence.details.active.network !== undefined) {
+                            console.log(`Updating ${path} active: ${entity.active} -> ${networkEntity.active}`);
+                            await entity._set('active', networkEntity.active);
+                            updateCount++;
+                        }
+
+                        // Handle layer divergence
+                        if (divergence.details.layer && divergence.details.layer.network !== undefined) {
+                            console.log(`Updating ${path} layer: ${entity.layer} -> ${networkEntity.layer}`);
+                            await entity._set('layer', networkEntity.layer);
+                            updateCount++;
+                        }
+
+                        // Handle position divergence
+                        if (divergence.details.position && networkEntity.position) {
+                            console.log(`Updating ${path} position:`, entity.position, '->', networkEntity.position);
+                            await entity._set('position', networkEntity.position);
+                            updateCount++;
+                        }
+
+                        // Handle rotation divergence
+                        if (divergence.details.rotation && networkEntity.rotation) {
+                            console.log(`Updating ${path} rotation:`, entity.rotation, '->', networkEntity.rotation);
+                            await entity._set('rotation', networkEntity.rotation);
+                            updateCount++;
+                        }
+
+                        // Handle scale divergence
+                        if (divergence.details.scale && networkEntity.scale) {
+                            console.log(`Updating ${path} scale:`, entity.scale, '->', networkEntity.scale);
+                            await entity._set('scale', networkEntity.scale);
+                            updateCount++;
+                        }
+
+                        // Handle localPosition divergence
+                        if (divergence.details.localPosition && networkEntity.localPosition) {
+                            console.log(`Updating ${path} localPosition:`, entity.transform?.localPosition, '->', networkEntity.localPosition);
+                            await entity._set('localPosition', networkEntity.localPosition);
+                            updateCount++;
+                        }
+
+                        // Handle localRotation divergence
+                        if (divergence.details.localRotation && networkEntity.localRotation) {
+                            console.log(`Updating ${path} localRotation:`, entity.transform?.localRotation, '->', networkEntity.localRotation);
+                            await entity._set('localRotation', networkEntity.localRotation);
+                            updateCount++;
+                        }
+
+                        // Handle localScale divergence
+                        if (divergence.details.localScale && networkEntity.localScale) {
+                            console.log(`Updating ${path} localScale:`, entity.transform?.localScale, '->', networkEntity.localScale);
+                            await entity._set('localScale', networkEntity.localScale);
+                            updateCount++;
+                        }
+
+                        // TODO: Handle component property divergences
+                        if (divergence.details.componentProperties && divergence.details.componentProperties.length > 0) {
+                            console.log(`Component property divergences detected for ${path}, but pull for components not yet implemented`);
+                        }
+
+                        // Refresh the hierarchy panel to reflect changes
+                        if (inspector?.hierarchyPanel) {
+                            inspector.hierarchyPanel.render();
+                        }
+
+                        // Refresh the sync view to show updated state
+                        setTimeout(() => {
+                            this.renderSyncView('public', networking.spaceState, this.isPopupOpen);
+                        }, 500);
+
+                        console.log(`✅ Pull completed for ${path}: ${updateCount} properties updated locally`);
+
+                    } catch (error) {
+                        console.error('Error pulling network state:', error);
+                        alert(`Error pulling network state: ${error.message}`);
+                    }
                 });
             });
         }

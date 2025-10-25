@@ -122,13 +122,13 @@ let generateUI = () => {
     contentArea.style.overflow = "auto";
 
     // Get space state
-    const spaceState = SM.scene?.spaceState || { public: {}, protected: {} };
+    const spaceState = networking.spaceState || { public: {}, protected: {} };
 
     // Public Properties Section
-    renderPropertiesSection("Public", spaceState.public, "#4a9eff", contentArea);
+    renderPropertiesSection("Public", networking.spaceState, "#4a9eff", contentArea);
 
-    // Protected Properties Section
-    renderPropertiesSection("Protected", spaceState.protected, "#ff9a4a", contentArea);
+    // // Protected Properties Section
+    // renderPropertiesSection("Protected", spaceState.protected, "#ff9a4a", contentArea);
 
     // Update info at bottom
     const updateInfo = doc.createElement();

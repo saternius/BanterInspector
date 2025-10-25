@@ -150,7 +150,7 @@ export class EntityComponent{
             return false;
         }
 
-        if(scene.spaceState.public[entKey]){
+        if(networking.spaceState[entKey]){
             return true;
         }
         if(attempts > 30){
