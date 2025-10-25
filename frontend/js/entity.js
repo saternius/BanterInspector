@@ -2,7 +2,7 @@ const { TransformComponent } = await import(`${window.repoUrl}/entity-components
 const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoUrl}/utils.js`);
 
 export class Entity{
-    async init(entityData){
+    async init(entityData, options){
         log("entity", "init", entityData)
         this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
         this.parentId = entityData.parentId;
@@ -16,6 +16,7 @@ export class Entity{
         this.identifiers = new Set();
         this.initialized = false;
         this.type = "Entity";
+        this.options = options || {};
         this.uuid = Math.floor(Math.random() * 10000000000000);
 
         if(!entityData._bs){
@@ -23,6 +24,10 @@ export class Entity{
             let lp = entityData.localPosition;
             let lr = entityData.localRotation;
             let ls = entityData.localScale;
+            let p = entityData.position;
+            let r = entityData.rotation;
+            if(p){ params.position = new BS.Vector3(p.x, p.y, p.z) }
+            if(r){ params.rotation = new BS.Vector4(r.x, r.y, r.z, r.w) }
             if(lp){ params.localPosition = new BS.Vector3(lp.x, lp.y, lp.z) }
             if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
@@ -43,19 +48,84 @@ export class Entity{
         this.transform = this._bs.transform;
 
         //setup db link
-        this.ref = net.db.ref(`space/${net.spaceId}/${this.id}`);
-        this.ref.update({
-            _active: this.active,
-            _layer: this.layer,
-            _localPosition: this.localPosition,
-            _localRotation: this.localRotation,
-            _localScale: this.localScale,
-            _position: this.position,
-            _rotation: this.rotation,
-            _components: [this.components.map(component=>component.id)]
+        this.meta_ref = net.db.ref(`space/${net.spaceId}/${this.id}/__meta`);
+        this.meta_ref.child("active").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "active", data)
+            this.active = data;
+            this._bs.SetActive(this.active);
         })
+
+        this.meta_ref.child("layer").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "layer", data)
+            this.layer = data;
+            this._bs.SetLayer(this.layer);
+        })
+
+        this.meta_ref.child("localPosition").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "localPosition", data)
+            this.transform.localPosition = new BS.Vector3(data.x, data.y, data.z);
+        })
+
+        this.meta_ref.child("localRotation").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "localRotation", data)
+            this.transform.localRotation = new BS.Vector4(data.x, data.y, data.z, data.w);
+        })
+
+        this.meta_ref.child("localScale").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "localScale", data)
+            this.transform.localScale = new BS.Vector3(data.x, data.y, data.z);
+        })
+
+        this.meta_ref.child("position").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "position", data)
+            this.transform.position = new BS.Vector3(data.x, data.y, data.z);
+        })
+
+        this.meta_ref.child("rotation").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "rotation", data)
+            this.transform.rotation = new BS.Vector4(data.x, data.y, data.z, data.w);
+        })
+
+
+
+        // handle component changes
+        this.meta_ref.child("components").on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "components", data)
+        })
+
+
+        // handle children changes
+        this.meta_ref.on("child_added", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "child added", data)
+        })
+        this.meta_ref.on("child_removed", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "child removed", data)
+        })
+
+        if(this.options.context === "crawl"){
+            await this.meta_ref.set({
+                active: this.active,
+                layer: this.layer,
+                localPosition: this.localPosition,
+                localRotation: this.localRotation,
+                localScale: this.localScale,
+                position: this.position,
+                rotation: this.rotation,
+            });
+        }
         return this;
     }
+
 
     get localPosition(){
         if(!this.transform) return {x:0,y:0,z:0};
@@ -90,6 +160,11 @@ export class Entity{
             return this.GetComponent(componentType, index, attempts + 1);
         }
         return component;
+    }
+
+    AddComponent(component){
+        this.components.push(component);
+        this.meta_ref.child("components").child(component.id).set(true);
     }
 
     getComponent(componentType, index = 0){
@@ -135,8 +210,7 @@ export class Entity{
                 }
                 let componentClass = componentBSTypeMap[bs_comp.componentType];
                 let entityComponent = await new componentClass().init(this, bs_comp, props, {context: "ghost"});
-                entityComponent.setId(component_ref);
-                this.components.push(entityComponent);
+                this.AddComponent(entityComponent);
                 SM.entityData.componentMap[component_ref] = entityComponent;
                 inspector.propertiesPanel.render(this.id);
             }
@@ -220,9 +294,9 @@ export class Entity{
 
 
     _set(prop, newValue){
-        log("entity", `(${this.name}) update ${prop} =>`, newValue)
         newValue = parseBest(newValue);
         if(prop == "active"){
+            if(newValue === this.active) return;
             this.active = newValue;
             this._bs.SetActive(newValue);
             this.components.forEach(component => {
@@ -234,34 +308,32 @@ export class Entity{
                     }
                 }
             });
-        }
-        if(prop == "persistent"){
+        }else if(prop == "persistent"){
+            if(newValue === this.persistent) return;
             this.persistent = newValue;
-        }
-
-        if(prop == "layer"){
+        }else if(prop == "layer"){
+            if(newValue === this.layer) return;
             this.layer = newValue;
             this._bs.SetLayer(newValue);
-        }
-
-        if(prop == "localPosition"){
+        }else if(prop == "localPosition"){
+            if(newValue === this.localPosition) return;
             this.transform.localPosition = new BS.Vector3(newValue.x,newValue.y, newValue.z)
-        }
-        if(prop == "localRotation"){
+        }else if(prop == "localRotation"){
+            if(newValue === this.localRotation) return;
             if ('w' in newValue) {
                 newValue.w = parseFloat(newValue.w || 1);
             } else {
                 newValue = eulerToQuaternion(newValue);
             }
             this.transform.localRotation = new BS.Vector4(newValue.x, newValue.y, newValue.z, newValue.w);
-        }
-        if(prop == "localScale"){
+        }else if(prop == "localScale"){
+            if(newValue === this.localScale) return;
             this.transform.localScale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
-        }
-        if(prop == "position"){
+        }else if(prop == "position"){
+            if(newValue === this.position) return;
             this.transform.position = new BS.Vector3(newValue.x,newValue.y, newValue.z)
-        }
-        if(prop == "rotation"){
+        }else if(prop == "rotation"){
+            if(newValue === this.rotation) return;
             this.transform.rotation = new BS.Vector4(newValue.x,newValue.y, newValue.z, newValue.w)
         }
         // if(prop == "scale"){
@@ -307,7 +379,7 @@ export class Entity{
         if(property == "name"){
             this.Rename(value);
         }else{
-            this.ref.child(property).set(value);
+            this.meta_ref.update({[property]: value});
         }
     }
     

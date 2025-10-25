@@ -500,8 +500,23 @@ export class EntityAddChange extends Change{
             return exists;
         }
 
-        let data = `entity_added¶${this.parentId}¶${this.entityName}`
-        net.sendOneShot(data);
+        // let data = `entity_added¶${this.parentId}¶${this.entityName}`
+        // net.sendOneShot(data);
+
+        let parentRef = net.db.ref(`space/${net.spaceId}/${this.parentId}`);
+        let newEntityRef = parentRef.child(this.entityName);
+        await newEntityRef.set({
+            __meta: {
+                active: true,
+                layer: 0,
+                localPosition: {x: 0, y: 0, z: 0},
+                localRotation: {x: 0, y: 0, z: 0, w: 1},
+                localScale: {x: 1, y: 1, z: 1},
+                position: {x: 0, y: 0, z: 0},
+                rotation: {x: 0, y: 0, z: 0, w: 1},
+                components: []
+            }
+        });
 
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
