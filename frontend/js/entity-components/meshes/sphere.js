@@ -54,6 +54,6 @@ export class SphereComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Sphere:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

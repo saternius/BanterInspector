@@ -43,6 +43,6 @@ export class ParametricSurfaceComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on ${this.type}:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

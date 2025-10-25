@@ -53,6 +53,6 @@ export class SphereColliderComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on SphereCollider:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

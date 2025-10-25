@@ -54,7 +54,6 @@ export class TransformComponent extends EntityComponent {
                 this._bs[property] = new BS.Vector4(value.x, value.y, value.z, value.w);
             }
         }
-        this.checkSpaceDiff();
     }
 
     extractProperties(sceneComponent) {

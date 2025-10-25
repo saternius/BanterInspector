@@ -53,6 +53,5 @@ export class GrabHandleComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on GrabHandle:`, e);
         }
-        this.checkSpaceDiff();
     }
 }

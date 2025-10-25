@@ -42,6 +42,6 @@ export class MeshColliderComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on MeshCollider:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

@@ -45,6 +45,5 @@ export class SyncedObjectComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on SyncedObject:`, e);
         }
-        this.checkSpaceDiff();
     }
 }

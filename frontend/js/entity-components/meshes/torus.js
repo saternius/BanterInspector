@@ -51,6 +51,6 @@ export class TorusComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Torus:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

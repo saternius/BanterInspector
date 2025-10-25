@@ -61,6 +61,5 @@ export class HeldEventsComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on HeldEvents:`, e);
         }
-        this.checkSpaceDiff();
     }
 }

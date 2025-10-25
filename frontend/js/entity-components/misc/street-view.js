@@ -37,6 +37,6 @@ export class StreetViewComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on StreetView:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

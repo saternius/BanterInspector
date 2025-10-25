@@ -80,6 +80,6 @@ export class GeometryComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Geometry:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

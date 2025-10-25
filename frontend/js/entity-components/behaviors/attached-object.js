@@ -107,6 +107,5 @@ export class AttachedObjectComponent extends EntityComponent {
             log("scene", "Attaching Object", this._entity._bs, this.properties.uid, this.properties.attachmentPoint)
             SM.scene.LegacyAttachObject(this._entity._bs, this.properties.uid, this.properties.attachmentPoint);
         }
-        this.checkSpaceDiff();
     }
 }

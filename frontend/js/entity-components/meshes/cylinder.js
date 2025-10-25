@@ -53,6 +53,6 @@ export class CylinderComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Cylinder:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

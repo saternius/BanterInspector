@@ -63,6 +63,6 @@ export class CapsuleColliderComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on CapsuleCollider:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }
