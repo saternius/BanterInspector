@@ -28,7 +28,7 @@
     
     const  { sceneManager } = await import(`${window.repoUrl}/scene-manager.js`);
     updateModuleProgress("scene-manager");
-    const  { networking } = await import(`${window.repoUrl}/networking.js`);
+    const  { net } = await import(`${window.repoUrl}/networking.js`);
     updateModuleProgress("networking");
     const  { HierarchyPanel } = await import(`${window.repoUrl}/pages/world-inspector/hierarchy-panel.js`);
     updateModuleProgress("hierarchy-panel");
@@ -358,8 +358,8 @@
 
                 SM.scene.addEventListener('space-state-changed', (event) => {
                     // Sync external changes through change manager
-                    document.dispatchEvent(new CustomEvent('spaceStateChanged'));
-                    networking.handleSpaceStateChange(event);
+                    // document.dispatchEvent(new CustomEvent('spaceStateChanged'));
+                    // networking.handleSpaceStateChange(event);
                 });
 
                 SM.scene.On("loaded", async () => {
@@ -367,7 +367,7 @@
                 });
 
                 SM.scene.On("one-shot", async (event) => {
-                    networking.handleOneShot(event);
+                    net.handleOneShot(event);
                     document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
                 });
 

@@ -56,11 +56,12 @@
                             }
                         }
                         
-                        let crawlMutex = net.getVar("_MUTEX_CRAWL");
-                        while(crawlMutex && (Date.now() - crawlMutex) < 60000){
-                            log("init", "someone is already crawling the scene.. I should wait", crawlMutex, Date.now() - crawlMutex)
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                        }
+                        //TODO: have a mutex in place like
+                        // let crawlMutex = net.getVar("_MUTEX_CRAWL");
+                        // while(crawlMutex && (Date.now() - crawlMutex) < 60000){
+                        //     log("init", "someone is already crawling the scene.. I should wait", crawlMutex, Date.now() - crawlMutex)
+                        //     await new Promise(resolve => setTimeout(resolve, 1000));
+                        // }
 
                         let scene_entity = null;
                         let people_entity = null;
@@ -97,6 +98,7 @@
 
         // Resets the SpaceProperties
         async Reset(ui){
+            await net.clearSpaceState();
             let r = async ()=>{
                 networking.sendOneShot('reset');
                 this.resetLoadAttempt();
@@ -120,11 +122,7 @@
         }
         
         async _reset(){
-            // if(window.isLocalHost){
-            //     localStorage.removeItem('lastSpaceState');
-            // }
             localStorage.removeItem('lastProps');
-            // window.location.reload();
             scene.OpenPage(`banter://${location.host}`)
         }
 
@@ -244,9 +242,10 @@
             log('init', "loading hierarchy for", destination, "=>", hierarchy)
             if(!hierarchy){ return null}
             
-            if(!h.layer){ h.layer = 0 }
-            if(!h.components){ h.components = [] }
-            if(!h.children){ h.children = [] }
+            if(!hierarchy.layer){ hierarchy.layer = 0 }
+            if(!hierarchy.components){ hierarchy.components = [] }
+            if(!hierarchy.children){ hierarchy.children = [] }
+            if(!hierarchy.name){ hierarchy.name = destination }
             
             let hierarchyToEntity = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
@@ -256,13 +255,13 @@
                 }
 
                 const entity = await new Entity().init({
-                    name: destination,
+                    name: h.name,
                     parentId: parent_path,
                     _bs: gO,
                     layer: gO.layer,
                     localPosition: h.localPosition,
-                    localPosition: h.localPosition,
-                    localPosition: h.localPosition
+                    localRotation: h.localRotation,
+                    localScale: h.localScale
                 });
                 
                 //Make transform the top component
@@ -312,39 +311,39 @@
         }
 
 
-        async provideHierarchyEntity(){
-            let sendHier = async (path)=>{
-                let entity = SM.getEntityById(path, false)
-                if(!entity){
-                    log("init", "I don't have a hier for: ", path)
-                    return
-                }
-                networking.sendOneShot(`hierarchy_entity¶${path}¶${JSON.stringify(entity.export(['id']))}`)
-            }
-            sendHier("People/"+this.myName())
-            if(this._iamHost){
-                sendHier("Scene")
-            }
-        }
+        // async provideHierarchyEntity(){
+        //     let sendHier = async (path)=>{
+        //         let entity = SM.getEntityById(path, false)
+        //         if(!entity){
+        //             log("init", "I don't have a hier for: ", path)
+        //             return
+        //         }
+        //         networking.sendOneShot(`hierarchy_entity¶${path}¶${JSON.stringify(entity.export(['id']))}`)
+        //     }
+        //     sendHier("People/"+this.myName())
+        //     if(this._iamHost){
+        //         sendHier("Scene")
+        //     }
+        // }
 
-        async onRecievedHierarchyEntity(path, entityData){
-            if(this.getEntityById(path)){ return }
-            log("init", "recieved hierarchy for: ", path, "=>", entityData)
-            if(path == "Scene" && !this._iamHost){
-                window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
-                window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                log('init', "loading scene...")
-                let scene_entity = await this._loadEntity(entityData, null)
-                this.finalizeSceneLoad(scene_entity);
-            }else{
-                if(path.startsWith("People/")){
-                    let userName = path.split("/")[1]
+        // async onRecievedHierarchyEntity(path, entityData){
+        //     if(this.getEntityById(path)){ return }
+        //     log("init", "recieved hierarchy for: ", path, "=>", entityData)
+        //     if(path == "Scene" && !this._iamHost){
+        //         window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+        //         window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+        //         log('init', "loading scene...")
+        //         let scene_entity = await this._loadEntity(entityData, null)
+        //         this.finalizeSceneLoad(scene_entity);
+        //     }else{
+        //         if(path.startsWith("People/")){
+        //             let userName = path.split("/")[1]
                     
-                    let entity = await this._loadEntity(entityData, "People")
-                    await entity._setParent(this.getEntityById("People"))
-                }
-            }
-        }
+        //             let entity = await this._loadEntity(entityData, "People")
+        //             await entity._setParent(this.getEntityById("People"))
+        //         }
+        //     }
+        // }
 
 
         //Creates a entity from the inventory schema
@@ -424,18 +423,13 @@
 
 
         getHistoricalProps(component_ref){
-            let type = component_ref.split("_")[0]
-            let space_keys = Object.keys(scene.spaceState.public)
-            let props = {}
-            space_keys.forEach(key=>{
-                if(key.startsWith(`__${component_ref}`)){
-                    let prop = key.split(":")[1]
-                    //let prop = path[path.length-1]
-                    props[prop] = networking.spaceState[key] //this.props[key]
-                }
-            })
+            let props = net.state.components[component_ref]
+            if(!props){
+                log("init", "ISSUE: no props found for", component_ref)
+                props = {}
+            }
             return{
-                type: type,
+                type: component_ref.split("_")[0],
                 props: props
             }
         }

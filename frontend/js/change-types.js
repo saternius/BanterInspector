@@ -211,7 +211,7 @@ export class SpacePropertyChange extends Change{
     }
 
     getOldValue() {
-        return networking.spaceState[this.property];
+        return net.state[this.property];
     }
 
     async apply() {
@@ -225,12 +225,7 @@ export class SpacePropertyChange extends Change{
     }
 
     async change(value) {
-   
-        await networking.setSpaceProperty(this.property, value, this.protected);
-        // Update space props panel
-        if (inspector?.spacePropsPanel) {
-            inspector.spacePropsPanel.render('spacePropChanged');
-        }
+        await net.SetVar(this.property, value, this.protected);
     }
 
     getDescription() {
@@ -297,7 +292,7 @@ export class ComponentAddChange extends Change{
         }
         let event_str = JSON.stringify(event);
         let data = `component_added¶${event_str}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
         let checks = 0;
         const returnWhenComponentLoaded = () => {
             return new Promise(resolve => {
@@ -324,7 +319,7 @@ export class ComponentAddChange extends Change{
         super.undo();
         if (!this.componentProperties.id) return;
         let data = `component_removed¶${this.componentProperties.id}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
 
@@ -383,7 +378,7 @@ export class ComponentReorderChange extends Change{
         };
         let event_str = JSON.stringify(event);
         let data = `component_reordered¶${event_str}`;
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     async undo() {
@@ -396,7 +391,7 @@ export class ComponentReorderChange extends Change{
         };
         let event_str = JSON.stringify(event);
         let data = `component_reordered¶${event_str}`;
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -452,7 +447,7 @@ export class ComponentRemoveChange extends Change{
         }
 
         let data = `component_removed¶${this.componentId}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     async undo() {
@@ -466,7 +461,7 @@ export class ComponentRemoveChange extends Change{
         }
         let event_str = JSON.stringify(event);
         let data = `component_added¶${event_str}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -506,7 +501,7 @@ export class EntityAddChange extends Change{
         }
 
         let data = `entity_added¶${this.parentId}¶${this.entityName}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
 
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
@@ -529,7 +524,7 @@ export class EntityAddChange extends Change{
         if (!this.newEntityId) return;
         let entity_id = this.newEntityId
         let data = `entity_removed¶${entity_id}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -567,30 +562,8 @@ export class EntityRemoveChange extends Change{
 
     async apply() {
         super.apply();
-
-        // if(this.entity.parentId && this.entity.parentId === "People"){
-        //     showNotification("People entities cannot be removed");
-        //     return;
-        // }
-
-        // // Check if any parent entity is staged for destruction
-        // let currentEntity = this.entity;
-        // while (currentEntity) {
-        //     if (currentEntity._stagedForDestruction) {
-        //         // Parent is being destroyed, suppress the oneShot
-        //         return;
-        //     }
-        //     // Move to parent entity
-        //     if (currentEntity.parentId && (currentEntity.parentId !== 'Scene' || currentEntity.parentId !== 'People')) {
-        //         currentEntity = SM.getEntityById(currentEntity.parentId);
-        //     } else {
-        //         currentEntity = null;
-        //     }
-        // }
-
-        // No parent is being destroyed, send the oneShot
         let data = `entity_removed¶${this.entityId}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     async undo() {
@@ -599,7 +572,7 @@ export class EntityRemoveChange extends Change{
 
         // Recreate the entity hierarchy
         let data = `load_entity¶${this.entity.parentId}¶${JSON.stringify(this.entityExport)}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -792,51 +765,7 @@ export class LoadItemChange extends Change{
         }
        
         let data = `load_entity¶${this.parentId}¶${JSON.stringify(this.itemData)}`
-        networking.sendOneShot(data);
-
-        //Additionally send all of the entity properties to space props
-        // if(!this.options.ephemeral){
-
-        //     let getEntitySpaceProperties = (entity)=>{
-        //         let props = {}
-        //         let getSubEntityProps = (entity)=>{
-        //             props[`__${entity.id}/active:entity`] = entity.active
-        //             props[`__${entity.id}/persistent:entity`] = entity.persistent
-        //             props[`__${entity.id}/name:entity`] = entity.name
-        //             props[`__${entity.id}/layer:entity`] = entity.layer
-        //             props[`__${entity.id}/localPosition:entity`] = entity.transform.localPosition
-        //             props[`__${entity.id}/localRotation:entity`] = entity.transform.localRotation
-        //             props[`__${entity.id}/localScale:entity`] = entity.transform.localScale
-        //             if(entity.components){
-        //                 entity.components.forEach(component=>{
-        //                     if(component.properties){   
-        //                         Object.keys(component.properties).forEach(prop=>{
-        //                             props[`__${component.id}/${prop}:component`] = component.properties[prop]
-        //                         })
-        //                     }
-        //                 })
-        //             }
-                    
-
-        //             if(entity.children){
-        //                 entity.children.forEach(child=>{
-        //                     getSubEntityProps(child)
-        //                 })
-        //             }
-                    
-        //         }
-    
-        //         getSubEntityProps(entity)
-        //         return props
-        //     }
-
-
-        //     let itemProps = getEntitySpaceProperties(this.itemData);
-        //     Object.keys(itemProps).forEach(key=>{
-        //         SM.props[key] = itemProps[key]
-        //     })
-        // }
-
+        net.sendOneShot(data);
         this.entityId = `${this.parentId}/${this.itemData.name}`
         let checks = 0;
         const returnWhenEntityLoaded = () => {
@@ -867,7 +796,7 @@ export class LoadItemChange extends Change{
         super.undo();
         if(!this.entityId) return;
         let data = `entity_removed¶${this.entityId}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -938,7 +867,7 @@ export class CloneEntityChange extends Change{
 
         // Send OneShot message with source entity ID, clone name, and component ID map
         let data = `entity_cloned¶${this.sourceEntityId}¶${this.cloneName}¶${JSON.stringify(this.componentIdMap)}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
 
         // Wait for the cloned entity to be created and initialized
         const returnWhenEntityLoaded = () => {
@@ -961,7 +890,7 @@ export class CloneEntityChange extends Change{
         super.undo();
         if(!this.clonedEntityId) return;
         let data = `entity_removed¶${this.clonedEntityId}`
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
     getDescription() {
@@ -1116,7 +1045,7 @@ export class RenameItemChange extends Change{
             let sFolder = inventory.firebase.sanitizeFirebasePath(folder);
             let sItem = inventory.firebase.sanitizeFirebasePath(this.itemName);
             let firebasePath = `inventory/${sAuth}/${sFolder}/${sItem}`;
-            await networking.deleteData(firebasePath);
+            await net.deleteData(firebasePath);
         }
         
         //ADD ITEM
@@ -1276,7 +1205,7 @@ export class DeleteItemChange extends Change{
         const isRemote = this.isItemInRemoteLocation();
         if (!isRemote) return;
 
-        if (!window.networking) {
+        if (!window.net) {
             console.warn('Networking not initialized, skipping sync');
             return;
         }
@@ -1294,7 +1223,7 @@ export class DeleteItemChange extends Change{
             firebasePath += `/${sanitizedItemName}`;
             
             // Delete from Firebase
-            await networking.deleteData(firebasePath);
+            await net.deleteData(firebasePath);
             log('inventory', 'Item deleted from Firebase:', firebasePath);
         } catch (error) {
             err('inventory', 'Failed to delete item from Firebase:', error);
@@ -1701,13 +1630,12 @@ export class EditScriptItemChange extends Change{
                             let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}/${folder.path}/${script_name}`;
                             ref = ref;
                             log("inventory", "SAVING TO: ", ref)
-                            networking.setData(ref, item);
+                            net.setData(ref, item);
                         }
                     }
                 }else if(this.options.source === 'firebaseHandler'){ // Firebase=>here=>mono=>SpaceProps=>mono
-                    let scriptKey = '#'+this.scriptName;
-                    log("Inventory", "Setting script content", scriptKey, this.scriptContent)
-                    networking.setSpaceProperty(scriptKey, this.scriptContent, false);
+                    log("Inventory", "Setting script content", this.scriptName, this.scriptContent)
+                    net.setScript(this.scriptName, this.scriptContent);
                 }
                 
             }
