@@ -3,6 +3,7 @@ const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoU
 
 export class Entity{
     async init(entityData){
+        log("entity", "init", entityData)
         this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
         this.parentId = entityData.parentId;
         this.components = entityData.components || [];
@@ -26,11 +27,8 @@ export class Entity{
             if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
             
-    
-          
             let parentEntity = SM.getEntityOrScene(this.parentId);
             params.parent = parentEntity._bs;
-            
             params.layer = this.layer;
             params.active = this.active;
             let newGameObject = new BS.GameObject(params);
@@ -38,14 +36,13 @@ export class Entity{
         }
 
         this._bs.networkId = entityData.networkId;
-        
         this.id = (this.parentId) ? this.parentId + "/" + this.name : this.name;
         this.identifiers.add(this.id);
         window.SM.entityData.entityMap[this.id] = this;
         this.initialized = true;
         this.transform = this._bs.transform;
         this.spaceProps = {};
-        this.checkSpaceDiff();
+        this.ref = net.db.ref(`space/${net.spaceId}/${this.id}`);
         return this;
     }
 
@@ -66,40 +63,6 @@ export class Entity{
     }
     get scale(){
         return this.transform.scale;
-    }
-
-    getSpaceProps(){
-        return {
-            active: this.active,
-            layer: this.layer,
-            localPosition: this.transform.localPosition,
-            localRotation: this.transform.localRotation,
-            localScale: this.transform.localScale,
-            position: this.transform.position,
-            rotation: this.transform.rotation,
-            // scale: this.transform.scale,
-            components: this.components.map(c=>c.id),
-            children: this.children.map(c=>c.id)
-        }
-    }
-
-    checkSpaceDiff(){
-        if(!SM.iamHost) return;
-        let current = this.spaceProps;
-        let newProps = this.getSpaceProps();
-        let diff = Object.keys(newProps).filter(key=>{
-            if(current[key] === undefined) return true;
-            if(current[key] !== newProps[key]) return true;
-            return false;
-        });
-
-        if(diff.length > 0){
-            diff.forEach(k=>{
-                let spaceKey = `$${this.id}:${k}`;
-                networking.setSpaceProperty(spaceKey, newProps[k], true);
-            })
-            this.spaceProps = newProps;
-        }
     }
 
     async GetComponent(componentType, index = 0, attempts = 0){
@@ -127,24 +90,17 @@ export class Entity{
             return false;
         }
 
-        // Perform the reorder
         const [movedComponent] = this.components.splice(fromIndex, 1);
         this.components.splice(toIndex, 0, movedComponent);
-
-        // Update the Unity side if needed (this might require BS API support)
-        // For now, just update the local state
-        this.checkSpaceDiff();
         return true;
     }
 
     _loaded(){
-        //log("RANDOM DEBUG", this.id, Object.keys(SM.entityData.entityMap).join(", "))
         this._finished_loading = true;
         let scripts = this.components.filter(c=>c.type === "MonoBehavior");
         scripts.forEach(async script=>{
             await script.ctx.onLoaded();
         })
-        this.checkSpaceDiff();
     }
 
     async _checkForGhostComponents(id){
@@ -168,7 +124,6 @@ export class Entity{
                 inspector.propertiesPanel.render(this.id);
             }
         })
-        this.checkSpaceDiff();
     }
 
     async _setParent(newParent, keepPosition){
@@ -183,7 +138,6 @@ export class Entity{
         newParent.children.push(this);
         this.parentId = newParent.id;
         this._bs.SetParent(newParent._bs, keepPosition);
-        newParent.checkSpaceDiff();
         this._rename(this.name);
     }
 
@@ -209,45 +163,13 @@ export class Entity{
         await this._bs.Destroy();
         
         delete SM.entityData.entityMap[this.id];
-        this._deleteOldSpaceProperties();
-        // delete SM.props[`__${this.id}/active:entity`];
-        // delete SM.props[`__${this.id}/persistent:entity`];
-        // delete SM.props[`__${this.id}/name:entity`];
-        // delete SM.props[`__${this.id}/layer:entity`];
-        // delete SM.props[`__${this.id}/localPosition:entity`];
-        // delete SM.props[`__${this.id}/localRotation:entity`];
-        // delete SM.props[`__${this.id}/localScale:entity`];
-        // delete SM.props[`__${this.id}/position:entity`];
-        // delete SM.props[`__${this.id}/rotation:entity`];
-        // delete SM.props[`__${this.id}/scale:entity`];
+        this.ref.remove();
         if(this.parentId){
             const parent = SM.getEntityById(this.parentId);
             if (parent) {
                 parent.children = parent.children.filter(child => child.id !== this.id);
             }
         }
-    }
-
-    _deleteOldSpaceProperties(){
-        //let toDelete = [];
-        Object.keys(this.spaceProps).forEach(key=>{
-            networking.deleteSpaceProperty(`$${this.id}:${key}`, true);
-        })
-        // Object.keys(SM.props).forEach(key=>{
-        //     let lastSlash = key.lastIndexOf("/");
-        //     let compID = key.slice(2, lastSlash).trim();
-        //     let component = SM.getEntityComponentById(compID, false);
-        //     if(!component) return;
-        //     if(component._entity.id === this.id){
-        //         if(!key.endsWith(":component")){
-        //             toDelete.push(key);
-        //         }
-        //     }
-        // })
-
-        // for(let key of toDelete){
-        //     delete SM.props[key];
-        // }
     }
 
     transformVal(property){
@@ -263,23 +185,15 @@ export class Entity{
         return base;
     }
 
-    saveSpaceProperties(){
-        this.spaceProps = {}
-        this.checkSpaceDiff();
-        let parent = SM.getEntityById(this.parentId);
-        if(parent){
-            parent.checkSpaceDiff();
-        }
-    }
-
+ 
     _rename(newName){
-        if(!SM.iamHost) this._deleteOldSpaceProperties();
+        // if(!SM.iamHost) this._deleteOldSpaceProperties();
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
         this.id = this.parentId+"/"+this.name;
         this._bs.SetName(newName);
         SM.entityData.entityMap[this.id] = this;
-        if(!SM.iamHost) this.saveSpaceProperties();
+        // if(!SM.iamHost) this.saveSpaceProperties();
         this.children.forEach(child=>{
             child.parentId = this.id;
             child._rename(child.name);
@@ -291,9 +205,6 @@ export class Entity{
     _set(prop, newValue){
         log("entity", `(${this.name}) update ${prop} =>`, newValue)
         newValue = parseBest(newValue);
-        if(prop == "name"){
-            this._rename(newValue, true);
-        }
         if(prop == "active"){
             this.active = newValue;
             this._bs.SetActive(newValue);
@@ -339,7 +250,6 @@ export class Entity{
         // if(prop == "scale"){
         //     this.transform.scale = new BS.Vector3(newValue.x,newValue.y, newValue.z)
         // }
-        this.checkSpaceDiff();
     }
 
     export(keep){
@@ -370,15 +280,17 @@ export class Entity{
         return clone;
     }
 
+    async Rename(newName){
+        //TODO: one shot => call _rename, if host, clone and del fbdb
+        showNotification("Renaming entity is not supported yet");
+        return;
+    }
+
     async Set(property, value){
-        if(typeof value === "object"){
-            value = JSON.stringify(value);
-        }
-        SM.props[`__${this.id}/${property}:entity`] = value;
-        let message = `update_entity¶${this.id}¶${property}¶${value}`;
-        networking.sendOneShot(message);
         if(property == "name"){
-            this._rename(value);
+            this.Rename(value);
+        }else{
+            this.ref.child(property).set(value);
         }
     }
     

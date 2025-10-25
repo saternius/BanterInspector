@@ -672,29 +672,29 @@
                 if (this.viewMode === 'struct') {
                     // Render in struct view
                     if (this.popupType === 'public') {
-                        this.renderStructView('public', networking.spaceState, true);
+                        this.renderStructView('public', net.state, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderStructView('protected', networking.spaceState, true);
+                        this.renderStructView('protected', net.state, true);
                     }
                 } else if (this.viewMode === 'sync') {
                     // Render in sync status view
                     if (this.popupType === 'public') {
-                        this.renderSyncView('public', networking.spaceState, true);
+                        this.renderSyncView('public', net.state, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderSyncView('protected', networking.spaceState, true);
+                        this.renderSyncView('protected', net.state, true);
                     }
                 } else {
                     // Render in flat view
                     if (this.popupType === 'public') {
-                        this.renderPropsList('public', networking.spaceState, true);
+                        this.renderPropsList('public', net.state, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderPropsList('protected', networking.spaceState, true);
+                        this.renderPropsList('protected', net.state, true);
                     }
                 }
             } else {
                 // Render both in inline panel (always flat view for inline)
-                this.renderPropsList('public', networking.spaceState, false);
-                this.renderPropsList('protected', networking.spaceState, false);
+                this.renderPropsList('public', net.state, false);
+                this.renderPropsList('protected', net.state, false);
             }
         }
 
@@ -983,7 +983,7 @@
 
             // Focus the input after render
             setTimeout(() => {
-                const value = networking.spaceState [key];
+                const value = net.state[key];
                 const suffix = isPopup ? '_popup' : '';
 
                 if (isVector3Object(value)) {
@@ -1010,7 +1010,7 @@
          * Save edited property
          */
         saveProp(type, key, isPopup = false) {
-            const currentValue = networking.spaceState[key];
+            const currentValue = net.state[key];
             const suffix = isPopup ? '_popup' : '';
 
             if (isVector3Object(currentValue)) {
@@ -1055,7 +1055,7 @@
          * View script content in a modal
          */
         viewScript(type, key) {
-            const scriptContent = networking.spaceState[key];
+            const scriptContent = net.state[key];
             const scriptName = key.substring(1); // Remove # prefix
 
             // Create modal
@@ -1166,9 +1166,9 @@
                 const change = new SpacePropertyChange(key, undefined, type === 'protected', { source: 'ui' });
                 changeManager.applyChange(change);
                 if (type === 'public') {
-                    delete networking.spaceState[key];
+                    delete net.state[key];
                 } else {
-                    delete networking.spaceState[key];
+                    delete net.state[key];
                 }
                 // Use smart render to only render if needed
                 this.smartRender(key, type === 'protected');
@@ -1190,7 +1190,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
                 changeManager.applyChange(change);
-                networking.spaceState[key] = value;
+                net.state[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1213,7 +1213,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
                 changeManager.applyChange(change);
-                networking.spaceState[key] = value;
+                net.state[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1236,7 +1236,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
                 changeManager.applyChange(change);
-                networking.spaceState[key] = value;
+                net.state[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1259,7 +1259,7 @@
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
                 changeManager.applyChange(change);
-                networking.spaceState[key] = value;
+                net.state[key] = value;
                 keyInput.value = '';
                 valueInput.value = '';
                 // New properties should be rendered if we're showing all or if they're auto-pinned
@@ -1326,9 +1326,9 @@
 
                 // Update local state
                 if (type === 'public') {
-                    networking.spaceState[key] = newValue;
+                    net.state[key] = newValue;
                 } else {
-                    networking.spaceState[key] = newValue;
+                    net.state[key] = newValue;
                 }
             }
         }
@@ -2402,7 +2402,7 @@
         renderSyncTree(divergences) {
             // Get both hierarchies for structure
             const localHierarchy = entities();
-            const networkHierarchy = networking.getSpaceHeir();
+            const networkHierarchy = {roots: []} //networking.getSpaceHeir();
 
             // Build a unified tree with divergence indicators
             const treeHTML = [];
@@ -2626,7 +2626,7 @@
                         }
 
                         // Get network state for this entity
-                        const networkHierarchy = networking.getSpaceHeir();
+                        const networkHierarchy = {roots: []} // networking.getSpaceHeir();
                         let networkEntity = null;
 
                         if (networkHierarchy && networkHierarchy.roots) {
@@ -2717,7 +2717,7 @@
 
                         // Refresh the sync view to show updated state
                         setTimeout(() => {
-                            this.renderSyncView('public', networking.spaceState, this.isPopupOpen);
+                            this.renderSyncView('public', net.state, this.isPopupOpen);
                         }, 500);
 
                         console.log(`✅ Pull completed for ${path}: ${updateCount} properties updated locally`);

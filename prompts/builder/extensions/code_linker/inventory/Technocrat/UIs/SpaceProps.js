@@ -121,11 +121,8 @@ let generateUI = () => {
     contentArea.style.gap = "20px";
     contentArea.style.overflow = "auto";
 
-    // Get space state
-    const spaceState = networking.spaceState || { public: {}, protected: {} };
-
     // Public Properties Section
-    renderPropertiesSection("Public", networking.spaceState, "#4a9eff", contentArea);
+    renderPropertiesSection("Public", net.state, "#4a9eff", contentArea);
 
     // // Protected Properties Section
     // renderPropertiesSection("Protected", spaceState.protected, "#ff9a4a", contentArea);
