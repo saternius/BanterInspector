@@ -19,9 +19,9 @@ let toggleIn = (e)=>{
 let toggleOut = (e)=>{
     if(!inside) return;
     inside = false;
-    console.log("OUT", e)
+    console.log("OUT", e)   
     networking.deleteSpaceProperty(`BigButton_${user}`)
-    let survey = Object.keys(scene.spaceState.public).filter(s=>(s.startsWith("BigButton_") && (scene.spaceState.public[s] === true || scene.spaceState.public[s] === 'true')))
+    let survey = Object.keys(networking.spaceState).filter(s=>(s.startsWith("BigButton_") && (networking.spaceState[s] === true || networking.spaceState[s] === 'true')))
     let somebody = survey.length > 0
     console.log("OUT", survey, somebody)
     if(somebody) return;

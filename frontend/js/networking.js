@@ -39,14 +39,24 @@ let renderProps = ()=>{
 }
 
 
+
+
 export class Networking {
     constructor(){
         this.db = null;
         this.storage = null;
         this.secret = this.getSecret();
         this.logs = [];
-        // Delay Firebase initialization to ensure all dependencies are loaded
-      
+        this.spaceId = window.location.host.split(".")[0];
+        this.state = {};
+    }
+
+    get amHost(){
+        return this.state.vars.hostUser === SM.myName();
+    }
+
+    claimHost(){
+        this.setVar("hostUser", SM.myName());
     }
 
     getSecret(){
@@ -58,7 +68,7 @@ export class Networking {
         return secret;
     }
     
-    initFirebase() {
+    initFirebase(callback) {
         log("init", "initializing firebase")
         // Firebase configuration
         const firebaseConfig = window.FIREBASE_CONFIG || {
@@ -78,14 +88,30 @@ export class Networking {
                 firebase.initializeApp(firebaseConfig);
                 this.db = firebase.database();
                 this.storage = firebase.storage();
-                
-                // Test the connection
-                //this.testConnection();
 
                 let initFirebaseListeners = ()=>{
                     if(window.inventory && window.inventory.firebase){
                         window.inventory.firebase.setupFirebaseListeners()
                         attachAuthToDatabase(this)
+                        const spaceRef = this.db.ref("space/"+this.spaceId);
+                        spaceRef.on('value', (snapshot)=>{
+                            let spaceState = snapshot.val();
+                            if(!spaceState.vars){
+                                spaceState.vars = {}
+                                this.db.ref("space/"+this.spaceId+"/vars").set({});
+                            }
+                            if(!spaceState.People){
+                                spaceState.People = {}
+                                this.db.ref("space/"+this.spaceId+"/People").set({});
+                            }
+                            if(!spaceState.components){
+                                spaceState.components = {}
+                                this.db.ref("space/"+this.spaceId+"/components").set({});
+                            }
+
+                            this.state = spaceState;
+                            callback(spaceState);
+                        });
                     }else{
                         setTimeout(initFirebaseListeners, 500)
                     }
@@ -313,44 +339,7 @@ export class Networking {
         return result;
     }
 
-    handleSpaceStateChange(event) {
-        const { changes } = event.detail;
-        changes.forEach(async (change) => {
-            let { property, newValue, isProtected } = change;
-            this.logs.push({type:'down', key: property, value: newValue, isProtected: isProtected});
-            if(window.logger.include.spaceProps){
-                //log("net-down", "handleSpaceStateChange: ", property, newValue);
-                //appendToConsole("spaceProps", "spaceProps_"+Math.floor(Math.random()*1000000), `[${property}] => ${newValue}`);
-            }
-            try{
-                if(newValue[0] === "{" || newValue[0] === "["){
-                    newValue = JSON.parse(newValue);
-                }
-                if(newValue === null || newValue === "null"){
-                    return;
-                }
-                if (isProtected) {
-                    SM.scene.spaceState.protected[property] = parseBest(newValue);
-                } else {
-                    SM.scene.spaceState.public[property] = parseBest(newValue);
-                }
-                if(property[0] === "#"){
-                    log("mono", "space state change =>", property, newValue);
-                    
-                    let monobehaviors = SM.getAllMonoBehaviors();
-                    monobehaviors.forEach(async (monoBehavior)=>{
-                        if(monoBehavior.properties.file === property.slice(1)){
-                            monoBehavior._refresh();
-                        }
-                    });
-                }
-            }catch(e){
-                log('net', "Failed to handle space state change:", event);
-                err('net', "ERROR: ", e);
 
-            }
-        });
-    }
 
     async routeOneShot(data, timestamp, sender){
         let items = data.split("¶")
@@ -576,90 +565,176 @@ export class Networking {
     }
 
 
-    async setSpaceProperty(key, value, hostOnly, isProtected) {
-        if (!SM.scene) return;
-        
-        if(hostOnly && !SM.iamHost){
-            return;
+    convertKeyToFirebaseKey(key){
+        key = key.replace("$", "");
+        key = key.replace(":", "/");
+        if(key.startsWith("__")){
+            key = "components/"+key.slice(2);
         }
-
-        //log("net-up", "setSpaceProperty: ", key, value, hostOnly);
-        this.logs.push({type:'up', key: key, value: value, hostOnly: hostOnly, isProtected: isProtected});
-        
-        if(typeof value === "object"){
-            value = JSON.stringify(value);
-        }
-
-        if (isProtected) {
-            SM.scene.SetProtectedSpaceProps({ [key]: value });
-            SM.scene.spaceState.protected[key] = value;
-        } else {
-            if(SM.scene.spaceState.public[key] === undefined || SM.scene.spaceState.public[key] !== value){
-                log("net", "Setting public space property =>", key, value)
-                SM.scene.SetPublicSpaceProps({ [key]: value });
-                SM.scene.spaceState.public[key] = value;
-            }
-        }
-        
-        if(window.isLocalHost){
-            //this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
-            //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
-        }
+        return key;
     }
+
+    clearSpaceState(){
+        this.state = {};
+        this.db.ref("space/"+this.spaceId).remove();
+    }
+
+   
+    getVar(key){
+        return this.state.vars[key];
+    }
+
+    setVar(key, value, hostOnly){
+        if(hostOnly && !this.amHost) return;
+        this.state.vars[key] = value;
+        let ref = this.db.ref("space/"+this.spaceId+"/vars/"+key);
+        ref.set(value);
+    }
+
+    async SetVar(key, value, hostOnly){ 
+        if(hostOnly && !this.amHost) return;
+        let ref = this.db.ref("space/"+this.spaceId+"/vars/"+key);
+        await ref.set(value);
+    }
+
+    delVar(key, hostOnly){
+        if(hostOnly && !this.amHost) return;
+        delete this.state.vars[key];
+        let ref = this.db.ref("space/"+this.spaceId+"/vars/"+key);
+        ref.remove();
+    }
+    
+    async DelVar(key, hostOnly){
+        if(hostOnly && !this.amHost) return;
+        let ref = this.db.ref("space/"+this.spaceId+"/vars/"+key);
+        await ref.remove();
+    }
+
+
+    // async setSpaceProperty(key, value, hostOnly, isProtected) {
+    //     if (!SM.scene) return;
+        
+
+        
+        
+    //     // if(typeof value === "object"){
+    //     //     value = JSON.stringify(value);
+    //     // }
+
+    //     // if (isProtected) {
+    //     //     SM.scene.SetProtectedSpaceProps({ [key]: value });
+    //     //     SM.scene.spaceState.protected[key] = value;
+    //     // } else {
+    //     //     if(SM.scene.spaceState.public[key] === undefined || SM.scene.spaceState.public[key] !== value){
+    //     //         log("net", "Setting public space property =>", key, value)
+    //     //         SM.scene.SetPublicSpaceProps({ [key]: value });
+    //     //         SM.scene.spaceState.public[key] = value;
+    //     //     }
+    //     // }
+        
+    //     if(window.isLocalHost){
+    //         //this.handleSpaceStateChange({detail: {changes: [{property: key, newValue: value, isProtected: isProtected}]}})
+    //         //localStorage.setItem('lastSpaceState', JSON.stringify(this.scene.spaceState));
+    //     }
+    // }
 
     async deleteSpaceProperty(key, hostOnly, isProtected){
-        if(hostOnly && !SM.iamHost){
+        if(hostOnly && !this.amHost){
             return;
         }
+        let fb_key = this.convertKeyToFirebaseKey(key);
+        let ref = this.db.ref("space/"+this.spaceId);
+        ref.child(fb_key).remove();
+        delete this.state[key];
 
-        if(isProtected){
-            SM.scene.SetProtectedSpaceProps({ [key]: null });
-            delete SM.scene.spaceState.protected[key];
-        }else{
-            SM.scene.SetPublicSpaceProps({ [key]: null });
-            delete SM.scene.spaceState.public[key];
-        }
-        // if(window.isLocalHost){
-        //     localStorage.setItem('lastSpaceState', JSON.stringify(SM.scene.spaceState));
+        // if(isProtected){
+        //     SM.scene.SetProtectedSpaceProps({ [key]: "" });
+        //     delete SM.scene.spaceState.protected[key];
+        // }else{
+        //     SM.scene.SetPublicSpaceProps({ [key]: "" });
+        //     delete SM.scene.spaceState.public[key];
         // }
+      
     }
 
-    async cleanupSceneOrphans(){
-        this.cleanSpaceState();
-        if(!SM.iamHost){
-            log("net", "cleanupSceneOrphans: not host")
-            return;
-        }
-        Object.keys(SM.scene.spaceState.public).forEach(key=>{
-            if(key.startsWith("$")){
-                let entityId = key.split(":")[0].slice(1);
-                if(!SM.getEntityById(entityId, false)){
-                    log("net", "cleanupSceneOrphans: deleting orphan: ", entityId)
-                    this.deleteSpaceProperty(key, true);
-                }
-            }
-            if(key.startsWith("__")){
-                let componentId = key.split(":")[0].slice(2);
-                if(!SM.getEntityComponentById(componentId, false)){
-                    log("net", "cleanupSceneOrphans: deleting orphan: ", componentId)
-                    this.deleteSpaceProperty(key, true);
-                }
-            }
-        })
+    handleFBSpaceStateChange(snapshot){
+       
+        //log("net", "handleFBSpaceStateChange: ", key, value);
     }
 
-    cleanSpaceState(){
-        Object.keys(SM.scene.spaceState.public).forEach(key=>{
-            if(SM.scene.spaceState.public[key] === null || SM.scene.spaceState.public[key] === "null"){
-                delete SM.scene.spaceState.public[key];
-            }
-        });
-        Object.keys(SM.scene.spaceState.protected).forEach(key=>{
-            if(SM.scene.spaceState.protected[key] === null || SM.scene.spaceState.protected[key] === "null"){
-                delete SM.scene.spaceState.protected[key];
-            }
-        });
+    handleSpaceStateChange(event) {
+    //     const { changes } = event.detail;
+    //     changes.forEach(async (change) => {
+    //         let { property, newValue, isProtected } = change;
+    //         this.logs.push({type:'down', key: property, value: newValue, isProtected: isProtected});
+    //         try{
+    //             if(newValue[0] === "{" || newValue[0] === "["){
+    //                 newValue = JSON.parse(newValue);
+    //             }
+    //             if(newValue === null || newValue === "null"){
+    //                 return;
+    //             }
+    //             if (isProtected) {
+    //                 SM.scene.spaceState.protected[property] = parseBest(newValue);
+    //             } else {
+    //                 SM.scene.spaceState.public[property] = parseBest(newValue);
+    //             }
+    //             if(property[0] === "#"){
+    //                 log("mono", "space state change =>", property, newValue);
+                    
+    //                 let monobehaviors = SM.getAllMonoBehaviors();
+    //                 monobehaviors.forEach(async (monoBehavior)=>{
+    //                     if(monoBehavior.properties.file === property.slice(1)){
+    //                         monoBehavior._refresh();
+    //                     }
+    //                 });
+    //             }
+    //         }catch(e){
+    //             log('net', "Failed to handle space state change:", event);
+    //             err('net', "ERROR: ", e);
+
+    //         }
+    //     });
     }
+
+
+    // async cleanupSceneOrphans(){
+    //     this.cleanSpaceState();
+    //     if(!SM.iamHost){
+    //         log("net", "cleanupSceneOrphans: not host")
+    //         return;
+    //     }
+    //     Object.keys(this.spaceState).forEach(key=>{
+    //         if(key.startsWith("$")){
+    //             let entityId = key.split(":")[0].slice(1);
+    //             if(!SM.getEntityById(entityId, false)){
+    //                 log("net", "orphan entity =>", entityId, this.spaceState)
+    //                 //log("net", "cleanupSceneOrphans: deleting orphan: ", entityId)
+    //                 this.deleteSpaceProperty(key, true);
+    //             }
+    //         }
+    //         if(key.startsWith("__")){
+    //             let componentId = key.split(":")[0].slice(2);
+    //             if(!SM.getEntityComponentById(componentId, false)){
+    //                 //log("net", "cleanupSceneOrphans: deleting orphan: ", componentId)
+    //                 this.deleteSpaceProperty(key, true);
+    //             }
+    //         }
+    //     })
+    // }
+
+    // cleanSpaceState(){
+    //     // Object.keys(SM.scene.spaceState.public).forEach(key=>{
+    //     //     if(SM.scene.spaceState.public[key] === null || SM.scene.spaceState.public[key] === ""){
+    //     //         delete SM.scene.spaceState.public[key];
+    //     //     }
+    //     // });
+    //     // Object.keys(SM.scene.spaceState.protected).forEach(key=>{
+    //     //     if(SM.scene.spaceState.protected[key] === null || SM.scene.spaceState.protected[key] === ""){
+    //     //         delete SM.scene.spaceState.protected[key];
+    //     //     }
+    //     // });
+    // }
 
 
     async sendOneShot(data){
@@ -671,122 +746,122 @@ export class Networking {
         await this.routeOneShot(data, now, name)
     }
 
-    getSpaceHeir(){
-        // Convert flat space state to nested hierarchy
-        if (!SM.scene || !SM.scene.spaceState || !SM.scene.spaceState.public) {
-            console.warn('getSpaceHeir: Scene or space state not available');
-            return null;
-        }
+    // getSpaceHeir(){
+    //     // Convert flat space state to nested hierarchy
+    //     if (!this.spaceState) {
+    //         console.warn('getSpaceHeir: Scene or space state not available');
+    //         return null;
+    //     }
 
-        const flatState = SM.scene.spaceState.public;
-        const nodes = {};
+    //     const flatState = this.spaceState;
+    //     const nodes = {};
 
-        // First pass: Create all nodes and assign their properties
-        Object.keys(flatState).forEach(key => {
-            // Skip non-entity keys (those that don't start with $)
-            if (!key.startsWith('$')) return;
+    //     // First pass: Create all nodes and assign their properties
+    //     Object.keys(flatState).forEach(key => {
+    //         // Skip non-entity keys (those that don't start with $)
+    //         if (!key.startsWith('$')) return;
 
-            // Parse the key: $Scene/Ground/Sigil:position -> path: Scene/Ground/Sigil, prop: position
-            const colonIndex = key.indexOf(':');
-            if (colonIndex === -1) return; // Skip malformed keys
+    //         // Parse the key: $Scene/Ground/Sigil:position -> path: Scene/Ground/Sigil, prop: position
+    //         const colonIndex = key.indexOf(':');
+    //         if (colonIndex === -1) return; // Skip malformed keys
 
-            const path = key.substring(1, colonIndex); // Remove $ prefix
-            const property = key.substring(colonIndex + 1);
-            const value = flatState[key];
+    //         const path = key.substring(1, colonIndex); // Remove $ prefix
+    //         const property = key.substring(colonIndex + 1);
+    //         const value = flatState[key];
 
-            // Create node if it doesn't exist
-            if (!nodes[path]) {
-                const pathParts = path.split('/');
-                const name = pathParts[pathParts.length - 1];
-                nodes[path] = {
-                    name: name,
-                    path: path,
-                    children: [],
-                    components: []
-                };
-            }
+    //         // Create node if it doesn't exist
+    //         if (!nodes[path]) {
+    //             const pathParts = path.split('/');
+    //             const name = pathParts[pathParts.length - 1];
+    //             nodes[path] = {
+    //                 name: name,
+    //                 path: path,
+    //                 children: [],
+    //                 components: []
+    //             };
+    //         }
 
-            // Assign property to node
-            if (property === 'children') {
-                // Children is an array of paths, we'll process these in second pass
-                nodes[path]._childPaths = parseBest(value) || [];
-            } else if (property === 'components') {
-                nodes[path].components = parseBest(value) || [];
-            } else if (property === 'layer') {
-                // Convert layer string to number
-                nodes[path].layer = parseInt(value, 10);
-            } else if (property === 'active') {
-                // Skip active property if it's not a boolean string
-                nodes[path].active = parseBest(value);
-            } else if (property === 'scale' && value === 'undefined') {
-                // Skip undefined scale
-            } else {
-                // Handle all other properties (position, rotation, localScale, etc.)
-                nodes[path][property] = parseBest(value);
-            }
-        });
+    //         // Assign property to node
+    //         if (property === 'children') {
+    //             // Children is an array of paths, we'll process these in second pass
+    //             nodes[path]._childPaths = parseBest(value) || [];
+    //         } else if (property === 'components') {
+    //             nodes[path].components = parseBest(value) || [];
+    //         } else if (property === 'layer') {
+    //             // Convert layer string to number
+    //             nodes[path].layer = parseInt(value, 10);
+    //         } else if (property === 'active') {
+    //             // Skip active property if it's not a boolean string
+    //             nodes[path].active = parseBest(value);
+    //         } else if (property === 'scale' && value === 'undefined') {
+    //             // Skip undefined scale
+    //         } else {
+    //             // Handle all other properties (position, rotation, localScale, etc.)
+    //             nodes[path][property] = parseBest(value);
+    //         }
+    //     });
 
-        // Second pass: Build parent-child relationships
-        Object.keys(nodes).forEach(path => {
-            const node = nodes[path];
+    //     // Second pass: Build parent-child relationships
+    //     Object.keys(nodes).forEach(path => {
+    //         const node = nodes[path];
 
-            // Process children if they exist
-            if (node._childPaths && Array.isArray(node._childPaths)) {
-                node._childPaths.forEach(childPath => {
-                    // Child paths might not have the $ prefix in the array
-                    const cleanChildPath = childPath.startsWith('$') ? childPath.substring(1) : childPath;
-                    const childNode = nodes[cleanChildPath];
+    //         // Process children if they exist
+    //         if (node._childPaths && Array.isArray(node._childPaths)) {
+    //             node._childPaths.forEach(childPath => {
+    //                 // Child paths might not have the $ prefix in the array
+    //                 const cleanChildPath = childPath.startsWith('$') ? childPath.substring(1) : childPath;
+    //                 const childNode = nodes[cleanChildPath];
 
-                    if (childNode) {
-                        // Add child node reference
-                        node.children.push(childNode);
-                        // Mark that this node has been added as a child
-                        childNode._hasParent = true;
-                    }
-                });
-            }
+    //                 if (childNode) {
+    //                     // Add child node reference
+    //                     node.children.push(childNode);
+    //                     // Mark that this node has been added as a child
+    //                     childNode._hasParent = true;
+    //                 }
+    //             });
+    //         }
 
-            // Clean up temporary property
-            delete node._childPaths;
-        });
+    //         // Clean up temporary property
+    //         delete node._childPaths;
+    //     });
 
-        // Third pass: Find root nodes (nodes without parents) and clean up
-        const rootNodes = [];
-        Object.keys(nodes).forEach(path => {
-            const node = nodes[path];
+    //     // Third pass: Find root nodes (nodes without parents) and clean up
+    //     const rootNodes = [];
+    //     Object.keys(nodes).forEach(path => {
+    //         const node = nodes[path];
 
-            // If this node has no parent and is a top-level path (no slashes), it's a root
-            if (!node._hasParent && !path.includes('/')) {
-                rootNodes.push(node);
-            }
+    //         // If this node has no parent and is a top-level path (no slashes), it's a root
+    //         if (!node._hasParent && !path.includes('/')) {
+    //             rootNodes.push(node);
+    //         }
 
-            // Clean up internal properties
-            delete node._hasParent;
-            delete node.path;
-        });
+    //         // Clean up internal properties
+    //         delete node._hasParent;
+    //         delete node.path;
+    //     });
 
-        // If we have a single root node, return it directly
-        // Otherwise return an object with all root nodes
-        if (rootNodes.length === 1) {
-            return rootNodes[0];
-        } else if (rootNodes.length > 1) {
-            // Return an object with multiple roots
-            return {
-                roots: rootNodes
-            };
-        } else {
-            // Try to find Scene as the root if no clear roots found
-            const sceneNode = nodes['Scene'];
-            if (sceneNode) {
-                delete sceneNode._hasParent;
-                return sceneNode;
-            }
+    //     // If we have a single root node, return it directly
+    //     // Otherwise return an object with all root nodes
+    //     if (rootNodes.length === 1) {
+    //         return rootNodes[0];
+    //     } else if (rootNodes.length > 1) {
+    //         // Return an object with multiple roots
+    //         return {
+    //             roots: rootNodes
+    //         };
+    //     } else {
+    //         // Try to find Scene as the root if no clear roots found
+    //         const sceneNode = nodes['Scene'];
+    //         if (sceneNode) {
+    //             delete sceneNode._hasParent;
+    //             return sceneNode;
+    //         }
 
-            // Fallback: return first available node
-            const firstNodeKey = Object.keys(nodes)[0];
-            return firstNodeKey ? nodes[firstNodeKey] : null;
-        }
-    }
+    //         // Fallback: return first available node
+    //         const firstNodeKey = Object.keys(nodes)[0];
+    //         return firstNodeKey ? nodes[firstNodeKey] : null;
+    //     }
+    // }
 
     runJS(code){
         this.sendOneShot(`runJS¶${code}`);
@@ -794,7 +869,7 @@ export class Networking {
 }
 
 export const networking = new Networking();
-window.networking = networking;
+window.net = networking;
 
 
 //This should eventually be deprecated
@@ -824,7 +899,7 @@ function quaternionToEuler(quaternion) {
     }
 }
 
-window.networking.globalProps = (name, globalPos, globalRot) =>{
+window.net.globalProps = (name, globalPos, globalRot) =>{
     //console.log("globalProps", name, globalPos, globalRot)
     let p_arr = globalPos.split(",").map(x=>parseFloat(x))
     let r_arr = globalRot.split(",").map(x=>parseFloat(x))
@@ -844,7 +919,7 @@ window.networking.globalProps = (name, globalPos, globalRot) =>{
 window.testFirebaseDB = async () => {
     log('net', 'Testing Firebase Realtime Database...');
     try {
-        const db = networking.getDatabase();
+        const db = net.getDatabase();
         
         // Test 1: Add data
         const testData = {

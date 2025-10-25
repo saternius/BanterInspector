@@ -1,6 +1,4 @@
 // Import required dependencies
-
-
 const { deepClone, parseBest, appendToShell, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
@@ -213,11 +211,7 @@ export class SpacePropertyChange extends Change{
     }
 
     getOldValue() {
-        const spaceState = SM?.scene?.spaceState;
-        if (!spaceState) return undefined;
-        
-        const props = this.protected ? spaceState.protected : spaceState.public;
-        return props[this.property];
+        return networking.spaceState[this.property];
     }
 
     async apply() {

@@ -20,7 +20,7 @@ export class MonoBehaviorComponent extends EntityComponent {
         this.setId(this.id.replace("undefined","MonoBehavior"));
         let fileName = this.properties.file;
         if(fileName && fileName.length > 0){
-            if(scene.spaceState.public["#"+fileName]){
+            if(networking.spaceState["#"+fileName]){
                 await this._loadScript(fileName);
             }else if(window.inventory?.items?.[fileName]){
                 this.LoadScript(fileName);
@@ -68,7 +68,7 @@ export class MonoBehaviorComponent extends EntityComponent {
             name: "myScript",
             file: null,
             vars: SM.props[`__${this.id}/vars:component`] || {},
-            _owner: SM.scene.spaceState.public.hostUser
+            _owner: networking.spaceState.hostUser
         }
     }
 
@@ -89,7 +89,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
         let scriptContent = this.inventoryItem.data;
         let scriptKey = '#'+fileName;
-        if(scene.spaceState.public[scriptKey] === undefined || scene.spaceState.public[scriptKey] !== scriptContent){
+        if(networking.spaceState[scriptKey] === undefined || networking.spaceState[scriptKey] !== scriptContent){
             networking.setSpaceProperty(scriptKey, scriptContent, false);
             log("Mono", "Setting script content", scriptKey, scriptContent)
         }else{
@@ -99,7 +99,7 @@ export class MonoBehaviorComponent extends EntityComponent {
 
     async _loadScript(fileName, attempts = 0) {
         let scriptKey = '#'+fileName;
-        let scriptContent = scene.spaceState.public[scriptKey];
+        let scriptContent = networking.spaceState[scriptKey];
         log("mono", "scriptContent", scriptContent)
         if(!scriptContent && inventory?.items?.[fileName]){
             scriptContent = inventory.items[fileName].data;

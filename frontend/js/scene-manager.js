@@ -9,7 +9,6 @@
 
     export class SceneManager {
         constructor() {
-            this._iamHost = false;
             this.scene = null;
             this.entityData = {
                 entities: [],
@@ -22,21 +21,10 @@
             this.selectedEntity = null;
             this.expandedNodes = new Set();
             this.loaded = false;
-            
-
-            // setInterval(()=>{
-            //     this.saveScene();
-            // }, 5000)
-        }
-        
-        get iamHost(){
-            let res = this.scene?.spaceState?.public?.hostUser === this.myName()
-            this._iamHost = res
-            return res;
         }
 
         myName(){
-            return this.scene.localUser.name ///`${}_${this.scene.localUser.id.slice(0,3)}`
+            return this.scene.localUser.name 
         }
 
         changeFileServer(value){
@@ -44,150 +32,54 @@
             window.location.reload();
         }
 
-        async initializeMock(){
-            this.scene = {
-                unityLoaded: true,
-                spaceState:{
-                    public:{
-                        text:"Hello World"
-                    },
-                    protected:{
-                        maxPlayers: 8
-                    },
-                },
-                localUser:{
-                    name: "Tutorial User",
-                    uid: "tutorial-user-123",
-                    id: "abcdefghi",
-                    isLocal: true,
-                    color: "#667eea"
-                },
-                addEventListener: (event, callback)=>{
-                    console.log("event =>", event, callback)
-                },
-                On: (event, callback)=>{
-                    console.log("event =>", event, callback)
-                },
-                Find: (path)=>{
-                    console.log("Find =>", path)
-                    return null;
-                },
-                FindByPath: (path)=>{
-                    console.log("FindByPath =>", path)
-                    return null;
-                },
-                OneShot: (string)=>{
-                    console.log("OneShot =>", string)
-                }
-            }
-            this.props = {
-                hierarchy:{
-                    "name": "Scene",
-                    "layer": 0,
-                    "components": [],
-                    "children": [
-                        {
-                            "name": "Ground",
-                            "layer": 0,
-                            "components": ["BoxCollider_25563"],
-                            "children": [
-                                {
-                                    "name": "GroundMesh",
-                                    "layer": 0,
-                                    "components": [],
-                                    "children": []
-                                },
-                                {
-                                    "name": "Sigil",
-                                    "layer": 0,
-                                    "components": [],
-                                    "children": []
-                                }
-                            ]
-                        }
-                    ]
-                }
-            }
-            let root = new BS.GameObject("Scene");
-            let entity = new Entity().init({
-                name: "Scene",
-                parentId: null,
-                layer: 0,
-                _bs: root
-            });
-            this.entityData.entities = [entity];
-            this.entityData.entityMap[entity.id] = entity;
-            await this.loadHierarchy(this.props.hierarchy);
-            this.loaded = true;
-        }
-
         async initialize() {
-            
-            if(window.useMock){
-                await this.initializeMock();
-                this.setup = async ()=>{
-                    this.loaded = true;
-                }
-                return;
-            }
-
-            // let fileServer = localStorage.getItem('file_server');
-            // if(!fileServer){
-            //     localStorage.setItem('file_server', "stable");
-            //     fileServer = "stable";
-            // }
-            // let fileServerEl = document.getElementById("custom-fileServer");
-            // fileServerEl.children[0].innerHTML = fileServer;
-            let fileServer = "ngrok";
-
             try {
                 if (typeof window.BS === 'undefined' || !window.BS.BanterScene) {
                     err('init', 'BS library not available');
                     return;
                 }
                 this.scene = window.BS.BanterScene.GetInstance();
-
                 this.setup = async ()=>{
                     if(this.loaded) return;
-                    networking.initFirebase()
+                    log("init", "initializing firebase..")
 
-                    log('init', "setting up inspector")
-                    networking.cleanSpaceState();
-
-                    log("pre-setup", 'spaceState =>', JSON.parse(JSON.stringify(this.scene.spaceState)))
-
-                   
-
-                    log("init", "Lets create people hierarchy and fetch info from those here")
-                    // networking.sendOneShot(`hierarchy_plz`)
-                    // let people_hier = {
-                    //     name: "People",
-                    //     layer: 0,
-                    //     components: [],
-                    //     children: [
-                    //         {
-                    //             name: this.myName(),
-                    //             layer: 0,
-                    //             components: [],
-                    //             children: []
-                    //         }
-                    //     ]
-                    // }
-
-                    // let people_entity = await this.loadHierarchy("People", people_hier);
-                    // log("init", "loaded default people entity =>", people_entity)
-                    // this.entityData.entities = [people_entity];
-
-                    this.finalizeSceneLoad = async (scene_entity, people_entity)=>{
-                        log('init', "finalizing scene load =>", scene_entity)
-                        let cleanup = ()=>{
-                            if(this.iamHost){
-                                networking.cleanupSceneOrphans();
-                            }else{
-                                networking.cleanSpaceState()
+                    net.initFirebase(async (state)=>{
+                        log("init", "spaceState =>", state)
+                        if(!state.vars.hostUser){
+                            log('init', "Server has no host user, so I guess it's me", this.myName())
+                            net.claimHost();
+                        }else{
+                            let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(state.vars.hostUser);
+                            if(!hostHere){
+                                log('init', "Host user not here, so I'll make myself the host", this.myName())
+                                net.claimHost();
                             }
                         }
-                        cleanup();
+                        
+                        let crawlMutex = net.getVar("_MUTEX_CRAWL");
+                        while(crawlMutex && (Date.now() - crawlMutex) < 60000){
+                            log("init", "someone is already crawling the scene.. I should wait", crawlMutex, Date.now() - crawlMutex)
+                            await new Promise(resolve => setTimeout(resolve, 1000));
+                        }
+
+                        let scene_entity = null;
+                        let people_entity = null;
+                        if(!state.Scene){ // crawl
+                            net.setVar("_MUTEX_CRAWL", Date.now());
+                            window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
+                            let hierarchy = await this.gatherSceneHierarchy();
+                            log('init', "gathered Scene's hierarchy =>", hierarchy)
+                            this.props.hierarchy = hierarchy;
+                            window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
+                            window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
+                            scene_entity = await this.loadHierarchy("Scene", hierarchy);
+                            people_entity = await this.loadHierarchy("People", {});
+                            net.delVar("_MUTEX_CRAWL");
+                        }else{ //load
+                            scene_entity = await this.loadHierarchy("Scene", state.Scene);
+                            people_entity = await this.loadHierarchy("People", state.People);
+                        }
+
                         this.entityData.entities = [scene_entity, people_entity];
                         this.initializeExpandedNodes();
                         window.loadingScreen.updateStage('entities', 100, 'All entities generated');
@@ -195,140 +87,7 @@
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
                         await this.executeStartupScripts("onSceneLoaded");
-                        setInterval(cleanup, 10000)
-                    }
-
-       
-
-
-                    log('init', "Lets find out who the host is")
-                    // if(window.isLocalHost){
-                    //     log('init', "I am running locally so I must be the host")
-                    //     let lastSpaceState = localStorage.getItem('lastSpaceState');
-                    //     if(lastSpaceState){
-                    //         this.scene.spaceState = JSON.parse(lastSpaceState);
-                    //     }
-                    //     this._iamHost = true;
-                    // }
-
-                    log('init', "spaceState =>", this.scene.spaceState)            
-                    if(!this.scene.spaceState.public.hostUser){
-                        log('init', "Server has no host user, so I guess it's me", this.myName())
-                        networking.setSpaceProperty("hostUser", this.myName(), false);
-                        this._iamHost = true;
-                    }else{
-                        let hostHere = Object.values(this.scene.users).map(x=>x.name).includes(this.scene.spaceState.public.hostUser);
-                        if(!hostHere){
-                            log('init', "Host user not here, so I'll make myself the host", this.myName())
-                            networking.setSpaceProperty("hostUser", this.myName(), false);
-                            this._iamHost = true;
-                        }
-                        if(this.scene.spaceState.public.hostUser === this.myName()){
-                            log('init', "I am the host ( according to the server )")
-                            this._iamHost = true;
-                        }
-                    }
-
-                    // if(this._iamHost){
-                    //     log('init', "I am the host, so I'll load the scene hierarchy")
-                    //     let lastProps = localStorage.getItem('lastProps');
-                    //     if(lastProps){
-                    //         this.props = JSON.parse(lastProps);
-                    //     }
-                    //     let hierarchy = null;
-                    //     if(!this.props.hierarchy){
-                    //         // window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
-                    //         // hierarchy = await this.gatherSceneHierarchy();
-                    //         // log('init', "gathered Scene's hierarchy =>", hierarchy)
-                    //     }else{
-                    //         // let h = this.props.hierarchy;
-                    //         // if(typeof h == "string"){
-                    //         //     h = JSON.parse(h);
-                    //         // }
-                    //         // hierarchy = h;
-                    //         // log('init', "using cached hierarchy =>", hierarchy)
-                    //     }
-                        
-                    //     log('init', "loading scene hierarchy =>", hierarchy)
-                    //     this.props.hierarchy = hierarchy;
-                    //     window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
-                    //     window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                    //     let scene_entity = await this.loadHierarchy("Scene", hierarchy);
-
-                        
-                    //     this.finalizeSceneLoad(scene_entity);
-                    // }
-
-                    this.resetLoadAttempt = ()=>{
-                        networking.setSpaceProperty("_MUTEX_CRAWL", false, false);
-                        networking.setSpaceProperty("$Scene:active", false, false);
-                        setTimeout(()=>{
-                            window.location.reload();
-                        }, 10000)
-                    }
-                    let tries = 0;
-                    let hasSavedScene = this.scene.spaceState.public['$Scene:active'] === 'true'
-                    if(hasSavedScene){
-                        // load scene via space props
-
-                        let loadFromSpaceProps = async ()=>{
-                            log("init", "loadFromSpaceProps")
-                            let crawlMutex = this.scene.spaceState.public["_MUTEX_CRAWL"]
-                            if(crawlMutex !== 'false' || !crawlMutex){
-                                let lastReq = parseInt(crawlMutex.split("_")[1]);
-                                if(Date.now() - lastReq > 10000){
-                                    this.resetLoadAttempt();
-                                }
-                                window.loadingScreen.updateStage('hierarchy', tries*5, 'Waiting for host to finish building (try '+tries+')..');
-                                log("init", "waiting for host to finish building", crawlMutex, Date.now() - lastReq)
-                                tries++;
-                                await new Promise(resolve => setTimeout(resolve, 1000));
-                                return loadFromSpaceProps();
-                            }
-                           
-                            let hiers = networking.getSpaceHeir();
-                            log("init", "gathered Scene's hierarchy =>", hiers)
-                            if(!hiers.roots || hiers.roots.length !== 2){
-                                window.loadingScreen.updateStage('hierarchy', tries*5, 'Space scene is broken. Run Reset()');
-                                log("init", "space scene is broken", hiers)
-                                this.resetLoadAttempt();
-                                return 
-                            }
-                            let scene_hier = hiers.roots.find(x=>x.name === "Scene");
-                            let people_hier = hiers.roots.find(x=>x.name === "People");
-                            this.props.hierarchy = scene_hier;
-                            let scene_entity = await this.loadHierarchy("Scene", scene_hier);
-                            log("init", "loaded Scene's entity =>", scene_entity)
-                            let people_entity = await this.loadHierarchy("People", people_hier);
-                            log("init", "loaded People's entity =>", people_entity)
-                            this.finalizeSceneLoad(scene_entity, people_entity);
-                        }
-                        loadFromSpaceProps();
-
-
-                    }else{
-                        // load by crawling.
-                        networking.setSpaceProperty("_MUTEX_CRAWL", this.myName()+"_"+Date.now(), false);
-                        window.loadingScreen.updateStage('hierarchy', 0, 'Gathering scene structure...');
-                        let hierarchy = await this.gatherSceneHierarchy();
-                        log('init', "gathered Scene's hierarchy =>", hierarchy)
-                        this.props.hierarchy = hierarchy;
-                        window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
-                        window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                        let scene_entity = await this.loadHierarchy("Scene", hierarchy);
-                        let people_hier = {
-                            name: "People",
-                            layer: 0,
-                            components: [],
-                            children: []
-                        }
-
-                        let people_entity = await this.loadHierarchy("People", people_hier);
-
-                        
-                        this.finalizeSceneLoad(scene_entity, people_entity);
-                        networking.setSpaceProperty("_MUTEX_CRAWL", false, false);
-                    }
+                    })
                 }
             } catch (error) {
                 err('init', 'Failed to connect to Unity:', error);
@@ -369,14 +128,6 @@
             scene.OpenPage(`banter://${location.host}`)
         }
 
-      
-
-        claimHost(){
-            networking.setSpaceProperty("hostUser", this.myName(), false);
-            setTimeout(()=>{
-                networking.sendOneShot('reset');
-            }, 1000)
-        }
 
         async handleUserJoined(event){
             log('scene-event', "[USER JOINED] fired", event)
@@ -491,7 +242,11 @@
         // Loads all the Entities on initialization
         async loadHierarchy(destination, hierarchy){
             log('init', "loading hierarchy for", destination, "=>", hierarchy)
-            if(!hierarchy){ return null}            
+            if(!hierarchy){ return null}
+            
+            if(!h.layer){ h.layer = 0 }
+            if(!h.components){ h.components = [] }
+            if(!h.children){ h.children = [] }
             
             let hierarchyToEntity = async (h, parent_path = null)=>{
                 let path = parent_path ? parent_path + "/" + h.name : h.name;
@@ -501,7 +256,7 @@
                 }
 
                 const entity = await new Entity().init({
-                    name: h.name || 'GameObject',
+                    name: destination,
                     parentId: parent_path,
                     _bs: gO,
                     layer: gO.layer,
@@ -512,22 +267,6 @@
                 
                 //Make transform the top component
                 let ref_idx = 0;
-                // let transform = gO.GetComponent(BS.ComponentType.Transform)
-                // if(transform){
-                //     try{
-                //         let component_ref = h.components[ref_idx]
-                //         let componentClass = componentBSTypeMap[transform.componentType]
-                //         let entityComponent = await new componentClass().init(entity, transform);
-                //         entityComponent.setId(component_ref);
-                //         entity.components.push(entityComponent);
-                //         ref_idx++;
-                //     }catch(e){
-                //         log('init', "transform", transform)
-                //         err('init', "error initializing transform for", entity.name, e)
-                //     }
-                // }
-
-                
                 // Add other components
                 for(let componentID in gO.components){
                     let component = gO.components[componentID]
@@ -692,7 +431,7 @@
                 if(key.startsWith(`__${component_ref}`)){
                     let prop = key.split(":")[1]
                     //let prop = path[path.length-1]
-                    props[prop] = scene.spaceState.public[key] //this.props[key]
+                    props[prop] = networking.spaceState[key] //this.props[key]
                 }
             })
             return{
