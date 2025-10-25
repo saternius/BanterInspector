@@ -30,7 +30,16 @@ export class EntityComponent{
 
         //link db
         this.ref = net.db.ref(`space/${net.spaceId}/components/${this.id}`);
-        this.ref.update(this.properties)
+        
+
+        this.ref.on("value", (snapshot)=>{
+            let data = snapshot.val();
+            log("component", "value", this.id, data)
+        })
+
+        if(this.options.context === "crawl"){
+            await this.ref.set(this.properties);
+        }
         return this;
     }
 

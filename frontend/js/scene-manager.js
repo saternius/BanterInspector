@@ -73,8 +73,8 @@
                             this.props.hierarchy = hierarchy;
                             window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
                             window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-                            scene_entity = await this.loadHierarchy("Scene", hierarchy);
-                            people_entity = await this.loadHierarchy("People", {});
+                            scene_entity = await this.loadHierarchy("Scene", hierarchy, {context: "crawl"});
+                            people_entity = await this.loadHierarchy("People", {}, {context: "crawl"});
                             net.delVar("_MUTEX_CRAWL");
                         }else{ //load
                             scene_entity = await this.loadHierarchy("Scene", state.Scene);
@@ -88,6 +88,9 @@
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
                         await this.executeStartupScripts("onSceneLoaded");
+                        setTimeout(()=>{
+                            inspector?.hierarchyPanel?.render()
+                        }, 1000)
                     })
                 }
             } catch (error) {
@@ -160,50 +163,42 @@
                 window.loadingScreen.updateStage('hierarchy', 20, 'Scene object found');
             }
 
-            let createEntityHierarchy = async (obj)=>{
-                let component_refs = []
+            let createEntityHierarchy = (obj)=>{
+                let component_refs = {}
                 let entity = {}
-
-                // Make transform the top component
-                // let transform = obj.GetComponent(BS.ComponentType.Transform)
-                // if(transform){
-                //     let component_ref = `Transform_${Math.floor(Math.random()*99999)}`
-                //     component_refs.push(component_ref);
-                // }
 
                 for(let c in obj.components){
                     let component = obj.components[c]
-                    if(component.type == BS.ComponentType.Transform) continue;
-                    let component_ref = `${componentTextMap[component.type]}_${Math.floor(Math.random()*99999)}`
-                    component_refs.push(component_ref)
+                    if(component.componentType == BS.ComponentType.Transform) continue;
+                    let component_ref = `${componentTextMap[component.componentType]}_${Math.floor(Math.random()*99999)}`
+                    component_refs[component_ref] = true;
                 }
 
-
-                entity.name = obj.name;
-                entity.components = component_refs;
-                entity.localPosition = obj.transform.localPosition;
-                entity.localRotation = obj.transform.localRotation;
-                entity.localScale = obj.transform.localScale;
+                entity.__meta = {
+                    active: true,
+                    layer: 0,
+                    localPosition: obj.transform.localPosition,
+                    localRotation: obj.transform.localRotation,
+                    localScale: obj.transform.localScale,
+                    position: obj.transform.position,
+                    rotation: obj.transform.rotation,
+                    components: component_refs
+                }
                 if (obj.Traverse) {
                     const childPromises = [];
                     obj.Traverse((child) => {
                         log('init', 'traversing..',child.id, child.name,  child.parent, obj.unityId)
                         if (child && child.id !== obj.unityId) {
                             if (child.parent == obj.unityId) {
-                                childPromises.push(createEntityHierarchy(child));
+                                entity[child.name] = createEntityHierarchy(child);
                             }
                         }
                     });
-                    
-                    const childEntities = await Promise.all(childPromises);
-                    entity.children = childEntities.filter(s => s);
                 } 
                 return entity;
             }
 
-            let sceneEntity = await createEntityHierarchy(sceneObj, null);
-            log('init', "sceneEntity =>", sceneEntity)
-            return sceneEntity;
+            return createEntityHierarchy(sceneObj, null);
         }
 
         // This gathers the hierarchy of the scene from the root entity
@@ -238,112 +233,93 @@
 
 
         // Loads all the Entities on initialization
-        async loadHierarchy(destination, hierarchy){
+        async loadHierarchy(destination, hierarchy, options){
             log('init', "loading hierarchy for", destination, "=>", hierarchy)
-            if(!hierarchy){ return null}
-            
-            if(!hierarchy.layer){ hierarchy.layer = 0 }
-            if(!hierarchy.components){ hierarchy.components = [] }
-            if(!hierarchy.children){ hierarchy.children = [] }
-            if(!hierarchy.name){ hierarchy.name = destination }
-            
-            let hierarchyToEntity = async (h, parent_path = null)=>{
-                let path = parent_path ? parent_path + "/" + h.name : h.name;
-                let gO = await this.scene.FindByPath(path);
+            if(!hierarchy){ return null }
+
+            if(!hierarchy.__meta){
+                hierarchy.__meta = {
+                    active: true,
+                    layer: 0,
+                    localPosition: {x: 0, y: 0, z: 0},
+                    localRotation: {x: 0, y: 0, z: 0, w: 1},
+                    localScale: {x: 1, y: 1, z: 1},
+                    position: {x: 0, y: 0, z: 0},
+                    rotation: {x: 0, y: 0, z: 0, w: 1},
+                    components: {}
+                }
+            }
+
+            let hierarchyToEntity = async (h, name, parentId, options)=>{
+                let gO_path = parentId ? parentId + "/" + name : name;
+                let gO = await this.scene.FindByPath(gO_path);
                 if(!gO){
-                    return await this.loadHistoricalEntity(h, parent_path)
+                    return await this.loadHistoricalEntity(h, name, parentId)
                 }
 
                 const entity = await new Entity().init({
-                    name: h.name,
-                    parentId: parent_path,
+                    name: name,
+                    parentId: parentId,
                     _bs: gO,
                     layer: gO.layer,
-                    localPosition: h.localPosition,
-                    localRotation: h.localRotation,
-                    localScale: h.localScale
-                });
+                    localPosition: h.__meta.localPosition,
+                    localRotation: h.__meta.localRotation,
+                    localScale: h.__meta.localScale,
+                    position: h.__meta.position,
+                    rotation: h.__meta.rotation
+                }, options);
                 
                 //Make transform the top component
                 let ref_idx = 0;
                 // Add other components
+                let component_array = h.__meta.components ? Object.keys(h.__meta.components) : [];
                 for(let componentID in gO.components){
                     let component = gO.components[componentID]
-                    if(component.type == BS.ComponentType.Transform) continue;
-                    let component_ref = h.components[ref_idx]
+                    if(component.componentType == BS.ComponentType.Transform) continue;
+                    let component_ref = component_array[ref_idx]
                     ref_idx++;
                     if(!component_ref){
-                        log('init', "no component ref found for", component, h.components, ref_idx)
+                        log('init', "no component ref found for", component, h.__meta.components, ref_idx, gO.components)
                         continue;
                     }
 
-                    if(SUPPORTED_COMPONENTS.has(component.type)){
+                    if(SUPPORTED_COMPONENTS.has(component.componentType)){
                         let componentClass = componentBSTypeMap[component.componentType]
                         let props = this.getHistoricalProps(component_ref).props
-                        let entityComponent = await new componentClass().init(entity, component, props);
-                        entityComponent.setId(component_ref);
-                        entity.components.push(entityComponent);
+                        props.id = component_ref;
+                        let entityComponent = await new componentClass().init(entity, component, props, options);
+                        entity.AddComponent(entityComponent);
                     }
                 }
 
                 //Add any MonoBehaviors
-                h.components.forEach(async component_ref=>{
+                component_array.forEach(async (component_ref)=>{
                     if(!component_ref){
-                        log("init", "[SUS SITUATION]: component_ref is not defined", component_ref, h, h.components)
+                        log("init", "[SUS SITUATION]: component_ref is not defined", component_ref, h, h.__meta.components)
                         return;
                     }
                     if(component_ref.startsWith("MonoBehavior")){
                         let props = this.getHistoricalProps(component_ref).props
                         props.id = component_ref;
-                        let entityComponent = await new MonoBehaviorComponent().init(entity, null, props)
-                        entity.components.push(entityComponent);
+                        let entityComponent = await new MonoBehaviorComponent().init(entity, null, props, options)
+                        entity.AddComponent(entityComponent);
                     }
                 })
                 
-                for(let child of h.children){
-                    let childEntity = await hierarchyToEntity(child, entity.id);
+
+                let promises = Object.keys(h).map(async key=>{
+                    if(key.startsWith("__")){ return }
+                    let child = h[key]
+                    let childEntity = await hierarchyToEntity(child, key, entity.id, options)
                     await childEntity._setParent(entity);
-                }
+                    return childEntity;
+                })
+                await Promise.all(promises);
                 entity._loaded();
                 return entity;
             }
-            return await hierarchyToEntity(hierarchy, null);
+            return await hierarchyToEntity(hierarchy, destination, null, options);
         }
-
-
-        // async provideHierarchyEntity(){
-        //     let sendHier = async (path)=>{
-        //         let entity = SM.getEntityById(path, false)
-        //         if(!entity){
-        //             log("init", "I don't have a hier for: ", path)
-        //             return
-        //         }
-        //         networking.sendOneShot(`hierarchy_entity¶${path}¶${JSON.stringify(entity.export(['id']))}`)
-        //     }
-        //     sendHier("People/"+this.myName())
-        //     if(this._iamHost){
-        //         sendHier("Scene")
-        //     }
-        // }
-
-        // async onRecievedHierarchyEntity(path, entityData){
-        //     if(this.getEntityById(path)){ return }
-        //     log("init", "recieved hierarchy for: ", path, "=>", entityData)
-        //     if(path == "Scene" && !this._iamHost){
-        //         window.loadingScreen.updateStage('hierarchy', 100, 'Scene structure loaded');
-        //         window.loadingScreen.updateStage('entities', 0, 'Generating entities...');
-        //         log('init', "loading scene...")
-        //         let scene_entity = await this._loadEntity(entityData, null)
-        //         this.finalizeSceneLoad(scene_entity);
-        //     }else{
-        //         if(path.startsWith("People/")){
-        //             let userName = path.split("/")[1]
-                    
-        //             let entity = await this._loadEntity(entityData, "People")
-        //             await entity._setParent(this.getEntityById("People"))
-        //         }
-        //     }
-        // }
 
 
         //Creates a entity from the inventory schema
@@ -436,38 +412,42 @@
         
 
         // Creates and hydrates a entity using the SpaceProperties
-        async loadHistoricalEntity(hierarchy, parentId){
+        async loadHistoricalEntity(hierarchy, name, parentId){
             
             log('init', "loading historical entity =>", hierarchy)
             const entity = await new Entity().init({
-                name: hierarchy.name,
+                name: name,
                 parentId: parentId,
-                layer: hierarchy.layer,
-                localPosition: hierarchy.localPosition,
-                localRotation: hierarchy.localRotation,
-                localScale: hierarchy.localScale
+                layer: hierarchy.__meta.layer,
+                localPosition: hierarchy.__meta.localPosition,
+                localRotation: hierarchy.__meta.localRotation,
+                localScale: hierarchy.__meta.localScale,
+                position: hierarchy.__meta.position,
+                rotation: hierarchy.__meta.rotation
             });
 
-            for(let i=0; i<hierarchy.components.length; i++){
-                let component_ref = hierarchy.components[i]
-                let hist = this.getHistoricalProps(component_ref)
-                log('init', `historical props for [${component_ref}] =>`, hist)
-                let componentClass = componentTypeMap[hist.type]
-                let props = hist.props
-                props.id = component_ref;
-                let entityComponent = await new componentClass().init(entity, null, props)
-                entity.components.push(entityComponent);
+            if(hierarchy.__meta.components){
+                for(let i=0; i<hierarchy.__meta.components.length; i++){
+                    let component_ref = hierarchy.__meta.components[i]
+                    let hist = this.getHistoricalProps(component_ref)
+                    log('init', `historical props for [${component_ref}] =>`, hist)
+                    let componentClass = componentTypeMap[hist.type]
+                    let props = hist.props
+                    props.id = component_ref;
+                    let entityComponent = await new componentClass().init(entity, null, props)
+                    entity.AddComponent(entityComponent);
+                }
             }
 
-            // Process all children and wait for them to complete
-            if(hierarchy.children && hierarchy.children.length > 0){
-                const childPromises = hierarchy.children.map(async (child) => {
-                    let childEntity = await this.loadHistoricalEntity(child, entity.id);
-                    await childEntity._setParent(entity);
-                    return childEntity;
-                });
-                await Promise.all(childPromises);
-            }
+            let childPromises = Object.keys(hierarchy).map(async key=>{
+                if(key.startsWith("__")){ return }
+                let child = hierarchy[key]
+                let childEntity = await this.loadHistoricalEntity(child, key, entity.id)
+                await childEntity._setParent(entity);
+                return childEntity;
+            })
+
+            await Promise.all(childPromises);
             entity._loaded();
             return entity;
         }
@@ -714,15 +694,14 @@
             // Handle all other components
             for (let c in gameObject.components) {
                 const component = gameObject.components[c];
-                if (component.type === BS.ComponentType.Transform) continue;
+                if (component.componentType === BS.ComponentType.Transform) continue;
 
-                if (SUPPORTED_COMPONENTS.has(component.type)) {
+                if (SUPPORTED_COMPONENTS.has(component.componentType)) {
                     const sourceComponent = sourceEntity.components[componentIndex];
                     const component_ref = componentIdMap[sourceComponent.id];
                     const componentClass = componentTypeMap[component_ref.split("_")[0]];
-                    const entityComponent = await new componentClass().init(entity, component);
-                    entityComponent.setId(component_ref);
-                    entity.components.push(entityComponent);
+                    const entityComponent = await new componentClass().init(entity, component, {id: component_ref});
+                    entity.AddComponent(entityComponent);
                     this.entityData.componentMap[component_ref] = entityComponent;
                     componentIndex++;
                 }
