@@ -41,27 +41,44 @@ export class Entity{
         window.SM.entityData.entityMap[this.id] = this;
         this.initialized = true;
         this.transform = this._bs.transform;
-        this.spaceProps = {};
+
+        //setup db link
         this.ref = net.db.ref(`space/${net.spaceId}/${this.id}`);
+        this.ref.update({
+            _active: this.active,
+            _layer: this.layer,
+            _localPosition: this.localPosition,
+            _localRotation: this.localRotation,
+            _localScale: this.localScale,
+            _position: this.position,
+            _rotation: this.rotation,
+            _components: [this.components.map(component=>component.id)]
+        })
         return this;
     }
 
     get localPosition(){
+        if(!this.transform) return {x:0,y:0,z:0};
         return this.transform.localPosition;
     }
     get localRotation(){
+        if(!this.transform) return {x:0,y:0,z:0,w:1};
         return this.transform.localRotation;
     }
     get localScale(){
+        if(!this.transform) return {x:1,y:1,z:1};
         return this.transform.localScale;
     }
     get position(){
+        if(!this.transform) return {x:0,y:0,z:0};
         return this.transform.position;
     }
     get rotation(){
+        if(!this.transform) return {x:0,y:0,z:0,w:1};
         return this.transform.rotation;
     }
     get scale(){
+        if(!this.transform) return {x:1,y:1,z:1};
         return this.transform.scale;
     }
 

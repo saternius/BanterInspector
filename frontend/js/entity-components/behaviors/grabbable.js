@@ -75,6 +75,5 @@ export class GrabbableComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Grabbable:`, e);
         }
-        this.checkSpaceDiff();
     }
 }

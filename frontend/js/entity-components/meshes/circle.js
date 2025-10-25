@@ -51,6 +51,6 @@ export class CircleComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Circle:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

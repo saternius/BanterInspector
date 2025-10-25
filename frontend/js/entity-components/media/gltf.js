@@ -95,6 +95,6 @@ export class GLTFComponent extends EntityComponent {
             clearTimeout(this._generationTimeout);
         }
         this._generationTimeout = setTimeout(this.generate.bind(this), 500)
-        this.checkSpaceDiff();
+
     }
 }

@@ -74,7 +74,7 @@ export class VideoPlayerComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on VideoPlayer:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 
     // Control methods

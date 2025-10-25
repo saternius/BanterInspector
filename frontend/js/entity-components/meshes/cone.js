@@ -61,6 +61,6 @@ export class ConeComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Cone:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

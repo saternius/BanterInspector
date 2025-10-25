@@ -42,6 +42,6 @@ export class BoxComponent extends MeshComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on Box:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }

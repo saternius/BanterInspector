@@ -42,6 +42,6 @@ export class KitItemComponent extends EntityComponent {
         } catch (e) {
             console.error(`Failed to update ${property} on KitItem:`, e);
         }
-        this.checkSpaceDiff();
+
     }
 }
