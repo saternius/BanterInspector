@@ -5,7 +5,7 @@
 
 
 const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-const { ComponentAddChange } = await import(`${window.repoUrl}/change-types.js`);
+const { AddComponentChange } = await import(`${window.repoUrl}/change-types.js`);
 const { componentBundleMap } = await import( `${window.repoUrl}/entity-components/index.js`);
 
 export class ComponentMenu {
@@ -202,7 +202,7 @@ export class ComponentMenu {
         if (!entity) return;
           
         // Create and apply the component add change
-        const change = new ComponentAddChange(
+        const change = new AddComponentChange(
             entity.id, 
             componentType,
             { source: 'ui' }

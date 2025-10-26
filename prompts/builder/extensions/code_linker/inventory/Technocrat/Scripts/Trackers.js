@@ -89,28 +89,28 @@ let rightHandTracker = null;
 // it exists in neither
 
 
-(async ()=>{
-    log("Trackers", "[START]");
-    await VerifyExistance("People");
+// (async ()=>{
+//     log("Trackers", "[START]");
+//     await VerifyExistance("People");
 
-    log("Trackers", "'People' exists, checking my dir..", me);
+//     log("Trackers", "'People' exists, checking my dir..", me);
 
-    await RemoveEntity("People/"+me);
-    await VerifyInexistance("People/"+me);
-    await AddEntity("People", me);
-    await VerifyExistance("People/"+me);
-    await AddEntity("People/"+me, "Trackers");
-    await VerifyExistance("People/"+me+"/Trackers");
+//     await RemoveEntity("People/"+me);
+//     await VerifyInexistance("People/"+me);
+//     await AddEntity("People", me);
+//     await VerifyExistance("People/"+me);
+//     await AddEntity("People/"+me, "Trackers");
+//     await VerifyExistance("People/"+me+"/Trackers");
 
-    log("Trackers", "$People/${me}/Trackers exists, loading trackers..");
+//     log("Trackers", "$People/${me}/Trackers exists, loading trackers..");
 
 
-    headTracker = await getOrMakeTracker("HEAD");
-    log("Trackers", "HEAD tracker loaded");
-    leftHandTracker = await getOrMakeTracker("LEFT_HAND");
-    log("Trackers", "LEFT_HAND tracker loaded");
-    rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
-    log("Trackers", "RIGHT_HAND tracker loaded");
+//     headTracker = await getOrMakeTracker("HEAD");
+//     log("Trackers", "HEAD tracker loaded");
+//     leftHandTracker = await getOrMakeTracker("LEFT_HAND");
+//     log("Trackers", "LEFT_HAND tracker loaded");
+//     rightHandTracker = await getOrMakeTracker("RIGHT_HAND");
+//     log("Trackers", "RIGHT_HAND tracker loaded");
 
-    log("Trackers", "[END]");
-})()
+//     log("Trackers", "[END]");
+// })()

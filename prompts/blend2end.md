@@ -202,7 +202,7 @@ async function importAgentGLB(hash) {
     let rootEntity = await changeManager.applyChange(createEntityChange);
 
     // Add GLTF component with hash
-    let gltfChange = new ComponentAddChange(
+    let gltfChange = new AddComponentChange(
         rootEntity.id,
         "Gltf",
         {
@@ -263,7 +263,7 @@ async function configureDesk(rootEntity) {
     await changeManager.applyChange(layerChange);
 
     // Add box collider
-    let colliderChange = new ComponentAddChange(
+    let colliderChange = new AddComponentChange(
         deskBody.id,
         "BoxCollider",
         {
@@ -293,7 +293,7 @@ async function configureDesk(rootEntity) {
         await changeManager.applyChange(drawerLayerChange);
 
         // Add GrabHandle component
-        let grabChange = new ComponentAddChange(
+        let grabChange = new AddComponentChange(
             drawer.id,
             "GrabHandle",
             {
@@ -345,7 +345,7 @@ this.onUpdate = async () => {
         inventory.syncItem(`DrawerSlide_${drawer.name}`, scriptItem);
 
         // Add MonoBehavior component
-        let monoChange = new ComponentAddChange(
+        let monoChange = new AddComponentChange(
             drawer.id,
             "MonoBehavior",
             {
@@ -469,7 +469,7 @@ export class AgentWorkflowChange extends Change {
         const { entityId, componentSpecs } = this.parameters;
         // Implementation from Stage 5
         for (let spec of componentSpecs) {
-            let change = new ComponentAddChange(
+            let change = new AddComponentChange(
                 entityId,
                 spec.type,
                 {

@@ -13,6 +13,7 @@
             this.entityData = {
                 entities: [],
                 entityMap:{},
+                entityUUIDMap:{},
                 componentMap: {}
             };
             this.props = {
@@ -266,7 +267,8 @@
                     localRotation: h.__meta.localRotation,
                     localScale: h.__meta.localScale,
                     position: h.__meta.position,
-                    rotation: h.__meta.rotation
+                    rotation: h.__meta.rotation,
+                    uuid: h.__meta.uuid
                 }, options);
                 
                 //Make transform the top component
@@ -311,7 +313,7 @@
                     if(key.startsWith("__")){ return }
                     let child = h[key]
                     let childEntity = await hierarchyToEntity(child, key, entity.id, options)
-                    await childEntity._setParent(entity);
+                    // await childEntity._setParent(entity);
                     return childEntity;
                 })
                 await Promise.all(promises);
@@ -336,6 +338,7 @@
                     localPosition: item.transform.localPosition,
                     localRotation: item.transform.localRotation,
                     localScale: item.transform.localScale,
+                    uuid: item.uuid,
                     networkId: `${parentId}/${item.name}`
                 });
     
@@ -378,9 +381,9 @@
                     }
                 }
 
-                if(newEntity.name !== "Scene"){
-                    await newEntity._setParent(parentEnt);
-                }
+                // if(newEntity.name !== "Scene"){
+                //     await newEntity._setParent(parentEnt);
+                // }
                 
                 // Call _loaded() after all children are fully instantiated
                 newEntity._loaded();
@@ -423,7 +426,8 @@
                 localRotation: hierarchy.__meta.localRotation,
                 localScale: hierarchy.__meta.localScale,
                 position: hierarchy.__meta.position,
-                rotation: hierarchy.__meta.rotation
+                rotation: hierarchy.__meta.rotation,
+                uuid: hierarchy.__meta.uuid
             });
 
             if(hierarchy.__meta.components){
@@ -443,7 +447,7 @@
                 if(key.startsWith("__")){ return }
                 let child = hierarchy[key]
                 let childEntity = await this.loadHistoricalEntity(child, key, entity.id)
-                await childEntity._setParent(entity);
+                //await childEntity._setParent(entity);
                 return childEntity;
             })
 
@@ -617,7 +621,8 @@
             // Create new GameObject
             let newEntity = await new Entity().init({
                 parentId: parentId,
-                name: entityName
+                name: entityName,
+                uuid: Math.floor(Math.random() * 10000000000000)
             });
 
             log("scene", "NEW SLOT:", newEntity)
@@ -635,7 +640,7 @@
             // }
             // let transform = await new TransformComponent().init(newEntity, null, properties);
             // newEntity.components.push(transform);
-            await newEntity._setParent(parentEntity);
+            //await newEntity._setParent(parentEntity);
         }
 
         /**
@@ -649,6 +654,8 @@
          */
         async _createEntityFromGameObject(gameObject, parentId, name, sourceEntity, componentIdMap) {
             // Create the entity wrapper
+
+            //TODO: figure out where uuid fits;
             const entity = await new Entity().init({
                 name: name || gameObject.name,
                 parentId: parentId,
@@ -656,7 +663,7 @@
                 layer: gameObject.layer,
                 localPosition: gameObject.transform.localPosition,
                 localRotation: gameObject.transform.localRotation,
-                localScale: gameObject.transform.localScale
+                localScale: gameObject.transform.localScale,
             });
 
             

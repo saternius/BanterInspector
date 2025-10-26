@@ -37,7 +37,7 @@ await AddComponent(entityId, "Material", {context: 'script'});
 #### 2. Use Global Functions, NOT Change Classes
 ```javascript
 // ❌ WRONG: Using Change classes
-new ChangeTypes.classes.EntityAddChange(parentId, name);
+new ChangeTypes.classes.AddEntityChange(parentId, name);
 
 // ✅ CORRECT: Using global functions directly
 await AddEntity(parentId, name, {context: 'script'});

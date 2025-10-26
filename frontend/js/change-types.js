@@ -249,7 +249,7 @@ export class SpacePropertyChange extends Change{
     }
 }
 
-export class ComponentAddChange extends Change{
+export class AddComponentChange extends Change{
     constructor(entityId, componentType, options) {
         super();
         this.timeout = 3000;
@@ -342,7 +342,7 @@ export class ComponentAddChange extends Change{
     }
 }
 
-export class ComponentReorderChange extends Change{
+export class ReorderComponentChange extends Change{
     constructor(entityId, fromIndex, toIndex, options) {
         super();
         this.timeout = 1000;
@@ -413,7 +413,7 @@ export class ComponentReorderChange extends Change{
     }
 }
 
-export class ComponentRemoveChange extends Change{
+export class RemoveComponentChange extends Change{
     constructor(componentId, options) {
         super();
         this.timeout = 3000;
@@ -481,7 +481,7 @@ export class ComponentRemoveChange extends Change{
     }
 }
 
-export class EntityAddChange extends Change{
+export class AddEntityChange extends Change{
     constructor(parentId, entityName, options) {
         super();
         this.timeout = 1000;
@@ -514,7 +514,8 @@ export class EntityAddChange extends Change{
                 localScale: {x: 1, y: 1, z: 1},
                 position: {x: 0, y: 0, z: 0},
                 rotation: {x: 0, y: 0, z: 0, w: 1},
-                components: []
+                components: {},
+                uuid: Math.floor(Math.random() * 10000000000000)
             }
         });
 
@@ -560,7 +561,7 @@ export class EntityAddChange extends Change{
     }
 }
 
-export class EntityRemoveChange extends Change{
+export class RemoveEntityChange extends Change{
     constructor(entityId, options) {
         super();
         this.timeout = 5000;
@@ -772,6 +773,7 @@ export class LoadItemChange extends Change{
             let itemData = item.data;
             itemData.name = this.options.name || this.itemName+"_"+Math.floor(Math.random() * 100000);
             itemData.parentId = this.parentId;
+            itemData.uuid = Math.floor(Math.random() * 10000000000000);
             itemData.id = this.parentId+"/"+itemData.name;
             changeChildrenIds(itemData);
     
@@ -1810,25 +1812,25 @@ window.SetSpaceProp = async (property, newValue, protect, options)=>{
     return await change.apply();
 }
 window.AddComponent = async (entityId, componentType, options)=>{
-    let change = new ComponentAddChange(entityId, componentType, options);
+    let change = new AddComponentChange(entityId, componentType, options);
     return await change.apply();
 }
 window.RemoveComponent = async (componentId, options)=>{
-    let change = new ComponentRemoveChange(componentId, options);
+    let change = new RemoveComponentChange(componentId, options);
     return await change.apply();
 }
 
 window.ReorderComponent = async (entityId, fromIndex, toIndex, options)=>{
-    let change = new ComponentReorderChange(entityId, fromIndex, toIndex, options);
+    let change = new ReorderComponentChange(entityId, fromIndex, toIndex, options);
     return await change.apply();
 }
 
 window.AddEntity = async (parentId, entityName, options)=>{
-    let change = new EntityAddChange(parentId, entityName, options);
+    let change = new AddEntityChange(parentId, entityName, options);
     return await change.apply();
 }
 window.RemoveEntity = async (entityId, options)=>{
-    let change = new EntityRemoveChange(entityId, options);
+    let change = new RemoveEntityChange(entityId, options);
     return await change.apply();
 }
 window.MoveEntity = async (entityId, newParentId, options)=>{
@@ -2540,10 +2542,10 @@ window.RunCommand = async (execString, options)=>{
             }
             return;
         case "add_entity":
-            change = new EntityAddChange(args[1], args[2], options);
+            change = new AddEntityChange(args[1], args[2], options);
             break;
         case "remove_entity":
-            change = new EntityRemoveChange(args[1], options);
+            change = new RemoveEntityChange(args[1], options);
             break;
         case "move_entity":
             change = new EntityMoveChange(args[1], args[2], options);
@@ -2553,10 +2555,10 @@ window.RunCommand = async (execString, options)=>{
             break;
         case "add_component":
             options.componentProperties = args[3];
-            change = new ComponentAddChange(args[1], args[2], options);
+            change = new AddComponentChange(args[1], args[2], options);
             break;
         case "remove_component":
-            change = new ComponentRemoveChange(args[1], options);
+            change = new RemoveComponentChange(args[1], options);
             break;
         case "set_component_property":
             change = new ComponentPropertyChange(args[1], args[2], args[3], options);
@@ -2595,7 +2597,7 @@ window.RunCommand = async (execString, options)=>{
             change = new EditScriptItemChange(args[1], args[2], options);
             break;
         case "reorder_component":
-            change = new ComponentReorderChange(args[1], args[2], args[3], options);
+            change = new ReorderComponentChange(args[1], args[2], args[3], options);
             break;
         default:
             appendToShell("command", "custom_command_"+Math.floor(Math.random()*1000000), `Unknown command: ${args[0]}`)
