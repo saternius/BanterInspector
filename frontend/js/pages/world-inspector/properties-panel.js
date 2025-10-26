@@ -6,7 +6,7 @@
 // (async () => {
     const { parseBest, formatPropertyName, rgbToHex, hexToRgb, isVector3Object, isQuaternion, quaternionToEuler, eulerToQuaternion, formatNumber, deepClone, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
+    const { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, MonoBehaviorVarChange, ReorderComponentChange } = await import(`${window.repoUrl}/change-types.js`);
     const { BanterLayers } = await import(`${window.repoUrl}/entity-components/index.js`);
 
     export class PropertiesPanel {
@@ -684,7 +684,7 @@
         moveComponentUp(index) {
             if (index <= 0) return; // Already at top
 
-            const change = new ComponentReorderChange(SM.selectedEntity, index, index - 1, { source: 'ui' });
+            const change = new ReorderComponentChange(SM.selectedEntity, index, index - 1, { source: 'ui' });
             changeManager.applyChange(change);
 
             // Re-render after a short delay
@@ -697,7 +697,7 @@
         moveComponentDown(index, totalComponents) {
             if (index >= totalComponents - 1) return; // Already at bottom
 
-            const change = new ComponentReorderChange(SM.selectedEntity, index, index + 1, { source: 'ui' });
+            const change = new ReorderComponentChange(SM.selectedEntity, index, index + 1, { source: 'ui' });
             changeManager.applyChange(change);
 
             // Re-render after a short delay
@@ -1606,7 +1606,7 @@
             if (!entityId) return;
             
             // Queue the component removal through change manager
-            const change = new ComponentRemoveChange(componentId, { source: 'ui' });
+            const change = new RemoveComponentChange(componentId, { source: 'ui' });
             changeManager.applyChange(change);
             
             // The actual deletion will be handled by the change manager

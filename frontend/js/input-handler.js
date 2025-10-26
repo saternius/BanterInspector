@@ -1,5 +1,5 @@
 const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
-const { EntityPropertyChange, ComponentPropertyChange, ComponentRemoveChange, MonoBehaviorVarChange, ComponentReorderChange } = await import(`${window.repoUrl}/change-types.js`);
+const { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, MonoBehaviorVarChange, ReorderComponentChange } = await import(`${window.repoUrl}/change-types.js`);
 export class InputHandler{
     constructor(){
         this.currentInput = null;

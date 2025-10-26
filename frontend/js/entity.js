@@ -3,7 +3,6 @@ const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoU
 
 export class Entity{
     async init(entityData, options){
-        log("entity", "init", entityData)
         this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
         this.parentId = entityData.parentId;
         this.components = entityData.components || [];
@@ -17,8 +16,9 @@ export class Entity{
         this.initialized = false;
         this.type = "Entity";
         this.options = options || {};
-        this.uuid = Math.floor(Math.random() * 10000000000000);
-
+        this.uuid = entityData.uuid || Math.floor(Math.random() * 10000000000000);
+        SM.entityData.entityUUIDMap[this.uuid] = this;
+        let parentEntity = SM.getEntityOrScene(this.parentId);
         if(!entityData._bs){
             let params = {name: this.name};
             let lp = entityData.localPosition;
@@ -32,12 +32,15 @@ export class Entity{
             if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
             
-            let parentEntity = SM.getEntityOrScene(this.parentId);
             params.parent = parentEntity._bs;
             params.layer = this.layer;
             params.active = this.active;
             let newGameObject = new BS.GameObject(params);
             this._bs = newGameObject;
+        }
+
+        if(this.parentId){
+            this._setParent(parentEntity, false, true);
         }
 
         this._bs.networkId = entityData.networkId;
@@ -48,71 +51,94 @@ export class Entity{
         this.transform = this._bs.transform;
 
         //setup db link
-        this.meta_ref = net.db.ref(`space/${net.spaceId}/${this.id}/__meta`);
+        this.ref = net.db.ref(`space/${net.spaceId}/${this.id}`);
+        this.meta_ref = this.ref.child("__meta");
         this.meta_ref.child("active").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "active", data)
+            if(!data) return;
             this.active = data;
             this._bs.SetActive(this.active);
         })
 
         this.meta_ref.child("layer").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "layer", data)
+            if(!data) return;
             this.layer = data;
             this._bs.SetLayer(this.layer);
         })
 
         this.meta_ref.child("localPosition").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "localPosition", data)
+            if(!data) return;
             this.transform.localPosition = new BS.Vector3(data.x, data.y, data.z);
         })
 
         this.meta_ref.child("localRotation").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "localRotation", data)
+            if(!data) return;
             this.transform.localRotation = new BS.Vector4(data.x, data.y, data.z, data.w);
         })
 
         this.meta_ref.child("localScale").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "localScale", data)
+            if(!data) return;
             this.transform.localScale = new BS.Vector3(data.x, data.y, data.z);
         })
 
         this.meta_ref.child("position").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "position", data)
+            if(!data) return;
             this.transform.position = new BS.Vector3(data.x, data.y, data.z);
         })
 
         this.meta_ref.child("rotation").on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "rotation", data)
+            if(!data) return;
             this.transform.rotation = new BS.Vector4(data.x, data.y, data.z, data.w);
         })
 
 
 
         // handle component changes
-        this.meta_ref.child("components").on("value", (snapshot)=>{
+        this.meta_ref.child("components").on("child_added", (snapshot)=>{
             let data = snapshot.val();
-            log("entity", "components", data)
+            log("entity", "component added", snapshot.key, data)
+            
         })
-
+        this.meta_ref.child("components").on("child_removed", (snapshot)=>{
+            let data = snapshot.val();
+            log("entity", "component removed", snapshot.key, data)
+        })
 
         // handle children changes
-        this.meta_ref.on("child_added", (snapshot)=>{
+        this.ref.on("child_added", (snapshot)=>{
+            log("entity", "child added", snapshot.key, snapshot.val(), this.id, this.name)
+            window.lastAddedChild = snapshot;
             let data = snapshot.val();
-            log("entity", "child added", data)
-        })
-        this.meta_ref.on("child_removed", (snapshot)=>{
-            let data = snapshot.val();
-            log("entity", "child removed", data)
+            let key = snapshot.key
+            let targetEntity = SM.entityData.entityUUIDMap[data.uuid];
+            
+            if(targetEntity){
+                targetEntity._setParent(this, false);
+            }else{
+                log("entity", "child added", "new entity", data)
+                data.parentId = this.id;
+                new Entity().init(data);
+            }
+            log("entity", "child added", key, data)
         })
 
+        this.ref.on("child_removed", (snapshot)=>{
+            log("entity", "child removed", snapshot)
+            let data = snapshot.val();
+            let key = snapshot.key
+
+            log("entity", "child removed", key, data)
+        })
+
+        
         if(this.options.context === "crawl"){
+            log("entity", "crawling", this.id)
             await this.meta_ref.set({
                 active: this.active,
                 layer: this.layer,
@@ -121,6 +147,7 @@ export class Entity{
                 localScale: this.localScale,
                 position: this.position,
                 rotation: this.rotation,
+                uuid: this.uuid
             });
         }
         return this;
@@ -217,13 +244,18 @@ export class Entity{
         })
     }
 
-    async _setParent(newParent, keepPosition){
-        if (newParent === this) return;
-        if(!newParent) return;
-        if (this.parentId) {
-            const oldParent = SM.getEntityById(this.parentId);
-            if(oldParent){
-                oldParent.children = oldParent.children.filter(child => child.id !== this.id);
+    async _setParent(newParent, keepPosition, firstAttempt){
+        if(!firstAttempt){
+            if (newParent === this) return;
+            if(!newParent) return;
+            if (this.parentId) {
+                const oldParent = SM.getEntityById(this.parentId);
+                if(oldParent === newParent){
+                    return;
+                }
+                if(oldParent){
+                    oldParent.children = oldParent.children.filter(child => child.id !== this.id);
+                }
             }
         }
         newParent.children.push(this);
@@ -278,10 +310,15 @@ export class Entity{
 
  
     _rename(newName){
+        let newId = this.parentId+"/"+newName;
+        if(this.id === newId){
+            return;
+        }
+        this.id = newId;
         // if(!SM.iamHost) this._deleteOldSpaceProperties();
         delete SM.entityData.entityMap[this.id]
         this.name = newName;
-        this.id = this.parentId+"/"+this.name;
+        
         this._bs.SetName(newName);
         SM.entityData.entityMap[this.id] = this;
         // if(!SM.iamHost) this.saveSpaceProperties();

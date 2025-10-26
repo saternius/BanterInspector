@@ -32,9 +32,9 @@ export class EntityComponent{
         this.ref = net.db.ref(`space/${net.spaceId}/components/${this.id}`);
         
 
-        this.ref.on("value", (snapshot)=>{
+        this.ref.on("child_changed", (snapshot)=>{
             let data = snapshot.val();
-            log("component", "value", this.id, data)
+            log("component", "child changed", this.id, data, snapshot.key)
         })
 
         if(this.options.context === "crawl"){

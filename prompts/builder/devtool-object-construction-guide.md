@@ -984,7 +984,7 @@ components: [
 
 ```javascript
 // Let system generate
-const change = new ComponentAddChange(entityId, componentType);
+const change = new AddComponentChange(entityId, componentType);
 
 // Or provide your own
 componentProperties: {
@@ -1026,7 +1026,7 @@ components: [
 **Solution:** Always await changes and verify
 
 ```javascript
-const change = new EntityAddChange(parentId, name);
+const change = new AddEntityChange(parentId, name);
 const entity = await change.apply();  // Wait for completion
 
 // Verify before proceeding
@@ -1168,7 +1168,7 @@ Before writing any code, you must choose your paradigm:
 
 ### The Five Universal Truths
 
-1. **Use global functions, not Change classes** - `AddEntity()` not `ChangeTypes.classes.EntityAddChange`
+1. **Use global functions, not Change classes** - `AddEntity()` not `ChangeTypes.classes.AddEntityChange`
 2. **Choose your paradigm FIRST** - Don't mix approaches in a single task
 3. **Explicit is non-negotiable** - When scripting, YOU add EVERY component
 4. **No auto-imports in scripting** - The `{source: "ui"}` magic is UI-only
