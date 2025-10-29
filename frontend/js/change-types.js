@@ -522,10 +522,13 @@ export class AddEntityChange extends Change{
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
+                console.log("checking for: ", this.newEntityId)
                 const entity = SM.getEntityById(this.newEntityId, false);
                 if (entity !== undefined && entity.initialized) {
+                    console.log("entity found: ", entity)
                   resolve(entity);
                 } else {
+                    console.log("entity not found: ", this.newEntityId)
                   setTimeout(check, 50);
                 }
               };
@@ -565,21 +568,19 @@ export class RemoveEntityChange extends Change{
     constructor(entityId, options) {
         super();
         this.timeout = 5000;
-        // this.entity = SM.getEntityById(entityId);
-        // if(!this.entity){
-        //     err("command", "Entity not found =>", entityId)
-        //     return;
-        // }
         this.entityId = entityId;
-        // this.entityExport = this.entity.export();
         this.siblingIndex = null;
         this.options = options || {};
     }
 
     async apply() {
         super.apply();
-        let data = `entity_removed¶${this.entityId}`
-        net.sendOneShot(data);
+        let entity = SM.getEntityById(this.entityId);
+        if(!entity){
+            this.void(`Entity not found => ${this.entityId}`);
+            return;
+        }
+        await entity.Destroy();
     }
 
     async undo() {
@@ -587,8 +588,9 @@ export class RemoveEntityChange extends Change{
         if (!this.entityExport) return;
 
         // Recreate the entity hierarchy
-        let data = `load_entity¶${this.entity.parentId}¶${JSON.stringify(this.entityExport)}`
-        net.sendOneShot(data);
+        // let data = `load_entity¶${this.entity.parentId}¶${JSON.stringify(this.entityExport)}`
+        // net.sendOneShot(data);
+        
     }
 
     getDescription() {

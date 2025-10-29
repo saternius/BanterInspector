@@ -19,6 +19,7 @@
             this.props = {
                 hierarchy: null,
             }
+            this.garbage = [];
             this.selectedEntity = null;
             this.expandedNodes = new Set();
             this.loaded = false;
@@ -88,6 +89,8 @@
                         inspector?.hierarchyPanel?.render()
                         inspector?.lifecyclePanel?.render()
                         this.loaded = true;
+                        SM.getAllEntities().forEach(e=>e.startListeningForChildChanges());
+
                         await this.executeStartupScripts("onSceneLoaded");
                         setTimeout(()=>{
                             inspector?.hierarchyPanel?.render()
