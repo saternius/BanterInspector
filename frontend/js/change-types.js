@@ -500,9 +500,6 @@ export class AddEntityChange extends Change{
             return exists;
         }
 
-        // let data = `entity_added¶${this.parentId}¶${this.entityName}`
-        // net.sendOneShot(data);
-
         let parentRef = net.db.ref(`space/${net.spaceId}/${this.parentId}`);
         let newEntityRef = parentRef.child(this.entityName);
         await newEntityRef.set({
@@ -611,28 +608,17 @@ export class RemoveEntityChange extends Change{
 }
 
 export class EntityMoveChange extends Change{
-    constructor(entityId, newParentId, keepPosition, options) {
+    constructor(entityId, newParentId, options) {
         super();
         this.timeout = 500;
         this.entityId = entityId;
         this.newParentId = newParentId;
-        this.keepPosition = keepPosition;
-        const entity = SM.getEntityById(entityId);
-        this.oldParentId = entity?.parentId || null;
-        this.oldSiblingIndex = this.getSiblingIndex(entityId, this.oldParentId);
         this.options = options || {};
     }
 
-    getSiblingIndex(entityId, parentId) {
-        if (parentId) {
-            const parent = SM.getEntityById(parentId);
-            return parent?.children?.findIndex(child => child.id === entityId) ?? -1;
-        } else {
-            return SM.entityData.entities.findIndex(s => s.id === entityId);
-        }
-    }
 
     async apply() {
+        log("move entity change", "apply", this.entityId, this.newParentId)
         super.apply();
         if(this.oldParentId === this.newParentId) return;
         if(this.oldParentId === "People" || this.newParentId === "People" || this.entityId === "People"){
@@ -642,14 +628,14 @@ export class EntityMoveChange extends Change{
         const entity = SM.getEntityById(this.entityId);
         const parent = SM.getEntityById(this.newParentId);
         if (!entity || !parent) return;
-        await entity.SetParent(this.newParentId, this.keepPosition);
+        await entity.SetParent(this.newParentId);
     }
 
     async undo() {
         super.undo();
         const entity = SM.getEntityById(this.entityId);
         if (!entity) return;
-        await entity.SetParent(this.oldParentId, this.keepPosition);
+        await entity.SetParent(this.oldParentId);
     }
 
     getDescription() {
