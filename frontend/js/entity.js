@@ -4,6 +4,7 @@ const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoU
 export class Entity{
     async init(entityData, options){
         this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
+        log("init", "entity", this.name, entityData)
         this.parentId = entityData.parentId;
         this.components = entityData.components || [];
         this.children = entityData.children || [];
@@ -110,32 +111,51 @@ export class Entity{
             log("entity", "component removed", snapshot.key, data)
         })
 
-        // handle children changes
-        this.ref.on("child_added", (snapshot)=>{
-            log("entity", "child added", snapshot.key, snapshot.val(), this.id, this.name)
-            window.lastAddedChild = snapshot;
-            let data = snapshot.val();
-            let key = snapshot.key
-            let targetEntity = SM.entityData.entityUUIDMap[data.uuid];
-            
-            if(targetEntity){
-                targetEntity._setParent(this, false);
-            }else{
-                log("entity", "child added", "new entity", data)
-                data.parentId = this.id;
-                new Entity().init(data);
-            }
-            log("entity", "child added", key, data)
-        })
+        this.startListeningForChildChanges = ()=>{
+             // handle children changes
+            this.ref.on("child_added", (snapshot)=>{
+                let key = snapshot.key;
+                if(key === "__meta"){
+                    return;
+                }
 
-        this.ref.on("child_removed", (snapshot)=>{
-            log("entity", "child removed", snapshot)
-            let data = snapshot.val();
-            let key = snapshot.key
+                window.lastAddedChild = snapshot;
+                let data = snapshot.val();
+                let targetEntity = SM.entityData.entityUUIDMap[data.__meta.uuid];
+               
+                if(targetEntity){
+                    log("redundant child added", key, data)
+                    targetEntity._setParent(this, false);
+                }else{
+                    log("new child added", key, data)
+                    data.parentId = this.id;
+                    data.name = key;
+                    new Entity().init(data);
+                }
+                log("entity", "child added", key, data)
+            })
 
-            log("entity", "child removed", key, data)
-        })
+            this.ref.on("child_removed", (snapshot)=>{
+                log("entity", "child removed", snapshot)
+                let data = snapshot.val();
+                let key = snapshot.key
+                console.log("child removed", key, data)
+                let targetID = this.id + "/" + key;
+                let targetEntity = SM.getEntityById(targetID);
+                if(targetEntity){
+                    SM.garbage.push(targetEntity);
+                    this.children = this.children.filter(child => child.id !== targetID);
+                }
+                inspector.hierarchyPanel.render();
+                log("entity", "child removed", key, data)
+            })
+        }
 
+        if(SM.loaded){
+            this.startListeningForChildChanges();
+        }
+
+       
         
         if(this.options.context === "crawl"){
             log("entity", "crawling", this.id)
@@ -150,6 +170,7 @@ export class Entity{
                 uuid: this.uuid
             });
         }
+        inspector.hierarchyPanel.render();
         return this;
     }
 
@@ -262,6 +283,10 @@ export class Entity{
         this.parentId = newParent.id;
         this._bs.SetParent(newParent._bs, keepPosition);
         this._rename(this.name);
+    }
+
+    async Destroy(){
+        this.ref.remove();
     }
 
     async _destroy(){
