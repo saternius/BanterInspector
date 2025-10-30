@@ -240,7 +240,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306626943,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
   "itemType": "entity",
   "last_used": 1760760114755,
-  "name": "3DUI"
+  "name": "3DUI",
+  "remote": true
 }

@@ -7,28 +7,6 @@
       {
         "initialized": true,
         "properties": {
-          "localPosition": {
-            "x": 1,
-            "y": 1,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 0.05,
-            "y": 0.05,
-            "z": 0.05
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "initialized": true,
-        "properties": {
           "arc": 6.283185307179586,
           "depth": 1,
           "depthSegments": 1,
@@ -57,7 +35,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
         "initialized": true,
@@ -73,7 +51,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "initialized": true,
@@ -102,7 +80,7 @@
       },
       {
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       }
     ],
     "finished_loading": true,
@@ -110,7 +88,25 @@
     "layer": 5,
     "name": "Tippy_77772",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 1,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      }
+    }
   },
   "description": "",
   "folder": "Tippy",

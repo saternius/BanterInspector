@@ -21,33 +21,6 @@
                       "loadAsync": true
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.04,
-                        "y": 1,
-                        "z": 0.04
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
                       "arc": 6.283185307179586,
                       "depth": 1,
                       "depthSegments": 1,
@@ -76,7 +49,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -96,7 +69,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -117,7 +90,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -125,38 +98,29 @@
                 "loadAsync": true,
                 "name": "shaft",
                 "parentId": "People/Technocrat/Glizzmo/Translate/Y",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.04,
+                    "y": 1,
+                    "z": 0.04
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.05,
-                        "y": 0.05,
-                        "z": 0.05
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -193,7 +157,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -213,7 +177,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -234,7 +198,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -242,18 +206,8 @@
                 "loadAsync": true,
                 "name": "tip",
                 "parentId": "People/Technocrat/Glizzmo/Translate/Y",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
                     "x": 0,
                     "y": 0.75,
@@ -266,13 +220,14 @@
                     "z": 0
                   },
                   "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "x": 0.05,
+                    "y": 0.05,
+                    "z": 0.05
                   }
-                },
-                "type": "Transform"
-              },
+                }
+              }
+            ],
+            "components": [
               {
                 "initialized": true,
                 "loadAsync": true,
@@ -280,7 +235,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -299,32 +254,6 @@
                   "radius": 0.5
                 },
                 "type": "CapsuleCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -352,7 +281,25 @@
             "loadAsync": true,
             "name": "Y",
             "parentId": "People/Technocrat/Glizzmo/Translate",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.75,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -360,33 +307,6 @@
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.04,
-                        "y": 1,
-                        "z": 0.04
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -423,7 +343,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -443,7 +363,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -464,7 +384,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -472,38 +392,29 @@
                 "loadAsync": true,
                 "name": "shaft",
                 "parentId": "People/Technocrat/Glizzmo/Translate/X",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.04,
+                    "y": 1,
+                    "z": 0.04
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.05,
-                        "y": 0.05,
-                        "z": 0.05
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -540,7 +451,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -560,7 +471,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -581,7 +492,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -589,7 +500,25 @@
                 "loadAsync": true,
                 "name": "tip",
                 "parentId": "People/Technocrat/Glizzmo/Translate/X",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.05,
+                    "y": 0.05,
+                    "z": 0.05
+                  }
+                }
               }
             ],
             "components": [
@@ -600,34 +529,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "properties": {
-                  "localPosition": {
-                    "x": -0.75,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.7071067811865475
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -646,32 +548,6 @@
                   "radius": 0.5
                 },
                 "type": "CapsuleCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": -0.75,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.7071067811865475
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -699,7 +575,25 @@
             "loadAsync": true,
             "name": "X",
             "parentId": "People/Technocrat/Glizzmo/Translate",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.75,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 0.7071067811865476,
+                "x": 0,
+                "y": 0,
+                "z": 0.7071067811865475
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -707,33 +601,6 @@
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.04,
-                        "y": 1,
-                        "z": 0.04
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -770,7 +637,7 @@
                       "width": 1.3,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -790,7 +657,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -811,7 +678,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -819,38 +686,29 @@
                 "loadAsync": true,
                 "name": "shaft",
                 "parentId": "People/Technocrat/Glizzmo/Translate/Z",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.04,
+                    "y": 1,
+                    "z": 0.04
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.05,
-                        "y": 0.05,
-                        "z": 0.05
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -887,7 +745,7 @@
                       "width": 0.5,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -907,7 +765,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -927,7 +785,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -948,7 +806,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -969,7 +827,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -977,7 +835,25 @@
                 "loadAsync": true,
                 "name": "tip",
                 "parentId": "People/Technocrat/Glizzmo/Translate/Z",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.05,
+                    "y": 0.05,
+                    "z": 0.05
+                  }
+                }
               }
             ],
             "components": [
@@ -988,34 +864,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.75
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0.7071067811865475,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -1034,32 +883,6 @@
                   "radius": 0.5
                 },
                 "type": "CapsuleCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.75
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0.7071067811865475,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -1087,26 +910,16 @@
             "loadAsync": true,
             "name": "Z",
             "parentId": "People/Technocrat/Glizzmo/Translate",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "loadAsync": true,
-            "options": {
-              "context": "item",
-              "loadAsync": true
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
-                "z": 0
+                "z": 0.75
               },
               "localRotation": {
-                "w": 1,
-                "x": 0,
+                "w": 0.7071067811865476,
+                "x": 0.7071067811865475,
                 "y": 0,
                 "z": 0
               },
@@ -1115,8 +928,7 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -1124,7 +936,25 @@
         "loadAsync": false,
         "name": "Translate",
         "parentId": "People/Technocrat/Glizzmo",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1132,33 +962,6 @@
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0,
-                    "y": 0.7071067811865475,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "loadAsync": false,
@@ -1195,7 +998,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -1216,7 +1019,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
@@ -1238,7 +1041,7 @@
                   "context": "item",
                   "loadAsync": false
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1246,38 +1049,29 @@
             "loadAsync": true,
             "name": "X-Ring",
             "parentId": "People/Technocrat/Glizzmo/Rotation",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 0.7071067811865476,
+                "x": 0,
+                "y": 0.7071067811865475,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0.7071067811865475,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "loadAsync": false,
@@ -1314,7 +1108,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -1335,7 +1129,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
@@ -1357,7 +1151,7 @@
                   "context": "item",
                   "loadAsync": false
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1365,38 +1159,29 @@
             "loadAsync": true,
             "name": "Z-Ring",
             "parentId": "People/Technocrat/Glizzmo/Rotation",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 0.7071067811865476,
+                "x": 0.7071067811865475,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "loadAsync": false,
@@ -1433,7 +1218,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -1454,7 +1239,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "initialized": true,
@@ -1476,7 +1261,7 @@
                   "context": "item",
                   "loadAsync": false
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               }
             ],
             "initialized": true,
@@ -1484,18 +1269,8 @@
             "loadAsync": true,
             "name": "Y-Ring",
             "parentId": "People/Technocrat/Glizzmo/Rotation",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "loadAsync": true,
-            "options": {
-              "context": "item",
-              "loadAsync": true
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -1512,8 +1287,7 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -1521,7 +1295,25 @@
         "loadAsync": false,
         "name": "Rotation",
         "parentId": "People/Technocrat/Glizzmo",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1532,33 +1324,6 @@
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.03,
-                        "y": 1,
-                        "z": 0.03
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -1595,7 +1360,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1615,7 +1380,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -1636,7 +1401,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1644,38 +1409,29 @@
                 "loadAsync": true,
                 "name": "line",
                 "parentId": "People/Technocrat/Glizzmo/Scale/Y",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.03,
+                    "y": 1,
+                    "z": 0.03
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.15,
-                        "y": 0.15,
-                        "z": 0.15
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -1712,7 +1468,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1732,7 +1488,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -1753,7 +1509,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1761,18 +1517,8 @@
                 "loadAsync": true,
                 "name": "cube",
                 "parentId": "People/Technocrat/Glizzmo/Scale/Y",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
                     "x": 0,
                     "y": 0.75,
@@ -1785,13 +1531,14 @@
                     "z": 0
                   },
                   "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
+                    "x": 0.15,
+                    "y": 0.15,
+                    "z": 0.15
                   }
-                },
-                "type": "Transform"
-              },
+                }
+              }
+            ],
+            "components": [
               {
                 "initialized": true,
                 "loadAsync": true,
@@ -1799,7 +1546,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -1821,32 +1568,6 @@
                   }
                 },
                 "type": "BoxCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -1876,7 +1597,25 @@
             "loadAsync": true,
             "name": "Y",
             "parentId": "People/Technocrat/Glizzmo/Scale",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.75,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -1884,33 +1623,6 @@
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.03,
-                        "y": 1,
-                        "z": 0.03
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -1947,7 +1659,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -1967,7 +1679,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -1988,7 +1700,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -1996,38 +1708,29 @@
                 "loadAsync": true,
                 "name": "line",
                 "parentId": "People/Technocrat/Glizzmo/Scale/X",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.03,
+                    "y": 1,
+                    "z": 0.03
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.15,
-                        "y": 0.15,
-                        "z": 0.15
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -2064,7 +1767,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -2084,7 +1787,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -2105,7 +1808,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -2113,7 +1816,25 @@
                 "loadAsync": true,
                 "name": "cube",
                 "parentId": "People/Technocrat/Glizzmo/Scale/X",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.15,
+                    "y": 0.15,
+                    "z": 0.15
+                  }
+                }
               }
             ],
             "components": [
@@ -2124,34 +1845,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "properties": {
-                  "localPosition": {
-                    "x": -0.75,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.7071067811865475
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -2173,32 +1867,6 @@
                   }
                 },
                 "type": "BoxCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": -0.75,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.7071067811865475
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -2228,7 +1896,25 @@
             "loadAsync": true,
             "name": "X",
             "parentId": "People/Technocrat/Glizzmo/Scale",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.75,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 0.7071067811865476,
+                "x": 0,
+                "y": 0,
+                "z": 0.7071067811865475
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -2236,33 +1922,6 @@
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.03,
-                        "y": 1,
-                        "z": 0.03
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -2299,7 +1958,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -2319,7 +1978,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -2340,7 +1999,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -2348,38 +2007,29 @@
                 "loadAsync": true,
                 "name": "line",
                 "parentId": "People/Technocrat/Glizzmo/Scale/Z",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.03,
+                    "y": 1,
+                    "z": 0.03
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "loadAsync": true,
-                    "options": {
-                      "context": "item",
-                      "loadAsync": true
-                    },
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.75,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 0.15,
-                        "y": 0.15,
-                        "z": 0.15
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "loadAsync": true,
@@ -2416,7 +2066,7 @@
                       "width": 1,
                       "widthSegments": 1
                     },
-                    "type": "BanterGeometry"
+                    "type": "Geometry"
                   },
                   {
                     "initialized": true,
@@ -2436,7 +2086,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "initialized": true,
@@ -2457,7 +2107,7 @@
                       "side": 0,
                       "texture": ""
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   }
                 ],
                 "initialized": true,
@@ -2465,7 +2115,25 @@
                 "loadAsync": true,
                 "name": "cube",
                 "parentId": "People/Technocrat/Glizzmo/Scale/Z",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.75,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 0.15,
+                    "y": 0.15,
+                    "z": 0.15
+                  }
+                }
               }
             ],
             "components": [
@@ -2476,34 +2144,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.75
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0.7071067811865475,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -2525,32 +2166,6 @@
                   }
                 },
                 "type": "BoxCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0.75
-                  },
-                  "localRotation": {
-                    "w": 0.7071067811865476,
-                    "x": 0.7071067811865475,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -2580,38 +2195,29 @@
             "loadAsync": true,
             "name": "Z",
             "parentId": "People/Technocrat/Glizzmo/Scale",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0.75
+              },
+              "localRotation": {
+                "w": 0.7071067811865476,
+                "x": 0.7071067811865475,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "loadAsync": true,
-                "options": {
-                  "context": "item",
-                  "loadAsync": true
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "loadAsync": true,
@@ -2648,7 +2254,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -2657,7 +2263,7 @@
                   "context": "item",
                   "loadAsync": true
                 },
-                "type": "BanterColliderEvents"
+                "type": "ColliderEvents"
               },
               {
                 "initialized": true,
@@ -2679,32 +2285,6 @@
                   }
                 },
                 "type": "BoxCollider"
-              },
-              {
-                "initialized": true,
-                "loadAsync": false,
-                "options": {
-                  "context": "ghost"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
               },
               {
                 "initialized": true,
@@ -2734,18 +2314,8 @@
             "loadAsync": true,
             "name": "UniformScale",
             "parentId": "People/Technocrat/Glizzmo/Scale",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "loadAsync": true,
-            "options": {
-              "context": "item",
-              "loadAsync": true
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -2762,8 +2332,7 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -2771,21 +2340,11 @@
         "loadAsync": false,
         "name": "Scale",
         "parentId": "People/Technocrat/Glizzmo",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "initialized": true,
-        "loadAsync": true,
-        "options": {
-          "context": "item",
-          "loadAsync": true
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 0.75,
+            "y": 0,
             "z": 0
           },
           "localRotation": {
@@ -2799,9 +2358,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "initialized": true,
         "loadAsync": false,
@@ -2817,7 +2377,25 @@
     "loadAsync": false,
     "name": "Glizzmo",
     "parentId": "People/Technocrat",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0.75,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Transform",

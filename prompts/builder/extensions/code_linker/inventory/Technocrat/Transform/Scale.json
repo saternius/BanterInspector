@@ -13,28 +13,6 @@
               {
                 "initialized": true,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.03,
-                    "y": 1,
-                    "z": 0.03
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
                   "depthSegments": 1,
@@ -63,7 +41,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -79,104 +57,18 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
             "layer": 0,
             "name": "line",
             "parentId": "Scene/Scale/Y",
-            "persistent": true
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.15,
-                    "y": 0.15,
-                    "z": 0.15
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "arc": 6.283185307179586,
-                  "depth": 1,
-                  "depthSegments": 1,
-                  "geometryType": 0,
-                  "height": 1,
-                  "heightSegments": 1,
-                  "innerRadius": 0.12,
-                  "openEnded": false,
-                  "outerRadius": 0.5,
-                  "p": 2,
-                  "parametricType": 0,
-                  "phiLength": 6.283185307179586,
-                  "phiSegments": 8,
-                  "phiStart": 0,
-                  "q": 3,
-                  "radialSegments": 32,
-                  "radius": 0.5,
-                  "radiusBottom": 1,
-                  "radiusTop": 0,
-                  "segments": 64,
-                  "thetaLength": 6.283185307179586,
-                  "thetaSegments": 6,
-                  "thetaStart": 0,
-                  "tube": 0.4,
-                  "tubularSegments": 64,
-                  "width": 1,
-                  "widthSegments": 1
-                },
-                "type": "BanterGeometry"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "color": {
-                    "a": 1,
-                    "b": 0,
-                    "g": 1,
-                    "r": 0
-                  },
-                  "generateMipMaps": true,
-                  "shaderName": "Standard",
-                  "side": 0,
-                  "texture": ""
-                },
-                "type": "BanterMaterial"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "name": "cube",
-            "parentId": "Scene/Scale/Y",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 0.75,
+                "y": 0,
                 "z": 0
               },
               "localRotation": {
@@ -186,151 +78,15 @@
                 "z": 0
               },
               "localScale": {
-                "x": 1,
+                "x": 0.03,
                 "y": 1,
-                "z": 1
+                "z": 0.03
               }
-            },
-            "type": "Transform"
-          },
-          {
-            "initialized": true,
-            "properties": {
-              "center": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "isTrigger": false,
-              "material": "",
-              "size": {
-                "x": 0.2,
-                "y": 0.2,
-                "z": 0.2
-              }
-            },
-            "type": "BoxCollider"
-          },
-          {
-            "initialized": true,
-            "type": "BanterColliderEvents"
-          }
-        ],
-        "initialized": true,
-        "layer": 5,
-        "name": "Y",
-        "parentId": "Scene/Scale",
-        "persistent": true
-      },
-      {
-        "active": true,
-        "children": [
-          {
-            "active": true,
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.03,
-                    "y": 1,
-                    "z": 0.03
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "arc": 6.283185307179586,
-                  "depth": 1,
-                  "depthSegments": 1,
-                  "geometryType": 0,
-                  "height": 1.5,
-                  "heightSegments": 1,
-                  "innerRadius": 0.2,
-                  "openEnded": false,
-                  "outerRadius": 0.5,
-                  "p": 2,
-                  "parametricType": 0,
-                  "phiLength": 6.283185307179586,
-                  "phiSegments": 8,
-                  "phiStart": 0,
-                  "q": 3,
-                  "radialSegments": 32,
-                  "radius": 0.05,
-                  "radiusBottom": 0.5,
-                  "radiusTop": 0.5,
-                  "segments": 64,
-                  "thetaLength": 6.283185307179586,
-                  "thetaSegments": 6,
-                  "thetaStart": 0,
-                  "tube": 0.4,
-                  "tubularSegments": 64,
-                  "width": 1,
-                  "widthSegments": 1
-                },
-                "type": "BanterGeometry"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "color": {
-                    "a": 1,
-                    "b": 0,
-                    "g": 0,
-                    "r": 1
-                  },
-                  "generateMipMaps": true,
-                  "shaderName": "Standard",
-                  "side": 0,
-                  "texture": ""
-                },
-                "type": "BanterMaterial"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "name": "line",
-            "parentId": "Scene/Scale/X",
-            "persistent": true
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.15,
-                    "y": 0.15,
-                    "z": 0.15
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -362,7 +118,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "initialized": true,
@@ -370,144 +126,7 @@
                   "color": {
                     "a": 1,
                     "b": 0,
-                    "g": 0,
-                    "r": 1
-                  },
-                  "generateMipMaps": true,
-                  "shaderName": "Standard",
-                  "side": 0,
-                  "texture": ""
-                },
-                "type": "BanterMaterial"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "name": "cube",
-            "parentId": "Scene/Scale/X",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": -0.75,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 0.7071067811865476,
-                "x": 0,
-                "y": 0,
-                "z": 0.7071067811865475
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "initialized": true,
-            "properties": {
-              "center": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "isTrigger": false,
-              "material": "",
-              "size": {
-                "x": 0.2,
-                "y": 0.2,
-                "z": 0.2
-              }
-            },
-            "type": "BoxCollider"
-          },
-          {
-            "initialized": true,
-            "type": "BanterColliderEvents"
-          }
-        ],
-        "initialized": true,
-        "layer": 5,
-        "name": "X",
-        "parentId": "Scene/Scale",
-        "persistent": true
-      },
-      {
-        "active": true,
-        "children": [
-          {
-            "active": true,
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.03,
-                    "y": 1,
-                    "z": 0.03
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "arc": 6.283185307179586,
-                  "depth": 1,
-                  "depthSegments": 1,
-                  "geometryType": 0,
-                  "height": 1.5,
-                  "heightSegments": 1,
-                  "innerRadius": 0.2,
-                  "openEnded": false,
-                  "outerRadius": 0.5,
-                  "p": 2,
-                  "parametricType": 0,
-                  "phiLength": 6.283185307179586,
-                  "phiSegments": 8,
-                  "phiStart": 0,
-                  "q": 3,
-                  "radialSegments": 32,
-                  "radius": 0.05,
-                  "radiusBottom": 0.5,
-                  "radiusTop": 0.5,
-                  "segments": 64,
-                  "thetaLength": 6.283185307179586,
-                  "thetaSegments": 6,
-                  "thetaStart": 0,
-                  "tube": 0.4,
-                  "tubularSegments": 64,
-                  "width": 1,
-                  "widthSegments": 1
-                },
-                "type": "BanterGeometry"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "color": {
-                    "a": 1,
-                    "b": 1,
-                    "g": 0,
+                    "g": 1,
                     "r": 0
                   },
                   "generateMipMaps": true,
@@ -515,158 +134,18 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "name": "line",
-            "parentId": "Scene/Scale/Z",
-            "persistent": true
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.15,
-                    "y": 0.15,
-                    "z": 0.15
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "arc": 6.283185307179586,
-                  "depth": 1,
-                  "depthSegments": 1,
-                  "geometryType": 0,
-                  "height": 1,
-                  "heightSegments": 1,
-                  "innerRadius": 0.12,
-                  "openEnded": false,
-                  "outerRadius": 0.5,
-                  "p": 2,
-                  "parametricType": 0,
-                  "phiLength": 6.283185307179586,
-                  "phiSegments": 8,
-                  "phiStart": 0,
-                  "q": 3,
-                  "radialSegments": 32,
-                  "radius": 0.5,
-                  "radiusBottom": 1,
-                  "radiusTop": 0,
-                  "segments": 64,
-                  "thetaLength": 6.283185307179586,
-                  "thetaSegments": 6,
-                  "thetaStart": 0,
-                  "tube": 0.4,
-                  "tubularSegments": 64,
-                  "width": 1,
-                  "widthSegments": 1
-                },
-                "type": "BanterGeometry"
-              },
-              {
-                "initialized": true,
-                "properties": {
-                  "color": {
-                    "a": 1,
-                    "b": 1,
-                    "g": 0,
-                    "r": 0
-                  },
-                  "generateMipMaps": true,
-                  "shaderName": "Standard",
-                  "side": 0,
-                  "texture": ""
-                },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
             "layer": 0,
             "name": "cube",
-            "parentId": "Scene/Scale/Z",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "parentId": "Scene/Scale/Y",
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 0,
-                "z": 0.75
-              },
-              "localRotation": {
-                "w": 0.7071067811865476,
-                "x": 0.7071067811865475,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "initialized": true,
-            "properties": {
-              "center": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "isTrigger": false,
-              "material": "",
-              "size": {
-                "x": 0.2,
-                "y": 0.2,
-                "z": 0.2
-              }
-            },
-            "type": "BoxCollider"
-          },
-          {
-            "initialized": true,
-            "type": "BanterColliderEvents"
-          }
-        ],
-        "initialized": true,
-        "layer": 5,
-        "name": "Z",
-        "parentId": "Scene/Scale",
-        "persistent": true
-      },
-      {
-        "active": true,
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
+                "y": 0.75,
                 "z": 0
               },
               "localRotation": {
@@ -680,9 +159,472 @@
                 "y": 0.15,
                 "z": 0.15
               }
+            }
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "material": "",
+              "size": {
+                "x": 0.2,
+                "y": 0.2,
+                "z": 0.2
+              }
             },
-            "type": "Transform"
+            "type": "BoxCollider"
           },
+          {
+            "initialized": true,
+            "type": "ColliderEvents"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "name": "Y",
+        "parentId": "Scene/Scale",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.75,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 1.5,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.05,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "Geometry"
+              },
+              {
+                "initialized": true,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0,
+                    "g": 0,
+                    "r": 1
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "Material"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "name": "line",
+            "parentId": "Scene/Scale/X",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.03,
+                "y": 1,
+                "z": 0.03
+              }
+            }
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.12,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.5,
+                  "radiusBottom": 1,
+                  "radiusTop": 0,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "Geometry"
+              },
+              {
+                "initialized": true,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0,
+                    "g": 0,
+                    "r": 1
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "Material"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "name": "cube",
+            "parentId": "Scene/Scale/X",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.75,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.15,
+                "y": 0.15,
+                "z": 0.15
+              }
+            }
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "material": "",
+              "size": {
+                "x": 0.2,
+                "y": 0.2,
+                "z": 0.2
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "initialized": true,
+            "type": "ColliderEvents"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "name": "X",
+        "parentId": "Scene/Scale",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.75,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.7071067811865476,
+            "x": 0,
+            "y": 0,
+            "z": 0.7071067811865475
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "active": true,
+        "children": [
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 1.5,
+                  "heightSegments": 1,
+                  "innerRadius": 0.2,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.05,
+                  "radiusBottom": 0.5,
+                  "radiusTop": 0.5,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "Geometry"
+              },
+              {
+                "initialized": true,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 1,
+                    "g": 0,
+                    "r": 0
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "Material"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "name": "line",
+            "parentId": "Scene/Scale/Z",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.03,
+                "y": 1,
+                "z": 0.03
+              }
+            }
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "initialized": true,
+                "properties": {
+                  "arc": 6.283185307179586,
+                  "depth": 1,
+                  "depthSegments": 1,
+                  "geometryType": 0,
+                  "height": 1,
+                  "heightSegments": 1,
+                  "innerRadius": 0.12,
+                  "openEnded": false,
+                  "outerRadius": 0.5,
+                  "p": 2,
+                  "parametricType": 0,
+                  "phiLength": 6.283185307179586,
+                  "phiSegments": 8,
+                  "phiStart": 0,
+                  "q": 3,
+                  "radialSegments": 32,
+                  "radius": 0.5,
+                  "radiusBottom": 1,
+                  "radiusTop": 0,
+                  "segments": 64,
+                  "thetaLength": 6.283185307179586,
+                  "thetaSegments": 6,
+                  "thetaStart": 0,
+                  "tube": 0.4,
+                  "tubularSegments": 64,
+                  "width": 1,
+                  "widthSegments": 1
+                },
+                "type": "Geometry"
+              },
+              {
+                "initialized": true,
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 1,
+                    "g": 0,
+                    "r": 0
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": "Standard",
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "Material"
+              }
+            ],
+            "initialized": true,
+            "layer": 0,
+            "name": "cube",
+            "parentId": "Scene/Scale/Z",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.75,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.15,
+                "y": 0.15,
+                "z": 0.15
+              }
+            }
+          }
+        ],
+        "components": [
+          {
+            "initialized": true,
+            "properties": {
+              "center": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "isTrigger": false,
+              "material": "",
+              "size": {
+                "x": 0.2,
+                "y": 0.2,
+                "z": 0.2
+              }
+            },
+            "type": "BoxCollider"
+          },
+          {
+            "initialized": true,
+            "type": "ColliderEvents"
+          }
+        ],
+        "initialized": true,
+        "layer": 5,
+        "name": "Z",
+        "parentId": "Scene/Scale",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0.75
+          },
+          "localRotation": {
+            "w": 0.7071067811865476,
+            "x": 0.7071067811865475,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      },
+      {
+        "active": true,
+        "components": [
           {
             "initialized": true,
             "properties": {
@@ -714,7 +656,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "initialized": true,
@@ -730,7 +672,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "initialized": true,
@@ -752,20 +694,15 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
         "layer": 5,
         "name": "UniformScale",
         "parentId": "Scene/Scale",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
             "y": 0,
@@ -778,19 +715,36 @@
             "z": 0
           },
           "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
+            "x": 0.15,
+            "y": 0.15,
+            "z": 0.15
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "initialized": true,
     "layer": 0,
     "name": "Scale",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Transform",

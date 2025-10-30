@@ -8,29 +8,6 @@
         "active": true,
         "components": [
           {
-            "id": "Transform_52750",
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": -0.4,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 0.1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
             "id": "BanterMaterial_7006",
             "initialized": true,
             "properties": {
@@ -45,7 +22,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "id": "BanterGeometry_87509",
@@ -79,7 +56,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           }
         ],
         "id": "Scene/Passthrough_73267_70712_29573/Mesh",
@@ -87,17 +64,11 @@
         "layer": 0,
         "name": "Mesh",
         "parentId": "Scene/Passthrough_73267_70712_29573",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "id": "Transform_70043",
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 0,
+            "y": -0.4,
             "z": 0
           },
           "localRotation": {
@@ -108,12 +79,13 @@
           },
           "localScale": {
             "x": 1,
-            "y": 1,
+            "y": 0.1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "id": "BanterAttachedObject_66628",
         "initialized": true,
@@ -121,7 +93,7 @@
           "attachmentPoint": 4,
           "uid": ""
         },
-        "type": "BanterAttachedObject"
+        "type": "AttachedObject"
       }
     ],
     "id": "Scene/Passthrough_73267_70712_29573",
@@ -129,7 +101,25 @@
     "layer": 0,
     "name": "Passthrough_73267_70712_29573",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Passthrough",

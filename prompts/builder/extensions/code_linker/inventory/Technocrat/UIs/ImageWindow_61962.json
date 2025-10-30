@@ -14,32 +14,6 @@
               "loadAsync": false
             },
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0.55,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
               "arc": 6.283185307179586,
               "depth": 0.025,
               "depthSegments": 1,
@@ -68,7 +42,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "loadAsync": false,
@@ -88,7 +62,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -117,7 +91,7 @@
               "context": "item",
               "loadAsync": false
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -125,69 +99,55 @@
         "loadAsync": false,
         "name": "Handle",
         "parentId": "Scene/ImageWindow_61962",
-        "persistent": true
-      },
-      {
-        "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
-        "initialized": true,
-        "layer": 0,
-        "loadAsync": false,
-        "name": "UI",
-        "parentId": "Scene/ImageWindow_61962",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": 0.3425434999999999,
-            "y": 1.1479116299999998,
-            "z": -0.20098807499999993
+            "x": 0,
+            "y": 0.55,
+            "z": 0
           },
           "localRotation": {
-            "w": 0.8742803666252141,
-            "x": 0.0038301673981042494,
-            "y": 0.48540619109296856,
-            "z": -8.6736173798840345e-19
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localScale": {
             "x": 1,
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
+        }
       },
+      {
+        "active": true,
+        "initialized": true,
+        "layer": 0,
+        "loadAsync": false,
+        "name": "UI",
+        "parentId": "Scene/ImageWindow_61962",
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -218,7 +178,25 @@
     "loadAsync": false,
     "name": "ImageWindow_61962",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0.3425434999999999,
+        "y": 1.1479116299999998,
+        "z": -0.20098807499999993
+      },
+      "localRotation": {
+        "w": 0.8742803666252141,
+        "x": 0.0038301673981042494,
+        "y": 0.48540619109296856,
+        "z": -8.6736173798840345e-19
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "UIs",

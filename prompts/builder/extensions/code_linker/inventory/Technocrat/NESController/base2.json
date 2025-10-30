@@ -13,33 +13,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": -0.15,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -68,7 +46,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -84,7 +62,25 @@
             "loadAsync": false,
             "name": "left",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.15,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -92,33 +88,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0.15,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -147,7 +121,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -163,7 +137,25 @@
             "loadAsync": false,
             "name": "right",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.15,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -171,33 +163,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.15,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -226,7 +196,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -242,7 +212,25 @@
             "loadAsync": false,
             "name": "up",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.15,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -250,33 +238,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -0.15,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -305,7 +271,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -321,7 +287,25 @@
             "loadAsync": false,
             "name": "down",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -0.15,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -329,33 +313,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -384,7 +346,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -400,7 +362,25 @@
             "loadAsync": false,
             "name": "center",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -408,33 +388,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0.07203423547592312,
-                    "y": 0.8286567601180508,
-                    "z": 2.7942988446986234
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.07,
                   "width": 0.2
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -463,7 +421,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -479,7 +437,25 @@
             "loadAsync": false,
             "name": "start",
             "parentId": "Scene/base2/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.07203423547592312,
+                "y": 0.8286567601180508,
+                "z": 2.7942988446986234
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -487,33 +463,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": -0.2949001517026634,
-                    "y": 0.8286567,
-                    "z": 2.794299
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.07,
                   "width": 0.2
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -542,7 +496,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -558,17 +512,12 @@
             "loadAsync": false,
             "name": "select",
             "parentId": "Scene/base2/keys",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": -0.8387761090105809,
-                "y": 0.9363898068312014,
-                "z": 2.7981580928180922
+                "x": -0.2949001517026634,
+                "y": 0.8286567,
+                "z": 2.794299
               },
               "localRotation": {
                 "w": 1,
@@ -581,8 +530,7 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -590,7 +538,25 @@
         "loadAsync": false,
         "name": "keys",
         "parentId": "Scene/base2",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.8387761090105809,
+            "y": 0.9363898068312014,
+            "z": 2.7981580928180922
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -601,33 +567,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.9496104824561211,
-                    "z": 2.854951565722298
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.75,
                   "width": 2.36
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -656,7 +600,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -672,7 +616,25 @@
             "loadAsync": false,
             "name": "panel",
             "parentId": "Scene/base2/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.9496104824561211,
+                "z": 2.854951565722298
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -680,33 +642,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": -0.10546667808440274,
-                    "y": 0.8291467770931376,
-                    "z": 2.83577258941409
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.22018016899257292,
                   "width": 0.6925648453596803
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -735,7 +675,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -751,7 +691,25 @@
             "loadAsync": false,
             "name": "select_start_panel",
             "parentId": "Scene/base2/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.10546667808440274,
+                "y": 0.8291467770931376,
+                "z": 2.83577258941409
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -767,38 +725,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": -0.13693099969274206,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -832,7 +763,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -853,7 +784,25 @@
                 "loadAsync": false,
                 "name": "left",
                 "parentId": "Scene/base2/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": -0.13693099969274206,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -866,38 +815,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0.13662046112697515,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -931,7 +853,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -952,7 +874,25 @@
                 "loadAsync": false,
                 "name": "right",
                 "parentId": "Scene/base2/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0.13662046112697515,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -965,38 +905,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.14,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1030,7 +943,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1051,7 +964,25 @@
                 "loadAsync": false,
                 "name": "up",
                 "parentId": "Scene/base2/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.14,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1064,38 +995,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": -0.14,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1129,7 +1033,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1150,7 +1054,25 @@
                 "loadAsync": false,
                 "name": "down",
                 "parentId": "Scene/base2/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -0.14,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1163,38 +1085,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1228,7 +1123,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1249,22 +1144,12 @@
                 "loadAsync": false,
                 "name": "center",
                 "parentId": "Scene/base2/printing/arrow_keys_highlight",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
-                    "x": -0.83614099155094,
-                    "y": 0.9352362358457921,
-                    "z": 2.85126673025606
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
                   },
                   "localRotation": {
                     "w": 1,
@@ -1273,12 +1158,11 @@
                     "z": 0
                   },
                   "localScale": {
-                    "x": 1.15,
-                    "y": 1.1,
-                    "z": 1.1
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                   }
-                },
-                "type": "Transform"
+                }
               }
             ],
             "initialized": true,
@@ -1286,7 +1170,25 @@
             "loadAsync": false,
             "name": "arrow_keys_highlight",
             "parentId": "Scene/base2/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.83614099155094,
+                "y": 0.9352362358457921,
+                "z": 2.85126673025606
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1.15,
+                "y": 1.1,
+                "z": 1.1
+              }
+            }
           },
           {
             "active": true,
@@ -1294,33 +1196,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0.493267674010094,
-                    "y": 0.8402174203224021,
-                    "z": 2.842044274903657
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.9999999,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.275,
                   "width": 0.275
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -1349,7 +1229,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -1365,7 +1245,25 @@
             "loadAsync": false,
             "name": "b_panel",
             "parentId": "Scene/base2/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.493267674010094,
+                "y": 0.8402174203224021,
+                "z": 2.842044274903657
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.9999999,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -1373,33 +1271,11 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0.8165530410076004,
-                    "y": 0.84,
-                    "z": 2.842044
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.9999999,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "depth": 0.15,
                   "height": 0.275,
                   "width": 0.275
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -1428,7 +1304,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -1444,17 +1320,12 @@
             "loadAsync": false,
             "name": "a_panel",
             "parentId": "Scene/base2/printing",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
+                "x": 0.8165530410076004,
+                "y": 0.84,
+                "z": 2.842044
               },
               "localRotation": {
                 "w": 1,
@@ -1463,12 +1334,11 @@
                 "z": 0
               },
               "localScale": {
-                "x": 1,
+                "x": 0.9999999,
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -1476,17 +1346,12 @@
         "loadAsync": false,
         "name": "printing",
         "parentId": "Scene/base2",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 1,
-            "z": 3
+            "y": 0,
+            "z": 0
           },
           "localRotation": {
             "w": 1,
@@ -1499,9 +1364,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "loadAsync": false,
         "options": {
@@ -1512,7 +1378,7 @@
           "height": 1,
           "width": 2.5
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -1531,7 +1397,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -1575,7 +1441,25 @@
     "loadAsync": false,
     "name": "base2",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 3
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

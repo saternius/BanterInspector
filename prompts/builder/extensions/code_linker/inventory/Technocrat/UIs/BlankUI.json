@@ -5,32 +5,6 @@
     "active": true,
     "components": [
       {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "localPosition": {
-            "x": 2.3453648,
-            "y": 1.3443090199999999,
-            "z": 0.6859100250000001
-          },
-          "localRotation": {
-            "w": 0.9835216782839067,
-            "x": 0.002266396317113861,
-            "y": -0.18077602660015912,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
         "inventoryItem": {
           "active": false,
           "author": "Technocrat",
@@ -59,7 +33,25 @@
     "loadAsync": false,
     "name": "BlankUI",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 2.3453648,
+        "y": 1.3443090199999999,
+        "z": 0.6859100250000001
+      },
+      "localRotation": {
+        "w": 0.9835216782839067,
+        "x": 0.002266396317113861,
+        "y": -0.18077602660015912,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "UIs",

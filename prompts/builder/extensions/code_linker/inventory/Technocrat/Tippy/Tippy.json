@@ -6,47 +6,16 @@
     "children": [
       {
         "active": true,
-        "components": [
-          {
-            "id": "Transform_82245",
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
         "id": "Scene/Tippy_76220/Holder",
         "initialized": true,
         "layer": 0,
         "name": "Holder",
         "parentId": "Scene/Tippy_76220",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "id": "Transform_18922",
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 1,
+            "y": 0,
             "z": 0
           },
           "localRotation": {
@@ -56,13 +25,14 @@
             "z": 0
           },
           "localScale": {
-            "x": 0.05,
-            "y": 0.05,
-            "z": 0.05
+            "x": 1,
+            "y": 1,
+            "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "id": "BanterGeometry_5540",
         "initialized": true,
@@ -95,7 +65,7 @@
           "width": 1,
           "widthSegments": 1
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
         "id": "BanterMaterial_52942",
@@ -112,7 +82,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "id": "MonoBehavior_50033",
@@ -144,7 +114,7 @@
       {
         "id": "BanterColliderEvents_8918",
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       }
     ],
     "finished_loading": true,
@@ -153,7 +123,25 @@
     "layer": 5,
     "name": "Tippy_76220",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      }
+    }
   },
   "description": "",
   "folder": "Tippy",

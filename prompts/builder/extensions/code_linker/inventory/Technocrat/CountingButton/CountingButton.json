@@ -8,29 +8,6 @@
         "active": true,
         "components": [
           {
-            "id": "Transform_34177",
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 1,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
             "id": "BanterGeometry_49782",
             "initialized": true,
             "properties": {
@@ -62,7 +39,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "id": "BanterMaterial_35740",
@@ -79,7 +56,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           }
         ],
         "id": "Scene/Controller/CountingButton_58874/ButtonMesh",
@@ -87,34 +64,29 @@
         "layer": 0,
         "name": "ButtonMesh",
         "parentId": "Scene/Controller/CountingButton_58874",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "id": "Transform_42981",
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 1.05,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 0.4999999999999944,
-                "x": 0.5000000000000056,
-                "y": 0.49999999999999434,
-                "z": -0.5000000000000057
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "id": "BanterText_7944",
             "initialized": true,
@@ -136,7 +108,7 @@
               "text": 13,
               "verticalAlignment": 1
             },
-            "type": "BanterText"
+            "type": "Text"
           }
         ],
         "id": "Scene/Controller/CountingButton_58874/Count",
@@ -144,33 +116,28 @@
         "layer": 0,
         "name": "Count",
         "parentId": "Scene/Controller/CountingButton_58874",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "id": "Transform_58940",
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 1,
+            "y": 1.05,
             "z": 0
           },
           "localRotation": {
-            "w": 0.7071067811865476,
-            "x": 0,
-            "y": 0,
-            "z": 0.7071067811865475
+            "w": 0.4999999999999944,
+            "x": 0.5000000000000056,
+            "y": 0.49999999999999434,
+            "z": -0.5000000000000057
           },
           "localScale": {
             "x": 1,
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "id": "BoxCollider_61545",
         "initialized": true,
@@ -192,7 +159,7 @@
       {
         "id": "BanterColliderEvents_33373",
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       },
       {
         "id": "MonoBehavior_51141",
@@ -209,7 +176,25 @@
     "layer": 5,
     "name": "CountingButton_58874",
     "parentId": "Scene/Controller",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 0.7071067811865476,
+        "x": 0,
+        "y": 0,
+        "z": 0.7071067811865475
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "A simple button with a number that increments by 1 if you click it.",
   "folder": "CountingButton",

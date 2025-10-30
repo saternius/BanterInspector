@@ -17,32 +17,6 @@
                   "context": "item"
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.1,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 0.25,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
                   "depthSegments": 1,
@@ -71,7 +45,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -91,7 +65,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -99,37 +73,29 @@
             "loadAsync": false,
             "name": "PipeHole",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 0.25,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -1.55,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 3,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -165,7 +131,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -185,7 +151,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -193,37 +159,29 @@
             "loadAsync": false,
             "name": "PipeShaft",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -1.55,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 3,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -259,7 +217,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -279,7 +237,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -287,20 +245,11 @@
             "loadAsync": false,
             "name": "PipeTop",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item"
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": -0.25,
+                "y": 0,
                 "z": 0
               },
               "localRotation": {
@@ -314,9 +263,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "loadAsync": false,
             "options": {
@@ -344,7 +294,7 @@
               "cmdUser": "Technocrat",
               "context": "item"
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -352,7 +302,25 @@
         "loadAsync": false,
         "name": "Pipe",
         "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": -0.25,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -367,32 +335,6 @@
                   "context": "item"
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.1,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 0.25,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
                   "depthSegments": 1,
@@ -421,7 +363,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -441,7 +383,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -449,37 +391,29 @@
             "loadAsync": false,
             "name": "PipeHole",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe_23907",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 0.25,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -1.55,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 3,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -515,7 +449,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -535,7 +469,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -543,37 +477,29 @@
             "loadAsync": false,
             "name": "PipeShaft",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe_23907",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -1.55,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 3,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item"
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -609,7 +535,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "loadAsync": false,
@@ -629,7 +555,7 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "initialized": true,
@@ -637,25 +563,16 @@
             "loadAsync": false,
             "name": "PipeTop",
             "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE/Pipe_23907",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item"
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 2.25,
+                "y": 0,
                 "z": 0
               },
               "localRotation": {
-                "w": 6.123233995736766e-17,
-                "x": 1,
+                "w": 1,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -664,9 +581,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "loadAsync": false,
             "options": {
@@ -694,7 +612,7 @@
               "cmdUser": "Technocrat",
               "context": "item"
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -702,25 +620,16 @@
         "loadAsync": false,
         "name": "Pipe_23907",
         "parentId": "Scene/FlappyFull_52013/Flappy/Pipes/PipeHurdleE",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item"
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 2.32500991202323,
-            "z": 5.04500000000002
+            "y": 2.25,
+            "z": 0
           },
           "localRotation": {
-            "w": 1,
-            "x": 0,
+            "w": 6.123233995736766e-17,
+            "x": 1,
             "y": 0,
             "z": 0
           },
@@ -729,9 +638,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -768,7 +678,25 @@
     "loadAsync": false,
     "name": "PipeHurdleE",
     "parentId": "Scene/FlappyFull_52013/Flappy/Pipes",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 2.32500991202323,
+        "z": 5.04500000000002
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "FlappyBird",

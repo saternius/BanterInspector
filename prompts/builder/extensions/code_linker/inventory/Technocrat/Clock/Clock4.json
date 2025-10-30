@@ -17,32 +17,6 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "addColliders": true,
                   "climbable": false,
                   "generateMipMaps": true,
@@ -51,7 +25,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -82,37 +56,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -128,7 +94,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -159,37 +125,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -205,7 +163,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -236,37 +194,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -282,7 +232,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -313,37 +263,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -359,7 +301,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -390,37 +332,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -436,7 +370,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -467,37 +401,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -513,7 +439,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -544,37 +470,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.92
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -590,7 +508,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -621,17 +539,8 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock4/Digit4",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -646,11 +555,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.92
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -682,37 +592,29 @@
         "loadAsync": false,
         "name": "Digit4",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "options": {
@@ -728,7 +630,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a9970f20aef5588f0ed4bd4f06a0a675e7f203ce048d6973536aa85f47dd8892"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -759,37 +661,29 @@
         "loadAsync": false,
         "name": "Colon",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": false,
         "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 0.90444737345679
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "options": {
@@ -805,7 +699,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=6487c1a155c3554541426559cd7153529b50dd5ed6e1cd8ca16b79e04397918f"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -836,37 +730,29 @@
         "loadAsync": false,
         "name": "GlassBack",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 0.90444737345679
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "options": {
@@ -882,7 +768,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=f69cd8dab9bd3ea9b3a4a699d79ca588b3f16c1fc5bc94375c586eb0e78a2b5b"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -913,37 +799,29 @@
         "loadAsync": false,
         "name": "Case",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "options": {
@@ -959,7 +837,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=888d0e0ae85cc1bfe077413ebebc59abc42cf73c8e63b1758dd598d7ce521768"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -990,37 +868,29 @@
         "loadAsync": false,
         "name": "ButtonPlayPause",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "options": {
@@ -1036,7 +906,7 @@
               "slippery": false,
               "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=a22b1972b0865a58308d82908d99f4016ddd9be38260f0637a128eddcf3a18ef"
             },
-            "type": "BanterGLTF"
+            "type": "GLTF"
           },
           {
             "inventoryItem": {
@@ -1067,7 +937,25 @@
         "loadAsync": false,
         "name": "ButtonReset",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1075,32 +963,6 @@
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1116,7 +978,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1147,37 +1009,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1193,7 +1047,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1224,37 +1078,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1270,7 +1116,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1301,37 +1147,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1347,7 +1185,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1378,37 +1216,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1424,7 +1254,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1455,37 +1285,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1501,7 +1323,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1532,37 +1354,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1578,7 +1392,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1609,37 +1423,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.867902
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1655,7 +1461,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1686,19 +1492,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock4/Digit3",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 0.7728888888888888,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -1711,11 +1508,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.867902
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -1747,7 +1545,25 @@
         "loadAsync": false,
         "name": "Digit3",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0.7728888888888888,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1755,32 +1571,6 @@
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1796,7 +1586,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1827,37 +1617,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1873,7 +1655,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1904,37 +1686,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -1950,7 +1724,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -1981,37 +1755,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2027,7 +1793,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2058,37 +1824,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2104,7 +1862,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2135,37 +1893,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2181,7 +1931,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2212,37 +1962,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2258,7 +2000,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2289,37 +2031,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.82
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2335,7 +2069,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2366,19 +2100,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock4/Digit2",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 1.8303024617696162,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -2391,11 +2116,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.82
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -2427,7 +2153,25 @@
         "loadAsync": false,
         "name": "Digit2",
         "parentId": "Scene/Clock4",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 1.8303024617696162,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -2435,32 +2179,6 @@
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2476,7 +2194,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=3919d39fb337252d1a8d9e3338499fcc341e5e3a6f3d8fd8b4c3714ecdb15167"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2507,37 +2225,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2553,7 +2263,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=27f0f67c5c2424510d8aa5c0cf0bf17bb2af5a2bf60071c1d5f16a5a7fca5288"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2584,37 +2294,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2630,7 +2332,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0362e0a5686cf4ee21b6a6ad80117ef1d55d39e0a81c9e7af0a12c9aaae7d17c"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2661,37 +2363,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2707,7 +2401,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=915e34294bc8898effb4e6cb1dc49489b1e0f0c50e1856262a8d9643f749c186"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2738,37 +2432,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2784,7 +2470,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=9a62e1c468b2754298ddb1e7cc4db945f01a31647fe55a33447860c186fdaf3e"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2815,37 +2501,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2861,7 +2539,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=e0a370d2c6d6d6fd9c9efdc92ae517f4ee61aeb25ea106a1e4a0defb92f425a7"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2892,37 +2570,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -2938,7 +2608,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=84f49b77f8a92351f3601ef7a392f64a9732e1caf451fb88b323d8bb18f237b5"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -2969,37 +2639,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.77
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "options": {
@@ -3015,7 +2677,7 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=eee095de405cb4e7ace51099744c51f97198701345916d0c60c5207f39581a30"
                 },
-                "type": "BanterGLTF"
+                "type": "GLTF"
               },
               {
                 "inventoryItem": {
@@ -3046,19 +2708,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock4/Digit1",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 2.6344285096213045,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -3071,11 +2724,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.77
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -3107,19 +2761,10 @@
         "loadAsync": false,
         "name": "Digit1",
         "parentId": "Scene/Clock4",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": 0,
+            "x": 2.6344285096213045,
             "y": 0,
             "z": 0
           },
@@ -3134,8 +2779,7 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "initialized": true,
@@ -3143,7 +2787,25 @@
     "loadAsync": false,
     "name": "Clock4",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Clock",

@@ -1,6 +1,6 @@
 {
   "author": "Technocrat",
-  "created": 1759372793215,
+  "created": 1759497339108,
   "data": {
     "active": true,
     "children": [
@@ -113,7 +113,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "left",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -240,7 +240,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "right",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -367,7 +367,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "up",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -494,7 +494,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "down",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -585,7 +585,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "center",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -633,136 +633,9 @@
                 "properties": {
                   "color": {
                     "a": 1,
-                    "b": 0.007843138,
-                    "g": 0.007843138,
-                    "r": 0.01176471
-                  },
-                  "generateMipMaps": true,
-                  "shaderName": [
-                    "U",
-                    "n",
-                    "l",
-                    "i",
-                    "t",
-                    "/",
-                    "D",
-                    "i",
-                    "f",
-                    "f",
-                    "u",
-                    "s",
-                    "e"
-                  ],
-                  "side": 0,
-                  "texture": ""
-                },
-                "type": "Material"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "convex": false,
-                  "isTrigger": false
-                },
-                "type": "MeshCollider"
-              },
-              {
-                "inventoryItem": {
-                  "active": false,
-                  "author": "Technocrat",
-                  "autoUpdate": false,
-                  "created": 1758844109618,
-                  "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
-                  "description": "",
-                  "folder": "Scripts",
-                  "global": false,
-                  "icon": "📜",
-                  "itemType": "script",
-                  "lastUsed": 1758844109618,
-                  "last_used": 1759289672134,
-                  "name": "Clickable.js",
-                  "startup": false,
-                  "startupSequence": "onSceneLoaded"
-                },
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "file": "Clickable.js",
-                  "name": "myScript",
-                  "vars": {
-                    "tag": {
-                      "type": "string",
-                      "value": "SELECT"
-                    }
-                  }
-                },
-                "type": "MonoBehavior"
-              }
-            ],
-            "initialized": true,
-            "layer": 5,
-            "loadAsync": false,
-            "name": "select",
-            "parentId": "Scene/NES1/keys",
-            "persistent": true,
-            "transform": {
-              "localPosition": {
-                "x": 0.5392089746220914,
-                "y": -0.14423990179206841,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            }
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "depth": 0.15,
-                  "height": 0.07,
-                  "width": 0.2
-                },
-                "type": "Box"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "color": {
-                    "a": 1,
-                    "b": 0.007843138,
-                    "g": 0.007843138,
-                    "r": 0.01176471
+                    "b": 0,
+                    "g": 0,
+                    "r": 0
                   },
                   "generateMipMaps": true,
                   "shaderName": [
@@ -833,13 +706,208 @@
                   }
                 },
                 "type": "MonoBehavior"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": false,
+                  "created": 1759289143241,
+                  "data": "this.default = {\n    eventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\",\n    },\n    tag: { \n        \"type\": \"string\",\n        \"value\": \"play\"\n    },\n    on:{\n        \"type\": \"color\",\n        \"value\": {r:1,g:1,b:1,a:1}\n    },\n    off:{\n        \"type\": \"color\",\n        \"value\": {r:0,g:0,b:0,a:1}\n    },\n    permanent:{\n        \"type\": \"boolean\",\n        \"value\": false\n    },\n    duration:{\n        \"type\": \"number\",\n        \"value\": 500\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nlet material = null;\nthis.handleEvent = (e) => {\n    log(\"eventFlasher\", \"handleEvent\", e.detail.flag)\n    if (e.detail.flag === this.vars.tag.value) {\n        if(material){\n            material.Set(\"color\", this.vars.on.value)\n            if(!this.vars.permanent.value){\n                setTimeout(() => {\n                    material.Set(\"color\", this.vars.off.value)\n                }, this.vars.duration.value)\n            }\n        }\n    }\n}\n\nthis.onStart = ()=>{\n    log(\"eventFlasher\", \"onStart\")\n    material = this._entity.getComponent(\"BanterMaterial\")\n    window.addEventListener(this.vars.eventName.value, this.handleEvent)\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(this.vars.eventName.value, this.handleEvent)\n}\n",
+                  "description": "",
+                  "folder": "Scripts",
+                  "global": false,
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1759289143242,
+                  "last_used": 1759491978044,
+                  "name": "EventFlasher.js",
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "context": "new"
+                },
+                "properties": {
+                  "file": "EventFlasher.js",
+                  "name": "myScript",
+                  "vars": {
+                    "tag": {
+                      "type": "string",
+                      "value": "START"
+                    }
+                  }
+                },
+                "type": "MonoBehavior"
               }
             ],
             "initialized": true,
             "layer": 5,
             "loadAsync": false,
             "name": "start",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.5392089746220914,
+                "y": -0.14423990179206841,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
+          },
+          {
+            "active": true,
+            "components": [
+              {
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "depth": 0.15,
+                  "height": 0.07,
+                  "width": 0.2
+                },
+                "type": "Box"
+              },
+              {
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "color": {
+                    "a": 1,
+                    "b": 0,
+                    "g": 0,
+                    "r": 0
+                  },
+                  "generateMipMaps": true,
+                  "shaderName": [
+                    "U",
+                    "n",
+                    "l",
+                    "i",
+                    "t",
+                    "/",
+                    "D",
+                    "i",
+                    "f",
+                    "f",
+                    "u",
+                    "s",
+                    "e"
+                  ],
+                  "side": 0,
+                  "texture": ""
+                },
+                "type": "Material"
+              },
+              {
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "convex": false,
+                  "isTrigger": false
+                },
+                "type": "MeshCollider"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": false,
+                  "created": 1758844109618,
+                  "data": "this.default = {\n    clickEventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\"\n    },\n    tag: {\n        \"type\": \"string\",\n        \"value\": \"play\"\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nthis.onStart = ()=>{\n    this._entity._bs.On(\"click\", e => {\n        log(\"clickable\", \"click\")\n        const event = new CustomEvent(this.vars.clickEventName.value, {\n            detail: {\n                entity: this._entity,\n                ctx: this,\n                details: e.detail,\n                flag: this.vars.tag.value\n            },\n            \n        });\n        window.dispatchEvent(event);\n    })\n}\n\nthis.onDestroy = ()=>{\n    this._entity._bs.listeners.get(\"click\").clear();\n}",
+                  "description": "",
+                  "folder": "Scripts",
+                  "global": false,
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1758844109618,
+                  "last_used": 1759289672134,
+                  "name": "Clickable.js",
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "cmdUser": "Technocrat",
+                  "context": "item",
+                  "loadAsync": false
+                },
+                "properties": {
+                  "file": "Clickable.js",
+                  "name": "myScript",
+                  "vars": {
+                    "tag": {
+                      "type": "string",
+                      "value": "SELECT"
+                    }
+                  }
+                },
+                "type": "MonoBehavior"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": false,
+                  "created": 1759289143241,
+                  "data": "this.default = {\n    eventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\",\n    },\n    tag: { \n        \"type\": \"string\",\n        \"value\": \"play\"\n    },\n    on:{\n        \"type\": \"color\",\n        \"value\": {r:1,g:1,b:1,a:1}\n    },\n    off:{\n        \"type\": \"color\",\n        \"value\": {r:0,g:0,b:0,a:1}\n    },\n    permanent:{\n        \"type\": \"boolean\",\n        \"value\": false\n    },\n    duration:{\n        \"type\": \"number\",\n        \"value\": 500\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nlet material = null;\nthis.handleEvent = (e) => {\n    log(\"eventFlasher\", \"handleEvent\", e.detail.flag)\n    if (e.detail.flag === this.vars.tag.value) {\n        if(material){\n            material.Set(\"color\", this.vars.on.value)\n            if(!this.vars.permanent.value){\n                setTimeout(() => {\n                    material.Set(\"color\", this.vars.off.value)\n                }, this.vars.duration.value)\n            }\n        }\n    }\n}\n\nthis.onStart = ()=>{\n    log(\"eventFlasher\", \"onStart\")\n    material = this._entity.getComponent(\"BanterMaterial\")\n    window.addEventListener(this.vars.eventName.value, this.handleEvent)\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(this.vars.eventName.value, this.handleEvent)\n}\n",
+                  "description": "",
+                  "folder": "Scripts",
+                  "global": false,
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1759289143242,
+                  "last_used": 1759491978044,
+                  "name": "EventFlasher.js",
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "context": "new"
+                },
+                "properties": {
+                  "file": "EventFlasher.js",
+                  "name": "myScript",
+                  "vars": {
+                    "tag": {
+                      "type": "string",
+                      "value": "SELECT"
+                    }
+                  }
+                },
+                "type": "MonoBehavior"
+              }
+            ],
+            "initialized": true,
+            "layer": 5,
+            "loadAsync": false,
+            "name": "select",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -887,9 +955,9 @@
                 "properties": {
                   "color": {
                     "a": 1,
-                    "b": 0.01568627450980392,
-                    "g": 0.01568627450980392,
-                    "r": 0.9803921568627451
+                    "b": 0.0392156862745098,
+                    "g": 0.0392156862745098,
+                    "r": 0.9686274509803922
                   },
                   "generateMipMaps": true,
                   "shaderName": "Standard",
@@ -946,13 +1014,56 @@
                   }
                 },
                 "type": "MonoBehavior"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": false,
+                  "created": 1759289143241,
+                  "data": "this.default = {\n    eventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\",\n    },\n    tag: { \n        \"type\": \"string\",\n        \"value\": \"play\"\n    },\n    on:{\n        \"type\": \"color\",\n        \"value\": {r:1,g:1,b:1,a:1}\n    },\n    off:{\n        \"type\": \"color\",\n        \"value\": {r:0,g:0,b:0,a:1}\n    },\n    permanent:{\n        \"type\": \"boolean\",\n        \"value\": false\n    },\n    duration:{\n        \"type\": \"number\",\n        \"value\": 500\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nlet material = null;\nthis.handleEvent = (e) => {\n    log(\"eventFlasher\", \"handleEvent\", e.detail.flag)\n    if (e.detail.flag === this.vars.tag.value) {\n        if(material){\n            material.Set(\"color\", this.vars.on.value)\n            if(!this.vars.permanent.value){\n                setTimeout(() => {\n                    material.Set(\"color\", this.vars.off.value)\n                }, this.vars.duration.value)\n            }\n        }\n    }\n}\n\nthis.onStart = ()=>{\n    log(\"eventFlasher\", \"onStart\")\n    material = this._entity.getComponent(\"BanterMaterial\")\n    window.addEventListener(this.vars.eventName.value, this.handleEvent)\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(this.vars.eventName.value, this.handleEvent)\n}\n",
+                  "description": "",
+                  "folder": "Scripts",
+                  "global": false,
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1759289143242,
+                  "last_used": 1759491978044,
+                  "name": "EventFlasher.js",
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "context": "new"
+                },
+                "properties": {
+                  "file": "EventFlasher.js",
+                  "name": "myScript",
+                  "vars": {
+                    "off": {
+                      "type": "color",
+                      "value": {
+                        "a": 1,
+                        "b": 0.0392156862745098,
+                        "g": 0.0392156862745098,
+                        "r": 0.9686274509803922
+                      }
+                    },
+                    "tag": {
+                      "type": "string",
+                      "value": "B"
+                    }
+                  }
+                },
+                "type": "MonoBehavior"
               }
             ],
             "initialized": true,
             "layer": 5,
             "loadAsync": false,
             "name": "B",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1000,9 +1111,9 @@
                 "properties": {
                   "color": {
                     "a": 1,
-                    "b": 0.01568628,
-                    "g": 0.01568628,
-                    "r": 0.9803922
+                    "b": 0.03529411764705882,
+                    "g": 0.03529411764705882,
+                    "r": 0.9764705882352941
                   },
                   "generateMipMaps": true,
                   "shaderName": [
@@ -1073,13 +1184,56 @@
                   }
                 },
                 "type": "MonoBehavior"
+              },
+              {
+                "inventoryItem": {
+                  "active": false,
+                  "author": "Technocrat",
+                  "autoUpdate": false,
+                  "created": 1759289143241,
+                  "data": "this.default = {\n    eventName: {\n        \"type\": \"string\",\n        \"value\": \"button-clicked\",\n    },\n    tag: { \n        \"type\": \"string\",\n        \"value\": \"play\"\n    },\n    on:{\n        \"type\": \"color\",\n        \"value\": {r:1,g:1,b:1,a:1}\n    },\n    off:{\n        \"type\": \"color\",\n        \"value\": {r:0,g:0,b:0,a:1}\n    },\n    permanent:{\n        \"type\": \"boolean\",\n        \"value\": false\n    },\n    duration:{\n        \"type\": \"number\",\n        \"value\": 500\n    }\n}\n\nObject.entries(this.default).forEach(([key, val])=>{\n    if(!this.vars[key]){\n        this.vars[key] = val\n    }\n})    \n\nlet material = null;\nthis.handleEvent = (e) => {\n    log(\"eventFlasher\", \"handleEvent\", e.detail.flag)\n    if (e.detail.flag === this.vars.tag.value) {\n        if(material){\n            material.Set(\"color\", this.vars.on.value)\n            if(!this.vars.permanent.value){\n                setTimeout(() => {\n                    material.Set(\"color\", this.vars.off.value)\n                }, this.vars.duration.value)\n            }\n        }\n    }\n}\n\nthis.onStart = ()=>{\n    log(\"eventFlasher\", \"onStart\")\n    material = this._entity.getComponent(\"BanterMaterial\")\n    window.addEventListener(this.vars.eventName.value, this.handleEvent)\n}\n\nthis.onDestroy = ()=>{\n    window.removeEventListener(this.vars.eventName.value, this.handleEvent)\n}\n",
+                  "description": "",
+                  "folder": "Scripts",
+                  "global": false,
+                  "icon": "📜",
+                  "itemType": "script",
+                  "lastUsed": 1759289143242,
+                  "last_used": 1759491978044,
+                  "name": "EventFlasher.js",
+                  "startup": false,
+                  "startupSequence": "onSceneLoaded"
+                },
+                "loadAsync": false,
+                "options": {
+                  "context": "new"
+                },
+                "properties": {
+                  "file": "EventFlasher.js",
+                  "name": "myScript",
+                  "vars": {
+                    "off": {
+                      "type": "color",
+                      "value": {
+                        "a": 1,
+                        "b": 0.03529411764705882,
+                        "g": 0.03529411764705882,
+                        "r": 0.9764705882352941
+                      }
+                    },
+                    "tag": {
+                      "type": "string",
+                      "value": "A"
+                    }
+                  }
+                },
+                "type": "MonoBehavior"
               }
             ],
             "initialized": true,
             "layer": 5,
             "loadAsync": false,
             "name": "A",
-            "parentId": "Scene/NES1/keys",
+            "parentId": "Scene/controller/keys",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1105,7 +1259,7 @@
         "layer": 0,
         "loadAsync": false,
         "name": "keys",
-        "parentId": "Scene/NES1",
+        "parentId": "Scene/controller",
         "persistent": true,
         "transform": {
           "localPosition": {
@@ -1199,7 +1353,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "panel",
-            "parentId": "Scene/NES1/printing",
+            "parentId": "Scene/controller/printing",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1290,7 +1444,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "select_start_panel",
-            "parentId": "Scene/NES1/printing",
+            "parentId": "Scene/controller/printing",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1384,7 +1538,7 @@
                 "layer": 5,
                 "loadAsync": false,
                 "name": "left",
-                "parentId": "Scene/NES1/printing/arrow_keys_highlight",
+                "parentId": "Scene/controller/printing/arrow_keys_highlight",
                 "persistent": true,
                 "transform": {
                   "localPosition": {
@@ -1475,7 +1629,7 @@
                 "layer": 5,
                 "loadAsync": false,
                 "name": "right",
-                "parentId": "Scene/NES1/printing/arrow_keys_highlight",
+                "parentId": "Scene/controller/printing/arrow_keys_highlight",
                 "persistent": true,
                 "transform": {
                   "localPosition": {
@@ -1566,7 +1720,7 @@
                 "layer": 5,
                 "loadAsync": false,
                 "name": "up",
-                "parentId": "Scene/NES1/printing/arrow_keys_highlight",
+                "parentId": "Scene/controller/printing/arrow_keys_highlight",
                 "persistent": true,
                 "transform": {
                   "localPosition": {
@@ -1657,7 +1811,7 @@
                 "layer": 5,
                 "loadAsync": false,
                 "name": "down",
-                "parentId": "Scene/NES1/printing/arrow_keys_highlight",
+                "parentId": "Scene/controller/printing/arrow_keys_highlight",
                 "persistent": true,
                 "transform": {
                   "localPosition": {
@@ -1748,7 +1902,7 @@
                 "layer": 5,
                 "loadAsync": false,
                 "name": "center",
-                "parentId": "Scene/NES1/printing/arrow_keys_highlight",
+                "parentId": "Scene/controller/printing/arrow_keys_highlight",
                 "persistent": true,
                 "transform": {
                   "localPosition": {
@@ -1774,7 +1928,7 @@
             "layer": 0,
             "loadAsync": false,
             "name": "arrow_keys_highlight",
-            "parentId": "Scene/NES1/printing",
+            "parentId": "Scene/controller/printing",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1865,7 +2019,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "b_panel",
-            "parentId": "Scene/NES1/printing",
+            "parentId": "Scene/controller/printing",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1956,7 +2110,7 @@
             "layer": 5,
             "loadAsync": false,
             "name": "a_panel",
-            "parentId": "Scene/NES1/printing",
+            "parentId": "Scene/controller/printing",
             "persistent": true,
             "transform": {
               "localPosition": {
@@ -1982,7 +2136,7 @@
         "layer": 0,
         "loadAsync": false,
         "name": "printing",
-        "parentId": "Scene/NES1",
+        "parentId": "Scene/controller",
         "persistent": true,
         "transform": {
           "localPosition": {
@@ -2084,30 +2238,30 @@
     "initialized": true,
     "layer": 5,
     "loadAsync": false,
-    "name": "NES1",
+    "name": "controller",
     "parentId": "Scene",
     "persistent": true,
     "transform": {
       "localPosition": {
-        "x": 4.953837,
-        "y": 0.9128982,
-        "z": -1.084459
+        "x": 0,
+        "y": 1,
+        "z": 3
       },
       "localRotation": {
-        "w": -0.6853062,
-        "x": -0.1391648,
-        "y": 0.7028384,
-        "z": -0.1304102
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
       },
       "localScale": {
-        "x": 0.25,
-        "y": 0.25,
-        "z": 0.25
+        "x": 1,
+        "y": 1,
+        "z": 1
       }
     }
   },
   "description": "",
-  "folder": "NESController",
+  "folder": "Scripts",
   "history": [
     {
       "action": "load_item",
@@ -2121,7 +2275,7 @@
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_24000",
+                    "id": "Transform_27622",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2149,7 +2303,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_40521",
+                    "id": "BanterBox_32754",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2164,7 +2318,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_79192",
+                    "id": "BanterMaterial_71875",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2200,7 +2354,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_74232",
+                    "id": "MeshCollider_83709",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2214,7 +2368,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_20268",
+                    "id": "MonoBehavior_17087",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -2249,19 +2403,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/left",
+                "id": "Scene/controller_9993/keys/left",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "left",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_64431",
+                    "id": "Transform_69609",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2289,7 +2443,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_56886",
+                    "id": "BanterBox_92581",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2304,7 +2458,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_94632",
+                    "id": "BanterMaterial_48347",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2340,7 +2494,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_54434",
+                    "id": "MeshCollider_52731",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2354,7 +2508,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_54990",
+                    "id": "MonoBehavior_34681",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -2389,19 +2543,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/right",
+                "id": "Scene/controller_9993/keys/right",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "right",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_69018",
+                    "id": "Transform_52721",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2429,7 +2583,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_62237",
+                    "id": "BanterBox_40258",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2444,7 +2598,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_52170",
+                    "id": "BanterMaterial_92361",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2480,7 +2634,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_397",
+                    "id": "MeshCollider_48373",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2494,7 +2648,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_74434",
+                    "id": "MonoBehavior_24299",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -2529,19 +2683,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/up",
+                "id": "Scene/controller_9993/keys/up",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "up",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_59245",
+                    "id": "Transform_72245",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2569,7 +2723,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_49504",
+                    "id": "BanterBox_97446",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2584,7 +2738,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_79164",
+                    "id": "BanterMaterial_75364",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2620,7 +2774,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_17621",
+                    "id": "MeshCollider_75662",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2634,7 +2788,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_96237",
+                    "id": "MonoBehavior_40562",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -2669,19 +2823,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/down",
+                "id": "Scene/controller_9993/keys/down",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "down",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_15416",
+                    "id": "Transform_30357",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2709,7 +2863,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_39377",
+                    "id": "BanterBox_54441",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2724,7 +2878,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_10657",
+                    "id": "BanterMaterial_18676",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2760,7 +2914,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_52834",
+                    "id": "MeshCollider_45362",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2774,19 +2928,19 @@
                     "type": "MeshCollider"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/center",
+                "id": "Scene/controller_9993/keys/center",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "center",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_94393",
+                    "id": "Transform_44825",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2814,7 +2968,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_17135",
+                    "id": "BanterBox_36134",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2829,7 +2983,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_59120",
+                    "id": "BanterMaterial_6486",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2865,7 +3019,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_48544",
+                    "id": "MeshCollider_49991",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2879,7 +3033,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_74682",
+                    "id": "MonoBehavior_64291",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -2914,19 +3068,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/start",
+                "id": "Scene/controller_9993/keys/start",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "start",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_79880",
+                    "id": "Transform_73539",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2954,7 +3108,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_86725",
+                    "id": "BanterBox_97438",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -2969,7 +3123,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_28513",
+                    "id": "BanterMaterial_54193",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3005,7 +3159,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_49986",
+                    "id": "MeshCollider_53433",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3019,7 +3173,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_56237",
+                    "id": "MonoBehavior_63998",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -3054,19 +3208,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/select",
+                "id": "Scene/controller_9993/keys/select",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "select",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_90160",
+                    "id": "Transform_16305",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3094,7 +3248,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterCylinder_24730",
+                    "id": "BanterCylinder_49363",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3109,7 +3263,7 @@
                     "type": "BanterCylinder"
                   },
                   {
-                    "id": "BanterMaterial_47367",
+                    "id": "BanterMaterial_83920",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3131,7 +3285,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_57500",
+                    "id": "MeshCollider_82945",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3145,7 +3299,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_68249",
+                    "id": "MonoBehavior_19390",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -3180,19 +3334,19 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/B",
+                "id": "Scene/controller_9993/keys/B",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "B",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_78981",
+                    "id": "Transform_89248",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3220,7 +3374,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterCylinder_6606",
+                    "id": "BanterCylinder_22675",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3235,7 +3389,7 @@
                     "type": "BanterCylinder"
                   },
                   {
-                    "id": "BanterMaterial_57897",
+                    "id": "BanterMaterial_60873",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3271,7 +3425,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_19121",
+                    "id": "MeshCollider_40021",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3285,7 +3439,7 @@
                     "type": "MeshCollider"
                   },
                   {
-                    "id": "MonoBehavior_84886",
+                    "id": "MonoBehavior_8994",
                     "inventoryItem": {
                       "active": false,
                       "author": "Technocrat",
@@ -3320,18 +3474,18 @@
                     "type": "MonoBehavior"
                   }
                 ],
-                "id": "Scene/controller_72257/keys/A",
+                "id": "Scene/controller_9993/keys/A",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "A",
-                "parentId": "Scene/controller_72257/keys",
+                "parentId": "Scene/controller_9993/keys",
                 "persistent": true
               }
             ],
             "components": [
               {
-                "id": "Transform_10478",
+                "id": "Transform_53287",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
@@ -3359,12 +3513,12 @@
                 "type": "Transform"
               }
             ],
-            "id": "Scene/controller_72257/keys",
+            "id": "Scene/controller_9993/keys",
             "initialized": true,
             "layer": 0,
             "loadAsync": false,
             "name": "keys",
-            "parentId": "Scene/controller_72257",
+            "parentId": "Scene/controller_9993",
             "persistent": true
           },
           {
@@ -3374,7 +3528,7 @@
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_778",
+                    "id": "Transform_50601",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3402,7 +3556,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_76644",
+                    "id": "BanterBox_6888",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3417,7 +3571,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_964",
+                    "id": "BanterMaterial_96960",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3453,7 +3607,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_13862",
+                    "id": "MeshCollider_92440",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3467,19 +3621,19 @@
                     "type": "MeshCollider"
                   }
                 ],
-                "id": "Scene/controller_72257/printing/panel",
+                "id": "Scene/controller_9993/printing/panel",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "panel",
-                "parentId": "Scene/controller_72257/printing",
+                "parentId": "Scene/controller_9993/printing",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_17199",
+                    "id": "Transform_85701",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3507,7 +3661,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_73348",
+                    "id": "BanterBox_47419",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3522,7 +3676,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_65418",
+                    "id": "BanterMaterial_85779",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3558,7 +3712,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_40302",
+                    "id": "MeshCollider_70273",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -3572,12 +3726,12 @@
                     "type": "MeshCollider"
                   }
                 ],
-                "id": "Scene/controller_72257/printing/select_start_panel",
+                "id": "Scene/controller_9993/printing/select_start_panel",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "select_start_panel",
-                "parentId": "Scene/controller_72257/printing",
+                "parentId": "Scene/controller_9993/printing",
                 "persistent": true
               },
               {
@@ -3587,7 +3741,7 @@
                     "active": true,
                     "components": [
                       {
-                        "id": "Transform_44767",
+                        "id": "Transform_69690",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3615,7 +3769,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterBox_35701",
+                        "id": "BanterBox_24285",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3630,7 +3784,7 @@
                         "type": "BanterBox"
                       },
                       {
-                        "id": "BanterMaterial_35995",
+                        "id": "BanterMaterial_90256",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3666,7 +3820,7 @@
                         "type": "BanterMaterial"
                       },
                       {
-                        "id": "MeshCollider_10296",
+                        "id": "MeshCollider_79819",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3680,19 +3834,19 @@
                         "type": "MeshCollider"
                       }
                     ],
-                    "id": "Scene/controller_72257/printing/arrow_keys_highlight/left",
+                    "id": "Scene/controller_9993/printing/arrow_keys_highlight/left",
                     "initialized": true,
                     "layer": 5,
                     "loadAsync": false,
                     "name": "left",
-                    "parentId": "Scene/controller_72257/printing/arrow_keys_highlight",
+                    "parentId": "Scene/controller_9993/printing/arrow_keys_highlight",
                     "persistent": true
                   },
                   {
                     "active": true,
                     "components": [
                       {
-                        "id": "Transform_95593",
+                        "id": "Transform_61846",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3720,7 +3874,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterBox_32091",
+                        "id": "BanterBox_84267",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3735,7 +3889,7 @@
                         "type": "BanterBox"
                       },
                       {
-                        "id": "BanterMaterial_90126",
+                        "id": "BanterMaterial_66548",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3771,7 +3925,7 @@
                         "type": "BanterMaterial"
                       },
                       {
-                        "id": "MeshCollider_39991",
+                        "id": "MeshCollider_38641",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3785,19 +3939,19 @@
                         "type": "MeshCollider"
                       }
                     ],
-                    "id": "Scene/controller_72257/printing/arrow_keys_highlight/right",
+                    "id": "Scene/controller_9993/printing/arrow_keys_highlight/right",
                     "initialized": true,
                     "layer": 5,
                     "loadAsync": false,
                     "name": "right",
-                    "parentId": "Scene/controller_72257/printing/arrow_keys_highlight",
+                    "parentId": "Scene/controller_9993/printing/arrow_keys_highlight",
                     "persistent": true
                   },
                   {
                     "active": true,
                     "components": [
                       {
-                        "id": "Transform_66777",
+                        "id": "Transform_58029",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3825,7 +3979,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterBox_81721",
+                        "id": "BanterBox_75834",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3840,7 +3994,7 @@
                         "type": "BanterBox"
                       },
                       {
-                        "id": "BanterMaterial_12240",
+                        "id": "BanterMaterial_15494",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3876,7 +4030,7 @@
                         "type": "BanterMaterial"
                       },
                       {
-                        "id": "MeshCollider_29120",
+                        "id": "MeshCollider_92646",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3890,19 +4044,19 @@
                         "type": "MeshCollider"
                       }
                     ],
-                    "id": "Scene/controller_72257/printing/arrow_keys_highlight/up",
+                    "id": "Scene/controller_9993/printing/arrow_keys_highlight/up",
                     "initialized": true,
                     "layer": 5,
                     "loadAsync": false,
                     "name": "up",
-                    "parentId": "Scene/controller_72257/printing/arrow_keys_highlight",
+                    "parentId": "Scene/controller_9993/printing/arrow_keys_highlight",
                     "persistent": true
                   },
                   {
                     "active": true,
                     "components": [
                       {
-                        "id": "Transform_14057",
+                        "id": "Transform_62052",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3930,7 +4084,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterBox_84144",
+                        "id": "BanterBox_70053",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3945,7 +4099,7 @@
                         "type": "BanterBox"
                       },
                       {
-                        "id": "BanterMaterial_82103",
+                        "id": "BanterMaterial_91893",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3981,7 +4135,7 @@
                         "type": "BanterMaterial"
                       },
                       {
-                        "id": "MeshCollider_67319",
+                        "id": "MeshCollider_65537",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -3995,19 +4149,19 @@
                         "type": "MeshCollider"
                       }
                     ],
-                    "id": "Scene/controller_72257/printing/arrow_keys_highlight/down",
+                    "id": "Scene/controller_9993/printing/arrow_keys_highlight/down",
                     "initialized": true,
                     "layer": 5,
                     "loadAsync": false,
                     "name": "down",
-                    "parentId": "Scene/controller_72257/printing/arrow_keys_highlight",
+                    "parentId": "Scene/controller_9993/printing/arrow_keys_highlight",
                     "persistent": true
                   },
                   {
                     "active": true,
                     "components": [
                       {
-                        "id": "Transform_98042",
+                        "id": "Transform_51391",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -4035,7 +4189,7 @@
                         "type": "Transform"
                       },
                       {
-                        "id": "BanterBox_87925",
+                        "id": "BanterBox_52028",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -4050,7 +4204,7 @@
                         "type": "BanterBox"
                       },
                       {
-                        "id": "BanterMaterial_20044",
+                        "id": "BanterMaterial_15013",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -4086,7 +4240,7 @@
                         "type": "BanterMaterial"
                       },
                       {
-                        "id": "MeshCollider_52132",
+                        "id": "MeshCollider_55011",
                         "loadAsync": false,
                         "options": {
                           "cmdUser": "Technocrat",
@@ -4100,18 +4254,18 @@
                         "type": "MeshCollider"
                       }
                     ],
-                    "id": "Scene/controller_72257/printing/arrow_keys_highlight/center",
+                    "id": "Scene/controller_9993/printing/arrow_keys_highlight/center",
                     "initialized": true,
                     "layer": 5,
                     "loadAsync": false,
                     "name": "center",
-                    "parentId": "Scene/controller_72257/printing/arrow_keys_highlight",
+                    "parentId": "Scene/controller_9993/printing/arrow_keys_highlight",
                     "persistent": true
                   }
                 ],
                 "components": [
                   {
-                    "id": "Transform_63420",
+                    "id": "Transform_86821",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4139,19 +4293,19 @@
                     "type": "Transform"
                   }
                 ],
-                "id": "Scene/controller_72257/printing/arrow_keys_highlight",
+                "id": "Scene/controller_9993/printing/arrow_keys_highlight",
                 "initialized": true,
                 "layer": 0,
                 "loadAsync": false,
                 "name": "arrow_keys_highlight",
-                "parentId": "Scene/controller_72257/printing",
+                "parentId": "Scene/controller_9993/printing",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_47856",
+                    "id": "Transform_32384",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4179,7 +4333,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_45835",
+                    "id": "BanterBox_47768",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4194,7 +4348,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_91022",
+                    "id": "BanterMaterial_8340",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4230,7 +4384,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_81285",
+                    "id": "MeshCollider_41635",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4244,19 +4398,19 @@
                     "type": "MeshCollider"
                   }
                 ],
-                "id": "Scene/controller_72257/printing/b_panel",
+                "id": "Scene/controller_9993/printing/b_panel",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "b_panel",
-                "parentId": "Scene/controller_72257/printing",
+                "parentId": "Scene/controller_9993/printing",
                 "persistent": true
               },
               {
                 "active": true,
                 "components": [
                   {
-                    "id": "Transform_11255",
+                    "id": "Transform_92485",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4284,7 +4438,7 @@
                     "type": "Transform"
                   },
                   {
-                    "id": "BanterBox_55248",
+                    "id": "BanterBox_72222",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4299,7 +4453,7 @@
                     "type": "BanterBox"
                   },
                   {
-                    "id": "BanterMaterial_97087",
+                    "id": "BanterMaterial_39360",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4335,7 +4489,7 @@
                     "type": "BanterMaterial"
                   },
                   {
-                    "id": "MeshCollider_99817",
+                    "id": "MeshCollider_94750",
                     "loadAsync": false,
                     "options": {
                       "cmdUser": "Technocrat",
@@ -4349,18 +4503,18 @@
                     "type": "MeshCollider"
                   }
                 ],
-                "id": "Scene/controller_72257/printing/a_panel",
+                "id": "Scene/controller_9993/printing/a_panel",
                 "initialized": true,
                 "layer": 5,
                 "loadAsync": false,
                 "name": "a_panel",
-                "parentId": "Scene/controller_72257/printing",
+                "parentId": "Scene/controller_9993/printing",
                 "persistent": true
               }
             ],
             "components": [
               {
-                "id": "Transform_97024",
+                "id": "Transform_49118",
                 "loadAsync": false,
                 "options": {
                   "cmdUser": "Technocrat",
@@ -4388,18 +4542,18 @@
                 "type": "Transform"
               }
             ],
-            "id": "Scene/controller_72257/printing",
+            "id": "Scene/controller_9993/printing",
             "initialized": true,
             "layer": 0,
             "loadAsync": false,
             "name": "printing",
-            "parentId": "Scene/controller_72257",
+            "parentId": "Scene/controller_9993",
             "persistent": true
           }
         ],
         "components": [
           {
-            "id": "Transform_22187",
+            "id": "Transform_34953",
             "loadAsync": false,
             "options": {
               "cmdUser": "Technocrat",
@@ -4427,7 +4581,7 @@
             "type": "Transform"
           },
           {
-            "id": "BanterBox_33389",
+            "id": "BanterBox_11587",
             "loadAsync": false,
             "options": {
               "cmdUser": "Technocrat",
@@ -4442,7 +4596,7 @@
             "type": "BanterBox"
           },
           {
-            "id": "BanterMaterial_78755",
+            "id": "BanterMaterial_45929",
             "loadAsync": false,
             "options": {
               "cmdUser": "Technocrat",
@@ -4464,7 +4618,7 @@
             "type": "BanterMaterial"
           },
           {
-            "id": "MeshCollider_14729",
+            "id": "MeshCollider_89716",
             "loadAsync": false,
             "options": {
               "cmdUser": "Technocrat",
@@ -4478,7 +4632,7 @@
             "type": "MeshCollider"
           },
           {
-            "id": "MonoBehavior_44956",
+            "id": "MonoBehavior_31179",
             "inventoryItem": {
               "active": false,
               "author": "Technocrat",
@@ -4506,11 +4660,11 @@
             "type": "MonoBehavior"
           }
         ],
-        "id": "Scene/controller_72257",
+        "id": "Scene/controller_9993",
         "initialized": true,
         "layer": 5,
         "loadAsync": false,
-        "name": "controller_72257",
+        "name": "controller_9993",
         "parentId": "Scene",
         "persistent": true
       },
@@ -4521,47 +4675,97 @@
       "parentId": "Scene"
     },
     {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_959"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/controller_9993/keys/A",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
       "action": "set_component_property",
-      "componentId": "Transform_22187",
-      "newValue": {
-        "x": 0.25,
-        "y": 0.25,
-        "z": 0.25
-      },
-      "options": {
-        "oldValue": {
-          "x": 1,
-          "y": 1,
-          "z": 1
-        },
-        "source": "ui"
-      },
-      "property": "localScale"
-    },
-    {
-      "action": "set_entity_property",
-      "entityId": "Scene/controller_72257/keys/start",
-      "newValue": false,
+      "componentId": "MonoBehavior_959",
+      "newValue": "EventFlasher.js",
       "options": {
         "source": "ui"
       },
-      "property": "active"
-    },
-    {
-      "action": "set_entity_property",
-      "entityId": "Scene/controller_72257/keys/start",
-      "newValue": true,
-      "options": {
-        "source": "ui"
-      },
-      "property": "active"
+      "property": "file"
     },
     {
       "action": "set_mono_behavior_var",
-      "componentId": "MonoBehavior_74682",
+      "componentId": "MonoBehavior_959",
+      "newValue": {
+        "type": "color",
+        "value": {
+          "a": 1,
+          "b": 0.03529411764705882,
+          "g": 0.03529411764705882,
+          "r": 0.9764705882352941
+        }
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "off"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_959",
       "newValue": {
         "type": "string",
-        "value": "SELECT"
+        "value": "A"
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "tag"
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_3758"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/controller_9993/keys/B",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_3758",
+      "newValue": "EventFlasher.js",
+      "options": {
+        "source": "ui"
+      },
+      "property": "file"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_3758",
+      "newValue": {
+        "type": "color",
+        "value": {
+          "a": 1,
+          "b": 0.0392156862745098,
+          "g": 0.0392156862745098,
+          "r": 0.9686274509803922
+        }
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "off"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_3758",
+      "newValue": {
+        "type": "string",
+        "value": "B"
       },
       "options": {
         "source": "ui"
@@ -4570,25 +4774,45 @@
     },
     {
       "action": "set_entity_property",
-      "entityId": "Scene/controller_72257/keys/start",
-      "newValue": "sel",
+      "entityId": "Scene/controller_9993",
+      "newValue": "controller",
       "options": {
         "source": "ui"
       },
       "property": "name"
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/controller_72257/keys/select",
-      "newValue": "start",
+      "action": "save_item",
+      "entityId": "Scene/controller",
+      "folder": "NESController",
+      "itemName": "controller",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_6897"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/controller/keys/start",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_6897",
+      "newValue": "EventFlasher.js",
       "options": {
         "source": "ui"
       },
-      "property": "name"
+      "property": "file"
     },
     {
       "action": "set_mono_behavior_var",
-      "componentId": "MonoBehavior_56237",
+      "componentId": "MonoBehavior_6897",
       "newValue": {
         "type": "string",
         "value": "START"
@@ -4599,26 +4823,62 @@
       "varName": "tag"
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/controller_72257/keys/sel",
-      "newValue": "select",
+      "action": "add_component",
+      "componentProperties": {
+        "id": "MonoBehavior_13"
+      },
+      "componentType": "MonoBehavior",
+      "entityId": "Scene/controller/keys/select",
       "options": {
         "source": "ui"
-      },
-      "property": "name"
+      }
     },
     {
-      "action": "set_entity_property",
-      "entityId": "Scene/controller_72257",
-      "newValue": "NES1",
+      "action": "set_component_property",
+      "componentId": "MonoBehavior_13",
+      "newValue": "EventFlasher.js",
       "options": {
         "source": "ui"
       },
-      "property": "name"
+      "property": "file"
+    },
+    {
+      "action": "set_mono_behavior_var",
+      "componentId": "MonoBehavior_13",
+      "newValue": {
+        "type": "string",
+        "value": "SELECT"
+      },
+      "options": {
+        "source": "ui"
+      },
+      "varName": "tag"
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/controller",
+      "folder": "Scripts",
+      "itemName": "controller",
+      "options": {
+        "source": "ui"
+      }
+    },
+    {
+      "action": "save_item",
+      "entityId": "Scene/controller",
+      "folder": "Scripts",
+      "itemName": "controller",
+      "options": {
+        "source": "ui"
+      }
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306313045,
+  "importedFrom": "inventory/Technocrat/Scripts",
   "itemType": "entity",
-  "last_used": 1759372793215,
-  "name": "NES1"
+  "last_used": 1759497339108,
+  "name": "controller_imported_1",
+  "remote": true
 }

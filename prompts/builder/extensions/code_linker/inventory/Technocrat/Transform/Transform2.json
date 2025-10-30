@@ -13,28 +13,6 @@
               {
                 "initialized": true,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.04,
-                    "y": 1,
-                    "z": 0.04
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "initialized": true,
-                "properties": {
                   "arc": 6.283185307179586,
                   "depth": 1,
                   "depthSegments": 1,
@@ -86,33 +64,29 @@
             "layer": 0,
             "name": "shaft",
             "parentId": "Scene/Transform2/Y",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.04,
+                "y": 1,
+                "z": 0.04
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.05,
-                    "y": 0.05,
-                    "z": 0.05
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -167,13 +141,8 @@
             "layer": 0,
             "name": "tip",
             "parentId": "Scene/Transform2/Y",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0.75,
@@ -186,13 +155,14 @@
                 "z": 0
               },
               "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "initialized": true,
             "properties": {
@@ -217,7 +187,25 @@
         "layer": 5,
         "name": "Y",
         "parentId": "Scene/Transform2",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.75,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -225,28 +213,6 @@
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.04,
-                    "y": 1,
-                    "z": 0.04
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -301,33 +267,29 @@
             "layer": 0,
             "name": "shaft",
             "parentId": "Scene/Transform2/X",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.04,
+                "y": 1,
+                "z": 0.04
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.05,
-                    "y": 0.05,
-                    "z": 0.05
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -382,32 +344,28 @@
             "layer": 0,
             "name": "tip",
             "parentId": "Scene/Transform2/X",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": -0.75,
-                "y": 0,
+                "x": 0,
+                "y": 0.75,
                 "z": 0
               },
               "localRotation": {
-                "w": 0.7071067811865476,
+                "w": 1,
                 "x": 0,
                 "y": 0,
-                "z": 0.7071067811865475
+                "z": 0
               },
               "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "initialized": true,
             "properties": {
@@ -432,7 +390,25 @@
         "layer": 5,
         "name": "X",
         "parentId": "Scene/Transform2",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.75,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.7071067811865476,
+            "x": 0,
+            "y": 0,
+            "z": 0.7071067811865475
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -440,28 +416,6 @@
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.04,
-                    "y": 1,
-                    "z": 0.04
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -516,33 +470,29 @@
             "layer": 0,
             "name": "shaft",
             "parentId": "Scene/Transform2/Z",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.04,
+                "y": 1,
+                "z": 0.04
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.75,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.05,
-                    "y": 0.05,
-                    "z": 0.05
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "properties": {
@@ -597,32 +547,28 @@
             "layer": 0,
             "name": "tip",
             "parentId": "Scene/Transform2/Z",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 0,
-                "z": 0.75
+                "y": 0.75,
+                "z": 0
               },
               "localRotation": {
-                "w": 0.7071067811865476,
-                "x": 0.7071067811865475,
+                "w": 1,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
               "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "initialized": true,
             "properties": {
@@ -647,21 +593,16 @@
         "layer": 5,
         "name": "Z",
         "parentId": "Scene/Transform2",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
             "y": 0,
-            "z": 0
+            "z": 0.75
           },
           "localRotation": {
-            "w": 1,
-            "x": 0,
+            "w": 0.7071067811865476,
+            "x": 0.7071067811865475,
             "y": 0,
             "z": 0
           },
@@ -670,15 +611,32 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "initialized": true,
     "layer": 0,
     "name": "Transform2",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Transform",

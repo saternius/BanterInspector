@@ -7,33 +7,11 @@
       {
         "loadAsync": false,
         "properties": {
-          "localPosition": {
-            "x": -0.6329414,
-            "y": 1.837041,
-            "z": 2.843223
-          },
-          "localRotation": {
-            "w": 0.7127653,
-            "x": -0.7004349,
-            "y": -0.03547433,
-            "z": -0.009908002
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "loadAsync": false,
-        "properties": {
           "depth": 1,
           "height": 1,
           "width": 1
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -49,7 +27,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -87,7 +65,25 @@
     "loadAsync": false,
     "name": "Blend2EndBounds",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -0.6329414,
+        "y": 1.837041,
+        "z": 2.843223
+      },
+      "localRotation": {
+        "w": 0.7127653,
+        "x": -0.7004349,
+        "y": -0.03547433,
+        "z": -0.009908002
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Blend2End",
