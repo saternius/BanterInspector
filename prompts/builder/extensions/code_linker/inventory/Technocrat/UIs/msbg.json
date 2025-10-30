@@ -14,32 +14,6 @@
               "loadAsync": false
             },
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0.654296875,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
               "arc": 6.283185307179586,
               "depth": 0.025,
               "depthSegments": 1,
@@ -125,69 +99,55 @@
         "loadAsync": false,
         "name": "Handle",
         "parentId": "Scene/msbg",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.654296875,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 2.328125,
-                "y": 1.30859375,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
         "initialized": true,
         "layer": 0,
         "loadAsync": false,
         "name": "UI",
         "parentId": "Scene/msbg",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": -5.756116175,
-            "y": 1.0226576,
-            "z": 1.743774625
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localRotation": {
-            "w": 0.6095165824042571,
-            "x": 0.04400912212301289,
-            "y": 0.7915508404039481,
+            "w": 1,
+            "x": 0,
+            "y": 0,
             "z": 0
           },
           "localScale": {
-            "x": 6,
-            "y": 6,
-            "z": 6
+            "x": 2.328125,
+            "y": 1.30859375,
+            "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -224,7 +184,25 @@
     "loadAsync": false,
     "name": "msbg",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -5.756116175,
+        "y": 1.0226576,
+        "z": 1.743774625
+      },
+      "localRotation": {
+        "w": 0.6095165824042571,
+        "x": 0.04400912212301289,
+        "y": 0.7915508404039481,
+        "z": 0
+      },
+      "localScale": {
+        "x": 6,
+        "y": 6,
+        "z": 6
+      }
+    }
   },
   "description": "",
   "folder": "UIs",

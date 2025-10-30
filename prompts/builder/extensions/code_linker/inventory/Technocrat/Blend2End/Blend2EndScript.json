@@ -5,28 +5,6 @@
     "active": true,
     "components": [
       {
-        "loadAsync": false,
-        "properties": {
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
         "inventoryItem": {
           "active": false,
           "author": "Technocrat",
@@ -60,7 +38,25 @@
     "loadAsync": false,
     "name": "Blend2EndScript",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Blend2End",

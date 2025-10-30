@@ -12,30 +12,11 @@
           "radialSegments": 32,
           "radius": 1
         },
-        "spaceProps": {
-          "enabled": true,
-          "height": 1,
-          "radialSegments": 32,
-          "radius": 1
-        },
         "type": "Cylinder"
       },
       {
         "loadAsync": false,
         "properties": {
-          "color": {
-            "a": 1,
-            "b": 1,
-            "g": 1,
-            "r": 1
-          },
-          "enabled": true,
-          "generateMipMaps": true,
-          "shaderName": "Standard",
-          "side": 0,
-          "texture": ""
-        },
-        "spaceProps": {
           "color": {
             "a": 1,
             "b": 1,
@@ -77,11 +58,6 @@
           "file": "PanelSpawner.js",
           "name": "myScript"
         },
-        "spaceProps": {
-          "enabled": true,
-          "file": "PanelSpawner.js",
-          "name": "myScript"
-        },
         "type": "MonoBehavior"
       },
       {
@@ -90,11 +66,6 @@
           "source": "ui"
         },
         "properties": {
-          "convex": true,
-          "enabled": true,
-          "isTrigger": true
-        },
-        "spaceProps": {
           "convex": true,
           "enabled": true,
           "isTrigger": true
@@ -109,9 +80,6 @@
         "properties": {
           "enabled": true
         },
-        "spaceProps": {
-          "enabled": true
-        },
         "type": "ColliderEvents"
       }
     ],
@@ -121,44 +89,6 @@
     "name": "SpawnPanel",
     "parentId": "Scene",
     "persistent": true,
-    "spaceProps": {
-      "active": true,
-      "components": [
-        "Cylinder_6154",
-        "Material_3501",
-        "MonoBehavior_9845",
-        "MeshCollider_8145",
-        "ColliderEvents_5089"
-      ],
-      "layer": 5,
-      "localPosition": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "rotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      }
-    },
     "transform": {
       "localPosition": {
         "x": 0,

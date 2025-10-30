@@ -12,38 +12,11 @@
           "loadAsync": false
         },
         "properties": {
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
           "depth": 0.1,
           "height": 0.1,
           "width": 0.1
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -64,7 +37,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -102,7 +75,7 @@
             "z": 0
           }
         },
-        "type": "BanterRigidbody"
+        "type": "Rigidbody"
       },
       {
         "loadAsync": false,
@@ -133,7 +106,7 @@
           "context": "item",
           "loadAsync": false
         },
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       },
       {
         "loadAsync": false,
@@ -153,7 +126,7 @@
           "fireRate": 0.1,
           "sensitivity": 1
         },
-        "type": "BanterHeldEvents"
+        "type": "HeldEvents"
       },
       {
         "inventoryItem": {
@@ -189,7 +162,25 @@
     "loadAsync": false,
     "name": "grippy",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

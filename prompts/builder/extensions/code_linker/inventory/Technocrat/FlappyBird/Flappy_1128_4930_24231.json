@@ -16,28 +16,6 @@
                   {
                     "initialized": true,
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": -0.45,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "initialized": true,
-                    "properties": {
                       "arc": 6.283185,
                       "depth": 12,
                       "depthSegments": 1,
@@ -119,33 +97,29 @@
                 "layer": 0,
                 "name": "Grass",
                 "parentId": "Root/Flappy_1128_4930_24231/Stage/Ground",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -0.45,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
                 "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": -1,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
                   {
                     "initialized": true,
                     "properties": {
@@ -213,16 +187,11 @@
                 "layer": 0,
                 "name": "Dirt",
                 "parentId": "Root/Flappy_1128_4930_24231/Stage/Ground",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
                     "x": 0,
-                    "y": 0,
+                    "y": -1,
                     "z": 0
                   },
                   "localRotation": {
@@ -236,41 +205,36 @@
                     "y": 1,
                     "z": 1
                   }
-                },
-                "type": "Transform"
+                }
               }
             ],
             "initialized": true,
             "layer": 0,
             "name": "Ground",
             "parentId": "Root/Flappy_1128_4930_24231/Stage",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "initialized": true,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 6,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "initialized": true,
                 "type": "ColliderEvents"
@@ -359,16 +323,11 @@
             "layer": 0,
             "name": "Clouds",
             "parentId": "Root/Flappy_1128_4930_24231/Stage",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 0,
+                "y": 6,
                 "z": 0
               },
               "localRotation": {
@@ -382,41 +341,36 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
         "layer": 0,
         "name": "Stage",
         "parentId": "Root/Flappy_1128_4930_24231",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "initialized": true,
             "properties": {
@@ -430,33 +384,29 @@
         "layer": 0,
         "name": "Pipes",
         "parentId": "Root/Flappy_1128_4930_24231",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0.55,
-                "y": 6,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 0.7071068,
-                "x": 0,
-                "y": -0.7071068,
-                "z": 0
-              },
-              "localScale": {
-                "x": 3,
-                "y": 3,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "initialized": true,
             "properties": {
@@ -484,7 +434,25 @@
         "layer": 0,
         "name": "DebugText",
         "parentId": "Root/Flappy_1128_4930_24231",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0.55,
+            "y": 6,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.7071068,
+            "x": 0,
+            "y": -0.7071068,
+            "z": 0
+          },
+          "localScale": {
+            "x": 3,
+            "y": 3,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -498,28 +466,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -574,33 +520,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -1,
-                            "z": -4
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -655,33 +597,29 @@
                     "layer": 0,
                     "name": "Box_20271",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -1,
+                        "z": -4
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -1,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -736,33 +674,29 @@
                     "layer": 0,
                     "name": "Box_60198",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -1,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -8,
-                            "z": 4.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -817,33 +751,29 @@
                     "layer": 0,
                     "name": "Box_34266",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -8,
+                        "z": 4.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -1,
-                            "z": 3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -898,33 +828,29 @@
                     "layer": 0,
                     "name": "Box_22161",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -1,
+                        "z": 3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -2,
-                            "z": -5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -979,33 +905,29 @@
                     "layer": 0,
                     "name": "Box_52272",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -2,
+                        "z": -5.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3,
-                            "z": -0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1060,33 +982,29 @@
                     "layer": 0,
                     "name": "Box_6926",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3,
+                        "z": -0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3,
-                            "z": -6
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1141,33 +1059,29 @@
                     "layer": 0,
                     "name": "Box_43966",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3,
+                        "z": -6
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -4,
-                            "z": 5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1222,33 +1136,29 @@
                     "layer": 0,
                     "name": "Box_34362",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -4,
+                        "z": 5.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -2,
-                            "z": 4.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1303,33 +1213,29 @@
                     "layer": 0,
                     "name": "Box_74788",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -2,
+                        "z": 4.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3.5,
-                            "z": 3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1384,33 +1290,29 @@
                     "layer": 0,
                     "name": "Box_51877",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3.5,
+                        "z": 3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5,
-                            "z": -8.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1465,33 +1367,29 @@
                     "layer": 0,
                     "name": "Box_48182",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -5,
+                        "z": -8.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -4,
-                            "z": -3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1546,33 +1444,29 @@
                     "layer": 0,
                     "name": "Box_54106",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -4,
+                        "z": -3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5.5,
-                            "z": -2.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1627,33 +1521,29 @@
                     "layer": 0,
                     "name": "Box_48657",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -5.5,
+                        "z": -2.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1708,33 +1598,29 @@
                     "layer": 0,
                     "name": "Box_78877",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -5,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": 4
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1789,33 +1675,29 @@
                     "layer": 0,
                     "name": "Box_77793",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -6,
+                        "z": 4
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1870,33 +1752,29 @@
                     "layer": 0,
                     "name": "Box_70143",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": 7.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -1951,33 +1829,29 @@
                     "layer": 0,
                     "name": "Box_24740",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": 7.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": -3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2032,33 +1906,29 @@
                     "layer": 0,
                     "name": "Box_55634",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": -3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": -7.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2113,33 +1983,29 @@
                     "layer": 0,
                     "name": "Box_29698",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": -7.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -8,
-                            "z": -5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2194,33 +2060,29 @@
                     "layer": 0,
                     "name": "Box_11146",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -8,
+                        "z": -5.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -8,
-                            "z": -0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2275,33 +2137,29 @@
                     "layer": 0,
                     "name": "Box_20540",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -8,
+                        "z": -0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2356,33 +2214,29 @@
                     "layer": 0,
                     "name": "Box_38116",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -9,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": 6.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2437,33 +2291,29 @@
                     "layer": 0,
                     "name": "Box_38161",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -9,
+                        "z": 6.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": -6.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2518,33 +2368,29 @@
                     "layer": 0,
                     "name": "Box_8717",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -9,
+                        "z": -6.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -10,
-                            "z": -5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2599,33 +2445,29 @@
                     "layer": 0,
                     "name": "Box_91283",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -10,
+                        "z": -5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -10,
-                            "z": 3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2680,33 +2522,29 @@
                     "layer": 0,
                     "name": "Box_56158",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -10,
+                        "z": 3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -11,
-                            "z": -1.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2761,17 +2599,12 @@
                     "layer": 0,
                     "name": "Box_67596",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Black",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -11,
+                        "z": -1.5
                       },
                       "localRotation": {
                         "w": 1,
@@ -2784,15 +2617,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Black",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -2800,28 +2650,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -1,
-                            "z": -1.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2876,33 +2704,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -1,
+                        "z": -1.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -2,
-                            "z": -4
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -2957,33 +2781,29 @@
                     "layer": 0,
                     "name": "Box_53078",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -2,
+                        "z": -4
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": -7.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3038,33 +2858,29 @@
                     "layer": 0,
                     "name": "Box_50714",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -6,
+                        "z": -7.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": -3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3119,33 +2935,29 @@
                     "layer": 0,
                     "name": "Box_51453",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -6,
+                        "z": -3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": -5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3200,17 +3012,12 @@
                     "layer": 0,
                     "name": "Box_95768",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_1",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -7,
+                        "z": -5.5
                       },
                       "localRotation": {
                         "w": 1,
@@ -3223,15 +3030,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Yellow_1",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -3239,28 +3063,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -1,
-                            "z": 2
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3315,33 +3117,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -1,
+                        "z": 2
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -2,
-                            "z": 2
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3396,33 +3194,29 @@
                     "layer": 0,
                     "name": "Box_53562",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -2,
+                        "z": 2
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3.5,
-                            "z": 2
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3477,33 +3271,29 @@
                     "layer": 0,
                     "name": "Box_51049",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3.5,
+                        "z": 2
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3.5,
-                            "z": 4.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3558,33 +3348,29 @@
                     "layer": 0,
                     "name": "Box_50257",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3.5,
+                        "z": 4.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5,
-                            "z": 3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3639,33 +3425,29 @@
                     "layer": 0,
                     "name": "Box_65241",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -5,
+                        "z": 3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -4,
-                            "z": -6
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3720,33 +3502,29 @@
                     "layer": 0,
                     "name": "Box_16833",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -4,
+                        "z": -6
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5,
-                            "z": -5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3801,33 +3579,29 @@
                     "layer": 0,
                     "name": "Box_28910",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -5,
+                        "z": -5.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": -5.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3882,17 +3656,12 @@
                     "layer": 0,
                     "name": "Box_33275",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/White",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -6,
+                        "z": -5.5
                       },
                       "localRotation": {
                         "w": 1,
@@ -3905,15 +3674,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "White",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -3921,28 +3707,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3,
-                            "z": -2
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -3997,33 +3761,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3,
+                        "z": -2
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": -1
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4078,33 +3838,29 @@
                     "layer": 0,
                     "name": "Box_14379",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -6,
+                        "z": -1
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3,
-                            "z": -3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4159,33 +3915,29 @@
                     "layer": 0,
                     "name": "Box_5676",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3,
+                        "z": -3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -6,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4240,33 +3992,29 @@
                     "layer": 0,
                     "name": "Box_93542",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -6,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": -2.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4321,33 +4069,29 @@
                     "layer": 0,
                     "name": "Box_74438",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": -2.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -8,
-                            "z": -2.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4402,33 +4146,29 @@
                     "layer": 0,
                     "name": "Box_15769",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -8,
+                        "z": -2.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": -2
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4483,17 +4223,12 @@
                     "layer": 0,
                     "name": "Box_62862",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Yellow_2",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -9,
+                        "z": -2
                       },
                       "localRotation": {
                         "w": 1,
@@ -4506,15 +4241,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Yellow_2",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -4522,28 +4274,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -3.5,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4598,33 +4328,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Grey",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -3.5,
+                        "z": 0.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -5,
-                            "z": 1.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4679,17 +4405,12 @@
                     "layer": 0,
                     "name": "Box_59147",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Grey",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -5,
+                        "z": 1.5
                       },
                       "localRotation": {
                         "w": 1,
@@ -4702,15 +4423,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Grey",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -4718,28 +4456,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -10,
-                            "z": -1.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4794,33 +4510,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Orange",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -10,
+                        "z": -1.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": -5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4875,17 +4587,12 @@
                     "layer": 0,
                     "name": "Box_30884",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Orange",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -9,
+                        "z": -5
                       },
                       "localRotation": {
                         "w": 1,
@@ -4898,15 +4605,32 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Orange",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -4914,28 +4638,6 @@
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -7,
-                            "z": 4
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -4990,33 +4692,29 @@
                     "layer": 0,
                     "name": "Box",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -7,
+                        "z": 4
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -9,
-                            "z": 3.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -5071,33 +4769,29 @@
                     "layer": 0,
                     "name": "Box_97520",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red",
-                    "persistent": true
+                    "persistent": true,
+                    "transform": {
+                      "localPosition": {
+                        "x": 0,
+                        "y": -9,
+                        "z": 3.5
+                      },
+                      "localRotation": {
+                        "w": 1,
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                      },
+                      "localScale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                      }
+                    }
                   },
                   {
                     "active": true,
                     "components": [
-                      {
-                        "initialized": true,
-                        "properties": {
-                          "localPosition": {
-                            "x": 0,
-                            "y": -8,
-                            "z": 0.5
-                          },
-                          "localRotation": {
-                            "w": 1,
-                            "x": 0,
-                            "y": 0,
-                            "z": 0
-                          },
-                          "localScale": {
-                            "x": 1,
-                            "y": 1,
-                            "z": 1
-                          }
-                        },
-                        "type": "Transform"
-                      },
                       {
                         "initialized": true,
                         "properties": {
@@ -5152,17 +4846,12 @@
                     "layer": 0,
                     "name": "Box_23060",
                     "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778/Red",
-                    "persistent": true
-                  }
-                ],
-                "components": [
-                  {
-                    "initialized": true,
-                    "properties": {
+                    "persistent": true,
+                    "transform": {
                       "localPosition": {
                         "x": 0,
-                        "y": 0,
-                        "z": 0
+                        "y": -8,
+                        "z": 0.5
                       },
                       "localRotation": {
                         "w": 1,
@@ -5175,25 +4864,19 @@
                         "y": 1,
                         "z": 1
                       }
-                    },
-                    "type": "Transform"
+                    }
                   }
                 ],
                 "initialized": true,
                 "layer": 0,
                 "name": "Red",
                 "parentId": "Root/Flappy_1128_4930_24231/Bird/Bird_67778",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "initialized": true,
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
-                    "x": 0.5,
-                    "y": 0.35,
-                    "z": 0.015
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
                   },
                   "localRotation": {
                     "w": 1,
@@ -5202,43 +4885,39 @@
                     "z": 0
                   },
                   "localScale": {
-                    "x": 0.25,
-                    "y": 0.06,
-                    "z": 0.06
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                   }
-                },
-                "type": "Transform"
+                }
               }
             ],
             "initialized": true,
             "layer": 0,
             "name": "Bird_67778",
             "parentId": "Root/Flappy_1128_4930_24231/Bird",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "initialized": true,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 0,
-                "y": 3,
-                "z": 0
+                "x": 0.5,
+                "y": 0.35,
+                "z": 0.015
               },
               "localRotation": {
+                "w": 1,
                 "x": 0,
                 "y": 0,
                 "z": 0
               },
               "localScale": {
-                "x": 0.5,
-                "y": 0.5,
-                "z": 0.5
+                "x": 0.25,
+                "y": 0.06,
+                "z": 0.06
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "initialized": true,
             "type": "ColliderEvents"
@@ -5361,31 +5040,24 @@
         "layer": 0,
         "name": "Bird",
         "parentId": "Root/Flappy_1128_4930_24231",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": 4,
-            "y": 1.1,
+            "x": 0,
+            "y": 3,
             "z": 0
           },
           "localRotation": {
-            "w": 1,
             "x": 0,
             "y": 0,
             "z": 0
           },
           "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "finished_loading": true,
@@ -5393,7 +5065,25 @@
     "layer": 0,
     "name": "Flappy_1128_4930_24231",
     "parentId": "Root",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 4,
+        "y": 1.1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "FlappyBird",

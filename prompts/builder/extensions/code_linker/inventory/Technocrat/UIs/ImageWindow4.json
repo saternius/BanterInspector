@@ -14,32 +14,6 @@
               "loadAsync": false
             },
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0.55,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "options": {
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
               "arc": 6.283185307179586,
               "depth": 0.025,
               "depthSegments": 1,
@@ -68,7 +42,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "loadAsync": false,
@@ -88,7 +62,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -117,7 +91,7 @@
               "context": "item",
               "loadAsync": false
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -125,36 +99,28 @@
         "loadAsync": false,
         "name": "Handle",
         "parentId": "Scene/ImageWindow4",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": 0.1840990750000001,
-            "y": 1.12987285,
-            "z": -1.4622887500000001
+            "x": 0,
+            "y": 0.55,
+            "z": 0
           },
           "localRotation": {
-            "w": 0.9493688076762327,
-            "x": 0.0037925912301758264,
-            "y": 0.31414086531868035,
-            "z": 1.7347234759768075e-18
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localScale": {
             "x": 1,
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -191,7 +157,25 @@
     "loadAsync": false,
     "name": "ImageWindow4",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0.1840990750000001,
+        "y": 1.12987285,
+        "z": -1.4622887500000001
+      },
+      "localRotation": {
+        "w": 0.9493688076762327,
+        "x": 0.0037925912301758264,
+        "y": 0.31414086531868035,
+        "z": 1.7347234759768075e-18
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "UIs",

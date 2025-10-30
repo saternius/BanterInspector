@@ -26,15 +26,6 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
                 },
-                "spaceProps": {
-                  "addColliders": false,
-                  "climbable": false,
-                  "generateMipMaps": true,
-                  "legacyRotate": false,
-                  "nonConvexColliders": false,
-                  "slippery": false,
-                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
-                },
                 "type": "GLTF"
               }
             ],
@@ -44,40 +35,6 @@
             "name": "PennyMesh",
             "parentId": "Scene/FlipFull/Penny",
             "persistent": true,
-            "spaceProps": {
-              "active": true,
-              "components": [
-                "GLTF_43263"
-              ],
-              "layer": 0,
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 0.1,
-                "y": 0.1,
-                "z": 0.1
-              },
-              "position": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "rotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            },
             "transform": {
               "localPosition": {
                 "x": 0,
@@ -123,17 +80,6 @@
                       "spatialBlend": 1,
                       "volume": 1
                     },
-                    "spaceProps": {
-                      "bypassEffects": false,
-                      "bypassListenerEffects": false,
-                      "bypassReverbZones": false,
-                      "loop": false,
-                      "mute": false,
-                      "pitch": 1,
-                      "playOnAwake": true,
-                      "spatialBlend": 1,
-                      "volume": 1
-                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -143,40 +89,6 @@
                 "name": "flip",
                 "parentId": "Scene/FlipFull/Penny/sfx",
                 "persistent": true,
-                "spaceProps": {
-                  "active": true,
-                  "components": [
-                    "AudioSource_93656"
-                  ],
-                  "layer": 0,
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  },
-                  "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  }
-                },
                 "transform": {
                   "localPosition": {
                     "x": 0,
@@ -219,17 +131,6 @@
                       "spatialBlend": 1,
                       "volume": 1
                     },
-                    "spaceProps": {
-                      "bypassEffects": false,
-                      "bypassListenerEffects": false,
-                      "bypassReverbZones": false,
-                      "loop": false,
-                      "mute": false,
-                      "pitch": 1,
-                      "playOnAwake": true,
-                      "spatialBlend": 1,
-                      "volume": 1
-                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -239,40 +140,6 @@
                 "name": "success",
                 "parentId": "Scene/FlipFull/Penny/sfx",
                 "persistent": true,
-                "spaceProps": {
-                  "active": true,
-                  "components": [
-                    "AudioSource_26972"
-                  ],
-                  "layer": 0,
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  },
-                  "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  }
-                },
                 "transform": {
                   "localPosition": {
                     "x": 0,
@@ -315,17 +182,6 @@
                       "spatialBlend": 1,
                       "volume": 1
                     },
-                    "spaceProps": {
-                      "bypassEffects": false,
-                      "bypassListenerEffects": false,
-                      "bypassReverbZones": false,
-                      "loop": false,
-                      "mute": false,
-                      "pitch": 1,
-                      "playOnAwake": true,
-                      "spatialBlend": 1,
-                      "volume": 1
-                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -335,40 +191,6 @@
                 "name": "nothing",
                 "parentId": "Scene/FlipFull/Penny/sfx",
                 "persistent": true,
-                "spaceProps": {
-                  "active": true,
-                  "components": [
-                    "AudioSource_74805"
-                  ],
-                  "layer": 0,
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  },
-                  "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  }
-                },
                 "transform": {
                   "localPosition": {
                     "x": 0,
@@ -411,17 +233,6 @@
                       "spatialBlend": 1,
                       "volume": 0
                     },
-                    "spaceProps": {
-                      "bypassEffects": false,
-                      "bypassListenerEffects": false,
-                      "bypassReverbZones": false,
-                      "loop": false,
-                      "mute": false,
-                      "pitch": 1,
-                      "playOnAwake": true,
-                      "spatialBlend": 1,
-                      "volume": 0
-                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -431,40 +242,6 @@
                 "name": "preloader",
                 "parentId": "Scene/FlipFull/Penny/sfx",
                 "persistent": true,
-                "spaceProps": {
-                  "active": true,
-                  "components": [
-                    "AudioSource_99141"
-                  ],
-                  "layer": 0,
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  },
-                  "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "rotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  }
-                },
                 "transform": {
                   "localPosition": {
                     "x": 0,
@@ -493,43 +270,6 @@
             "name": "sfx",
             "parentId": "Scene/FlipFull/Penny",
             "persistent": true,
-            "spaceProps": {
-              "active": true,
-              "children": [
-                "Scene/Table_4039/Penny/sfx/flip",
-                "Scene/Table_4039/Penny/sfx/success",
-                "Scene/Table_4039/Penny/sfx/nothing",
-                "Scene/Table_4039/Penny/sfx/preloader"
-              ],
-              "layer": 0,
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              },
-              "position": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "rotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            },
             "transform": {
               "localPosition": {
                 "x": 0,
@@ -567,13 +307,6 @@
               "takeOwnershipOnCollision": false,
               "takeOwnershipOnGrab": true
             },
-            "spaceProps": {
-              "kinematicIfNotOwned": true,
-              "syncPosition": true,
-              "syncRotation": true,
-              "takeOwnershipOnCollision": false,
-              "takeOwnershipOnGrab": true
-            },
             "type": "SyncedObject"
           },
           {
@@ -584,11 +317,6 @@
               "loadAsync": false
             },
             "properties": {
-              "height": 0.02,
-              "radialSegments": 32,
-              "radius": 0.1
-            },
-            "spaceProps": {
               "height": 0.02,
               "radialSegments": 32,
               "radius": 0.1
@@ -606,10 +334,6 @@
               "convex": true,
               "isTrigger": false
             },
-            "spaceProps": {
-              "convex": true,
-              "isTrigger": false
-            },
             "type": "MeshCollider"
           },
           {
@@ -620,35 +344,6 @@
               "loadAsync": false
             },
             "properties": {
-              "angularDrag": 0.05,
-              "angularVelocity": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "centerOfMass": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "collisionDetectionMode": 0,
-              "drag": 0,
-              "freezePositionX": false,
-              "freezePositionY": false,
-              "freezePositionZ": false,
-              "freezeRotationX": false,
-              "freezeRotationY": false,
-              "freezeRotationZ": false,
-              "isKinematic": false,
-              "mass": 1,
-              "useGravity": true,
-              "velocity": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              }
-            },
-            "spaceProps": {
               "angularDrag": 0.05,
               "angularVelocity": {
                 "x": 0,
@@ -711,10 +406,6 @@
               "file": "Flipable.js",
               "name": "Flipable"
             },
-            "spaceProps": {
-              "file": "Flipable.js",
-              "name": "Flipable"
-            },
             "type": "MonoBehavior"
           }
         ],
@@ -725,48 +416,6 @@
         "parentId": "Scene/FlipFull",
         "penny": true,
         "persistent": true,
-        "spaceProps": {
-          "active": true,
-          "children": [
-            "Scene/Table_4039/Penny/PennyMesh",
-            "Scene/Table_4039/Penny/sfx"
-          ],
-          "components": [
-            "SyncedObject_54982",
-            "Cylinder_66758",
-            "MeshCollider_77928",
-            "Rigidbody_29049",
-            "MonoBehavior_12115"
-          ],
-          "layer": 5,
-          "localPosition": {
-            "x": 0,
-            "y": 0.65,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "position": {
-            "x": -1.243011,
-            "y": 0.260046,
-            "z": -1.234344
-          },
-          "rotation": {
-            "w": 0.3762418,
-            "x": -0.0002059784,
-            "y": -0.9265214,
-            "z": -0.0001901385
-          }
-        },
         "transform": {
           "localPosition": {
             "x": 0,
@@ -812,20 +461,6 @@
               "text": "$1",
               "verticalAlignment": 1
             },
-            "spaceProps": {
-              "color": {
-                "a": 0.94,
-                "b": 0.984313725490196,
-                "g": 0.984313725490196,
-                "r": 0.984313725490196
-              },
-              "enableWordWrapping": true,
-              "fontSize": 1,
-              "horizontalAlignment": 1,
-              "richText": false,
-              "text": "$1",
-              "verticalAlignment": 1
-            },
             "type": "Text"
           },
           {
@@ -854,10 +489,6 @@
               "file": "Gains.js",
               "name": "Gains"
             },
-            "spaceProps": {
-              "file": "Gains.js",
-              "name": "Gains"
-            },
             "type": "MonoBehavior"
           },
           {
@@ -866,12 +497,6 @@
               "source": "ui"
             },
             "properties": {
-              "enableXAxis": true,
-              "enableYAxis": true,
-              "enableZAxis": false,
-              "smoothing": 0.1
-            },
-            "spaceProps": {
               "enableXAxis": true,
               "enableYAxis": true,
               "enableZAxis": false,
@@ -886,41 +511,6 @@
         "name": "Gains",
         "parentId": "Scene/FlipFull",
         "persistent": true,
-        "spaceProps": {
-          "active": true,
-          "components": [
-            "Text_33701",
-            "MonoBehavior_6017",
-            "Billboard_6123"
-          ],
-          "layer": 0,
-          "localPosition": {
-            "x": 0,
-            "y": 2.1,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "position": {
-            "x": -1.213246,
-            "y": 0.9139951959449187,
-            "z": -1.241294
-          },
-          "rotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          }
-        },
         "transform": {
           "localPosition": {
             "x": 0,
@@ -956,11 +546,6 @@
           "height": 0.05,
           "width": 2
         },
-        "spaceProps": {
-          "depth": 1,
-          "height": 0.05,
-          "width": 2
-        },
         "type": "Box"
       },
       {
@@ -982,18 +567,6 @@
           "side": 0,
           "texture": ""
         },
-        "spaceProps": {
-          "color": {
-            "a": 1,
-            "b": 0.08627450980392157,
-            "g": 0.1411764705882353,
-            "r": 0.16470588235294117
-          },
-          "generateMipMaps": true,
-          "shaderName": "Standard",
-          "side": 0,
-          "texture": ""
-        },
         "type": "Material"
       },
       {
@@ -1004,19 +577,6 @@
           "loadAsync": false
         },
         "properties": {
-          "center": {
-            "x": 0,
-            "y": -0.475,
-            "z": 0
-          },
-          "isTrigger": false,
-          "size": {
-            "x": 1.5,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "spaceProps": {
           "center": {
             "x": 0,
             "y": -0.475,
@@ -1063,10 +623,6 @@
           "file": "FlipController.js",
           "name": "FlipController"
         },
-        "spaceProps": {
-          "file": "FlipController.js",
-          "name": "FlipController"
-        },
         "type": "MonoBehavior"
       }
     ],
@@ -1076,47 +632,6 @@
     "name": "FlipFull",
     "parentId": "Scene",
     "persistent": true,
-    "spaceProps": {
-      "active": true,
-      "children": [
-        "Scene/FlipFull/Penny",
-        "Scene/FlipFull/Gains"
-      ],
-      "components": [
-        "Box_28510",
-        "Material_63019",
-        "BoxCollider_20649",
-        "MonoBehavior_48456"
-      ],
-      "layer": 0,
-      "localPosition": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "rotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      }
-    },
     "transform": {
       "localPosition": {
         "x": 0,
@@ -1926,7 +1441,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306626943,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
   "itemType": "entity",
   "last_used": 1761049905716,
-  "name": "FlipFull"
+  "name": "FlipFull",
+  "remote": true
 }

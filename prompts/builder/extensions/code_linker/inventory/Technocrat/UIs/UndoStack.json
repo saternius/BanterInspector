@@ -7,27 +7,6 @@
       {
         "loadAsync": false,
         "properties": {
-          "localPosition": {
-            "x": -1.67,
-            "y": 3.345,
-            "z": -2.47
-          },
-          "localRotation": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "loadAsync": false,
-        "properties": {
           "file": "UndoStack.js",
           "name": "myScript"
         },
@@ -39,7 +18,24 @@
     "loadAsync": false,
     "name": "UndoStack",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -1.67,
+        "y": 3.345,
+        "z": -2.47
+      },
+      "localRotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "UIs",

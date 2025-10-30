@@ -15,33 +15,6 @@
               "loadAsync": false
             },
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 1.029296875,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
               "arc": 6.283185307179586,
               "depth": 0.025,
               "depthSegments": 1,
@@ -70,7 +43,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "loadAsync": false,
@@ -91,7 +64,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -122,7 +95,7 @@
               "context": "item",
               "loadAsync": false
             },
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
@@ -130,75 +103,55 @@
         "loadAsync": false,
         "name": "Handle",
         "parentId": "Scene/NES_Schema",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 1.029296875,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 5,
-                "y": 2.05859375,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
         "initialized": true,
         "layer": 0,
         "loadAsync": false,
         "name": "UI",
         "parentId": "Scene/NES_Schema",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": -0.7282296500000001,
-            "y": 0.87247915,
-            "z": 0.26489427500000007
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localRotation": {
-            "w": 0.9485110332601464,
-            "x": -0.0026749806000956893,
-            "y": 0.3167327963166409,
+            "w": 1,
+            "x": 0,
+            "y": 0,
             "z": 0
           },
           "localScale": {
-            "x": 0.1,
-            "y": 0.1,
-            "z": 0.1
+            "x": 5,
+            "y": 2.05859375,
+            "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -241,7 +194,25 @@
     "loadAsync": false,
     "name": "NES_Schema",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -0.7282296500000001,
+        "y": 0.87247915,
+        "z": 0.26489427500000007
+      },
+      "localRotation": {
+        "w": 0.9485110332601464,
+        "x": -0.0026749806000956893,
+        "y": 0.3167327963166409,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.1,
+        "y": 0.1,
+        "z": 0.1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

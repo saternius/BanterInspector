@@ -7,33 +7,11 @@
       {
         "initialized": true,
         "properties": {
-          "localPosition": {
-            "x": 0,
-            "y": 1,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 0.5,
-            "y": 0.5,
-            "z": 0.5
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "initialized": true,
-        "properties": {
           "backgroundColor": "#000000",
           "cameraClear": 1,
           "renderTextureSize": 1024
         },
-        "type": "BanterMirror"
+        "type": "Mirror"
       },
       {
         "initialized": true,
@@ -54,7 +32,7 @@
       },
       {
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       },
       {
         "initialized": true,
@@ -70,7 +48,25 @@
     "layer": 5,
     "name": "PersonalMirror_19488",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.5
+      }
+    }
   },
   "description": "",
   "folder": "Mirror",

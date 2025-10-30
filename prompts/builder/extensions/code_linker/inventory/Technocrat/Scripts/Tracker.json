@@ -12,37 +12,6 @@
         "name": "Holder",
         "parentId": "Scene/Tracker",
         "persistent": true,
-        "spaceProps": {
-          "active": true,
-          "layer": 0,
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          },
-          "position": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "rotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          }
-        },
         "transform": {
           "localPosition": {
             "x": 0,
@@ -77,10 +46,6 @@
           "attachmentPoint": 0,
           "uid": ""
         },
-        "spaceProps": {
-          "attachmentPoint": 0,
-          "uid": ""
-        },
         "type": "AttachedObject"
       },
       {
@@ -91,11 +56,6 @@
           "loadAsync": false
         },
         "properties": {
-          "depth": 0.05,
-          "height": 0.05,
-          "width": 0.05
-        },
-        "spaceProps": {
           "depth": 0.05,
           "height": 0.05,
           "width": 0.05
@@ -121,18 +81,6 @@
           "side": 0,
           "texture": ""
         },
-        "spaceProps": {
-          "color": {
-            "a": 1,
-            "b": 1,
-            "g": 1,
-            "r": 1
-          },
-          "generateMipMaps": true,
-          "shaderName": "Standard",
-          "side": 0,
-          "texture": ""
-        },
         "type": "Material"
       }
     ],
@@ -142,45 +90,6 @@
     "name": "Tracker",
     "parentId": "Scene",
     "persistent": true,
-    "spaceProps": {
-      "active": true,
-      "children": [
-        "Scene/Tracker/Holder"
-      ],
-      "components": [
-        "AttachedObject_27514",
-        "Box_27823",
-        "Material_42377"
-      ],
-      "layer": 5,
-      "localPosition": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "position": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "rotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      }
-    },
     "transform": {
       "localPosition": {
         "x": 0,
@@ -462,7 +371,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306313043,
+  "importedFrom": "inventory/Technocrat/Scripts",
   "itemType": "entity",
   "last_used": 1761024365137,
-  "name": "Tracker"
+  "name": "Tracker",
+  "remote": true
 }

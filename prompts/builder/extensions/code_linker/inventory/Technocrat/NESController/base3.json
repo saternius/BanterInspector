@@ -18,38 +18,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": -0.15,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -83,7 +56,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -104,7 +77,25 @@
             "loadAsync": false,
             "name": "left",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.15,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -117,38 +108,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0.15,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -182,7 +146,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -203,7 +167,25 @@
             "loadAsync": false,
             "name": "right",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.15,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -216,38 +198,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.15,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -281,7 +236,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -302,7 +257,25 @@
             "loadAsync": false,
             "name": "up",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.15,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -315,38 +288,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -0.15,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -380,7 +326,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -401,7 +347,25 @@
             "loadAsync": false,
             "name": "down",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -0.15,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -414,38 +378,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.15,
                   "width": 0.15
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -479,7 +416,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -500,7 +437,25 @@
             "loadAsync": false,
             "name": "center",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -513,38 +468,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0.5392089746220914,
-                    "y": -0.14423990179206841,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.07,
                   "width": 0.2
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -578,7 +506,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -599,7 +527,25 @@
             "loadAsync": false,
             "name": "start",
             "parentId": "Scene/base3/keys",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.5392089746220914,
+                "y": -0.14423990179206841,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -612,38 +558,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0.8911834593528473,
-                    "y": -0.14,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.07,
                   "width": 0.2
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -677,7 +596,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -698,22 +617,12 @@
             "loadAsync": false,
             "name": "select",
             "parentId": "Scene/base3/keys",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": -0.8194409508836993,
-                "y": -0.048757124636218244,
-                "z": -0.16869226228429424
+                "x": 0.8911834593528473,
+                "y": -0.14,
+                "z": 0
               },
               "localRotation": {
                 "w": 1,
@@ -726,8 +635,7 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -735,7 +643,25 @@
         "loadAsync": false,
         "name": "keys",
         "parentId": "Scene/base3",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.8194409508836993,
+            "y": -0.048757124636218244,
+            "z": -0.16869226228429424
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -751,38 +677,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -0.05,
-                    "z": -0.13519490838590825
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.75,
                   "width": 2.36
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -816,7 +715,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -837,7 +736,25 @@
             "loadAsync": false,
             "name": "panel",
             "parentId": "Scene/base3/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -0.05,
+                "z": -0.13519490838590825
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -850,38 +767,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": -0.09896223050545236,
-                    "y": -0.18258292502691764,
-                    "z": -0.14048260586834324
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.22018016899257292,
                   "width": 0.6925648453596803
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -915,7 +805,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -936,7 +826,25 @@
             "loadAsync": false,
             "name": "select_start_panel",
             "parentId": "Scene/base3/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.09896223050545236,
+                "y": -0.18258292502691764,
+                "z": -0.14048260586834324
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -952,38 +860,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": -0.13693099969274206,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1017,7 +898,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1038,7 +919,25 @@
                 "loadAsync": false,
                 "name": "left",
                 "parentId": "Scene/base3/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": -0.13693099969274206,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1051,38 +950,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0.13662046112697515,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1116,7 +988,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1137,7 +1009,25 @@
                 "loadAsync": false,
                 "name": "right",
                 "parentId": "Scene/base3/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0.13662046112697515,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1150,38 +1040,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0.14,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1215,7 +1078,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1236,7 +1099,25 @@
                 "loadAsync": false,
                 "name": "up",
                 "parentId": "Scene/base3/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": 0.14,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1249,38 +1130,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": -0.14,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1314,7 +1168,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1335,7 +1189,25 @@
                 "loadAsync": false,
                 "name": "down",
                 "parentId": "Scene/base3/printing/arrow_keys_highlight",
-                "persistent": true
+                "persistent": true,
+                "transform": {
+                  "localPosition": {
+                    "x": 0,
+                    "y": -0.14,
+                    "z": 0
+                  },
+                  "localRotation": {
+                    "w": 1,
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                  },
+                  "localScale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                  }
+                }
               },
               {
                 "active": true,
@@ -1348,38 +1220,11 @@
                       "loadAsync": false
                     },
                     "properties": {
-                      "localPosition": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localRotation": {
-                        "w": 1,
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                      },
-                      "localScale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                      }
-                    },
-                    "type": "Transform"
-                  },
-                  {
-                    "loadAsync": false,
-                    "options": {
-                      "cmdUser": "Technocrat",
-                      "context": "item",
-                      "loadAsync": false
-                    },
-                    "properties": {
                       "depth": 0.15,
                       "height": 0.15,
                       "width": 0.15
                     },
-                    "type": "BanterBox"
+                    "type": "Box"
                   },
                   {
                     "loadAsync": false,
@@ -1413,7 +1258,7 @@
                       ],
                       "side": 0
                     },
-                    "type": "BanterMaterial"
+                    "type": "Material"
                   },
                   {
                     "loadAsync": false,
@@ -1434,22 +1279,12 @@
                 "loadAsync": false,
                 "name": "center",
                 "parentId": "Scene/base3/printing/arrow_keys_highlight",
-                "persistent": true
-              }
-            ],
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
+                "persistent": true,
+                "transform": {
                   "localPosition": {
-                    "x": -0.8204953860062931,
-                    "y": -0.05,
-                    "z": -0.14
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
                   },
                   "localRotation": {
                     "w": 1,
@@ -1458,12 +1293,11 @@
                     "z": 0
                   },
                   "localScale": {
-                    "x": 1.15,
-                    "y": 1.1,
-                    "z": 1.1
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
                   }
-                },
-                "type": "Transform"
+                }
               }
             ],
             "initialized": true,
@@ -1471,7 +1305,25 @@
             "loadAsync": false,
             "name": "arrow_keys_highlight",
             "parentId": "Scene/base3/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": -0.8204953860062931,
+                "y": -0.05,
+                "z": -0.14
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1.15,
+                "y": 1.1,
+                "z": 1.1
+              }
+            }
           },
           {
             "active": true,
@@ -1484,38 +1336,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0.7918454270767865,
-                    "y": -0.1802751308247752,
-                    "z": -0.14
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.9999999,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.275,
                   "width": 0.275
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -1549,7 +1374,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -1570,7 +1395,25 @@
             "loadAsync": false,
             "name": "b_panel",
             "parentId": "Scene/base3/printing",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0.7918454270767865,
+                "y": -0.1802751308247752,
+                "z": -0.14
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.9999999,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
@@ -1583,38 +1426,11 @@
                   "loadAsync": false
                 },
                 "properties": {
-                  "localPosition": {
-                    "x": 0.4790293596186581,
-                    "y": -0.1811650937208213,
-                    "z": -0.14
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.9999999,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
                   "depth": 0.15,
                   "height": 0.275,
                   "width": 0.275
                 },
-                "type": "BanterBox"
+                "type": "Box"
               },
               {
                 "loadAsync": false,
@@ -1648,7 +1464,7 @@
                   ],
                   "side": 0
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               },
               {
                 "loadAsync": false,
@@ -1669,22 +1485,12 @@
             "loadAsync": false,
             "name": "a_panel",
             "parentId": "Scene/base3/printing",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
+                "x": 0.4790293596186581,
+                "y": -0.1811650937208213,
+                "z": -0.14
               },
               "localRotation": {
                 "w": 1,
@@ -1693,12 +1499,11 @@
                 "z": 0
               },
               "localScale": {
-                "x": 1,
+                "x": 0.9999999,
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
+            }
           }
         ],
         "initialized": true,
@@ -1706,22 +1511,12 @@
         "loadAsync": false,
         "name": "printing",
         "parentId": "Scene/base3",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 1,
-            "z": 3
+            "y": 0,
+            "z": 0
           },
           "localRotation": {
             "w": 1,
@@ -1734,9 +1529,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "loadAsync": false,
         "options": {
@@ -1749,7 +1545,7 @@
           "height": 1,
           "width": 2.5
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -1770,7 +1566,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -1818,7 +1614,25 @@
     "loadAsync": false,
     "name": "base3",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 3
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

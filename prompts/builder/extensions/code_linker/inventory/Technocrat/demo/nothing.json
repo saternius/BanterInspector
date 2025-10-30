@@ -3,35 +3,29 @@
   "created": 1755735542471,
   "data": {
     "active": true,
-    "components": [
-      {
-        "initialized": true,
-        "properties": {
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      }
-    ],
     "initialized": true,
     "layer": 0,
     "name": "nothing",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "demo",

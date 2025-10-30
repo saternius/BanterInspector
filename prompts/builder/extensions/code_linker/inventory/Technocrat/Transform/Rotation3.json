@@ -10,28 +10,6 @@
           {
             "initialized": true,
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "initialized": true,
-            "properties": {
               "arc": 6.283185307179586,
               "depth": 1,
               "depthSegments": 1,
@@ -60,7 +38,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "initialized": true,
@@ -76,7 +54,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "initialized": true,
@@ -97,40 +75,36 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
         "layer": 5,
         "name": "Y-Ring",
         "parentId": "Scene/Rotation3",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 0.7071067811865476,
-                "x": 0,
-                "y": 0.7071067811865475,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "initialized": true,
             "properties": {
@@ -162,7 +136,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "initialized": true,
@@ -178,7 +152,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "initialized": true,
@@ -199,40 +173,36 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
         "layer": 5,
         "name": "X-Ring",
         "parentId": "Scene/Rotation3",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 0.7071067811865476,
+            "x": 0,
+            "y": 0.7071067811865475,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "initialized": true,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 0.7071067811865476,
-                "x": 0.7071067811865475,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "initialized": true,
             "properties": {
@@ -264,7 +234,7 @@
               "width": 1,
               "widthSegments": 1
             },
-            "type": "BanterGeometry"
+            "type": "Geometry"
           },
           {
             "initialized": true,
@@ -280,7 +250,7 @@
               "side": 0,
               "texture": ""
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "initialized": true,
@@ -301,28 +271,23 @@
           },
           {
             "initialized": true,
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "initialized": true,
         "layer": 5,
         "name": "Z-Ring",
         "parentId": "Scene/Rotation3",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "initialized": true,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 2,
+            "y": 0,
             "z": 0
           },
           "localRotation": {
-            "w": 1,
-            "x": 0,
+            "w": 0.7071067811865476,
+            "x": 0.7071067811865475,
             "y": 0,
             "z": 0
           },
@@ -331,8 +296,7 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "finished_loading": true,
@@ -340,7 +304,25 @@
     "layer": 0,
     "name": "Rotation3",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 2,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Transform",

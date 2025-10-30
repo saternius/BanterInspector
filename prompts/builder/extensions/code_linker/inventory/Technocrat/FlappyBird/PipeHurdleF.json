@@ -11,28 +11,6 @@
             "active": true,
             "components": [
               {
-                "id": "Transform_53821",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.1,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 0.25,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
-              {
                 "id": "BanterGeometry_70711",
                 "properties": {
                   "arc": 6.283185307179586,
@@ -63,7 +41,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_60326",
@@ -79,39 +57,35 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeHole",
             "name": "PipeHole",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 0.25,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "id": "Transform_22227",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -1.55,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 3,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "id": "BanterGeometry_44494",
                 "properties": {
@@ -143,7 +117,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_38754",
@@ -159,39 +133,35 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeShaft",
             "name": "PipeShaft",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -1.55,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 3,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "id": "Transform_3700",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "id": "BanterGeometry_17212",
                 "properties": {
@@ -223,7 +193,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_9293",
@@ -239,19 +209,14 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe/PipeTop",
             "name": "PipeTop",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "id": "Transform_23600",
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -268,9 +233,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "id": "BoxCollider_28117",
             "properties": {
@@ -290,13 +256,31 @@
           },
           {
             "id": "BanterColliderEvents_4780",
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe",
         "name": "Pipe",
         "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -304,28 +288,6 @@
           {
             "active": true,
             "components": [
-              {
-                "id": "Transform_90578",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0.1,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 0.25,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "id": "BanterGeometry_21230",
                 "properties": {
@@ -357,7 +319,7 @@
                   "width": 0.5,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_64508",
@@ -373,39 +335,35 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeHole",
             "name": "PipeHole",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0.1,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 0.25,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "id": "Transform_56830",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": -1.55,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 0.85,
-                    "y": 3,
-                    "z": 0.85
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "id": "BanterGeometry_83396",
                 "properties": {
@@ -437,7 +395,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_80933",
@@ -453,39 +411,35 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeShaft",
             "name": "PipeShaft",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": -1.55,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 0.85,
+                "y": 3,
+                "z": 0.85
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "id": "Transform_69436",
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "id": "BanterGeometry_52067",
                 "properties": {
@@ -517,7 +471,7 @@
                   "width": 1,
                   "widthSegments": 1
                 },
-                "type": "BanterGeometry"
+                "type": "Geometry"
               },
               {
                 "id": "BanterMaterial_55592",
@@ -533,27 +487,22 @@
                   "side": 0,
                   "texture": ""
                 },
-                "type": "BanterMaterial"
+                "type": "Material"
               }
             ],
             "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907/PipeTop",
             "name": "PipeTop",
             "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "id": "Transform_32166",
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
-                "y": 2,
+                "y": 0,
                 "z": 0
               },
               "localRotation": {
-                "w": 6.123233995736766e-17,
-                "x": 1,
+                "w": 1,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -562,9 +511,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "id": "BoxCollider_61518",
             "properties": {
@@ -584,28 +534,23 @@
           },
           {
             "id": "BanterColliderEvents_7578",
-            "type": "BanterColliderEvents"
+            "type": "ColliderEvents"
           }
         ],
         "finished_loading": true,
         "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457/Pipe_23907",
         "name": "Pipe_23907",
         "parentId": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "id": "Transform_41587",
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
-            "y": 2.376389456441852,
-            "z": 0.05000000000001295
+            "y": 2,
+            "z": 0
           },
           "localRotation": {
-            "w": 1,
-            "x": 0,
+            "w": 6.123233995736766e-17,
+            "x": 1,
             "y": 0,
             "z": 0
           },
@@ -614,9 +559,10 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "ctx": {
           "scored": false,
@@ -688,7 +634,25 @@
     "id": "Root/Flappy_1128_4930_82947/Pipes/PipeHurdleF_77457",
     "name": "PipeHurdleF_77457",
     "parentId": "Root/Flappy_1128_4930_82947/Pipes",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 2.376389456441852,
+        "z": 0.05000000000001295
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "folder": "FlappyBird",
   "itemType": "entity",

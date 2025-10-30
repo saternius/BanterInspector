@@ -7,28 +7,6 @@
       {
         "initialized": true,
         "properties": {
-          "localPosition": {
-            "x": 0,
-            "y": 1,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "initialized": true,
-        "properties": {
           "arc": 6.283185307179586,
           "depth": 0,
           "depthSegments": 1,
@@ -57,7 +35,7 @@
           "width": 0,
           "widthSegments": 0.35962327160493823
         },
-        "type": "BanterGeometry"
+        "type": "Geometry"
       },
       {
         "initialized": true,
@@ -73,7 +51,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "initialized": true,
@@ -94,7 +72,7 @@
       },
       {
         "initialized": true,
-        "type": "BanterColliderEvents"
+        "type": "ColliderEvents"
       },
       {
         "initialized": true,
@@ -127,7 +105,7 @@
             "z": 0
           }
         },
-        "type": "BanterRigidbody"
+        "type": "Rigidbody"
       },
       {
         "initialized": true,
@@ -144,7 +122,7 @@
           "fireRate": 0.1,
           "sensitivity": 1
         },
-        "type": "BanterHeldEvents"
+        "type": "HeldEvents"
       },
       {
         "initialized": true,
@@ -159,7 +137,25 @@
     "layer": 20,
     "name": "BarHack",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "Tippy",

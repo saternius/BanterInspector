@@ -10,33 +10,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": -0.15,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.15,
               "height": 0.15,
               "width": 0.15
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -65,7 +43,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -81,7 +59,25 @@
         "loadAsync": false,
         "name": "left",
         "parentId": "Scene/arrow_keys",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": -0.15,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -89,33 +85,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": 0.15,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.15,
               "height": 0.15,
               "width": 0.15
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -144,7 +118,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -160,7 +134,25 @@
         "loadAsync": false,
         "name": "right",
         "parentId": "Scene/arrow_keys",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0.15,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -168,33 +160,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0.15,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.15,
               "height": 0.15,
               "width": 0.15
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -223,7 +193,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -239,7 +209,25 @@
         "loadAsync": false,
         "name": "up",
         "parentId": "Scene/arrow_keys",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0.15,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -247,33 +235,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": -0.15,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.15,
               "height": 0.15,
               "width": 0.15
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -302,7 +268,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -318,7 +284,25 @@
         "loadAsync": false,
         "name": "down",
         "parentId": "Scene/arrow_keys",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": -0.15,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -326,33 +310,11 @@
           {
             "loadAsync": false,
             "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
-          {
-            "loadAsync": false,
-            "properties": {
               "depth": 0.15,
               "height": 0.15,
               "width": 0.15
             },
-            "type": "BanterBox"
+            "type": "Box"
           },
           {
             "loadAsync": false,
@@ -381,7 +343,7 @@
               ],
               "side": 0
             },
-            "type": "BanterMaterial"
+            "type": "Material"
           },
           {
             "loadAsync": false,
@@ -397,13 +359,8 @@
         "loadAsync": false,
         "name": "center",
         "parentId": "Scene/arrow_keys",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
             "y": 0,
@@ -420,8 +377,7 @@
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
+        }
       }
     ],
     "initialized": true,
@@ -429,7 +385,25 @@
     "loadAsync": false,
     "name": "arrow_keys",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

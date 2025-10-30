@@ -6,28 +6,6 @@
     "components": [
       {
         "loadAsync": false,
-        "properties": {
-          "localPosition": {
-            "x": -0.8383930463028298,
-            "y": 1.8909215308202107,
-            "z": 2.9338843285025122
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Transform"
-      },
-      {
-        "loadAsync": false,
         "options": {
           "context": "new"
         },
@@ -36,7 +14,7 @@
           "height": 0.15,
           "width": 0.15
         },
-        "type": "BanterBox"
+        "type": "Box"
       },
       {
         "loadAsync": false,
@@ -55,7 +33,7 @@
           "side": 0,
           "texture": ""
         },
-        "type": "BanterMaterial"
+        "type": "Material"
       },
       {
         "loadAsync": false,
@@ -99,7 +77,25 @@
     "loadAsync": false,
     "name": "arrow",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -0.8383930463028298,
+        "y": 1.8909215308202107,
+        "z": 2.9338843285025122
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "NESController",

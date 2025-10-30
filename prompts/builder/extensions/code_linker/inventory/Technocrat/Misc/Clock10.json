@@ -13,28 +13,6 @@
               {
                 "loadAsync": false,
                 "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
-              {
-                "loadAsync": false,
-                "properties": {
                   "addColliders": true,
                   "climbable": false,
                   "generateMipMaps": true,
@@ -51,33 +29,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -97,33 +71,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -143,33 +113,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -189,33 +155,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -235,33 +197,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -281,33 +239,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -327,33 +281,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.92
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -373,13 +323,8 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock10/Digit4",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -394,11 +339,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.92
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -430,33 +376,29 @@
         "loadAsync": false,
         "name": "Digit4",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "properties": {
@@ -476,33 +418,29 @@
         "loadAsync": false,
         "name": "Colon",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 0.90444737345679
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "properties": {
@@ -522,33 +460,29 @@
         "loadAsync": false,
         "name": "GlassBack",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 0.90444737345679
+          }
+        }
       },
       {
         "active": true,
         "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          },
           {
             "loadAsync": false,
             "properties": {
@@ -568,7 +502,25 @@
         "loadAsync": false,
         "name": "Case",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -576,28 +528,6 @@
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -640,13 +570,8 @@
             "loadAsync": false,
             "name": "RefreshIcon",
             "parentId": "Scene/Clock10/ButtonReset",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -663,9 +588,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "loadAsync": false,
             "properties": {
@@ -743,7 +669,25 @@
         "loadAsync": false,
         "name": "ButtonReset",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -751,28 +695,6 @@
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -792,33 +714,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -838,33 +756,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -884,33 +798,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -930,33 +840,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -976,33 +882,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1022,33 +924,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1068,33 +966,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.867902
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1114,15 +1008,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock10/Digit3",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 0.7728888888888888,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -1135,11 +1024,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.867902
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -1171,7 +1061,25 @@
         "loadAsync": false,
         "name": "Digit3",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 0.7728888888888888,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1179,28 +1087,6 @@
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1220,33 +1106,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1266,33 +1148,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1312,33 +1190,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1358,33 +1232,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1404,33 +1274,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1450,33 +1316,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1496,33 +1358,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.77
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1542,15 +1400,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock10/Digit1",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 2.6344285096213045,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -1563,11 +1416,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.77
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -1599,7 +1453,25 @@
         "loadAsync": false,
         "name": "Digit1",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 2.6344285096213045,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -1607,28 +1479,6 @@
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1648,33 +1498,29 @@
             "loadAsync": false,
             "name": "A",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1694,33 +1540,29 @@
             "loadAsync": false,
             "name": "B",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1740,33 +1582,29 @@
             "loadAsync": false,
             "name": "F",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1786,33 +1624,29 @@
             "loadAsync": false,
             "name": "E",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": false,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1832,33 +1666,29 @@
             "loadAsync": false,
             "name": "G",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1878,33 +1708,29 @@
             "loadAsync": false,
             "name": "D",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1924,33 +1750,29 @@
             "loadAsync": false,
             "name": "C",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
+            "persistent": true,
+            "transform": {
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              }
+            }
           },
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 0.82
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -1970,15 +1792,10 @@
             "loadAsync": false,
             "name": "backlight",
             "parentId": "Scene/Clock10/Digit2",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
-                "x": 1.8303024617696162,
+                "x": 0,
                 "y": 0,
                 "z": 0
               },
@@ -1991,11 +1808,12 @@
               "localScale": {
                 "x": 1,
                 "y": 1,
-                "z": 1
+                "z": 0.82
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "inventoryItem": {
               "active": false,
@@ -2027,7 +1845,25 @@
         "loadAsync": false,
         "name": "Digit2",
         "parentId": "Scene/Clock10",
-        "persistent": true
+        "persistent": true,
+        "transform": {
+          "localPosition": {
+            "x": 1.8303024617696162,
+            "y": 0,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          }
+        }
       },
       {
         "active": true,
@@ -2035,28 +1871,6 @@
           {
             "active": true,
             "components": [
-              {
-                "loadAsync": false,
-                "properties": {
-                  "localPosition": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localRotation": {
-                    "w": 1,
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                  },
-                  "localScale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                  }
-                },
-                "type": "Transform"
-              },
               {
                 "loadAsync": false,
                 "properties": {
@@ -2099,13 +1913,8 @@
             "loadAsync": false,
             "name": "PlayPauseIcon",
             "parentId": "Scene/Clock10/ButtonPlayPause",
-            "persistent": true
-          }
-        ],
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
+            "persistent": true,
+            "transform": {
               "localPosition": {
                 "x": 0,
                 "y": 0,
@@ -2122,9 +1931,10 @@
                 "y": 1,
                 "z": 1
               }
-            },
-            "type": "Transform"
-          },
+            }
+          }
+        ],
+        "components": [
           {
             "loadAsync": false,
             "properties": {
@@ -2200,13 +2010,8 @@
         "loadAsync": false,
         "name": "ButtonPlayPause",
         "parentId": "Scene/Clock10",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
             "x": 0,
             "y": 0,
@@ -2219,13 +2024,14 @@
             "z": 0
           },
           "localScale": {
-            "x": 0.5,
-            "y": 0.5,
-            "z": 0.5
+            "x": 1,
+            "y": 1,
+            "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "inventoryItem": {
           "active": false,
@@ -2275,7 +2081,25 @@
     "loadAsync": false,
     "name": "Clock10",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localRotation": {
+        "w": 1,
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "localScale": {
+        "x": 0.5,
+        "y": 0.5,
+        "z": 0.5
+      }
+    }
   },
   "description": "",
   "folder": "Misc",

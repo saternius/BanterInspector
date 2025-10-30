@@ -6,61 +6,33 @@
     "children": [
       {
         "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "properties": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Transform"
-          }
-        ],
         "initialized": true,
         "layer": 0,
         "loadAsync": false,
         "name": "UI",
         "parentId": "Scene/SpaceProps",
-        "persistent": true
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "properties": {
+        "persistent": true,
+        "transform": {
           "localPosition": {
-            "x": -4.5080956,
-            "y": -4.1634496,
-            "z": -6.5867946
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localRotation": {
-            "w": 0.5859767,
-            "x": 0.09129753,
-            "y": 0.7989975,
-            "z": -0.09949398
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
           },
           "localScale": {
             "x": 1,
             "y": 1,
             "z": 1
           }
-        },
-        "type": "Transform"
-      },
+        }
+      }
+    ],
+    "components": [
       {
         "loadAsync": false,
         "properties": {
@@ -75,7 +47,25 @@
     "loadAsync": false,
     "name": "SpaceProps",
     "parentId": "Scene",
-    "persistent": true
+    "persistent": true,
+    "transform": {
+      "localPosition": {
+        "x": -4.5080956,
+        "y": -4.1634496,
+        "z": -6.5867946
+      },
+      "localRotation": {
+        "w": 0.5859767,
+        "x": 0.09129753,
+        "y": 0.7989975,
+        "z": -0.09949398
+      },
+      "localScale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      }
+    }
   },
   "description": "",
   "folder": "UIs",
