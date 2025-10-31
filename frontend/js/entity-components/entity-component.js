@@ -14,6 +14,7 @@ export class EntityComponent{
         this.properties = (properties) ? this.fillProperties(properties) : this.defaultProperties();
         this.options = options || {};
         this.loadAsync = options?.loadAsync || false;
+      //
         if(sceneComponent){
             this.properties = this.extractProperties(sceneComponent);
             this._bs = sceneComponent;
@@ -25,6 +26,7 @@ export class EntityComponent{
             await this._setMany(this.properties)
         }
         window.SM.entityData.componentMap[this.id] = this;
+        delete this.properties.id;
         this._initialized = true;
 
 
@@ -34,9 +36,10 @@ export class EntityComponent{
 
         this.ref.on("value", (snapshot)=>{
             let data = snapshot.val();
+            if(!data) return;
+            delete data.id;
             for(let p in data){
                 if(this.properties[p] !== data[p]){
-                    //log("component", "value changed", this.id, p, data[p])
                     this._set(p, data[p]);
                 }
             }
@@ -95,22 +98,12 @@ export class EntityComponent{
         if(this._bs){
             this._bs.Destroy();
         }
-        this._entity.components.splice(this._entity.components.indexOf(this), 1);
-        delete SM.entityData.componentMap[this.id];
-        
-        // Remove any space properties associated with this component
-        const propsToRemove = [];
-        // Check both public and protected properties
-        Object.keys(SM.props).forEach(key => {
-            if (key.includes(`__${this.id}/`)) {
-                propsToRemove.push(key);
-            }
-        });
-        // Remove the properties
-        for (const key of propsToRemove) {
-            delete SM.props[key];
+        let idx = this._entity.components.indexOf(this);
+        if(idx !== -1){
+            this._entity.components.splice(idx, 1);
+            delete SM.entityData.componentMap[this.id];
+            inspector.propertiesPanel.render(this._entity.id);
         }
-        inspector.propertiesPanel.render(this._entity.id);
     }
     
     async Set(property, value){

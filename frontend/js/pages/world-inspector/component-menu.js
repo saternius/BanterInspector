@@ -196,6 +196,7 @@ export class ComponentMenu {
      * Add component to selected entity
      */
     async addComponent(componentType) {
+        log("component-menu", "adding component =>", componentType)
         if (!SM.selectedEntity) return;
         
         const entity = SM.getSelectedEntity();
@@ -209,10 +210,7 @@ export class ComponentMenu {
         );
         
         await changeManager.applyChange(change);
-        
-        
         await this.handleComponentBundles(componentType);
-
         // Hide menu and refresh UI
         this.hide();
         SM.selectEntity(entity.id);

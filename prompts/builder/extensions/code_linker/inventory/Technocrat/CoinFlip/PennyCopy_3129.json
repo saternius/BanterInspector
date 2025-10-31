@@ -1,0 +1,381 @@
+{
+  "author": "Technocrat",
+  "created": 1761944033468,
+  "data": {
+    "Components": {
+      "AudioSource_53807": {
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "volume": 1
+      },
+      "AudioSource_58404": {
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "volume": 1
+      },
+      "AudioSource_67093": {
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "volume": 1
+      },
+      "AudioSource_80625": {
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "volume": 1
+      },
+      "Cylinder_10151": {
+        "height": 0.02,
+        "radialSegments": 32,
+        "radius": 0.1
+      },
+      "GLTF_9628": {
+        "addColliders": false,
+        "climbable": false,
+        "generateMipMaps": true,
+        "legacyRotate": false,
+        "nonConvexColliders": false,
+        "slippery": false,
+        "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+      },
+      "Material_61021": {
+        "color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1
+        },
+        "generateMipMaps": true,
+        "shaderName": "Standard",
+        "side": 0,
+        "texture": ""
+      },
+      "Rigidbody_7861": {
+        "angularDrag": 0.05,
+        "angularVelocity": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "centerOfMass": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "collisionDetectionMode": 0,
+        "drag": 0,
+        "freezePositionX": false,
+        "freezePositionY": false,
+        "freezePositionZ": false,
+        "freezeRotationX": false,
+        "freezeRotationY": false,
+        "freezeRotationZ": false,
+        "isKinematic": false,
+        "mass": 1,
+        "useGravity": true,
+        "velocity": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "SyncedObject_98116": {
+        "kinematicIfNotOwned": true,
+        "syncPosition": true,
+        "syncRotation": true,
+        "takeOwnershipOnCollision": false,
+        "takeOwnershipOnGrab": true
+      }
+    },
+    "Entity": {
+      "PennyCopy_3129": {
+        "PennyMesh": {
+          "__meta": {
+            "active": true,
+            "components": {
+              "GLTF_9628": true
+            },
+            "layer": 0,
+            "localPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localRotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localScale": {
+              "x": 0.1,
+              "y": 0.1,
+              "z": 0.1
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "uuid": 4828955626924
+          }
+        },
+        "__meta": {
+          "active": true,
+          "components": {
+            "Cylinder_10151": true,
+            "Material_61021": true,
+            "Rigidbody_7861": true,
+            "SyncedObject_98116": true
+          },
+          "layer": 0,
+          "localPosition": {
+            "x": 0,
+            "y": 0.65,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "uuid": 2229754434427
+        },
+        "sfx": {
+          "__meta": {
+            "active": true,
+            "layer": 0,
+            "localPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localRotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localScale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "uuid": 699152289250
+          },
+          "flip": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_67093": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 2005118402146
+            }
+          },
+          "nothing": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_53807": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 8760244216927
+            }
+          },
+          "preloader": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_58404": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 5100594663217
+            }
+          },
+          "success": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_80625": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 8700378880270
+            }
+          }
+        }
+      }
+    }
+  },
+  "description": "",
+  "folder": "CoinFlip",
+  "icon": "📦",
+  "itemType": "entity",
+  "last_used": 1761944033468,
+  "name": "PennyCopy_3129"
+}

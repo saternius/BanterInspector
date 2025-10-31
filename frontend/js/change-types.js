@@ -1,4 +1,3 @@
-
 // Import required dependencies
 const { deepClone, parseBest, appendToShell, showNotification } = await import(`${window.repoUrl}/utils.js`);
 const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
@@ -265,6 +264,7 @@ export class AddComponentChange extends Change{
         this.componentType = componentType;
         this.options = options || {};
         this.componentProperties = this.options.componentProperties || {};
+        this.componentId = this.componentProperties.id || `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
 
         // Validate component type exists
         const validation = window.ChangeTypes?.validateComponent(componentType);
@@ -288,26 +288,17 @@ export class AddComponentChange extends Change{
     }
 
     async apply() {
-        super.apply();
-        if(!this.componentProperties.id){
-            this.componentProperties.id = `${this.componentType}_${Math.floor(Math.random() * 10000)}`;
-        }
-   
+        super.apply();   
         let entity = SM.getEntityById(this.entityId);
         if(!entity){
             this.void(`Entity not found => ${this.entityId}`);
             return;
         }
 
-        const ComponentClass = componentTypeMap[this.componentType];            
-        if (!ComponentClass) {
-            log("scene", `Component class not found for type: ${this.componentType}`);
-            return;
-        }
-
-        this.options.context = "spawn";
-        let entityComponent = await new ComponentClass().init(entity, null, this.componentProperties, this.options);
-        entity.AddComponent(entityComponent);
+        this.componentProperties.id = this.componentId; //needs at least 1 prop to register with firebase
+        log("AddComponentChange", "adding component =>", this.componentId, this.componentProperties);
+        await net.db.ref(`space/${net.spaceId}/components/${this.componentId}`).set(this.componentProperties);
+        await net.db.ref(`space/${net.spaceId}/${entity.id}/__meta/components/${this.componentId}`).set(true);
 
         inspector.propertiesPanel.render();
 
@@ -316,7 +307,7 @@ export class AddComponentChange extends Change{
         const returnWhenComponentLoaded = () => {
             return new Promise(resolve => {
               const check = () => {
-                const component = SM.getEntityComponentById(this.componentProperties.id, false);
+                const component = SM.getEntityComponentById(this.componentId, false);
                 if (component !== undefined && component._initialized) {
                   resolve(component);
                 } else {
@@ -336,9 +327,8 @@ export class AddComponentChange extends Change{
 
     async undo() {
         super.undo();
-        if (!this.componentProperties.id) return;
-        let data = `component_removed¶${this.componentProperties.id}`
-        net.sendOneShot(data);
+        if (!this.componentId) return;
+        log("TODO", "implement undo for AddComponentChange");
     }
 
 
@@ -797,15 +787,22 @@ export class LoadItemChange extends Change{
         
         let everythingLoaded = ()=>{
             let entity = SM.getEntityById(this.entityId, false)
-            if(!entity) return false;
+            if(!entity){
+                log("loadItem", "entity not found =>", this.entityId)
+                return false;
+            }
 
             let componentsLoaded = true;
             Object.keys(this.itemData.Components).forEach(compId=>{
-                if(!SM.getEntityComponentById(compId, false)){
+                let component = SM.getEntityComponentById(compId, false);
+                if(!component){
+                    log("loadItem", "component not found =>", compId)
                     componentsLoaded = false;
-                }
-                if(entity.components.find(c=>c.id === compId) === undefined){
-                    componentsLoaded = false;
+                }else{
+                    if(!component._entity.components.includes(component)){
+                        log("loadItem", `${component.id} not a component of ${entity.id} yet`)
+                        componentsLoaded = false;
+                    }
                 }
             })
             return componentsLoaded;

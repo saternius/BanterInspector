@@ -2,410 +2,86 @@
   "author": "Technocrat",
   "created": 1760653997499,
   "data": {
-    "active": true,
-    "children": [
-      {
-        "active": true,
-        "components": [
-          {
-            "loadAsync": false,
-            "options": {
-              "cmdUser": "Technocrat",
-              "context": "item",
-              "loadAsync": false
-            },
-            "properties": {
-              "addColliders": false,
-              "climbable": false,
-              "generateMipMaps": true,
-              "legacyRotate": false,
-              "nonConvexColliders": false,
-              "slippery": false,
-              "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
-            },
-            "type": "GLTF"
-          }
-        ],
-        "initialized": true,
-        "layer": 0,
-        "loadAsync": false,
-        "name": "PennyMesh",
-        "parentId": "Scene/Penny7",
-        "persistent": true,
-        "transform": {
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 0.1,
-            "y": 0.1,
-            "z": 0.1
-          }
-        },
-        "type": "Entity",
-        "uuid": 8648057838228
+    "Components": {
+      "AudioSource_3987": {
+        "_owner": "Technocrat",
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "type": "AudioSource",
+        "volume": 1
       },
-      {
-        "active": true,
-        "children": [
-          {
-            "active": true,
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "bypassEffects": false,
-                  "bypassListenerEffects": false,
-                  "bypassReverbZones": false,
-                  "loop": false,
-                  "mute": false,
-                  "pitch": 1,
-                  "playOnAwake": true,
-                  "spatialBlend": 1,
-                  "volume": 1
-                },
-                "type": "AudioSource"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "loadAsync": false,
-            "name": "flip",
-            "parentId": "Scene/Penny7/sfx",
-            "persistent": true,
-            "transform": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Entity",
-            "uuid": 6682264681844
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "bypassEffects": false,
-                  "bypassListenerEffects": false,
-                  "bypassReverbZones": false,
-                  "loop": false,
-                  "mute": false,
-                  "pitch": 1,
-                  "playOnAwake": true,
-                  "spatialBlend": 1,
-                  "volume": 1
-                },
-                "type": "AudioSource"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "loadAsync": false,
-            "name": "success",
-            "parentId": "Scene/Penny7/sfx",
-            "persistent": true,
-            "transform": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Entity",
-            "uuid": 6682114098112
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "bypassEffects": false,
-                  "bypassListenerEffects": false,
-                  "bypassReverbZones": false,
-                  "loop": false,
-                  "mute": false,
-                  "pitch": 1,
-                  "playOnAwake": true,
-                  "spatialBlend": 1,
-                  "volume": 1
-                },
-                "type": "AudioSource"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "loadAsync": false,
-            "name": "nothing",
-            "parentId": "Scene/Penny7/sfx",
-            "persistent": true,
-            "transform": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Entity",
-            "uuid": 6047095781272
-          },
-          {
-            "active": true,
-            "components": [
-              {
-                "loadAsync": false,
-                "options": {
-                  "cmdUser": "Technocrat",
-                  "context": "item",
-                  "loadAsync": false
-                },
-                "properties": {
-                  "bypassEffects": false,
-                  "bypassListenerEffects": false,
-                  "bypassReverbZones": false,
-                  "loop": false,
-                  "mute": false,
-                  "pitch": 1,
-                  "playOnAwake": true,
-                  "spatialBlend": 1,
-                  "volume": 0
-                },
-                "type": "AudioSource"
-              }
-            ],
-            "initialized": true,
-            "layer": 0,
-            "loadAsync": false,
-            "name": "preloader",
-            "parentId": "Scene/Penny7/sfx",
-            "persistent": true,
-            "transform": {
-              "localPosition": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localRotation": {
-                "w": 1,
-                "x": 0,
-                "y": 0,
-                "z": 0
-              },
-              "localScale": {
-                "x": 1,
-                "y": 1,
-                "z": 1
-              }
-            },
-            "type": "Entity",
-            "uuid": 2642021711853
-          }
-        ],
-        "initialized": true,
-        "layer": 0,
-        "loadAsync": false,
-        "name": "sfx",
-        "parentId": "Scene/Penny7",
-        "persistent": true,
-        "transform": {
-          "localPosition": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localRotation": {
-            "w": 1,
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "localScale": {
-            "x": 1,
-            "y": 1,
-            "z": 1
-          }
-        },
-        "type": "Entity",
-        "uuid": 5777140613129
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "kinematicIfNotOwned": true,
-          "syncPosition": true,
-          "syncRotation": true,
-          "takeOwnershipOnCollision": false,
-          "takeOwnershipOnGrab": true
-        },
-        "type": "SyncedObject"
+      "AudioSource_4935": {
+        "_owner": "Technocrat",
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "type": "AudioSource",
+        "volume": 1
       },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "height": 0.02,
-          "radialSegments": 32,
-          "radius": 0.1
-        },
+      "AudioSource_8776": {
+        "_owner": "Technocrat",
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "type": "AudioSource",
+        "volume": 1
+      },
+      "AudioSource_9849": {
+        "_owner": "Technocrat",
+        "bypassEffects": false,
+        "bypassListenerEffects": false,
+        "bypassReverbZones": false,
+        "loop": false,
+        "mute": false,
+        "pitch": 1,
+        "playOnAwake": true,
+        "spatialBlend": 1,
+        "type": "AudioSource",
+        "volume": 0
+      },
+      "Cylinder_3327": {
+        "_owner": "Technocrat",
+        "height": 0.02,
+        "radialSegments": 32,
+        "radius": 0.1,
         "type": "Cylinder"
       },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "convex": true,
-          "isTrigger": false
-        },
+      "GLTF_7562": {
+        "_owner": "Technocrat",
+        "addColliders": false,
+        "climbable": false,
+        "generateMipMaps": true,
+        "legacyRotate": false,
+        "nonConvexColliders": false,
+        "slippery": false,
+        "type": "GLTF",
+        "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+      },
+      "MeshCollider_4905": {
+        "_owner": "Technocrat",
+        "convex": true,
+        "isTrigger": false,
         "type": "MeshCollider"
       },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "angularDrag": 0.05,
-          "angularVelocity": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "centerOfMass": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          },
-          "collisionDetectionMode": 0,
-          "drag": 0,
-          "freezePositionX": false,
-          "freezePositionY": false,
-          "freezePositionZ": false,
-          "freezeRotationX": false,
-          "freezeRotationY": false,
-          "freezeRotationZ": false,
-          "isKinematic": false,
-          "mass": 1,
-          "useGravity": true,
-          "velocity": {
-            "x": 0,
-            "y": 0,
-            "z": 0
-          }
-        },
-        "type": "Rigidbody"
-      },
-      {
-        "inventoryItem": {
-          "active": false,
-          "author": "Technocrat",
-          "autoUpdate": false,
-          "created": 1759783702790,
-          "data": "this._entity.penny = true;\nlet consecutive_heads = 0;\nconst tracks = {\n    'flip_1': 'flips/flip_1.wav',\n    'flip_2': 'flips/flip_2.wav',\n    'flip_3': 'flips/flip_3.wav',\n    'flip_4': 'flips/flip_4.wav',\n    'flip_5': 'flips/flip_5.wav',\n    'flip_6': 'flips/flip_6.wav',\n    'flip_7': 'flips/flip_7.wav',\n    'flip_8': 'flips/flip_8.wav',\n    'flip_9': 'flips/flip_9.wav',\n    'flip_10': 'flips/flip_10.wav',\n    'flip_11': 'flips/flip_11.wav',\n    'flip_12': 'flips/flip_12.wav',\n    'flip_13': 'flips/flip_13.wav',\n    'flip_14': 'flips/flip_14.wav',\n    'flip_15': 'flips/flip_15.wav',\n    'flip_16': 'flips/flip_16.wav',\n    'flip_17': 'flips/flip_17.wav',\n    'flip_18': 'flips/flip_18.wav',\n    'flip_19': 'flips/flip_19.wav',\n    'flip_20': 'flips/flip_20.wav',\n    'flip_21': 'flips/flip_21.wav',\n    'flip_22': 'flips/flip_22.wav',\n    'flip_23': 'flips/flip_23.wav',\n    'flip_24': 'flips/flip_24.wav',\n    'flip_25': 'flips/flip_25.wav',\n    'success_1': 'success/success_1.wav',\n    'success_2': 'success/success_2.wav',\n    'success_3': 'success/success_3.wav',\n    'success_4': 'success/success_4.wav',\n    'success_5': 'success/success_5.wav',\n    'success_6': 'success/success_6.wav',\n    'success_7': 'success/success_7.wav',\n    'success_8': 'success/success_8.wav',\n    'success_9': 'success/success_9.wav',\n    'success_10': 'success/success_10.wav',\n    'success_11': 'success/success_11.wav',\n    'success_12': 'success/success_12.wav',\n    'success_13': 'success/success_13.wav',\n    'success_14': 'success/success_14.wav',\n    'nothing': 'tap.mp3'\n}\n\nthis.onLoaded = ()=>{\n    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent(\"AudioSource\")\n    Object.values(tracks).forEach((suburl)=>{\n        preloadAudio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${suburl}`)\n    })\n}\n\n\nlet play_audio = (track)=>{\n    let source = track.split('_')[0]\n    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent(\"AudioSource\")\n    audio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${tracks[track]}`)\n}\n\nlet audio = this._entity.getComponent(\"AudioSource\")\nthis.flip = async ()=>{\n    let up_force = Math.random()*2+2\n    let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let y_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let z_torque = (Math.random() - 0.5) * 10 + 1  // Range: -4 to +6 \n    log(\"flipable\", up_force, x_torque, y_torque, z_torque)\n\n    let rigidBody = this._entity.getComponent(\"Rigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return null;\n    }\n\n    // Apply flip forces\n    rigidBody._bs.AddForce({x: 0, y: up_force, z: 0}, BS.ForceMode.Impulse);\n    rigidBody._bs.AddTorque({x: x_torque, y:y_torque,  z: z_torque}, BS.ForceMode.Impulse);\n    play_audio('flip_'+Math.floor(Math.random()*25+1))\n    // Track the coin and return result\n    return await this.trackCoin();\n}\n\n// Function to check if coin is heads or tails\nthis.isCoinHeads = () => {\n    // Get the rotation of the coin\n    const rotation = this._entity.Get(\"rotation\");\n\n    if (!rotation) {\n        return false;\n    }\n\n    // Convert quaternion to up vector\n    // For a coin, we check if the local \"up\" vector points upward in world space\n    // Quaternion to matrix conversion for the up vector (0,1,0)\n    const { x, z } = rotation;\n\n    // Calculate the world \"up\" direction from the coin's local up axis\n    // We only need the Y component to determine if the coin is facing up or down\n    const upY = 1 - 2 * (x*x + z*z);\n\n    // If the coin's up vector points upward (positive Y), it's heads\n    // If it points downward (negative Y), it's tails\n    return !(upY > 0);\n}\n\n// Async function to track the coin until it settles\nthis.trackCoin = () => {\n    log('flipable', 'Tracking coin');\n    return new Promise((resolve) => {\n        // Wait 500ms before starting to track to let physics kick in\n        setTimeout(() => {\n            let checkCount = 0;\n            let hasMovedSignificantly = false;\n            let lastPos = null;\n\n            const checkInterval = setInterval(() => {\n                const rigidBody = this._entity.getComponent(\"Rigidbody\");\n                if (!rigidBody) {\n                    clearInterval(checkInterval);\n                    resolve(null);\n                    return;\n                }\n\n                // Try to get angular velocity from the BanterScript rigidbody\n                let angularVelocity = rigidBody._bs.angularVelocity;\n                let velocity = rigidBody._bs.velocity;\n\n                if (!angularVelocity) {\n                    // Fallback: check rotation changes\n                    const currentRot = this._entity.Get(\"rotation\");\n\n                    if (lastPos && lastPos.rotation) {\n                        const dx = currentRot.x - lastPos.rotation.x;\n                        const dy = currentRot.y - lastPos.rotation.y;\n                        const dz = currentRot.z - lastPos.rotation.z;\n                        const dw = currentRot.w - lastPos.rotation.w;\n                        angularVelocity = { x: dx * 10, y: dy * 10, z: dz * 10 }; // Approximate angular velocity\n                    } else {\n                        angularVelocity = { x: 100, y: 100, z: 100 }; // Force movement detection on first check\n                    }\n                    lastPos = { position: this._entity.Get(\"position\"), rotation: currentRot };\n                }\n\n                // Check both angular and linear velocity for settling\n                const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n                const linearSpeed = velocity ? Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2) : 0;\n\n                // Track if coin has moved/rotated significantly\n                if (!hasMovedSignificantly && (angularSpeed > 0.35 || linearSpeed > 0.35)) {\n                    hasMovedSignificantly = true;\n                    log('flipable', `Coin has moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n                if(!hasMovedSignificantly){\n                    log('flipable', `Coin has not moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n\n\n                checkCount++;\n\n                // Only consider it settled if it has moved significantly AND both angular and linear speeds are low\n                if (hasMovedSignificantly && angularSpeed < 0.25 && linearSpeed < 0.25) {\n                    clearInterval(checkInterval);\n\n                    // Check if it's heads or tails\n                    const isHeads = this.isCoinHeads();\n                    if(isHeads){\n                        consecutive_heads++;\n                    }else{\n                        consecutive_heads = 0;\n                    }\n                    const result = isHeads ? 'heads' : 'tails';\n                    log('flipable', `Coin landed: ${result.toUpperCase()}`);\n                    if(isHeads){\n                        play_audio('success_'+consecutive_heads)\n                    }else{\n                        play_audio('nothing')\n                    }\n                    resolve(result);\n                }\n\n                // Timeout after 10 seconds\n                if (checkCount > 200) {\n                    log('flipable', `Coin tracking timeout`);\n                    clearInterval(checkInterval);\n                    // Still check the final position\n                    const isHeads = this.isCoinHeads();\n                    const result = isHeads ? 'heads' : 'tails';\n                    resolve(result);\n                }\n            }, 50); // Check every 100ms\n        }, 100); // Wait 500ms before starting tracking\n    });\n}\n\n\nthis.onStart = ()=>{\n    log(\"flipable\", \"onStart called - setting up watchers\");\n\n    // Test WatchTransform with detailed logging\n    const watchResult = this._entity.WatchTransform([\"position\", \"rotation\"], (data)=>{\n        log(\"flipable\", \"WatchTransform callback fired!\");\n        log(\"flipable\", \"Callback data received:\", data);\n        log(\"flipable\", \"Current position:\", this._entity.Get(\"position\"));\n        log(\"flipable\", \"Current rotation:\", this._entity.Get(\"rotation\"));\n    });\n\n    log(\"flipable\", \"WatchTransform returned:\", watchResult);\n    log(\"flipable\", \"Return type:\", typeof watchResult);\n    log(\"flipable\", \"Is Promise?\", watchResult instanceof Promise);\n\n    // Also test the rigidbody watcher\n    const rigidBody = this._entity.getComponent(\"Rigidbody\");\n    if(rigidBody) {\n        rigidBody.WatchProperties(['velocity', 'angularVelocity'], (data)=>{\n            log(\"flipable\", \"velocity changed, data:\", data);\n            log(\"flipable\", \"Current velocity:\", rigidBody._bs.velocity);\n        });\n        log(\"flipable\", \"Rigidbody velocity watcher set up\");\n    } else {\n        log(\"flipable\", \"WARNING: No rigidbody found!\");\n    }\n\n    log(\"flipable\", \"onStart completed - all watchers should be active\");\n}\n\nthis.onDestroy = ()=>{\n    // this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
-          "description": "",
-          "folder": "CoinFlip",
-          "global": false,
-          "icon": "📜",
-          "imported": true,
-          "importedAt": 1760424216324,
-          "importedFrom": "inventory/Technocrat/CoinFlip",
-          "itemType": "script",
-          "lastUsed": 1759855136851,
-          "last_used": 1760425892976,
-          "name": "Flipable.js",
-          "remote": true,
-          "startup": false,
-          "startupSequence": "onSceneLoaded"
-        },
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "file": "Flipable.js",
-          "name": "Flipable"
-        },
-        "type": "MonoBehavior"
-      },
-      {
+      "MonoBehavior_476": {
+        "_owner": "Technocrat",
+        "file": "FlipController.js",
         "inventoryItem": {
           "active": false,
           "author": "Technocrat",
@@ -427,48 +103,340 @@
           "startup": false,
           "startupSequence": "onSceneLoaded"
         },
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "file": "FlipController.js",
-          "name": "myScript"
-        },
+        "name": "myScript",
         "type": "MonoBehavior"
-      }
-    ],
-    "initialized": true,
-    "layer": 5,
-    "loadAsync": false,
-    "name": "Penny7",
-    "networkId": "Penny7",
-    "neworkId": "Penny7",
-    "parentId": "Scene",
-    "penny": true,
-    "persistent": true,
-    "transform": {
-      "localPosition": {
-        "x": 0,
-        "y": 0.65,
-        "z": 0
       },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
+      "MonoBehavior_9853": {
+        "_owner": "Technocrat",
+        "file": "Flipable.js",
+        "inventoryItem": {
+          "active": false,
+          "author": "Technocrat",
+          "autoUpdate": false,
+          "created": 1759783702790,
+          "data": "this._entity.penny = true;\nlet consecutive_heads = 0;\nconst tracks = {\n    'flip_1': 'flips/flip_1.wav',\n    'flip_2': 'flips/flip_2.wav',\n    'flip_3': 'flips/flip_3.wav',\n    'flip_4': 'flips/flip_4.wav',\n    'flip_5': 'flips/flip_5.wav',\n    'flip_6': 'flips/flip_6.wav',\n    'flip_7': 'flips/flip_7.wav',\n    'flip_8': 'flips/flip_8.wav',\n    'flip_9': 'flips/flip_9.wav',\n    'flip_10': 'flips/flip_10.wav',\n    'flip_11': 'flips/flip_11.wav',\n    'flip_12': 'flips/flip_12.wav',\n    'flip_13': 'flips/flip_13.wav',\n    'flip_14': 'flips/flip_14.wav',\n    'flip_15': 'flips/flip_15.wav',\n    'flip_16': 'flips/flip_16.wav',\n    'flip_17': 'flips/flip_17.wav',\n    'flip_18': 'flips/flip_18.wav',\n    'flip_19': 'flips/flip_19.wav',\n    'flip_20': 'flips/flip_20.wav',\n    'flip_21': 'flips/flip_21.wav',\n    'flip_22': 'flips/flip_22.wav',\n    'flip_23': 'flips/flip_23.wav',\n    'flip_24': 'flips/flip_24.wav',\n    'flip_25': 'flips/flip_25.wav',\n    'success_1': 'success/success_1.wav',\n    'success_2': 'success/success_2.wav',\n    'success_3': 'success/success_3.wav',\n    'success_4': 'success/success_4.wav',\n    'success_5': 'success/success_5.wav',\n    'success_6': 'success/success_6.wav',\n    'success_7': 'success/success_7.wav',\n    'success_8': 'success/success_8.wav',\n    'success_9': 'success/success_9.wav',\n    'success_10': 'success/success_10.wav',\n    'success_11': 'success/success_11.wav',\n    'success_12': 'success/success_12.wav',\n    'success_13': 'success/success_13.wav',\n    'success_14': 'success/success_14.wav',\n    'nothing': 'tap.mp3'\n}\n\nthis.onLoaded = ()=>{\n    let preloadAudio = SM.getEntityById(`${this._entity.id}/sfx/preloader`).getComponent(\"AudioSource\")\n    Object.values(tracks).forEach((suburl)=>{\n        preloadAudio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${suburl}`)\n    })\n}\n\n\nlet play_audio = (track)=>{\n    let source = track.split('_')[0]\n    let audio = SM.getEntityById(`${this._entity.id}/sfx/${source}`).getComponent(\"AudioSource\")\n    audio._bs.PlayOneShotFromUrl(`https://suitable-bulldog-flying.ngrok-free.app/assets/audio/${tracks[track]}`)\n}\n\nlet audio = this._entity.getComponent(\"AudioSource\")\nthis.flip = async ()=>{\n    let up_force = Math.random()*2+2\n    let x_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let y_torque = (Math.random() - 0.5) * 4    // Range: -2 to +2\n    let z_torque = (Math.random() - 0.5) * 10 + 1  // Range: -4 to +6 \n    log(\"flipable\", up_force, x_torque, y_torque, z_torque)\n\n    let rigidBody = this._entity.getComponent(\"Rigidbody\")\n    if(!rigidBody){\n        log(\"flipable\", \"NO RIGIDBODY\")\n        return null;\n    }\n\n    // Apply flip forces\n    rigidBody._bs.AddForce({x: 0, y: up_force, z: 0}, BS.ForceMode.Impulse);\n    rigidBody._bs.AddTorque({x: x_torque, y:y_torque,  z: z_torque}, BS.ForceMode.Impulse);\n    play_audio('flip_'+Math.floor(Math.random()*25+1))\n    // Track the coin and return result\n    return await this.trackCoin();\n}\n\n// Function to check if coin is heads or tails\nthis.isCoinHeads = () => {\n    // Get the rotation of the coin\n    const rotation = this._entity.Get(\"rotation\");\n\n    if (!rotation) {\n        return false;\n    }\n\n    // Convert quaternion to up vector\n    // For a coin, we check if the local \"up\" vector points upward in world space\n    // Quaternion to matrix conversion for the up vector (0,1,0)\n    const { x, z } = rotation;\n\n    // Calculate the world \"up\" direction from the coin's local up axis\n    // We only need the Y component to determine if the coin is facing up or down\n    const upY = 1 - 2 * (x*x + z*z);\n\n    // If the coin's up vector points upward (positive Y), it's heads\n    // If it points downward (negative Y), it's tails\n    return !(upY > 0);\n}\n\n// Async function to track the coin until it settles\nthis.trackCoin = () => {\n    log('flipable', 'Tracking coin');\n    return new Promise((resolve) => {\n        // Wait 500ms before starting to track to let physics kick in\n        setTimeout(() => {\n            let checkCount = 0;\n            let hasMovedSignificantly = false;\n            let lastPos = null;\n\n            const checkInterval = setInterval(() => {\n                const rigidBody = this._entity.getComponent(\"Rigidbody\");\n                if (!rigidBody) {\n                    clearInterval(checkInterval);\n                    resolve(null);\n                    return;\n                }\n\n                // Try to get angular velocity from the BanterScript rigidbody\n                let angularVelocity = rigidBody._bs.angularVelocity;\n                let velocity = rigidBody._bs.velocity;\n\n                if (!angularVelocity) {\n                    // Fallback: check rotation changes\n                    const currentRot = this._entity.Get(\"rotation\");\n\n                    if (lastPos && lastPos.rotation) {\n                        const dx = currentRot.x - lastPos.rotation.x;\n                        const dy = currentRot.y - lastPos.rotation.y;\n                        const dz = currentRot.z - lastPos.rotation.z;\n                        const dw = currentRot.w - lastPos.rotation.w;\n                        angularVelocity = { x: dx * 10, y: dy * 10, z: dz * 10 }; // Approximate angular velocity\n                    } else {\n                        angularVelocity = { x: 100, y: 100, z: 100 }; // Force movement detection on first check\n                    }\n                    lastPos = { position: this._entity.Get(\"position\"), rotation: currentRot };\n                }\n\n                // Check both angular and linear velocity for settling\n                const angularSpeed = Math.sqrt(angularVelocity.x**2 + angularVelocity.y**2 + angularVelocity.z**2);\n                const linearSpeed = velocity ? Math.sqrt(velocity.x**2 + velocity.y**2 + velocity.z**2) : 0;\n\n                // Track if coin has moved/rotated significantly\n                if (!hasMovedSignificantly && (angularSpeed > 0.35 || linearSpeed > 0.35)) {\n                    hasMovedSignificantly = true;\n                    log('flipable', `Coin has moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n                if(!hasMovedSignificantly){\n                    log('flipable', `Coin has not moved significantly: ${angularSpeed}, ${linearSpeed}`);\n                }\n\n\n                checkCount++;\n\n                // Only consider it settled if it has moved significantly AND both angular and linear speeds are low\n                if (hasMovedSignificantly && angularSpeed < 0.25 && linearSpeed < 0.25) {\n                    clearInterval(checkInterval);\n\n                    // Check if it's heads or tails\n                    const isHeads = this.isCoinHeads();\n                    if(isHeads){\n                        consecutive_heads++;\n                    }else{\n                        consecutive_heads = 0;\n                    }\n                    const result = isHeads ? 'heads' : 'tails';\n                    log('flipable', `Coin landed: ${result.toUpperCase()}`);\n                    if(isHeads){\n                        play_audio('success_'+consecutive_heads)\n                    }else{\n                        play_audio('nothing')\n                    }\n                    resolve(result);\n                }\n\n                // Timeout after 10 seconds\n                if (checkCount > 200) {\n                    log('flipable', `Coin tracking timeout`);\n                    clearInterval(checkInterval);\n                    // Still check the final position\n                    const isHeads = this.isCoinHeads();\n                    const result = isHeads ? 'heads' : 'tails';\n                    resolve(result);\n                }\n            }, 50); // Check every 100ms\n        }, 100); // Wait 500ms before starting tracking\n    });\n}\n\n\nthis.onStart = ()=>{\n    log(\"flipable\", \"onStart called - setting up watchers\");\n\n    // Test WatchTransform with detailed logging\n    const watchResult = this._entity.WatchTransform([\"position\", \"rotation\"], (data)=>{\n        log(\"flipable\", \"WatchTransform callback fired!\");\n        log(\"flipable\", \"Callback data received:\", data);\n        log(\"flipable\", \"Current position:\", this._entity.Get(\"position\"));\n        log(\"flipable\", \"Current rotation:\", this._entity.Get(\"rotation\"));\n    });\n\n    log(\"flipable\", \"WatchTransform returned:\", watchResult);\n    log(\"flipable\", \"Return type:\", typeof watchResult);\n    log(\"flipable\", \"Is Promise?\", watchResult instanceof Promise);\n\n    // Also test the rigidbody watcher\n    const rigidBody = this._entity.getComponent(\"Rigidbody\");\n    if(rigidBody) {\n        rigidBody.WatchProperties(['velocity', 'angularVelocity'], (data)=>{\n            log(\"flipable\", \"velocity changed, data:\", data);\n            log(\"flipable\", \"Current velocity:\", rigidBody._bs.velocity);\n        });\n        log(\"flipable\", \"Rigidbody velocity watcher set up\");\n    } else {\n        log(\"flipable\", \"WARNING: No rigidbody found!\");\n    }\n\n    log(\"flipable\", \"onStart completed - all watchers should be active\");\n}\n\nthis.onDestroy = ()=>{\n    // this._entity._bs.listeners.get(\"click\").delete(flip);\n}\n",
+          "description": "",
+          "folder": "CoinFlip",
+          "global": false,
+          "icon": "📜",
+          "imported": true,
+          "importedAt": 1760424216324,
+          "importedFrom": "inventory/Technocrat/CoinFlip",
+          "itemType": "script",
+          "lastUsed": 1759855136851,
+          "last_used": 1760425892976,
+          "name": "Flipable.js",
+          "remote": true,
+          "startup": false,
+          "startupSequence": "onSceneLoaded"
+        },
+        "name": "Flipable",
+        "type": "MonoBehavior"
       },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
+      "Rigidbody_6566": {
+        "_owner": "Technocrat",
+        "angularDrag": 0.05,
+        "angularVelocity": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "centerOfMass": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "collisionDetectionMode": 0,
+        "drag": 0,
+        "freezePositionX": false,
+        "freezePositionY": false,
+        "freezePositionZ": false,
+        "freezeRotationX": false,
+        "freezeRotationY": false,
+        "freezeRotationZ": false,
+        "isKinematic": false,
+        "mass": 1,
+        "type": "Rigidbody",
+        "useGravity": true,
+        "velocity": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      "SyncedObject_3355": {
+        "_owner": "Technocrat",
+        "kinematicIfNotOwned": true,
+        "syncPosition": true,
+        "syncRotation": true,
+        "takeOwnershipOnCollision": false,
+        "takeOwnershipOnGrab": true,
+        "type": "SyncedObject"
       }
     },
-    "type": "Entity",
-    "uuid": 5210799567747
+    "Entity": {
+      "Penny7": {
+        "PennyMesh": {
+          "__meta": {
+            "active": true,
+            "components": {
+              "GLTF_7562": true
+            },
+            "layer": 0,
+            "localPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localRotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localScale": {
+              "x": 0.1,
+              "y": 0.1,
+              "z": 0.1
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "uuid": 8648057838228
+          }
+        },
+        "__meta": {
+          "active": true,
+          "components": {
+            "Cylinder_3327": true,
+            "MeshCollider_4905": true,
+            "MonoBehavior_476": true,
+            "MonoBehavior_9853": true,
+            "Rigidbody_6566": true,
+            "SyncedObject_3355": true
+          },
+          "layer": 5,
+          "localPosition": {
+            "x": 0,
+            "y": 0.65,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "position": {
+            "x": 0,
+            "y": 0.65,
+            "z": 0
+          },
+          "rotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "uuid": 5210799567747
+        },
+        "sfx": {
+          "__meta": {
+            "active": true,
+            "layer": 0,
+            "localPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localRotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localScale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "uuid": 5777140613129
+          },
+          "flip": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_8776": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 6682264681844
+            }
+          },
+          "nothing": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_4935": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 6047095781272
+            }
+          },
+          "preloader": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_9849": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 2642021711853
+            }
+          },
+          "success": {
+            "__meta": {
+              "active": true,
+              "components": {
+                "AudioSource_3987": true
+              },
+              "layer": 0,
+              "localPosition": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localRotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "localScale": {
+                "x": 1,
+                "y": 1,
+                "z": 1
+              },
+              "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "rotation": {
+                "w": 1,
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "uuid": 6682114098112
+            }
+          }
+        }
+      }
+    }
   },
   "description": "",
   "folder": "CoinFlip",
@@ -1621,7 +1589,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306626946,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
   "itemType": "entity",
   "last_used": 1760653997499,
-  "name": "Penny7"
+  "name": "Penny7",
+  "remote": true
 }

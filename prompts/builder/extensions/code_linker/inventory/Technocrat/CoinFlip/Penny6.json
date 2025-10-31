@@ -1035,8 +1035,12 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306626945,
+  "importedFrom": "inventory/Technocrat/CoinFlip",
   "itemType": "entity",
   "lastUsed": 1760423120398,
   "last_used": 1760394713064,
-  "name": "Penny6"
+  "name": "Penny6",
+  "remote": true
 }
