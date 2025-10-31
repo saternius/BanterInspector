@@ -32,12 +32,17 @@ export class EntityComponent{
         this.ref = net.db.ref(`space/${net.spaceId}/components/${this.id}`);
         
 
-        this.ref.on("child_changed", (snapshot)=>{
+        this.ref.on("value", (snapshot)=>{
             let data = snapshot.val();
-            log("component", "child changed", this.id, data, snapshot.key)
+            for(let p in data){
+                if(this.properties[p] !== data[p]){
+                    //log("component", "value changed", this.id, p, data[p])
+                    this._set(p, data[p]);
+                }
+            }
         })
 
-        if(this.options.context === "crawl"){
+        if(this.options.context === "crawl" || this.options.context === "spawn"){
             await this.ref.set(this.properties);
         }
         return this;
@@ -86,6 +91,7 @@ export class EntityComponent{
     }
 
     async _destroy(){
+        this.ref.remove();
         if(this._bs){
             this._bs.Destroy();
         }
@@ -108,14 +114,7 @@ export class EntityComponent{
     }
     
     async Set(property, value){
-        // Proceed with the Set operation
-        if(typeof value === "object"){
-            value = JSON.stringify(value);
-        }
-        let message = `update_component¶${this.id}¶${property}¶${value}`;
-        SM.props[`__${this.id}/${property}:component`] = value;
-        await networking.sendOneShot(message);
-
+        this.ref.update({[property]: value});
     }
 
     WatchProperties(properties, callback){

@@ -1606,7 +1606,7 @@
             if (!entityId) return;
             
             // Queue the component removal through change manager
-            const change = new RemoveComponentChange(componentId, { source: 'ui' });
+            const change = new RemoveComponentChange(entityId, componentId, { source: 'ui' });
             changeManager.applyChange(change);
             
             // The actual deletion will be handled by the change manager

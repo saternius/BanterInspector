@@ -4,7 +4,7 @@ const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoU
 export class Entity{
     async init(entityData, options){
         this.name = entityData.name || `New_Entity_${Math.floor(Math.random()*99999)}`;
-        log("init", "entity", this.name, entityData)
+        //log("init", "entity", this.name, entityData)
         this.parentId = entityData.parentId;
         this.components = entityData.components || [];
         this.children = entityData.children || [];
@@ -33,11 +33,17 @@ export class Entity{
             if(lp){ params.localPosition = new BS.Vector3(lp.x, lp.y, lp.z) }
             if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
-            
-            params.parent = parentEntity._bs;
+            if(parentEntity){ params.parent = parentEntity._bs; }
             params.layer = this.layer;
             params.active = this.active;
             let newGameObject = new BS.GameObject(params);
+            if(params.parent){ //complain that this is needed
+                setTimeout(async () => {
+                    if(params.localPosition){ newGameObject.transform.localPosition = params.localPosition; }
+                    if(params.localRotation){ newGameObject.transform.localRotation = params.localRotation; }
+                    if(params.localScale){ newGameObject.transform.localScale = params.localScale; }
+                }, 150);
+            }
             this._bs = newGameObject;
         }
 
@@ -51,14 +57,18 @@ export class Entity{
         this.transform = this._bs.transform;
 
         if(this.parentId){
-            this._setParent(parentEntity, true);
+            // Only set parent if the parent entity actually exists and is initialized
+            if(parentEntity && parentEntity !== "building.." && parentEntity.initialized){
+                this._setParent(parentEntity, true);
+            }
+            // Otherwise, the parent will claim this child when it processes the child_added event
         }
         this.setupRefs();
         
      
         
         if(this.options.context === "crawl"){
-            log("entity", "crawling", this.id)
+            //log("entity", "crawling", this.id)
             await this.meta_ref.set({
                 active: this.active,
                 layer: this.layer,
@@ -125,20 +135,33 @@ export class Entity{
  
  
          // handle component changes
-         this.meta_ref.child("components").on("child_added", (snapshot)=>{
+         this.meta_ref.child("components").on("child_added", async (snapshot)=>{
              let data = snapshot.val();
-             log("entity", "component added", snapshot.key, data)
-             
+             let component = SM.getEntityComponentById(snapshot.key, false);
+             if(!component){
+                let data = await net.db.ref(`space/${net.spaceId}/components/${snapshot.key}`).once('value');
+                data = data.val();
+                data.id = snapshot.key;
+                let componentClass = componentTypeMap[snapshot.key.split("_")[0]];
+                component = await new componentClass().init(this, null, data);
+             }
+             let hasComponent = this.components.find(c=>c.id === snapshot.key);
+             if(!hasComponent){
+                await this._addComponent(component);
+             }
          })
-         this.meta_ref.child("components").on("child_removed", (snapshot)=>{
+         this.meta_ref.child("components").on("child_removed", async (snapshot)=>{
              let data = snapshot.val();
-             log("entity", "component removed", snapshot.key, data)
+             //log("entity", "component removed", snapshot.key, data)
+             let component = SM.getEntityComponentById(snapshot.key);
+             if(component){
+                await this._removeComponent(component);
+             }
          })
  
          this.startListeningForChildChanges = ()=>{
               // handle children changes
-             this.ref.on("child_added", (snapshot)=>{
-                log("entity", "child added on "+this.id, snapshot.key, snapshot.val())
+             this.ref.on("child_added", async (snapshot)=>{
                  let key = snapshot.key;
                  if(key === "__meta"){
                      return;
@@ -149,37 +172,59 @@ export class Entity{
                  let targetEntity = SM.entityData.entityUUIDMap[data.__meta.uuid];
                 
                  if(targetEntity){
-                    log("redundant child added", key, data)
+                    log("ENTITY_REF_REDUNDANT", key, this.id, data, targetEntity)
+                    if(targetEntity === "building.."){
+                       // Entity is still being built, wait for it to complete then establish parent relationship
+                       const checkInterval = setInterval(() => {
+                           const builtEntity = SM.entityData.entityUUIDMap[data.__meta.uuid];
+                           log("ENTITY_REF_REDUNDANT_CHECK", key, this.id, data, builtEntity)
+                           if(builtEntity && builtEntity !== "building.." && builtEntity.initialized){
+                               clearInterval(checkInterval);
+                               // Only set parent if not already correctly parented
+                               if(!this.children.includes(builtEntity)){
+                                   this._addChild(builtEntity);
+                               }
+                           }
+                       }, 50);
+                       // Set a timeout to prevent infinite waiting
+                       setTimeout(() => clearInterval(checkInterval), 5000);
+                       return;
+                    }
                     if(this.id === targetEntity.parentId){
-                        log( `Renaming in place  [${targetEntity.id}] => [${key}]`)
+                        //log( `Renaming in place  [${targetEntity.id}] => [${key}]`)
                         targetEntity._rename(key);
                     }else{
                         targetEntity._setParent(this);
                     }
-                 }else{
-                     log("new child added", key, data)
+                 }else{ 
+                     SM.entityData.entityUUIDMap[data.__meta.uuid] = "building.."
+                     log("ENTITY_REF_NEW", key, this.id, data)
                      data.parentId = this.id;
                      data.name = key;
-                     new Entity().init(data);
+                     let newEntity = new Entity()
+                     await newEntity.init(data);
+                     SM.entityData.entityUUIDMap[data.__meta.uuid] = newEntity;
                  }
                
                  inspector.hierarchyPanel.render();
              })
  
-             this.ref.on("child_removed", (snapshot)=>{
+             this.ref.on("child_removed", async (snapshot)=>{ // handles conditions where child is deleted or moved to a different parent.
                 let key = snapshot.key;
                  if(key === "__meta"){
                      return;
                  }
-                 log("entity", "child removed", snapshot)
                  let data = snapshot.val();
+                 //log("ENTITY_REF_REMOVED", key, this.id, data)
                  let targetID = this.id + "/" + key;
                  let targetEntity = SM.getEntityById(targetID);
                  if(targetEntity){
-                     SM.garbage.push(targetEntity);
-                     this.children = this.children.filter(child => child !== targetEntity);
-                 }
-                 log("entity", "child removed", key, data)
+                    SM.garbage.push(targetEntity);
+                    this.children = this.children.filter(child => child !== targetEntity);
+                }
+                if(data.__meta.destroyed){
+                    await targetEntity._destroy();
+                }
                  inspector.hierarchyPanel.render();
                  
              })
@@ -219,15 +264,31 @@ export class Entity{
         let component = this.components.filter(component => component.type === componentType)[index];
         if(!component && attempts < 100){
             await new Promise(resolve => setTimeout(resolve, 100));
-            log("entity", "GetComponent", "Retrying", componentType, index, attempts);
+            //log("entity", "GetComponent", "Retrying", componentType, index, attempts);
             return this.GetComponent(componentType, index, attempts + 1);
         }
         return component;
     }
 
     AddComponent(component){
-        this.components.push(component);
         this.meta_ref.child("components").child(component.id).set(true);
+        this._addComponent(component);
+    }
+
+    async _addComponent(component){
+        this.components.push(component);
+        SM.entityData.componentMap[component.id] = component;
+        component._entity = this;
+        inspector.propertiesPanel.render();
+    }
+
+    RemoveComponent(component){
+        this.meta_ref.child("components").child(component.id).remove();
+        this._removeComponent(component);
+    }
+
+    async _removeComponent(component){ //This should deref instead of destroy in the future.
+        await component._destroy();
     }
 
     getComponent(componentType, index = 0){
@@ -258,32 +319,45 @@ export class Entity{
         })
     }
 
-    async _checkForGhostComponents(id){
-        let visible_components = this.components.map(x=>x._bs)
-        Object.values(this._bs.components).forEach(async bs_comp => {
-            if(!visible_components.includes(bs_comp)){
-                log("entity", this.id, "ghost component found: ", bs_comp.type, componentTextMap[bs_comp.type])
-                if(bs_comp.type === 34){
-                    //This is UI
-                    return;
-                }
-                let component_ref = `${componentTextMap[bs_comp.type]}_${id}`
-                let props = {
-                    id: component_ref
-                }
-                let componentClass = componentBSTypeMap[bs_comp.componentType];
-                let entityComponent = await new componentClass().init(this, bs_comp, props, {context: "ghost"});
-                this.AddComponent(entityComponent);
-                SM.entityData.componentMap[component_ref] = entityComponent;
-                inspector.propertiesPanel.render(this.id);
-            }
-        })
+    // async _checkForGhostComponents(id){
+    //     let visible_components = this.components.map(x=>x._bs)
+    //     Object.values(this._bs.components).forEach(async bs_comp => {
+    //         if(!visible_components.includes(bs_comp)){
+    //             log("entity", this.id, "ghost component found: ", bs_comp.type, componentTextMap[bs_comp.type])
+    //             if(bs_comp.type === 34){
+    //                 //This is UI
+    //                 return;
+    //             }
+    //             let component_ref = `${componentTextMap[bs_comp.type]}_${id}`
+    //             let props = {
+    //                 id: component_ref
+    //             }
+    //             let componentClass = componentBSTypeMap[bs_comp.componentType];
+    //             let entityComponent = await new componentClass().init(this, bs_comp, props, {context: "ghost"});
+    //             this.AddComponent(entityComponent);
+    //             SM.entityData.componentMap[component_ref] = entityComponent;
+    //             inspector.propertiesPanel.render(this.id);
+    //         }
+    //     })
+    // }
+
+    _addChild(child){
+        log("ENTITY_ADD_CHILD", child.id, this.id)
+        child.parentId = this.id;
+        if(this.children.includes(child)){
+            return;
+        }
+        this.children.push(child);
+        this._bs.SetParent(child._bs, this.keepPositionOnParenting);
+        return child;
     }
 
     async _setParent(newParent, firstAttempt){
+        // Always validate parent exists
+        if(!newParent || newParent === "building..") return;
+
         if(!firstAttempt){
             if (newParent === this) return;
-            if(!newParent) return;
             if (this.parentId) {
                 const oldParent = SM.getEntityById(this.parentId);
                 if(oldParent === newParent){
@@ -295,8 +369,8 @@ export class Entity{
                 }
             }
         }
-        newParent.children.push(this);
-        this.parentId = newParent.id;
+
+        newParent._addChild(this);
         this._bs.SetParent(newParent._bs, this.keepPositionOnParenting);
         this._rename(this.name);
     }
@@ -329,13 +403,18 @@ export class Entity{
         })
 
         this.identifiers.add(this.id);
-        this.ref.off();
-        this.meta_ref.off();
+        if(this.ref){
+            this.ref.off();
+        }
+        if(this.meta_ref){
+            this.meta_ref.off();
+        }
         this.setupRefs();
     }
 
 
     async Destroy(){
+        await this.meta_ref.child("destroyed").set(true);
         this.ref.remove();
     }
 
@@ -361,7 +440,6 @@ export class Entity{
         await this._bs.Destroy();
         
         delete SM.entityData.entityMap[this.id];
-        this.ref.remove();
         if(this.parentId){
             const parent = SM.getEntityById(this.parentId);
             if (parent) {
@@ -434,32 +512,28 @@ export class Entity{
         // }
     }
 
-    export(keep){
-        let ignore = ['id', 'ctx']
-        if(keep){
-            ignore = ignore.filter(x=>!keep.includes(x));
+    async export(){
+        const snapshot = await this.ref.once('value');
+        let entityData = snapshot.val();
+        const componentsData = {};
+
+        // Collect components from this entity
+        for (const x of this.components) {
+            componentsData[x.id] = x.properties;
         }
 
-        
-        let clone = {};
-        for(const key in this){
-            if(ignore.includes(key)) continue;
-            if(key.startsWith("_")) continue;
-            if(this.hasOwnProperty(key)){
-                if(key === "transform"){
-                    clone[key] = {
-                        localPosition: this.transformVal("localPosition"),
-                        localRotation: this.transformVal("localRotation"),
-                        localScale: this.transformVal("localScale")
-                    }
-                }else if(key === "children"){
-                    clone[key] = this.children.map(child=>child.export(keep));
-                }else{
-                    clone[key] = deepClone(this[key], ignore, true);
-                }
+        // Collect components from all descendants
+        const descendants = this.getAllDescendants();
+        for (const descendant of descendants) {
+            for (const x of descendant.components) {
+                componentsData[x.id] = x.properties;
             }
         }
-        return clone;
+
+        return {
+            Entity: { [this.name]: entityData },
+            Components: componentsData
+        }
     }
 
    
@@ -561,5 +635,20 @@ export class Entity{
             return null;
         }
         return scripts[0];
+    }
+
+    getAllDescendants(){
+        let descendants = [];
+
+        // Recursive helper function to collect all descendants
+        const collectDescendants = (entity) => {
+            for(let child of entity.children){
+                descendants.push(child);
+                collectDescendants(child);
+            }
+        };
+
+        collectDescendants(this);
+        return descendants;
     }
 }

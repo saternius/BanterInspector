@@ -1149,6 +1149,42 @@ export class Inventory {
                     return checkEntity(entityData);
                 };
 
+                // Check if entity has spaceProps property
+                const hasSpaceProps = (entityData) => {
+                    if (!entityData) return false;
+                    const checkEntity = (entity) => {
+                        if (entity.spaceProps !== undefined) {
+                            return true;
+                        }
+                        if (entity.children && entity.children.some(child => checkEntity(child))) {
+                            return true;
+                        }
+                        return false;
+                    };
+                    return checkEntity(entityData);
+                };
+
+                // Helper to remove spaceProps from entity tree
+                const removeSpaceProps = (entityData) => {
+                    if (!entityData) return entityData;
+
+                    const cleanEntity = (entity) => {
+                        // Remove spaceProps property if it exists
+                        if (entity.spaceProps !== undefined) {
+                            delete entity.spaceProps;
+                        }
+
+                        // Recursively clean children
+                        if (entity.children && Array.isArray(entity.children)) {
+                            entity.children = entity.children.map(child => cleanEntity(child));
+                        }
+
+                        return entity;
+                    };
+
+                    return cleanEntity(JSON.parse(JSON.stringify(entityData))); // Deep clone before cleaning
+                };
+
                 // Convert old format if needed
                 if (hasOldFormat(item.data)) {
                     item.data = this.convertEntityToNewFormat(item.data);
@@ -1158,6 +1194,12 @@ export class Inventory {
                 // Update component names if needed
                 if (hasBanterNames(item.data)) {
                     item.data = this.updateComponentNames(item.data);
+                    needsUpdate = true;
+                }
+
+                // Remove spaceProps if present
+                if (hasSpaceProps(item.data)) {
+                    item.data = removeSpaceProps(item.data);
                     needsUpdate = true;
                 }
 
@@ -1188,7 +1230,7 @@ export class Inventory {
 
     installAll(path, minUpdateTime){
         let data = `import¶${path}¶${minUpdateTime}`;
-        networking.sendOneShot(data);
+        net.sendOneShot(data);
     }
 
 

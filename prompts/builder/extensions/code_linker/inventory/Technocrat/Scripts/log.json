@@ -2,29 +2,21 @@
   "author": "Technocrat",
   "created": 1761235434698,
   "data": {
-    "active": true,
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "componentProperties": {
-            "addColliders": true,
-            "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=26aaad6b4dac57523a6151f319b99f58a24472e1cb41c339995e8ed2b76fc3dc"
-          }
-        },
-        "properties": {
-          "addColliders": true,
-          "climbable": false,
-          "enabled": true,
-          "generateMipMaps": true,
-          "legacyRotate": false,
-          "nonConvexColliders": false,
-          "slippery": false,
-          "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=26aaad6b4dac57523a6151f319b99f58a24472e1cb41c339995e8ed2b76fc3dc"
-        },
-        "type": "GLTF"
+    "Components": {
+      "GLTF_1173": {
+        "addColliders": true,
+        "climbable": false,
+        "enabled": true,
+        "generateMipMaps": true,
+        "legacyRotate": false,
+        "nonConvexColliders": false,
+        "slippery": false,
+        "type": "GLTF",
+        "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=26aaad6b4dac57523a6151f319b99f58a24472e1cb41c339995e8ed2b76fc3dc"
       },
-      {
+      "MonoBehavior_5503": {
+        "enabled": true,
+        "file": "GLTFGrabbable.js",
         "inventoryItem": {
           "active": false,
           "author": "Technocrat",
@@ -40,46 +32,50 @@
           "remote": true,
           "startup": false
         },
-        "loadAsync": false,
-        "options": {
-          "componentProperties": {
-            "file": "GLTFGrabbable.js"
-          }
-        },
-        "properties": {
-          "enabled": true,
-          "file": "GLTFGrabbable.js",
-          "name": "myScript"
-        },
+        "name": "myScript",
         "type": "MonoBehavior"
       }
-    ],
-    "initialized": true,
-    "layer": 0,
-    "loadAsync": false,
-    "name": "log",
-    "parentId": "Scene",
-    "persistent": true,
-    "transform": {
-      "localPosition": {
-        "x": 0,
-        "y": 1,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 0.4,
-        "y": 0.4,
-        "z": 0.4
-      }
     },
-    "type": "Entity",
-    "uuid": 2539730339209
+    "Entity": {
+      "log": {
+        "__meta": {
+          "active": true,
+          "components": {
+            "GLTF_1173": true,
+            "MonoBehavior_5503": true
+          },
+          "layer": 0,
+          "localPosition": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 0.4,
+            "y": 0.4,
+            "z": 0.4
+          },
+          "position": {
+            "x": 0,
+            "y": 1,
+            "z": 0
+          },
+          "rotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "uuid": 2539730339209
+        }
+      }
+    }
   },
   "description": "",
   "folder": "Scripts",

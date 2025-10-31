@@ -2,17 +2,73 @@
   "author": "Technocrat",
   "created": 1761024365137,
   "data": {
-    "active": true,
-    "children": [
-      {
-        "active": true,
-        "initialized": true,
-        "layer": 0,
-        "loadAsync": false,
-        "name": "Holder",
-        "parentId": "Scene/Tracker",
-        "persistent": true,
-        "transform": {
+    "Components": {
+      "AttachedObject_5849": {
+        "attachmentPoint": 0,
+        "uid": ""
+      },
+      "Box_3388": {
+        "depth": 0.05,
+        "height": 0.05,
+        "width": 0.05
+      },
+      "Material_3943": {
+        "color": {
+          "a": 1,
+          "b": 1,
+          "g": 1,
+          "r": 1
+        },
+        "generateMipMaps": true,
+        "shaderName": "Standard",
+        "side": 0,
+        "texture": ""
+      }
+    },
+    "Entity": {
+      "Tracker": {
+        "Holder": {
+          "__meta": {
+            "active": true,
+            "layer": 0,
+            "localPosition": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localRotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "localScale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "rotation": {
+              "w": 1,
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "uuid": 6001033602549
+          }
+        },
+        "__meta": {
+          "active": true,
+          "components": {
+            "AttachedObject_5849": true,
+            "Box_3388": true,
+            "Material_3943": true
+          },
+          "layer": 5,
           "localPosition": {
             "x": 0,
             "y": 0,
@@ -28,88 +84,22 @@
             "x": 1,
             "y": 1,
             "z": 1
-          }
-        },
-        "type": "Entity",
-        "uuid": 6001033602549
-      }
-    ],
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "attachmentPoint": 0,
-          "uid": ""
-        },
-        "type": "AttachedObject"
-      },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "depth": 0.05,
-          "height": 0.05,
-          "width": 0.05
-        },
-        "type": "Box"
-      },
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "color": {
-            "a": 1,
-            "b": 1,
-            "g": 1,
-            "r": 1
           },
-          "generateMipMaps": true,
-          "shaderName": "Standard",
-          "side": 0,
-          "texture": ""
-        },
-        "type": "Material"
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "rotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "uuid": 1742740906118
+        }
       }
-    ],
-    "initialized": true,
-    "layer": 5,
-    "loadAsync": false,
-    "name": "Tracker",
-    "parentId": "Scene",
-    "persistent": true,
-    "transform": {
-      "localPosition": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      }
-    },
-    "type": "Entity",
-    "uuid": 1742740906118
+    }
   },
   "description": "",
   "folder": "Scripts",

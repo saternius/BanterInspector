@@ -38,7 +38,7 @@ export class InventoryFirebase {
         // Clear any existing listeners
         this.clearFirebaseListeners();
         
-        if (!window.networking) {
+        if (!window.net) {
             log('net', 'Firebase not initialized, skipping listeners setup');
             return;
         }
@@ -58,9 +58,9 @@ export class InventoryFirebase {
         //     this.setupRootListener();
         // }
 
-        const glbLoaderKey = `glb_loader/${userName}_${networking.secret}`;
+        const glbLoaderKey = `glb_loader/${userName}_${net.secret}`;
         log("glb_loader", "setting up listener for", glbLoaderKey);
-        const glbLoaderRef = window.networking.getDatabase().ref(glbLoaderKey);
+        const glbLoaderRef = net.getDatabase().ref(glbLoaderKey);
         let firstcall = true;
         glbLoaderRef.on('value', async (snapshot) => {
             if(firstcall){
@@ -94,10 +94,10 @@ export class InventoryFirebase {
     setupFolderListener(folderName, folder) {
         
         log("net", "[SETUP FOLDER LISTENER for folder: ", folderName, "]")
-        if (!window.networking || !window.networking.getDatabase) return;
-        
+        if (!window.net || !window.net.getDatabase) return;
+
         try {
-            const db = window.networking.getDatabase();
+            const db = net.getDatabase();
             let firebasePath = null;
             if(folder.importedFrom !== undefined){
                 firebasePath = folder.importedFrom;
@@ -462,7 +462,7 @@ export class InventoryFirebase {
         const isRemote = this.isItemInRemoteLocation();
         if (!isRemote) return;
 
-        if (!window.networking) {
+        if (!window.net) {
             err('net', 'Networking not initialized, skipping sync');
             return;
         }
@@ -483,7 +483,7 @@ export class InventoryFirebase {
             const cleanedItem = this.removeUndefined(inventoryItem);
 
             // Save to Firebase
-            await window.networking.setData(firebasePath, cleanedItem);
+            await net.setData(firebasePath, cleanedItem);
             log('net', 'Item synced to Firebase:', firebasePath);
         } catch (error) {
             err('net', 'Failed to sync item to Firebase:', error);
@@ -497,7 +497,7 @@ export class InventoryFirebase {
         // Only sync if folder is marked as remote
         if (!folder.remote) return;
         
-        if (!window.networking) {
+        if (!window.net) {
             err('net', 'Networking not initialized, skipping folder sync');
             return;
         }
@@ -524,7 +524,7 @@ export class InventoryFirebase {
             };
             
             // Save folder metadata to Firebase
-            await window.networking.setData(firebasePath, folderMetadata);
+            await net.setData(firebasePath, folderMetadata);
             log('net', 'Folder metadata synced to Firebase:', firebasePath);
         } catch (error) {
             err('net', 'Failed to sync folder to Firebase:', error);
@@ -725,7 +725,7 @@ export class InventoryFirebase {
      * Import public folders from a username
      */
     async importPublicUserFolders(username) {
-        if (!window.networking) {
+        if (!window.net) {
             showNotification('Networking not initialized');
             return false;
         }
@@ -739,7 +739,7 @@ export class InventoryFirebase {
         try {
             // Check if user exists in Firebase
             const userInventoryRef = `inventory/${username}`;
-            const userData = await networking.getData(userInventoryRef);
+            const userData = await net.getData(userInventoryRef);
             
             if (!userData) {
                 return false; // User doesn't exist
@@ -774,7 +774,7 @@ export class InventoryFirebase {
                 // Check if this is a folder with public metadata
                 if (folderData && typeof folderData === 'object') {
                     const metadataPath = `${userInventoryRef}/${folderKey}/_folder_metadata`;
-                    const metadata = await networking.getData(metadataPath);
+                    const metadata = await net.getData(metadataPath);
                     
                     if (metadata && metadata.public === true) {
                         // Create a folderRef item for this public folder
@@ -854,7 +854,7 @@ export class InventoryFirebase {
                 }
             }
 
-            const data = await networking.getData(firebaseRef);
+            const data = await net.getData(firebaseRef);
             if(!data) return false;
             let importedCount = 0;
 
@@ -1057,12 +1057,12 @@ export class InventoryFirebase {
             showNotification('Uploading image...');
             
             // Get Firebase Storage from networking module
-            if (!window.networking || !window.networking.getStorage) {
+            if (!window.net || !window.net.getStorage) {
                 showNotification('Firebase Storage not initialized. Please wait and try again.');
                 return;
             }
             
-            const storage = window.networking.getStorage();
+            const storage = net.getStorage();
             if (!storage) {
                 showNotification('Firebase Storage not available');
                 return;
@@ -1141,7 +1141,7 @@ export class InventoryFirebase {
                 errorMessage += 'Permission denied. Check Firebase Storage rules.';
             } else if (error.code === 'storage/unknown') {
                 errorMessage += 'Unknown error. Check Firebase Storage configuration and CORS settings.';
-                console.error('Tip: Run window.networking.testStorageConnection() in console to debug');
+                console.error('Tip: Run window.net.testStorageConnection() in console to debug');
             } else {
                 errorMessage += error.message;
             }

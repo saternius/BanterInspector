@@ -60,7 +60,7 @@ class ChangeManager {
 
             // Apply the change with timeout
             const timeout = change.timeout || 5000; // Default 5 second timeout
-            outcome = await this.applyWithTimeout(change.apply.bind(change), timeout, change);
+            outcome = await change.apply(); //await this.applyWithTimeout(change.apply.bind(change), timeout, change);
 
             // Record in history if applicable
             if (shouldRecord) {

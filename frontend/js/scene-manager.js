@@ -4,6 +4,7 @@
  */
 // (async () => {
 
+
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
 
@@ -79,8 +80,13 @@
                             people_entity = await this.loadHierarchy("People", {}, {context: "crawl"});
                             net.delVar("_MUTEX_CRAWL");
                         }else{ //load
-                            scene_entity = await this.loadHierarchy("Scene", state.Scene);
-                            people_entity = await this.loadHierarchy("People", state.People);
+                            if(state.People[this.myName()]){
+                                await net.db.ref(`space/${net.spaceId}/People/${this.myName()}/__meta/destroyed`).set(true)
+                                await net.db.ref(`space/${net.spaceId}/People/${this.myName()}`).remove();
+                                delete state.People[this.myName()];
+                            }
+                            scene_entity = await this.loadHierarchy("Scene", state.Scene, {context: "startupLoad"});
+                            people_entity = await this.loadHierarchy("People", state.People, {context: "startupLoad"});
                         }
 
                         this.entityData.entities = [scene_entity, people_entity];
@@ -265,7 +271,7 @@
                     name: name,
                     parentId: parentId,
                     _bs: gO,
-                    layer: gO.layer,
+                    layer: gO.layer || 0,
                     localPosition: h.__meta.localPosition,
                     localRotation: h.__meta.localRotation,
                     localScale: h.__meta.localScale,
@@ -327,81 +333,81 @@
         }
 
 
-        //Creates a entity from the inventory schema
-        async _loadEntity(entityData, parentId, options){
-            //log("RANDOM DEBUG", "LOADING ENTITY", entityData, parentId, options)
-            //TODO: add a param for await req for sync/async component/entity
-            let loadSubEntity = async (item, parentId, parentEnt)=>{ 
+        // //Creates a entity from the inventory schema
+        // async _loadEntity(entityData, parentId, options){
+        //     //log("RANDOM DEBUG", "LOADING ENTITY", entityData, parentId, options)
+        //     //TODO: add a param for await req for sync/async component/entity
+        //     let loadSubEntity = async (item, parentId, parentEnt)=>{ 
             
-                const newEntity = await new Entity().init({
-                    name: item.name,
-                    parentId: parentId,
-                    layer: item.layer,
-                    loadAsync: item.loadAsync,
-                    localPosition: item.transform.localPosition,
-                    localRotation: item.transform.localRotation,
-                    localScale: item.transform.localScale,
-                    uuid: item.uuid,
-                    networkId: `${parentId}/${item.name}`
-                });
+        //         const newEntity = await new Entity().init({
+        //             name: item.name,
+        //             parentId: parentId,
+        //             layer: item.layer,
+        //             loadAsync: item.loadAsync,
+        //             localPosition: item.transform.localPosition,
+        //             localRotation: item.transform.localRotation,
+        //             localScale: item.transform.localScale,
+        //             uuid: item.uuid,
+        //             networkId: `${parentId}/${item.name}`
+        //         });
     
                 
-                if(item.components){
-                    for(let component of item.components){
-                        if(component.properties){
-                            component.properties.id = component.id;
-                        }else{
-                            component.properties = {
-                                id: component.id
-                            }
-                        }
-                        const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync, owner: options?.owner});
-                        if(!component.loadAsync){
-                            log("loadEntity", "component [AWAIT]", component.type, item.name+"/"+component.type+":"+component.id)
-                            await result;
-                        }else{
-                            log("loadEntity", "component [ASYNC]", component.type, item.name+"/"+component.type+":"+component.id)
-                        }
-                    }
-                }
+        //         if(item.components){
+        //             for(let component of item.components){
+        //                 if(component.properties){
+        //                     component.properties.id = component.id;
+        //                 }else{
+        //                     component.properties = {
+        //                         id: component.id
+        //                     }
+        //                 }
+        //                 const result = this._addComponent(newEntity, component.type, component.properties, {context: "item", loadAsync: component.loadAsync, owner: options?.owner});
+        //                 if(!component.loadAsync){
+        //                     log("loadEntity", "component [AWAIT]", component.type, item.name+"/"+component.type+":"+component.id)
+        //                     await result;
+        //                 }else{
+        //                     log("loadEntity", "component [ASYNC]", component.type, item.name+"/"+component.type+":"+component.id)
+        //                 }
+        //             }
+        //         }
 
-                if(item.children){
-                    let childPromises = [];
-                    for(let i=0; i<item.children.length; i++){
-                        let child = item.children[i];
-                        let childEntityPromise = loadSubEntity(child, newEntity.id, newEntity);
-                        if(!child.loadAsync){
-                            console.log("LoadEntity", "Entity [AWAIT]", child.name)
-                            await childEntityPromise;
-                        }else{
-                            console.log("LoadEntity", "Entity [ASYNC]", child.name)
-                            childPromises.push(childEntityPromise);
-                        }
-                    }
-                    // Wait for all async children to complete
-                    if(childPromises.length > 0){
-                        await Promise.all(childPromises);
-                    }
-                }
+        //         if(item.children){
+        //             let childPromises = [];
+        //             for(let i=0; i<item.children.length; i++){
+        //                 let child = item.children[i];
+        //                 let childEntityPromise = loadSubEntity(child, newEntity.id, newEntity);
+        //                 if(!child.loadAsync){
+        //                     console.log("LoadEntity", "Entity [AWAIT]", child.name)
+        //                     await childEntityPromise;
+        //                 }else{
+        //                     console.log("LoadEntity", "Entity [ASYNC]", child.name)
+        //                     childPromises.push(childEntityPromise);
+        //                 }
+        //             }
+        //             // Wait for all async children to complete
+        //             if(childPromises.length > 0){
+        //                 await Promise.all(childPromises);
+        //             }
+        //         }
 
-                // if(newEntity.name !== "Scene"){
-                //     await newEntity._setParent(parentEnt);
-                // }
+        //         // if(newEntity.name !== "Scene"){
+        //         //     await newEntity._setParent(parentEnt);
+        //         // }
                 
-                // Call _loaded() after all children are fully instantiated
-                newEntity._loaded();
-                return newEntity;
-            }
+        //         // Call _loaded() after all children are fully instantiated
+        //         newEntity._loaded();
+        //         return newEntity;
+        //     }
 
 
-            let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
-            let entity = await loadSubEntity(entityData, parentId, parentEntity);
+        //     let parentEntity = (parentId)? this.getEntityOrScene(parentId) : this.getEntityOrScene(entityData.parentId);
+        //     let entity = await loadSubEntity(entityData, parentId, parentEntity);
 
-            this.expandedNodes.add(parentId);
-            this.selectEntity(entity.id);
-            // _loaded() is now called within loadSubEntity after all children are instantiated
-            return entity;
-        }
+        //     this.expandedNodes.add(parentId);
+        //     this.selectEntity(entity.id);
+        //     // _loaded() is now called within loadSubEntity after all children are instantiated
+        //     return entity;
+        // }
 
 
         getHistoricalProps(component_ref){
@@ -424,27 +430,29 @@
             const entity = await new Entity().init({
                 name: name,
                 parentId: parentId,
-                layer: hierarchy.__meta.layer,
-                localPosition: hierarchy.__meta.localPosition,
-                localRotation: hierarchy.__meta.localRotation,
-                localScale: hierarchy.__meta.localScale,
-                position: hierarchy.__meta.position,
-                rotation: hierarchy.__meta.rotation,
+                layer: hierarchy.__meta.layer || 0,
+                localPosition: hierarchy.__meta.localPosition || {x: 0, y: 0, z: 0},
+                localRotation: hierarchy.__meta.localRotation || {x: 0, y: 0, z: 0, w: 1},
+                localScale: hierarchy.__meta.localScale || {x: 1, y: 1, z: 1},
+                position: hierarchy.__meta.position || {x: 0, y: 0, z: 0},
+                rotation: hierarchy.__meta.rotation || {x: 0, y: 0, z: 0, w: 1},
                 uuid: hierarchy.__meta.uuid
             });
+           
 
-            if(hierarchy.__meta.components){
-                for(let i=0; i<hierarchy.__meta.components.length; i++){
-                    let component_ref = hierarchy.__meta.components[i]
-                    let hist = this.getHistoricalProps(component_ref)
-                    log('init', `historical props for [${component_ref}] =>`, hist)
-                    let componentClass = componentTypeMap[hist.type]
-                    let props = hist.props
-                    props.id = component_ref;
-                    let entityComponent = await new componentClass().init(entity, null, props)
-                    entity.AddComponent(entityComponent);
-                }
-            }
+            // if(hierarchy.__meta.components){
+            //     let component_array = hierarchy.__meta.components ? Object.keys(hierarchy.__meta.components) : [];
+            //     for(let i=0; i<hierarchy.__meta.components.length; i++){
+            //         let component_ref = hierarchy.__meta.components[i]
+            //         let hist = this.getHistoricalProps(component_ref)
+            //         log('init', `historical props for [${component_ref}] =>`, hist)
+            //         let componentClass = componentTypeMap[hist.type]
+            //         let props = hist.props
+            //         props.id = component_ref;
+            //         let entityComponent = await new componentClass().init(entity, null, props)
+            //         entity.AddComponent(entityComponent);
+            //     }
+            // }
 
             let childPromises = Object.keys(hierarchy).map(async key=>{
                 if(key.startsWith("__")){ return }
@@ -741,60 +749,60 @@
         }
 
 
-        async _addComponent(entity, componentType, componentProperties, options){
-            // Check if component already exists (for unique components)
-            const uniqueComponents = ['Transform', 'Rigidbody', 'SyncedObject'];
-            if (uniqueComponents.includes(componentType)) {
-                const exists = entity.components.some(c => c.type === componentType);
-                if (exists) {
-                    log("scene", `A ${componentType} component already exists on this entity`);
-                    return;
-                }
-            }
+        // async _addComponent(entity, componentType, componentProperties, options){
+        //     // Check if component already exists (for unique components)
+        //     const uniqueComponents = ['Transform', 'Rigidbody', 'SyncedObject'];
+        //     if (uniqueComponents.includes(componentType)) {
+        //         const exists = entity.components.some(c => c.type === componentType);
+        //         if (exists) {
+        //             log("scene", `A ${componentType} component already exists on this entity`);
+        //             return;
+        //         }
+        //     }
 
-            // Create the component
-            const ComponentClass = componentTypeMap[componentType];
+        //     // Create the component
+        //     const ComponentClass = componentTypeMap[componentType];
             
-            if (!ComponentClass) {
-                log("scene", `Component class not found for type: ${componentType}`);
-                return;
-            }
+        //     if (!ComponentClass) {
+        //         log("scene", `Component class not found for type: ${componentType}`);
+        //         return;
+        //     }
             
-            let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
+        //     let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
 
             
-            entity.components.push(entityComponent);
-            this.entityData.componentMap[entityComponent.id] = entityComponent;
+        //     entity.components.push(entityComponent);
+        //     this.entityData.componentMap[entityComponent.id] = entityComponent;
 
-            // Refresh properties panel
-            if (inspector?.propertiesPanel) {
-                inspector.propertiesPanel.render(entity.id);
-            }
+        //     // Refresh properties panel
+        //     if (inspector?.propertiesPanel) {
+        //         inspector.propertiesPanel.render(entity.id);
+        //     }
 
 
-            // Check for ghost if new, if item delete ghosts.
-            entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            setTimeout(()=>{
-                entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-            }, 1500)
+        //     // Check for ghost if new, if item delete ghosts.
+        //     entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+        //     setTimeout(()=>{
+        //         entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
+        //     }, 1500)
 
-            if(options.context === "item"){
-                setTimeout(()=>{
-                    let toBust = []
-                    entity.components.forEach(c=>{
-                        if(c.options.context === "ghost"){
-                            toBust.push(c);
-                        }
-                    })
-                    toBust.forEach(c=>{
-                        // log("loadEntity", `destroying ghost: ${entity.id}/${c.type}/${c.id}`)
-                        // c._destroy();
-                    })
-                }, 3000)
-            }
+        //     if(options.context === "item"){
+        //         setTimeout(()=>{
+        //             let toBust = []
+        //             entity.components.forEach(c=>{
+        //                 if(c.options.context === "ghost"){
+        //                     toBust.push(c);
+        //                 }
+        //             })
+        //             toBust.forEach(c=>{
+        //                 // log("loadEntity", `destroying ghost: ${entity.id}/${c.type}/${c.id}`)
+        //                 // c._destroy();
+        //             })
+        //         }, 3000)
+        //     }
             
-            return entityComponent;
-        }
+        //     return entityComponent;
+        // }
 
         /**
          * Execute startup scripts from inventory

@@ -275,6 +275,8 @@ export const componentTypeMap = {
     "MonoBehavior": MonoBehaviorComponent
 }
 
+window.componentTypeMap = componentTypeMap;
+
 export const componentBSTypeMap = {
     [BS.ComponentType.Transform]: TransformComponent,
     [BS.ComponentType.BanterGeometry]: GeometryComponent,
