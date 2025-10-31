@@ -3,6 +3,7 @@
  * Handles public and protected space properties management
  */
 
+
 // (async () => {
     const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber, confirm } = await import(`${window.repoUrl}/utils.js`);
     const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
@@ -31,8 +32,11 @@
             this.propertyFilters = new Set(['active', 'layer', 'position', 'rotation', 'scale',
                                            'localPosition', 'localRotation', 'localScale',
                                            'components', 'children']);
+            this.varsCache = {}; // Cache for Firebase vars
+            this.listeners = []; // Track listeners for cleanup
             this.loadPinnedProps();
             this.loadViewPreferences();
+            this.setupFirebaseListeners();
             this.setupEventListeners();
             this.setupCollapsible();
             this.addPopupButtons();
@@ -557,13 +561,121 @@
         }
 
         /**
+         * Setup Firebase listeners for real-time synchronization
+         */
+        async setupFirebaseListeners() {
+
+            if(!net.db){
+                await new Promise(resolve => setTimeout(resolve, 100));
+                await this.setupFirebaseListeners();
+                return;
+            }
+            // Use the global net instance directly
+
+            // Main listener for all vars changes
+            net.onVarsChange((snapshot) => {
+                this.varsCache = snapshot.val() || {};
+                this.renderFromCache();
+            });
+
+            // Granular listeners for performance optimization
+            this.listeners.push(
+                net.onVarAdded((snapshot) => {
+                    this.handlePropertyAdded(snapshot.key, snapshot.val());
+                })
+            );
+
+            this.listeners.push(
+                net.onVarChanged((snapshot) => {
+                    this.handlePropertyChanged(snapshot.key, snapshot.val());
+                })
+            );
+
+            this.listeners.push(
+                net.onVarRemoved((snapshot) => {
+                    this.handlePropertyRemoved(snapshot.key);
+                })
+            );
+        }
+
+        /**
+         * Handle property added from Firebase
+         */
+        handlePropertyAdded(key, value) {
+            // Update local cache
+            this.varsCache[key] = value;
+            // Smart render to only update if necessary
+            this.smartRender(key, key.startsWith('_'));
+        }
+
+        /**
+         * Handle property changed from Firebase
+         */
+        handlePropertyChanged(key, value) {
+            // Update local cache
+            this.varsCache[key] = value;
+            // Smart render to only update if necessary
+            this.smartRender(key, key.startsWith('_'));
+        }
+
+        /**
+         * Handle property removed from Firebase
+         */
+        handlePropertyRemoved(key) {
+            // Remove from local cache
+            delete this.varsCache[key];
+            // Smart render to only update if necessary
+            this.smartRender(key, key.startsWith('_'));
+        }
+
+        /**
+         * Render from cached data
+         */
+        renderFromCache() {
+            const { public: publicVars, protected: protectedVars } = this.categorizeProperties();
+
+            if (this.isPopupOpen && this.popupWindow) {
+                // Render only the specific property type in popup
+                if (this.viewMode === 'struct') {
+                    if (this.popupType === 'public') {
+                        this.renderStructView('public', this.varsCache, true);
+                    } else if (this.popupType === 'protected') {
+                        this.renderStructView('protected', this.varsCache, true);
+                    }
+                } else if (this.viewMode === 'sync') {
+                    if (this.popupType === 'public') {
+                        this.renderSyncView('public', this.varsCache, true);
+                    } else if (this.popupType === 'protected') {
+                        this.renderSyncView('protected', this.varsCache, true);
+                    }
+                } else {
+                    if (this.popupType === 'public') {
+                        this.renderPropsList('public', this.varsCache, true);
+                    } else if (this.popupType === 'protected') {
+                        this.renderPropsList('protected', this.varsCache, true);
+                    }
+                }
+            } else {
+                // Render both in inline panel (always flat view for inline)
+                this.renderPropsList('public', this.varsCache, false);
+                this.renderPropsList('protected', this.varsCache, false);
+            }
+        }
+
+        /**
+         * Categorize properties into public and protected
+         */
+        categorizeProperties() {
+            // Use the helper method from net
+            return net.categorizeVars(this.varsCache);
+        }
+
+        /**
          * Setup event listeners
          */
         setupEventListeners() {
-            // Listen for space state changes
-            document.addEventListener('spaceStateChanged', () => {
-                this.render("spaceprop:spaceStateChanged");
-            });
+            // Firebase listeners handle space state changes now
+            // Remove legacy spaceStateChanged event listener
 
             // Add property key press handlers
             const publicKeyInput = document.getElementById('addPublicKey');
@@ -644,9 +756,9 @@
             // Clear any cached values or editing states
             this.editingProps.clear();
 
-            // Force re-fetch all properties from the scene
-            // The SM.scene.spaceState already contains the latest values
-            // Just force a full re-render
+            // Force re-fetch all properties from Firebase
+            // The Firebase listener will automatically update the varsCache
+            // Force a full re-render
             this.render('spaceprop:fullRefresh');
 
             // Show a brief visual feedback that refresh occurred
@@ -667,34 +779,37 @@
             this.renderOrigins[origin] = (this.renderOrigins[origin] || 0) + 1;
             this.updateRenderCount();
 
+            // Use cached vars from Firebase
+            const vars = this.varsCache;
+
             if (this.isPopupOpen && this.popupWindow) {
                 // Render only the specific property type in popup
                 if (this.viewMode === 'struct') {
                     // Render in struct view
                     if (this.popupType === 'public') {
-                        this.renderStructView('public', net.state, true);
+                        this.renderStructView('public', vars, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderStructView('protected', net.state, true);
+                        this.renderStructView('protected', vars, true);
                     }
                 } else if (this.viewMode === 'sync') {
                     // Render in sync status view
                     if (this.popupType === 'public') {
-                        this.renderSyncView('public', net.state, true);
+                        this.renderSyncView('public', vars, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderSyncView('protected', net.state, true);
+                        this.renderSyncView('protected', vars, true);
                     }
                 } else {
                     // Render in flat view
                     if (this.popupType === 'public') {
-                        this.renderPropsList('public', net.state, true);
+                        this.renderPropsList('public', vars, true);
                     } else if (this.popupType === 'protected') {
-                        this.renderPropsList('protected', net.state, true);
+                        this.renderPropsList('protected', vars, true);
                     }
                 }
             } else {
                 // Render both in inline panel (always flat view for inline)
-                this.renderPropsList('public', net.state, false);
-                this.renderPropsList('protected', net.state, false);
+                this.renderPropsList('public', vars, false);
+                this.renderPropsList('protected', vars, false);
             }
         }
 
@@ -983,7 +1098,7 @@
 
             // Focus the input after render
             setTimeout(() => {
-                const value = net.state[key];
+                const value = this.varsCache[key];
                 const suffix = isPopup ? '_popup' : '';
 
                 if (isVector3Object(value)) {
@@ -1010,7 +1125,7 @@
          * Save edited property
          */
         saveProp(type, key, isPopup = false) {
-            const currentValue = net.state[key];
+            const currentValue = this.varsCache[key];
             const suffix = isPopup ? '_popup' : '';
 
             if (isVector3Object(currentValue)) {
@@ -1052,10 +1167,26 @@
         }
 
         /**
+         * Cleanup method to remove all Firebase listeners
+         */
+        cleanup() {
+            // Remove all granular listeners
+            this.listeners.forEach(listener => {
+                net.removeListener(listener);
+            });
+            this.listeners = [];
+
+            // Clean up any popup windows
+            if (this.popupWindow && !this.popupWindow.closed) {
+                this.popupWindow.close();
+            }
+        }
+
+        /**
          * View script content in a modal
          */
         viewScript(type, key) {
-            const scriptContent = net.state[key];
+            const scriptContent = this.varsCache[key];
             const scriptName = key.substring(1); // Remove # prefix
 
             // Create modal
@@ -1164,21 +1295,16 @@
         async deleteProp(type, key) {
             if (await confirm(`Are you sure you want to delete the ${type} property "${key}"?`)) {
                 const change = new SpacePropertyChange(key, undefined, type === 'protected', { source: 'ui' });
-                changeManager.applyChange(change);
-                if (type === 'public') {
-                    delete net.state[key];
-                } else {
-                    delete net.state[key];
-                }
-                // Use smart render to only render if needed
-                this.smartRender(key, type === 'protected');
+                await changeManager.applyChange(change);
+                // The change will use net.DelVar which will trigger Firebase listeners
+                // No need to manually delete from cache as Firebase listener will handle it
             }
         }
 
         /**
          * Add public property
          */
-        addPublicProp() {
+        async addPublicProp() {
             const keyInput = document.getElementById('addPublicKey');
             const valueInput = document.getElementById('addPublicValue');
 
@@ -1189,19 +1315,17 @@
 
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
-                changeManager.applyChange(change);
-                net.state[key] = value;
+                await changeManager.applyChange(change);
+                // The change will use net.SetVar which will trigger Firebase listeners
                 keyInput.value = '';
                 valueInput.value = '';
-                // New properties should be rendered if we're showing all or if they're auto-pinned
-                this.smartRender(key, false);
             }
         }
 
         /**
          * Add public property from popup
          */
-        addPublicPropPopup() {
+        async addPublicPropPopup() {
             const keyInput = this.popupWindow?.querySelector('#addPublicKeyPopup');
             const valueInput = this.popupWindow?.querySelector('#addPublicValuePopup');
 
@@ -1212,19 +1336,17 @@
 
             if (key) {
                 const change = new SpacePropertyChange(key, value, false, { source: 'ui' });
-                changeManager.applyChange(change);
-                net.state[key] = value;
+                await changeManager.applyChange(change);
+                // The change will use net.SetVar which will trigger Firebase listeners
                 keyInput.value = '';
                 valueInput.value = '';
-                // New properties should be rendered if we're showing all or if they're auto-pinned
-                this.smartRender(key, false);
             }
         }
 
         /**
          * Add protected property
          */
-        addProtectedProp() {
+        async addProtectedProp() {
             const keyInput = document.getElementById('addProtectedKey');
             const valueInput = document.getElementById('addProtectedValue');
 
@@ -1235,19 +1357,17 @@
 
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
-                changeManager.applyChange(change);
-                net.state[key] = value;
+                await changeManager.applyChange(change);
+                // The change will use net.SetVar which will trigger Firebase listeners
                 keyInput.value = '';
                 valueInput.value = '';
-                // New properties should be rendered if we're showing all or if they're auto-pinned
-                this.smartRender(key, true);
             }
         }
 
         /**
          * Add protected property from popup
          */
-        addProtectedPropPopup() {
+        async addProtectedPropPopup() {
             const keyInput = this.popupWindow?.querySelector('#addProtectedKeyPopup');
             const valueInput = this.popupWindow?.querySelector('#addProtectedValuePopup');
 
@@ -1258,12 +1378,10 @@
 
             if (key) {
                 const change = new SpacePropertyChange(key, value, true, { source: 'ui' });
-                changeManager.applyChange(change);
-                net.state[key] = value;
+                await changeManager.applyChange(change);
+                // The change will use net.SetVar which will trigger Firebase listeners
                 keyInput.value = '';
                 valueInput.value = '';
-                // New properties should be rendered if we're showing all or if they're auto-pinned
-                this.smartRender(key, true);
             }
         }
 
@@ -1324,12 +1442,8 @@
                 const change = new SpacePropertyChange(key, newValue, type === 'protected', { source: 'ui' });
                 changeManager.applyChange(change);
 
-                // Update local state
-                if (type === 'public') {
-                    net.state[key] = newValue;
-                } else {
-                    net.state[key] = newValue;
-                }
+                // Firebase will automatically sync the update through listeners
+                // No need to manually update the cache
             }
         }
 

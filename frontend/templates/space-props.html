@@ -1,0 +1,74 @@
+<div data-panel="spacePropsPanel" class="space-props-panel">
+    <!-- Input Helper Overlay -->
+    <div id="inputHelper" data-section="inputHelper" class="input-helper">
+        <div class="panel-header">
+            Input Helper
+            <span id="inputHelperSubject">Unknown Subject</span>
+        </div>
+        <div class="properties-content">
+            <div class="input-value-display" id="inputHelperValue">0</div>
+            <div class="input-helper-info" id="inputHelperInfo"></div>
+            <div class="radial-crown-container">
+                <div class="radial-crown-ridge" id="radialCrown">
+                    <div class="radial-crown">
+                        <div class="radial-crown-slit"></div>
+                    </div>
+                </div>
+                <div style="transform: scale(.5, .5); margin-top: -40px; justify-items: center;">
+                    <div class="radial-crown-ridge" id="radialCrownTol">
+                        <div class="radial-crown">
+                            <div class="radial-crown-slit"></div>
+                        </div>
+                    </div>
+                    <div class="radial-crown-tol-display" id="radialCrownTolDisplay">
+                        Tol: +/- 1
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Space Props Panel Container -->
+    <div id="spacePropsContent" data-section="spacePropsContent" class="space-props-content">
+        <div class="panel-header">
+            <button class="panel-collapse-btn" id="spacePropsCollapseBtn" title="Collapse/Expand">▼</button>
+            Space Properties
+            <div class="lifecycle-buttons">
+                <button class="console-clear-button" id="refreshSpacePropsBtn" title="Refresh Panel" data-panel="spacePropsPanelRefreshBtn">🔄</button>
+            </div>
+        </div>
+        <div class="properties-content">
+            <!-- Public Properties -->
+            <div data-section="publicPropsSection" class="space-props-section">
+                <div id="publicPropsSection" class="space-props-header">
+                    <h3>Public Properties</h3>
+                    <span class="props-count" id="publicPropsCount">0</span>
+                </div>
+                <div class="props-list" id="publicPropsList">
+                    <div class="empty-props">No public properties</div>
+                </div>
+                <div class="add-prop-container">
+                    <input data-input="propertyPanelAddPublicPropKey" type="text" id="addPublicKey" class="prop-input" placeholder="Key">
+                    <input data-input="propertyPanelAddPublicPropValue" type="text" id="addPublicValue" class="prop-input" placeholder="Value">
+                    <button data-panel="propertyPanelAddPublicProp" data-action="add-var" data-var-type="public" class="add-prop-button">Add</button>
+                </div>
+            </div>
+
+            <!-- Protected Properties -->
+            <div data-section="protectedPropsSection" class="space-props-section">
+                <div id="protectedPropsSection" class="space-props-header">
+                    <h3>Protected Properties</h3>
+                    <span class="props-count" id="protectedPropsCount">0</span>
+                </div>
+                <div class="props-list" id="protectedPropsList">
+                    <div class="empty-props">No protected properties</div>
+                </div>
+                <div class="add-prop-container">
+                    <input data-input="propertyPanelAddProtectedPropKey" type="text" id="addProtectedKey" class="prop-input" placeholder="Key">
+                    <input data-input="propertyPanelAddProtectedPropValue" type="text" id="addProtectedValue" class="prop-input" placeholder="Value">
+                    <button data-panel="propertyPanelAddProtectedProp" data-action="add-var" data-var-type="protected" class="add-prop-button">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

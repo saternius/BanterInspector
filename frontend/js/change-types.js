@@ -213,7 +213,7 @@ export class SpacePropertyChange extends Change{
     }
 
     getOldValue() {
-        return net.state[this.property];
+        return net.state.vars?.[this.property] || net.state[this.property];
     }
 
     async apply() {
@@ -227,7 +227,13 @@ export class SpacePropertyChange extends Change{
     }
 
     async change(value) {
-        await net.SetVar(this.property, value, this.protected);
+        if (value === undefined) {
+            // Delete the property
+            await net.DelVar(this.property, this.protected);
+        } else {
+            // Set or update the property
+            await net.SetVar(this.property, value, this.protected);
+        }
     }
 
     getDescription() {
