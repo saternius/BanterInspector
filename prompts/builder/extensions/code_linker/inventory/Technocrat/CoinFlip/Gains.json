@@ -2,46 +2,16 @@
   "author": "Technocrat",
   "created": 1761049851912,
   "data": {
-    "active": true,
-    "components": [
-      {
-        "loadAsync": false,
-        "options": {
-          "cmdUser": "Technocrat",
-          "context": "item",
-          "loadAsync": false
-        },
-        "properties": {
-          "color": {
-            "a": 0.94,
-            "b": 0.984313725490196,
-            "g": 0.984313725490196,
-            "r": 0.984313725490196
-          },
-          "enableWordWrapping": true,
-          "fontSize": 1,
-          "horizontalAlignment": 1,
-          "richText": false,
-          "text": "$1",
-          "verticalAlignment": 1
-        },
-        "spaceProps": {
-          "color": {
-            "a": 0.94,
-            "b": 0.984313725490196,
-            "g": 0.984313725490196,
-            "r": 0.984313725490196
-          },
-          "enableWordWrapping": true,
-          "fontSize": 1,
-          "horizontalAlignment": 1,
-          "richText": false,
-          "text": "$1",
-          "verticalAlignment": 1
-        },
-        "type": "Text"
+    "Components": {
+      "Billboard_355": {
+        "enableXAxis": true,
+        "enableYAxis": true,
+        "enableZAxis": false,
+        "smoothing": 0.1,
+        "type": "Billboard"
       },
-      {
+      "MonoBehavior_6815": {
+        "file": "Gains.js",
         "inventoryItem": {
           "active": false,
           "author": "Technocrat",
@@ -59,66 +29,67 @@
           "startup": false,
           "startupSequence": "onSceneLoaded"
         },
-        "loadAsync": false,
-        "options": {
-          "source": "ui"
-        },
-        "properties": {
-          "file": "Gains.js",
-          "name": "Gains"
-        },
-        "spaceProps": {
-          "file": "Gains.js",
-          "name": "Gains"
-        },
+        "name": "Gains",
         "type": "MonoBehavior"
       },
-      {
-        "loadAsync": false,
-        "options": {
-          "source": "ui"
+      "Text_4542": {
+        "_owner": "Technocrat",
+        "color": {
+          "a": 0.94,
+          "b": 0.984313725490196,
+          "g": 0.984313725490196,
+          "r": 0.984313725490196
         },
-        "properties": {
-          "enableXAxis": true,
-          "enableYAxis": true,
-          "enableZAxis": false,
-          "smoothing": 0.1
-        },
-        "spaceProps": {
-          "enableXAxis": true,
-          "enableYAxis": true,
-          "enableZAxis": false,
-          "smoothing": 0.1
-        },
-        "type": "Billboard"
-      }
-    ],
-    "initialized": true,
-    "layer": 0,
-    "loadAsync": false,
-    "name": "Gains",
-    "parentId": "Scene",
-    "persistent": true,
-    "transform": {
-      "localPosition": {
-        "x": 0,
-        "y": 2.1,
-        "z": 0
-      },
-      "localRotation": {
-        "w": 1,
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "localScale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
+        "enableWordWrapping": true,
+        "fontSize": 1,
+        "horizontalAlignment": 1,
+        "richText": false,
+        "text": "$1",
+        "type": "Text",
+        "verticalAlignment": 1
       }
     },
-    "type": "Entity",
-    "uuid": 8974606321184
+    "Entity": {
+      "Gains": {
+        "__meta": {
+          "active": true,
+          "components": {
+            "Billboard_355": true,
+            "MonoBehavior_6815": true,
+            "Text_4542": true
+          },
+          "layer": 0,
+          "localPosition": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "localRotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "localScale": {
+            "x": 1,
+            "y": 1,
+            "z": 1
+          },
+          "position": {
+            "x": 0,
+            "y": 2.1,
+            "z": 0
+          },
+          "rotation": {
+            "w": 1,
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "uuid": 8974606321184
+        }
+      }
+    }
   },
   "description": "",
   "folder": "CoinFlip",

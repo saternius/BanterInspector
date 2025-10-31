@@ -301,10 +301,10 @@ export class InspectorInjector {
                 components: [
                     { type: 'Geometry', name: 'Geometry', desc: '3D procedural shapes' },
                     { type: 'Box', name: 'Box', desc: 'Box/cube primitive' },
+                    { type: 'Cylinder', name: 'Cylinder', desc: 'Cylinder primitive' },
                     { type: 'Sphere', name: 'Sphere', desc: 'Sphere primitive' },
                     { type: 'Circle', name: 'Circle', desc: 'Circle primitive' },
                     { type: 'Cone', name: 'Cone', desc: 'Cone primitive' },
-                    { type: 'Cylinder', name: 'Cylinder', desc: 'Cylinder primitive' },
                     { type: 'Plane', name: 'Plane', desc: 'Flat plane primitive' },
                     { type: 'Ring', name: 'Ring', desc: 'Ring primitive' },
                     { type: 'Torus', name: 'Torus', desc: 'Torus/donut primitive' },
@@ -355,8 +355,8 @@ export class InspectorInjector {
                 icon: '🎬',
                 name: 'Media',
                 components: [
-                    { type: 'Audio', name: 'Audio', desc: 'Audio playback' },
-                    { type: 'Video', name: 'Video', desc: 'Video playback' },
+                    { type: 'AudioSource', name: 'Audio Source', desc: 'Audio playback' },
+                    { type: 'VideoPlayer', name: 'Video Player', desc: 'Video playback' },
                     { type: 'GLTF', name: 'GLTF Model', desc: '3D model loader' }
                 ]
             },
@@ -366,30 +366,26 @@ export class InspectorInjector {
                 components: [
                     { type: 'MonoBehavior', name: 'MonoBehavior', desc: 'Script behavior' },
                     { type: 'GrabHandle', name: 'Grab Handle', desc: 'Interactive grab handle' },
-                    { type: 'Portal', name: 'Portal', desc: 'Teleport to other spaces' },
-                    { type: 'Mirror', name: 'Mirror', desc: 'Reflective surface' },
-                    { type: 'Browser', name: 'Browser', desc: 'Web browser display' },
-                    { type: 'RealtimeTransform', name: 'Realtime Transform', desc: 'Synced position/rotation' },
-                    { type: 'RealtimeValue', name: 'Realtime Value', desc: 'Synced value property' },
-                    { type: 'RealtimeArray', name: 'Realtime Array', desc: 'Synced array property' },
-                    { type: 'RealtimeBoolean', name: 'Realtime Boolean', desc: 'Synced boolean property' },
-                    { type: 'Chat', name: 'Chat', desc: 'Chat interface' }
+                    { type: 'Grabbable', name: 'Grabbable', desc: 'Grabbable object' },
+                    { type: 'SyncedObject', name: 'Synced Object', desc: 'Multi-user synchronization' },
+                    { type: 'HeldEvents', name: 'Held Events', desc: 'Events when object is held' },
+                    { type: 'AttachedObject', name: 'Attached Object', desc: 'Attach to users' },
+                    { type: 'ColliderEvents', name: 'Collider Events', desc: 'Collision/trigger events' }
                 ]
             },
             misc: {
                 icon: '🔧',
-                name: 'Miscellaneous',
+                name: 'Misc',
                 components: [
                     { type: 'Light', name: 'Light', desc: 'Light source' },
-                    { type: 'Chair', name: 'Chair', desc: 'Sittable chair' },
-                    { type: 'HDRI', name: 'HDRI', desc: 'Environment lighting' },
-                    { type: 'Panel', name: 'Panel', desc: 'UI panel' },
-                    { type: 'PanelItem', name: 'Panel Item', desc: 'UI panel item' },
-                    { type: 'LineSegments', name: 'Line Segments', desc: 'Line renderer' },
-                    { type: 'VideoStream', name: 'Video Stream', desc: 'Live video streaming' },
-                    { type: 'Avatar', name: 'Avatar', desc: 'User avatar' },
-                    { type: 'Microphone', name: 'Microphone', desc: 'Audio input' },
-                    { type: 'Speaker', name: 'Speaker', desc: 'Audio output' }
+                    { type: 'Mirror', name: 'Mirror', desc: 'Reflective surface' },
+                    { type: 'Browser', name: 'Browser', desc: 'Web browser display' },
+                    { type: 'AssetBundle', name: 'Asset Bundle', desc: 'Load Unity asset bundles' },
+                    { type: 'Portal', name: 'Portal', desc: 'Teleport to other spaces' },
+                    { type: 'WorldObject', name: 'World Object', desc: 'World object reference' },
+                    { type: 'StreetView', name: 'Street View', desc: 'Google Street View integration' },
+                    { type: 'KitItem', name: 'Kit Item', desc: 'Kit item reference' },
+                    { type: 'UIPanel', name: 'UI Panel', desc: 'UI panel with haptics and sounds' }
                 ]
             }
         };
@@ -412,9 +408,8 @@ export class InspectorInjector {
 
             categoryData.components.forEach(comp => {
                 html += `
-                <div class="component-item" data-component-type="${comp.type}">
+                <div class="component-item" data-component="${comp.type}">
                     <div class="component-name">${comp.name}</div>
-                    <div class="component-desc">${comp.desc}</div>
                 </div>`;
             });
 

@@ -135,7 +135,6 @@
         }
         
         async _reset(){
-            localStorage.removeItem('lastProps');
             scene.OpenPage(`banter://${location.host}`)
         }
 

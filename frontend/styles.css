@@ -2704,7 +2704,7 @@ input:hover{
     border: 1px solid #333;
     border-radius: 8px;
     width: 100%;
-    max-width: 860px;
+    max-width: 1024px;
     max-height: 95vh;
     display: flex;
     flex-direction: column;
@@ -2726,6 +2726,11 @@ input:hover{
     font-size: 18px;
     font-weight: 600;
     color: #e8e8e8;
+}
+
+.category-components{
+    max-height: 500px;
+    overflow-y: scroll;
 }
 
 .close-button {
