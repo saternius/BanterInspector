@@ -89,18 +89,34 @@ Extensions and plugins are located in the `prompts/builder/extensions/` director
 
 ### Key Patterns
 1. **Module Loading**: ES6 modules with dynamic imports based on environment (CDN for prod, local for dev)
-2. **State Management**: Centralized through SceneManager with event-based updates
+2. **State Management**: Centralized through SceneManager with Firebase Realtime Database for persistence
 3. **UI Updates**: Direct DOM manipulation with event delegation
 4. **Unity Bridge**: All Unity communication goes through the BS library via SceneManager
+5. **Firebase Integration**: Real-time synchronization and persistence through Firebase services
 
+### Firebase Architecture
+The project has migrated from Banter's built-in spaceState and OneShot networking to Firebase services:
 
-### Change Managment System
-The application is meant to be a powerful tool for users to create complex VR experiences while inside VR. Due to the runtime development nature, having a reliable undo/redo mechanism is vital. To solve this all actions that can be performed should have be atomized with corresponsing sets of change classes.
+#### Firebase Realtime Database Structure
+State is stored under `/space/{spaceId}` with the following structure:
+- `/vars` - Space variables (public and protected properties)
+- `/People` - User entities in the space
+- `/components` - Component data and properties
+- `/scripts` - Stored JavaScript scripts
+
+#### Key Services
+- **Firebase Realtime Database**: Handles all state synchronization between clients
+- **Firebase Storage**: Used for file uploads (inventory items, assets, GLB files)
+- **Firebase Auth**: Optional authentication for inventory persistence
+
+### Change Management System
+The application is meant to be a powerful tool for users to create complex VR experiences while inside VR. Due to the runtime development nature, having a reliable undo/redo mechanism is vital. To solve this all actions that can be performed should have be atomized with corresponding sets of change classes.
+
 There will eventually be agentic integration into the inspector, so as such every action that can be triggered via the UX has a corresponding Change class that can alternatively be triggered via a cli command. These are defined in the change-types classes.
 
-When an action is generated that has effects that should be synced across clients, the change class would trigger a OneShot broadcast call that will send to all clients.
-networking.js is responsible for broadcasting events, and recieving/routing incoming broadcasts.
-To abstract this complexity, capitalized methods in components,entites,etc ex: .Set() are to be the intiative method ( the method that initiates the actions ), while _ methods ex: ._set() are to be executive method ( the method that actually performs the operation post sync )
+When an action is generated that has effects that should be synced across clients, the change class creates or updates Firebase database references which automatically sync to all connected clients.
+networking.js manages the Firebase connections and provides helper methods for database operations.
+To abstract this complexity, capitalized methods in components, entities, etc ex: .Set() are to be the initiative method (the method that initiates the actions), while _ methods ex: ._set() are to be executive method (the method that actually performs the operation post sync)
 
 
 ### Component System
@@ -108,6 +124,8 @@ Components are defined in `frontend/js/entity-components/` with a common structu
 - Export a component definition object with `properties`, and optional `handlers`
 - Properties define type, default values, and constraints
 - Register in `frontend/js/entity-components/index.js`
+- Each component automatically creates a Firebase reference at `/space/{spaceId}/components/{componentId}`
+- Component updates are synchronized through Firebase listeners
 - Organized into categories:
   - `behaviors/` - Interactive behaviors (grab handles, synced objects, etc.)
   - `materials/` - Material and physics material components
@@ -115,6 +133,13 @@ Components are defined in `frontend/js/entity-components/` with a common structu
   - `meshes/` - 3D primitives and geometry components
   - `misc/` - Various utility components (portals, mirrors, browsers, etc.)
   - `physics/` - Colliders, rigidbodies, and joints
+
+### Entity System
+Entities (GameObjects) are managed through `frontend/js/entity.js`:
+- Each entity creates a Firebase reference at `/space/{spaceId}/{entityId}`
+- Entity hierarchy is maintained through Firebase parent-child relationships
+- Real-time updates propagate through Firebase listeners
+- Special entities like "Scene" and "People" have reserved paths in Firebase
 
 
 ### Undo/Redo System
@@ -127,13 +152,30 @@ The ChangeManager tracks all modifications:
 ## Critical Considerations
 
 1. **BS Library Dependency**: The inspector requires the BanterScript library to be loaded before initialization
-2. **Property Types**: Supports primitives, Vector3, Color, and asset references (Texture, Material, Audio)
-3. **Asset URLs**: Production uses CDN URLs, development uses local paths
+2. **Firebase Services**: The application requires Firebase Realtime Database and Storage for state synchronization
+3. **Property Types**: Supports primitives, Vector3, Color, and asset references (Texture, Material, Audio)
+4. **Asset URLs**: Production uses CDN URLs, development uses local paths
+5. **Migration Notes**: The project has migrated from Banter's native spaceState and OneShot networking to Firebase. Some legacy OneShot code remains for backward compatibility but is mostly commented out
+6. **Space Identification**: Each space is identified by extracting the subdomain from `window.location.host` (e.g., `spaceId` from `spaceId.banter.fun`)
 
 
 ## Module Details
 
 ### Frontend Modules
+
+#### Networking Module (`frontend/js/networking.js`)
+Central hub for Firebase integration and state synchronization:
+- **Firebase Initialization**: Manages Firebase app configuration and service connections
+- **Database Operations**: Helper methods for CRUD operations on Firebase Realtime Database
+- **State Management**: Maintains space state with `/vars`, `/components`, `/scripts`, `/People`
+- **Host Management**: Tracks and manages the space host for admin operations
+- **Legacy Support**: Contains commented-out OneShot code from the previous networking implementation
+- **Key Methods**:
+  - `initFirebase()` - Initializes Firebase services and sets up initial space state
+  - `getVar()/setVar()` - Get/set space variables in Firebase
+  - `setScript()` - Store scripts in Firebase
+  - `getDatabase()/getStorage()` - Access Firebase services
+  - `routeOneShot()` - Legacy routing function (partially active for backward compatibility)
 
 #### Inventory System (`frontend/js/pages/inventory/`)
 Modularized persistent storage for GameObjects and scripts:
@@ -145,12 +187,13 @@ Modularized persistent storage for GameObjects and scripts:
 Supports storing GameObject hierarchies and JavaScript files with drag & drop, file upload, and JSON export/import capabilities.
 
 #### Space Properties Panel (`frontend/js/pages/world-inspector/space-props-panel.js`)
-Manages Banter space-level properties that persist across sessions:
-- **Public Properties**: Accessible by all users in the space
+Manages space-level properties that persist across sessions via Firebase:
+- **Public Properties**: Accessible by all users in the space (stored in Firebase `/space/{spaceId}/vars`)
 - **Protected Properties**: Only modifiable by space admins
 - Supports string, number, boolean, Vector3, and Color types
-- Real-time synchronization across connected clients
+- Real-time synchronization through Firebase listeners
 - Inline editing with type validation
+- Properties are accessed via `net.getVar()` and `net.setVar()`
 
 #### Script Editor (`frontend/js/pages/script-editor/script-editor.js`)
 Full-featured code editor using CodeMirror v5.65.13:

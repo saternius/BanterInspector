@@ -190,6 +190,7 @@ export class Entity{
                        setTimeout(() => clearInterval(checkInterval), 5000);
                        return;
                     }
+                    
                     if(this.id === targetEntity.parentId){
                         //log( `Renaming in place  [${targetEntity.id}] => [${key}]`)
                         targetEntity._rename(key);

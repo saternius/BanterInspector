@@ -9,6 +9,7 @@ export class Networking {
         this.logs = [];
         this.spaceId = window.location.host.split(".")[0];
         this.state = {};
+        this.varsListeners = new Map(); // Track vars listeners for cleanup
     }
 
     get host(){
@@ -21,6 +22,75 @@ export class Networking {
 
     claimHost(){
         this.setVar("hostUser", SM.myName());
+    }
+
+    // New listener management methods for space-props
+    onVarsChange(callback) {
+        const varsRef = this.db.ref(`space/${this.spaceId}/vars`);
+        varsRef.on('value', callback);
+        this.varsListeners.set(callback, varsRef);
+        return callback; // Return for easy removal
+    }
+
+    offVarsChange(callback) {
+        if (this.varsListeners.has(callback)) {
+            const ref = this.varsListeners.get(callback);
+            ref.off('value', callback);
+            this.varsListeners.delete(callback);
+        }
+    }
+
+    // Granular listeners for performance optimization
+    onVarAdded(callback) {
+        const varsRef = this.db.ref(`space/${this.spaceId}/vars`);
+        varsRef.on('child_added', callback);
+        return { ref: varsRef, callback, event: 'child_added' };
+    }
+
+    onVarChanged(callback) {
+        const varsRef = this.db.ref(`space/${this.spaceId}/vars`);
+        varsRef.on('child_changed', callback);
+        return { ref: varsRef, callback, event: 'child_changed' };
+    }
+
+    onVarRemoved(callback) {
+        const varsRef = this.db.ref(`space/${this.spaceId}/vars`);
+        varsRef.on('child_removed', callback);
+        return { ref: varsRef, callback, event: 'child_removed' };
+    }
+
+    // Remove a specific listener
+    removeListener(listenerInfo) {
+        if (listenerInfo && listenerInfo.ref) {
+            listenerInfo.ref.off(listenerInfo.event, listenerInfo.callback);
+        }
+    }
+
+    // Helper to categorize vars (public vs protected)
+    categorizeVars(vars = this.state.vars) {
+        const result = { public: {}, protected: {} };
+        Object.entries(vars || {}).forEach(([key, value]) => {
+            if (key.startsWith('_')) {
+                result.protected[key.substring(1)] = value;
+            } else {
+                result.public[key] = value;
+            }
+        });
+        return result;
+    }
+
+    // Get all vars (snapshot)
+    async getAllVars() {
+        const snapshot = await this.db.ref(`space/${this.spaceId}/vars`).once('value');
+        return snapshot.val() || {};
+    }
+
+    // Cleanup all listeners
+    cleanupListeners() {
+        this.varsListeners.forEach((ref, callback) => {
+            ref.off('value', callback);
+        });
+        this.varsListeners.clear();
     }
 
     getSecret(){
@@ -332,159 +402,6 @@ export class Networking {
             await SM._reset();
         }
 
-        // if(data === "hierarchy_plz"){
-        //     await SM.provideHierarchyEntity();
-        // }
-
-        // if(items[0] === "component_reordered"){ // `component_reordered:${event_str}`;
-        //     let eventData = items[1];
-        //     try {
-        //         let event = JSON.parse(eventData);
-        //         let entity = SM.getEntityById(event.entityId);
-        //         if(entity){
-        //             entity.reorderComponent(event.fromIndex, event.toIndex);
-        //             if(SM.selectedEntity === entity.id){
-        //                 renderProps();
-        //             }
-        //         }
-        //     } catch(e) {
-        //         err('net', "Failed to parse component_reordered event:", e);
-        //     }
-        // }
-
-        // if(items[0] === "update_entity"){ //`update_entity:${this.id}:${property}:${value}`;
-        //     let [entityId, prop, value] = items.slice(1)
-        //     let entity = SM.getEntityById(entityId);
-        //     if(entity){
-        //         await entity._set(prop, safeParse(value));
-        //         inspector.hierarchyPanel.render()
-        //         if(SM.selectedEntity === entity.id){
-        //             renderProps()
-        //         }
-        //     }
-        //     SM.props[`__${entityId}/${prop}:entity`] = value
-        // }
-
-
-        // if(items[0] === "update_component"){ // `update_component:${this.id}:${property}:${value}`;
-        //     let [componentId, prop, value] = items.slice(1)
-        //     let component = SM.getEntityComponentById(componentId);
-        //     if(component){
-        //         await component._setWithTimestamp(prop, safeParse(value), timestamp);
-        //         if(SM.selectedEntity === component._entity.id){
-        //             renderProps()
-        //         }
-        //     }
-        //     SM.props[`__${componentId}/${prop}:component`] = value
-        // }
-
-        // //update_monobehavior, update_component, update_entity
-        // if(items[0] === "update_monobehavior"){
-        //     let [componentId, op, arg1, arg2] = items.slice(1)
-        //     let monobehavior = SM.getEntityComponentById(componentId);
-        //     if(op === "vars"){
-        //         log("net", "update_monobehavior vars =>", componentId, arg1, arg2)
-        //         await monobehavior._updateVar(arg1, safeParse(arg2));
-        //         if(SM.selectedEntity === monobehavior._entity.id){
-        //             renderProps()
-        //         }
-        //         SM.props[`__${componentId}/vars:component`] = monobehavior.ctx.vars
-        //     }else if(op === "_running"){
-        //         if(monobehavior){
-        //             monobehavior.ctx._running = safeParse(arg1);
-        //             inspector.lifecyclePanel.render()
-        //         }
-        //     }
-        // }
-
-        
-        // if(items[0] === "hierarchy_entity"){
-        //     let [path, entity_data] = items.slice(1)
-        //     await SM.onRecievedHierarchyEntity(path, JSON.parse(entity_data));
-        //     await SM.updateHierarchy();
-        // }
-
-
-       
-        // if(items[0] === "load_entity"){
-        //     let [parentId, entity_data] = items.slice(1)
-        //     await SM._loadEntity(JSON.parse(entity_data), parentId, {owner: sender});
-        //     await SM.updateHierarchy();
-        // }
-
-        // if(items[0] === "component_added"){
-        //     let event = JSON.parse(items[1]);
-        //     let entity = SM.getEntityById(event.entityId);
-        //     if(entity){
-        //         await SM._addComponent(entity, event.componentType, event.componentProperties, event.options);
-        //         await SM.updateHierarchy();
-        //     }
-        // }
-
-        // if(items[0] === "component_removed"){
-        //     let componentId = items[1];
-        //     let component = SM.getEntityComponentById(componentId);
-        //     if(component){
-        //         await component._destroy();
-        //         await SM.updateHierarchy();
-        //     }
-        // }
-
-        // if(items[0] === "entity_added"){
-        //     let [parentId, entityName] = items.slice(1)
-        //     await SM._addNewEntity(entityName, parentId);
-        //     await SM.updateHierarchy();
-        // }
-
-        // if(items[0] === "entity_removed"){
-        //     let entityId = items[1];
-        //     let entity = SM.getEntityById(entityId, false);
-        //     if(entity){
-        //         await entity._destroy();
-        //         await SM.updateHierarchy();
-        //     }else{
-        //         networking.deleteSpaceProperty(`$${entityId}:active`, true);
-        //     }
-        // }
-
-        // if(items[0] === "entity_moved"){
-        //     let [entityId, newParentId, keepPosition] = items.slice(1)
-        //     const entity = SM.getEntityById(entityId);
-        //     keepPosition = keepPosition === "true";
-        //     if (!entity) return;
-        //     if(!newParentId) newParentId = SM.entityData.entities[0].id;
-        //     await entity._setParent(SM.getEntityById(newParentId), keepPosition);
-        //     await SM.updateHierarchy();
-        // }
-
-        // if(items[0] === "entity_cloned"){
-        //     let [sourceEntityId, cloneName, componentIdMapJson] = items.slice(1)
-        //     const sourceEntity = SM.getEntityById(sourceEntityId);
-        //     if (!sourceEntity) return;
-
-        //     // Parse the component ID map
-        //     const componentIdMap = JSON.parse(componentIdMapJson);
-
-        //     // Use scene.Instantiate to clone the entity
-        //     const clonedGameObject = await SM.scene.Instantiate(sourceEntity._bs);
-
-        //     // Rename the cloned GameObject to match the synchronized name
-        //     await clonedGameObject.SetName(cloneName);
-
-        //     // Create entity wrapper and map all components recursively using synchronized IDs
-        //     await SM._createEntityFromGameObject(clonedGameObject, sourceEntity.parentId, cloneName, sourceEntity, componentIdMap);
-
-        //     await SM.updateHierarchy();
-        // }
-
-        // if(items[0] === "load_script"){
-        //     let [fileName, componentId] = items.slice(1)
-        //     let monobehavior = SM.getEntityComponentById(componentId);
-        //     if(monobehavior){
-        //         await monobehavior._loadScript(fileName);
-        //     }
-        // }
-
         if(items[0] === "monobehavior_start"){
             let componentId = items[1];
             let monobehavior = SM.getEntityComponentById(componentId);
@@ -615,49 +532,6 @@ export class Networking {
 
 export const net = new Networking();
 window.net = net;
-
-
-//This should eventually be deprecated
-function quaternionToEuler(quaternion) {
-    const x = quaternion.x;
-    const y = quaternion.y;
-    const z = quaternion.z;
-    const w = quaternion.w;
-    
-    const t0 = 2.0 * (w * x + y * z);
-    const t1 = 1.0 - 2.0 * (x * x + y * y);
-    const roll = Math.atan2(t0, t1);
-    
-    const t2 = 2.0 * (w * y - z * x);
-    
-    const t3 = 1.0 - 2.0 * (y * y + z * z);
-    const pitch = Math.asin(t2);
-    
-    const t4 = 2.0 * (w * z + x * y);
-    const t5 = 1.0 - 2.0 * (y * y + z * z);
-    const yaw = Math.atan2(t4, t5);
-
-    return {
-        x: roll,
-        y: pitch,
-        z: yaw
-    }
-}
-
-window.net.globalProps = (name, globalPos, globalRot) =>{
-    //console.log("globalProps", name, globalPos, globalRot)
-    let p_arr = globalPos.split(",").map(x=>parseFloat(x))
-    let r_arr = globalRot.split(",").map(x=>parseFloat(x))
-    let pos_vec = {x:p_arr[0], y:p_arr[1], z:p_arr[2]}
-    let quaternion = {x:r_arr[0], y:r_arr[1], z:r_arr[2], w:r_arr[3]}
-    let euler = quaternionToEuler(quaternion)
-    SM.getAllMonoBehaviors().forEach(monobehavior => {
-        if(monobehavior.ctx.globalProps){
-            monobehavior.ctx.globalProps(name, pos_vec, euler)
-        }
-    })
-}
-
 
 
 // Debug function for testing Firebase Realtime Database

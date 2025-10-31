@@ -1,0 +1,102 @@
+<!-- World Inspector Page -->
+<div class="page active" id="world-inspector-page">
+    <div class="inspector-container">
+        <!-- Hierarchy Panel -->
+        <div data-panel="hierarchyPanel" class="panel hierarchy-panel">
+            <div class="panel-header">Scene Hierarchy</div>
+            <div class="search-container">
+                <input data-input="entitySearchInput" type="text" id="searchInput" class="search-input" placeholder="Search entities...">
+            </div>
+            <div class="entity-actions-container">
+                <button data-hierarchy-btn="addChildEntityBtn" class="action-button" id="addChildEntityBtn" title="Add Child">
+                    <span class="button-icon">+</span>
+                </button>
+                <button data-hierarchy-btn="cloneEntityBtn" class="action-button" id="cloneEntityBtn" title="Clone">
+                    <span class="button-icon">🧬</span>
+                </button>
+                <button data-hierarchy-btn="deleteEntityBtn" class="action-button delete-button" id="deleteEntityBtn" title="Delete">
+                    <span class="button-icon">×</span>
+                </button>
+                <button data-hierarchy-btn="saveEntityBtn" class="action-button save-button" id="saveEntityBtn" title="Save">
+                    <span class="button-icon">💾</span>
+                </button>
+            </div>
+            <div data-section="hierarchyTree" class="hierarchy-tree" id="hierarchyTree">
+                <div class="loading-state">Loading scene hierarchy...</div>
+            </div>
+        </div>
+
+        <!-- Properties Panel -->
+        <div data-panel="propertiesPanel" class="panel properties-panel" id="propertiesPanel">
+            <div class="panel-header">
+                <span id="selectedEntityName">Properties</span>
+                <div class="properties-header-buttons">
+                    <button id="loadSettingsBtn" class="collapse-all-btn" data-panel="loadSettingsBtn">Async</button>
+                    <button id="collapseAllBtn" style="display: none;" class="collapse-all-btn" data-panel="propertyPanelCollapseAllBtn">Collapse</button>
+                </div>
+            </div>
+            <div class="properties-content" id="propertiesContent">
+                <div class="empty-state">
+                    <h3>No entity selected</h3>
+                    <p>Select a entity from the hierarchy to view its properties</p>
+                </div>
+            </div>
+            <div data-panel='propertyPanelAddComponent' class="add-component-container" id="addComponentContainer" style="display: none;">
+                <button class="add-component-button" id="addComponentBtn">
+                    <span>+</span>
+                    Add Component
+                </button>
+            </div>
+        </div>
+
+        <!-- Space Props Panel Container -->
+        <div data-panel="spacePropsPanel" class="panel space-props-panel-container">
+            <!-- Space Props will be loaded here from space-props.html -->
+            <div id="spacePropsPlaceholder"></div>
+
+            <!-- Lifecycle Panel -->
+            <div data-panel="lifecyclePanel" class="lifecycle-panel" id="lifecyclePanel">
+                <div class="panel-header">
+                    <button class="panel-collapse-btn" id="lifecycleCollapseBtn" title="Collapse/Expand">▼</button>
+                    <span>Lifecycle</span>
+                    <div class="lifecycle-buttons">
+                        <button class="console-clear-button" id="refreshPanelBtn" title="Refresh Panel" data-panel="lifecyclePanelRefreshBtn">🔄</button>
+                    </div>
+                </div>
+                <div class="lifecycle-content">
+                    <div data-section="lifecycleList" class="lifecycle-list" id="lifecycleList">
+                        <div class="empty-lifecycle">No active MonoBehavior scripts</div>
+                    </div>
+                    <div data-section="cmdShell" class="lifecycle-shell-container">
+                        <div class="shell-header">
+                            <span>Shell</span>
+                            <div class="shell-toggles">
+                                <button class="shell-toggle" data-toggle="command" title="Command">Command</button>
+                                <button class="shell-toggle active" data-toggle="oneShot" title="OneShot">OneShot</button>
+                                <button class="shell-clear-button" id="clearShellBtn2" title="Clear Shell" data-panel="lifecyclePanelClearShellBtn">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="lifecycle-shell" id="lifecycleShell"></div>
+                        <input class="command-shell-input" id="commandShellInput" placeholder="> cmd" data-input="lifecyclePanelCommandShellInput">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Component Menu Overlay -->
+    <div class="component-menu-overlay" id="componentMenuOverlay" style="display: none;">
+        <div class="component-menu">
+            <div class="component-menu-header">
+                <h2>Add Component</h2>
+                <button class="close-button" id="closeComponentMenu" data-panel="componentMenuCloseBtn">×</button>
+            </div>
+            <div class="component-menu-search">
+                <input data-input="componentMenuSearchInput" type="text" class="component-search-input" id="componentSearchInput" placeholder="Search components...">
+            </div>
+            <div class="component-menu-content" id="componentMenuContent">
+                <!-- Component categories will be injected here dynamically -->
+            </div>
+        </div>
+    </div>
+</div>

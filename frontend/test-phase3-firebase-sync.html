@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phase 3: Firebase Space Props Migration Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #4ec9b0; }
+        h2 { color: #569cd6; margin-top: 30px; }
+        .test-section {
+            background: #2a2a2a;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover { background: #1177bb; }
+        .log-area {
+            background: #1e1e1e;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #9cdcfe; }
+        .warning { color: #dcdcaa; }
+        input {
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 3px;
+        }
+        .property-list {
+            display: grid;
+            grid-template-columns: 200px 1fr 100px;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .property-item {
+            display: contents;
+        }
+        .property-key {
+            color: #9cdcfe;
+            padding: 5px;
+            background: #2d2d2d;
+            border-radius: 3px;
+        }
+        .property-value {
+            color: #ce9178;
+            padding: 5px;
+            background: #2d2d2d;
+            border-radius: 3px;
+        }
+        .property-actions {
+            text-align: center;
+        }
+        .sync-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .sync-connected { background: #4ec9b0; }
+        .sync-disconnected { background: #f48771; }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phase 3: Firebase Space Props Migration Test</h1>
+    <p>Testing real-time synchronization of space properties through Firebase</p>
+
+    <div class="sync-status">
+        Connection Status: <span id="status">Initializing...</span>
+        <span id="sync-indicator" class="sync-indicator sync-disconnected"></span>
+    </div>
+
+    <div class="two-column">
+        <!-- Client 1 Simulation -->
+        <div class="test-section">
+            <h2>Client 1 - Space Props Panel</h2>
+            <div>
+                <h3>Add Property</h3>
+                <input type="text" id="client1-key" placeholder="Property key">
+                <input type="text" id="client1-value" placeholder="Property value">
+                <button onclick="client1AddProperty()">Add Public</button>
+                <button onclick="client1AddProtectedProperty()">Add Protected</button>
+            </div>
+
+            <h3>Properties</h3>
+            <div id="client1-properties" class="property-list"></div>
+            <div id="client1-log" class="log-area"></div>
+        </div>
+
+        <!-- Client 2 Simulation -->
+        <div class="test-section">
+            <h2>Client 2 - Space Props Panel</h2>
+            <div>
+                <h3>Add Property</h3>
+                <input type="text" id="client2-key" placeholder="Property key">
+                <input type="text" id="client2-value" placeholder="Property value">
+                <button onclick="client2AddProperty()">Add Public</button>
+                <button onclick="client2AddProtectedProperty()">Add Protected</button>
+            </div>
+
+            <h3>Properties</h3>
+            <div id="client2-properties" class="property-list"></div>
+            <div id="client2-log" class="log-area"></div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test Actions</h2>
+        <button onclick="testAddProperty()">Test Add Property</button>
+        <button onclick="testUpdateProperty()">Test Update Property</button>
+        <button onclick="testDeleteProperty()">Test Delete Property</button>
+        <button onclick="testBulkOperations()">Test Bulk Operations</button>
+        <button onclick="clearAllProperties()">Clear All Properties</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Firebase Database Monitor</h2>
+        <div id="firebase-log" class="log-area" style="max-height: 300px;"></div>
+    </div>
+
+    <script type="module">
+        // Import necessary modules
+        window.repoUrl = window.location.origin;
+
+        // Initialize test environment
+        let client1Cache = {};
+        let client2Cache = {};
+        let testPropertyCounter = 0;
+
+        function log(message, type = 'info', clientId = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+
+            if (clientId === 1) {
+                const logArea = document.getElementById('client1-log');
+                logArea.innerHTML += `<div class="${type}">${logEntry}</div>`;
+                logArea.scrollTop = logArea.scrollHeight;
+            } else if (clientId === 2) {
+                const logArea = document.getElementById('client2-log');
+                logArea.innerHTML += `<div class="${type}">${logEntry}</div>`;
+                logArea.scrollTop = logArea.scrollHeight;
+            } else {
+                const logArea = document.getElementById('firebase-log');
+                logArea.innerHTML += `<div class="${type}">${logEntry}</div>`;
+                logArea.scrollTop = logArea.scrollHeight;
+            }
+        }
+
+        function updateStatus(message, connected = false) {
+            document.getElementById('status').textContent = message;
+            const indicator = document.getElementById('sync-indicator');
+            indicator.className = `sync-indicator sync-${connected ? 'connected' : 'disconnected'}`;
+        }
+
+        function renderProperties(clientId, properties) {
+            const container = document.getElementById(`client${clientId}-properties`);
+            container.innerHTML = '';
+
+            Object.entries(properties).forEach(([key, value]) => {
+                const isProtected = key.startsWith('_');
+                const displayKey = isProtected ? key.substring(1) + ' 🔒' : key;
+
+                const item = document.createElement('div');
+                item.className = 'property-item';
+                item.innerHTML = `
+                    <div class="property-key">${displayKey}</div>
+                    <div class="property-value">${JSON.stringify(value)}</div>
+                    <div class="property-actions">
+                        <button onclick="deleteProperty('${key}', ${clientId})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Client 1 functions
+        window.client1AddProperty = async function() {
+            const key = document.getElementById('client1-key').value.trim();
+            const value = document.getElementById('client1-value').value.trim();
+
+            if (key && value) {
+                log(`Adding property: ${key} = ${value}`, 'info', 1);
+                // Simulate adding through Firebase
+                await simulateFirebaseAdd(key, value, false);
+                document.getElementById('client1-key').value = '';
+                document.getElementById('client1-value').value = '';
+            }
+        };
+
+        window.client1AddProtectedProperty = async function() {
+            const key = document.getElementById('client1-key').value.trim();
+            const value = document.getElementById('client1-value').value.trim();
+
+            if (key && value) {
+                const protectedKey = `_${key}`;
+                log(`Adding protected property: ${key} = ${value}`, 'info', 1);
+                await simulateFirebaseAdd(protectedKey, value, true);
+                document.getElementById('client1-key').value = '';
+                document.getElementById('client1-value').value = '';
+            }
+        };
+
+        // Client 2 functions
+        window.client2AddProperty = async function() {
+            const key = document.getElementById('client2-key').value.trim();
+            const value = document.getElementById('client2-value').value.trim();
+
+            if (key && value) {
+                log(`Adding property: ${key} = ${value}`, 'info', 2);
+                await simulateFirebaseAdd(key, value, false);
+                document.getElementById('client2-key').value = '';
+                document.getElementById('client2-value').value = '';
+            }
+        };
+
+        window.client2AddProtectedProperty = async function() {
+            const key = document.getElementById('client2-key').value.trim();
+            const value = document.getElementById('client2-value').value.trim();
+
+            if (key && value) {
+                const protectedKey = `_${key}`;
+                log(`Adding protected property: ${key} = ${value}`, 'info', 2);
+                await simulateFirebaseAdd(protectedKey, value, true);
+                document.getElementById('client2-key').value = '';
+                document.getElementById('client2-value').value = '';
+            }
+        };
+
+        // Simulate Firebase operations
+        async function simulateFirebaseAdd(key, value, isProtected) {
+            log(`Firebase: SET /vars/${key} = ${value}`, 'success');
+
+            // Update both client caches (simulating Firebase listeners)
+            setTimeout(() => {
+                client1Cache[key] = value;
+                client2Cache[key] = value;
+
+                renderProperties(1, client1Cache);
+                renderProperties(2, client2Cache);
+
+                log(`Property added: ${key}`, 'success', 1);
+                log(`Property synced: ${key}`, 'info', 2);
+            }, 100);
+        }
+
+        window.deleteProperty = async function(key, clientId) {
+            log(`Deleting property: ${key}`, 'warning', clientId);
+            log(`Firebase: REMOVE /vars/${key}`, 'warning');
+
+            // Update both client caches
+            setTimeout(() => {
+                delete client1Cache[key];
+                delete client2Cache[key];
+
+                renderProperties(1, client1Cache);
+                renderProperties(2, client2Cache);
+
+                log(`Property deleted: ${key}`, 'success', clientId);
+                log(`Deletion synced: ${key}`, 'info', clientId === 1 ? 2 : 1);
+            }, 100);
+        };
+
+        // Test functions
+        window.testAddProperty = async function() {
+            const key = `testProp${++testPropertyCounter}`;
+            const value = `testValue${testPropertyCounter}`;
+            log(`Test: Adding property ${key} = ${value}`, 'info');
+            await simulateFirebaseAdd(key, value, false);
+        };
+
+        window.testUpdateProperty = async function() {
+            const keys = Object.keys(client1Cache).filter(k => !k.startsWith('_'));
+            if (keys.length > 0) {
+                const key = keys[0];
+                const newValue = `updated_${Date.now()}`;
+                log(`Test: Updating property ${key} to ${newValue}`, 'info');
+                await simulateFirebaseAdd(key, newValue, false);
+            } else {
+                log('No properties to update', 'warning');
+            }
+        };
+
+        window.testDeleteProperty = async function() {
+            const keys = Object.keys(client1Cache);
+            if (keys.length > 0) {
+                const key = keys[keys.length - 1];
+                await deleteProperty(key, 1);
+            } else {
+                log('No properties to delete', 'warning');
+            }
+        };
+
+        window.testBulkOperations = async function() {
+            log('Starting bulk operations test...', 'info');
+
+            // Add multiple properties rapidly
+            for (let i = 1; i <= 5; i++) {
+                await simulateFirebaseAdd(`bulk${i}`, `value${i}`, false);
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
+            log('Bulk operations complete', 'success');
+        };
+
+        window.clearAllProperties = function() {
+            Object.keys(client1Cache).forEach(key => {
+                delete client1Cache[key];
+                delete client2Cache[key];
+            });
+
+            renderProperties(1, client1Cache);
+            renderProperties(2, client2Cache);
+
+            log('All properties cleared', 'warning');
+            log('Firebase: All vars removed', 'warning');
+        };
+
+        window.clearLogs = function() {
+            document.getElementById('client1-log').innerHTML = '';
+            document.getElementById('client2-log').innerHTML = '';
+            document.getElementById('firebase-log').innerHTML = '';
+        };
+
+        // Initialize
+        updateStatus('Connected to Firebase (Simulation)', true);
+        log('Firebase sync test initialized', 'success');
+        log('This test simulates two clients with Firebase synchronization', 'info');
+
+        // Add some initial test data
+        simulateFirebaseAdd('initialProp', 'Hello World', false);
+        simulateFirebaseAdd('_protectedProp', 'Admin Only', true);
+    </script>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!-- Feedback Page -->
+<div class="page" id="feedback-page">
+    <div class="feedback-split-layout">
+        <!-- Left Side - Feedback Form -->
+        <div class="feedback-left-panel">
+            <div class="feedback-container">
+                <div class="feedback-header">
+                    <h2>Help Improve the Inspector</h2>
+                    <p>Your feedback helps us make the inspector better for everyone</p>
+                </div>
+
+                <div class="feedback-form">
+                    <div class="feedback-section">
+                        <label class="feedback-label">What would you like to share?</label>
+                        <div class="feedback-type-selector">
+                            <button class="feedback-type-btn active" data-type="feature">
+                                <span class="feedback-type-icon">✨</span>
+                                Feature
+                            </button>
+                            <button class="feedback-type-btn" data-type="bug">
+                                <span class="feedback-type-icon">🐛</span>
+                                Bug
+                            </button>
+                            <button class="feedback-type-btn" data-type="improvement">
+                                <span class="feedback-type-icon">💡</span>
+                                Idea
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="feedback-section">
+                        <label class="feedback-label" for="feedbackDetails">Your Feedback</label>
+                        <div class="feedback-input feedback-input-container">
+                            <textarea data-input="feedbackDetails" id="feedbackDetails" class="feedback-textarea" rows="6" placeholder="Please provide as much detail as possible..."></textarea>
+                            <button data-feedback="feedbacMicButton" id="micButton" class="mic-button" title="Click to record feedback">
+                                <span class="mic-status"></span>
+                                <span class="mic-icon">🎤</span>
+                                <span class="recording-indicator"></span>
+                            </button>
+                        </div>
+                        <div id="speechStatus" class="speech-status" style="display: none;"></div>
+
+                        <!-- Block Editor Container -->
+                        <div id="blockEditorContainer" class="block-editor-container" style="display: none;">
+                            <div class="block-editor-header">
+                                <h3>Refined Feedback</h3>
+                                <button data-feedback="feedbackClearDraftBtn" id="clearDraftBtn" class="clear-draft-btn" title="Clear draft and start over" style="display: none;">
+                                    <span class="btn-icon">🗑️</span>
+                                    Clear Draft
+                                </button>
+                            </div>
+                            <div class="block-editor-content">
+                                <div id="blocksList" class="blocks-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="feedback-actions">
+                        <button data-feedback="feedbackSubmitBtn" id="submitFeedbackBtn" class="feedback-submit-btn">
+                            <span class="btn-icon">📤</span>
+                            Submit Feedback
+                        </button>
+                        <div id="dualSubmitButtons" class="dual-submit-buttons" style="display: none;">
+                            <button data-feedback="feedbackSubmitOriginalBtn" id="submitOriginalBtn" class="feedback-submit-btn submit-original">
+                                <span class="btn-icon">📄</span>
+                                Submit Original
+                            </button>
+                            <button data-feedback="feedbackSubmitRefinementBtn" id="submitRefinementBtn" class="feedback-submit-btn submit-original">
+                                <span class="btn-icon">✨</span>
+                                Submit Refinement
+                            </button>
+                            <button data-feedback="feedbackFixWithVoiceBtn" id="fixWithVoice" class="feedback-submit-btn submit-original">
+                                <span class="btn-icon">🎤</span>
+                                Fix with Voice
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="feedbackStatus" class="feedback-status" style="display: none;"></div>
+                </div>
+
+                <div class="feedback-footer">
+                    <p>You can also contribute directly on <a href="https://github.com/saternius/BanterInspector" target="_blank">GitHub</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Tickets List -->
+        <div class="feedback-right-panel">
+            <div class="tickets-container">
+                <div class="tickets-header">
+                    <h2>Active Tickets</h2>
+                    <button data-feedback="feedbackRefreshTicketsBtn" id="refreshTicketsBtn" class="refresh-tickets-btn" title="Refresh tickets">
+                        <span class="btn-icon">🔄</span>
+                    </button>
+                </div>
+
+                <div class="tickets-filters">
+                    <select data-feedback="feedbackTicketFilterType" id="ticketFilterType" class="ticket-filter">
+                        <option value="all">All Types</option>
+                        <option value="feature">Features</option>
+                        <option value="bug">Bugs</option>
+                        <option value="improvement">Improvements</option>
+                    </select>
+                    <select data-feedback="feedbackTicketFilterStatus" id="ticketFilterStatus" class="ticket-filter">
+                        <option value="all">All Status</option>
+                        <option value="open">Open</option>
+                        <option value="qa">QA</option>
+                        <option value="postponed">Postponed</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+
+                <div id="ticketsList" class="tickets-list">
+                    <div class="loading-tickets">Loading tickets...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Detail Modal -->
+    <div id="ticketDetailModal" class="ticket-detail-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTicketId"></h3>
+                <button class="modal-close" data-feedback="feedbackTicketDetailModalCloseBtn" data-action="close-ticket-modal">×</button>
+            </div>
+            <div id="modalTicketContent" class="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Ticket Edit Modal -->
+    <div id="ticketEditModal" class="ticket-edit-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Feedback</h3>
+                <button class="modal-close" data-feedback="feedbackTicketEditModalCloseBtn" data-action="close-edit-modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="edit-form-group">
+                    <label for="ticketEditContent">Feedback Details:</label>
+                    <textarea id="ticketEditContent" class="ticket-edit-textarea" rows="8" placeholder="Enter your feedback details..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-save-btn" data-feedback="feedbackTicketEditModalSaveBtn" data-action="save-ticket-edit">Save Changes</button>
+                    <button class="modal-cancel-btn" data-feedback="feedbackTicketEditModalCancelBtn" data-action="close-edit-modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

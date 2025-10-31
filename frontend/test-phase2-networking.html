@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Phase 2 Networking Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #444;
+            border-radius: 4px;
+        }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #dcdcaa; }
+        button {
+            background: #094771;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+        button:hover {
+            background: #0e5a8e;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            background: #2d2d30;
+            border-left: 3px solid #007acc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Phase 2: Enhanced Networking Module Test</h1>
+
+    <div class="section">
+        <h2>Test Controls</h2>
+        <button onclick="testListenerMethods()">Test Listener Methods</button>
+        <button onclick="testHelperMethods()">Test Helper Methods</button>
+        <button onclick="testGranularListeners()">Test Granular Listeners</button>
+        <button onclick="testCleanup()">Test Cleanup</button>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <div class="section">
+        <h2>Variables Control</h2>
+        <button onclick="addTestVar()">Add Test Variable</button>
+        <button onclick="addProtectedVar()">Add Protected Variable</button>
+        <button onclick="updateVar()">Update Variable</button>
+        <button onclick="deleteVar()">Delete Variable</button>
+    </div>
+
+    <div class="section">
+        <h2>Test Results</h2>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+
+        function log(message, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logDiv.appendChild(entry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLog() {
+            logDiv.innerHTML = '';
+            log('Log cleared', 'info');
+        }
+
+        // Mock required globals for testing
+        window.SM = { myName: () => 'TestUser' };
+        window.repoUrl = '/frontend/js';
+
+        // Test functions
+        async function testListenerMethods() {
+            log('Testing onVarsChange and offVarsChange...', 'info');
+
+            if (!window.net || !window.net.db) {
+                log('Error: Networking not initialized or Firebase not connected', 'error');
+                return;
+            }
+
+            let changeCount = 0;
+            const testCallback = (snapshot) => {
+                changeCount++;
+                const vars = snapshot.val() || {};
+                log(`VarsChange callback fired (${changeCount}): ${JSON.stringify(vars)}`, 'success');
+            };
+
+            // Add listener
+            const callbackRef = net.onVarsChange(testCallback);
+            log('Added vars change listener', 'info');
+
+            // Trigger a change
+            setTimeout(() => {
+                net.setVar('test_listener', Date.now());
+                log('Set test_listener variable', 'info');
+            }, 1000);
+
+            // Remove listener after 3 seconds
+            setTimeout(() => {
+                net.offVarsChange(callbackRef);
+                log('Removed vars change listener', 'info');
+                log(`Total changes detected: ${changeCount}`, 'success');
+            }, 3000);
+        }
+
+        async function testHelperMethods() {
+            log('Testing helper methods...', 'info');
+
+            if (!window.net || !window.net.db) {
+                log('Error: Networking not initialized', 'error');
+                return;
+            }
+
+            // Test getAllVars
+            try {
+                const allVars = await net.getAllVars();
+                log(`getAllVars result: ${JSON.stringify(allVars)}`, 'success');
+            } catch (error) {
+                log(`Error getting all vars: ${error.message}`, 'error');
+            }
+
+            // Test categorizeVars
+            const testVars = {
+                publicVar1: 'value1',
+                publicVar2: 42,
+                _protectedVar1: 'protected1',
+                _protectedVar2: true,
+                normalVar: 'normal'
+            };
+
+            const categorized = net.categorizeVars(testVars);
+            log(`Categorized vars:`, 'info');
+            log(`  Public: ${JSON.stringify(categorized.public)}`, 'success');
+            log(`  Protected: ${JSON.stringify(categorized.protected)}`, 'success');
+        }
+
+        async function testGranularListeners() {
+            log('Testing granular listeners...', 'info');
+
+            if (!window.net || !window.net.db) {
+                log('Error: Networking not initialized', 'error');
+                return;
+            }
+
+            const listeners = [];
+
+            // Add listeners
+            listeners.push(net.onVarAdded((snapshot) => {
+                log(`VAR ADDED: ${snapshot.key} = ${JSON.stringify(snapshot.val())}`, 'success');
+            }));
+
+            listeners.push(net.onVarChanged((snapshot) => {
+                log(`VAR CHANGED: ${snapshot.key} = ${JSON.stringify(snapshot.val())}`, 'info');
+            }));
+
+            listeners.push(net.onVarRemoved((snapshot) => {
+                log(`VAR REMOVED: ${snapshot.key}`, 'error');
+            }));
+
+            log('Granular listeners added. Try adding/updating/deleting variables.', 'info');
+
+            // Clean up after 10 seconds
+            setTimeout(() => {
+                listeners.forEach(listener => net.removeListener(listener));
+                log('Granular listeners removed', 'info');
+            }, 10000);
+        }
+
+        async function testCleanup() {
+            log('Testing cleanup method...', 'info');
+
+            if (!window.net || !window.net.db) {
+                log('Error: Networking not initialized', 'error');
+                return;
+            }
+
+            // Add multiple listeners
+            const callback1 = () => log('Callback 1 fired', 'info');
+            const callback2 = () => log('Callback 2 fired', 'info');
+            const callback3 = () => log('Callback 3 fired', 'info');
+
+            net.onVarsChange(callback1);
+            net.onVarsChange(callback2);
+            net.onVarsChange(callback3);
+
+            log(`Added 3 listeners. Map size: ${net.varsListeners.size}`, 'info');
+
+            // Cleanup all
+            net.cleanupListeners();
+            log(`After cleanup. Map size: ${net.varsListeners.size}`, 'success');
+        }
+
+        // Variable manipulation functions
+        let varCounter = 0;
+
+        function addTestVar() {
+            const key = `testVar_${++varCounter}`;
+            const value = `value_${Date.now()}`;
+            net.setVar(key, value);
+            log(`Added variable: ${key} = ${value}`, 'success');
+        }
+
+        function addProtectedVar() {
+            const key = `_protectedVar_${++varCounter}`;
+            const value = `protected_${Date.now()}`;
+            net.setVar(key, value);
+            log(`Added protected variable: ${key} = ${value}`, 'success');
+        }
+
+        function updateVar() {
+            const key = `testVar_${varCounter}`;
+            const value = `updated_${Date.now()}`;
+            net.setVar(key, value);
+            log(`Updated variable: ${key} = ${value}`, 'info');
+        }
+
+        function deleteVar() {
+            const key = `testVar_${varCounter}`;
+            net.delVar(key);
+            log(`Deleted variable: ${key}`, 'error');
+        }
+
+        // Initialize after page load
+        window.addEventListener('load', async () => {
+            log('Page loaded. Waiting for networking module...', 'info');
+
+            // Dynamic import of networking module
+            try {
+                const module = await import('./js/networking.js');
+                log('Networking module loaded', 'success');
+
+                if (window.net && window.net.db) {
+                    log('Firebase is initialized and ready', 'success');
+
+                    // Get initial vars state
+                    const vars = await net.getAllVars();
+                    log(`Current vars count: ${Object.keys(vars).length}`, 'info');
+                } else {
+                    log('Waiting for Firebase initialization...', 'info');
+                }
+            } catch (error) {
+                log(`Error loading networking module: ${error.message}`, 'error');
+                log('Note: This test file should be run in the context of the main inspector application', 'info');
+            }
+        });
+    </script>
+</body>
+</html>
