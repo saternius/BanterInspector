@@ -1,46 +1,6 @@
 const { appendToShell, parseBest } = await import(`${window.repoUrl}/utils.js`);
 const {attachAuthToDatabase} = await import(`${window.repoUrl}/firebase-auth-helper.js`);
 
-function safeParse(value) {
-    // Only operate on strings
-    if (typeof value !== 'string') return value;
-  
-    const str = value.trim();
-  
-    // 1) Booleans and null
-    if (/^(?:true|false|null)$/i.test(str)) {
-      if (str.toLowerCase() === 'null')   return null;
-      return str.toLowerCase() === 'true';
-    }
-  
-    // 2) Numbers (integer, float, scientific)
-    if (/^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(str)) {
-      // +0/-0 edge cases mirror Number()
-      return Number(str);
-    }
-  
-    // 3) JSON objects or arrays
-    if ((str.startsWith('{') && str.endsWith('}')) ||
-        (str.startsWith('[') && str.endsWith(']'))) {
-      try {
-        return JSON.parse(str);
-      } catch {
-        // fall through to return original string
-      }
-    }
-  
-    // 4) Fallback
-    return value;
-}
-
-let renderProps = ()=>{
-    if(navigation.currentPage !== "world-inspector") return;
-    inspector.propertiesPanel.render(SM.selectedEntity)
-}
-
-
-
-
 export class Networking {
     constructor(){
         this.db = null;
@@ -49,6 +9,10 @@ export class Networking {
         this.logs = [];
         this.spaceId = window.location.host.split(".")[0];
         this.state = {};
+    }
+
+    get host(){
+        return this.state.vars.hostUser;
     }
 
     get amHost(){

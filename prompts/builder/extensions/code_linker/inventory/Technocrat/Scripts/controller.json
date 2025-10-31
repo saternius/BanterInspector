@@ -4874,7 +4874,11 @@
     }
   ],
   "icon": "📦",
+  "imported": true,
+  "importedAt": 1761306313043,
+  "importedFrom": "inventory/Technocrat/Scripts",
   "itemType": "entity",
   "last_used": 1759497339108,
-  "name": "controller"
+  "name": "controller",
+  "remote": true
 }

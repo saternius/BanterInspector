@@ -12,11 +12,30 @@
           "radialSegments": 32,
           "radius": 1
         },
+        "spaceProps": {
+          "enabled": true,
+          "height": 1,
+          "radialSegments": 32,
+          "radius": 1
+        },
         "type": "Cylinder"
       },
       {
         "loadAsync": false,
         "properties": {
+          "color": {
+            "a": 1,
+            "b": 1,
+            "g": 1,
+            "r": 1
+          },
+          "enabled": true,
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
+        "spaceProps": {
           "color": {
             "a": 1,
             "b": 1,
@@ -58,6 +77,11 @@
           "file": "PanelSpawner.js",
           "name": "myScript"
         },
+        "spaceProps": {
+          "enabled": true,
+          "file": "PanelSpawner.js",
+          "name": "myScript"
+        },
         "type": "MonoBehavior"
       },
       {
@@ -70,6 +94,11 @@
           "enabled": true,
           "isTrigger": true
         },
+        "spaceProps": {
+          "convex": true,
+          "enabled": true,
+          "isTrigger": true
+        },
         "type": "MeshCollider"
       },
       {
@@ -78,6 +107,9 @@
           "source": "ui"
         },
         "properties": {
+          "enabled": true
+        },
+        "spaceProps": {
           "enabled": true
         },
         "type": "ColliderEvents"

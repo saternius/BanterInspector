@@ -731,8 +731,7 @@ export class Feedback {
         log("net","saving feedback to firebase =>", feedback)
         try {
             // Get networking instance to access Firebase
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -753,8 +752,7 @@ export class Feedback {
     
     async getFeedbackByTicket(ticketId) {
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) return null;
             
@@ -894,8 +892,7 @@ export class Feedback {
         ticketsList.innerHTML = '<div class="loading-tickets">Loading tickets...</div>';
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -1007,8 +1004,7 @@ export class Feedback {
         
         // Fetch fresh ticket data to ensure we have latest comments
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             if (db) {
                 const snapshot = await db.ref(`feedback/tickets/${ticketId}`).once('value');
                 if (snapshot.exists()) {
@@ -1096,8 +1092,7 @@ export class Feedback {
         
         try {
             // Fetch latest ticket data to ensure we have updated comments
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (db) {
                 const snapshot = await db.ref(`feedback/tickets/${ticket.ticketId}`).once('value');
@@ -1164,8 +1159,7 @@ export class Feedback {
         if (!content || !this.currentTicket) return;
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -1247,8 +1241,7 @@ export class Feedback {
         }
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -1308,8 +1301,7 @@ export class Feedback {
         if (!ticket) return;
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -1352,8 +1344,7 @@ export class Feedback {
         if (!newContent || !this.currentTicket) return;
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');
@@ -1403,8 +1394,7 @@ export class Feedback {
         if (!this.currentTicket) return;
         
         try {
-            const networking = window.networking;
-            const db = networking?.getDatabase();
+            const db = net?.getDatabase();
             
             if (!db) {
                 throw new Error('Firebase Database not available');

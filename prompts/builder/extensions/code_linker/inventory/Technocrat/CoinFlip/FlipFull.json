@@ -26,6 +26,15 @@
                   "slippery": false,
                   "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
                 },
+                "spaceProps": {
+                  "addColliders": false,
+                  "climbable": false,
+                  "generateMipMaps": true,
+                  "legacyRotate": false,
+                  "nonConvexColliders": false,
+                  "slippery": false,
+                  "url": "https://suitable-bulldog-flying.ngrok-free.app/api/fetch_glb?file=0e106cef5f3c27c9f685cb150935c8453267b03321d0779b06b20713a030a1c9"
+                },
                 "type": "GLTF"
               }
             ],
@@ -70,6 +79,17 @@
                       "loadAsync": false
                     },
                     "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
+                    "spaceProps": {
                       "bypassEffects": false,
                       "bypassListenerEffects": false,
                       "bypassReverbZones": false,
@@ -131,6 +151,17 @@
                       "spatialBlend": 1,
                       "volume": 1
                     },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -182,6 +213,17 @@
                       "spatialBlend": 1,
                       "volume": 1
                     },
+                    "spaceProps": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 1
+                    },
                     "type": "AudioSource"
                   }
                 ],
@@ -223,6 +265,17 @@
                       "loadAsync": false
                     },
                     "properties": {
+                      "bypassEffects": false,
+                      "bypassListenerEffects": false,
+                      "bypassReverbZones": false,
+                      "loop": false,
+                      "mute": false,
+                      "pitch": 1,
+                      "playOnAwake": true,
+                      "spatialBlend": 1,
+                      "volume": 0
+                    },
+                    "spaceProps": {
                       "bypassEffects": false,
                       "bypassListenerEffects": false,
                       "bypassReverbZones": false,
@@ -307,6 +360,13 @@
               "takeOwnershipOnCollision": false,
               "takeOwnershipOnGrab": true
             },
+            "spaceProps": {
+              "kinematicIfNotOwned": true,
+              "syncPosition": true,
+              "syncRotation": true,
+              "takeOwnershipOnCollision": false,
+              "takeOwnershipOnGrab": true
+            },
             "type": "SyncedObject"
           },
           {
@@ -317,6 +377,11 @@
               "loadAsync": false
             },
             "properties": {
+              "height": 0.02,
+              "radialSegments": 32,
+              "radius": 0.1
+            },
+            "spaceProps": {
               "height": 0.02,
               "radialSegments": 32,
               "radius": 0.1
@@ -334,6 +399,10 @@
               "convex": true,
               "isTrigger": false
             },
+            "spaceProps": {
+              "convex": true,
+              "isTrigger": false
+            },
             "type": "MeshCollider"
           },
           {
@@ -344,6 +413,35 @@
               "loadAsync": false
             },
             "properties": {
+              "angularDrag": 0.05,
+              "angularVelocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "centerOfMass": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              },
+              "collisionDetectionMode": 0,
+              "drag": 0,
+              "freezePositionX": false,
+              "freezePositionY": false,
+              "freezePositionZ": false,
+              "freezeRotationX": false,
+              "freezeRotationY": false,
+              "freezeRotationZ": false,
+              "isKinematic": false,
+              "mass": 1,
+              "useGravity": true,
+              "velocity": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            },
+            "spaceProps": {
               "angularDrag": 0.05,
               "angularVelocity": {
                 "x": 0,
@@ -406,6 +504,10 @@
               "file": "Flipable.js",
               "name": "Flipable"
             },
+            "spaceProps": {
+              "file": "Flipable.js",
+              "name": "Flipable"
+            },
             "type": "MonoBehavior"
           }
         ],
@@ -461,6 +563,20 @@
               "text": "$1",
               "verticalAlignment": 1
             },
+            "spaceProps": {
+              "color": {
+                "a": 0.94,
+                "b": 0.984313725490196,
+                "g": 0.984313725490196,
+                "r": 0.984313725490196
+              },
+              "enableWordWrapping": true,
+              "fontSize": 1,
+              "horizontalAlignment": 1,
+              "richText": false,
+              "text": "$1",
+              "verticalAlignment": 1
+            },
             "type": "Text"
           },
           {
@@ -489,6 +605,10 @@
               "file": "Gains.js",
               "name": "Gains"
             },
+            "spaceProps": {
+              "file": "Gains.js",
+              "name": "Gains"
+            },
             "type": "MonoBehavior"
           },
           {
@@ -497,6 +617,12 @@
               "source": "ui"
             },
             "properties": {
+              "enableXAxis": true,
+              "enableYAxis": true,
+              "enableZAxis": false,
+              "smoothing": 0.1
+            },
+            "spaceProps": {
               "enableXAxis": true,
               "enableYAxis": true,
               "enableZAxis": false,
@@ -546,6 +672,11 @@
           "height": 0.05,
           "width": 2
         },
+        "spaceProps": {
+          "depth": 1,
+          "height": 0.05,
+          "width": 2
+        },
         "type": "Box"
       },
       {
@@ -567,6 +698,18 @@
           "side": 0,
           "texture": ""
         },
+        "spaceProps": {
+          "color": {
+            "a": 1,
+            "b": 0.08627450980392157,
+            "g": 0.1411764705882353,
+            "r": 0.16470588235294117
+          },
+          "generateMipMaps": true,
+          "shaderName": "Standard",
+          "side": 0,
+          "texture": ""
+        },
         "type": "Material"
       },
       {
@@ -577,6 +720,19 @@
           "loadAsync": false
         },
         "properties": {
+          "center": {
+            "x": 0,
+            "y": -0.475,
+            "z": 0
+          },
+          "isTrigger": false,
+          "size": {
+            "x": 1.5,
+            "y": 1,
+            "z": 1
+          }
+        },
+        "spaceProps": {
           "center": {
             "x": 0,
             "y": -0.475,
@@ -620,6 +776,10 @@
           "loadAsync": false
         },
         "properties": {
+          "file": "FlipController.js",
+          "name": "FlipController"
+        },
+        "spaceProps": {
           "file": "FlipController.js",
           "name": "FlipController"
         },

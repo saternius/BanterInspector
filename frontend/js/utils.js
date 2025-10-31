@@ -721,7 +721,7 @@ window.log = function(tag, ...args) {
         }
         window.dispatchEvent(new CustomEvent('log-event', {detail: msg}));
         if(window.logger.remote && !window.logger.remoteTagsExcluded.includes(tag)){
-            networking.sendOneShot("log_event¶"+JSON.stringify(msg));
+            net.sendOneShot("log_event¶"+JSON.stringify(msg));
         }
     }
 

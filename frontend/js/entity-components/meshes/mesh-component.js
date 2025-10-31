@@ -18,11 +18,10 @@ export class MeshComponent extends EntityComponent {
             setTimeout(this.initGrabbable.bind(this), 50);
             return;
         }
-        material._set("shaderName", "Standard");
-        material._set("color", material.properties.color);
-        this._entity._set("layer", 5);
-        SM._addComponent(this._entity, "MeshCollider");
-        SM._addComponent(this._entity, "MonoBehavior", {
+        material.Set("shaderName", "Standard");
+        material.Set("color", material.properties.color);
+        AddComponent(this._entity.id, "MeshCollider");
+        AddComponent(this._entity.id, "MonoBehavior",{
             componentProperties:{
                 file: "Grabbable.js"
             }

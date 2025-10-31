@@ -25,6 +25,20 @@
           "text": "$1",
           "verticalAlignment": 1
         },
+        "spaceProps": {
+          "color": {
+            "a": 0.94,
+            "b": 0.984313725490196,
+            "g": 0.984313725490196,
+            "r": 0.984313725490196
+          },
+          "enableWordWrapping": true,
+          "fontSize": 1,
+          "horizontalAlignment": 1,
+          "richText": false,
+          "text": "$1",
+          "verticalAlignment": 1
+        },
         "type": "Text"
       },
       {
@@ -53,6 +67,10 @@
           "file": "Gains.js",
           "name": "Gains"
         },
+        "spaceProps": {
+          "file": "Gains.js",
+          "name": "Gains"
+        },
         "type": "MonoBehavior"
       },
       {
@@ -61,6 +79,12 @@
           "source": "ui"
         },
         "properties": {
+          "enableXAxis": true,
+          "enableYAxis": true,
+          "enableZAxis": false,
+          "smoothing": 0.1
+        },
+        "spaceProps": {
           "enableXAxis": true,
           "enableYAxis": true,
           "enableZAxis": false,
