@@ -4,6 +4,9 @@ const cors = require('cors');
 
 const app = express();
 
+// Import routers
+const feedbackRouter = require('./routes/feedback');
+
 // Enhanced CORS configuration
 app.use(cors({
     origin: true,  // Allow all origins
@@ -18,7 +21,8 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(express.json());
+// Increase body size limit for comments and details
+app.use(express.json({ limit: '10mb' }));
 
 // Test endpoint
 app.get('/test', (req, res) => {
@@ -32,6 +36,12 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://inspector-6bad1-default-rtdb.firebaseio.com'
 });
+
+// Make admin available to routes
+app.set('admin', admin);
+
+// Mount feedback router
+app.use('/api/feedback', feedbackRouter);
 
 // Set custom claims for anonymous user
 app.post('/setclaims', async (req, res) => {
