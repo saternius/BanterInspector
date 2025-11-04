@@ -1,5 +1,7 @@
 const { StatementBlockEditor } = await import(`${window.repoUrl}/pages/feedback/statement-block-editor.js`);
 const { confirm } = await import(`${window.repoUrl}/utils.js`);
+const { FeedbackAPI } = await import(`${window.repoUrl}/pages/feedback/feedback-api.js`);
+
 export class Feedback {
     constructor() {
         this.selectedType = 'feature';
@@ -16,6 +18,7 @@ export class Feedback {
         this.useBlockMode = true; // Feature flag
         this.blockEditorContainer = null;
         this.isAddingToBlocks = false;
+        this.api = new FeedbackAPI(); // Initialize API client
         this.init();
     }
     
@@ -35,7 +38,7 @@ export class Feedback {
             }
         })
         
-        // Add keyboard event listeners for modal
+        // Add keyboard event listeners for modals
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('ticketEditModal').style.display === 'flex') {
                 if (e.key === 'Escape') {
@@ -44,13 +47,24 @@ export class Feedback {
                     // Only save on Enter if not in the textarea
                     this.saveTicketEdit();
                 }
+            } else if (document.getElementById('ticketDetailModal').style.display === 'flex') {
+                if (e.key === 'Escape') {
+                    this.closeTicketDetailModal();
+                }
+            }
+        });
+
+        // Add click-outside-to-close for ticket detail modal
+        document.getElementById('ticketDetailModal')?.addEventListener('mousedown', (e) => {
+            if (e.target.id === 'ticketDetailModal') {
+                this.closeTicketDetailModal();
             }
         });
     }
     
 
     async get_key(){
-        let key = await fetch(`${window.ngrokUrl}/../something-for-the-time`);
+        let key = await fetch(`${window.repoUrl}/../something-for-the-time`);
         key = await key.text();
         this.key = key;
     }
@@ -81,7 +95,7 @@ export class Feedback {
         
         // Initialize the block editor
         this.statementBlockEditor = new StatementBlockEditor({
-            serviceUrl: window.blockServiceUrl || 'http://localhost:5000/process-text',
+            serviceUrl: `https://app.tippy.dev/api/process-text`,
             onBlocksChanged: (blocks) => {
                 // Auto-save draft when blocks change
                 if (this.statementBlockEditor) {
@@ -728,43 +742,23 @@ export class Feedback {
     
     
     async saveFeedbackToFirebase(feedback) {
-        log("net","saving feedback to firebase =>", feedback)
+        log("net","saving feedback via API =>", feedback)
         try {
-            // Get networking instance to access Firebase
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            // Save to public path: feedback/tickets/{ticketId}
-            await db.ref(`feedback/tickets/${feedback.ticketId}`).set({
-                ...feedback,
-                createdAt: firebase.database.ServerValue.TIMESTAMP
-            });
-            
-            log("net", 'Feedback saved to Firebase:', `feedback/tickets/${feedback.ticketId}`);
+            // Save via API instead of direct Firebase
+            await this.api.createTicket(feedback);
+
+            log("net", 'Feedback saved via API:', feedback.ticketId);
         } catch (error) {
-            err("net", 'Error saving to Firebase:', error);
+            err("net", 'Error saving feedback:', error);
             // Don't throw - we'll still save locally
         }
     }
     
     async getFeedbackByTicket(ticketId) {
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) return null;
-            
-            // Get from public path
-            const snapshot = await db.ref(`feedback/tickets/${ticketId}`).once('value');
-            
-            if (snapshot.exists()) {
-                return { id: ticketId, ...snapshot.val() };
-            }
-            
-            return null;
-            
+            // Get via API instead of direct Firebase
+            const ticket = await this.api.getTicket(ticketId);
+            return ticket;
         } catch (error) {
             err("net", 'Error fetching feedback:', error);
             return null;
@@ -888,38 +882,17 @@ export class Feedback {
     async loadAllTickets() {
         const ticketsList = document.getElementById('ticketsList');
         if (!ticketsList) return;
-        
+
         ticketsList.innerHTML = '<div class="loading-tickets">Loading tickets...</div>';
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            // Get all tickets from public path
-            const snapshot = await db.ref('feedback/tickets').once('value');
-            const allTickets = [];
-            
-            snapshot.forEach(childSnapshot => {
-                allTickets.push({
-                    id: childSnapshot.key,
-                    ticketId: childSnapshot.key,
-                    ...childSnapshot.val()
-                });
-            });
-            
-            // Sort by creation date (newest first)
-            allTickets.sort((a, b) => {
-                const dateA = new Date(a.createdAt || a.timestamp);
-                const dateB = new Date(b.createdAt || b.timestamp);
-                return dateB - dateA;
-            });
-            
+            // Get all tickets via API instead of direct Firebase
+            const allTickets = await this.api.getAllTickets();
+
+            // Tickets are already sorted by the API (newest first)
             this.tickets = allTickets;
             this.displayTickets(allTickets);
-            
+
         } catch (error) {
             err("net", 'Error loading tickets:', error);
             ticketsList.innerHTML = '<div class="error-loading">Failed to load tickets</div>';
@@ -1001,29 +974,31 @@ export class Feedback {
     async openTicketDetail(ticketId) {
         const ticket = this.tickets.find(t => t.ticketId === ticketId);
         if (!ticket) return;
-        
+
         // Fetch fresh ticket data to ensure we have latest comments
         try {
-            const db = net?.getDatabase();
-            if (db) {
-                const snapshot = await db.ref(`feedback/tickets/${ticketId}`).once('value');
-                if (snapshot.exists()) {
-                    const latestData = snapshot.val();
-                    Object.assign(ticket, latestData);
-                }
+            const latestData = await this.api.getTicket(ticketId);
+            if (latestData) {
+                Object.assign(ticket, latestData);
             }
         } catch (error) {
             err("net", 'Error fetching latest ticket data:', error);
         }
-        
+
         this.currentTicket = ticket;
-        
+
         const modal = document.getElementById('ticketDetailModal');
         const modalTitle = document.getElementById('modalTicketId');
         const modalContent = document.getElementById('modalTicketContent');
-        
+
+        // Setup close button handler
+        const closeBtn = modal.querySelector('[data-action="close-ticket-modal"]');
+        if (closeBtn) {
+            closeBtn.onclick = () => this.closeTicketDetailModal();
+        }
+
         modalTitle.textContent = `Ticket #${ticket.ticketId}`;
-        
+
         const date = new Date(ticket.timestamp || ticket.createdAt);
         const isOwner = ticket.createdBy === SM.myName();
         
@@ -1089,24 +1064,19 @@ export class Feedback {
     
     async loadComments(ticket) {
         const commentsList = document.getElementById('commentsList');
-        
+
         try {
             // Fetch latest ticket data to ensure we have updated comments
-            const db = net?.getDatabase();
-            
-            if (db) {
-                const snapshot = await db.ref(`feedback/tickets/${ticket.ticketId}`).once('value');
-                if (snapshot.exists()) {
-                    const latestData = snapshot.val();
-                    ticket.comments = latestData.comments || [];
-                    
-                    // Update the current ticket reference
-                    if (this.currentTicket && this.currentTicket.ticketId === ticket.ticketId) {
-                        this.currentTicket.comments = ticket.comments;
-                    }
+            const latestData = await this.api.getTicket(ticket.ticketId);
+            if (latestData) {
+                ticket.comments = latestData.comments || [];
+
+                // Update the current ticket reference
+                if (this.currentTicket && this.currentTicket.ticketId === ticket.ticketId) {
+                    this.currentTicket.comments = ticket.comments;
                 }
             }
-            
+
             const comments = ticket.comments || [];
             
             if (comments.length === 0) {
@@ -1155,51 +1125,36 @@ export class Feedback {
     async addComment() {
         const input = document.getElementById('newCommentInput');
         const content = input.value.trim();
-        
+
         if (!content || !this.currentTicket) return;
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
             const comment = {
                 author: (SM.scene?.localUser?.name) || SM.myName() || 'Anonymous',
-                content: content,
-                timestamp: new Date().toISOString()
+                content: content
             };
-            
-            // Update the ticket with the new comment
-            const updatedComments = [...(this.currentTicket.comments || []), comment];
-            
-            // First get the current ticket data to preserve all fields
-            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
-            const currentSnapshot = await ticketRef.once('value');
-            const currentData = currentSnapshot.val() || this.currentTicket;
-            
-            // Update with new comments
-            await ticketRef.set({
-                ...currentData,
-                comments: updatedComments,
-                updatedAt: new Date().toISOString()
-            });
-            
+
+            // Add comment via API
+            const result = await this.api.addComment(this.currentTicket.ticketId, comment);
+
             // Update local data
-            this.currentTicket.comments = updatedComments;
+            if (!this.currentTicket.comments) {
+                this.currentTicket.comments = [];
+            }
+            this.currentTicket.comments.push(result.comment);
+
             const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
             if (ticketIndex !== -1) {
                 this.tickets[ticketIndex] = this.currentTicket;
             }
-            
+
             // Clear input and reload comments
             input.value = '';
             await this.loadComments(this.currentTicket);
-            
+
             // Update the comment count in the ticket list
-            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
-            
+            this.updateTicketCommentCount(this.currentTicket.ticketId, this.currentTicket.comments.length);
+
         } catch (error) {
             err("net", 'Error adding comment:', error);
             showNotification('Failed to add comment. Please try again.');
@@ -1231,38 +1186,24 @@ export class Feedback {
     
     async saveTicketEdit() {
         if (!this.editingTicket) return;
-        
+
         const contentTextarea = document.getElementById('ticketEditContent');
         const newContent = contentTextarea.value.trim();
-        
+
         if (!newContent) {
             showNotification('Feedback content cannot be empty.');
             return;
         }
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            // Get the current ticket data to preserve all fields
-            const ticketRef = db.ref(`feedback/tickets/${this.editingTicket.ticketId}`);
-            const currentSnapshot = await ticketRef.once('value');
-            const currentData = currentSnapshot.val() || this.editingTicket;
-            
-            // Update with new content
-            await ticketRef.set({
-                ...currentData,
-                details: newContent,
-                updatedAt: new Date().toISOString(),
-                editedAt: new Date().toISOString()
+            // Update ticket via API
+            const updatedTicket = await this.api.updateTicket(this.editingTicket.ticketId, {
+                details: newContent
             });
-            
+
             // Update local data
             this.editingTicket.details = newContent;
-            this.editingTicket.editedAt = new Date().toISOString();
+            this.editingTicket.editedAt = updatedTicket.editedAt;
             
             // Update the display to show the edited content
             const ticketItems = document.querySelectorAll('.ticket-item');
@@ -1296,23 +1237,18 @@ export class Feedback {
     
     async deleteTicket(ticketId) {
         if (!await confirm('Are you sure you want to delete this ticket?')) return;
-        
+
         const ticket = this.tickets.find(t => t.ticketId === ticketId);
         if (!ticket) return;
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            await db.ref(`feedback/tickets/${ticketId}`).remove();
-            
+            // Delete ticket via API
+            await this.api.deleteTicket(ticketId);
+
             // Remove from local data
             this.tickets = this.tickets.filter(t => t.ticketId !== ticketId);
             this.displayTickets(this.tickets);
-            
+
         } catch (error) {
             console.error('Error deleting ticket:', error);
             showNotification('Failed to delete ticket. Please try again.');
@@ -1340,48 +1276,31 @@ export class Feedback {
     async saveEditedComment(commentIndex) {
         const textarea = document.getElementById(`comment-edit-textarea-${commentIndex}`);
         const newContent = textarea.value.trim();
-        
+
         if (!newContent || !this.currentTicket) return;
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            // Update the comment content
-            const updatedComments = [...this.currentTicket.comments];
-            updatedComments[commentIndex] = {
-                ...updatedComments[commentIndex],
-                content: newContent,
-                editedAt: new Date().toISOString()
-            };
-            
-            // Save to Firebase
-            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
-            const currentSnapshot = await ticketRef.once('value');
-            const currentData = currentSnapshot.val() || this.currentTicket;
-            
-            await ticketRef.set({
-                ...currentData,
-                comments: updatedComments,
-                updatedAt: new Date().toISOString()
-            });
-            
+            // Update comment via API
+            const updatedComment = await this.api.updateComment(
+                this.currentTicket.ticketId,
+                commentIndex,
+                newContent
+            );
+
             // Update local data
-            this.currentTicket.comments = updatedComments;
+            this.currentTicket.comments[commentIndex] = updatedComment;
+
             const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
             if (ticketIndex !== -1) {
                 this.tickets[ticketIndex] = this.currentTicket;
             }
-            
+
             // Reload comments to show the update
             await this.loadComments(this.currentTicket);
-            
+
             // Update the comment count in the ticket list
-            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
-            
+            this.updateTicketCommentCount(this.currentTicket.ticketId, this.currentTicket.comments.length);
+
         } catch (error) {
             console.error('Error saving edited comment:', error);
             showNotification('Failed to save comment. Please try again.');
@@ -1390,43 +1309,27 @@ export class Feedback {
     
     async deleteComment(commentIndex) {
         if (!await confirm('Are you sure you want to delete this comment?')) return;
-        
+
         if (!this.currentTicket) return;
-        
+
         try {
-            const db = net?.getDatabase();
-            
-            if (!db) {
-                throw new Error('Firebase Database not available');
-            }
-            
-            // Remove the comment from the array
-            const updatedComments = this.currentTicket.comments.filter((_, index) => index !== commentIndex);
-            
-            // Save to Firebase
-            const ticketRef = db.ref(`feedback/tickets/${this.currentTicket.ticketId}`);
-            const currentSnapshot = await ticketRef.once('value');
-            const currentData = currentSnapshot.val() || this.currentTicket;
-            
-            await ticketRef.set({
-                ...currentData,
-                comments: updatedComments,
-                updatedAt: new Date().toISOString()
-            });
-            
-            // Update local data
-            this.currentTicket.comments = updatedComments;
+            // Delete comment via API
+            await this.api.deleteComment(this.currentTicket.ticketId, commentIndex);
+
+            // Update local data - remove the comment
+            this.currentTicket.comments = this.currentTicket.comments.filter((_, index) => index !== commentIndex);
+
             const ticketIndex = this.tickets.findIndex(t => t.ticketId === this.currentTicket.ticketId);
             if (ticketIndex !== -1) {
                 this.tickets[ticketIndex] = this.currentTicket;
             }
-            
+
             // Reload comments to show the update
             await this.loadComments(this.currentTicket);
-            
+
             // Update the comment count in the ticket list
-            this.updateTicketCommentCount(this.currentTicket.ticketId, updatedComments.length);
-            
+            this.updateTicketCommentCount(this.currentTicket.ticketId, this.currentTicket.comments.length);
+
         } catch (error) {
             console.error('Error deleting comment:', error);
             showNotification('Failed to delete comment. Please try again.');
@@ -1607,26 +1510,29 @@ export class Feedback {
             singleSubmit.style.cursor = 'pointer';
             singleSubmit.innerHTML = "Submit Feedback";
         }
-        
+
         // Enable dual submit buttons (for block mode)
         const submitOriginalBtn = document.getElementById('submitOriginalBtn');
         const submitRefinementBtn = document.getElementById('submitRefinementBtn');
-        
+
         if (submitOriginalBtn) {
             submitOriginalBtn.disabled = false;
             submitOriginalBtn.style.opacity = '1';
             submitOriginalBtn.style.cursor = 'pointer';
         }
-        
+
         if (submitRefinementBtn) {
             submitRefinementBtn.disabled = false;
             submitRefinementBtn.style.opacity = '1';
             submitRefinementBtn.style.cursor = 'pointer';
         }
     }
-}
 
-// Add global function handlers
-window.closeTicketModal = function() {
-    document.getElementById('ticketDetailModal').style.display = 'none';
-};
+    closeTicketDetailModal() {
+        const modal = document.getElementById('ticketDetailModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+        this.currentTicket = null;
+    }
+}

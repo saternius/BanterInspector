@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" android-bundle windows-bundle hide-space-info>
 <head>
-    <meta name="sidequest-space-verification" content="4e20d730-763a-449a-9902-2f3534c48b5c">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspector Injection Example</title>
+    <title>Tippy</title>
 </head>
 <body>
-    <div id="inspectorContainer"></div>
+    <div id="tippyContainer"></div>
 
     <script type="module">
-        let importUrl = 'https://suitable-bulldog-flying.ngrok-free.app'
-        const { InspectorInjector } = await import(`${importUrl}/inspector-injector.js`);
+        let importUrl = 'https://app.tippy.dev'
+        const { TippyInjector } = await import(`${importUrl}/tippy-injector.js`);
 
 
-        // Initialize the inspector with custom configuration
-        const inspector = new InspectorInjector({
-            targetElement: document.getElementById('inspectorContainer'),
+        // Initialize Tippy with custom configuration
+        const tippy = new TippyInjector({
+            targetElement: document.getElementById('tippyContainer'),
             config: {
-                ngrokUrl: importUrl,
-                fileServer: 'ngrok', // Options: 'stable', 'ngrok', 'local', 'unity'
+                serverUrl: importUrl,
                 inventoryDeps: [
                     {'path':'inventory/Technocrat/Scripts', minUpdateTime: 1761007569000},
                     {'path':'inventory/Technocrat/BanterBrush', minUpdateTime: 1761007569000}
-                ]
+                ],
+                firebaseConfig:{
+                    apiKey: "AIzaSyBrWGOkEJ6YjFmhXqvujbtDjWII3udLpWs",
+                    authDomain: "inspector-6bad1.firebaseapp.com",
+                    projectId: "inspector-6bad1",
+                    storageBucket: "inspector-6bad1.firebasestorage.app",
+                    messagingSenderId: "565892382854",
+                    appId: "1:565892382854:web:06cc45d58cc0f0e3205107",
+                    measurementId: "G-3S4G5E0GVK",
+                    databaseURL: "https://inspector-6bad1-default-rtdb.firebaseio.com"
+                }
             }
         });
 
-        // Inject the inspector into the page
-        inspector.inject();
+        // Inject Tippy into the page
+        tippy.inject();
 
         // You can also destroy it if needed
-        // inspector.destroy();
+        // tippy.destroy();
     </script>
 </body>
 </html>

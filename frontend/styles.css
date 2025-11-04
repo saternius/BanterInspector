@@ -1525,7 +1525,7 @@ input:hover{
     transition: all 0.3s ease;
 }
 
-.inspector-container {
+.tippy-container {
     display: flex;
     height: 100%;
     gap: 1px;

@@ -1,11 +1,14 @@
 const express = require('express');
 const admin = require('firebase-admin');
 const cors = require('cors');
+const http = require('http');
+const WebSocketManager = require('./websocket-manager');
 
 const app = express();
 
 // Import routers
 const feedbackRouter = require('./routes/feedback');
+const inventoryRouter = require('./routes/inventory');
 
 // Enhanced CORS configuration
 app.use(cors({
@@ -40,8 +43,9 @@ admin.initializeApp({
 // Make admin available to routes
 app.set('admin', admin);
 
-// Mount feedback router
+// Mount routers
 app.use('/api/feedback', feedbackRouter);
+app.use('/api/inventory', inventoryRouter);
 
 // Set custom claims for anonymous user
 app.post('/setclaims', async (req, res) => {
@@ -65,6 +69,18 @@ app.post('/setclaims', async (req, res) => {
 });
 
 const PORT = 3303;
-app.listen(PORT, '0.0.0.0', () => {
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Initialize WebSocket manager
+const wsManager = new WebSocketManager(server, admin);
+
+// Make WebSocket manager available to routes if needed
+app.set('wsManager', wsManager);
+
+// Start server
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`Auth server running on port ${PORT}`);
+    console.log(`WebSocket server ready on ws://localhost:${PORT}`);
 });

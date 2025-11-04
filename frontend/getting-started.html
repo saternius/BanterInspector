@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tippy - Getting Started</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            max-width: 800px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .step h2 {
+            display: inline-block;
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .code-block {
+            position: relative;
+            margin-top: 15px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            padding-right: 60px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+        }
+
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .property { color: #9cdcfe; }
+        .function { color: #dcdcaa; }
+
+        .highlight {
+            background: #fffbdd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .emphasis {
+            font-size: 2em;
+            text-align: center;
+            margin: 30px 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tippy Inspector</h1>
+        <p class="subtitle">Unity Scene Editor for Banter VR</p>
+
+        <div class="step">
+            <span class="step-number">1</span>
+            <h2>Create a Firebase project</h2>
+            <p>Head to the <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and create a new project (or use an existing one).</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
+            <h2>Enable Realtime Database</h2>
+            <p style="margin-bottom: 10px;">In your Firebase project:</p>
+            <ol style="margin-left: 20px; margin-bottom: 10px;">
+                <li>Go to <strong>Build → Realtime Database</strong></li>
+                <li>Click <strong>Create Database</strong></li>
+                <li>Choose your database location</li>
+                <li>Start in <strong>test mode</strong> (we'll configure rules next)</li>
+            </ol>
+            <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                <strong>⚠️ Important:</strong> Copy your database URL (e.g., <span class="highlight">https://your-project-id-default-rtdb.firebaseio.com</span>). You'll need this in step 5.
+            </p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">3</span>
+            <h2>Configure Database Rules</h2>
+            <p style="margin-bottom: 10px;">Go to the <strong>Rules</strong> tab in Realtime Database and paste these rules:</p>
+
+<pre>{
+  <span class="string">"rules"</span>: {
+    <span class="string">"spaceState"</span>: {
+      <span class="string">"$spaceId"</span>: {
+        <span class="string">".read"</span>: <span class="string">"auth != null"</span>,
+        <span class="string">".write"</span>: <span class="string">"auth != null"</span>
+      }
+    }
+  }
+}</pre>
+            <p style="margin-top: 10px;">Click <strong>Publish</strong> to save the rules.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">4</span>
+            <h2>Enable Anonymous Authentication</h2>
+            <p style="margin-bottom: 10px;">Tippy uses Firebase Authentication for secure access:</p>
+            <ol style="margin-left: 20px;">
+                <li>Go to <strong>Build → Authentication</strong></li>
+                <li>Click <strong>Get Started</strong></li>
+                <li>Go to the <strong>Sign-in method</strong> tab</li>
+                <li>Enable <strong>Anonymous</strong> authentication</li>
+            </ol>
+        </div>
+
+        <div class="step">
+            <span class="step-number">5</span>
+            <h2>Get your Firebase config</h2>
+            <p style="margin-bottom: 15px;">Go to <strong>Project Settings → General → Your apps → SDK setup and configuration</strong> and copy your config object:</p>
+
+<pre><span class="keyword">const</span> firebaseConfig = {
+  <span class="property">apiKey</span>: <span class="string">"your-api-key"</span>,
+  <span class="property">authDomain</span>: <span class="string">"your-project.firebaseapp.com"</span>,
+  <span class="property">projectId</span>: <span class="string">"your-project-id"</span>,
+  <span class="property">storageBucket</span>: <span class="string">"your-project.appspot.com"</span>,
+  <span class="property">messagingSenderId</span>: <span class="string">"123456789"</span>,
+  <span class="property">appId</span>: <span class="string">"1:123456789:web:abc123def456"</span>,
+  <span class="property">databaseURL</span>: <span class="string">"https://your-project-id-default-rtdb.firebaseio.com"</span>
+};</pre>
+            <p style="margin-top: 10px;"><strong>Note:</strong> Add the <span class="highlight">databaseURL</span> field with your database URL from step 2.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">6</span>
+            <h2>Open your index.html</h2>
+            <p>Navigate to your Banterworld's <span class="highlight">index.html</span> file.</p>
+        </div>
+
+        <div class="step">
+            <span class="step-number">7</span>
+            <h2>Paste this code</h2>
+            <p>Add the following to your <span class="highlight">&lt;body&gt;</span> tag, replacing the firebaseConfig with yours:</p>
+
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode(this, 'tippy-code')">Copy</button>
+                <pre id="tippy-code"><span class="keyword">&lt;body&gt;</span>
+    <span class="keyword">&lt;div</span> <span class="property">id</span>=<span class="string">"tippyContainer"</span><span class="keyword">&gt;&lt;/div&gt;</span>
+
+    <span class="keyword">&lt;script</span> <span class="property">type</span>=<span class="string">"module"</span><span class="keyword">&gt;</span>
+        <span class="keyword">let</span> importUrl = <span class="string">'https://app.tippy.dev'</span>
+        <span class="keyword">const</span> { TippyInjector } = <span class="keyword">await import</span>(<span class="string">`${importUrl}/tippy-injector.js`</span>);
+
+        <span class="comment">// Initialize Tippy with custom configuration</span>
+        <span class="keyword">const</span> tippy = <span class="keyword">new</span> <span class="function">TippyInjector</span>({
+            <span class="property">targetElement</span>: document.<span class="function">getElementById</span>(<span class="string">'tippyContainer'</span>),
+            <span class="property">config</span>: {
+                <span class="property">serverUrl</span>: importUrl,
+                <span class="property">firebaseConfig</span>:{
+                    <span class="property">apiKey</span>: <span class="string">"your-api-key"</span>,
+                    <span class="property">authDomain</span>: <span class="string">"your-project.firebaseapp.com"</span>,
+                    <span class="property">projectId</span>: <span class="string">"your-project-id"</span>,
+                    <span class="property">storageBucket</span>: <span class="string">"your-project.appspot.com"</span>,
+                    <span class="property">messagingSenderId</span>: <span class="string">"123456789"</span>,
+                    <span class="property">appId</span>: <span class="string">"1:123456789:web:abc123def456"</span>,
+                    <span class="property">databaseURL</span>: <span class="string">"https://your-project-id-default-rtdb.firebaseio.com"</span>
+                }
+            }
+        });
+
+        <span class="comment">// Inject Tippy into the page</span>
+        tippy.<span class="function">inject</span>();
+    <span class="keyword">&lt;/script&gt;</span>
+<span class="keyword">&lt;/body&gt;</span></pre>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">8</span>
+            <h2>That's it!</h2>
+            <p>Load your Banterworld and Tippy will be ready to use.</p>
+        </div>
+
+        <div class="footer">
+            <p style="margin-bottom: 5px;">Need help or have questions?</p>
+            <p>Contact me on Discord: <a href="https://discord.com/users/_jaybot" target="_blank">@_jaybot</a></p>
+        </div>
+    </div>
+
+    <script>
+        function copyCode(button, preId) {
+            const pre = document.getElementById(preId);
+            const text = pre.textContent;
+
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.textContent = 'Failed';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

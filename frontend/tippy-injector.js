@@ -1,37 +1,37 @@
 /**
- * Banter Inspector Injector
- * This module can be imported to inject the entire inspector application into any HTML page
+ * Tippy Injector
+ * This module can be imported to inject the entire Tippy application into any HTML page
  *
  * Usage:
  * <script type="module">
- *   import { InspectorInjector } from './inspector-injector.js';
- *   const inspector = new InspectorInjector({
+ *   import { TippyInjector } from './tippy-injector.js';
+ *   const tippy = new TippyInjector({
  *     targetElement: document.body, // or any container element
  *     config: {
  *       ngrokUrl: 'https://your-ngrok-url.ngrok-free.app',
  *       fileServer: 'ngrok' // or 'stable', 'local', 'unity'
  *     }
  *   });
- *   inspector.inject();
+ *   tippy.inject();
  * </script>
  */
 
-export class InspectorInjector {
+export class TippyInjector {
     constructor(options = {}) {
+        window.FIREBASE_CONFIG = options.config.firebaseConfig;
         this.targetElement = options.targetElement || document.body;
         this.config = {
-            ngrokUrl: options.config?.ngrokUrl || 'https://suitable-bulldog-flying.ngrok-free.app',
-            fileServer: options.config?.fileServer || 'ngrok',
+            serverUrl: options.config?.serverUrl || 'https://app.tippy.dev',
             ...options.config
         };
         this.injected = false;
         this.templateLoader = null;
-        this.inspectorConfig = null;
+        this.tippyConfig = null;
     }
 
     async inject() {
         if (this.injected) {
-            console.warn('Inspector already injected');
+            console.warn('Tippy already injected');
             return;
         }
 
@@ -44,7 +44,7 @@ export class InspectorInjector {
         // Load template and config modules
         await this.loadModules();
 
-        // Inject the inspector HTML
+        // Inject the Tippy HTML
         await this.injectHTML();
 
         // Inject styles
@@ -61,29 +61,29 @@ export class InspectorInjector {
     }
 
     setupGlobalConfig() {
-        window.ngrokUrl = this.config.ngrokUrl;
-        window.isLocalHost = window.location.hostname === 'localhost';
-        window.repoUrl = '.';
+        window.repoUrl = this.config.serverUrl;
+        // window.isLocalHost = window.location.hostname === 'localhost';
+        // window.repoUrl = '.';
 
-        window.fileServer = this.config.fileServer;
-        if (!window.fileServer) {
-            localStorage.setItem('file_server', 'ngrok');
-            window.fileServer = 'ngrok';
-        }
+        // window.fileServer = this.config.fileServer;
+        // if (!window.fileServer) {
+        //     localStorage.setItem('file_server', 'ngrok');
+        //     window.fileServer = 'ngrok';
+        // }
 
-        if (window.fileServer === 'stable') {
-            window.repoUrl = 'https://saternius.github.io/BanterInspector/frontend';
-        } else if (window.fileServer === 'ngrok') {
-            window.repoUrl = window.ngrokUrl;
-        } else if (window.fileServer === 'local') {
-            window.repoUrl = 'http://192.168.0.148:9909';
-        } else if (window.fileServer === 'unity') {
-            if (window.isLocalHost) {
-                window.repoUrl = 'http://localhost:42069/frontend';
-            } else {
-                console.log('Unity is not running on localhost');
-            }
-        }
+        // if (window.fileServer === 'stable') {
+        //     window.repoUrl = 'https://saternius.github.io/BanterInspector/frontend';
+        // } else if (window.fileServer === 'ngrok') {
+        //     window.repoUrl = window.ngrokUrl;
+        // } else if (window.fileServer === 'local') {
+        //     window.repoUrl = 'http://192.168.0.148:9909';
+        // } else if (window.fileServer === 'unity') {
+        //     if (window.isLocalHost) {
+        //         window.repoUrl = 'http://localhost:42069/frontend';
+        //     } else {
+        //         console.log('Unity is not running on localhost');
+        //     }
+        // }
 
         window.blockServiceUrl = `${window.ngrokUrl}/api/process-text`;
         window.blend2endServiceUrl = `${window.ngrokUrl}/api/format-blend2end`;
@@ -97,10 +97,10 @@ export class InspectorInjector {
         ]);
 
         this.templateLoader = new templateLoaderModule.TemplateLoader(window.repoUrl);
-        this.inspectorConfig = new configModule.InspectorConfig(this.config);
+        this.tippyConfig = new configModule.TippyConfig(this.config);
 
         // Store config globally for other modules
-        window.inspectorConfig = this.inspectorConfig;
+        window.tippyConfig = this.tippyConfig;
     }
 
     injectDependencies() {
@@ -202,16 +202,16 @@ export class InspectorInjector {
             // Add container-specific styles to fix layout when not injecting into body
             const style = document.createElement('style');
             style.textContent = `
-                #banter-inspector-root,
-                #inspectorContainer {
+                #tippy-root,
+                #tippyContainer {
                     display: flex;
                     flex-direction: column;
                     height: 100%;
                     position: relative;
                 }
 
-                #banter-inspector-root .page-container,
-                #inspectorContainer .page-container {
+                #tippy-root .page-container,
+                #tippyContainer .page-container {
                     display: block !important;
                 }
             `;
@@ -227,16 +227,16 @@ export class InspectorInjector {
         const templates = await this.templateLoader.loadAll();
 
         // Build HTML from templates
-        const inspectorHTML = await this.buildHTMLFromTemplates(templates);
+        const tippyHTML = await this.buildHTMLFromTemplates(templates);
 
         // Create a container div if target is body, otherwise inject directly
         if (this.targetElement === document.body) {
             const container = document.createElement('div');
-            container.id = 'banter-inspector-root';
-            container.innerHTML = inspectorHTML;
+            container.id = 'tippy-root';
+            container.innerHTML = tippyHTML;
             this.targetElement.appendChild(container);
         } else {
-            this.targetElement.innerHTML = inspectorHTML;
+            this.targetElement.innerHTML = tippyHTML;
             // Ensure the target element has proper dimensions
             if (!this.targetElement.style.height) {
                 this.targetElement.style.height = '100vh';
@@ -264,13 +264,6 @@ export class InspectorInjector {
                 <div class="reset-buttons">
                     <button data-toolbar-btn="hardResetBtn" class="reset-btn" data-action="hard-reset">⏻</button>
                     <button data-toolbar-btn="softResetBtn" class="reset-btn" data-action="soft-reset" style="background-color: #5b3d3d;">⟳</button>
-                </div>
-                <div data-toolbar-btn="fileServer">
-                    <select class="file-server" id="fileServer" data-action="change-file-server">
-                        <option value="stable">Stable</option>
-                        <option value="ngrok">Ngrok</option>
-                        <option value="local">Local</option>
-                    </select>
                 </div>
             </div>
         `;
@@ -435,7 +428,7 @@ export class InspectorInjector {
     destroy() {
         // Clean up if needed
         if (this.targetElement === document.body) {
-            const container = document.getElementById('banter-inspector-root');
+            const container = document.getElementById('tippy-root');
             if (container) {
                 container.remove();
             }
@@ -447,4 +440,4 @@ export class InspectorInjector {
 }
 
 // Export for use as a module
-export default InspectorInjector;
+export default TippyInjector;

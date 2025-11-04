@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .authenticated {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .log {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            background: white;
+            border-left: 3px solid #007bff;
+        }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Connection Test</h1>
+
+    <div id="status" class="status disconnected">Disconnected</div>
+
+    <div>
+        <h3>Connection Controls</h3>
+        <button onclick="connect()">Connect</button>
+        <button onclick="disconnect()">Disconnect</button>
+    </div>
+
+    <div>
+        <h3>Authentication</h3>
+        <label>Username: <input type="text" id="username" value="testuser"></label>
+        <label>Secret: <input type="text" id="secret" value="test123"></label>
+        <button onclick="authenticate()">Authenticate</button>
+    </div>
+
+    <div>
+        <h3>Test Listeners</h3>
+        <button onclick="subscribeToInventory()">Subscribe to Inventory</button>
+        <button onclick="unsubscribeAll()">Unsubscribe All</button>
+    </div>
+
+    <div>
+        <h3>Event Log</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script type="module">
+        import { InventoryWebSocket } from './js/pages/inventory/inventory-websocket.js';
+
+        let ws = null;
+        let listenerId = null;
+
+        function updateStatus(status, className) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = status;
+            statusEl.className = 'status ' + className;
+        }
+
+        function addLog(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.insertBefore(entry, logEl.firstChild);
+        }
+
+        window.connect = async function() {
+            if (ws) {
+                addLog('Already connected');
+                return;
+            }
+
+            ws = new InventoryWebSocket({
+                url: 'ws://localhost:3303',
+                debug: true,
+                onConnect: () => {
+                    updateStatus('Connected', 'connected');
+                    addLog('WebSocket connected');
+                },
+                onDisconnect: () => {
+                    updateStatus('Disconnected', 'disconnected');
+                    addLog('WebSocket disconnected');
+                },
+                onError: (error) => {
+                    addLog(`Error: ${error}`, 'error');
+                }
+            });
+
+            try {
+                await ws.connect();
+                addLog('Connection established');
+            } catch (error) {
+                addLog(`Connection failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.disconnect = function() {
+            if (ws) {
+                ws.disconnect();
+                ws = null;
+                addLog('Disconnected');
+            }
+        };
+
+        window.authenticate = async function() {
+            if (!ws || !ws.isConnected()) {
+                addLog('Not connected', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const secret = document.getElementById('secret').value;
+
+            try {
+                await ws.authenticate(username, secret);
+                updateStatus('Authenticated', 'authenticated');
+                addLog(`Authenticated as ${username}`);
+            } catch (error) {
+                addLog(`Authentication failed: ${error.message}`, 'error');
+            }
+        };
+
+        window.subscribeToInventory = function() {
+            if (!ws || !ws.authenticated) {
+                addLog('Not authenticated', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const path = `inventory/${username}`;
+
+            listenerId = ws.on(path, 'child_added', (snapshot) => {
+                addLog(`Child added: ${snapshot.key} = ${JSON.stringify(snapshot.val())}`);
+            });
+
+            addLog(`Subscribed to ${path}`);
+        };
+
+        window.unsubscribeAll = function() {
+            if (ws) {
+                ws.offAll();
+                addLog('Unsubscribed from all listeners');
+            }
+        };
+
+        // Auto-connect on load
+        window.addEventListener('load', () => {
+            addLog('Page loaded, ready to test WebSocket');
+        });
+    </script>
+</body>
+</html>

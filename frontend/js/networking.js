@@ -105,17 +105,11 @@ export class Networking {
     initFirebase(callback) {
         log("init", "initializing firebase")
         // Firebase configuration
-        const firebaseConfig = window.FIREBASE_CONFIG || {
-            apiKey: "AIzaSyBrWGOkEJ6YjFmhXqvujbtDjWII3udLpWs",
-            authDomain: "inspector-6bad1.firebaseapp.com",
-            projectId: "inspector-6bad1",
-            storageBucket: "inspector-6bad1.firebasestorage.app",
-            messagingSenderId: "565892382854",
-            appId: "1:565892382854:web:06cc45d58cc0f0e3205107",
-            measurementId: "G-3S4G5E0GVK",
-            databaseURL: "https://inspector-6bad1-default-rtdb.firebaseio.com"
-        };
-        
+        if(!window.FIREBASE_CONFIG){
+            err("init", "Firebase configuration not found");
+            return;
+        }
+        const firebaseConfig = window.FIREBASE_CONFIG;
         // Initialize Firebase only if not already initialized
         if (typeof firebase !== 'undefined' && !firebase.apps.length) {
             try {

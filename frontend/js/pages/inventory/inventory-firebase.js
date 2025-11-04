@@ -1,4 +1,6 @@
 
+import { InventoryAPI } from './inventory-api.js';
+
 /**
  * InventoryFirebase - Handles all Firebase/remote storage operations for the inventory
  */
@@ -6,6 +8,7 @@ export class InventoryFirebase {
     constructor(inventory) {
         this.inventory = inventory;
         this.firebaseListeners = new Map();
+        this.api = new InventoryAPI(); // Initialize API client
     }
 
     folderIsMine(folder){
@@ -153,42 +156,6 @@ export class InventoryFirebase {
         }
     }
 
-    /**
-     * Setup Firebase listener for root inventory
-     */
-    // setupRootListener() {
-    //     if (!window.networking || !window.networking.getDatabase) return;
-        
-    //     try {
-    //         const db = window.networking.getDatabase();
-    //         const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-    //         const firebasePath = `inventory/${userName}`;
-            
-    //         const rootRef = db.ref(firebasePath);
-            
-    //         const addedListener = rootRef.on('child_added', (snapshot) => {
-    //             this.handleFirebaseItemAdded(snapshot, null);
-    //         });
-            
-    //         const removedListener = rootRef.on('child_removed', (snapshot) => {
-    //             this.handleFirebaseItemRemoved(snapshot, null);
-    //         });
-            
-    //         const changedListener = rootRef.on('child_changed', (snapshot) => {
-    //             this.handleFirebaseItemChanged(snapshot, null);
-    //         });
-            
-    //         // Store listeners for cleanup
-    //         this.firebaseListeners.set(firebasePath, {
-    //             ref: rootRef,
-    //             listeners: { addedListener, removedListener, changedListener }
-    //         });
-            
-    //         log("net", 'Firebase listeners setup for root:', firebasePath);
-    //     } catch (error) {
-    //         err("net", 'Failed to setup root listener:', error);
-    //     }
-    // }
 
     /**
      * Handle Firebase item added event
@@ -457,36 +424,21 @@ export class InventoryFirebase {
      * Sync item to Firebase
      */
     async syncToFirebase(inventoryItem) {
-        log("net", "syncToFirebase", inventoryItem)
+        log("net", "syncToFirebase via API", inventoryItem)
         // Check if item is in a remote folder or root is remote
         const isRemote = this.isItemInRemoteLocation();
         if (!isRemote) return;
 
-        if (!window.net) {
-            err('net', 'Networking not initialized, skipping sync');
-            return;
-        }
-
         try {
-            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-
-            // Build the Firebase path
-            let firebasePath = `inventory/${userName}`;
-            if (inventoryItem.folder) {
-                const sanitizedFolder = this.sanitizeFirebasePath(inventoryItem.folder);
-                firebasePath += `/${sanitizedFolder}`;
-            }
-            const sanitizedItemName = this.sanitizeFirebasePath(inventoryItem.name);
-            firebasePath += `/${sanitizedItemName}`;
-
             // Remove undefined properties before syncing
             const cleanedItem = this.removeUndefined(inventoryItem);
 
-            // Save to Firebase
-            await net.setData(firebasePath, cleanedItem);
-            log('net', 'Item synced to Firebase:', firebasePath);
+            // Use API to sync the item
+            await this.api.syncItem(inventoryItem.name, cleanedItem);
+            log('net', `Synced item "${inventoryItem.name}" to Firebase via API`);
         } catch (error) {
-            err('net', 'Failed to sync item to Firebase:', error);
+            err('net', 'Failed to sync item via API:', error);
+            showNotification(`Failed to sync item: ${error.message}`);
         }
     }
     
@@ -496,22 +448,8 @@ export class InventoryFirebase {
     async syncFolderToFirebase(folderKey, folder) {
         // Only sync if folder is marked as remote
         if (!folder.remote) return;
-        
-        if (!window.net) {
-            err('net', 'Networking not initialized, skipping folder sync');
-            return;
-        }
-        
+
         try {
-            const userName = this.sanitizeFirebasePath(SM.myName());
-            if (!userName) {
-                err('net', 'No username available for Firebase sync');
-                return;
-            }
-            
-            const sanitizedFolderKey = this.sanitizeFirebasePath(folderKey);
-            const firebasePath = `inventory/${userName}/${sanitizedFolderKey}/_folder_metadata`;
-            
             // Create folder metadata object with description and public status
             const folderMetadata = {
                 author: SM.myName(),
@@ -522,12 +460,13 @@ export class InventoryFirebase {
                 _description: folder._description || '',
                 public: folder.public || false
             };
-            
-            // Save folder metadata to Firebase
-            await net.setData(firebasePath, folderMetadata);
-            log('net', 'Folder metadata synced to Firebase:', firebasePath);
+
+            // Use API to sync the folder
+            await this.api.syncFolder(folderKey, folderMetadata);
+            log('net', `Synced folder "${folderKey}" to Firebase via API`);
         } catch (error) {
-            err('net', 'Failed to sync folder to Firebase:', error);
+            err('net', 'Failed to sync folder via API:', error);
+            showNotification(`Failed to sync folder: ${error.message}`);
         }
     }
 
@@ -633,63 +572,51 @@ export class InventoryFirebase {
      */
     async uploadToFirebase(contents, userName) {
         try {
-            // Initialize Firebase if not already done
-            if (!window.firebase || !window.firebase.database) {
-                showNotification('Firebase not initialized. Please check configuration.');
-                return;
-            }
-            
-            const db = window.firebase.database();
-            const basePath = `inventory/${userName}`;
-            
-            // Upload items
+            // Prepare bulk upload data with all items and folders
+            const bulkData = {
+                items: {},
+                folders: {}
+            };
+
+            // Process items
             for (const [itemName, item] of Object.entries(contents.items)) {
                 const sanitizedItemName = this.sanitizeFirebasePath(itemName);
-                const sanitizedCurrentFolder = this.inventory.currentFolder ? this.sanitizeFirebasePath(this.inventory.currentFolder) : null;
-                const itemPath = sanitizedCurrentFolder 
-                    ? `${basePath}/${sanitizedCurrentFolder}/${sanitizedItemName}`
-                    : `${basePath}/${sanitizedItemName}`;
-                
-                await db.ref(itemPath).set(item);
+                // Ensure folder property is set correctly
+                if (this.inventory.currentFolder) {
+                    item.folder = this.inventory.currentFolder;
+                }
+                bulkData.items[sanitizedItemName] = item;
             }
-            
-            // Upload folders and their contents recursively
+
+            // Process folders and their contents recursively
             for (const [folderName, folder] of Object.entries(contents.folders)) {
                 const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
-                const sanitizedCurrentFolder = this.inventory.currentFolder ? this.sanitizeFirebasePath(this.inventory.currentFolder) : null;
-                const folderPath = sanitizedCurrentFolder
-                    ? `${basePath}/${sanitizedCurrentFolder}/${sanitizedFolderName}`
-                    : `${basePath}/${sanitizedFolderName}`;
-                
-                // Upload folder metadata
-                await db.ref(`${folderPath}/_folder`).set(folder);
-                
-                // Get and upload folder contents recursively
+                // Set parent folder if we're in a folder
+                if (this.inventory.currentFolder) {
+                    folder.parent = this.inventory.currentFolder;
+                }
+                bulkData.folders[sanitizedFolderName] = folder;
+
+                // Get and include folder contents recursively
                 const folderContents = this.inventory.getFolderContentsRecursive(folderName);
-                
-                // Upload items in folder
+
+                // Include items in folder
                 for (const [itemName, item] of Object.entries(folderContents.items)) {
                     const sanitizedItemName = this.sanitizeFirebasePath(itemName);
-                    const sanitizedItemFolder = item.folder ? this.sanitizeFirebasePath(item.folder) : null;
-                    const itemPath = sanitizedItemFolder
-                        ? `${basePath}/${sanitizedItemFolder}/${sanitizedItemName}`
-                        : `${folderPath}/${sanitizedItemName}`;
-                    
-                    await db.ref(itemPath).set(item);
+                    bulkData.items[sanitizedItemName] = item;
                 }
-                
-                // Upload subfolders
+
+                // Include subfolders
                 for (const [subfolderName, subfolder] of Object.entries(folderContents.folders)) {
                     const sanitizedSubfolderName = this.sanitizeFirebasePath(subfolderName);
-                    const sanitizedParent = subfolder.parent ? this.sanitizeFirebasePath(subfolder.parent) : null;
-                    const subfolderPath = sanitizedParent
-                        ? `${basePath}/${sanitizedParent}/${sanitizedSubfolderName}`
-                        : `${folderPath}/${sanitizedSubfolderName}`;
-                    
-                    await db.ref(`${subfolderPath}/_folder`).set(subfolder);
+                    bulkData.folders[sanitizedSubfolderName] = subfolder;
                 }
             }
-            
+
+            // Use API for bulk upload
+            const result = await this.api.bulkUpload(bulkData);
+            log('net', `Bulk uploaded ${result.count} items/folders via API`);
+
             // Mark uploaded folders as remote
             for (const folderName of Object.keys(contents.folders)) {
                 if (this.inventory.folders[folderName]) {
@@ -699,24 +626,20 @@ export class InventoryFirebase {
                     localStorage.setItem(storageKey, JSON.stringify(this.inventory.folders[folderName]));
                 }
             }
-            
+
             // Mark current folder as remote if we're in a folder
             if (this.inventory.currentFolder && this.inventory.folders[this.inventory.currentFolder]) {
                 this.inventory.folders[this.inventory.currentFolder].remote = true;
                 const storageKey = `inventory_folder_${this.inventory.currentFolder}`;
                 localStorage.setItem(storageKey, JSON.stringify(this.inventory.folders[this.inventory.currentFolder]));
-            } else {
-                // Mark root as remote
-                // const rootRemoteKey = `inventory_root_remote_${userName}`;
-                // localStorage.setItem(rootRemoteKey, 'true');
             }
-            
+
             showNotification('Successfully uploaded to Firebase!');
             this.inventory.ui.render();
             this.setupFirebaseListeners();
-            
+
         } catch (error) {
-            console.error('Firebase upload error:', error);
+            err('net', 'Upload failed:', error);
             showNotification(`Upload failed: ${error.message}`);
         }
     }
@@ -725,26 +648,20 @@ export class InventoryFirebase {
      * Import public folders from a username
      */
     async importPublicUserFolders(username) {
-        if (!window.net) {
-            showNotification('Networking not initialized');
-            return false;
-        }
-        
         // Check if a folder with this username already exists at root level
         if (this.inventory.folders[username]) {
             showNotification(`A folder named "${username}" already exists`);
             return false;
         }
-        
+
         try {
-            // Check if user exists in Firebase
-            const userInventoryRef = `inventory/${username}`;
-            const userData = await net.getData(userInventoryRef);
-            
-            if (!userData) {
+            // Use API to get public folders for the user
+            const result = await this.api.importPublicUserFolders(username);
+
+            if (!result.userData) {
                 return false; // User doesn't exist
             }
-            
+
             // Create the public user folder
             const now = Date.now();
             const userFolder = {
@@ -756,65 +673,58 @@ export class InventoryFirebase {
                 itemType: "folder",
                 icon: "👤",
                 remote: true,
-                importedFrom: userInventoryRef,
+                importedFrom: result.userPath,
                 author: username,
                 public: true,
                 userFolder: true
             };
-            
+
             // Save user folder to localStorage
             const folderStorageKey = `inventory_folder_${username}`;
             localStorage.setItem(folderStorageKey, JSON.stringify(userFolder));
             this.inventory.folders[username] = userFolder;
-            
-            // Find all public folders for this user
+
+            // Process public folders
             let folderRefsCreated = 0;
-            
-            for (const [folderKey, folderData] of Object.entries(userData)) {
-                // Check if this is a folder with public metadata
-                if (folderData && typeof folderData === 'object') {
-                    const metadataPath = `${userInventoryRef}/${folderKey}/_folder_metadata`;
-                    const metadata = await net.getData(metadataPath);
-                    
-                    if (metadata && metadata.public === true) {
-                        // Create a folderRef item for this public folder
-                        const folderRefKey = `${username}/${folderKey}`;
-                        const folderRef = {
-                            itemType: "folderRef",
-                            author: username,
-                            public: true,
-                            name: folderKey,
-                            folder: username, // Parent folder is the user folder
-                            path: folderRefKey,
-                            importedFrom: `${userInventoryRef}/${folderKey}`,
-                            created: now,
-                            last_used: now,
-                            icon: "📁",
-                            _description: metadata._description || ''
-                        };
-                        
-                        // Save folderRef to localStorage
-                        const itemStorageKey = `inventory_${folderRefKey}`;
-                        localStorage.setItem(itemStorageKey, JSON.stringify(folderRef));
-                        this.inventory.items[folderRefKey] = folderRef;
-                        folderRefsCreated++;
-                    }
-                }
+
+            for (const [folderKey, folderInfo] of Object.entries(result.publicFolders)) {
+                // Create a folderRef item for this public folder
+                const folderRefKey = `${username}/${folderKey}`;
+                const folderRef = {
+                    itemType: "folderRef",
+                    author: username,
+                    public: true,
+                    name: folderKey,
+                    folder: username, // Parent folder is the user folder
+                    path: folderRefKey,
+                    importedFrom: folderInfo.path,
+                    created: now,
+                    last_used: now,
+                    icon: "📁",
+                    _description: folderInfo.metadata?._description || ''
+                };
+
+                // Save folderRef to localStorage
+                const itemStorageKey = `inventory_${folderRefKey}`;
+                localStorage.setItem(itemStorageKey, JSON.stringify(folderRef));
+                this.inventory.items[folderRefKey] = folderRef;
+                folderRefsCreated++;
             }
-            
+
             // Update UI
             this.inventory.ui.render();
-            
+
             if (folderRefsCreated > 0) {
                 showNotification(`Created folder for user "${username}" with ${folderRefsCreated} public folder${folderRefsCreated > 1 ? 's' : ''}`);
             } else {
                 showNotification(`Created folder for user "${username}" (no public folders found)`);
             }
-            
+
             return true;
-            
+
         } catch (error) {
             console.error('Error importing public user folders:', error);
+            showNotification(`Error: ${error.message}`);
             return false;
         }
     }
@@ -823,11 +733,6 @@ export class InventoryFirebase {
      * Import from Firebase reference
      */
     async importFromFirebase(firebaseRef, parentFolder, minUpdateTime) {
-        if (!window.firebase || !window.firebase.database) {
-            showNotification('Firebase not initialized');
-            return false;
-        }
-
         let subjectName = firebaseRef.split('/').pop();
         let path = subjectName;
 
@@ -854,7 +759,9 @@ export class InventoryFirebase {
                 }
             }
 
-            const data = await net.getData(firebaseRef);
+            // Use API to get data from Firebase reference
+            const result = await this.api.importFromFirebase(firebaseRef, parentFolder, minUpdateTime);
+            const data = result.data;
             if(!data) return false;
             let importedCount = 0;
 
@@ -1055,98 +962,59 @@ export class InventoryFirebase {
         try {
             // Show upload notification
             showNotification('Uploading image...');
-            
-            // Get Firebase Storage from networking module
-            if (!window.net || !window.net.getStorage) {
-                showNotification('Firebase Storage not initialized. Please wait and try again.');
-                return;
-            }
-            
-            const storage = net.getStorage();
-            if (!storage) {
-                showNotification('Firebase Storage not available');
-                return;
-            }
-            
-            // Generate path similar to how entities would be stored
-            const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-            const timestamp = Date.now();
-            const fileName = file.name;
-            const fileExt = fileName.split('.').pop().toLowerCase();
-            const baseName = fileName.substring(0, fileName.lastIndexOf('.'));
-            
-            // Create storage path: inventory/username/currentFolder/filename
-            const storagePath = `inventory/${userName}/${this.inventory.currentFolder}/${fileName}`;
-            const storageRef = storage.ref(storagePath);
-            
-            // Upload file
-            const snapshot = await storageRef.put(file);
-            
-            // Get download URL
-            const downloadURL = await snapshot.ref.getDownloadURL();
-            
-            // Create image item
+
+            // Prepare metadata for upload
+            const metadata = {
+                name: file.name,
+                folder: this.inventory.currentFolder || null,
+                author: SM.scene?.localUser?.name || 'Unknown',
+                size: file.size,
+                type: file.type
+            };
+
+            // Use API to upload image
+            const result = await this.api.uploadImage(file, metadata);
+
+            // Create image item from API response
             const now = Date.now();
             const imageItem = {
-                author: SM.scene?.localUser?.name || 'Unknown',
-                name: fileName,
+                author: metadata.author,
+                name: file.name,
                 created: now,
                 last_used: now,
                 itemType: 'image',
-                icon:"🖼️",
+                icon: "🖼️",
                 description: '',
                 data: {
-                    url: downloadURL,
-                    storagePath: storagePath,
+                    url: result.url,
+                    storagePath: result.path,
                     size: file.size,
                     type: file.type,
                     width: 0,  // Will be updated when image loads
                     height: 0
                 }
             };
-            
+
             // Load image to get dimensions
             const img = new Image();
             img.onload = () => {
                 imageItem.data.width = img.width;
                 imageItem.data.height = img.height;
-                
+
                 // Save to localStorage
-                this.inventory.saveImageItem(fileName, imageItem);
+                this.inventory.saveImageItem(file.name, imageItem);
             };
             img.onerror = () => {
                 // Save anyway even if dimensions couldn't be loaded
-                this.inventory.saveImageItem(fileName, imageItem);
+                this.inventory.saveImageItem(file.name, imageItem);
             };
-            img.src = downloadURL;
-            
+            img.src = result.url;
+
+            log('net', `Uploaded image "${file.name}" via API`);
+
         } catch (error) {
-            console.error('Image upload error:', error);
-            console.error('Error code:', error.code);
-            console.error('Error message:', error.message);
-            
-            if (error.serverResponse) {
-                console.error('Server response:', error.serverResponse);
-                try {
-                    const parsed = JSON.parse(error.serverResponse);
-                    console.error('Parsed server response:', parsed);
-                } catch (e) {
-                    // Not JSON
-                }
-            }
-            
-            // Provide more specific error messages
-            let errorMessage = 'Error uploading image: ';
-            if (error.code === 'storage/unauthorized') {
-                errorMessage += 'Permission denied. Check Firebase Storage rules.';
-            } else if (error.code === 'storage/unknown') {
-                errorMessage += 'Unknown error. Check Firebase Storage configuration and CORS settings.';
-                console.error('Tip: Run window.net.testStorageConnection() in console to debug');
-            } else {
-                errorMessage += error.message;
-            }
-            
-            showNotification(errorMessage);
+            err('net', 'Image upload failed:', error);
+            showNotification(`Image upload failed: ${error.message}`);
         }
     }
 

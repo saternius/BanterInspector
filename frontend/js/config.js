@@ -1,13 +1,13 @@
 /**
- * InspectorConfig - Central configuration management for the Inspector
+ * TippyConfig - Central configuration management for Tippy
  * Part of Phase 1 Firebase Migration Plan
  */
-export class InspectorConfig {
+export class TippyConfig {
     constructor(options = {}) {
         // Firebase configuration
         this.firebase = {
-            projectId: options.firebaseProjectId || 'inspector-6bad1',
-            databaseURL: options.firebaseDatabaseURL || 'https://inspector-6bad1-default-rtdb.firebaseio.com',
+            projectId: options.firebaseProjectId || 'tippy-6bad1',
+            databaseURL: options.firebaseDatabaseURL || 'https://tippy-6bad1-default-rtdb.firebaseio.com',
             apiKey: options.firebaseApiKey || 'AIzaSyBJl_TjFUzIMgOFWSqJMrAEeE4t-FFPx7w',
             authDomain: options.firebaseAuthDomain || 'inspector-6bad1.firebaseapp.com',
             storageBucket: options.firebaseStorageBucket || 'inspector-6bad1.appspot.com',
@@ -60,7 +60,7 @@ export class InspectorConfig {
             localStorage: options.useLocalStorage !== false,
             sessionStorage: options.useSessionStorage || false,
             indexedDB: options.useIndexedDB || false,
-            cachePrefix: options.cachePrefix || 'banter-inspector-'
+            cachePrefix: options.cachePrefix || 'tippy-'
         };
 
         // Apply environment-specific overrides
@@ -220,14 +220,14 @@ export class InspectorConfig {
      * Reset to default configuration
      */
     reset() {
-        const defaultConfig = new InspectorConfig();
+        const defaultConfig = new TippyConfig();
         Object.assign(this, defaultConfig);
         console.log('Configuration reset to defaults');
     }
 }
 
 // Export singleton instance
-export const config = new InspectorConfig();
+export const config = new TippyConfig();
 
 // Also export class for custom instances
-export default InspectorConfig;
+export default TippyConfig;
