@@ -161,9 +161,14 @@ export class Inventory {
         // Helper function to get all scripts in a folder and its subfolders
         const getScriptsInFolder = (folderPath) => {
             // Get scripts directly in this folder
-            const scriptsInFolder = Object.values(this.items).filter(item =>
-                item.itemType === 'script' && item.folder === folderPath
-            );
+            const scriptsInFolder = Object.values(this.items).filter(item =>{
+                if(folderPath){
+                    return item.itemType === 'script' && item.folder === folderPath
+                }else{
+                    return !item.folder
+                }
+            });
+               
             scripts.push(...scriptsInFolder);
 
             // Get all subfolders of this folder

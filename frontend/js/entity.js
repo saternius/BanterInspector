@@ -297,6 +297,9 @@ export class Entity{
     }
 
     async _addComponent(component){
+        if(this.components.includes(component)){
+            return;
+        }
         this.components.push(component);
         SM.entityData.componentMap[component.id] = component;
         component._entity = this;

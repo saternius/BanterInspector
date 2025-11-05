@@ -357,6 +357,7 @@ export class TippyInjector {
                 icon: '⚡',
                 name: 'Behaviors',
                 components: [
+                    { type: 'Script', name: 'Script', desc: 'Script data' },
                     { type: 'MonoBehavior', name: 'MonoBehavior', desc: 'Script behavior' },
                     { type: 'GrabHandle', name: 'Grab Handle', desc: 'Interactive grab handle' },
                     { type: 'Grabbable', name: 'Grabbable', desc: 'Grabbable object' },

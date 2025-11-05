@@ -6,6 +6,8 @@ const { TransformComponent } = await import(`${window.repoUrl}/entity-components
 window.updateModuleProgress("transform");
 const { MonoBehaviorComponent } = await import(`${window.repoUrl}/entity-components/monobehavior.js`);
 window.updateModuleProgress("monobehavior");
+const { ScriptComponent } = await import(`${window.repoUrl}/entity-components/script.js`);
+window.updateModuleProgress("script");
 const { GeometryComponent } = await import(`${window.repoUrl}/entity-components/meshes/geometry.js`);
 window.updateModuleProgress("geometry");
 const { MaterialComponent } = await import(`${window.repoUrl}/entity-components/materials/material.js`);
@@ -272,7 +274,8 @@ export const componentTypeMap = {
     "Spiral": SpiralComponent,
     "Spring": SpringComponent,
     "Light": LightComponent,
-    "MonoBehavior": MonoBehaviorComponent
+    "MonoBehavior": MonoBehaviorComponent,
+    "Script": ScriptComponent
 }
 
 window.componentTypeMap = componentTypeMap;
@@ -337,7 +340,8 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterSpiral]: SpiralComponent,
     [BS.ComponentType.BanterSpring]: SpringComponent,
     [BS.ComponentType.Light]: LightComponent,
-    [MonoBehaviorComponent]: MonoBehaviorComponent
+    [MonoBehaviorComponent]: MonoBehaviorComponent,
+    [ScriptComponent]: ScriptComponent
 }
 
 export const componentTextMap = {
@@ -400,7 +404,8 @@ export const componentTextMap = {
     [BS.ComponentType.BanterSpiral]: "Spiral",
     [BS.ComponentType.BanterSpring]: "Spring",
     [BS.ComponentType.Light]: "Light",
-    [MonoBehaviorComponent]: "MonoBehavior"
+    [MonoBehaviorComponent]: "MonoBehavior",
+    [ScriptComponent]: "Script"
 }
 
 
@@ -785,5 +790,6 @@ export {
     SpiralComponent,
     SpringComponent,
     LightComponent,
-    MonoBehaviorComponent
+    MonoBehaviorComponent,
+    ScriptComponent
 };

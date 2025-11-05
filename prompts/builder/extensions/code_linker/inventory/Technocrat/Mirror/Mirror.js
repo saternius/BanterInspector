@@ -48,11 +48,3 @@ this.onDestroy = ()=>{
     console.log("onDestroy")
     this._entity._bs.listeners.get("click").clear();
 }
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}

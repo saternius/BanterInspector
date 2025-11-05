@@ -860,6 +860,154 @@ export class LoadItemChange extends Change{
     }
 }
 
+
+export class LoadScriptChange extends Change{
+    constructor(scriptName, options) {
+        super();
+        this.timeout = 10000000;
+        this.scriptName = scriptName;
+        this.options = options || {};
+        this.itemData = null;
+        this.entityId = null;
+    }
+
+    async apply() {
+        super.apply();
+        let sanatizedScriptName = this.scriptName.replaceAll(".","_");
+        let checkExistingInScene = SM.getEntityByName(sanatizedScriptName);
+        if(checkExistingInScene){
+            err("loadScript", "Script already exists in scene =>", checkExistingInScene.id)
+            this.void("Script already exists in scene => "+checkExistingInScene.id);
+            return checkExistingInScene;
+        }
+
+        let componentId = "Script_"+Math.floor(Math.random()*99999);
+        
+        this.itemData = {
+            "Entity": {
+                [sanatizedScriptName]: {
+                    "__meta": {
+                        "active": true,
+                        "components": {
+                            [componentId]: true
+                        },
+                        "layer": 0,
+                        "localPosition": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "localRotation": {
+                            "w": 1,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "localScale": {
+                            "x": 1,
+                            "y": 1,
+                            "z": 1
+                        },
+                        "position": {
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "rotation": {
+                            "w": 1,
+                            "x": 0,
+                            "y": 0,
+                            "z": 0
+                        },
+                        "uuid": Math.floor(Math.random() * 10000000000000)
+                    }
+                }
+            },
+            "Components": {
+                [componentId]: {
+                    "name": this.scriptName,
+                    "data": inventory.items[this.scriptName].data,
+                    "vars": inventory.items[this.scriptName].vars || {}
+                }
+            }
+        }
+        await net.db.ref(`space/${net.spaceId}/components`).update(this.itemData.Components);
+        await net.db.ref(`space/${net.spaceId}/Scene`).update(this.itemData.Entity);
+        this.entityId = `Scene/${sanatizedScriptName}`
+        
+        
+        let everythingLoaded = ()=>{
+            let entity = SM.getEntityById(this.entityId, false)
+            if(!entity){
+                log("loadItem", "entity not found =>", this.entityId)
+                return false;
+            }
+
+            let componentsLoaded = true;
+            Object.keys(this.itemData.Components).forEach(compId=>{
+                let component = SM.getEntityComponentById(compId, false);
+                if(!component){
+                    log("loadItem", "component not found =>", compId)
+                    componentsLoaded = false;
+                }else{
+                    if(!component._entity.components.includes(component)){
+                        log("loadItem", `${component.id} not a component of ${entity.id} yet`)
+                        componentsLoaded = false;
+                    }
+                }
+            })
+            return componentsLoaded;
+        }
+
+        let checks = 0;
+        const returnWhenEntityLoaded = () => {
+            return new Promise(resolve => {
+              const check = () => {
+                let isLoaded = everythingLoaded();
+                checks++;
+                log("loadItem", "checking for entity =>", this.entityId, isLoaded)
+
+                if(checks > 250){
+                    err("loadItem", "Entity could not be loaded/found =>", this.entityId)
+                    resolve(null);
+                    return;
+                }
+
+                if (isLoaded) {
+                    resolve(SM.getEntityById(this.entityId));
+                } else {
+                    setTimeout(check, 50);
+                }
+              };
+              check();
+            });
+          };
+        return await returnWhenEntityLoaded();
+    }
+
+    async undo() {
+        super.undo();
+        log("todo", "undo load script");
+    }
+
+    getDescription() {
+        return `Load script ${this.scriptName}`;
+    }
+
+    getUndoDescription() {
+        return `Remove script ${this.scriptName}`;
+    }
+
+    cmd(){
+        return {
+            action: "load_script",
+            scriptName: this.scriptName,
+            options: this.options
+        }
+    }
+}
+
+
 export class CloneEntityChange extends Change{
     constructor(entityId, options) {
         super();
@@ -1569,14 +1717,7 @@ this.onUpdate = ()=>{
 this.onDestroy = ()=>{
     console.log("onDestroy")
 }
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}`;
+`;
             itemType = 'script';
             icon = '📜';
         }
@@ -1930,6 +2071,11 @@ window.RenameFolder = async (folderName, newName, options)=>{
 
 window.MoveFolder = async (folderName, newName, options)=>{
     let change = new MoveFolderChange(folderName, newName, options);
+    return await change.apply();
+}
+
+window.LoadScript = async (scriptName, options)=>{
+    let change = new LoadScriptChange(scriptName, options);
     return await change.apply();
 }
 

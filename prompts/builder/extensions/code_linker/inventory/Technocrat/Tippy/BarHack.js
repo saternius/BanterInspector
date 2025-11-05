@@ -28,11 +28,3 @@ this.onDestroy = ()=>{
     this._entity._bs.listeners.get("grab").clear();
     this._entity._bs.listeners.get("drop").clear();
 }
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}

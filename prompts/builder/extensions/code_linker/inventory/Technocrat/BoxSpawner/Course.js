@@ -103,13 +103,3 @@ this.onDestroy = ()=>{
     clearInterval(this.spawnerTimeout)
     document.removeEventListener("keydown", handleKey)
 }
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-} 
-
-

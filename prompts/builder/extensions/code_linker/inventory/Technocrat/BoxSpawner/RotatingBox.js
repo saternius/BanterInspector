@@ -29,11 +29,3 @@ this.onUpdate = ()=>{
 this.onDestroy = ()=>{
     this.log("onDestroy")
 }
-
-this.keyDown = (key)=>{
-    this.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    this.log("keyUp", key)
-}

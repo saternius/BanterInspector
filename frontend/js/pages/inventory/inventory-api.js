@@ -199,8 +199,9 @@ export class InventoryAPI {
      */
     async syncItem(itemName, item) {
         // For items in folders, we need to include the full path
-        const path = item.folder ? `${item.folder}/${itemName}` : itemName;
-
+        let path = item.folder ? `${item.folder}/${itemName}` : itemName;
+        // Sanitize path: replace dots and other Firebase-invalid chars with underscores
+        path = path.replace(/[\.\$#\[\]]/g, "_");
         return this._request('/sync/item', {
             method: 'POST',
             body: JSON.stringify({

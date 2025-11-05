@@ -163,12 +163,32 @@
 
         <div class="step">
             <span class="step-number">1</span>
+            <h2>Set up Unity Scene GameObjects</h2>
+            <p style="margin-bottom: 10px;">In your Unity scene, create two required GameObjects in the root of your hierarchy:</p>
+            <ol style="margin-left: 20px; margin-bottom: 10px;">
+                <li><strong>"Scene"</strong> - Any GameObject that is a child of this will be crawled and loaded in Tippy</li>
+                <li><strong>"People"</strong> - This should remain empty (used for player management)</li>
+            </ol>
+            <p style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px;">
+                <strong>💡 Tip:</strong> These GameObjects should exist at the root level of your Unity scene hierarchy for proper functionality.
+            </p>
+            <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                <strong>⚠️ Important:</strong> For GameObjects to be crawlable by Tippy, they must have both a <strong>BanterTransform</strong> and <strong>BanterObjectId</strong> component attached to them.
+            </p>
+            <div style="margin-top: 15px; text-align: center;">
+                <img src="assets/images/hier_example.png" alt="Unity Hierarchy Example" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em; font-style: italic;">Example Unity hierarchy showing Scene and People GameObjects</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <span class="step-number">2</span>
             <h2>Create a Firebase project</h2>
             <p>Head to the <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and create a new project (or use an existing one).</p>
         </div>
 
         <div class="step">
-            <span class="step-number">2</span>
+            <span class="step-number">3</span>
             <h2>Enable Realtime Database</h2>
             <p style="margin-bottom: 10px;">In your Firebase project:</p>
             <ol style="margin-left: 20px; margin-bottom: 10px;">
@@ -178,12 +198,12 @@
                 <li>Start in <strong>test mode</strong> (we'll configure rules next)</li>
             </ol>
             <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
-                <strong>⚠️ Important:</strong> Copy your database URL (e.g., <span class="highlight">https://your-project-id-default-rtdb.firebaseio.com</span>). You'll need this in step 5.
+                <strong>⚠️ Important:</strong> Copy your database URL (e.g., <span class="highlight">https://your-project-id-default-rtdb.firebaseio.com</span>). You'll need this in step 6.
             </p>
         </div>
 
         <div class="step">
-            <span class="step-number">3</span>
+            <span class="step-number">4</span>
             <h2>Configure Database Rules</h2>
             <p style="margin-bottom: 10px;">Go to the <strong>Rules</strong> tab in Realtime Database and paste these rules:</p>
 
@@ -201,7 +221,7 @@
         </div>
 
         <div class="step">
-            <span class="step-number">4</span>
+            <span class="step-number">5</span>
             <h2>Enable Anonymous Authentication</h2>
             <p style="margin-bottom: 10px;">Tippy uses Firebase Authentication for secure access:</p>
             <ol style="margin-left: 20px;">
@@ -213,7 +233,7 @@
         </div>
 
         <div class="step">
-            <span class="step-number">5</span>
+            <span class="step-number">6</span>
             <h2>Get your Firebase config</h2>
             <p style="margin-bottom: 15px;">Go to <strong>Project Settings → General → Your apps → SDK setup and configuration</strong> and copy your config object:</p>
 
@@ -226,17 +246,17 @@
   <span class="property">appId</span>: <span class="string">"1:123456789:web:abc123def456"</span>,
   <span class="property">databaseURL</span>: <span class="string">"https://your-project-id-default-rtdb.firebaseio.com"</span>
 };</pre>
-            <p style="margin-top: 10px;"><strong>Note:</strong> Add the <span class="highlight">databaseURL</span> field with your database URL from step 2.</p>
+            <p style="margin-top: 10px;"><strong>Note:</strong> Add the <span class="highlight">databaseURL</span> field with your database URL from step 3.</p>
         </div>
 
         <div class="step">
-            <span class="step-number">6</span>
+            <span class="step-number">7</span>
             <h2>Open your index.html</h2>
             <p>Navigate to your Banterworld's <span class="highlight">index.html</span> file.</p>
         </div>
 
         <div class="step">
-            <span class="step-number">7</span>
+            <span class="step-number">8</span>
             <h2>Paste this code</h2>
             <p>Add the following to your <span class="highlight">&lt;body&gt;</span> tag, replacing the firebaseConfig with yours:</p>
 
@@ -274,7 +294,7 @@
         </div>
 
         <div class="step">
-            <span class="step-number">8</span>
+            <span class="step-number">9</span>
             <h2>That's it!</h2>
             <p>Load your Banterworld and Tippy will be ready to use.</p>
         </div>

@@ -248,16 +248,19 @@ export class MonoBehaviorComponent extends EntityComponent {
     }
 
     Start(){
+        log("mono", `Starting ${this.fileName} on ${this.id}`)
         // const oneShot = 'monobehavior_start¶' + this.id;
         // networking.sendOneShot(oneShot);
     }
 
     Stop(){
+        log("mono", `Stopping ${this.fileName} on ${this.id}`)
         // const oneShot = 'monobehavior_stop¶' + this.id;
         // networking.sendOneShot(oneShot);
     }
 
     Refresh(){
+        log("mono", `Refreshing ${this.fileName} on ${this.id}`)
         // const oneShot = 'monobehavior_refresh¶' + this.id;
         // networking.sendOneShot(oneShot);
     }

@@ -113,11 +113,7 @@
         async Reset(ui){
             await net.clearSpaceState();
             let r = async ()=>{
-                networking.sendOneShot('reset');
-                this.resetLoadAttempt();
-                setTimeout(async ()=>{
-                    await this._reset();
-                }, 1000)
+                this._reset();
             }
 
             if(!(this.scene.localUser.name === "Technocrat") && ui){

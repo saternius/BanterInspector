@@ -3,6 +3,24 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
+/**
+ * Sanitize Firebase path component
+ * Firebase keys cannot contain . $ # [ ] /
+ */
+function sanitizeFirebasePath(str) {
+    if (!str) return '';
+    const clean = (s) => {
+        return s
+            .trim()
+            .replace(/[\.\$#\[\]\/]/g, '_')
+            .replace(/\s+/g, '_')
+            .replace(/_{2,}/g, '_')
+            .replace(/^_|_$/g, '');
+    };
+    // Handle paths with slashes by sanitizing each component
+    return str.split('/').map(clean).join('/');
+}
+
 // Configure multer for image uploads
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -67,10 +85,12 @@ router.post('/items', validateUser, async (req, res) => {
             item.created = Date.now();
         }
 
-        // Construct Firebase path
-        const itemPath = item.folder
-            ? `inventory/${req.userName}/${item.folder}/${item.name}`
-            : `inventory/${req.userName}/${item.name}`;
+        // Construct Firebase path with sanitization
+        const sanitizedFolder = item.folder ? sanitizeFirebasePath(item.folder) : null;
+        const sanitizedItemName = sanitizeFirebasePath(item.name);
+        const itemPath = sanitizedFolder
+            ? `inventory/${req.userName}/${sanitizedFolder}/${sanitizedItemName}`
+            : `inventory/${req.userName}/${sanitizedItemName}`;
 
         // Save to Firebase
         await db.ref(itemPath).set(item);
@@ -101,10 +121,12 @@ router.put('/items/:name', validateUser, async (req, res) => {
         // Add update timestamp
         updates.updatedAt = admin.database.ServerValue.TIMESTAMP;
 
-        // Construct Firebase path (check if item has folder)
-        const itemPath = updates.folder
-            ? `inventory/${req.userName}/${updates.folder}/${itemName}`
-            : `inventory/${req.userName}/${itemName}`;
+        // Construct Firebase path (check if item has folder) with sanitization
+        const sanitizedFolder = updates.folder ? sanitizeFirebasePath(updates.folder) : null;
+        const sanitizedItemName = sanitizeFirebasePath(itemName);
+        const itemPath = sanitizedFolder
+            ? `inventory/${req.userName}/${sanitizedFolder}/${sanitizedItemName}`
+            : `inventory/${req.userName}/${sanitizedItemName}`;
 
         // Update in Firebase
         await db.ref(itemPath).update(updates);
@@ -128,10 +150,12 @@ router.delete('/items/:name', validateUser, async (req, res) => {
         const admin = req.app.get('admin');
         const db = admin.database();
 
-        // Construct Firebase path
-        const itemPath = folder
-            ? `inventory/${req.userName}/${folder}/${itemName}`
-            : `inventory/${req.userName}/${itemName}`;
+        // Construct Firebase path with sanitization
+        const sanitizedFolder = folder ? sanitizeFirebasePath(folder) : null;
+        const sanitizedItemName = sanitizeFirebasePath(itemName);
+        const itemPath = sanitizedFolder
+            ? `inventory/${req.userName}/${sanitizedFolder}/${sanitizedItemName}`
+            : `inventory/${req.userName}/${sanitizedItemName}`;
 
         // Remove from Firebase
         await db.ref(itemPath).remove();
@@ -167,10 +191,12 @@ router.post('/folders', validateUser, async (req, res) => {
         // Set author
         folder.author = req.userName;
 
-        // Construct Firebase path for folder metadata
-        const folderPath = folder.parent
-            ? `inventory/${req.userName}/${folder.parent}/${folder.name}/_folder_metadata`
-            : `inventory/${req.userName}/${folder.name}/_folder_metadata`;
+        // Construct Firebase path for folder metadata with sanitization
+        const sanitizedParent = folder.parent ? sanitizeFirebasePath(folder.parent) : null;
+        const sanitizedFolderName = sanitizeFirebasePath(folder.name);
+        const folderPath = sanitizedParent
+            ? `inventory/${req.userName}/${sanitizedParent}/${sanitizedFolderName}/_folder_metadata`
+            : `inventory/${req.userName}/${sanitizedFolderName}/_folder_metadata`;
 
         // Save folder metadata
         await db.ref(folderPath).set(folder);
@@ -201,10 +227,12 @@ router.put('/folders/:key', validateUser, async (req, res) => {
         // Add update timestamp
         updates.updatedAt = admin.database.ServerValue.TIMESTAMP;
 
-        // Construct Firebase path for folder metadata
-        const folderPath = updates.parent
-            ? `inventory/${req.userName}/${updates.parent}/${folderKey}/_folder_metadata`
-            : `inventory/${req.userName}/${folderKey}/_folder_metadata`;
+        // Construct Firebase path for folder metadata with sanitization
+        const sanitizedParent = updates.parent ? sanitizeFirebasePath(updates.parent) : null;
+        const sanitizedFolderKey = sanitizeFirebasePath(folderKey);
+        const folderPath = sanitizedParent
+            ? `inventory/${req.userName}/${sanitizedParent}/${sanitizedFolderKey}/_folder_metadata`
+            : `inventory/${req.userName}/${sanitizedFolderKey}/_folder_metadata`;
 
         // Update folder metadata
         await db.ref(folderPath).update(updates);
@@ -228,10 +256,12 @@ router.delete('/folders/:key', validateUser, async (req, res) => {
         const admin = req.app.get('admin');
         const db = admin.database();
 
-        // Construct Firebase path
-        const folderPath = parent
-            ? `inventory/${req.userName}/${parent}/${folderKey}`
-            : `inventory/${req.userName}/${folderKey}`;
+        // Construct Firebase path with sanitization
+        const sanitizedParent = parent ? sanitizeFirebasePath(parent) : null;
+        const sanitizedFolderKey = sanitizeFirebasePath(folderKey);
+        const folderPath = sanitizedParent
+            ? `inventory/${req.userName}/${sanitizedParent}/${sanitizedFolderKey}`
+            : `inventory/${req.userName}/${sanitizedFolderKey}`;
 
         if (recursive) {
             // Delete entire folder and contents
@@ -283,7 +313,8 @@ router.post('/bulk', validateUser, async (req, res) => {
             } else {
                 // Handle object format
                 for (const [key, folder] of Object.entries(contents.folders)) {
-                    const folderPath = `inventory/${req.userName}/${key}/_folder_metadata`;
+                    const sanitizedKey = sanitizeFirebasePath(key);
+                    const folderPath = `inventory/${req.userName}/${sanitizedKey}/_folder_metadata`;
                     updates[folderPath] = {
                         ...folder,
                         author: req.userName,
@@ -310,9 +341,11 @@ router.post('/bulk', validateUser, async (req, res) => {
             } else {
                 // Handle object format
                 for (const [key, item] of Object.entries(contents.items)) {
-                    const itemPath = item.folder
-                        ? `inventory/${req.userName}/${item.folder}/${key}`
-                        : `inventory/${req.userName}/${key}`;
+                    const sanitizedKey = sanitizeFirebasePath(key);
+                    const sanitizedFolder = item.folder ? sanitizeFirebasePath(item.folder) : null;
+                    const itemPath = sanitizedFolder
+                        ? `inventory/${req.userName}/${sanitizedFolder}/${sanitizedKey}`
+                        : `inventory/${req.userName}/${sanitizedKey}`;
                     updates[itemPath] = {
                         ...item,
                         createdAt: timestamp
@@ -482,8 +515,9 @@ router.post('/sync/item', validateUser, async (req, res) => {
         // Add timestamp
         item.syncedAt = admin.database.ServerValue.TIMESTAMP;
 
-        // Construct full Firebase path
-        const fullPath = `inventory/${req.userName}/${path}`;
+        // Construct full Firebase path with sanitization
+        const sanitizedPath = sanitizeFirebasePath(path);
+        const fullPath = `inventory/${req.userName}/${sanitizedPath}`;
 
         // Save to Firebase
         await db.ref(fullPath).set(item);
@@ -513,8 +547,9 @@ router.post('/sync/folder', validateUser, async (req, res) => {
         // Add timestamp
         folder.syncedAt = admin.database.ServerValue.TIMESTAMP;
 
-        // Construct Firebase path
-        const folderPath = `inventory/${req.userName}/${folderKey}/_folder_metadata`;
+        // Construct Firebase path with sanitization
+        const sanitizedFolderKey = sanitizeFirebasePath(folderKey);
+        const folderPath = `inventory/${req.userName}/${sanitizedFolderKey}/_folder_metadata`;
 
         // Save to Firebase
         await db.ref(folderPath).set(folder);
@@ -541,8 +576,9 @@ router.delete('/sync/remove', validateUser, async (req, res) => {
             return res.status(400).json({ success: false, error: 'Path is required' });
         }
 
-        // Construct full Firebase path
-        const fullPath = `inventory/${req.userName}/${path}`;
+        // Construct full Firebase path with sanitization
+        const sanitizedPath = sanitizeFirebasePath(path);
+        const fullPath = `inventory/${req.userName}/${sanitizedPath}`;
 
         // Remove from Firebase
         await db.ref(fullPath).remove();

@@ -282,7 +282,16 @@ export class InventoryUI {
                 }
             });
         });
-        
+
+        // Add event listeners for load script buttons
+        inventoryContainer.querySelectorAll('.load-script-btn').forEach(btn => {
+            btn.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                const itemName = btn.dataset.itemName;
+                window.LoadScript(itemName);
+            });
+        });
+
         // Add event listeners for add to scene buttons
         inventoryContainer.querySelectorAll('.add-to-scene-btn').forEach(btn => {
             btn.addEventListener('mousedown', (e) => {
@@ -693,8 +702,14 @@ export class InventoryUI {
                 </div>
             `;
         } else if (itemType === 'script' || itemType === 'markdown') {
+            // Scripts get both + and edit buttons, markdown only gets edit
+            const loadScriptBtn = itemType === 'script' ? `
+                    <button class="action-btn load-script-btn" data-item-name="${key}" title="Load script to scene">
+                        ➕
+                    </button>` : '';
             itemActions = `
                 <div class="item-actions">
+                    ${loadScriptBtn}
                     <button class="action-btn edit-script-btn" data-item-name="${key}">
                         ✏️
                     </button>

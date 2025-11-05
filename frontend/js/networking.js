@@ -481,13 +481,13 @@ export class Networking {
     }
 
     setScript(scriptName, scriptContent){
-        let ref = this.db.ref("space/"+this.spaceId+"/scripts/"+scriptName);
-        ref.set(scriptContent);
+        // let ref = this.db.ref("space/"+this.spaceId+"/scripts/"+scriptName);
+        // ref.set(scriptContent);
     }
 
     async SetScript(scriptName, scriptContent){
-        let ref = this.db.ref("space/"+this.spaceId+"/scripts/"+scriptName);
-        await ref.set(scriptContent);
+        // let ref = this.db.ref("space/"+this.spaceId+"/scripts/"+scriptName);
+        // await ref.set(scriptContent);
     }
 
     async SetVar(key, value, hostOnly){ 

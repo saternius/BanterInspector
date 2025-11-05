@@ -16,11 +16,3 @@ this.onUpdate = ()=>{
 this.onDestroy = ()=>{
     console.log("onDestroy")
 }
-
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}

@@ -709,15 +709,6 @@ this.onDestroy = ()=>{
     console.log("onDestroy")
 }
 
-this.keyDown = (key)=>{
-    console.log("keyDown", key)
-}
-
-this.keyUp = (key)=>{
-    console.log("keyUp", key)
-}
-
-
 //toolbar control btn
 let navControls = document.querySelector(".nav-controls")
 let tooltipBtn = document.createElement("button")
