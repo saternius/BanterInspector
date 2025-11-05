@@ -53,7 +53,7 @@ export class FirebaseAuthHelper {
             // Sign in anonymously
             const credential = await firebase.auth().signInAnonymously();
             this.currentUser = credential.user;
-            await this.registerUserSecret(this.currentUser.uid, username, secret);
+            //await this.registerUserSecret(this.currentUser.uid, username, secret);
             console.log('Authenticated anonymously as:', username);
             return this.currentUser;
         } catch (error) {

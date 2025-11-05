@@ -1,4 +1,4 @@
-const { EditScriptItemChange } = await import(`${window.repoUrl}/change-types.js`);
+const { EditScriptItemChange, ComponentPropertyChange } = await import(`${window.repoUrl}/change-types.js`);
 const { confirm, showNotification } = await import(`${window.repoUrl}/utils.js`);
 
 export class ScriptEditor {
@@ -351,11 +351,25 @@ export class ScriptEditor {
     
     save(source="ui") {
         if (!this.codemirror) return;
-        
+
         const newContent = this.codemirror.getValue();
-        let change = new EditScriptItemChange(this.currentScript.name, newContent, {source: source});
-        changeManager.applyChange(change);
-        
+
+        // Check if this is a ScriptComponent or an inventory item
+        if (this.currentScript.isScriptComponent && this.currentScript.componentId) {
+            // For ScriptComponent, update the component's data property
+            const change = new ComponentPropertyChange(
+                this.currentScript.componentId,
+                'data',
+                newContent,
+                { source: source }
+            );
+            changeManager.applyChange(change);
+        } else {
+            // For inventory items, use the existing EditScriptItemChange
+            const change = new EditScriptItemChange(this.currentScript.name, newContent, {source: source});
+            changeManager.applyChange(change);
+        }
+
         // Update local content
         this.currentScript.content = newContent;
         this.isModified = false;
@@ -363,7 +377,10 @@ export class ScriptEditor {
         document.getElementById(`lastSave-${this.pageId}`).textContent = `Last saved: ${new Date(this.lastSave).toLocaleString()}`;
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
 
-        this.run('Refresh')
+        // Only refresh MonoBehaviors, not ScriptComponents
+        if (!this.currentScript.isScriptComponent) {
+            this.run('Refresh');
+        }
     }
     
     findMonoBehaviorEntities() {
@@ -476,7 +493,7 @@ export class ScriptEditor {
     }
 
     
-    updatePlaybackButtons(isPaused = false) {
+    updatePlaybackButtons() {
         const playBtn = document.getElementById(`playBtn-${this.pageId}`);
         const stopBtn = document.getElementById(`stopBtn-${this.pageId}`);
         if(playBtn){

@@ -7,6 +7,7 @@
 
     // let localhost = window.location.hostname === 'localhost'
     const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
+    const { confirm } = await import( './utils.js');
 
     export class SceneManager {
         constructor() {
@@ -27,7 +28,30 @@
         }
 
         myName(){
-            return this.scene.localUser.name 
+            return this.scene.localUser.name
+        }
+
+        /**
+         * Shows a custom warning dialog asking user to create a missing GameObject
+         * @param {string} objectName - Name of the missing object (e.g., "Scene" or "People")
+         * @returns {Promise<boolean>} - True if user accepts, false if they decline
+         */
+        async showMissingObjectWarning(objectName) {
+            return await confirm(
+                `No "${objectName}" GameObject found in the scene. Would you like to create an empty "${objectName}" GameObject as a substitute?`
+            );
+        }
+
+        /**
+         * Creates an empty GameObject with the specified name
+         * @param {string} objectName - Name of the GameObject to create
+         * @returns {Promise<Object>} - The created GameObject
+         */
+        async createEmptyGameObject(objectName) {
+            log('init', `Creating empty GameObject: ${objectName}`);
+            const newGameObject = new window.BS.GameObject(objectName);
+            showNotification(`Created empty "${objectName}" GameObject`);
+            return newGameObject;
         }
 
         changeFileServer(value){
@@ -65,6 +89,36 @@
                         //     log("init", "someone is already crawling the scene.. I should wait", crawlMutex, Date.now() - crawlMutex)
                         //     await new Promise(resolve => setTimeout(resolve, 1000));
                         // }
+
+
+                        let sceneObj = await this.scene.Find("Scene");
+                        let peopleObj = await this.scene.Find("People");
+
+                        log("INIT", "sceneObj =>", sceneObj)
+                        log("INIT", "peopleObj =>", peopleObj)
+
+                        // Check for missing Scene object
+                        if(!sceneObj){
+                            log('init', 'No Scene object found');
+                            const shouldCreate = await this.showMissingObjectWarning("Scene");
+                            if(shouldCreate){
+                                sceneObj = await this.createEmptyGameObject("Scene");
+                            } else {
+                                err('init', 'User declined to create Scene object. Initialization may fail.');
+                            }
+                        }
+
+                        // Check for missing People object
+                        if(!peopleObj){
+                            log('init', 'No People object found');
+                            const shouldCreate = await this.showMissingObjectWarning("People");
+                            if(shouldCreate){
+                                peopleObj = await this.createEmptyGameObject("People");
+                            } else {
+                                err('init', 'User declined to create People object. Initialization may fail.');
+                            }
+                        }
+
 
                         let scene_entity = null;
                         let people_entity = null;

@@ -32,7 +32,7 @@
     updateModuleProgress("networking");
     const  { HierarchyPanel } = await import(`${window.repoUrl}/pages/world-inspector/hierarchy-panel.js`);
     updateModuleProgress("hierarchy-panel");
-    const  { PropertiesPanel } = await import(`${window.repoUrl}/pages/world-inspector/properties-panel.js`);
+    const  { PropertiesPanel } = await import(`${window.repoUrl}/pages/world-inspector/properties-panel/index.js`);
     updateModuleProgress("properties-panel");
     const  { SpacePropsPanel } = await import(`${window.repoUrl}/pages/world-inspector/space-props-panel.js`);
     updateModuleProgress("space-props-panel");

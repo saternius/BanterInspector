@@ -39,8 +39,20 @@ export class EntityComponent{
             if(!data) return;
             delete data.id;
             for(let p in data){
-                if(this.properties[p] !== data[p]){
+                let v1 = JSON.stringify(this.properties[p]);
+                let v2 = JSON.stringify(data[p]);
+                if(v1 !== v2){
+                    log("component", `${this.id} is setting ${p} from ${v1} to ${v2}`)
                     this._set(p, data[p]);
+                }else{
+                    log("component", `${v1} is the same as ${v2}`)
+                }
+            }
+
+            // Handle properties that were deleted from Firebase
+            for(let p in this.properties){
+                if(p !== 'id' && p !== '_owner' && !(p in data)){
+                    this._set(p, this.defaultProperties()[p] || null);
                 }
             }
         })
@@ -107,7 +119,13 @@ export class EntityComponent{
     }
     
     async Set(property, value){
-        this.ref.update({[property]: value});
+        // Firebase will delete the property if value is null
+        if (value === null) {
+            // Use remove() for null values to ensure Firebase deletes the field
+            await this.ref.child(property).remove();
+        } else {
+            await this.ref.update({[property]: value});
+        }
     }
 
     WatchProperties(properties, callback){

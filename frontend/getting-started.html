@@ -163,7 +163,7 @@
 
         <div class="step">
             <span class="step-number">1</span>
-            <h2>Set up Unity Scene GameObjects</h2>
+            <h2> Set up Unity Scene (Optional)</h2>
             <p style="margin-bottom: 10px;">In your Unity scene, create two required GameObjects in the root of your hierarchy:</p>
             <ol style="margin-left: 20px; margin-bottom: 10px;">
                 <li><strong>"Scene"</strong> - Any GameObject that is a child of this will be crawled and loaded in Tippy</li>
@@ -209,12 +209,8 @@
 
 <pre>{
   <span class="string">"rules"</span>: {
-    <span class="string">"spaceState"</span>: {
-      <span class="string">"$spaceId"</span>: {
-        <span class="string">".read"</span>: <span class="string">"auth != null"</span>,
-        <span class="string">".write"</span>: <span class="string">"auth != null"</span>
-      }
-    }
+    <span class="string">".read"</span>: <span class="string"> "now < 2056357200000"</span>,
+    <span class="string">".write"</span>: <span class="string">"now < 2056357200000"</span>
   }
 }</pre>
             <p style="margin-top: 10px;">Click <strong>Publish</strong> to save the rules.</p>

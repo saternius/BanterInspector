@@ -20,7 +20,7 @@ export class ScriptComponent extends EntityComponent {
         return {
             name: sceneComponent.name || "myScript",
             data: sceneComponent.data || "",
-            vars: sceneComponent.vars || {}
+            vars: sceneComponent.vars !== undefined ? sceneComponent.vars : null
         };
     }
 
@@ -28,12 +28,13 @@ export class ScriptComponent extends EntityComponent {
         return {
             name: "myScript",
             data: "",
-            vars: {}
+            vars: null
         }
     }
 
     async _set(property, value){
         value = parseBest(value);
         this.properties[property] = value;
+        // Note: Script component doesn't have a _bs component, so no need to set _bs[property]
     }
 }
