@@ -1,11 +1,11 @@
 /**
- * MonoBehavior Renderer
- * Specialized renderer for MonoBehavior components with script management
+ * ScriptRunner Renderer
+ * Specialized renderer for ScriptRunner components with script management
  */
 
 import { VectorColorInputRenderer } from './vector-color-inputs.js';
 
-export class MonoBehaviorRenderer {
+export class ScriptRunnerRenderer {
     constructor(propertyInputRenderer, utils, changeManager) {
         this.propertyInputRenderer = propertyInputRenderer;
         this.utils = utils || {};
@@ -15,14 +15,14 @@ export class MonoBehaviorRenderer {
     }
 
     /**
-     * Render MonoBehavior component with special handling
-     * @param {Object} component - MonoBehavior component
+     * Render ScriptRunner component with special handling
+     * @param {Object} component - ScriptRunner component
      * @param {number} index - Component index in entity's component array
      * @param {number} totalComponents - Total number of components
      * @param {string} entityId - Parent entity ID
      * @returns {HTMLElement} - The component section element
      */
-    renderMonoBehaviorComponent(component, index, totalComponents, entityId) {
+    renderScriptRunnerComponent(component, index, totalComponents, entityId) {
         const section = document.createElement('div');
         section.className = 'component-section';
         section.dataset.panel = 'propertyPanelComponent';
@@ -30,11 +30,11 @@ export class MonoBehaviorRenderer {
         section.dataset.componentIndex = index;
 
         // Create header
-        const header = this.createMonoBehaviorHeader(component, index, totalComponents, entityId);
+        const header = this.createScriptRunnerHeader(component, index, totalComponents, entityId);
         section.appendChild(header);
 
         // Create body
-        const body = this.createMonoBehaviorBody(component, entityId);
+        const body = this.createScriptRunnerBody(component, entityId);
         section.appendChild(body);
 
         // Setup toggle functionality
@@ -44,11 +44,11 @@ export class MonoBehaviorRenderer {
     }
 
     /**
-     * Create MonoBehavior header with special actions
+     * Create ScriptRunner header with special actions
      */
-    createMonoBehaviorHeader(component, index, totalComponents, entityId) {
+    createScriptRunnerHeader(component, index, totalComponents, entityId) {
         const header = document.createElement('div');
-        header.className = 'component-header';
+        header.className = 'component-header runner-header';
 
         const headerContent = document.createElement('div');
         headerContent.style.display = 'flex';
@@ -60,13 +60,13 @@ export class MonoBehaviorRenderer {
         const titleDiv = document.createElement('div');
         const ownerColor = this.getUserColor(component.properties._owner);
         titleDiv.innerHTML = `
-            <span class="component-name">MonoBehavior</span>
+            <span class="component-name">ScriptRunner</span>
             <span class="component-type">${component.id}</span>
             <span class="component-owner" style="color:${ownerColor}">${component.properties._owner}</span>
         `;
 
         // Actions
-        const actionsDiv = this.createMonoBehaviorActions(component, index, totalComponents, entityId);
+        const actionsDiv = this.createScriptRunnerActions(component, index, totalComponents, entityId);
 
         headerContent.appendChild(titleDiv);
         headerContent.appendChild(actionsDiv);
@@ -88,9 +88,9 @@ export class MonoBehaviorRenderer {
     }
 
     /**
-     * Create MonoBehavior-specific action buttons
+     * Create ScriptRunner-specific action buttons
      */
-    createMonoBehaviorActions(component, index, totalComponents, entityId) {
+    createScriptRunnerActions(component, index, totalComponents, entityId) {
         const { ReorderComponentChange, RemoveComponentChange } = this.changeManager.changeTypes || {};
         const { confirm } = this.utils;
 
@@ -99,7 +99,7 @@ export class MonoBehaviorRenderer {
         actionsDiv.style.alignItems = 'center';
         actionsDiv.style.gap = '8px';
 
-        // Refresh button for MonoBehavior
+        // Refresh button for ScriptRunner
         const refreshBtn = document.createElement('button');
         refreshBtn.className = 'component-reorder-btn';
         refreshBtn.innerHTML = '↻';
@@ -157,7 +157,7 @@ export class MonoBehaviorRenderer {
         deleteBtn.title = 'Delete component';
         deleteBtn.onmousedown = async (e) => {
             e.stopPropagation();
-            const shouldDelete = confirm ? await confirm(`Delete MonoBehavior component?`) : window.confirm(`Delete MonoBehavior component?`);
+            const shouldDelete = confirm ? await confirm(`Delete ScriptRunner component?`) : window.confirm(`Delete ScriptRunner component?`);
             if (shouldDelete && RemoveComponentChange) {
                 const change = new RemoveComponentChange(entityId, component.id, { source: 'ui' });
                 this.changeManager.applyChange(change);
@@ -178,9 +178,9 @@ export class MonoBehaviorRenderer {
     }
 
     /**
-     * Create MonoBehavior body with script properties and vars
+     * Create ScriptRunner body with script properties and vars
      */
-    createMonoBehaviorBody(component, entityId) {
+    createScriptRunnerBody(component, entityId) {
         const { ComponentPropertyChange } = this.changeManager.changeTypes || {};
 
         const body = document.createElement('div');
@@ -212,7 +212,7 @@ export class MonoBehaviorRenderer {
 
             // Render each variable
             Object.entries(component.ctx.vars).forEach(([varName, varValue]) => {
-                const varRow = this.renderMonoBehaviorVar(varName, varValue, component);
+                const varRow = this.renderScriptRunnerVar(varName, varValue, component);
                 body.appendChild(varRow);
             });
         }
@@ -254,7 +254,7 @@ export class MonoBehaviorRenderer {
 
         // Get available scripts from inventory
         if (typeof window !== 'undefined' && window.inventory) {
-            const scripts = window.inventory.getAvailableScripts ? window.inventory.getAvailableScripts() : [];
+            const scripts = SM.getAllScriptAssets().map(x=>x.properties);
 
             // Add current script if it exists
             const addScriptOption = (script) => {
@@ -290,7 +290,7 @@ export class MonoBehaviorRenderer {
 
                 // Trigger re-render to show vars
                 setTimeout(() => {
-                    window.dispatchEvent(new CustomEvent('monobehavior-file-changed', { detail: { entityId } }));
+                    window.dispatchEvent(new CustomEvent('scriptrunner-file-changed', { detail: { entityId } }));
                 }, 100);
             }
         };
@@ -316,10 +316,10 @@ export class MonoBehaviorRenderer {
     }
 
     /**
-     * Render a MonoBehavior variable
+     * Render a ScriptRunner variable
      */
-    renderMonoBehaviorVar(varName, varValue, component) {
-        const { MonoBehaviorVarChange } = this.changeManager.changeTypes || {};
+    renderScriptRunnerVar(varName, varValue, component) {
+        const { ScriptRunnerVarChange } = this.changeManager.changeTypes || {};
         const { formatPropertyName } = this.utils;
 
         const row = document.createElement('div');
@@ -340,8 +340,8 @@ export class MonoBehaviorRenderer {
             input.className = 'checkbox-input';
             input.checked = varValue.value;
             input.onchange = () => {
-                if (MonoBehaviorVarChange) {
-                    const change = new MonoBehaviorVarChange(
+                if (ScriptRunnerVarChange) {
+                    const change = new ScriptRunnerVarChange(
                         component.id,
                         varName,
                         { type: 'boolean', value: input.checked },
@@ -360,8 +360,8 @@ export class MonoBehaviorRenderer {
             input.step = 'any';
             input.onchange = () => {
                 const numValue = parseFloat(input.value);
-                if (!isNaN(numValue) && MonoBehaviorVarChange) {
-                    const change = new MonoBehaviorVarChange(
+                if (!isNaN(numValue) && ScriptRunnerVarChange) {
+                    const change = new ScriptRunnerVarChange(
                         component.id,
                         varName,
                         { type: 'number', value: numValue },
@@ -389,9 +389,9 @@ export class MonoBehaviorRenderer {
                 input.step = 'any';
                 input.onchange = () => {
                     const numValue = parseFloat(input.value);
-                    if (!isNaN(numValue) && MonoBehaviorVarChange) {
+                    if (!isNaN(numValue) && ScriptRunnerVarChange) {
                         varValue.value[axis] = numValue;
-                        const change = new MonoBehaviorVarChange(
+                        const change = new ScriptRunnerVarChange(
                             component.id,
                             varName,
                             { type: 'vector3', value: varValue.value },
@@ -415,8 +415,8 @@ export class MonoBehaviorRenderer {
                 component.id,
                 component,
                 (newColor) => {
-                    if (MonoBehaviorVarChange) {
-                        const change = new MonoBehaviorVarChange(
+                    if (ScriptRunnerVarChange) {
+                        const change = new ScriptRunnerVarChange(
                             component.id,
                             varName,
                             { type: 'color', value: newColor },
@@ -425,7 +425,7 @@ export class MonoBehaviorRenderer {
                         this.changeManager.applyChange(change);
                     }
                 },
-                true  // isMonoBehaviorVar
+                true  // isScriptRunnerVar
             );
             valueContainer.appendChild(colorInput);
 
@@ -436,8 +436,8 @@ export class MonoBehaviorRenderer {
             input.className = 'property-input';
             input.value = varValue.value?.toString() || '';
             input.onchange = () => {
-                if (MonoBehaviorVarChange) {
-                    const change = new MonoBehaviorVarChange(
+                if (ScriptRunnerVarChange) {
+                    const change = new ScriptRunnerVarChange(
                         component.id,
                         varName,
                         { type: 'string', value: input.value },

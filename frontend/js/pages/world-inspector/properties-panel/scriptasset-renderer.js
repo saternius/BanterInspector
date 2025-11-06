@@ -1,11 +1,11 @@
 /**
- * Script Renderer
- * Specialized renderer for Script components with code display and variable management
+ * ScriptAsset Renderer
+ * Specialized renderer for ScriptAsset components with code display and variable management
  */
 
 import { VectorColorInputRenderer } from './vector-color-inputs.js';
 
-export class ScriptRenderer {
+export class ScriptAssetRenderer {
     constructor(propertyInputRenderer, utils, changeManager) {
         this.propertyInputRenderer = propertyInputRenderer;
         this.utils = utils || {};
@@ -16,14 +16,14 @@ export class ScriptRenderer {
     }
 
     /**
-     * Render Script component with special handling
-     * @param {Object} component - Script component
+     * Render ScriptAsset component with special handling
+     * @param {Object} component - ScriptAsset component
      * @param {number} index - Component index in entity's component array
      * @param {number} totalComponents - Total number of components
      * @param {string} entityId - Parent entity ID
      * @returns {HTMLElement} - The component section element
      */
-    renderScriptComponent(component, index, totalComponents, entityId) {
+    renderScriptAssetComponent(component, index, totalComponents, entityId) {
         const section = document.createElement('div');
         section.className = 'component-section';
         section.dataset.panel = 'propertyPanelComponent';
@@ -35,7 +35,7 @@ export class ScriptRenderer {
         section.appendChild(header);
 
         // Create body
-        const body = this.createScriptBody(component, entityId);
+        const body = this.createScriptAssetBody(component, entityId);
         section.appendChild(body);
 
         // Setup toggle functionality
@@ -45,11 +45,11 @@ export class ScriptRenderer {
     }
 
     /**
-     * Create Script header with special actions
+     * Create ScriptAsset header with special actions
      */
     createScriptHeader(component, index, totalComponents, entityId) {
         const header = document.createElement('div');
-        header.className = 'component-header';
+        header.className = 'component-header scriptasset-header';
 
         const headerContent = document.createElement('div');
         headerContent.style.display = 'flex';
@@ -61,7 +61,7 @@ export class ScriptRenderer {
         const titleDiv = document.createElement('div');
         const ownerColor = this.getUserColor(component.properties._owner);
         titleDiv.innerHTML = `
-            <span class="component-name">Script</span>
+            <span class="component-name">ScriptAsset</span>
             <span class="component-type">${component.id}</span>
             <span class="component-owner" style="color:${ownerColor}">${component.properties._owner}</span>
         `;
@@ -89,7 +89,7 @@ export class ScriptRenderer {
     }
 
     /**
-     * Create Script-specific action buttons
+     * Create ScriptAsset-specific action buttons
      */
     createScriptActions(component, index, totalComponents, entityId) {
         const { ReorderComponentChange, RemoveComponentChange } = this.changeManager.changeTypes || {};
@@ -145,7 +145,7 @@ export class ScriptRenderer {
         deleteBtn.title = 'Delete component';
         deleteBtn.onmousedown = async (e) => {
             e.stopPropagation();
-            const shouldDelete = confirm ? await confirm(`Delete Script component?`) : window.confirm(`Delete Script component?`);
+            const shouldDelete = confirm ? await confirm(`Delete ScriptAsset component?`) : window.confirm(`Delete ScriptAsset component?`);
             if (shouldDelete && RemoveComponentChange) {
                 const change = new RemoveComponentChange(entityId, component.id, { source: 'ui' });
                 this.changeManager.applyChange(change);
@@ -166,9 +166,9 @@ export class ScriptRenderer {
     }
 
     /**
-     * Create Script body with name, data, and vars
+     * Create ScriptAsset body with name, data, and vars
      */
-    createScriptBody(component, entityId) {
+    createScriptAssetBody(component, entityId) {
         const body = document.createElement('div');
         body.className = 'component-body';
 
@@ -306,7 +306,7 @@ export class ScriptRenderer {
                     content: component.properties.data || '',
                     author: component.properties._owner || 'Unknown',
                     created: Date.now(),
-                    isScriptComponent: true,
+                    isScriptAsset: true,
                     componentId: component.id
                 }
             });
@@ -456,7 +456,7 @@ export class ScriptRenderer {
     }
 
     /**
-     * Render a Script variable
+     * Render a ScriptAsset variable
      */
     renderScriptVar(varName, varData, component) {
         const { ComponentPropertyChange } = this.changeManager.changeTypes || {};

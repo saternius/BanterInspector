@@ -6,7 +6,7 @@ export class ScriptEditor {
         this.currentScript = scriptData;
         this.editor = null;
         this.isModified = false;
-        this.monoBehaviorEntities = new Map(); // Map of entityId -> MonoBehavior component
+        this.scriptRunnerEntities = new Map(); // Map of entityId -> ScriptRunner component
         this.selectedEntities = new Set();
         this.codemirror = null;
         this.pageId = `script-editor-${scriptData.name.replace(/[^a-zA-Z0-9]/g, '-')}-${Date.now()}`;
@@ -49,7 +49,7 @@ export class ScriptEditor {
     }
 
     renderFooter(){
-        this.findMonoBehaviorEntities();
+        this.findScriptRunnerEntities();
         const footer = this.pageElement?.querySelector('.script-editor-footer');
         if(footer){
             footer.innerHTML = `
@@ -57,12 +57,12 @@ export class ScriptEditor {
                     <span>Author: ${this.currentScript.author}</span>
                     <span>Created: ${new Date(this.currentScript.created).toLocaleString()}</span>
                 </div>
-                ${this.monoBehaviorEntities.size > 0 ? `
-                <div class="monobehavior-controls">
+                ${this.scriptRunnerEntities.size > 0 ? `
+                <div class="scriptrunner-controls">
                     <div class="entity-selector-panel">
-                        <div class="entity-selector-title">MonoBehavior Instances:</div>
+                        <div class="entity-selector-title">ScriptRunner Instances:</div>
                         <div class="entity-selector-buttons" id="entitySelectorButtons-${this.pageId}">
-                            ${Array.from(this.monoBehaviorEntities.entries()).map(([entityId, component]) => {
+                            ${Array.from(this.scriptRunnerEntities.entries()).map(([entityId, component]) => {
                                 const entity = SM.getEntityById(entityId);
                                 const entityName = entity?.name || 'Unknown Entity';
                                 const isSelected = this.selectedEntities.has(entityId);
@@ -83,7 +83,7 @@ export class ScriptEditor {
                 ` : ''}
             `;
 
-            // <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.monoBehaviorEntities.size > 0 ? 'block' : 'none'};">
+            // <div class="console-output" id="consoleOutput-${this.pageId}" style="display: ${this.scriptRunnerEntities.size > 0 ? 'block' : 'none'};">
             //     <div class="console-header">Console Output</div>
             //     <div class="console-content" id="consoleContent-${this.pageId}"></div>
             // </div>
@@ -354,9 +354,9 @@ export class ScriptEditor {
 
         const newContent = this.codemirror.getValue();
 
-        // Check if this is a ScriptComponent or an inventory item
-        if (this.currentScript.isScriptComponent && this.currentScript.componentId) {
-            // For ScriptComponent, update the component's data property
+        // Check if this is a ScriptAsset component or an inventory item
+        if (this.currentScript.isScriptAsset && this.currentScript.componentId) {
+            // For ScriptAsset component, update the component's data property
             const change = new ComponentPropertyChange(
                 this.currentScript.componentId,
                 'data',
@@ -377,30 +377,30 @@ export class ScriptEditor {
         document.getElementById(`lastSave-${this.pageId}`).textContent = `Last saved: ${new Date(this.lastSave).toLocaleString()}`;
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
 
-        // Only refresh MonoBehaviors, not ScriptComponents
-        if (!this.currentScript.isScriptComponent) {
+        // Only refresh ScriptRunners, not ScriptAsset components
+        if (!this.currentScript.isScriptAsset) {
             this.run('Refresh');
         }
     }
     
-    findMonoBehaviorEntities() {
-        this.monoBehaviorEntities.clear();
-                
-        // Iterate through all entities to find MonoBehavior components using this script
+    findScriptRunnerEntities() {
+        this.scriptRunnerEntities.clear();
+
+        // Iterate through all entities to find ScriptRunner components using this script
         SM.getAllEntities().forEach((entity) => {
             if (entity.components) {
                 entity.components.forEach(component => {
-                    if (component.type === 'MonoBehavior' && 
+                    if (component.type === 'ScriptRunner' &&
                         component.properties?.file === this.currentScript.name) {
-                        this.monoBehaviorEntities.set(entity.id, component);
+                        this.scriptRunnerEntities.set(entity.id, component);
                         // this.wrapConsoleForComponent(component, entity.name);
                     }
                 });
             }
         });
-        
-        this.selectedEntities = new Set(this.monoBehaviorEntities.keys());
-        return this.monoBehaviorEntities;
+
+        this.selectedEntities = new Set(this.scriptRunnerEntities.keys());
+        return this.scriptRunnerEntities;
     }
     
     selectEntity(entityId) {
@@ -427,7 +427,7 @@ export class ScriptEditor {
     
     canRun(){
         let stoppedSelected = Array.from(this.selectedEntities).filter(entityId => {
-            let component = this.monoBehaviorEntities.get(entityId);
+            let component = this.scriptRunnerEntities.get(entityId);
             return !component.ctx._running;
         })
         return stoppedSelected.length > 0;
@@ -435,7 +435,7 @@ export class ScriptEditor {
 
     canStop(){
         let runningSelected = Array.from(this.selectedEntities).filter(entityId => {
-            let component = this.monoBehaviorEntities.get(entityId);
+            let component = this.scriptRunnerEntities.get(entityId);
             return component.ctx._running;
         })
         return runningSelected.length > 0;
@@ -459,7 +459,7 @@ export class ScriptEditor {
 
     run(action){
         let components = Array.from(this.selectedEntities)
-        .map(entityId => this.monoBehaviorEntities.get(entityId))
+        .map(entityId => this.scriptRunnerEntities.get(entityId))
 
         if(action === 'Start'){
             components = components.filter(component => component && component.ctx && !component.ctx._running);

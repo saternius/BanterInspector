@@ -81,7 +81,7 @@ export class InventoryFirebase {
                     addColliders: true
                 }
             })
-            await AddComponent(entity.id, "MonoBehavior", {
+            await AddComponent(entity.id, "ScriptRunner", {
                 componentProperties:{
                     file: "GLTFGrabbable.js"
                 }

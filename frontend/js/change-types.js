@@ -1,6 +1,6 @@
 // Import required dependencies
 const { deepClone, parseBest, appendToShell, showNotification } = await import(`${window.repoUrl}/utils.js`);
-const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
+const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -640,7 +640,7 @@ export class EntityMoveChange extends Change{
     }
 }
 
-export class MonoBehaviorVarChange extends Change{
+export class ScriptRunnerVarChange extends Change{
     constructor(componentId, varName, newValue, options) {
         super();
         this.timeout = 500;
@@ -648,13 +648,13 @@ export class MonoBehaviorVarChange extends Change{
         this.varName = varName;
         this.newValue = deepClone(newValue);
         this.options = options || {};
-        this.monobehavior = SM.getEntityComponentById(componentId);
+        this.scriptrunner = SM.getEntityComponentById(componentId);
         this.oldValue = deepClone(options.oldValue || this.getOldValue());
     }
 
     getOldValue() {
-        if (!this.monobehavior || !this.monobehavior.ctx?.vars) return undefined;
-        return deepClone(this.monobehavior.ctx.vars[this.varName]);
+        if (!this.scriptrunner || !this.scriptrunner.ctx?.vars) return undefined;
+        return deepClone(this.scriptrunner.ctx.vars[this.varName]);
     }
 
     async apply() {
@@ -668,15 +668,15 @@ export class MonoBehaviorVarChange extends Change{
     }
 
     async change(value) {
-        log("monobehavior", "changing var =>", this.monobehavior, this.varName, value)
-        if (!this.monobehavior) return;
+        log("scriptrunner", "changing var =>", this.scriptrunner, this.varName, value)
+        if (!this.scriptrunner) return;
 
         // Update the properties.vars for persistence
-        if (!this.monobehavior.ctx.vars) {
+        if (!this.scriptrunner.ctx.vars) {
             return;
         }
 
-        await this.monobehavior.updateVar(this.varName, value);
+        await this.scriptrunner.updateVar(this.varName, value);
 
         // Refresh UI if needed
         if (inspector?.propertiesPanel) {
@@ -685,16 +685,16 @@ export class MonoBehaviorVarChange extends Change{
     }
 
     getDescription() {
-        return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.newValue)}`;
+        return `Changed ScriptRunner var ${this.varName} to ${JSON.stringify(this.newValue)}`;
     }
 
     getUndoDescription() {
-        return `Changed MonoBehavior var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
+        return `Changed ScriptRunner var ${this.varName} to ${JSON.stringify(this.oldValue)}`;
     }
 
     cmd(){
         return {
-            action: "set_mono_behavior_var",
+            action: "set_script_runner_var",
             componentId: this.componentId,
             varName: this.varName,
             newValue: this.newValue,
@@ -881,7 +881,7 @@ export class LoadScriptChange extends Change{
             return checkExistingInScene;
         }
 
-        let componentId = "Script_"+Math.floor(Math.random()*99999);
+        let componentId = "ScriptAsset_"+Math.floor(Math.random()*99999);
         
         this.itemData = {
             "Entity": {
@@ -2008,8 +2008,8 @@ window.RenameItem = async (itemName, newName, options)=>{
     return await change.apply();
 }
 
-window.SetMonoBehaviorVar = async (componentId, varName, newValue, options)=>{
-    let change = new MonoBehaviorVarChange(componentId, varName, newValue, options);
+window.SetScriptRunnerVar = async (componentId, varName, newValue, options)=>{
+    let change = new ScriptRunnerVarChange(componentId, varName, newValue, options);
     return await change.apply();
 }
 
@@ -2106,7 +2106,7 @@ window.ChangeTypes = {
         AddEntity,
         RemoveEntity,
         MoveEntity,
-        SetMonoBehaviorVar,
+        SetScriptRunnerVar,
         LoadItem,
         CloneEntity,
         SaveEntityItem,
@@ -2192,12 +2192,12 @@ window.ChangeTypes = {
             undoable: true,
             command: 'move_entity'
         },
-        SetMonoBehaviorVar: {
+        SetScriptRunnerVar: {
             category: 'script',
-            description: 'Change a MonoBehavior variable value',
+            description: 'Change a ScriptRunner variable value',
             parameters: ['componentId', 'varName', 'newValue', 'options'],
             undoable: true,
-            command: 'set_mono_behavior_var'
+            command: 'set_script_runner_var'
         },
         LoadItem: {
             category: 'inventory',

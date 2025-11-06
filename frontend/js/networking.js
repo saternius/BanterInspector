@@ -396,27 +396,27 @@ export class Networking {
             await SM._reset();
         }
 
-        if(items[0] === "monobehavior_start"){
+        if(items[0] === "scriptrunner_start"){
             let componentId = items[1];
-            let monobehavior = SM.getEntityComponentById(componentId);
-            if(monobehavior){
-                await monobehavior._start();
+            let scriptrunner = SM.getEntityComponentById(componentId);
+            if(scriptrunner){
+                await scriptrunner._start();
             }
         }
 
-        if(items[0] === "monobehavior_stop"){
+        if(items[0] === "scriptrunner_stop"){
             let componentId = items[1];
-            let monobehavior = SM.getEntityComponentById(componentId);
-            if(monobehavior){
-                await monobehavior._stop();
+            let scriptrunner = SM.getEntityComponentById(componentId);
+            if(scriptrunner){
+                await scriptrunner._stop();
             }
         }
 
-        if(items[0] === "monobehavior_refresh"){
+        if(items[0] === "scriptrunner_refresh"){
             let componentId = items[1];
-            let monobehavior = SM.getEntityComponentById(componentId);
-            if(monobehavior){
-                await monobehavior._refresh();
+            let scriptrunner = SM.getEntityComponentById(componentId);
+            if(scriptrunner){
+                await scriptrunner._refresh();
             }
         }
 

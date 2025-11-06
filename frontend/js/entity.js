@@ -337,7 +337,7 @@ export class Entity{
 
     _loaded(){
         this._finished_loading = true;
-        let scripts = this.components.filter(c=>c.type === "MonoBehavior");
+        let scripts = this.components.filter(c=>c.type === "ScriptRunner");
         scripts.forEach(async script=>{
             await script.ctx.onLoaded();
         })
@@ -455,9 +455,9 @@ export class Entity{
     async _destroy(){
         this._stagedForDestruction = true;
         
-        let monobehaviors = [...this.components.filter(component => component.type === "MonoBehavior")];
-        for(let monobehavior of monobehaviors){
-            await monobehavior._destroy();
+        let scriptrunners = [...this.components.filter(component => component.type === "ScriptRunner")];
+        for(let scriptrunner of scriptrunners){
+            await scriptrunner._destroy();
         }
 
         let children = [...this.children];
@@ -467,7 +467,7 @@ export class Entity{
 
         let components = [...this.components];
         for(let component of components){
-            if(component.type === "MonoBehavior") continue;
+            if(component.type === "ScriptRunner") continue;
             await component._destroy();
         }
 
@@ -505,7 +505,7 @@ export class Entity{
             this.active = newValue;
             this._bs.SetActive(newValue);
             this.components.forEach(component => {
-                if(component.type === "MonoBehavior"){
+                if(component.type === "ScriptRunner"){
                     if(newValue){
                         component._refresh();
                     }else{
@@ -665,7 +665,7 @@ export class Entity{
     }
 
     GetScript(scriptName){
-        let scripts = this.components.filter(x=>x.type === "MonoBehavior" && x.properties.name === scriptName).map(x=>x.ctx);
+        let scripts = this.components.filter(x=>x.type === "ScriptRunner" && x.properties.name === scriptName).map(x=>x.ctx);
         if(scripts.length === 0){
             return null;
         }

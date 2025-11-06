@@ -4,9 +4,9 @@ const { Entity } = await import(`${window.repoUrl}/entity.js`);
 window.updateModuleProgress("entity");
 const { TransformComponent } = await import(`${window.repoUrl}/entity-components/transform.js`);
 window.updateModuleProgress("transform");
-const { MonoBehaviorComponent } = await import(`${window.repoUrl}/entity-components/monobehavior.js`);
-window.updateModuleProgress("monobehavior");
-const { ScriptComponent } = await import(`${window.repoUrl}/entity-components/script.js`);
+const { ScriptRunnerComponent } = await import(`${window.repoUrl}/entity-components/scriptrunner.js`);
+window.updateModuleProgress("scriptrunner");
+const { ScriptAssetComponent } = await import(`${window.repoUrl}/entity-components/script.js`);
 window.updateModuleProgress("script");
 const { GeometryComponent } = await import(`${window.repoUrl}/entity-components/meshes/geometry.js`);
 window.updateModuleProgress("geometry");
@@ -274,8 +274,8 @@ export const componentTypeMap = {
     "Spiral": SpiralComponent,
     "Spring": SpringComponent,
     "Light": LightComponent,
-    "MonoBehavior": MonoBehaviorComponent,
-    "Script": ScriptComponent
+    "ScriptRunner": ScriptRunnerComponent,
+    "ScriptAsset": ScriptAssetComponent
 }
 
 window.componentTypeMap = componentTypeMap;
@@ -340,8 +340,8 @@ export const componentBSTypeMap = {
     [BS.ComponentType.BanterSpiral]: SpiralComponent,
     [BS.ComponentType.BanterSpring]: SpringComponent,
     [BS.ComponentType.Light]: LightComponent,
-    [MonoBehaviorComponent]: MonoBehaviorComponent,
-    [ScriptComponent]: ScriptComponent
+    [ScriptRunnerComponent]: ScriptRunnerComponent,
+    [ScriptAssetComponent]: ScriptAssetComponent
 }
 
 export const componentTextMap = {
@@ -404,8 +404,8 @@ export const componentTextMap = {
     [BS.ComponentType.BanterSpiral]: "Spiral",
     [BS.ComponentType.BanterSpring]: "Spring",
     [BS.ComponentType.Light]: "Light",
-    [MonoBehaviorComponent]: "MonoBehavior",
-    [ScriptComponent]: "Script"
+    [ScriptRunnerComponent]: "ScriptRunner",
+    [ScriptAssetComponent]: "ScriptAsset"
 }
 
 
@@ -450,7 +450,7 @@ window.ComponentRegistry = {
         Entity,
         EntityComponent,
         TransformComponent,
-        MonoBehaviorComponent,
+        ScriptRunnerComponent,
         // Meshes/Geometry
         GeometryComponent,
         BoxComponent,
@@ -523,7 +523,7 @@ window.ComponentRegistry = {
         Entity: { category: 'core', description: 'Entity/GameObject class', icon: '📦' },
         EntityComponent: { category: 'core', description: 'Base component class', icon: '🧩' },
         TransformComponent: { category: 'core', description: 'Position, rotation, scale', icon: '📐' },
-        MonoBehaviorComponent: { category: 'scripting', description: 'Script execution component', icon: '📜' },
+        ScriptRunnerComponent: { category: 'scripting', description: 'Script execution component', icon: '📜' },
 
         // Meshes/Geometry
         GeometryComponent: { category: 'meshes', description: 'Generic geometry component', icon: '🔷' },
@@ -790,6 +790,6 @@ export {
     SpiralComponent,
     SpringComponent,
     LightComponent,
-    MonoBehaviorComponent,
-    ScriptComponent
+    ScriptRunnerComponent,
+    ScriptAssetComponent
 };

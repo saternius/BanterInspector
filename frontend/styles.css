@@ -2142,6 +2142,22 @@ input:hover{
     background: #37485f;
 }
 
+.runner-header{
+    background: #471b4f;
+}
+.runner-header:hover{
+    background: #572b5f;
+}
+
+.scriptasset-header{
+    background: #5a2b63;
+}
+
+.scriptasset-header:hover{
+    background: #6a3b73;
+}
+
+
 .perm{
     background: #2b4840;
 }
@@ -5354,7 +5370,7 @@ input:focus, textarea:focus, select:focus {
     list-style: none;
     /* margin: 0; */
     opacity: 0;
-    /* padding: 0; */
+    padding: 0;
     position: absolute;
     transition: 0.2s linear;
     width: 100%;
@@ -5365,7 +5381,8 @@ input:focus, textarea:focus, select:focus {
     display: block;
     height: auto;
     opacity: 1;
-    overflow: scroll;
+    overflow: auto;
+    overflow-x: hidden;
     max-height: 400px;
 }
 .js-Dropdown-list li {

@@ -1,5 +1,5 @@
 const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
-const { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, MonoBehaviorVarChange, ReorderComponentChange } = await import(`${window.repoUrl}/change-types.js`);
+const { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, ScriptRunnerVarChange, ReorderComponentChange } = await import(`${window.repoUrl}/change-types.js`);
 export class InputHandler{
     constructor(){
         this.currentInput = null;
@@ -769,7 +769,7 @@ export class InputHandler{
     
     getColorValue(component, property){
         // Handle MonoBehavior variables
-        if(this.contextType === 'monobehavior'){
+        if(this.contextType === 'scriptrunner'){
             const varDef = component.vars?.[property];
             return varDef?.value || {r: 1, g: 1, b: 1, a: 1};
         }
@@ -785,8 +785,8 @@ export class InputHandler{
     
     setColorValue(component, property, color){
         // Handle MonoBehavior variables
-        if(this.contextType === 'monobehavior'){
-            const change = new MonoBehaviorVarChange(component.id, property, {type: 'color', value: color}, { source: 'ui' });
+        if(this.contextType === 'scriptrunner'){
+            const change = new ScriptRunnerVarChange(component.id, property, {type: 'color', value: color}, { source: 'ui' });
             window.changeManager.applyChange(change);
             return;
         }

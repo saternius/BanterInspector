@@ -1,6 +1,6 @@
 /**
  * Lifecycle Manager
- * Singleton that manages lifecycle events for all MonoBehavior components
+ * Singleton that manages lifecycle events for all ScriptRunner components
  */
 let localhost = window.location.hostname === 'localhost'
 export class LifecycleManager {
@@ -13,7 +13,7 @@ export class LifecycleManager {
             onInspectorLoaded: false,
             onSceneLoaded: false
         }
-        this.monoBehaviors = new Map(); // Map of componentId -> MonoBehavior instance
+        this.scriptRunners = new Map(); // Map of componentId -> ScriptRunner instance
         this.fps = 30; // Default 45 FPS for onUpdate
         this.updateInterval = null;
         this.isRunning = false;
@@ -29,35 +29,35 @@ export class LifecycleManager {
     }
     
     /**
-     * Register a MonoBehavior component
+     * Register a ScriptRunner component
      */
-    async registerMonoBehavior(monoBehavior) {
-        this.monoBehaviors.set(monoBehavior.id, monoBehavior);        
+    async registerScriptRunner(scriptRunner) {
+        this.scriptRunners.set(scriptRunner.id, scriptRunner);        
         // Start the lifecycle if this is the first component
-        if (this.monoBehaviors.size === 1 && !this.isRunning) {
+        if (this.scriptRunners.size === 1 && !this.isRunning) {
             this.start();
         }
 
-        this.pruneOrphanedMonoBehaviors();
+        this.pruneOrphanedScriptRunners();
         inspector.lifecyclePanel.render()
     }
 
-    pruneOrphanedMonoBehaviors(){
+    pruneOrphanedScriptRunners(){
         // TODO
     }
     
     /**
-     * Unregister a MonoBehavior component
+     * Unregister a ScriptRunner component
      */
-    unregisterMonoBehavior(monoBehavior) {
-        if(!monoBehavior) return;
+    unregisterScriptRunner(scriptRunner) {
+        if(!scriptRunner) return;
         // Call onDestroy before removing
-        this.monoBehaviors.delete(monoBehavior.id);
+        this.scriptRunners.delete(scriptRunner.id);
         // Stop the lifecycle if no components remain
-        if (this.monoBehaviors.size === 0) {
+        if (this.scriptRunners.size === 0) {
             this.stop();
         }
-        this.pruneOrphanedMonoBehaviors();
+        this.pruneOrphanedScriptRunners();
         inspector.lifecyclePanel.render()
     }
     
@@ -114,17 +114,16 @@ export class LifecycleManager {
      * Trigger onUpdate for all registered behaviors
      */
     triggerUpdate() {
-        //console.log("triggerUpdate", this.monoBehaviors)
-        this.monoBehaviors.forEach((monoBehavior, componentId) => {
-            monoBehavior._update();
+        this.scriptRunners.forEach((scriptRunner, componentId) => {
+            scriptRunner._update();
         });
     }
 
-    relayEventToMonoBehaviors(event, key){
-        this.monoBehaviors.forEach((monoBehavior, componentId) => {
-            if (monoBehavior.ctx[event] && typeof monoBehavior.ctx[event] === 'function') {
+    relayEventToScriptRunners(event, key){
+        this.scriptRunners.forEach((scriptRunner, componentId) => {
+            if (scriptRunner.ctx[event] && typeof scriptRunner.ctx[event] === 'function') {
                 try {
-                    monoBehavior.ctx[event](key);
+                    scriptRunner.ctx[event](key);
                 } catch (error) {
                     err('lifecycle', `Error in ${event} for ${componentId}:`, error);
                 }
@@ -138,30 +137,30 @@ export class LifecycleManager {
     setupKeyboardListeners() {
         // KeyDown event
         document.addEventListener('keydown', (event) => {
-            this.relayEventToMonoBehaviors('onKeyDown', event.key);
+            this.relayEventToScriptRunners('onKeyDown', event.key);
         });
         
         // KeyUp event
         document.addEventListener('keyup', (event) => {
-            this.relayEventToMonoBehaviors('onKeyUp', event.key);
+            this.relayEventToScriptRunners('onKeyUp', event.key);
         });
         
         // KeyPress event (deprecated but included for compatibility)
         document.addEventListener('keypress', (event) => {
-            this.relayEventToMonoBehaviors('keyPress', event.key);
+            this.relayEventToScriptRunners('keyPress', event.key);
         });
     }
 
     keyDown(key){
-        this.relayEventToMonoBehaviors('onKeyDown', key);
+        this.relayEventToScriptRunners('onKeyDown', key);
     }
 
     keyUp(key){
-        this.relayEventToMonoBehaviors('onKeyUp', key);
+        this.relayEventToScriptRunners('onKeyUp', key);
     }
 
     keyPress(key){
-        this.relayEventToMonoBehaviors('keyPress', key);
+        this.relayEventToScriptRunners('keyPress', key);
     }
 
 }
@@ -172,7 +171,7 @@ window.lifecycle = lifecycle; // For debugging
 
 /**
  * Global LifecycleAPI for runtime inspection
- * Provides easy access to running MonoBehavior scripts
+ * Provides easy access to running ScriptRunner scripts
  */
 window.LifecycleAPI = {
     /**
@@ -183,12 +182,12 @@ window.LifecycleAPI = {
     },
 
     /**
-     * Get all running MonoBehaviors
-     * @returns {Array} Array of MonoBehavior instances with metadata
+     * Get all running ScriptRunners
+     * @returns {Array} Array of ScriptRunner instances with metadata
      */
     getAllScripts() {
         const scripts = [];
-        lifecycle.monoBehaviors.forEach((mb, id) => {
+        lifecycle.scriptRunners.forEach((scriptRunner, id) => {
             scripts.push({
                 id,
                 scriptFile: mb.properties?.file,
@@ -211,7 +210,7 @@ window.LifecycleAPI = {
     /**
      * Get scripts by entity name
      * @param {string} entityName - Name of entity to search for
-     * @returns {Array} Array of MonoBehavior instances on that entity
+     * @returns {Array} Array of ScriptRunner instances on that entity
      */
     getByEntity(entityName) {
         return this.getAllScripts().filter(s => s.entity?.name === entityName);
@@ -220,7 +219,7 @@ window.LifecycleAPI = {
     /**
      * Get scripts by file name
      * @param {string} fileName - Script file name to search for
-     * @returns {Array} Array of MonoBehavior instances using that script
+     * @returns {Array} Array of ScriptRunner instances using that script
      */
     getByFile(fileName) {
         return this.getAllScripts().filter(s => s.scriptFile === fileName);
@@ -228,7 +227,7 @@ window.LifecycleAPI = {
 
     /**
      * Get running scripts only
-     * @returns {Array} Array of currently running MonoBehavior instances
+     * @returns {Array} Array of currently running ScriptRunner instances
      */
     getRunning() {
         return this.getAllScripts().filter(s => s.running);
@@ -237,7 +236,7 @@ window.LifecycleAPI = {
     /**
      * Get scripts by owner
      * @param {string} owner - Owner name to filter by
-     * @returns {Array} Array of MonoBehavior instances owned by that user
+     * @returns {Array} Array of ScriptRunner instances owned by that user
      */
     getByOwner(owner) {
         return this.getAllScripts().filter(s => s.owner === owner);
@@ -245,11 +244,11 @@ window.LifecycleAPI = {
 
     /**
      * Get lifecycle methods available on a script
-     * @param {string} scriptId - MonoBehavior component ID
+     * @param {string} scriptId - ScriptRunner component ID
      * @returns {Object} Object with lifecycle method availability
      */
     getLifecycleMethods(scriptId) {
-        const mb = lifecycle.monoBehaviors.get(scriptId);
+        const mb = lifecycle.scriptRunners.get(scriptId);
         if (!mb?.ctx) return null;
 
         return {
@@ -265,11 +264,11 @@ window.LifecycleAPI = {
 
     /**
      * Get custom methods defined on a script (non-lifecycle)
-     * @param {string} scriptId - MonoBehavior component ID
+     * @param {string} scriptId - ScriptRunner component ID
      * @returns {Array} Array of custom method names
      */
     getCustomMethods(scriptId) {
-        const mb = lifecycle.monoBehaviors.get(scriptId);
+        const mb = lifecycle.scriptRunners.get(scriptId);
         if (!mb?.ctx) return [];
 
         const standardKeys = [
@@ -284,14 +283,14 @@ window.LifecycleAPI = {
     },
 
     /**
-     * Call a custom method on a MonoBehavior
-     * @param {string} scriptId - MonoBehavior component ID
+     * Call a custom method on a ScriptRunner
+     * @param {string} scriptId - ScriptRunner component ID
      * @param {string} methodName - Method name to call
      * @param {...any} args - Arguments to pass to the method
      * @returns {any} Return value of the method
      */
     callMethod(scriptId, methodName, ...args) {
-        const mb = lifecycle.monoBehaviors.get(scriptId);
+        const mb = lifecycle.scriptRunners.get(scriptId);
         if (!mb?.ctx?.[methodName]) {
             throw new Error(`Method ${methodName} not found on script ${scriptId}`);
         }
@@ -354,11 +353,11 @@ window.LifecycleAPI = {
 
     /**
      * Get detailed info about a specific script
-     * @param {string} scriptId - MonoBehavior component ID
+     * @param {string} scriptId - ScriptRunner component ID
      * @returns {Object} Detailed information object
      */
     getInfo(scriptId) {
-        const mb = lifecycle.monoBehaviors.get(scriptId);
+        const mb = lifecycle.scriptRunners.get(scriptId);
         if (!mb) {
             console.warn(`Script ${scriptId} not found`);
             return null;
@@ -388,7 +387,7 @@ window.LifecycleAPI = {
             } : null
         };
 
-        console.log('MonoBehavior Info:', info);
+        console.log('ScriptRunner Info:', info);
         return info;
     },
 
@@ -416,4 +415,4 @@ window.LifecycleAPI = {
     }
 };
 
-console.log('[LifecycleAPI] Exposed globally with monitoring for', lifecycle.monoBehaviors.size, 'MonoBehavior scripts');
+console.log('[LifecycleAPI] Exposed globally with monitoring for', lifecycle.scriptRunners.size, 'ScriptRunner scripts');

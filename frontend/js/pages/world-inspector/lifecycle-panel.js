@@ -1,6 +1,6 @@
 /**
  * Lifecycle Panel
- * UI for displaying and managing MonoBehavior scripts from lifecycle-manager
+ * UI for displaying and managing ScriptRunner scripts from lifecycle-manager
  */
 
 // (async () => {
@@ -68,12 +68,12 @@
 
             // Listen for component changes
             document.addEventListener('componentChanged', (e) => {
-                if (e.detail?.componentType === 'MonoBehavior') {
+                if (e.detail?.componentType === 'ScriptRunner') {
                     this.render();
                 }
             });
 
-            // Override console.log to capture MonoBehavior output
+            // Override console.log to capture ScriptRunner output
             // const originalLog = console.log;
             // console.log = (...args) => {
             //     // Call original console.log
@@ -96,10 +96,10 @@
         /**
          * Get entity information for a MonoBehavior
          */
-        getEntityInfo(monoBehavior) {
-            // MonoBehavior component has a direct reference to its entity
-            if (monoBehavior._entity) {
-                return [monoBehavior._entity.name || 'Unnamed Entity'];
+        getEntityInfo(scriptRunner) {
+            // ScriptRunner component has a direct reference to its entity
+            if (scriptRunner._entity) {
+                return [scriptRunner._entity.name || 'Unnamed Entity'];
             }
             return ['No entity'];
         }
@@ -112,9 +112,9 @@
             if (!listElement) return;
             
             listElement.innerHTML = '';
-            let monoBehaviors = SM.getAllMonoBehaviors();
-            if (monoBehaviors.length === 0) {
-                listElement.innerHTML = '<div class="empty-lifecycle">No active MonoBehavior scripts</div>';
+            let scriptRunners = SM.getAllScriptRunners();
+            if (scriptRunners.length === 0) {
+                listElement.innerHTML = '<div class="empty-lifecycle">No active ScriptRunner scripts</div>';
                 return;
             }
             
@@ -138,8 +138,8 @@
             // Create body
             const tbody = document.createElement('tbody');
             
-            monoBehaviors.forEach((monoBehavior) => {
-                const row = this.createMonobehaviorRow(monoBehavior);
+            scriptRunners.forEach((scriptRunner) => {
+                const row = this.createScriptRunnerRow(scriptRunner);
                 tbody.appendChild(row);
             });
             
@@ -150,7 +150,7 @@
         /**
          * Create a row for a monobehavior
          */
-        createMonobehaviorRow(monoBehavior) {
+        createScriptRunnerRow(scriptRunner) {
             const row = document.createElement('tr');
             row.className = 'lifecycle-row';
             
@@ -166,7 +166,7 @@
                 if (scriptItem && scriptItem.itemType === 'script') {
                     const event = new CustomEvent('open-script-editor', {
                         detail: {
-                            name: monoBehavior.properties.file,
+                            name: scriptRunner.properties.file,
                             content: scriptItem.data,
                             author: scriptItem.author,
                             created: scriptItem.created
@@ -193,7 +193,7 @@
             // Usage column
             const usageCell = document.createElement('td');
             usageCell.className = 'lifecycle-usage';
-            const entities = this.getEntityInfo(monoBehavior);
+            const entities = this.getEntityInfo(scriptRunner);
             const entitiesText = entities.join(', ') || 'No entities';
             if (entitiesText.length > 32) {
                 usageCell.textContent = entitiesText.substring(0, 32) + '...';
@@ -207,8 +207,8 @@
             logCell.className = 'lifecycle-log';
             const logCheckbox = document.createElement('input');
             logCheckbox.type = 'checkbox';
-            logCheckbox.checked = this.selectedLogs.has(monoBehavior.id);
-            logCheckbox.onchange = () => this.toggleLogging(monoBehavior.id, logCheckbox.checked);
+            logCheckbox.checked = this.selectedLogs.has(scriptRunner.id);
+            logCheckbox.onchange = () => this.toggleLogging(scriptRunner.id, logCheckbox.checked);
             logCell.appendChild(logCheckbox);
             
             // Actions column
@@ -239,8 +239,8 @@
             refreshBtn.innerHTML = '🔄';
             refreshBtn.title = 'Refresh';
             refreshBtn.onmousedown = () => {
-                monoBehavior.Refresh();
-                this.addShellOutput(scriptName, '[Refreshed]', monoBehavior.id);
+                scriptRunner.Refresh();
+                this.addShellOutput(scriptName, '[Refreshed]', scriptRunner.id);
                 this.render();
             }
             
@@ -257,16 +257,16 @@
         }
 
         /**
-         * Toggle logging for a monobehavior
+         * Toggle logging for a scriptrunner
          */
         toggleLogging(componentId, enabled) {
             if (enabled) {
                 this.selectedLogs.add(componentId);
                 // Add initial message
-                const monoBehavior = lifecycle.monoBehaviors.get(componentId);
-                if (monoBehavior) {
-                    const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-                    this.addShellOutput(scriptName, '[Logging enabled]', monoBehavior.id);
+                const scriptRunner = lifecycle.scriptRunners.get(componentId);
+                if (scriptRunner) {
+                    const scriptName = scriptRunner.properties?.file || scriptRunner.properties?.name || 'Unknown';
+                    this.addShellOutput(scriptName, '[Logging enabled]', scriptRunner.id);
                 }
             } else {
                 this.selectedLogs.delete(componentId);

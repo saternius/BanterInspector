@@ -943,7 +943,7 @@ window.lockQuaternionAxes = (q, lockX = false, lockY = false, lockZ = false) =>{
  *
  * Examples:
  *   "__BanterMaterial_9677/color:component"
- *   "__MonoBehavior_2905/file:component"
+ *   "__ScriptRunner_2905/file:component"
  *   "__Gravestone/Transform/localScale:50546_Transform"
  *
  * @param {string} encodedKey - The encoded space property key

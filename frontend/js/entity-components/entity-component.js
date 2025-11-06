@@ -42,10 +42,10 @@ export class EntityComponent{
                 let v1 = JSON.stringify(this.properties[p]);
                 let v2 = JSON.stringify(data[p]);
                 if(v1 !== v2){
-                    log("component", `${this.id} is setting ${p} from ${v1} to ${v2}`)
+                    //log("component", `${this.id} is setting ${p} from ${v1} to ${v2}`)
                     this._set(p, data[p]);
                 }else{
-                    log("component", `${v1} is the same as ${v2}`)
+                    //log("component", `${v1} is the same as ${v2}`)
                 }
             }
 

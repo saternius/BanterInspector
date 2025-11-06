@@ -151,10 +151,10 @@ Full-featured code editor using CodeMirror v5.65.13:
 - Keyboard shortcuts (Ctrl/Cmd+S to save, Ctrl/Cmd+F to search)
 - Live console output from running scripts
 - Play/Stop controls for script execution
-- Integration with MonoBehavior components
+- Integration with ScriptRunner components
 - Modified indicator for unsaved changes
 
-#### MonoBehavior Component (`frontend/js/entity-components/monobehavior.js`)
+#### ScriptRunner Component (`frontend/js/entity-components/scriptrunner.js`)
 BanterScript runtime component that:
 - Loads scripts from inventory by filename
 - Provides lifecycle methods: `onStart()`, `onUpdate()`, `onDestroy()`

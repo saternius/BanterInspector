@@ -1,7 +1,7 @@
 const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`); 
 const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 
-export class ScriptComponent extends EntityComponent {
+export class ScriptAssetComponent extends EntityComponent {
     constructor(){
         super();
         this._bsRef = null;
@@ -10,8 +10,8 @@ export class ScriptComponent extends EntityComponent {
 
     async init(entity, sceneComponent, properties, options){
         await super.init(entity, sceneComponent, properties, options);
-        this.type = "Script";
-        this.setId(this.id.replace("undefined","Script"));
+        this.type = "ScriptAsset";
+        this.setId(this.id.replace("undefined","ScriptAsset"));
         return this;
     }
 
@@ -35,6 +35,6 @@ export class ScriptComponent extends EntityComponent {
     async _set(property, value){
         value = parseBest(value);
         this.properties[property] = value;
-        // Note: Script component doesn't have a _bs component, so no need to set _bs[property]
+        // Note: ScriptAsset component doesn't have a _bs component, so no need to set _bs[property]
     }
 }

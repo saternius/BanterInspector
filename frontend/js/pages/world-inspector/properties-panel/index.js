@@ -9,8 +9,8 @@ import { PropertyUpdater } from './property-updater.js';
 import { PropertyInputRenderer } from './property-input-renderer.js';
 import { EntityPropertiesRenderer } from './entity-properties-renderer.js';
 import { ComponentRenderer } from './component-renderer.js';
-import { MonoBehaviorRenderer } from './monobehavior-renderer.js';
-import { ScriptRenderer } from './script-renderer.js';
+import { ScriptRunnerRenderer } from './scriptrunner-renderer.js';
+import { ScriptAssetRenderer } from './scriptasset-renderer.js';
 
 export class PropertiesPanel {
     constructor() {
@@ -69,12 +69,12 @@ export class PropertiesPanel {
             utils,
             changeManager
         );
-        this.monoBehaviorRenderer = new MonoBehaviorRenderer(
+        this.scriptRunnerRenderer = new ScriptRunnerRenderer(
             this.propertyInputRenderer,
             utils,
             changeManager
         );
-        this.scriptRenderer = new ScriptRenderer(
+        this.scriptAssetRenderer = new ScriptAssetRenderer(
             this.propertyInputRenderer,
             utils,
             changeManager
@@ -179,14 +179,14 @@ export class PropertiesPanel {
         // Collapse all components in both renderers
         this.componentRenderer.collapseAll(SM.selectedEntity, entity.components);
 
-        // Also collapse MonoBehavior and Script components
+        // Also collapse ScriptRunner and ScriptAsset components
         entity.components.forEach((component, index) => {
-            if (component.type === 'MonoBehavior') {
+            if (component.type === 'ScriptRunner') {
                 const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
-                this.monoBehaviorRenderer.collapsedComponents.add(componentKey);
-            } else if (component.type === 'Script') {
+                this.scriptRunnerRenderer.collapsedComponents.add(componentKey);
+            } else if (component.type === 'ScriptAsset') {
                 const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
-                this.scriptRenderer.collapsedComponents.add(componentKey);
+                this.scriptAssetRenderer.collapsedComponents.add(componentKey);
             }
         });
 
@@ -210,10 +210,10 @@ export class PropertiesPanel {
         const hasExpandedComponent = entity.components.some((component, index) => {
             const componentKey = `${SM.selectedEntity}_${component.type}_${index}`;
 
-            if (component.type === 'MonoBehavior') {
-                return !this.monoBehaviorRenderer.collapsedComponents.has(componentKey);
-            } else if (component.type === 'Script') {
-                return !this.scriptRenderer.collapsedComponents.has(componentKey);
+            if (component.type === 'ScriptRunner') {
+                return !this.scriptRunnerRenderer.collapsedComponents.has(componentKey);
+            } else if (component.type === 'ScriptAsset') {
+                return !this.scriptAssetRenderer.collapsedComponents.has(componentKey);
             } else {
                 return !this.componentRenderer.collapsedComponents.has(componentKey);
             }
@@ -285,17 +285,17 @@ export class PropertiesPanel {
             entity.components.forEach((component, index) => {
                 let componentElement;
 
-                if (component.type === 'MonoBehavior') {
-                    // Use MonoBehavior renderer
-                    componentElement = this.monoBehaviorRenderer.renderMonoBehaviorComponent(
+                if (component.type === 'ScriptRunner') {
+                    // Use ScriptRunner renderer
+                    componentElement = this.scriptRunnerRenderer.renderScriptRunnerComponent(
                         component,
                         index,
                         entity.components.length,
                         SM.selectedEntity
                     );
-                } else if (component.type === 'Script') {
-                    // Use Script renderer
-                    componentElement = this.scriptRenderer.renderScriptComponent(
+                } else if (component.type === 'ScriptAsset') {
+                    // Use ScriptAsset renderer
+                    componentElement = this.scriptAssetRenderer.renderScriptAssetComponent(
                         component,
                         index,
                         entity.components.length,

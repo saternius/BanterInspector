@@ -21,7 +21,7 @@ export class MeshComponent extends EntityComponent {
         material.Set("shaderName", "Standard");
         material.Set("color", material.properties.color);
         AddComponent(this._entity.id, "MeshCollider");
-        AddComponent(this._entity.id, "MonoBehavior",{
+        AddComponent(this._entity.id, "ScriptRunner",{
             componentProperties:{
                 file: "Grabbable.js"
             }

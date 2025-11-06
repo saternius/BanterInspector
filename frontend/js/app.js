@@ -382,7 +382,7 @@
                 })
 
                 scene.On("button-released", e => {
-                    SM.getAllMonoBehaviors().forEach(m=>{
+                    SM.getAllScriptRunners().forEach(m=>{
                         if(m.ctx.buttonReleased){
                             m.ctx.buttonReleased(e)
                         }
@@ -390,7 +390,7 @@
                 })
 
                 scene.On("button-pressed", e => {
-                    SM.getAllMonoBehaviors().forEach(m=>{
+                    SM.getAllScriptRunners().forEach(m=>{
                         if(m.ctx.buttonPressed){
                             m.ctx.buttonPressed(e)
                         }

@@ -6,7 +6,7 @@
 
 
     // let localhost = window.location.hostname === 'localhost'
-    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, MonoBehaviorComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
+    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
     const { confirm } = await import( './utils.js');
 
     export class SceneManager {
@@ -163,8 +163,13 @@
             window.scene = this.scene
         }
 
-        // Resets the SpaceProperties
         async Reset(ui){
+            console.log("%cReset() destroys persistant data, and should only be used consciously", "color: red; font-weight: bold;");
+        }
+
+        // Resets the SpaceProperties
+        async Reset2(ui){
+
             await net.clearSpaceState();
             let r = async ()=>{
                 this._reset();
@@ -352,16 +357,16 @@
                     }
                 }
 
-                //Add any MonoBehaviors
+                //Add any ScriptRunners
                 component_array.forEach(async (component_ref)=>{
                     if(!component_ref){
                         log("init", "[SUS SITUATION]: component_ref is not defined", component_ref, h, h.__meta.components)
                         return;
                     }
-                    if(component_ref.startsWith("MonoBehavior")){
+                    if(component_ref.startsWith("ScriptRunner")){
                         let props = this.getHistoricalProps(component_ref).props
                         props.id = component_ref;
-                        let entityComponent = await new MonoBehaviorComponent().init(entity, null, props, options)
+                        let entityComponent = await new ScriptRunnerComponent().init(entity, null, props, options)
                         entity.AddComponent(entityComponent);
                     }
                 })
@@ -652,12 +657,12 @@
             return SM.getAllEntities().find(x=>x.name==entityName);
         }
 
-        getAllMonoBehaviors(){
-            return Object.values(this.entityData.componentMap).filter(x=>x.type === "MonoBehavior");
+        getAllScriptRunners(){
+            return Object.values(this.entityData.componentMap).filter(x=>x.type === "ScriptRunner");
         }
 
         getScriptByName(scriptName){
-            let mono =  Object.values(this.entityData.componentMap).find(x=>x.type === "MonoBehavior" && x.properties.name === scriptName);
+            let mono =  Object.values(this.entityData.componentMap).find(x=>x.type === "ScriptRunner" && x.properties.name === scriptName);
             return mono?.ctx;
         }
 
@@ -732,32 +737,6 @@
             // Map all components from the GameObject using synchronized IDs
             let componentIndex = 0;
 
-            // Handle Transform component first
-            // const transform = gameObject.GetComponent(BS.ComponentType.Transform);
-            // if (transform) {
-            //     const sourceComponent = sourceEntity.components[componentIndex];
-            //     const component_ref = componentIdMap[sourceComponent.id];
-            //     const componentClass = componentBSTypeMap[transform.componentType];
-            //     const entityComponent = await new componentClass().init(entity, transform);
-            //     entityComponent.setId(component_ref);
-            //     entity.components.push(entityComponent);
-            //     this.entityData.componentMap[component_ref] = entityComponent;
-            //     componentIndex++;
-
-
-            //     // Set the parent and transform
-            //     let parentBS = this.getEntityById(parentId)._bs;
-            //     entity._bs.SetParent(parentBS)
-            //     let sourceTransform = sourceEntity.getTransform()
-            //     let transformProps = await sourceTransform.Get("transform")
-            //     console.log('transformProps', transformProps)
-            //     entityComponent.Set("localPosition", transformProps.localPosition)
-            //     entityComponent.Set("localRotation", transformProps.localRotation)
-            //     entityComponent.Set("localScale", transformProps.localScale)
-            // }
-
-           
-
             // Handle all other components
             for (let c in gameObject.components) {
                 const component = gameObject.components[c];
@@ -798,60 +777,13 @@
         }
 
 
-        // async _addComponent(entity, componentType, componentProperties, options){
-        //     // Check if component already exists (for unique components)
-        //     const uniqueComponents = ['Transform', 'Rigidbody', 'SyncedObject'];
-        //     if (uniqueComponents.includes(componentType)) {
-        //         const exists = entity.components.some(c => c.type === componentType);
-        //         if (exists) {
-        //             log("scene", `A ${componentType} component already exists on this entity`);
-        //             return;
-        //         }
-        //     }
+       getAllScriptAssets(){
+            return SM.getAllEntities().map(x=>x.components.find(x=>x.type==="ScriptAsset")).filter(x=>x)
+       }
 
-        //     // Create the component
-        //     const ComponentClass = componentTypeMap[componentType];
-            
-        //     if (!ComponentClass) {
-        //         log("scene", `Component class not found for type: ${componentType}`);
-        //         return;
-        //     }
-            
-        //     let entityComponent = await new ComponentClass().init(entity, null, componentProperties, options);
-
-            
-        //     entity.components.push(entityComponent);
-        //     this.entityData.componentMap[entityComponent.id] = entityComponent;
-
-        //     // Refresh properties panel
-        //     if (inspector?.propertiesPanel) {
-        //         inspector.propertiesPanel.render(entity.id);
-        //     }
-
-
-        //     // Check for ghost if new, if item delete ghosts.
-        //     entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-        //     setTimeout(()=>{
-        //         entity._checkForGhostComponents(entityComponent.id.split("_")[1]);
-        //     }, 1500)
-
-        //     if(options.context === "item"){
-        //         setTimeout(()=>{
-        //             let toBust = []
-        //             entity.components.forEach(c=>{
-        //                 if(c.options.context === "ghost"){
-        //                     toBust.push(c);
-        //                 }
-        //             })
-        //             toBust.forEach(c=>{
-        //                 // log("loadEntity", `destroying ghost: ${entity.id}/${c.type}/${c.id}`)
-        //                 // c._destroy();
-        //             })
-        //         }, 3000)
-        //     }
-            
-        //     return entityComponent;
-        // }
+       getScriptAsset(scriptName){
+        return SM.getAllScriptAssets().find(x=>x.properties.name === scriptName);
+       }
 
         /**
          * Execute startup scripts from inventory
@@ -911,7 +843,7 @@
                     try {
                         log('startup', `Executing startup script: ${script.name}`);
                         
-                        // Create a script context similar to MonoBehavior
+                        // Create a script context similar to ScriptRunner
                         const scriptContext = {
                             vars: {},
                             _scene: this.scene,
