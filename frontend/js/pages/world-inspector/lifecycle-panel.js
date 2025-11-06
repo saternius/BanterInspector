@@ -165,10 +165,17 @@
             ownerCell.title = `Owner: ${scriptRunner.properties?.owner || 'No owner'}`;
             ownerCell.style.cursor = 'pointer';
             ownerCell.onmousedown = () => {
-                SetComponentProp(scriptRunner.id, "owner", SM.myName());
-                setTimeout(()=>{
-                    this.render();
-                }, 150)
+                if(scriptRunner.amOwner()){
+                    SetComponentProp(scriptRunner.id, "owner", "global");
+                    setTimeout(()=>{
+                        this.render();
+                    }, 150)
+                }else{
+                    SetComponentProp(scriptRunner.id, "owner", SM.myName());
+                    setTimeout(()=>{
+                        this.render();
+                    }, 150)
+                }
             }
             
             // Usage column

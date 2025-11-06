@@ -653,6 +653,7 @@ export class Entity{
     WatchTransform(properties, callback){
         log("watch", this.id, "transform", properties)
         let bs_props = properties.map(p=>BS.PropertyName[p]);
+        log("watch", this.id, "bs_props", bs_props)
         this._bs.WatchTransform(bs_props, (e)=>{
             log("WatchTransform")
             if(SM.selectedEntity === this.id){

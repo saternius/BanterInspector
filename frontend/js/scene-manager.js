@@ -576,7 +576,15 @@
 
 
         selectEntity(entityId) {
+            let lastEnt = this.getEntityById(this.selectedEntity, false);
+            if(lastEnt){
+                lastEnt.WatchTransform([])
+            }
             this.selectedEntity = entityId;
+            let ent = this.getEntityById(entityId);
+            if(ent){
+                ent.WatchTransform(["localPosition", "localRotation", "localScale", "position", "rotation"], (e)=>{console.log("watch", e)});
+            }
             this._updateUI();
             window.dispatchEvent(new CustomEvent('entitySelected', {
                 detail: { entityId }

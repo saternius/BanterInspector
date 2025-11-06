@@ -353,22 +353,8 @@ export class ScriptEditor {
         if (!this.codemirror) return;
 
         const newContent = this.codemirror.getValue();
-
-        // Check if this is a ScriptAsset component or an inventory item
-        if (this.currentScript.isScriptAsset && this.currentScript.componentId) {
-            // For ScriptAsset component, update the component's data property
-            const change = new ComponentPropertyChange(
-                this.currentScript.componentId,
-                'data',
-                newContent,
-                { source: source }
-            );
-            changeManager.applyChange(change);
-        } else {
-            // For inventory items, use the existing EditScriptItemChange
-            const change = new EditScriptItemChange(this.currentScript.name, newContent, {source: source});
-            changeManager.applyChange(change);
-        }
+        const change = new EditScriptItemChange(this.currentScript.name, newContent, {source: source});
+        changeManager.applyChange(change);
 
         // Update local content
         this.currentScript.content = newContent;
@@ -377,10 +363,7 @@ export class ScriptEditor {
         document.getElementById(`lastSave-${this.pageId}`).textContent = `Last saved: ${new Date(this.lastSave).toLocaleString()}`;
         document.getElementById(`modifiedIndicator-${this.pageId}`).style.display = 'none';
 
-        // Only refresh ScriptRunners, not ScriptAsset components
-        if (!this.currentScript.isScriptAsset) {
-            this.run('Refresh');
-        }
+        //this.run('Refresh');
     }
     
     findScriptRunnerEntities() {

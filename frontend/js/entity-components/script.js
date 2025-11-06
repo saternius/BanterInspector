@@ -34,8 +34,17 @@ export class ScriptAssetComponent extends EntityComponent {
 
     async _set(property, value){
         value = parseBest(value);
-        this.properties[property] = value;
-        console.log("scriptasset", "set", property, value);
+        if(property === "data" && value !== this.properties.data){
+            console.log("scriptasset", "set", property, value);
+            this.properties[property] = value;
+            this.getAllAttachedRunners().forEach(runner => {
+                if(runner.properties.hotreload){
+                    runner.Refresh();
+                }
+            });
+        }else{
+            this.properties[property] = value;
+        }
     }
 
     getAllAttachedRunners(){

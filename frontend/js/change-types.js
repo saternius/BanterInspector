@@ -83,6 +83,10 @@ export class EntityPropertyChange extends Change{
 
     async apply(){
         if(this.property === "name"){
+            if(this.oldValue.endsWith("_js")){
+                this.void("Cannot change the name of scripts");
+                return;
+            }
             if((this.oldValue === "Scene" || this.newValue === "Scene")){
                 this.void("Cannot assign/change the name of 'Scene'");
                 return;
@@ -676,7 +680,7 @@ export class ScriptRunnerVarChange extends Change{
             return;
         }
 
-        await this.scriptrunner.updateVar(this.varName, value);
+        await this.scriptrunner.UpdateVar(this.varName, value);
 
         // Refresh UI if needed
         if (inspector?.propertiesPanel) {
@@ -1801,25 +1805,29 @@ export class EditScriptItemChange extends Change{
                     inventory.ui.showPreview(this.scriptName);
                 }
                 showNotification(`Saved changes to "${this.scriptName}"`);
-                if(this.options.source === 'ui' && item.folder){ 
-                    let folder = inventory.folders[item.folder];
-                    if(folder){
-                        folder.last_used = Date.now();
-                        const storageKey = `inventory_folder_${folder.name}`;
-                        localStorage.setItem(storageKey, JSON.stringify(folder));
-                        let my_name = inventory.firebase.sanitizeFirebasePath(scene.localUser.name);
-                        let script_name = inventory.firebase.sanitizeFirebasePath(this.scriptName);
-                        if(folder.remote){
-                            let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}/${folder.path}/${script_name}`;
-                            ref = ref;
-                            log("inventory", "SAVING TO: ", ref)
-                            net.setData(ref, item);
-                        }
-                    }
-                }else if(this.options.source === 'firebaseHandler'){ // Firebase=>here=>mono=>SpaceProps=>mono
-                    log("Inventory", "Setting script content", this.scriptName, this.scriptContent)
-                    net.setScript(this.scriptName, this.scriptContent);
+                let assetEnt = SM.getEntityByName(this.scriptName.replace(".","_")).getComponent("ScriptAsset");
+                if(assetEnt){
+                   assetEnt.Set("data", this.scriptContent);
                 }
+                // if(this.options.source === 'ui' && item.folder){ 
+                //     let folder = inventory.folders[item.folder];
+                //     if(folder){
+                //         folder.last_used = Date.now();
+                //         const storageKey = `inventory_folder_${folder.name}`;
+                //         localStorage.setItem(storageKey, JSON.stringify(folder));
+                //         let my_name = inventory.firebase.sanitizeFirebasePath(scene.localUser.name);
+                //         let script_name = inventory.firebase.sanitizeFirebasePath(this.scriptName);
+                //         if(folder.remote){
+                //             let ref = (folder.importedFrom)?`${folder.importedFrom}/${script_name}`:`inventory/${my_name}/${folder.path}/${script_name}`;
+                //             ref = ref;
+                //             log("inventory", "SAVING TO: ", ref)
+                //             net.setData(ref, item);
+                //         }
+                //     }
+                // }else if(this.options.source === 'firebaseHandler'){ // Firebase=>here=>mono=>SpaceProps=>mono
+                //     log("Inventory", "Setting script content", this.scriptName, this.scriptContent)
+                //     net.setScript(this.scriptName, this.scriptContent);
+                // }
                 
             }
         }

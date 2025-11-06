@@ -62,6 +62,15 @@ export class ScriptRunnerComponent extends EntityComponent {
         }
 
         this.properties[property] = value;
+        if(property === "vars" && this.ctx && this.ctx.vars){
+            Object.entries(value).forEach(([varName, varValue]) => {
+                if(this.ctx.vars[varName]){
+                    if(varValue.value !== this.ctx.vars[varName].value){
+                        this._updateVar(varName, varValue);
+                    }
+                }
+            });
+        }
     }
 
     extractProperties(sceneComponent) {
@@ -301,15 +310,16 @@ export class ScriptRunnerComponent extends EntityComponent {
         return newContext;
     }
 
-    async updateVar(varName, value) {
+    async UpdateVar(varName, value) {
         if (!this.ctx || !this.ctx.vars) return;
+        this.ref.child("vars").child(varName).set(value);
 
-        // Update locally first
-        await this._updateVar(varName, value);
+        // // Update locally first
+        // await this._updateVar(varName, value);
 
         // Note: Network sync would go here if needed
         // For now, changes are local only
-        log("mono", "updated ctx.vars and properties.vars =>", varName, value);
+        // log("mono", "updated ctx.vars and properties.vars =>", varName, value);
     }
 
     async _updateVar(varName, value) {

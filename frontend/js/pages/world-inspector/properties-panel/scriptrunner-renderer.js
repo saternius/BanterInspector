@@ -206,9 +206,28 @@ export class ScriptRunnerRenderer {
         );
         body.appendChild(nameRow);
 
+
+      
+
+
         // File property with dropdown
         const fileRow = this.createFileSelectionRow(component, entityId);
         body.appendChild(fileRow);
+
+        
+        const hotreloadRow = this.propertyInputRenderer.createPropertyRow(
+            'Hotreload',
+            (component.properties.hotreload),
+            'checkbox',
+            (value) => {
+                log("scriptrunner", "hotreload", value);
+                //component.properties.hotreload = value;
+                const change = new ComponentPropertyChange(component.id, 'hotreload', value, { source: 'ui' });
+                this.changeManager.applyChange(change);
+            }
+        );
+        body.appendChild(hotreloadRow);
+
 
         // Render vars if any
         if (component.ctx && component.ctx.vars && Object.keys(component.ctx.vars).length > 0) {
@@ -221,6 +240,8 @@ export class ScriptRunnerRenderer {
                 body.appendChild(varRow);
             });
         }
+
+
 
         // Add Edit Script button
         if (component.properties.file) {
@@ -274,15 +295,15 @@ export class ScriptRunnerRenderer {
             };
 
             // Add current file first if it exists
-            if (window.inventory.items && window.inventory.items[component.properties.file]) {
-                addScriptOption(window.inventory.items[component.properties.file]);
-            }
+            // if (window.inventory.items && window.inventory.items[component.properties.file]) {
+                // addScriptOption(window.inventory.items[component.properties.file]);
+            // }
 
             // Add other available scripts
             scripts.forEach(script => {
-                if (script.name !== component.properties.file) {
+                // if (script.name !== component.properties.file) {
                     addScriptOption(script);
-                }
+                //}
             });
         }
 
@@ -483,20 +504,26 @@ export class ScriptRunnerRenderer {
         editButton.innerHTML = '📝 Edit Script';
 
         editButton.onmousedown = () => {
-            if (typeof window !== 'undefined' && window.inventory && window.inventory.items) {
-                const scriptItem = window.inventory.items[component.properties.file];
-                if (scriptItem && scriptItem.itemType === 'script') {
-                    const event = new CustomEvent('open-script-editor', {
-                        detail: {
-                            name: component.properties.file,
-                            content: scriptItem.data,
-                            author: scriptItem.author,
-                            created: scriptItem.created
-                        }
-                    });
-                    window.dispatchEvent(event);
+            if(component.properties.file.length > 0){
+                let assetEnt = SM.getEntityByName(component.properties.file.replace(".","_"));
+                if(assetEnt){
+                    SM.selectEntity(assetEnt.id);
                 }
             }
+            // if (typeof window !== 'undefined' && window.inventory && window.inventory.items) {
+            //     const scriptItem = window.inventory.items[component.properties.file];
+            //     if (scriptItem && scriptItem.itemType === 'script') {
+            //         const event = new CustomEvent('open-script-editor', {
+            //             detail: {
+            //                 name: component.properties.file,
+            //                 content: scriptItem.data,
+            //                 author: scriptItem.author,
+            //                 created: scriptItem.created
+            //             }
+            //         });
+            //         window.dispatchEvent(event);
+            //     }
+            // }
         };
 
         editButton.onmouseover = () => {

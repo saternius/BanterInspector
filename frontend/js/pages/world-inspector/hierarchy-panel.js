@@ -201,6 +201,10 @@
             const name = document.createElement('span');
             name.className = 'node-name';
             name.textContent = entity.name;
+
+            if(entity.name.endsWith("_js")){
+                name.style.color = '#ff9500';
+            }
             
             // Assemble node
             content.appendChild(icon);
