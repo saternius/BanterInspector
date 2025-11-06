@@ -35,6 +35,10 @@ export class ScriptAssetComponent extends EntityComponent {
     async _set(property, value){
         value = parseBest(value);
         this.properties[property] = value;
-        // Note: ScriptAsset component doesn't have a _bs component, so no need to set _bs[property]
+        console.log("scriptasset", "set", property, value);
+    }
+
+    getAllAttachedRunners(){
+        return SM.getAllScriptRunners().filter(x=>x.properties.file === this.properties.name);
     }
 }

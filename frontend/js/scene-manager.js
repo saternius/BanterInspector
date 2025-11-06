@@ -154,6 +154,7 @@
                         await this.executeStartupScripts("onSceneLoaded");
                         setTimeout(()=>{
                             inspector?.hierarchyPanel?.render()
+                            SM.getAllScriptRunners().forEach(s=>s._refresh())
                         }, 1000)
                     })
                 }

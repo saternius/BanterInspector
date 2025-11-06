@@ -59,11 +59,10 @@ export class ScriptAssetRenderer {
 
         // Title with owner
         const titleDiv = document.createElement('div');
-        const ownerColor = this.getUserColor(component.properties._owner);
         titleDiv.innerHTML = `
             <span class="component-name">ScriptAsset</span>
             <span class="component-type">${component.id}</span>
-            <span class="component-owner" style="color:${ownerColor}">${component.properties._owner}</span>
+            <span class="component-owner" style="color:#b1b1b1;">${component.properties.author}</span>
         `;
 
         // Actions

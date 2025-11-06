@@ -58,11 +58,12 @@ export class ScriptRunnerRenderer {
 
         // Title with owner
         const titleDiv = document.createElement('div');
-        const ownerColor = this.getUserColor(component.properties._owner);
+        const ownerColor = this.getUserColor(component.properties.owner);
         titleDiv.innerHTML = `
             <span class="component-name">ScriptRunner</span>
             <span class="component-type">${component.id}</span>
-            <span class="component-owner" style="color:${ownerColor}">${component.properties._owner}</span>
+            <span class="component-owner" style="color:${ownerColor}">${component.properties.owner}</span>
+            <span class="component-status" style="font-size:10px; margin-left:30px; color:#${component.ctx?._running ? '00b100' : 'b10000'};">${component.ctx?._running ? 'Running' : 'Stopped'}</span>
         `;
 
         // Actions
@@ -99,6 +100,8 @@ export class ScriptRunnerRenderer {
         actionsDiv.style.alignItems = 'center';
         actionsDiv.style.gap = '8px';
 
+        
+
         // Refresh button for ScriptRunner
         const refreshBtn = document.createElement('button');
         refreshBtn.className = 'component-reorder-btn';
@@ -110,6 +113,8 @@ export class ScriptRunnerRenderer {
                 component.Refresh();
             }
         };
+
+
         actionsDiv.appendChild(refreshBtn);
 
         // Up arrow - hide if component is at the top

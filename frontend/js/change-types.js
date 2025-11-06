@@ -926,6 +926,7 @@ export class LoadScriptChange extends Change{
             "Components": {
                 [componentId]: {
                     "name": this.scriptName,
+                    "author": inventory.items[this.scriptName]?.author || "Unknown",
                     "data": inventory.items[this.scriptName].data,
                     "vars": inventory.items[this.scriptName].vars || {}
                 }

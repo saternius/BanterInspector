@@ -53,11 +53,11 @@
          */
         setupEventListeners() {
             // Listen for lifecycle manager changes
-            document.addEventListener('monobehaviorRegistered', () => {
+            document.addEventListener('scriptrunnerRegistered', () => {
                 this.render();
             });
 
-            document.addEventListener('monobehaviorUnregistered', () => {
+            document.addEventListener('scriptrunnerUnregistered', () => {
                 this.render();
             });
 
@@ -72,29 +72,10 @@
                     this.render();
                 }
             });
-
-            // Override console.log to capture ScriptRunner output
-            // const originalLog = console.log;
-            // console.log = (...args) => {
-            //     // Call original console.log
-            //     originalLog.apply(console, args);
-
-            //     // Check if this is from a MonoBehavior context
-            //     const stack = new Error().stack;
-            //     if (stack && stack.includes('MonoBehavior')) {
-            //         // Try to extract component ID from the log
-            //         lifecycle.monoBehaviors.forEach((monoBehavior, componentId) => {
-            //             if (this.selectedLogs.has(componentId)) {
-            //                 const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown';
-            //                 this.addShellOutput(scriptName, args.join(' '));
-            //             }
-            //         });
-            //     }
-            // };
         }
 
         /**
-         * Get entity information for a MonoBehavior
+         * Get entity information for a ScriptRunner
          */
         getEntityInfo(scriptRunner) {
             // ScriptRunner component has a direct reference to its entity
@@ -148,7 +129,7 @@
         }
 
         /**
-         * Create a row for a monobehavior
+         * Create a row for a ScriptRunner
          */
         createScriptRunnerRow(scriptRunner) {
             const row = document.createElement('tr');
@@ -157,12 +138,12 @@
             // Name column
             const nameCell = document.createElement('td');
             nameCell.className = 'lifecycle-name';
-            const scriptName = monoBehavior.properties?.file || monoBehavior.properties?.name || 'Unknown Script';
+            const scriptName = scriptRunner.properties?.file || scriptRunner.properties?.name || 'Unknown Script';
             nameCell.textContent = scriptName;
-            nameCell.title = `Script: ${monoBehavior.properties?.file || 'No script'}`;
+            nameCell.title = `Script: ${scriptRunner.properties?.file || 'No script'}`;
             nameCell.style.cursor = 'pointer';
             nameCell.onmousedown = () => {
-                const scriptItem = window.inventory.items[monoBehavior.properties.file];
+                const scriptItem = window.inventory.items[scriptRunner.properties.file];
                 if (scriptItem && scriptItem.itemType === 'script') {
                     const event = new CustomEvent('open-script-editor', {
                         detail: {
@@ -180,11 +161,11 @@
             // Owner column
             const ownerCell = document.createElement('td');
             ownerCell.className = 'lifecycle-owner';
-            ownerCell.textContent = monoBehavior.properties?._owner || 'Unknown Owner';
-            ownerCell.title = `Owner: ${monoBehavior.properties?._owner || 'No owner'}`;
+            ownerCell.textContent = scriptRunner.properties?.owner || 'Unknown Owner';
+            ownerCell.title = `Owner: ${scriptRunner.properties?.owner || 'No owner'}`;
             ownerCell.style.cursor = 'pointer';
             ownerCell.onmousedown = () => {
-                SetComponentProp(monoBehavior.id, "_owner", SM.myName());
+                SetComponentProp(scriptRunner.id, "owner", SM.myName());
                 setTimeout(()=>{
                     this.render();
                 }, 150)
@@ -220,10 +201,10 @@
             stopBtn.className = 'lifecycle-button stop';
             stopBtn.innerHTML = '⏹';
             stopBtn.title = 'Stop';
-            if(monoBehavior.ctx._running){
+            if(scriptRunner.ctx._running){
                 stopBtn.onmousedown = () => {
-                    monoBehavior.Stop();
-                    this.addShellOutput(scriptName, '[Stopped]', monoBehavior.id);
+                    scriptRunner.Stop();
+                    this.addShellOutput(scriptName, '[Stopped]', scriptRunner.id);
                     this.render();
                 }
             }else{

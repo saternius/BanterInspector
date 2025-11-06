@@ -199,7 +199,7 @@ window.LifecycleAPI = {
                 } : null,
                 running: mb.ctx?._running,
                 initialized: mb._initialized,
-                owner: mb.properties?._owner,
+                owner: mb.properties?.owner,
                 vars: mb.properties?.vars,
                 instance: mb
             });
@@ -374,7 +374,7 @@ window.LifecycleAPI = {
             } : null,
             running: mb.ctx?._running,
             initialized: mb._initialized,
-            owner: mb.properties?._owner,
+            owner: mb.properties?.owner,
             vars: mb.properties?.vars,
             lifecycleMethods: this.getLifecycleMethods(scriptId),
             customMethods: this.getCustomMethods(scriptId),

@@ -11,7 +11,7 @@ export class ScriptRunnerComponent extends EntityComponent {
     async init(entity, sceneComponent, properties, options){
         await super.init(entity, sceneComponent, properties, options);
         if(options?.owner){
-            this.properties._owner = options.owner;
+            this.properties.owner = options.owner;
         }
         this.ctx = (this.ctx) ? this.ctx : this.newScriptContext();
         this._scriptFunction = (this._scriptFunction) ? this._scriptFunction : null;
@@ -51,11 +51,13 @@ export class ScriptRunnerComponent extends EntityComponent {
                 await this.LoadScript(value);
             } else {
                 // File cleared - stop script and clear vars
-                if (this.ctx && this.ctx._running) {
-                    await this._stop();
+                if(this.ctx){
+                    if (this.ctx._running) {
+                        await this._stop();
+                    }
+                    this.ctx.vars = {};
+                    this.properties.vars = {};
                 }
-                this.ctx.vars = {};
-                this.properties.vars = {};
             }
         }
 
@@ -66,7 +68,9 @@ export class ScriptRunnerComponent extends EntityComponent {
         return {
             name: sceneComponent.name || "myScript",
             file: sceneComponent.file || null,
-            vars: sceneComponent.vars || {}
+            vars: sceneComponent.vars || {},
+            owner: 'global',
+            hotreload: true
         };
     }
 
@@ -74,13 +78,14 @@ export class ScriptRunnerComponent extends EntityComponent {
         return {
             name: "myScript",
             file: null,
-            vars: SM.props[`__${this.id}/vars:component`] || {},
-            _owner: net.host
+            vars: {},
+            owner: 'global',
+            hotreload: true
         }
     }
 
     amOwner(){
-        return this.properties._owner === SM.myName()
+        return this.properties.owner === SM.myName()
     }
 
     async LoadScript(fileName) {
@@ -253,21 +258,21 @@ export class ScriptRunnerComponent extends EntityComponent {
     }
 
     Start(){
-        log("mono", `Starting ${this.fileName} on ${this.id}`)
-        // const oneShot = 'scriptrunner_start¶' + this.id;
-        // networking.sendOneShot(oneShot);
+        log("mono", `Starting ${this.properties.file} on ${this.id}`)
+        const oneShot = 'scriptrunner_start¶' + this.id;
+        net.sendOneShot(oneShot);
     }
 
     Stop(){
-        log("mono", `Stopping ${this.fileName} on ${this.id}`)
-        // const oneShot = 'scriptrunner_stop¶' + this.id;
-        // networking.sendOneShot(oneShot);
+        log("mono", `Stopping ${this.properties.file} on ${this.id}`)
+        const oneShot = 'scriptrunner_stop¶' + this.id;
+        net.sendOneShot(oneShot);
     }
 
     Refresh(){
-        log("mono", `Refreshing ${this.fileName} on ${this.id}`)
-        // const oneShot = 'scriptrunner_refresh¶' + this.id;
-        // networking.sendOneShot(oneShot);
+        log("mono", `Refreshing ${this.properties.file} on ${this.id}`)
+        const oneShot = 'scriptrunner_refresh¶' + this.id;
+        net.sendOneShot(oneShot);
     }
 
 
