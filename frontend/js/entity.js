@@ -242,6 +242,13 @@ export class Entity{
                  if(targetEntity){
                     SM.garbage.push(targetEntity);
                     this.children = this.children.filter(child => child !== targetEntity);
+                    setTimeout(()=>{
+                        //check if still orphaned, if so destroy it
+                        let claimedParent = SM.getEntityById(targetEntity.parentId);
+                        if(!claimedParent.children.includes(targetEntity)){
+                            targetEntity._destroy();
+                        }
+                    }, 500);
                 }
                 if(data.__meta.destroyed){
                     await targetEntity._destroy();
@@ -479,6 +486,9 @@ export class Entity{
             if (parent) {
                 parent.children = parent.children.filter(child => child.id !== this.id);
             }
+        }
+        if(SM.garbage.includes(this)){
+            SM.garbage = SM.garbage.filter(entity => entity.id !== this.id);
         }
     }
 
