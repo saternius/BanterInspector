@@ -36,7 +36,7 @@ export class EntityComponent{
 
         this.ref.on("value", (snapshot)=>{
             let data = snapshot.val();
-            if(!data) return;
+            if(data === null) return;
             delete data.id;
             for(let p in data){
                 let v1 = JSON.stringify(this.properties[p]);

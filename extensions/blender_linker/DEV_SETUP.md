@@ -1,4 +1,4 @@
-# Development Setup for Banter GLB Uploader
+# Development Setup for Tippy Blender Link
 
 This guide explains how to set up a development environment for the Blender add-on without constantly zipping and reinstalling.
 
@@ -90,7 +90,7 @@ After making code changes, you need to reload the add-on. There are several ways
 ### Option 3: Toggle Add-on
 
 1. Go to Edit → Preferences → Add-ons
-2. Find "Banter GLB Uploader"
+2. Find "Tippy Blender Link"
 3. Disable and re-enable it
 
 ### Option 4: Restart Blender

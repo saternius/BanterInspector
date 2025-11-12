@@ -1,10 +1,10 @@
 import bpy
-from .export_upload import BANTER_OT_export_upload
-from .batch_export import BANTER_OT_batch_export
+from .export_upload import TIPPY_OT_export_upload
+from .batch_export import TIPPY_OT_batch_export
 
 classes = [
-    BANTER_OT_export_upload,
-    BANTER_OT_batch_export,
+    TIPPY_OT_export_upload,
+    TIPPY_OT_batch_export,
 ]
 
 def register():

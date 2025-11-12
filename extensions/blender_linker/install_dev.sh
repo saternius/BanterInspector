@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Development installation script for Banter GLB Uploader
+# Development installation script for Tippy Blender Link
 # Creates a symlink from Blender's add-ons directory to your development folder
 
 # Get the directory where this script is located
@@ -22,7 +22,7 @@ BLENDER_PATHS=(
     "$HOME/.config/blender/3.0/scripts/addons"
 )
 
-echo "Banter GLB Uploader - Development Installation"
+echo "Tippy Blender Link - Development Installation"
 echo "=============================================="
 echo ""
 echo "This script will create a symbolic link from your Blender add-ons"
@@ -70,8 +70,8 @@ if [ $? -eq 0 ]; then
     echo "Next steps:"
     echo "1. Open Blender"
     echo "2. Go to Edit > Preferences > Add-ons"
-    echo "3. Search for 'Banter'"
-    echo "4. Enable 'Banter GLB Uploader'"
+    echo "3. Search for 'Tippy'"
+    echo "4. Enable 'Tippy Blender Link'"
     echo ""
     echo "You can now edit files in $ADDON_DIR"
     echo "and reload the addon in Blender with F3 > 'Reload Scripts'"

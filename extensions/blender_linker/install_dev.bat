@@ -1,10 +1,10 @@
 @echo off
-REM Development installation script for Banter GLB Uploader (Windows)
+REM Development installation script for Tippy Blender Link (Windows)
 REM Creates a symbolic link from Blender's add-ons directory to your development folder
 
 setlocal enabledelayedexpansion
 
-echo Banter GLB Uploader - Development Installation (Windows)
+echo Tippy Blender Link - Development Installation (Windows)
 echo ========================================================
 echo.
 
@@ -58,8 +58,8 @@ if %errorlevel% equ 0 (
     echo Next steps:
     echo 1. Open Blender
     echo 2. Go to Edit ^> Preferences ^> Add-ons
-    echo 3. Search for 'Banter'
-    echo 4. Enable 'Banter GLB Uploader'
+    echo 3. Search for 'Tippy'
+    echo 4. Enable 'Tippy Blender Link'
     echo.
     echo You can now edit files in %ADDON_DIR%
     echo and reload the addon in Blender with F3 ^> 'Reload Scripts'

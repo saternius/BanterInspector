@@ -2,13 +2,14 @@ import bpy
 from bpy.types import Operator
 from bpy.props import StringProperty, EnumProperty, BoolProperty
 import traceback
-from ..utils import GLBExporter, BanterUploader, ValidationHelper
+from ..utils import GLBExporter, ValidationHelper
+from ..utils.firebase_client import FirebaseClient, get_transform_data
 from .. import config
 
-class BANTER_OT_batch_export(Operator):
-    """Export multiple objects as separate GLB files and upload to Banter CDN"""
-    bl_idname = "banter.batch_export"
-    bl_label = "Batch Export & Upload"
+class TIPPY_OT_batch_export(Operator):
+    """Export multiple objects as separate GLB files and upload to Firebase"""
+    bl_idname = "tippy.batch_export"
+    bl_label = "Batch Export & Upload to Firebase"
     bl_options = {'REGISTER', 'UNDO'}
     
     # Properties
@@ -89,14 +90,29 @@ class BANTER_OT_batch_export(Operator):
             # Get settings
             settings = config.EXPORT_PRESETS[self.export_preset].copy()
             prefs = context.preferences.addons["blender_banter_uploader"].preferences
-            server_url = prefs.server_url
-            username = prefs.username
-            secret = prefs.secret
-            
-            # Check server
-            if not BanterUploader.check_server_status(server_url):
-                self.report({'ERROR'}, f"Cannot connect to server at {server_url}")
+
+            # Build Firebase config
+            firebase_config = {
+                'apiKey': prefs.firebase_api_key,
+                'authDomain': prefs.firebase_auth_domain,
+                'projectId': prefs.firebase_project_id,
+                'storageBucket': prefs.firebase_storage_bucket,
+                'messagingSenderId': prefs.firebase_messaging_sender_id,
+                'appId': prefs.firebase_app_id,
+                'databaseURL': prefs.firebase_database_url
+            }
+
+            # Check configuration
+            if not prefs.firebase_database_url or not prefs.firebase_storage_bucket:
+                self.report({'ERROR'}, "Firebase configuration incomplete. Please configure in addon preferences.")
                 return {'CANCELLED'}
+
+            if not prefs.space_id:
+                self.report({'ERROR'}, "No Space ID configured. Please set Space ID in addon preferences.")
+                return {'CANCELLED'}
+
+            # Initialize Firebase client
+            client = FirebaseClient(firebase_config, prefs.space_id)
             
             # Process each item
             successful = []
@@ -139,25 +155,33 @@ class BANTER_OT_batch_export(Operator):
                             self.report({'WARNING'}, f"{item['name']}: File too large ({size_mb:.1f}MB)")
                             continue
                     
-                    # Upload with mesh name
-                    result = BanterUploader.upload_with_retry(
+                    # Get transform data from first object in the group
+                    transform = None
+                    if item['objects']:
+                        transform = get_transform_data(item['objects'][0])
+
+                    # Upload to Firebase with mesh name
+                    result = client.upload_with_retry(
                         glb_data,
-                        server_url=server_url,
-                        username=username,
-                        secret=secret,
                         mesh_name=item['name'],  # Use the item name as mesh name
-                        max_retries=2
+                        transform=transform,
+                        max_retries=prefs.max_retries
                     )
-                    
-                    asset_hash = result.get('hash', result.get('id', 'unknown'))
-                    
+
+                    if not result.get('success'):
+                        raise Exception(result.get('error', 'Unknown error'))
+
+                    storage_url = result.get('storage_url', 'unknown')
+                    component_id = result.get('component_id', 'unknown')
+
                     successful.append({
                         'name': item['name'],
-                        'hash': asset_hash,
+                        'url': storage_url,
+                        'component_id': component_id,
                         'size': size_mb
                     })
-                    
-                    self.report({'INFO'}, f"{item['name']}: Uploaded successfully (hash: {asset_hash})")
+
+                    self.report({'INFO'}, f"{item['name']}: Uploaded successfully to Firebase")
                     
                 except Exception as e:
                     if not self.skip_failed:
@@ -172,20 +196,20 @@ class BANTER_OT_batch_export(Operator):
             
             # Store results in scene using proper Blender properties
             # Clear previous results
-            context.scene.banter_batch_results.clear()
-            
+            context.scene.tippy_batch_results.clear()
+
             # Add new results
             for item in successful:
-                result_item = context.scene.banter_batch_results.add()
+                result_item = context.scene.tippy_batch_results.add()
                 result_item.name = item['name']
-                result_item.hash = item['hash']
+                result_item.hash = item['url']  # Store URL in hash field for compatibility
                 result_item.size = item['size']
-            
-            # Copy all hashes to clipboard
+
+            # Copy all URLs to clipboard
             if successful:
-                hashes = [f"{item['name']}: {item['hash']}" for item in successful]
-                context.window_manager.clipboard = "\n".join(hashes)
-                self.report({'INFO'}, "All hashes copied to clipboard")
+                urls = [f"{item['name']}: {item['url']}" for item in successful]
+                context.window_manager.clipboard = "\n".join(urls)
+                self.report({'INFO'}, "All URLs copied to clipboard")
             
             return {'FINISHED'}
             

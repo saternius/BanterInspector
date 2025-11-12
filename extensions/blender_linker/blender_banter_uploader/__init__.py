@@ -1,10 +1,10 @@
 bl_info = {
-    "name": "Banter GLB Uploader",
-    "author": "Banter Team",
-    "version": (1, 0, 0),
+    "name": "Tippy Blender Link",
+    "author": "Tippy Team",
+    "version": (2, 0, 0),
     "blender": (3, 0, 0),
-    "location": "View3D > Sidebar > Banter",
-    "description": "Export and upload GLB files to Banter microservice CDN",
+    "location": "View3D > Sidebar > Tippy",
+    "description": "Export and upload GLB files to Firebase Storage and Realtime Database",
     "warning": "",
     "doc_url": "",
     "category": "Import-Export",
@@ -20,11 +20,11 @@ DEBUG = True
 def debug_print(msg):
     """Print debug messages"""
     if DEBUG:
-        print(f"[BANTER DEBUG] {msg}")
+        print(f"[TIPPY DEBUG] {msg}")
 
 def register():
     debug_print("="*50)
-    debug_print("Starting Banter GLB Uploader registration...")
+    debug_print("Starting Tippy Blender Link registration...")
     debug_print(f"Python version: {sys.version}")
     debug_print(f"Blender version: {bpy.app.version_string}")
     debug_print(f"Module name: {__name__}")
@@ -46,7 +46,7 @@ def register():
         
         from . import config
         debug_print(f"  Config module: {config}")
-        debug_print(f"  Default server URL: {config.DEFAULT_SERVER_URL}")
+        debug_print(f"  Firebase config template loaded")
         
     except Exception as e:
         debug_print(f"ERROR during imports: {e}")
@@ -89,12 +89,12 @@ def register():
         debug_print(traceback.format_exc())
         raise
     
-    debug_print("✓ Banter GLB Uploader registered successfully!")
+    debug_print("✓ Tippy Blender Link registered successfully!")
     debug_print("="*50)
 
 def unregister():
     debug_print("="*50)
-    debug_print("Unregistering Banter GLB Uploader...")
+    debug_print("Unregistering Tippy Blender Link...")
     
     try:
         from . import panels, operators, preferences, scene_properties
@@ -115,7 +115,7 @@ def unregister():
         debug_print(f"ERROR during unregister: {e}")
         debug_print(traceback.format_exc())
     
-    debug_print("✓ Banter GLB Uploader unregistered")
+    debug_print("✓ Tippy Blender Link unregistered")
     debug_print("="*50)
 
 if __name__ == "__main__":

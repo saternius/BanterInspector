@@ -1,18 +1,18 @@
 import bpy
 from .ui_panel import (
-    BANTER_PT_upload_panel,
-    BANTER_PT_history_panel,
-    BANTER_PT_settings_panel,
-    BANTER_OT_copy_hash,
-    BANTER_OT_refresh_server_status
+    TIPPY_PT_upload_panel,
+    TIPPY_PT_history_panel,
+    TIPPY_PT_settings_panel,
+    TIPPY_OT_copy_hash,
+    TIPPY_OT_refresh_server_status
 )
 
 classes = [
-    BANTER_OT_copy_hash,  # Register operators first
-    BANTER_OT_refresh_server_status,
-    BANTER_PT_upload_panel,
-    BANTER_PT_history_panel,
-    BANTER_PT_settings_panel,
+    TIPPY_OT_copy_hash,  # Register operators first
+    TIPPY_OT_refresh_server_status,
+    TIPPY_PT_upload_panel,
+    TIPPY_PT_history_panel,
+    TIPPY_PT_settings_panel,
 ]
 
 def register():

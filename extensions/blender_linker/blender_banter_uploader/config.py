@@ -1,4 +1,15 @@
-DEFAULT_SERVER_URL = "https://suitable-bulldog-flying.ngrok-free.app"
+# Firebase configuration template
+# Users should fill these values in the addon preferences
+FIREBASE_CONFIG_TEMPLATE = {
+    "apiKey": "",  # Your Firebase API Key
+    "authDomain": "",  # e.g., "your-project.firebaseapp.com"
+    "projectId": "",  # Your Firebase Project ID
+    "storageBucket": "",  # e.g., "your-project.appspot.com"
+    "messagingSenderId": "",  # Your messaging sender ID
+    "appId": "",  # Your Firebase app ID
+    "databaseURL": ""  # e.g., "https://your-project-default-rtdb.firebaseio.com"
+}
+
 MAX_FILE_SIZE_MB = 40
 TEMP_DIR = None  # Use system temp
 

@@ -2,15 +2,16 @@ import bpy
 from bpy.types import Operator
 from bpy.props import StringProperty, EnumProperty, BoolProperty
 import traceback
-from ..utils import GLBExporter, BanterUploader, ValidationHelper
+from ..utils import GLBExporter, ValidationHelper
+from ..utils.firebase_client import FirebaseClient, get_transform_data
 from .. import config
 
-class BANTER_OT_export_upload(Operator):
-    """Export selected objects as GLB and upload to Banter CDN"""
-    bl_idname = "banter.export_upload"
-    bl_label = "Export & Upload to Banter"
+class TIPPY_OT_export_upload(Operator):
+    """Export selected objects as GLB and upload to Firebase"""
+    bl_idname = "tippy.export_upload"
+    bl_label = "Export & Upload to Firebase"
     bl_options = {'REGISTER', 'UNDO'}
-    
+
     # Properties
     export_preset: EnumProperty(
         name="Export Preset",
@@ -23,31 +24,17 @@ class BANTER_OT_export_upload(Operator):
         ],
         default='mobile_vr'
     )
-    
+
     combine_objects: BoolProperty(
         name="Combine Objects",
         description="Export multiple objects as single GLB",
         default=True
     )
-    
-    auto_copy_hash: BoolProperty(
-        name="Auto Copy Hash",
-        description="Automatically copy hash to clipboard",
+
+    auto_copy_url: BoolProperty(
+        name="Auto Copy URL",
+        description="Automatically copy URL to clipboard",
         default=True
-    )
-    
-    # Optional override credentials (if not using preferences)
-    override_username: StringProperty(
-        name="Username",
-        description="Override username (leave blank to use preferences)",
-        default=""
-    )
-    
-    override_secret: StringProperty(
-        name="Secret",
-        description="Override secret (leave blank to use preferences)",
-        default="",
-        subtype='PASSWORD'
     )
     
     # Runtime properties (not shown in UI)
@@ -108,14 +95,29 @@ class BANTER_OT_export_upload(Operator):
                 return {'CANCELLED'}
             
             self.report({'INFO'}, f"Exported GLB ({size_mb:.2f}MB)")
-            
-            # Get server URL and credentials from preferences
+
+            # Get Firebase configuration from preferences
             prefs = context.preferences.addons["blender_banter_uploader"].preferences
-            server_url = prefs.server_url
-            
-            # Use override credentials if provided, otherwise use preferences
-            username = self.override_username if self.override_username else prefs.username
-            secret = self.override_secret if self.override_secret else prefs.secret
+
+            # Build Firebase config
+            firebase_config = {
+                'apiKey': prefs.firebase_api_key,
+                'authDomain': prefs.firebase_auth_domain,
+                'projectId': prefs.firebase_project_id,
+                'storageBucket': prefs.firebase_storage_bucket,
+                'messagingSenderId': prefs.firebase_messaging_sender_id,
+                'appId': prefs.firebase_app_id,
+                'databaseURL': prefs.firebase_database_url
+            }
+
+            # Check configuration
+            if not prefs.firebase_database_url or not prefs.firebase_storage_bucket:
+                self.report({'ERROR'}, "Firebase configuration incomplete. Please configure in addon preferences.")
+                return {'CANCELLED'}
+
+            if not prefs.space_id:
+                self.report({'ERROR'}, "No Space ID configured. Please set Space ID in addon preferences.")
+                return {'CANCELLED'}
 
             # Determine mesh name - use single object name or generic name for multiple
             if len(selected_objects) == 1:
@@ -123,96 +125,107 @@ class BANTER_OT_export_upload(Operator):
             else:
                 mesh_name = f"Combined_{len(selected_objects)}_objects"
 
-            # Upload to server
-            self.report({'INFO'}, f"Uploading '{mesh_name}' to {server_url}...")
+            # Get transform data from the active object
+            transform = None
+            if context.active_object:
+                transform = get_transform_data(context.active_object)
+
+            # Initialize Firebase client
+            client = FirebaseClient(firebase_config, prefs.space_id)
+
+            # Upload to Firebase
+            self.report({'INFO'}, f"Uploading '{mesh_name}' to Firebase...")
 
             try:
-                result = BanterUploader.upload_with_retry(
+                result = client.upload_with_retry(
                     glb_data,
-                    server_url=server_url,
-                    username=username,
-                    secret=secret,
                     mesh_name=mesh_name,
-                    max_retries=3
+                    transform=transform,
+                    max_retries=prefs.max_retries
                 )
             except Exception as e:
-                self.report({'ERROR'}, f"Upload failed: {str(e)}")
+                self.report({'ERROR'}, f"Firebase upload failed: {str(e)}")
                 return {'CANCELLED'}
-            
-            # Get hash from response
-            asset_hash = result.get('hash', result.get('id', 'unknown'))
+
+            # Check result
+            if not result.get('success'):
+                self.report({'ERROR'}, f"Upload failed: {result.get('error', 'Unknown error')}")
+                return {'CANCELLED'}
+
+            # Get URL and component ID from response
+            storage_url = result.get('storage_url', 'unknown')
+            component_id = result.get('component_id', 'unknown')
             
             # Store in scene for history using proper Blender properties
-            history_item = context.scene.banter_upload_history.add()
-            history_item.hash = asset_hash
+            history_item = context.scene.tippy_upload_history.add()
+            history_item.hash = storage_url  # Store URL in hash field for compatibility
             history_item.name = selected_objects[0].name if len(selected_objects) == 1 else f"{len(selected_objects)} objects"
             history_item.size = size_mb
             history_item.preset = self.export_preset
-            
+
             # Keep history limited to last 20 items
-            while len(context.scene.banter_upload_history) > 20:
-                context.scene.banter_upload_history.remove(0)
-            
+            while len(context.scene.tippy_upload_history) > 20:
+                context.scene.tippy_upload_history.remove(0)
+
             # Copy to clipboard if enabled
-            if self.auto_copy_hash:
-                context.window_manager.clipboard = asset_hash
-                self.report({'INFO'}, f"Upload complete! Hash copied to clipboard: {asset_hash}")
+            if self.auto_copy_url:
+                context.window_manager.clipboard = storage_url
+                self.report({'INFO'}, f"Upload complete! URL copied to clipboard: {storage_url}")
             else:
-                self.report({'INFO'}, f"Upload complete! Hash: {asset_hash}")
-            
-            # Store last hash for UI display
-            context.scene.banter_last_upload_hash = asset_hash
-            
+                self.report({'INFO'}, f"Upload complete! URL: {storage_url}")
+
+            # Store last upload URL for UI display
+            context.scene.tippy_last_upload_hash = storage_url
+
             return {'FINISHED'}
-            
+
         except Exception as e:
             self.report({'ERROR'}, f"Unexpected error: {str(e)}")
             print(traceback.format_exc())
             return {'CANCELLED'}
-    
+
     def invoke(self, context, event):
-        # Check server availability first
+        # Check Firebase configuration
         prefs = context.preferences.addons["blender_banter_uploader"].preferences
-        server_url = prefs.server_url
-        
-        if not BanterUploader.check_server_status(server_url):
-            self.report({'ERROR'}, f"Cannot connect to server at {server_url}")
+
+        # Check if Firebase is configured
+        if not prefs.firebase_database_url or not prefs.firebase_storage_bucket:
+            self.report({'ERROR'}, "Firebase not configured. Please set up Firebase in addon preferences.")
             return {'CANCELLED'}
-        
-        # Warn if no credentials are set
-        if not prefs.username and not self.override_username:
-            self.report({'WARNING'}, "No username configured - upload may fail without authentication")
-        
+
+        # Warn if no space ID is set
+        if not prefs.space_id:
+            self.report({'ERROR'}, "No Space ID configured. Please set Space ID in addon preferences.")
+            return {'CANCELLED'}
+
         # Show dialog with options
         return context.window_manager.invoke_props_dialog(self, width=400)
     
     def draw(self, context):
         layout = self.layout
         prefs = context.preferences.addons["blender_banter_uploader"].preferences
-        
+
         # Export preset selection
         layout.prop(self, "export_preset")
-        
+
         # Options
         layout.prop(self, "combine_objects")
-        layout.prop(self, "auto_copy_hash")
-        
-        # Authentication section
+        layout.prop(self, "auto_copy_url")
+
+        # Firebase status section
         layout.separator()
         box = layout.box()
-        box.label(text="Authentication", icon='LOCKED')
-        
-        # Show current credentials status
-        if prefs.username:
-            box.label(text=f"Using: {prefs.username}", icon='USER')
+        box.label(text="Firebase Settings", icon='URL')
+
+        # Show current space status
+        if prefs.space_id:
+            box.label(text=f"Space ID: {prefs.space_id}", icon='CHECKMARK')
         else:
-            box.label(text="No username set in preferences", icon='ERROR')
-        
-        # Optional override fields
-        row = box.row()
-        row.prop(self, "override_username", text="Override Username")
-        row = box.row()
-        row.prop(self, "override_secret", text="Override Secret")
+            box.label(text="No Space ID configured", icon='ERROR')
+
+        # Show Firebase project
+        if prefs.firebase_project_id:
+            box.label(text=f"Project: {prefs.firebase_project_id}", icon='FILE_VOLUME')
         
         # Selection info
         layout.separator()

@@ -5,48 +5,73 @@ import traceback
 
 # Debug function
 def debug_print(msg):
-    print(f"[BANTER PREFS DEBUG] {msg}")
+    print(f"[TIPPY PREFS DEBUG] {msg}")
 
 debug_print("Preferences module loading...")
 
 try:
     from . import config
     debug_print(f"Config imported successfully")
-    DEFAULT_SERVER_URL = config.DEFAULT_SERVER_URL
     DEFAULT_EXPORT_PRESET = config.DEFAULT_EXPORT_PRESET
     MAX_FILE_SIZE_MB = config.MAX_FILE_SIZE_MB
 except Exception as e:
     debug_print(f"ERROR importing config: {e}")
     debug_print(traceback.format_exc())
     # Fallback values
-    DEFAULT_SERVER_URL = "https://suitable-bulldog-flying.ngrok-free.app"
     DEFAULT_EXPORT_PRESET = "mobile_vr"
     MAX_FILE_SIZE_MB = 20
 
-debug_print(f"Using DEFAULT_SERVER_URL: {DEFAULT_SERVER_URL}")
-
-class BanterUploaderPreferences(AddonPreferences):
+class TippyUploaderPreferences(AddonPreferences):
     bl_idname = "blender_banter_uploader"
-    
-    # Server settings - try without subtype first
-    server_url: StringProperty(
-        name="Server URL",
-        description="URL of the Banter microservice",
-        default=DEFAULT_SERVER_URL
-    )
-    
-    # Authentication settings
-    username: StringProperty(
-        name="Username",
-        description="Your Banter username for authentication",
+
+    # Firebase configuration settings
+    firebase_api_key: StringProperty(
+        name="API Key",
+        description="Firebase API Key",
         default=""
     )
-    
-    secret: StringProperty(
-        name="Secret",
-        description="Your secret key for authentication",
-        default="",
-        subtype='PASSWORD'  # Makes it display as password field
+
+    firebase_auth_domain: StringProperty(
+        name="Auth Domain",
+        description="Firebase Auth Domain (e.g., your-project.firebaseapp.com)",
+        default=""
+    )
+
+    firebase_project_id: StringProperty(
+        name="Project ID",
+        description="Firebase Project ID",
+        default=""
+    )
+
+    firebase_storage_bucket: StringProperty(
+        name="Storage Bucket",
+        description="Firebase Storage Bucket (e.g., your-project.appspot.com)",
+        default=""
+    )
+
+    firebase_messaging_sender_id: StringProperty(
+        name="Messaging Sender ID",
+        description="Firebase Messaging Sender ID",
+        default=""
+    )
+
+    firebase_app_id: StringProperty(
+        name="App ID",
+        description="Firebase App ID",
+        default=""
+    )
+
+    firebase_database_url: StringProperty(
+        name="Database URL",
+        description="Firebase Realtime Database URL",
+        default=""
+    )
+
+    # Space settings
+    space_id: StringProperty(
+        name="Space ID",
+        description="Target space identifier (e.g., ccfaa6)",
+        default=""
     )
     
     # Default export settings
@@ -137,21 +162,27 @@ class BanterUploaderPreferences(AddonPreferences):
     
     def draw(self, context):
         layout = self.layout
-        
-        # Server settings
+
+        # Firebase configuration
         box = layout.box()
-        box.label(text="Server Settings", icon='URL')
-        box.prop(self, "server_url")
-        
-        # Authentication
+        box.label(text="Firebase Configuration", icon='URL')
+        col = box.column(align=True)
+        col.prop(self, "firebase_api_key")
+        col.prop(self, "firebase_auth_domain")
+        col.prop(self, "firebase_project_id")
+        col.prop(self, "firebase_storage_bucket")
+        col.prop(self, "firebase_messaging_sender_id")
+        col.prop(self, "firebase_app_id")
+        col.prop(self, "firebase_database_url")
+
+        # Space settings
         box.separator()
-        box.label(text="Authentication", icon='LOCKED')
-        box.prop(self, "username")
-        box.prop(self, "secret")
-        
+        box.label(text="Space Settings", icon='LOCKED')
+        box.prop(self, "space_id")
+
         # Test connection button
         row = box.row()
-        row.operator("banter.test_connection", icon='FILE_REFRESH')
+        row.operator("tippy.test_firebase_connection", icon='FILE_REFRESH')
         
         # Export settings
         box = layout.box()
@@ -210,56 +241,80 @@ class BanterUploaderPreferences(AddonPreferences):
         }
 
 
-class BANTER_OT_test_connection(bpy.types.Operator):
-    """Test connection to Banter server"""
-    bl_idname = "banter.test_connection"
-    bl_label = "Test Connection"
-    
+class TIPPY_OT_test_firebase_connection(bpy.types.Operator):
+    """Test connection to Firebase"""
+    bl_idname = "tippy.test_firebase_connection"
+    bl_label = "Test Firebase Connection"
+
     def execute(self, context):
         try:
             prefs = context.preferences.addons["blender_banter_uploader"].preferences
-            from .utils import BanterUploader
-            
-            if BanterUploader.check_server_status(prefs.server_url):
-                self.report({'INFO'}, f"Successfully connected to {prefs.server_url}")
+            from .utils.firebase_client import FirebaseClient
+
+            # Build Firebase config
+            firebase_config = {
+                'apiKey': prefs.firebase_api_key,
+                'authDomain': prefs.firebase_auth_domain,
+                'projectId': prefs.firebase_project_id,
+                'storageBucket': prefs.firebase_storage_bucket,
+                'messagingSenderId': prefs.firebase_messaging_sender_id,
+                'appId': prefs.firebase_app_id,
+                'databaseURL': prefs.firebase_database_url
+            }
+
+            # Check if configuration is provided
+            if not prefs.firebase_database_url or not prefs.firebase_api_key:
+                self.report({'ERROR'}, "Firebase configuration incomplete. Please fill in all fields.")
+                return {'CANCELLED'}
+
+            if not prefs.space_id:
+                self.report({'WARNING'}, "No Space ID configured. You'll need this for uploads.")
+
+            # Test connection
+            client = FirebaseClient(firebase_config, prefs.space_id)
+            success, message = client.test_connection()
+
+            if success:
+                self.report({'INFO'}, f"Firebase connection successful! {message}")
             else:
-                self.report({'ERROR'}, f"Cannot connect to {prefs.server_url}")
+                self.report({'ERROR'}, f"Firebase connection failed: {message}")
+
         except Exception as e:
-            self.report({'ERROR'}, f"Error testing connection: {str(e)}")
-            debug_print(f"Connection test error: {e}")
+            self.report({'ERROR'}, f"Error testing Firebase connection: {str(e)}")
+            debug_print(f"Firebase connection test error: {e}")
             debug_print(traceback.format_exc())
-        
+
         return {'FINISHED'}
 
 
 def register():
     debug_print("Registering preferences classes...")
     try:
-        bpy.utils.register_class(BanterUploaderPreferences)
-        debug_print("  ✓ BanterUploaderPreferences registered")
+        bpy.utils.register_class(TippyUploaderPreferences)
+        debug_print("  ✓ TippyUploaderPreferences registered")
     except Exception as e:
-        debug_print(f"  ERROR registering BanterUploaderPreferences: {e}")
+        debug_print(f"  ERROR registering TippyUploaderPreferences: {e}")
         debug_print(f"  Error type: {type(e).__name__}")
         debug_print(traceback.format_exc())
         raise
-    
+
     try:
-        bpy.utils.register_class(BANTER_OT_test_connection)
-        debug_print("  ✓ BANTER_OT_test_connection registered")
+        bpy.utils.register_class(TIPPY_OT_test_firebase_connection)
+        debug_print("  ✓ TIPPY_OT_test_firebase_connection registered")
     except Exception as e:
-        debug_print(f"  ERROR registering BANTER_OT_test_connection: {e}")
+        debug_print(f"  ERROR registering TIPPY_OT_test_firebase_connection: {e}")
         raise
 
 def unregister():
     debug_print("Unregistering preferences classes...")
     try:
-        bpy.utils.unregister_class(BANTER_OT_test_connection)
-        debug_print("  ✓ BANTER_OT_test_connection unregistered")
+        bpy.utils.unregister_class(TIPPY_OT_test_firebase_connection)
+        debug_print("  ✓ TIPPY_OT_test_firebase_connection unregistered")
     except Exception as e:
-        debug_print(f"  ERROR unregistering BANTER_OT_test_connection: {e}")
-    
+        debug_print(f"  ERROR unregistering TIPPY_OT_test_firebase_connection: {e}")
+
     try:
-        bpy.utils.unregister_class(BanterUploaderPreferences)
-        debug_print("  ✓ BanterUploaderPreferences unregistered")
+        bpy.utils.unregister_class(TippyUploaderPreferences)
+        debug_print("  ✓ TippyUploaderPreferences unregistered")
     except Exception as e:
-        debug_print(f"  ERROR unregistering BanterUploaderPreferences: {e}")
+        debug_print(f"  ERROR unregistering TippyUploaderPreferences: {e}")

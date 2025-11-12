@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tippy Blender Link - Getting Started Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            color: #393939;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.25);
+            backdrop-filter: blur(5px);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        h2:first-child {
+            margin-top: 0;
+        }
+
+        h3 {
+            color: #444;
+            font-size: 1.3rem;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #666;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        ol, ul {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #d63384;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning strong {
+            color: #856404;
+        }
+
+        .info {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info strong {
+            color: #0c5460;
+        }
+
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success strong {
+            color: #155724;
+        }
+
+        .button {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+
+        .button:hover {
+            background: #5a67d8;
+        }
+
+        .button-secondary {
+            background: #6c757d;
+        }
+
+        .button-secondary:hover {
+            background: #5a6268;
+        }
+
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #667eea;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #667eea;
+        }
+
+        .firebase-config {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        footer {
+            background: #f8f9fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .troubleshooting {
+            background: #fff8f0;
+            border: 1px solid #ffd6a5;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔗 Tippy Blender Link</h1>
+            <p class="subtitle">Export and Upload GLB Files to Firebase</p>
+        </header>
+
+        <div class="content">
+            <div class="toc">
+                <h3>📑 Table of Contents</h3>
+                <ul>
+                    <li><a href="#overview">1. Overview</a></li>
+                    <li><a href="#requirements">2. Requirements</a></li>
+                    <li><a href="#firebase-setup">3. Firebase Setup</a></li>
+                    <li><a href="#blender-installation">4. Blender Installation</a></li>
+                    <li><a href="#configuration">5. Configuration</a></li>
+                    <li><a href="#usage">6. Basic Usage</a></li>
+                    <li><a href="#troubleshooting">7. Troubleshooting</a></li>
+                </ul>
+            </div>
+
+            <h2 id="overview">📋 Overview</h2>
+            <p>Tippy Blender Link is a powerful Blender addon that streamlines the process of exporting 3D models as GLB files and uploading them directly to Firebase Storage and Realtime Database. This guide will walk you through the complete setup process.</p>
+
+            <div class="info">
+                <strong>What you'll be able to do:</strong>
+                <ul>
+                    <li>Export objects or collections as optimized GLB files</li>
+                    <li>Upload files directly to Firebase Storage</li>
+                    <li>Store metadata in Firebase Realtime Database</li>
+                    <li>Use presets for different quality levels (Mobile VR, PC VR, High Quality)</li>
+                    <li>Batch export multiple objects</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin: 40px 0; padding: 30px; background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%); border-radius: 12px; border: 2px solid rgba(102, 126, 234, 0.2);">
+                <h3 style="color: #667eea; margin-bottom: 15px; font-size: 1.5rem;">Ready to Get Started?</h3>
+                <p style="margin-bottom: 20px; color: #666; font-size: 1.1rem;">Download the latest version of Tippy Blender Link</p>
+                <a href="https://github.com/saternius/TippyBlenderLink/releases" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 18px 40px; border-radius: 8px; text-decoration: none; font-size: 1.2rem; font-weight: bold; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.5)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)';">
+                    📥 Download Extension
+                </a>
+                <p style="margin-top: 15px; color: #999; font-size: 0.9rem;">Version 2.0.0 • Compatible with Blender 3.0+</p>
+            </div>
+
+            <h2 id="requirements">✅ Requirements</h2>
+            <ul>
+                <li><strong>Blender:</strong> Version 3.0 or higher</li>
+                <li><strong>Operating System:</strong> Windows, macOS, or Linux</li>
+                <li><strong>Internet Connection:</strong> Required for Firebase uploads</li>
+                <li><strong>Firebase Account:</strong> Free tier is sufficient for most use cases</li>
+            </ul>
+
+            <h2 id="firebase-setup">🔥 Firebase Setup</h2>
+
+            <h3>Step 1: Create a Firebase Project</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Go to the <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></p>
+                <p><span class="step-number">2</span> Click <strong>"Create a project"</strong> or <strong>"Add project"</strong></p>
+                <p><span class="step-number">3</span> Enter your project name (e.g., "tippy-blender-uploads")</p>
+                <p><span class="step-number">4</span> Choose whether to enable Google Analytics (optional)</p>
+                <p><span class="step-number">5</span> Click <strong>"Create project"</strong> and wait for it to be ready</p>
+            </div>
+
+            <h3>Step 2: Enable Firebase Storage</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> In the Firebase Console, click on <strong>"Storage"</strong> in the left sidebar</p>
+                <p><span class="step-number">2</span> Click <strong>"Get started"</strong></p>
+                <p><span class="step-number">3</span> Choose your security rules:</p>
+                <pre><code>// For testing (NOT for production):
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}</code></pre>
+                <p><span class="step-number">4</span> Select your Cloud Storage location (choose one close to your users)</p>
+                <p><span class="step-number">5</span> Click <strong>"Done"</strong></p>
+            </div>
+
+            <h3>Step 3: Enable Realtime Database</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Click on <strong>"Realtime Database"</strong> in the left sidebar</p>
+                <p><span class="step-number">2</span> Click <strong>"Create Database"</strong></p>
+                <p><span class="step-number">3</span> Select your database location</p>
+                <p><span class="step-number">4</span> Choose security rules:</p>
+                <pre><code>// For testing (NOT for production):
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null"
+  }
+}</code></pre>
+                <p><span class="step-number">5</span> Click <strong>"Enable"</strong></p>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Security Notice:</strong> The rules above are for testing only. For production use, implement proper security rules based on your authentication system and user permissions.
+            </div>
+
+            <h3>Step 4: Get Your Firebase Configuration</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Go to Project Settings (gear icon) → <strong>"Project settings"</strong></p>
+                <p><span class="step-number">2</span> Scroll down to <strong>"Your apps"</strong> section</p>
+                <p><span class="step-number">3</span> Click <strong>"Add app"</strong> and select <strong>"Web"</strong> (</> icon)</p>
+                <p><span class="step-number">4</span> Register your app with a nickname (e.g., "Blender Addon")</p>
+                <p><span class="step-number">5</span> Copy the configuration object:</p>
+            </div>
+
+            <div class="firebase-config">
+                <h4>Your Firebase Configuration</h4>
+                <pre><code>{
+  "apiKey": "your-api-key-here",
+  "authDomain": "your-project.firebaseapp.com",
+  "databaseURL": "https://your-project.firebaseio.com",
+  "projectId": "your-project-id",
+  "storageBucket": "your-project.appspot.com",
+  "messagingSenderId": "123456789",
+  "appId": "your-app-id"
+}</code></pre>
+                <p><strong>Save this configuration - you'll need it for the Blender addon!</strong></p>
+            </div>
+
+            <h3>Step 5: Create a Service Account (Required for Authentication)</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> In Firebase Console, go to Project Settings → <strong>"Service accounts"</strong></p>
+                <p><span class="step-number">2</span> Click <strong>"Generate new private key"</strong></p>
+                <p><span class="step-number">3</span> Click <strong>"Generate key"</strong> in the confirmation dialog</p>
+                <p><span class="step-number">4</span> A JSON file will download - <strong>keep this file secure!</strong></p>
+            </div>
+
+            <div class="warning">
+                <strong>🔒 Security Warning:</strong> The service account key file contains sensitive credentials. Never commit it to version control or share it publicly.
+            </div>
+
+            <h2 id="blender-installation">🎨 Blender Installation</h2>
+
+            <h3>Method 1: Install from ZIP (Recommended)</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Download <code>tippy_blender_link_v2.0.0.zip</code></p>
+                <p><span class="step-number">2</span> Open Blender</p>
+                <p><span class="step-number">3</span> Go to <strong>Edit → Preferences</strong></p>
+                <p><span class="step-number">4</span> Click on the <strong>"Add-ons"</strong> section</p>
+                <p><span class="step-number">5</span> Click <strong>"Install..."</strong> button at the top</p>
+                <p><span class="step-number">6</span> Navigate to and select <code>tippy_blender_link_v2.0.0.zip</code></p>
+                <p><span class="step-number">7</span> Click <strong>"Install Add-on"</strong></p>
+                <p><span class="step-number">8</span> Search for "Tippy" in the add-ons list</p>
+                <p><span class="step-number">9</span> Check the box next to <strong>"Import-Export: Tippy Blender Link"</strong> to enable it</p>
+            </div>
+
+            <h3>Method 2: Manual Installation</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Extract <code>tippy_blender_link_v2.0.0.zip</code></p>
+                <p><span class="step-number">2</span> Copy the <code>blender_banter_uploader</code> folder to your Blender addons directory:</p>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('windows')">Windows</button>
+                    <button class="tab" onclick="showTab('macos')">macOS</button>
+                    <button class="tab" onclick="showTab('linux')">Linux</button>
+                </div>
+
+                <div id="windows" class="tab-content active">
+                    <pre><code>%APPDATA%\Blender Foundation\Blender\3.x\scripts\addons\</code></pre>
+                </div>
+
+                <div id="macos" class="tab-content">
+                    <pre><code>~/Library/Application Support/Blender/3.x/scripts/addons/</code></pre>
+                </div>
+
+                <div id="linux" class="tab-content">
+                    <pre><code>~/.config/blender/3.x/scripts/addons/</code></pre>
+                </div>
+
+                <p><span class="step-number">3</span> Restart Blender</p>
+                <p><span class="step-number">4</span> Enable the addon in Preferences → Add-ons</p>
+            </div>
+
+            <div class="success">
+                <strong>✅ Installation Complete!</strong> You should now see a "Tippy" tab in the 3D Viewport's sidebar (press N to toggle the sidebar).
+            </div>
+
+            <h2 id="configuration">⚙️ Configuration</h2>
+
+            <h3>Configure Firebase Credentials</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> In Blender, go to <strong>Edit → Preferences → Add-ons</strong></p>
+                <p><span class="step-number">2</span> Find <strong>"Tippy Blender Link"</strong> and expand it</p>
+                <p><span class="step-number">3</span> Click on <strong>"Preferences"</strong> to expand the settings</p>
+                <p><span class="step-number">4</span> You'll see two options for Firebase configuration:</p>
+            </div>
+
+            <h4>Option A: Paste Firebase Configuration (Easier)</h4>
+            <ol>
+                <li>Copy your entire Firebase configuration object from the Firebase Console</li>
+                <li>Paste it into the <strong>"Firebase Config JSON"</strong> text field</li>
+                <li>Click <strong>"Validate Configuration"</strong></li>
+            </ol>
+
+            <h4>Option B: Upload Service Account File</h4>
+            <ol>
+                <li>Click the file browser icon next to <strong>"Service Account File"</strong></li>
+                <li>Select the JSON file you downloaded from Firebase</li>
+                <li>Click <strong>"Load Service Account"</strong></li>
+            </ol>
+
+            <div class="info">
+                <strong>💡 Tip:</strong> The configuration is saved with your Blender preferences, so you only need to do this once.
+            </div>
+
+            <h3>Configure Export Settings</h3>
+            <p>In the Tippy panel, you can choose from three export presets:</p>
+            <ul>
+                <li><strong>Mobile/VR:</strong> Optimized for Quest and mobile devices (lower poly count, compressed textures)</li>
+                <li><strong>PC VR:</strong> Balanced quality for PC VR applications</li>
+                <li><strong>High Quality:</strong> Maximum quality for showcases and high-end applications</li>
+            </ul>
+
+            <h2 id="usage">🚀 Basic Usage</h2>
+
+            <h3>Exporting a Single Object</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Select the object or collection you want to export</p>
+                <p><span class="step-number">2</span> Press <strong>N</strong> to open the sidebar (if not visible)</p>
+                <p><span class="step-number">3</span> Click on the <strong>"Tippy"</strong> tab</p>
+                <p><span class="step-number">4</span> Choose your export preset</p>
+                <p><span class="step-number">5</span> (Optional) Enter tags for organization</p>
+                <p><span class="step-number">6</span> Click <strong>"Export & Upload to Firebase"</strong></p>
+            </div>
+
+            <h3>Batch Export</h3>
+            <div class="step">
+                <p><span class="step-number">1</span> Select multiple objects or collections</p>
+                <p><span class="step-number">2</span> In the Tippy panel, click <strong>"Batch Export Selected"</strong></p>
+                <p><span class="step-number">3</span> Each object will be exported as a separate GLB file</p>
+            </div>
+
+            <h3>View Upload History</h3>
+            <p>The addon keeps track of your recent uploads. You can view them in the <strong>"Recent Uploads"</strong> section of the Tippy panel.</p>
+
+            <h2 id="troubleshooting">🔧 Troubleshooting</h2>
+
+            <div class="troubleshooting">
+                <h3>Common Issues and Solutions</h3>
+
+                <h4>❌ "Firebase configuration not found"</h4>
+                <p><strong>Solution:</strong> Make sure you've configured Firebase credentials in the addon preferences.</p>
+
+                <h4>❌ "Authentication failed"</h4>
+                <p><strong>Solution:</strong> Check that your Firebase configuration is correct and that Storage and Realtime Database are enabled.</p>
+
+                <h4>❌ "File too large" error</h4>
+                <p><strong>Solution:</strong> The maximum file size is 40MB. Try using a lower quality preset or optimizing your model.</p>
+
+                <h4>❌ Addon doesn't appear in Blender</h4>
+                <p><strong>Solution:</strong></p>
+                <ol>
+                    <li>Make sure you're using Blender 3.0 or higher</li>
+                    <li>Check that the addon is enabled in Preferences</li>
+                    <li>Try restarting Blender</li>
+                    <li>Verify the addon files are in the correct directory</li>
+                </ol>
+
+                <h4>❌ Upload fails silently</h4>
+                <p><strong>Solution:</strong> Check the Blender console (Window → Toggle System Console on Windows) for error messages.</p>
+            </div>
+
+            <h3>Getting Help</h3>
+            <ul>
+                <li><strong>Documentation:</strong> Check the README.md file in the addon folder</li>
+                <li><strong>Bug Reports:</strong> Report issues on the project's issue tracker</li>
+                <li><strong>Firebase Issues:</strong> Consult the <a href="https://firebase.google.com/docs" target="_blank">Firebase Documentation</a></li>
+            </ul>
+
+            <div class="success">
+                <strong>🎉 Congratulations!</strong> You're now ready to streamline your 3D asset pipeline with Tippy Blender Link. Happy exporting!
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>Tippy Blender Link v2.0.0</strong></p>
+            <p>Created by the Tippy Team</p>
+            <p>© 2024 - Export and upload GLB files with ease</p>
+            <p style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #dee2e6;">
+                <strong>Need Help?</strong> If you run into any issues, contact <strong>@_jaybot</strong> on Discord
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

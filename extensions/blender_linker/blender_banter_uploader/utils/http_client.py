@@ -4,12 +4,12 @@ import hashlib
 from typing import Optional, Callable
 from .. import config
 
-class BanterUploader:
-    
+class TippyUploader:
+
     @staticmethod
     def upload_glb(glb_data, server_url=None, username=None, secret=None, mesh_name=None, progress_callback=None):
         """
-        Upload GLB data to Banter microservice.
+        Upload GLB data to Tippy microservice.
 
         Args:
             glb_data: Bytes data of GLB file
@@ -128,7 +128,7 @@ class BanterUploader:
                 if attempt > 0 and progress_callback:
                     progress_callback(0, f"Retry attempt {attempt + 1}...")
 
-                return BanterUploader.upload_glb(
+                return TippyUploader.upload_glb(
                     glb_data,
                     server_url,
                     username,
