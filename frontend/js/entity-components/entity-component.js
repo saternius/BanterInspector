@@ -49,10 +49,12 @@ export class EntityComponent{
                 }
             }
 
+            let defaultProperties = this.defaultProperties();
+
             // Handle properties that were deleted from Firebase
-            for(let p in this.properties){
-                if(p !== 'id' && p !== '_owner' && !(p in data)){
-                    this._set(p, this.defaultProperties()[p] || null);
+            for(let p in defaultProperties){
+                if(!(p in data)){
+                    this._set(p, defaultProperties[p]);
                 }
             }
         })

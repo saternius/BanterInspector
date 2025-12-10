@@ -3,7 +3,6 @@ const admin = require('firebase-admin');
 const cors = require('cors');
 const http = require('http');
 const WebSocketManager = require('./websocket-manager');
-
 const app = express();
 
 // Import routers
@@ -53,16 +52,19 @@ app.post('/setclaims', async (req, res) => {
     try {
         const { uid, username, secret } = req.body;
         console.log(uid, username, secret);
-        // Set custom claims
-        await admin.auth().setCustomUserClaims(uid, {
-            username: username,
-            secret: secret
+        const userRef = this.admin.database().ref(`secrets/${username}`);
+        const snapshot = await userRef.once('value');
+        const userData = snapshot.val();
+        if(userData){
+            res.json({ success: true, message: "User already registered" });
+            return;
+        }
+
+        await admin.database().ref(`secrets/${username}`).set({
+            secret: secret,
+            created: new Date().toLocaleString()
         });
-
-        // Store secret in database
-        await admin.database().ref(`secrets/${username}`).set(secret);
-
-        res.json({ success: true });
+        res.json({ success: true, message: "User registered" });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

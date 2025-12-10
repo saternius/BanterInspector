@@ -26,10 +26,10 @@ export class Entity{
             let lp = entityData.localPosition;
             let lr = entityData.localRotation;
             let ls = entityData.localScale;
-            let p = entityData.position;
-            let r = entityData.rotation;
-            if(p){ params.position = new BS.Vector3(p.x, p.y, p.z) }
-            if(r){ params.rotation = new BS.Vector4(r.x, r.y, r.z, r.w) }
+            // let p = entityData.position;
+            // let r = entityData.rotation;
+            // if(p){ params.position = new BS.Vector3(p.x, p.y, p.z) }
+            // if(r){ params.rotation = new BS.Vector4(r.x, r.y, r.z, r.w) }
             if(lp){ params.localPosition = new BS.Vector3(lp.x, lp.y, lp.z) }
             if(lr){ params.localRotation = new BS.Vector4(lr.x, lr.y, lr.z, lr.w) }
             if(ls){ params.localScale = new BS.Vector3(ls.x, ls.y, ls.z) }
@@ -222,6 +222,12 @@ export class Entity{
                      log("ENTITY_REF_NEW", key, this.id, data)
                      data.parentId = this.id;
                      data.name = key;
+                     let expected_id = this.id + "/" + key;
+                     let existingEntity = SM.getEntityById(expected_id);
+                     if(existingEntity){
+                        log("ENTITY_REF_REDUNDANT", key, this.id, data, existingEntity)
+                        return;
+                     }
                      let newEntity = new Entity()
                      await newEntity.init(data);
                      SM.entityData.entityUUIDMap[data.__meta.uuid] = newEntity;
@@ -245,7 +251,7 @@ export class Entity{
                     setTimeout(()=>{
                         //check if still orphaned, if so destroy it
                         let claimedParent = SM.getEntityById(targetEntity.parentId);
-                        if(!claimedParent.children.includes(targetEntity)){
+                        if(!claimedParent || !claimedParent.children.includes(targetEntity)){
                             targetEntity._destroy();
                         }
                     }, 500);
@@ -288,14 +294,8 @@ export class Entity{
         return this.transform.scale;
     }
 
-    async GetComponent(componentType, index = 0, attempts = 0){
-        let component = this.components.filter(component => component.type === componentType)[index];
-        if(!component && attempts < 100){
-            await new Promise(resolve => setTimeout(resolve, 100));
-            //log("entity", "GetComponent", "Retrying", componentType, index, attempts);
-            return this.GetComponent(componentType, index, attempts + 1);
-        }
-        return component;
+    GetComponent(componentType, index = 0){
+        return this.components.filter(component => component.type === componentType)[index];
     }
 
     AddComponent(component){
@@ -380,7 +380,6 @@ export class Entity{
         }
         this.children.push(child);
         child._bs.SetParent(this._bs, this.keepPositionOnParenting);
-        //this._bs.SetParent(child._bs, this.keepPositionOnParenting);
         return child;
     }
 
@@ -403,7 +402,6 @@ export class Entity{
         }
 
         newParent._addChild(this);
-        //this._bs.SetParent(newParent._bs, this.keepPositionOnParenting);
         this._rename(this.name);
     }
 
@@ -449,7 +447,9 @@ export class Entity{
         const snapshot = await origRef.once('value');
         let parentRef = net.db.ref(`space/${net.spaceId}/${this.parentId}`);
         this._renameDownwards();
-        await parentRef.child(newName).set(snapshot.val());
+        let newSnapshot = snapshot.val();
+        log('entity', 'renaming', this.id, '=>', newId, 'with snapshot', newSnapshot)
+        await parentRef.child(newName).set(newSnapshot);
         origRef.remove();
     }
 
@@ -560,6 +560,7 @@ export class Entity{
         const snapshot = await this.ref.once('value');
         let entityData = snapshot.val();
         const componentsData = {};
+        
 
         // Collect components from this entity
         for (const x of this.components) {
@@ -583,11 +584,12 @@ export class Entity{
    
 
     async Set(property, value){
+        let newValue = parseBest(value);
         if(property == "name"){
             this.Rename(value);
         }else{
-            log("entity", "Set =>", this.id, property, value)
-            this.meta_ref.update({[property]: value});
+            log("entity", "Set =>", this.id, property, newValue)
+            this.meta_ref.update({[property]: newValue});
         }
     }
     
@@ -681,6 +683,14 @@ export class Entity{
             return null;
         }
         return scripts[0];
+    }
+
+    GetChild(childName){
+        let children = this.children.filter(x=>x.name === childName);
+        if(children.length === 0){
+            return null;
+        }
+        return children[0];
     }
 
     getAllDescendants(){

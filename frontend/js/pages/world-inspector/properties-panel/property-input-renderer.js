@@ -102,7 +102,7 @@ export class PropertyInputRenderer {
         valueContainer.className = 'property-value';
 
         const enums = component.enums ? component.enums() : {};
-
+        // log('property-input-renderer', 'rendering property', key, value, component, componentIndex, propertyIndex)
         // Handle different property types
         if (enums[key]) {
             // Enum dropdown

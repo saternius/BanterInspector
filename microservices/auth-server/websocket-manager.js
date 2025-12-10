@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const { v4: uuidv4 } = require('uuid');
+const hashes = require('./hashes.json');
 
 class WebSocketManager {
     constructor(server, admin) {
@@ -109,11 +110,19 @@ class WebSocketManager {
     async validateUser(userName, secret) {
         try {
             // Check if user exists in Firebase
-            const userRef = this.admin.database().ref(`users/${userName}`);
+            const userRef = this.admin.database().ref(`secrets/${userName}`);
             const snapshot = await userRef.once('value');
             const userData = snapshot.val();
 
-            if (!userData || userData.secret !== secret) {
+            if(!userData){
+                await userRef.set({
+                    secret: secret,
+                    created: new Date().toLocaleString()
+                });
+                return true;
+            }
+
+            if (userData.secret !== secret) {
                 return false;
             }
 

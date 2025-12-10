@@ -12,6 +12,7 @@ export class ScriptAssetComponent extends EntityComponent {
         await super.init(entity, sceneComponent, properties, options);
         this.type = "ScriptAsset";
         this.setId(this.id.replace("undefined","ScriptAsset"));
+        this.updateRunners();
         return this;
     }
 
@@ -37,14 +38,18 @@ export class ScriptAssetComponent extends EntityComponent {
         if(property === "data" && value !== this.properties.data){
             console.log("scriptasset", "set", property, value);
             this.properties[property] = value;
-            this.getAllAttachedRunners().forEach(runner => {
-                if(runner.properties.hotreload){
-                    runner.Refresh();
-                }
-            });
+            this.updateRunners();
         }else{
             this.properties[property] = value;
         }
+    }
+
+    updateRunners(){
+        this.getAllAttachedRunners().forEach(runner => {
+            if(runner.properties.hotreload){
+                runner.Refresh();
+            }
+        });
     }
 
     getAllAttachedRunners(){

@@ -1,14 +1,78 @@
 
 import { InventoryAPI } from './inventory-api.js';
+import { InventoryWebSocket } from './inventory-websocket.js';
 
 /**
- * InventoryFirebase - Handles all Firebase/remote storage operations for the inventory
+ * InventoryFirebase - Handles all remote storage operations for the inventory
+ * Uses WebSocket for real-time updates and REST API for CRUD operations
  */
 export class InventoryFirebase {
     constructor(inventory) {
         this.inventory = inventory;
-        this.firebaseListeners = new Map();
         this.api = new InventoryAPI(); // Initialize API client
+        this.ws = null;
+        this.wsListeners = new Map(); // Track WebSocket listeners
+        this.isInitialized = false;
+    }
+
+    /**
+     * Initialize WebSocket connection for real-time updates
+     */
+    async initWebSocket() {
+        if (this.isInitialized) return;
+
+        try {
+            // Get user credentials
+            const userName = SM.scene?.localUser?.name;
+            const secret = window.net?.secret;
+
+            if (!userName || !secret) {
+                console.warn('Missing credentials for WebSocket connection');
+                return;
+            }
+
+            this.ws = new InventoryWebSocket({
+                userName: this.sanitizeFirebasePath(userName),
+                secret: secret,
+                debug: false,
+                onConnect: () => {
+                    log('net', 'WebSocket connected for inventory');
+                    // Re-establish listeners after reconnection
+                    this.reestablishListeners();
+                },
+                onDisconnect: () => {
+                    log('net', 'WebSocket disconnected, attempting reconnection...');
+                },
+                onError: (error) => {
+                    err('net', 'WebSocket error:', error);
+                }
+            });
+
+            await this.ws.connect();
+            this.isInitialized = true;
+            log('net', 'WebSocket initialized successfully');
+        } catch (error) {
+            err('net', 'Failed to initialize WebSocket:', error);
+            showNotification('Real-time updates unavailable - WebSocket connection failed');
+        }
+    }
+
+    /**
+     * Re-establish all listeners after reconnection
+     */
+    reestablishListeners() {
+        // Re-setup listeners for all remote folders
+        Object.entries(this.inventory.folders).forEach(([folderName, folder]) => {
+            if (this.folderLinkable(folder)) {
+                // Clear old listener IDs
+                const existingPath = this.getFolderPath(folderName, folder);
+                if (this.wsListeners.has(existingPath)) {
+                    this.wsListeners.delete(existingPath);
+                }
+                // Re-setup listener
+                this.setupFolderListener(folderName, folder);
+            }
+        });
     }
 
     folderIsMine(folder){
@@ -34,125 +98,152 @@ export class InventoryFirebase {
     }
 
     /**
-     * Setup Firebase listeners for remote folders
+     * Get the Firebase path for a folder
      */
-    setupFirebaseListeners() {
+    getFolderPath(folderName, folder) {
+        if (folder.importedFrom !== undefined) {
+            return folder.importedFrom;
+        }
 
+        let userName = SM.scene?.localUser?.name;
+        if (!userName) return null;
+
+        userName = this.sanitizeFirebasePath(userName);
+        let firebasePath = `inventory/${userName}`;
+
+        if (folder.parent) {
+            const sanitizedParent = this.sanitizeFirebasePath(folder.parent);
+            firebasePath += `/${sanitizedParent}`;
+        }
+
+        const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
+        firebasePath += `/${sanitizedFolderName}`;
+
+        return firebasePath;
+    }
+
+    /**
+     * Setup WebSocket listeners for remote folders
+     */
+    async setupFirebaseListeners() {
         // Clear any existing listeners
         this.clearFirebaseListeners();
-        
-        if (!window.net) {
-            log('net', 'Firebase not initialized, skipping listeners setup');
-            return;
+
+        // Initialize WebSocket if not already done
+        if (!this.ws) {
+            await this.initWebSocket();
+            if (!this.ws) {
+                log('net', 'WebSocket not available, real-time updates disabled');
+                return;
+            }
         }
-        
+
         const userName = this.sanitizeFirebasePath(SM.scene?.localUser?.name || 'default');
-        
+
         // Check all folders for remote status and setup listeners
         Object.entries(this.inventory.folders).forEach(([folderName, folder]) => {
             if (this.folderLinkable(folder)) {
                 this.setupFolderListener(folderName, folder);
             }
         });
-        
-        // Check if root is remote and setup listener
-        // const rootRemoteKey = `inventory_root_remote_${userName}`;
-        // if (localStorage.getItem(rootRemoteKey) === 'true') {
-        //     this.setupRootListener();
-        // }
 
-        const glbLoaderKey = `glb_loader/${userName}_${net.secret}`;
+        // Setup GLB loader listener via WebSocket
+        const glbLoaderKey = `glb_loader/${userName}_${window.net?.secret || ''}`;
         log("glb_loader", "setting up listener for", glbLoaderKey);
-        const glbLoaderRef = net.getDatabase().ref(glbLoaderKey);
-        let firstcall = true;
-        glbLoaderRef.on('value', async (snapshot) => {
-            if(firstcall){
-                firstcall = false;
-                return;
-            }
-            let value = snapshot.val();
-            let glb_url = value.url;
-            let mesh_name = value.mesh_name;
-            log("glb_loader", "change", snapshot.key, glb_url, mesh_name);
-            let entity = await AddEntity("Scene", mesh_name);
-            await AddComponent(entity.id, "GLTF", {
-                componentProperties:{
-                    url: `${window.ngrokUrl}${glb_url}`,
-                    addColliders: true
-                }
-            })
-            await AddComponent(entity.id, "ScriptRunner", {
-                componentProperties:{
-                    file: "GLTFGrabbable.js"
-                }
-            })
-            
 
-        });
+        if (this.ws && this.ws.isConnected()) {
+            let firstCall = true;
+            const glbListenerId = this.ws.on(glbLoaderKey, 'value', async (snapshot) => {
+                if (firstCall) {
+                    firstCall = false;
+                    return;
+                }
+
+                const value = snapshot.val();
+                if (!value) return;
+
+                const glb_url = value.url;
+                const mesh_name = value.mesh_name;
+                log("glb_loader", "change", snapshot.key, glb_url, mesh_name);
+
+                // AddEntity is a global function from the main app
+                if (typeof AddEntity !== 'undefined') {
+                    const entity = await AddEntity("Scene", mesh_name);
+                    await AddComponent(entity.id, "GLTF", {
+                        componentProperties: {
+                            url: `${window.ngrokUrl}${glb_url}`,
+                            addColliders: true
+                        }
+                    });
+                    await AddComponent(entity.id, "ScriptRunner", {
+                        componentProperties: {
+                            file: "GLTFGrabbable.js"
+                        }
+                    });
+                }
+            });
+
+            // Track this special listener
+            this.wsListeners.set(glbLoaderKey, [glbListenerId]);
+        }
     }
 
     /**
-     * Setup Firebase listener for a specific folder
+     * Setup WebSocket listener for a specific folder
      */
     setupFolderListener(folderName, folder) {
-        
-        log("net", "[SETUP FOLDER LISTENER for folder: ", folderName, "]")
-        if (!window.net || !window.net.getDatabase) return;
+        log("net", "[SETUP WEBSOCKET LISTENER for folder: ", folderName, "]")
+
+        if (!this.ws || !this.ws.isConnected()) {
+            log("net", "WebSocket not connected, skipping listener setup");
+            return;
+        }
 
         try {
-            const db = net.getDatabase();
-            let firebasePath = null;
-            if(folder.importedFrom !== undefined){
-                firebasePath = folder.importedFrom;
-            }else{
-                let userName = SM.scene?.localUser?.name;
-                if(!userName){
-                    log("net", "no user name found, waiting for 1 second")
-                    setTimeout(()=>{
-                        this.setupFolderListener(folderName, folder);
-                    }, 100);
-                    return;
-                }
-                userName = this.sanitizeFirebasePath(userName);
-                firebasePath = `inventory/${userName}`;
-                if (folder.parent) {
-                    const sanitizedParent = this.sanitizeFirebasePath(folder.parent);
-                    firebasePath += `/${sanitizedParent}`;
-                }
-                const sanitizedFolderName = this.sanitizeFirebasePath(folderName);
-                firebasePath += `/${sanitizedFolderName}`;
-            }
+            // Get the Firebase path for this folder
+            const firebasePath = this.getFolderPath(folderName, folder);
 
-            if(this.firebaseListeners.has(firebasePath)){
-                log("net", "[FOLDER LISTENER ALREADY SETUP for folder: ", folderName, "]")
+            if (!firebasePath) {
+                log("net", "No user name found, waiting for 100ms")
+                setTimeout(() => {
+                    this.setupFolderListener(folderName, folder);
+                }, 100);
                 return;
             }
-            
-            
-            // Setup listeners for child_added and child_removed
-            const folderRef = db.ref(firebasePath);
-            
-            const addedListener = folderRef.on('child_added', (snapshot) => {
+
+            // Check if listener already exists
+            if (this.wsListeners.has(firebasePath)) {
+                log("net", "[WEBSOCKET LISTENER ALREADY SETUP for folder: ", folderName, "]")
+                return;
+            }
+
+            // Setup WebSocket listeners
+            const listeners = [];
+
+            // Child added listener
+            const addedListenerId = this.ws.on(firebasePath, 'child_added', (snapshot) => {
                 this.handleFirebaseItemAdded(snapshot, folderName);
             });
-            
-            const removedListener = folderRef.on('child_removed', (snapshot) => {
+            listeners.push(addedListenerId);
+
+            // Child removed listener
+            const removedListenerId = this.ws.on(firebasePath, 'child_removed', (snapshot) => {
                 this.handleFirebaseItemRemoved(snapshot, folderName);
             });
-            
-            const changedListener = folderRef.on('child_changed', (snapshot) => {
+            listeners.push(removedListenerId);
+
+            // Child changed listener
+            const changedListenerId = this.ws.on(firebasePath, 'child_changed', (snapshot) => {
                 this.handleFirebaseItemChanged(snapshot, folderName);
             });
-            
-            // Store listeners for cleanup
-            this.firebaseListeners.set(firebasePath, {
-                ref: folderRef,
-                listeners: { addedListener, removedListener, changedListener }
-            });
-            
-            log("net", 'Firebase listeners setup for folder:', firebasePath);
+            listeners.push(changedListenerId);
+
+            // Store listener IDs for cleanup
+            this.wsListeners.set(firebasePath, listeners);
+
+            log("net", 'WebSocket listeners setup for folder:', firebasePath);
         } catch (error) {
-            err("net", 'Failed to setup folder listener:', error);
+            err("net", 'Failed to setup WebSocket listener:', error);
         }
     }
 
@@ -315,10 +406,18 @@ export class InventoryFirebase {
 							}
 						}
                        
-                        (async ()=>{
-                            await EditScript(itemName, item.data, {source: 'firebaseHandler'});                            
-                        })();
-                        
+
+                        let assetEnt = SM.getEntityByName(itemName.replace(".","_"))
+                        if(assetEnt){
+                            let assetComp = assetEnt.getComponent("ScriptAsset");
+                            if(assetComp){
+                                assetComp.Set("data", item.data);
+                                if(assetEnt.id === SM.selectedEntity){
+                                    //inspector.propertiesPanel.updateComponent(assetComp.id, "data", item.data); //TODO
+                                    inspector.propertiesPanel.render();
+                                }
+                            }
+                        }
 					} catch (e) {
 						err('inspector', 'Failed to sync open script editor with remote update:', e);
 					}
@@ -335,17 +434,20 @@ export class InventoryFirebase {
     }
 
     /**
-     * Clear all Firebase listeners
+     * Clear all WebSocket listeners
      */
     clearFirebaseListeners() {
-        this.firebaseListeners.forEach(({ ref, listeners }) => {
-            // Remove all listeners
-            if (listeners.addedListener) ref.off('child_added');
-            if (listeners.removedListener) ref.off('child_removed');
-            if (listeners.changedListener) ref.off('child_changed');
+        if (!this.ws) return;
+
+        // Clear all WebSocket listeners
+        this.wsListeners.forEach((listenerIds, path) => {
+            listenerIds.forEach(listenerId => {
+                this.ws.off(listenerId);
+            });
         });
-        this.firebaseListeners.clear();
-        log('net', 'Firebase listeners cleared');
+
+        this.wsListeners.clear();
+        log('net', 'WebSocket listeners cleared');
     }
 
     /**
@@ -423,7 +525,7 @@ export class InventoryFirebase {
     /**
      * Sync item to Firebase
      */
-    async syncToFirebase(inventoryItem) {
+    async syncToFirebase(inventoryItem) { 
         log("net", "syncToFirebase via API", inventoryItem)
         // Check if item is in a remote folder or root is remote
         const isRemote = this.isItemInRemoteLocation(inventoryItem);

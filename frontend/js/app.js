@@ -112,6 +112,8 @@
                 
                 // Initialize inventory
                 this.inventory = new Inventory();
+                // Expose inventory globally for WebSocket toggle utilities
+                window.inventoryInstance = this.inventory;
                 
                 // Initialize feedback
                 this.feedback = new Feedback();

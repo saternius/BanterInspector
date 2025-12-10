@@ -17,19 +17,6 @@ export class ScriptRunnerComponent extends EntityComponent {
         this._scriptFunction = (this._scriptFunction) ? this._scriptFunction : null;
         this.type = "ScriptRunner";
         this.setId(this.id.replace("undefined","ScriptRunner"));
-
-        let fileName = this.properties.file;
-        if(fileName && fileName.length > 0){
-            // Look up ScriptAsset and load if found
-            const scriptAsset = SM.getScriptAsset(fileName);
-            if (scriptAsset) {
-                await this.LoadScript(fileName);
-            } else {
-                log("mono", `ScriptAsset "${fileName}" not found during init`);
-                this.ctx._running = false;
-            }
-        }
-
         return this;
     }
 
@@ -45,6 +32,7 @@ export class ScriptRunnerComponent extends EntityComponent {
     async _set(property, value){
         log("mono", "[MONO] updating property =>", property, value)
         value = parseBest(value);
+        this.properties[property] = value;
 
         if(property === 'file'){
             if (value && value.length > 0) {
@@ -61,12 +49,12 @@ export class ScriptRunnerComponent extends EntityComponent {
             }
         }
 
-        this.properties[property] = value;
+        
         if(property === "vars" && this.ctx && this.ctx.vars){
             Object.entries(value).forEach(([varName, varValue]) => {
                 if(this.ctx.vars[varName]){
                     if(varValue.value !== this.ctx.vars[varName].value){
-                        this._updateVar(varName, varValue);
+                        this._setVar(varName, varValue);
                     }
                 }
             });
@@ -97,6 +85,25 @@ export class ScriptRunnerComponent extends EntityComponent {
         return this.properties.owner === SM.myName()
     }
 
+    async getScriptAsset(fileName){
+        const scriptAsset = SM.getScriptAsset(fileName);
+        if(!scriptAsset){
+            if (window.inventory && window.inventory.items[fileName]) {
+                const inventoryItem = window.inventory.items[fileName];
+                if (inventoryItem.itemType === 'script') {
+                    log("mono", `Found "${fileName}" in inventory, loading to scene...`);
+                    await window.LoadScript(fileName);
+                    return SM.getScriptAsset(fileName);
+                } else {
+                    log("mono", `Item "${fileName}" in inventory is not a script`);
+                }
+            } else {
+                log("mono", `Script "${fileName}" not found in inventory either`);
+            }
+        }
+        return scriptAsset;
+    }
+
     async LoadScript(fileName) {
         if (!fileName || fileName.length === 0) {
             this.ctx._running = false;
@@ -104,7 +111,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         }
 
         // Find the ScriptAsset component by name
-        const scriptAsset = SM.getScriptAsset(fileName);
+        const scriptAsset = await this.getScriptAsset(fileName);
 
         if (!scriptAsset) {
             log("mono", `ScriptAsset "${fileName}" not found`);
@@ -256,7 +263,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         }
 
         // Look up ScriptAsset and reload
-        const scriptAsset = SM.getScriptAsset(fileName);
+        const scriptAsset = await this.getScriptAsset(fileName);
         if (scriptAsset) {
             await this._loadScript(fileName, scriptAsset);
         } else {
@@ -310,9 +317,9 @@ export class ScriptRunnerComponent extends EntityComponent {
         return newContext;
     }
 
-    async UpdateVar(varName, value) {
+    async SetVar(varName, value) {
         if (!this.ctx || !this.ctx.vars) return;
-        this.ref.child("vars").child(varName).set(value);
+        this.ref.child("vars").child(varName).child("value").set(value);
 
         // // Update locally first
         // await this._updateVar(varName, value);
@@ -322,12 +329,18 @@ export class ScriptRunnerComponent extends EntityComponent {
         // log("mono", "updated ctx.vars and properties.vars =>", varName, value);
     }
 
-    async _updateVar(varName, value) {
+    async _setVar(varName, value) {
         log("mono", "[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
-        this.properties.vars[varName] = value;
-        this.ctx.vars[varName] = value;
-        await this.ctx.onVarChange(varName, value);
+        let newValue = value;
+        if(typeof value !== "object"){
+            newValue = this.properties.vars[varName];
+            newValue.value = value;
+        }
+
+        this.properties.vars[varName] = newValue;
+        this.ctx.vars[varName] = newValue;
+        await this.ctx.onVarChange(varName, newValue);
     }
 
     // loadVarsFromSpaceState(){

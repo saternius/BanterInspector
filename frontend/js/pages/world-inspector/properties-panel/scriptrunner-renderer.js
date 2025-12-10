@@ -359,6 +359,16 @@ export class ScriptRunnerRenderer {
         const valueContainer = document.createElement('div');
         valueContainer.className = 'property-value';
 
+        if(!varValue.type){
+            if(varValue.value === true || varValue.value === false){
+                varValue.type = 'boolean';
+            } else if(!isNaN(varValue.value)){
+                varValue.type = 'number';
+            } else {
+                varValue.type = 'string';
+            }
+        }
+
         // Determine type and render appropriate input
         if (varValue.type === 'boolean') {
             const input = document.createElement('input');

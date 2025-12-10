@@ -388,6 +388,7 @@ export class Networking {
 
         if(items[0] === "runJS"){
             let code = items[1];
+            log("runJS", code)
             new Function(code)();
             return;
         }

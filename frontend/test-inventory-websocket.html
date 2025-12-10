@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory WebSocket Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .log {
+            background-color: #f5f5f5;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .item-list {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 200px;
+        }
+        .item {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-left: 3px solid #007bff;
+            border-radius: 3px;
+        }
+        .folder {
+            padding: 8px;
+            margin: 5px 0;
+            background: #e9ecef;
+            border-left: 3px solid #28a745;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventory WebSocket Integration Test</h1>
+
+    <div id="status" class="status disconnected">WebSocket Disconnected</div>
+
+    <div class="container">
+        <div class="panel">
+            <h3>Controls</h3>
+
+            <div>
+                <label>Username: <input type="text" id="username" value="testuser"></label>
+                <label>Secret: <input type="text" id="secret" value="test123"></label>
+            </div>
+
+            <div>
+                <button onclick="initWebSocket()">Initialize WebSocket</button>
+                <button onclick="disconnectWebSocket()">Disconnect</button>
+            </div>
+
+            <div>
+                <h4>Inventory Operations</h4>
+                <button onclick="setupListeners()">Setup Listeners</button>
+                <button onclick="addTestItem()">Add Test Item</button>
+                <button onclick="removeTestItem()">Remove Test Item</button>
+                <button onclick="clearListeners()">Clear All Listeners</button>
+            </div>
+
+            <div>
+                <h4>Folder Operations</h4>
+                <label>Folder Name: <input type="text" id="folderName" value="test-folder"></label>
+                <button onclick="createFolder()">Create Remote Folder</button>
+                <button onclick="listenToFolder()">Listen to Folder</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h3>Inventory Contents</h3>
+            <div id="inventory-display">
+                <h4>Items</h4>
+                <div id="items" class="item-list">
+                    <em>No items yet</em>
+                </div>
+
+                <h4>Folders</h4>
+                <div id="folders" class="item-list">
+                    <em>No folders yet</em>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3>Event Log</h3>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script type="module">
+        import { InventoryWebSocket } from './js/pages/inventory/inventory-websocket.js';
+        import { InventoryAPI } from './js/pages/inventory/inventory-api.js';
+
+        let ws = null;
+        let api = null;
+        let listeners = [];
+        let items = {};
+        let folders = {};
+
+        function updateStatus(status, className) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = status;
+            statusEl.className = 'status ' + className;
+        }
+
+        function addLog(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.style.color = type === 'error' ? 'red' : type === 'success' ? 'green' : 'black';
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.insertBefore(entry, logEl.firstChild);
+        }
+
+        function updateInventoryDisplay() {
+            const itemsEl = document.getElementById('items');
+            const foldersEl = document.getElementById('folders');
+
+            // Update items
+            const itemKeys = Object.keys(items);
+            if (itemKeys.length === 0) {
+                itemsEl.innerHTML = '<em>No items yet</em>';
+            } else {
+                itemsEl.innerHTML = itemKeys.map(key => {
+                    const item = items[key];
+                    return `<div class="item">
+                        <strong>${item.name || key}</strong>
+                        (${item.itemType || 'unknown'})
+                        ${item.folder ? ` - Folder: ${item.folder}` : ''}
+                    </div>`;
+                }).join('');
+            }
+
+            // Update folders
+            const folderKeys = Object.keys(folders);
+            if (folderKeys.length === 0) {
+                foldersEl.innerHTML = '<em>No folders yet</em>';
+            } else {
+                foldersEl.innerHTML = folderKeys.map(key => {
+                    const folder = folders[key];
+                    return `<div class="folder">
+                        <strong>${folder.name || key}</strong>
+                        ${folder.remote ? ' (Remote)' : ''}
+                        ${folder.parent ? ` - Parent: ${folder.parent}` : ''}
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        window.initWebSocket = async function() {
+            if (ws) {
+                addLog('WebSocket already initialized', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const secret = document.getElementById('secret').value;
+
+            api = new InventoryAPI();
+
+            ws = new InventoryWebSocket({
+                userName: username,
+                secret: secret,
+                debug: true,
+                onConnect: () => {
+                    updateStatus('WebSocket Connected', 'connected');
+                    addLog('WebSocket connected successfully', 'success');
+                },
+                onDisconnect: () => {
+                    updateStatus('WebSocket Disconnected', 'disconnected');
+                    addLog('WebSocket disconnected');
+                },
+                onError: (error) => {
+                    addLog(`WebSocket error: ${error}`, 'error');
+                }
+            });
+
+            try {
+                await ws.connect();
+                addLog('WebSocket initialization complete', 'success');
+            } catch (error) {
+                addLog(`Failed to initialize WebSocket: ${error.message}`, 'error');
+                ws = null;
+            }
+        };
+
+        window.disconnectWebSocket = function() {
+            if (ws) {
+                ws.disconnect();
+                ws = null;
+                addLog('WebSocket disconnected');
+                updateStatus('WebSocket Disconnected', 'disconnected');
+            }
+        };
+
+        window.setupListeners = function() {
+            if (!ws || !ws.isConnected()) {
+                addLog('WebSocket not connected', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const path = `inventory/${username}`;
+
+            // Listen for child_added
+            const addedId = ws.on(path, 'child_added', (snapshot) => {
+                const key = snapshot.key;
+                const data = snapshot.val();
+
+                if (data && data._folder) {
+                    folders[key] = data._folder;
+                    addLog(`Folder added: ${key}`, 'success');
+                } else if (data && data.itemType) {
+                    items[key] = data;
+                    addLog(`Item added: ${key} (${data.itemType})`, 'success');
+                }
+                updateInventoryDisplay();
+            });
+            listeners.push(addedId);
+
+            // Listen for child_changed
+            const changedId = ws.on(path, 'child_changed', (snapshot) => {
+                const key = snapshot.key;
+                const data = snapshot.val();
+
+                if (data && data._folder) {
+                    folders[key] = data._folder;
+                    addLog(`Folder changed: ${key}`);
+                } else if (data && data.itemType) {
+                    items[key] = data;
+                    addLog(`Item changed: ${key}`);
+                }
+                updateInventoryDisplay();
+            });
+            listeners.push(changedId);
+
+            // Listen for child_removed
+            const removedId = ws.on(path, 'child_removed', (snapshot) => {
+                const key = snapshot.key;
+
+                if (folders[key]) {
+                    delete folders[key];
+                    addLog(`Folder removed: ${key}`);
+                } else if (items[key]) {
+                    delete items[key];
+                    addLog(`Item removed: ${key}`);
+                }
+                updateInventoryDisplay();
+            });
+            listeners.push(removedId);
+
+            addLog(`Setup listeners for path: ${path}`, 'success');
+        };
+
+        window.addTestItem = async function() {
+            if (!api) {
+                addLog('API not initialized', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const secret = document.getElementById('secret').value;
+            const itemName = `test-item-${Date.now()}`;
+
+            const testItem = {
+                name: itemName,
+                itemType: 'entity',
+                entity: {
+                    name: 'TestObject',
+                    position: { x: 0, y: 1, z: 0 },
+                    components: []
+                },
+                created: Date.now()
+            };
+
+            try {
+                await api.createItem(itemName, testItem, username, secret);
+                addLog(`Created test item: ${itemName}`, 'success');
+            } catch (error) {
+                addLog(`Failed to create item: ${error.message}`, 'error');
+            }
+        };
+
+        window.removeTestItem = async function() {
+            if (!api) {
+                addLog('API not initialized', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const secret = document.getElementById('secret').value;
+            const itemKeys = Object.keys(items);
+
+            if (itemKeys.length === 0) {
+                addLog('No items to remove', 'error');
+                return;
+            }
+
+            const itemToRemove = itemKeys[0];
+
+            try {
+                await api.deleteItem(itemToRemove, username, secret);
+                addLog(`Removed item: ${itemToRemove}`, 'success');
+            } catch (error) {
+                addLog(`Failed to remove item: ${error.message}`, 'error');
+            }
+        };
+
+        window.createFolder = async function() {
+            if (!api) {
+                addLog('API not initialized', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const secret = document.getElementById('secret').value;
+            const folderName = document.getElementById('folderName').value;
+
+            const folderData = {
+                author: username,
+                name: folderName,
+                created: Date.now(),
+                remote: true,
+                _description: 'Test folder created via WebSocket test'
+            };
+
+            try {
+                await api.syncFolder(folderName, folderData, username, secret);
+                addLog(`Created remote folder: ${folderName}`, 'success');
+            } catch (error) {
+                addLog(`Failed to create folder: ${error.message}`, 'error');
+            }
+        };
+
+        window.listenToFolder = function() {
+            if (!ws || !ws.isConnected()) {
+                addLog('WebSocket not connected', 'error');
+                return;
+            }
+
+            const username = document.getElementById('username').value;
+            const folderName = document.getElementById('folderName').value;
+            const path = `inventory/${username}/${folderName}`;
+
+            const listenerId = ws.on(path, 'child_added', (snapshot) => {
+                addLog(`Item added to ${folderName}: ${snapshot.key}`, 'success');
+            });
+
+            listeners.push(listenerId);
+            addLog(`Listening to folder: ${path}`, 'success');
+        };
+
+        window.clearListeners = function() {
+            if (ws) {
+                listeners.forEach(id => ws.off(id));
+                listeners = [];
+                addLog('All listeners cleared');
+            }
+        };
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            addLog('Test page loaded - ready for WebSocket testing');
+        });
+    </script>
+</body>
+</html>

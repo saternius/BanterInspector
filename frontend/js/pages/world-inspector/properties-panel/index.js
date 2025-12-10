@@ -271,6 +271,9 @@ export class PropertiesPanel {
             this.selectedEntityNameElement.textContent = `Properties - ${entity.name}`;
         }
 
+        // Save scroll position before clearing content
+        const scrollTop = this.propertiesContent.scrollTop;
+
         // Clear content
         this.propertiesContent.innerHTML = '';
 
@@ -325,6 +328,9 @@ export class PropertiesPanel {
 
         // Update collapse all button visibility
         this.updateCollapseAllButtonVisibility();
+
+        // Restore scroll position after rendering
+        this.propertiesContent.scrollTop = scrollTop;
 
         // Dispatch render complete event
         window.dispatchEvent(new CustomEvent("ui-rendered", {

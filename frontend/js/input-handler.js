@@ -36,9 +36,7 @@ export class InputHandler{
                         z: 0,
                     }
                 }
-
-                let pos = rightHand.transform._localRotation;
-
+                let pos = rightHand.transform.localRotation;
                 return {
                     x: pos.x,
                     y: pos.y,
@@ -83,8 +81,17 @@ export class InputHandler{
     setValue(target, property, value){
         let sections = property.split(".");
         let lockkey = target.id+"_"+sections[0];
-        if(inspector.propertiesPanel.scaleLockStates.get(lockkey)){
-            inspector.propertiesPanel.handleProportionalScaleChange(component.type, component.id, sections[0], sections[1], value, component.properties[sections[0]], 0);
+        const scaleLockHandler = inspector.propertiesPanel?.scaleLockHandler;
+        if(scaleLockHandler?.isLocked(lockkey)){
+            // Get current value based on target type
+            let currentValue;
+            if(target.type === "Entity"){
+                currentValue = target.transformVal(sections[0]);
+            }else{
+                currentValue = target.properties[sections[0]];
+            }
+            const newScale = scaleLockHandler.handleProportionalScale(lockkey, currentValue, sections[1], value);
+            target.Set(sections[0], newScale);
             return;
         }
 
@@ -98,11 +105,11 @@ export class InputHandler{
             currentVec[axis] = value;
             target.Set(key, currentVec);
         }else{
-            let currentVec = deepClone(component.properties[key]);
+            let currentVec = deepClone(target.properties[key]);
             currentVec[axis] = value;
             target.Set(key, currentVec);
         }
-        
+
     }
 
     helpNumericInputElement(element, target, property){

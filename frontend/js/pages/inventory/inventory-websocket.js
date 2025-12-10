@@ -23,18 +23,17 @@ export class InventoryWebSocket {
     }
 
     _getWebSocketUrl() {
-        // Determine WebSocket URL based on current location
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const host = window.location.hostname;
-        const port = window.location.port || (protocol === 'wss:' ? '443' : '80');
+        // Auto-detect environment
+        const isLocalhost = window.location.hostname === 'localhost' ||
+                           window.location.hostname === '127.0.0.1';
 
-        // In development, use the auth server port
-        if (host === 'localhost' || host === '127.0.0.1') {
-            return `ws://localhost:3303`;
+        if (isLocalhost) {
+            // Development environment - use local auth server
+            return 'ws://localhost:3303';
+        } else {
+            // Production environment - use auth.tippy.dev with secure WebSocket
+            return 'wss://auth.tippy.dev';
         }
-
-        // In production, use the current host
-        return `${protocol}//${host}:${port}`;
     }
 
     connect() {

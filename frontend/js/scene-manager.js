@@ -576,15 +576,15 @@
 
 
         selectEntity(entityId) {
-            let lastEnt = this.getEntityById(this.selectedEntity, false);
-            if(lastEnt){
-                lastEnt.WatchTransform([])
-            }
+            // let lastEnt = this.getEntityById(this.selectedEntity, false);
+            // if(lastEnt){
+            //     lastEnt.WatchTransform([])
+            // }
             this.selectedEntity = entityId;
-            let ent = this.getEntityById(entityId);
-            if(ent){
-                ent.WatchTransform(["localPosition", "localRotation", "localScale", "position", "rotation"], (e)=>{console.log("watch", e)});
-            }
+            // let ent = this.getEntityById(entityId);
+            // if(ent){
+            //     ent.WatchTransform(["localPosition", "localRotation", "localScale", "position", "rotation"], (e)=>{console.log("watch", e)});
+            // }
             this._updateUI();
             window.dispatchEvent(new CustomEvent('entitySelected', {
                 detail: { entityId }
@@ -666,12 +666,25 @@
             return SM.getAllEntities().find(x=>x.name==entityName);
         }
 
-        getAllScriptRunners(){
-            return Object.values(this.entityData.componentMap).filter(x=>x.type === "ScriptRunner");
+        getAllComponents(){
+            return Object.values(this.entityData.componentMap).filter(x=>x._entity.components.includes(x))
         }
 
+        getAllScriptRunners(){
+            return this.getAllComponents().filter(x=>x.type === "ScriptRunner");
+        }
+
+        getAllScriptAssets(){
+            return this.getAllComponents().filter(x=>x.type === "ScriptAsset");
+       }
+
+       getScriptAsset(scriptName){
+            return this.getAllScriptAssets().find(x=>x.properties.name === scriptName);
+       }
+
+
         getScriptByName(scriptName){
-            let mono =  Object.values(this.entityData.componentMap).find(x=>x.type === "ScriptRunner" && x.properties.name === scriptName);
+            let mono =  this.getAllScriptRunners().find(x=>x.properties.name === scriptName);
             return mono?.ctx;
         }
 
@@ -786,14 +799,7 @@
         }
 
 
-       getAllScriptAssets(){
-            return SM.getAllEntities().map(x=>x.components.find(x=>x.type==="ScriptAsset")).filter(x=>x)
-       }
-
-       getScriptAsset(scriptName){
-        return SM.getAllScriptAssets().find(x=>x.properties.name === scriptName);
-       }
-
+     
         /**
          * Execute startup scripts from inventory
          * Scripts must have both startup and active flags set to true

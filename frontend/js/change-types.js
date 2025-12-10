@@ -680,7 +680,7 @@ export class ScriptRunnerVarChange extends Change{
             return;
         }
 
-        await this.scriptrunner.UpdateVar(this.varName, value);
+        await this.scriptrunner.SetVar(this.varName, value.value);
 
         // Refresh UI if needed
         if (inspector?.propertiesPanel) {
@@ -1023,61 +1023,123 @@ export class CloneEntityChange extends Change{
             return;
         }
         this.sourceEntityId = entityId;
-        // Generate a unique clone name upfront for synchronization across clients
         this.cloneName = `${this.sourceEntity.name}_${Math.floor(Math.random() * 100000)}`;
         this.clonedEntityId = `${this.sourceEntity.parentId}/${this.cloneName}`;
-
-        // Pre-generate all component IDs for the entire hierarchy
-        this.componentIdMap = this.generateComponentIdMap(this.sourceEntity);
-
         this.options = options || {};
     }
 
-    /**
-     * Recursively generates component IDs for the entity and all its children
-     * Returns a map of original component IDs to new component IDs
-     */
-    generateComponentIdMap(entity) {
-        const idMap = {};
 
-        // Generate IDs for this entity's components
-        entity.components.forEach(component => {
-            const newId = `${component.type}_${Math.floor(Math.random() * 99999)}`;
-            idMap[component.id] = newId;
-        });
-
-        // Recursively generate IDs for children
-        if (entity.children && entity.children.length > 0) {
-            entity.children.forEach(child => {
-                const childMap = this.generateComponentIdMap(child);
-                Object.assign(idMap, childMap);
-            });
-        }
-
-        return idMap;
-    }
 
     async apply() {
         super.apply();
 
-        // Send OneShot message with source entity ID, clone name, and component ID map
-        let data = `entity_cloned¶${this.sourceEntityId}¶${this.cloneName}¶${JSON.stringify(this.componentIdMap)}`
-        net.sendOneShot(data);
+        if (!this.sourceEntity) {
+            this.void(`Source entity not found`);
+            return null;
+        }
 
-        // Wait for the cloned entity to be created and initialized
+        // Export the source entity data
+        let exportData = await this.sourceEntity.export();
+        if (!exportData || !exportData.Entity) {
+            this.void(`Failed to export source entity`);
+            return null;
+        }
+
+        // Get the original entity name and data
+        let originalName = Object.keys(exportData.Entity)[0];
+        let entityData = exportData.Entity[originalName];
+
+        // Create new component ID mapping
+        let compDict = {};
+        const changeChildrenIds = (entity) => {
+            // Generate new UUID for this entity
+            entity.__meta.uuid = Math.floor(Math.random() * 10000000000000);
+
+            // Remap component IDs
+            if (entity.__meta.components) {
+                let entComps = {};
+                Object.keys(entity.__meta.components).forEach(compId => {
+                    let newID = `${compId.split("_")[0]}_${Math.floor(Math.random() * 99999)}`;
+                    compDict[newID] = exportData.Components[compId];
+                    entComps[newID] = true;
+                });
+                entity.__meta.components = entComps;
+            }
+
+            // Process all children recursively
+            Object.keys(entity).forEach(childName => {
+                if (childName === "__meta") {
+                    return;
+                }
+                let child = entity[childName];
+                if (child && typeof child === 'object' && child.__meta) {
+                    changeChildrenIds(child);
+                }
+            });
+        };
+        changeChildrenIds(entityData);
+
+        // Build the final item data with new name
+        let itemData = {
+            Entity: { [this.cloneName]: entityData },
+            Components: compDict
+        };
+
+        this.itemData = itemData;
+
+        log("CloneEntityChange", "cloning entity =>", this.sourceEntityId, "to", this.clonedEntityId);
+
+        // Write components to Firebase
+        if (Object.keys(itemData.Components).length > 0) {
+            await net.db.ref(`space/${net.spaceId}/components`).update(itemData.Components);
+        }
+
+        // Write entity to Firebase under the parent
+        await net.db.ref(`space/${net.spaceId}/${this.sourceEntity.parentId}`).update(itemData.Entity);
+
+        // Wait for the cloned entity to fully load
+        let checks = 0;
+        const everythingLoaded = () => {
+            let entity = SM.getEntityById(this.clonedEntityId, false);
+            if (!entity) {
+                return false;
+            }
+
+            let componentsLoaded = true;
+            Object.keys(this.itemData.Components).forEach(compId => {
+                let component = SM.getEntityComponentById(compId, false);
+                if (!component) {
+                    componentsLoaded = false;
+                } else {
+                    if (!component._entity.components.includes(component)) {
+                        componentsLoaded = false;
+                    }
+                }
+            });
+            return componentsLoaded && entity._finished_loading;
+        };
+
         const returnWhenEntityLoaded = () => {
             return new Promise(resolve => {
-              const check = () => {
-                const entity = SM.getEntityById(this.clonedEntityId, false);
-                if (entity !== undefined && entity._finished_loading) {
-                  resolve(entity);
-                } else {
-                  setTimeout(check, 50);
-                }
-              };
-              check();
+                const check = () => {
+                    let isLoaded = everythingLoaded();
+                    checks++;
+
+                    if (checks > 200) {
+                        err("CloneEntityChange", "Entity could not be loaded/found =>", this.clonedEntityId);
+                        resolve(null);
+                        return;
+                    }
+
+                    if (isLoaded) {
+                        resolve(SM.getEntityById(this.clonedEntityId));
+                    } else {
+                        setTimeout(check, 50);
+                    }
+                };
+                check();
             });
-          };
+        };
         return await returnWhenEntityLoaded();
     }
 

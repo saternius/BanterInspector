@@ -36,15 +36,14 @@ if FIREBASE_AVAILABLE:
         FIREBASE_AVAILABLE = False
 
 class CORSRequestHandler(SimpleHTTPRequestHandler):
+    # Note: CORS headers are handled by nginx, not here
     def send_response(self, code, message=None):
         print(f"[DEBUG] send_response({code}) for {self.path}")
         super().send_response(code, message)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,POST,OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', '*')
         self.send_header('Cache-Control', 'no-cache, no-store, must-revalidate')
 
     def do_OPTIONS(self):
+        # Preflight handled by nginx
         print(f"[DEBUG] OPTIONS preflight for {self.path}")
         self.send_response(200)
         self.end_headers()
