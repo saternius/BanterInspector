@@ -1,4 +1,4 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
+import { EntityComponent } from '../entity-component.js';
 
 export class ColliderEventsComponent extends EntityComponent {
     constructor() {

@@ -1,4 +1,4 @@
-const { confirm } = await import(`${window.repoUrl}/utils.js`);
+import { confirm } from '../../utils.js';
 
 export class StatementBlockEditor {
     constructor(options = {}) {

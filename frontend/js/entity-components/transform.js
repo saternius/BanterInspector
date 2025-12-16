@@ -1,5 +1,5 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
-const { eulerToQuaternion, parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { EntityComponent } from './entity-component.js';
+import { eulerToQuaternion, parseBest } from '../utils.js';
 
 
 let getScale = async (entID) =>{

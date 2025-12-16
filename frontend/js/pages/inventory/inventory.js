@@ -1,8 +1,7 @@
-const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
-// Import new modules
-const { InventoryFirebase } = await import(`${window.repoUrl}/pages/inventory/inventory-firebase.js`);
-const { InventoryUI } = await import(`${window.repoUrl}/pages/inventory/inventory-ui.js`);
-const { InventoryFileHandler } = await import(`${window.repoUrl}/pages/inventory/inventory-file-handler.js`);
+import { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} from '../../change-types.js';
+import { InventoryFirebase } from './inventory-firebase.js';
+import { InventoryUI } from './inventory-ui.js';
+import { InventoryFileHandler } from './inventory-file-handler.js';
 
 /**
  * Main Inventory class - orchestrates inventory functionality through specialized modules

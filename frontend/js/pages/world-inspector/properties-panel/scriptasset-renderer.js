@@ -458,7 +458,6 @@ export class ScriptAssetRenderer {
      * Render a ScriptAsset variable
      */
     renderScriptVar(varName, varData, component) {
-        const { ComponentPropertyChange } = this.changeManager.changeTypes || {};
         const { formatPropertyName } = this.utils;
 
         const row = document.createElement('div');
@@ -554,8 +553,9 @@ export class ScriptAssetRenderer {
             // Firebase doesn't support empty objects {}, so use null when no vars remain
             const newVars = Object.keys(vars).length === 0 ? null : vars;
 
-            if (ComponentPropertyChange) {
-                const change = new ComponentPropertyChange(component.id, 'vars', newVars, { source: 'ui' });
+            const { ScriptAssetVarChange } = this.changeManager.changeTypes || {};
+            if (ScriptAssetVarChange) {
+                const change = new ScriptAssetVarChange(component.id, newVars, { source: 'ui' });
                 this.changeManager.applyChange(change);
                 // Trigger re-render
                 setTimeout(() => {
@@ -575,16 +575,15 @@ export class ScriptAssetRenderer {
      * Create input for a variable based on its type
      */
     createVarInput(varName, varData, component) {
-        const { ComponentPropertyChange } = this.changeManager.changeTypes || {};
-
         const updateVar = (newValue) => {
             // Handle the case where vars might be null
             const currentVars = component.properties.vars || {};
             const vars = { ...currentVars };
             vars[varName] = { type: varData.type, value: newValue };
 
-            if (ComponentPropertyChange) {
-                const change = new ComponentPropertyChange(component.id, 'vars', vars, { source: 'ui' });
+            const { ScriptAssetVarChange } = this.changeManager.changeTypes || {};
+            if (ScriptAssetVarChange) {
+                const change = new ScriptAssetVarChange(component.id, vars, { source: 'ui' });
                 this.changeManager.applyChange(change);
             }
         };
@@ -649,8 +648,6 @@ export class ScriptAssetRenderer {
      * Create add variable section
      */
     createAddVarSection(component) {
-        const { ComponentPropertyChange } = this.changeManager.changeTypes || {};
-
         const section = document.createElement('div');
         section.style.marginTop = '16px';
         section.style.padding = '16px';
@@ -689,6 +686,15 @@ export class ScriptAssetRenderer {
         nameInput.placeholder = 'variableName';
         nameInput.style.width = '100%';
         nameInput.style.boxSizing = 'border-box';
+
+        // Helper to update add button state based on name input
+        const updateAddButtonState = (addBtn) => {
+            if (!addBtn) return;
+            const hasName = nameInput.value.trim().length > 0;
+            addBtn.disabled = !hasName;
+            addBtn.style.opacity = hasName ? '1' : '0.5';
+            addBtn.style.cursor = hasName ? 'pointer' : 'not-allowed';
+        };
 
         nameGroup.appendChild(nameLabel);
         nameGroup.appendChild(nameInput);
@@ -755,10 +761,15 @@ export class ScriptAssetRenderer {
         addButton.style.color = '#fff';
         addButton.style.border = 'none';
         addButton.style.borderRadius = '6px';
-        addButton.style.cursor = 'pointer';
+        addButton.style.cursor = 'not-allowed';
         addButton.style.fontWeight = '600';
         addButton.style.fontSize = '13px';
-        addButton.style.transition = 'background-color 0.2s';
+        addButton.style.transition = 'background-color 0.2s, opacity 0.2s';
+        addButton.style.opacity = '0.5';
+        addButton.disabled = true;
+
+        // Enable/disable button based on name input
+        nameInput.addEventListener('input', () => updateAddButtonState(addButton));
 
         addButton.onmousedown = (e) => {
             e.stopPropagation();
@@ -799,8 +810,9 @@ export class ScriptAssetRenderer {
             const vars = { ...currentVars };
             vars[varName] = { type: varType, value: typedValue };
 
-            if (ComponentPropertyChange) {
-                const change = new ComponentPropertyChange(component.id, 'vars', vars, { source: 'ui' });
+            const { ScriptAssetVarChange } = this.changeManager.changeTypes || {};
+            if (ScriptAssetVarChange) {
+                const change = new ScriptAssetVarChange(component.id, vars, { source: 'ui' });
                 this.changeManager.applyChange(change);
 
                 // Clear inputs
@@ -815,11 +827,15 @@ export class ScriptAssetRenderer {
         };
 
         addButton.onmouseover = () => {
-            addButton.style.backgroundColor = '#3a5a7a';
+            if (!addButton.disabled) {
+                addButton.style.backgroundColor = '#3a5a7a';
+            }
         };
 
         addButton.onmouseout = () => {
-            addButton.style.backgroundColor = '#2a4a6a';
+            if (!addButton.disabled) {
+                addButton.style.backgroundColor = '#2a4a6a';
+            }
         };
 
         section.appendChild(addButton);

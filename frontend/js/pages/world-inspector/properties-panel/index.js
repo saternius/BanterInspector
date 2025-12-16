@@ -11,6 +11,9 @@ import { EntityPropertiesRenderer } from './entity-properties-renderer.js';
 import { ComponentRenderer } from './component-renderer.js';
 import { ScriptRunnerRenderer } from './scriptrunner-renderer.js';
 import { ScriptAssetRenderer } from './scriptasset-renderer.js';
+import * as utils from '../../../utils.js';
+import { changeManager } from '../../../change-manager.js';
+import * as changeTypes from '../../../change-types.js';
 
 export class PropertiesPanel {
     constructor() {
@@ -40,11 +43,6 @@ export class PropertiesPanel {
      * Initialize all module instances
      */
     async initializeModules() {
-        // Get utils and change manager
-        const utils = await import(`${window.repoUrl}/utils.js`);
-        const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-        const changeTypes = await import(`${window.repoUrl}/change-types.js`);
-
         // Store references
         this.utils = utils;
         this.changeManager = changeManager;

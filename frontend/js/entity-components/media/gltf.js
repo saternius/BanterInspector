@@ -1,5 +1,5 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { EntityComponent } from '../entity-component.js';
+import { parseBest } from '../../utils.js';
 
 
 // Reference code for the gltf component via pure BanterScript code
@@ -7,7 +7,152 @@ const { parseBest } = await import(`${window.repoUrl}/utils.js`);
 // const glb = new BS.BanterGLTF('https://cdn.sidequestvr.com/file/2309817/christmas_tree_polycraft.glb');
 // await go.AddComponent(glb);
 // const transform = await go.AddComponent(new BS.Transform());
-// transform.localScale = new BS.Vector3(0.01, 0.01, 0.01);    
+// transform.localScale = new BS.Vector3(0.01, 0.01, 0.01);
+
+export class GLTFControls {
+    constructor(component) {
+        this.component = component;
+        this.crawling = false;
+        this.type = 'GLTF';
+        this.controls = {
+            'crawl': {
+                'input': 'button',
+                'callback': this.crawlInlineObjects.bind(this),
+                'label': 'Crawl Inline Objects',
+                'id': 'crawl'
+            }
+        }
+    }
+
+    // Sanitize names for Firebase paths - replace invalid chars with underscore
+    sanitizeName(name) {
+        if (!name) return 'unnamed';
+        // Firebase disallows: ".", "#", "$", "[", "]"
+        return name.replace(/[.#$\[\]]/g, '_');
+    }
+
+    async crawlInlineObjects() {
+        if (this.crawling) return;
+
+        const buttonEl = document.getElementById(`${this.component.id}_crawl`);
+
+        try {
+            this.crawling = true;
+            buttonEl.innerHTML = 'Crawling...';
+            buttonEl.disabled = true;
+
+            // Call BS method to expose inline objects
+            console.log('GLTF Crawl: Starting CrawlInlineObjects...');
+            await this.component._entity._bs.CrawlInlineObjects();
+            console.log('GLTF Crawl: CrawlInlineObjects complete');
+
+            // Brief delay for Unity to update hierarchy
+            await new Promise(resolve => setTimeout(resolve, 100));
+
+            // Create entities for newly exposed children
+            console.log('GLTF Crawl: Creating entities for children...');
+            await this.createEntitiesForChildren();
+            console.log('GLTF Crawl: Entity creation complete');
+
+            inspector.hierarchyPanel.render();
+
+            buttonEl.innerHTML = 'Crawl Complete';
+            setTimeout(() => {
+                buttonEl.innerHTML = this.controls['crawl'].label;
+                buttonEl.disabled = false;
+            }, 2000);
+
+        } catch (error) {
+            console.error('Error crawling inline objects:', error);
+            buttonEl.innerHTML = 'Crawl Failed';
+            setTimeout(() => {
+                buttonEl.innerHTML = this.controls['crawl'].label;
+                buttonEl.disabled = false;
+            }, 2000);
+        } finally {
+            this.crawling = false;
+        }
+    }
+
+    async createEntitiesForChildren() {
+        const parentEntity = this.component._entity;
+        const parentGameObject = parentEntity._bs;
+        const existingChildNames = new Set(parentEntity.children.map(c => c.name));
+
+        console.log('GLTF Crawl: parentGameObject.unityId =', parentGameObject.unityId);
+        console.log('GLTF Crawl: Has Traverse?', !!parentGameObject.Traverse);
+
+        if (parentGameObject.Traverse) {
+            const childrenToProcess = [];
+
+            console.log('GLTF Crawl: Starting traverse...');
+            parentGameObject.Traverse((child) => {
+                console.log('GLTF Crawl: Found child:', child?.name, 'id:', child?.id, 'parent:', child?.parent);
+                // Exclude self and only get direct children
+                if (child && child.id !== parentGameObject.unityId && parseInt(child.parent) === parseInt(parentGameObject.unityId)) {
+                    const sanitizedChildName = this.sanitizeName(child.name);
+                    if (!existingChildNames.has(sanitizedChildName)) {
+                        childrenToProcess.push(child);
+                    }
+                }
+            });
+            console.log('GLTF Crawl: Traverse complete, found', childrenToProcess.length, 'children');
+
+            for (const child of childrenToProcess) {
+                console.log('GLTF Crawl: Processing child:', child.name);
+                await this.createEntityFromGameObject(child, parentEntity);
+            }
+        }
+    }
+
+    async createEntityFromGameObject(gameObject, parentEntity) {
+        const { Entity } = await import('../../entity.js');
+
+        const sanitizedName = this.sanitizeName(gameObject.name);
+        console.log('GLTF Crawl: Creating entity for', gameObject.name, '(sanitized:', sanitizedName + ')');
+
+        const newEntity = await new Entity().init({
+            name: sanitizedName,
+            parentId: parentEntity.id,
+            _bs: gameObject,
+            layer: gameObject.layer || 0,
+            localPosition: gameObject.transform.localPosition,
+            localRotation: gameObject.transform.localRotation,
+            localScale: gameObject.transform.localScale,
+        }, { context: "crawl" });
+
+        if (!parentEntity.children.includes(newEntity)) {
+            parentEntity.children.push(newEntity);
+        }
+
+        console.log('GLTF Crawl: Entity created:', newEntity.id);
+
+        // Recursively process grandchildren
+        // The gameObject from Traverse has 'id' (UUID) and we need to find its Unity instance ID
+        // which children reference via their 'parent' property
+        const gameObjectInstanceId = gameObject.unityId || gameObject.instanceId || gameObject.parent;
+        console.log('GLTF Crawl:', gameObject.name, 'gameObject keys:', Object.keys(gameObject), 'unityId:', gameObject.unityId, 'instanceId:', gameObject.instanceId);
+
+        if (gameObject.Traverse) {
+            const grandchildren = [];
+            gameObject.Traverse((grandchild) => {
+                console.log('GLTF Crawl: Grandchild check:', grandchild?.name, 'parent:', grandchild?.parent, 'vs gameObject unityId:', gameObjectInstanceId);
+                // Exclude self and only get direct children of this gameObject
+                if (grandchild && grandchild.id !== gameObject.id && parseInt(grandchild.parent) === parseInt(gameObjectInstanceId)) {
+                    grandchildren.push(grandchild);
+                }
+            });
+
+            console.log('GLTF Crawl:', gameObject.name, 'has', grandchildren.length, 'grandchildren');
+
+            for (const grandchild of grandchildren) {
+                await this.createEntityFromGameObject(grandchild, newEntity);
+            }
+        }
+
+        return newEntity;
+    }
+}
 
 export class GLTFComponent extends EntityComponent {
     constructor() {
@@ -15,9 +160,9 @@ export class GLTFComponent extends EntityComponent {
         this._bsRef = false;
         this.type = 'GLTF';
         this._generationTimeout = null;
-        // this._gltfObject = null;
         this._gltfComponent = null;
         this._gltfTransform = null;
+        this._controls = new GLTFControls(this);
     }
 
     defaultProperties() {

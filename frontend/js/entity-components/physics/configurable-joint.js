@@ -1,4 +1,4 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
+import { EntityComponent } from '../entity-component.js';
 
 let noInf = (value)=>{
     if(value === Infinity) return 999999;

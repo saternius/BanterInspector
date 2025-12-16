@@ -1,5 +1,5 @@
-const { MeshComponent } = await import(`${window.repoUrl}/entity-components/meshes/mesh-component.js`);
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { MeshComponent } from './mesh-component.js';
+import { parseBest } from '../../utils.js';
 
 export class ConeComponent extends MeshComponent {
     constructor() {

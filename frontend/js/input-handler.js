@@ -1,5 +1,6 @@
-const { deepClone, parseBest, appendToConsole, showNotification } = await import(`${window.repoUrl}/utils.js`);
-const { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, ScriptRunnerVarChange, ReorderComponentChange } = await import(`${window.repoUrl}/change-types.js`);
+import { deepClone, parseBest, showNotification } from './utils.js';
+import { EntityPropertyChange, ComponentPropertyChange, RemoveComponentChange, ScriptRunnerVarChange, ReorderComponentChange } from './change-types.js';
+
 export class InputHandler{
     constructor(){
         this.currentInput = null;

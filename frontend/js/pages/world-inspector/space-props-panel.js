@@ -3,15 +3,13 @@
  * Handles public and protected space properties management
  */
 
+import { isVector3Object, isQuaternion, quaternionToEuler, formatNumber, confirm } from '../../utils.js';
+import { changeManager } from '../../change-manager.js';
+import { SpacePropertyChange } from '../../change-types.js';
+import { SyncStatusComparator } from './sync-status-comparator.js';
 
-// (async () => {
-    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber, confirm } = await import(`${window.repoUrl}/utils.js`);
-    const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { SpacePropertyChange } = await import(`${window.repoUrl}/change-types.js`);
-    const { SyncStatusComparator } = await import(`${window.repoUrl}/pages/world-inspector/sync-status-comparator.js`);
-
-    export class SpacePropsPanel {
-        constructor() {
+export class SpacePropsPanel {
+    constructor() {
             this.editingProps = new Map();
             this.pinnedProps = new Set();
             this.popupWindow = null;
@@ -2845,14 +2843,13 @@
         }
     }
 
-    // Make functions globally available for inline onmousedown handlers
-    window.addPublicProp = () => {
-        const panel = window.spacePropsPanel;
-        if (panel) panel.addPublicProp();
-    };
+// Make functions globally available for inline onmousedown handlers
+window.addPublicProp = () => {
+    const panel = window.spacePropsPanel;
+    if (panel) panel.addPublicProp();
+};
 
-    window.addProtectedProp = () => {
-        const panel = window.spacePropsPanel;
-        if (panel) panel.addProtectedProp();
-    };
-//})()
+window.addProtectedProp = () => {
+    const panel = window.spacePropsPanel;
+    if (panel) panel.addProtectedProp();
+};

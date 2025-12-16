@@ -1,6 +1,6 @@
 // Import required dependencies
-const { deepClone, parseBest, appendToShell, showNotification } = await import(`${window.repoUrl}/utils.js`);
-const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
+import { deepClone, parseBest, appendToShell, showNotification } from './utils.js';
+import { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } from './entity-components/index.js';
 
 // options: { source: 'ui' | 'history' | 'script' | 'sync' }
 
@@ -886,7 +886,7 @@ export class LoadScriptChange extends Change{
         }
 
         let componentId = "ScriptAsset_"+Math.floor(Math.random()*99999);
-        
+        let scriptData = inventory.items[this.scriptName];
         this.itemData = {
             "Entity": {
                 [sanatizedScriptName]: {
@@ -930,12 +930,25 @@ export class LoadScriptChange extends Change{
             "Components": {
                 [componentId]: {
                     "name": this.scriptName,
-                    "author": inventory.items[this.scriptName]?.author || "Unknown",
-                    "data": inventory.items[this.scriptName].data,
-                    "vars": inventory.items[this.scriptName].vars || {}
+                    "author": scriptData?.author || "Unknown",
+                    "data": scriptData.data,
+                    "vars": scriptData.vars || {}
                 }
             }
         }
+
+        if(scriptData.active){
+            let runnerId = "ScriptRunner_"+Math.floor(Math.random()*99999);
+            this.itemData.Components[runnerId] = {
+                "name": this.scriptName,
+                "file": this.scriptName,
+                "vars": scriptData.vars || {},
+                "owner": "global",
+                "hotreload": scriptData.autoUpdate
+            }
+            this.itemData.Entity[sanatizedScriptName]["__meta"]["components"][runnerId] = true;
+        }
+
         await net.db.ref(`space/${net.spaceId}/components`).update(this.itemData.Components);
         await net.db.ref(`space/${net.spaceId}/Scene`).update(this.itemData.Entity);
         this.entityId = `Scene/${sanatizedScriptName}`
@@ -1888,8 +1901,68 @@ export class EditScriptItemChange extends Change{
     }
 }
 
+export class ScriptAssetVarChange extends Change {
+    constructor(componentId, vars, options) {
+        super();
+        this.timeout = 500;
+        this.componentId = componentId;
+        this.newVars = vars !== null ? deepClone(vars) : null;
+        this.options = options || {};
+        this.component = SM.getEntityComponentById(componentId);
+        if (!this.component) {
+            this.void(`Component ${componentId} not found`);
+            this.scriptName = 'unknown';
+            this.oldVars = null;
+            return;
+        }
+        this.oldVars = this.component.properties.vars !== null ? deepClone(this.component.properties.vars) : null;
+        this.scriptName = this.component.properties.name || 'unknown';
+    }
 
+    async apply() {
+        if (this.voidChange) return;
+        super.apply();
+        await this.change(this.newVars);
+    }
 
+    async undo() {
+        if (this.voidChange) return;
+        super.undo();
+        await this.change(this.oldVars);
+    }
+
+    async change(vars) {
+        if (!this.component) return;
+
+        // 1. Update component in Firebase
+        await this.component.Set('vars', vars);
+
+        // 2. Update inventory item if it exists
+        if (inventory && this.scriptName && inventory.items[this.scriptName]) {
+            const item = inventory.items[this.scriptName];
+            item.vars = vars;
+            item.last_used = Date.now();
+            inventory.syncItem(this.scriptName, item);
+        }
+    }
+
+    getDescription() {
+        return `Changed ${this.scriptName || 'script'} variables`;
+    }
+
+    getUndoDescription() {
+        return `Reverted ${this.scriptName || 'script'} variables`;
+    }
+
+    cmd() {
+        return {
+            action: "set_scriptasset_vars",
+            componentId: this.componentId,
+            vars: this.newVars,
+            options: this.options
+        }
+    }
+}
 
 // Command history management
 const COMMAND_HISTORY_KEY = 'commandHistory';

@@ -1,5 +1,5 @@
-const { JointComponent } = await import(`${window.repoUrl}/entity-components/physics/joint-component.js`);
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { JointComponent } from './joint-component.js';
+import { parseBest } from '../../utils.js';
 
 export class CharacterJointComponent extends JointComponent {
     constructor() {

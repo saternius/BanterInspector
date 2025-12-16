@@ -2,14 +2,10 @@
  * Scene Manager
  * Handles Unity scene connection, state management, and data synchronization
  */
-// (async () => {
+import { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } from './entity-components/index.js';
+import { confirm } from './utils.js';
 
-
-    // let localhost = window.location.hostname === 'localhost'
-    const { SUPPORTED_COMPONENTS, Entity, TransformComponent, componentBSTypeMap, componentTypeMap, componentTextMap, componentBundleMap, ScriptRunnerComponent } = await import( `${window.repoUrl}/entity-components/index.js`);
-    const { confirm } = await import( './utils.js');
-
-    export class SceneManager {
+export class SceneManager {
         constructor() {
             this.scene = null;
             this.entityData = {

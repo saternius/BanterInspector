@@ -3,10 +3,9 @@
  * Handles the component selection menu overlay
  */
 
-
-const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-const { AddComponentChange } = await import(`${window.repoUrl}/change-types.js`);
-const { componentBundleMap } = await import( `${window.repoUrl}/entity-components/index.js`);
+import { changeManager } from '../../change-manager.js';
+import { AddComponentChange } from '../../change-types.js';
+import { componentBundleMap } from '../../entity-components/index.js';
 
 export class ComponentMenu {
     constructor() {

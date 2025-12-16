@@ -1,4 +1,4 @@
-const { ParametricSurfaceComponent } = await import(`${window.repoUrl}/entity-components/meshes/parametric-surface.js`);
+import { ParametricSurfaceComponent } from './parametric-surface.js';
 
 export class HelicoidComponent extends ParametricSurfaceComponent {
     constructor() {

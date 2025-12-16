@@ -1,5 +1,6 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`);
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { EntityComponent } from '../entity-component.js';
+import { parseBest } from '../../utils.js';
+
 export class HeldEventsComponent extends EntityComponent {
     constructor() {
         super();

@@ -1,5 +1,6 @@
-const { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} = await import(`${window.repoUrl}/change-types.js`);
-const {emojiCategories} = await import(`${window.repoUrl}/pages/inventory/emoji_categories.js`);
+import { LoadItemChange, CreateFolderChange, DeleteItemChange, SaveEntityItemChange, RenameItemChange, RenameFolderChange, RemoveFolderChange, MoveItemDirectoryChange, CreateScriptItemChange, EditScriptItemChange} from '../../change-types.js';
+import { emojiCategories } from './emoji_categories.js';
+
 /**
  * InventoryUI - Handles all UI rendering, preview, drag-drop, and modal functions
  */
@@ -1027,6 +1028,148 @@ export class InventoryUI {
                 selection.addRange(range);
             });
         }
+
+        // Script variable event handlers
+        this.attachScriptVarEventListeners(itemName, item);
+    }
+
+    /**
+     * Attach event listeners for script variable management
+     */
+    attachScriptVarEventListeners(itemName, item) {
+        if (item.itemType !== 'script') return;
+
+        // Name input - enable/disable add button based on value
+        const nameInput = this.previewPane.querySelector('.script-var-name-input');
+        const addVarBtn = this.previewPane.querySelector('.script-var-add-btn');
+
+        if (nameInput && addVarBtn) {
+            nameInput.addEventListener('input', () => {
+                const hasName = nameInput.value.trim().length > 0;
+                addVarBtn.disabled = !hasName;
+                addVarBtn.style.opacity = hasName ? '1' : '0.5';
+                addVarBtn.style.cursor = hasName ? 'pointer' : 'not-allowed';
+            });
+        }
+
+        // Add variable button
+        if (addVarBtn) {
+            addVarBtn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const nameInput = this.previewPane.querySelector('.script-var-name-input');
+                const typeSelect = this.previewPane.querySelector('.script-var-type-select');
+                const valueInput = this.previewPane.querySelector('.script-var-value-input');
+
+                const varName = nameInput?.value?.trim();
+                const varType = typeSelect?.value || 'string';
+                const varValue = valueInput?.value || '';
+
+                if (!varName) {
+                    showNotification('Please enter a variable name');
+                    return;
+                }
+
+                // Check if variable already exists
+                const currentVars = item.vars || {};
+                if (currentVars[varName]) {
+                    showNotification('Variable with this name already exists');
+                    return;
+                }
+
+                // Convert value based on type
+                let typedValue;
+                switch (varType) {
+                    case 'boolean':
+                        typedValue = varValue.toLowerCase() === 'true';
+                        break;
+                    case 'number':
+                        typedValue = parseFloat(varValue) || 0;
+                        break;
+                    case 'string':
+                    default:
+                        typedValue = varValue;
+                        break;
+                }
+
+                // Add the variable
+                const vars = { ...currentVars };
+                vars[varName] = { type: varType, value: typedValue };
+                item.vars = vars;
+
+                this.inventory.syncItem(itemName, item);
+                showNotification(`Added variable "${varName}"`);
+
+                // Re-render preview to show updated vars
+                this.showPreview(itemName);
+            });
+        }
+
+        // Delete variable buttons
+        const deleteVarBtns = this.previewPane.querySelectorAll('.script-var-delete-btn');
+        deleteVarBtns.forEach(btn => {
+            btn.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                const varName = btn.dataset.varName;
+                if (!varName) return;
+
+                const vars = { ...item.vars };
+                delete vars[varName];
+
+                // Set to null if no vars remain (Firebase doesn't support empty objects)
+                item.vars = Object.keys(vars).length === 0 ? null : vars;
+
+                this.inventory.syncItem(itemName, item);
+                showNotification(`Deleted variable "${varName}"`);
+
+                // Re-render preview
+                this.showPreview(itemName);
+            });
+        });
+
+        // Variable value change - text inputs
+        const textInputs = this.previewPane.querySelectorAll('.script-var-value-text');
+        textInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const varName = input.dataset.varName;
+                if (!varName || !item.vars || !item.vars[varName]) return;
+
+                item.vars[varName].value = input.value;
+                this.inventory.syncItem(itemName, item);
+            });
+        });
+
+        // Variable value change - number inputs
+        const numberInputs = this.previewPane.querySelectorAll('.script-var-value-number');
+        numberInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const varName = input.dataset.varName;
+                if (!varName || !item.vars || !item.vars[varName]) return;
+
+                const numValue = parseFloat(input.value);
+                if (!isNaN(numValue)) {
+                    item.vars[varName].value = numValue;
+                    this.inventory.syncItem(itemName, item);
+                }
+            });
+        });
+
+        // Variable value change - checkbox inputs
+        const checkboxInputs = this.previewPane.querySelectorAll('.script-var-value-checkbox');
+        checkboxInputs.forEach(input => {
+            input.addEventListener('change', () => {
+                const varName = input.dataset.varName;
+                if (!varName || !item.vars || !item.vars[varName]) return;
+
+                item.vars[varName].value = input.checked;
+                this.inventory.syncItem(itemName, item);
+
+                // Update the label text next to the checkbox
+                const label = input.parentElement.querySelector('span');
+                if (label) {
+                    label.textContent = input.checked ? 'true' : 'false';
+                }
+            });
+        });
     }
 
     /**
@@ -1558,6 +1701,7 @@ export class InventoryUI {
                     <div class="meta-label">Description:</div>
                     <textarea class="description-textarea" data-item-name="${item.name}" placeholder="Enter a description...">${this.escapeHtml(description)}</textarea>
                 </div>
+                ${this.renderScriptVarsSection(item, itemName)}
                 <div class="preview-content">
                     <h3>Script Content</h3>
                     <pre class="script-preview"><code>${this.escapeHtml(item.data)}</code></pre>
@@ -1612,6 +1756,84 @@ export class InventoryUI {
                     </div>
                 </div>
             `;
+        }
+    }
+
+    /**
+     * Render script variables section for preview pane
+     */
+    renderScriptVarsSection(item, itemName) {
+        const vars = item.vars || {};
+        const varEntries = Object.entries(vars);
+
+        const typeColors = {
+            'string': { bg: '#2a3a2a', color: '#6db46d' },
+            'number': { bg: '#3a2a4a', color: '#b46dd6' },
+            'boolean': { bg: '#2a3a4a', color: '#6d9dd6' }
+        };
+
+        let varsHtml = '';
+        if (varEntries.length > 0) {
+            varsHtml = varEntries.map(([varName, varData]) => {
+                const colors = typeColors[varData.type] || { bg: '#2a2a2a', color: '#888' };
+                return `
+                    <div class="script-var-row" data-var-name="${varName}" data-item-name="${itemName}" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; background: #0d0d0d; border: 1px solid #2a2a2a; border-radius: 4px; margin-bottom: 6px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-weight: 500; color: #ddd;">${this.escapeHtml(varName)}</span>
+                            <span style="padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; background: ${colors.bg}; color: ${colors.color};">${varData.type}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            ${this.renderVarInput(varName, varData, itemName)}
+                            <button class="script-var-delete-btn" data-var-name="${varName}" data-item-name="${itemName}" style="padding: 4px 8px; background: transparent; color: #666; border: 1px solid #333; border-radius: 4px; cursor: pointer; font-size: 14px;" title="Delete variable">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            varsHtml = `<div style="padding: 10px; color: #666; font-style: italic;">No variables defined</div>`;
+        }
+
+        return `
+            <div class="preview-meta script-vars-section">
+                <div class="meta-label" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Variables (${varEntries.length})</span>
+                </div>
+                <div class="script-vars-list" style="margin-top: 8px;">
+                    ${varsHtml}
+                </div>
+                <div class="script-var-add-section" style="margin-top: 12px; padding: 12px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <input type="text" class="script-var-name-input" data-item-name="${itemName}" placeholder="Variable name" style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 6px 10px; border-radius: 4px;">
+                        <select class="script-var-type-select" data-item-name="${itemName}" style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 6px 10px; border-radius: 4px;">
+                            <option value="string">String</option>
+                            <option value="number">Number</option>
+                            <option value="boolean">Boolean</option>
+                        </select>
+                    </div>
+                    <input type="text" class="script-var-value-input" data-item-name="${itemName}" placeholder="Default value" style="width: 100%; box-sizing: border-box; background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 6px 10px; border-radius: 4px; margin-bottom: 8px;">
+                    <button class="action-btn script-var-add-btn" data-item-name="${itemName}" style="width: 100%; opacity: 0.5; cursor: not-allowed;" disabled>+ Add Variable</button>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Render input for a variable based on its type
+     */
+    renderVarInput(varName, varData, itemName) {
+        switch (varData.type) {
+            case 'boolean':
+                return `
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" class="script-var-value-checkbox" data-var-name="${varName}" data-item-name="${itemName}" ${varData.value ? 'checked' : ''} style="cursor: pointer;">
+                        <span style="font-size: 12px; color: #888;">${varData.value ? 'true' : 'false'}</span>
+                    </label>
+                `;
+            case 'number':
+                return `<input type="number" class="script-var-value-number" data-var-name="${varName}" data-item-name="${itemName}" value="${varData.value}" step="any" style="width: 80px; background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px;">`;
+            case 'string':
+            default:
+                return `<input type="text" class="script-var-value-text" data-var-name="${varName}" data-item-name="${itemName}" value="${this.escapeHtml(varData.value || '')}" style="width: 120px; background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 4px 8px; border-radius: 4px;">`;
         }
     }
 

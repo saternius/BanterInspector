@@ -3,11 +3,10 @@
  * UI for displaying and managing ScriptRunner scripts from lifecycle-manager
  */
 
-// (async () => {
-    const { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } = await import(`${window.repoUrl}/utils.js`);
-    const { lifecycle } = await import(`${window.repoUrl}/lifecycle-manager.js`);
+import { isVector3Object, isQuaternion, quaternionToEuler, formatNumber } from '../../utils.js';
+import { lifecycle } from '../../lifecycle-manager.js';
 
-    export class LifecyclePanel {
+export class LifecyclePanel {
         constructor() {
             this.selectedLogs = new Set(); // Set of componentIds that have logging enabled
             this.shellBuffer = [];
@@ -281,6 +280,5 @@
         }
     }
 
-    // Export for global access
-    window.LifecyclePanel = LifecyclePanel;
-//})()
+// Export for global access
+window.LifecyclePanel = LifecyclePanel;

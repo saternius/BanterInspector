@@ -1,0 +1,13 @@
+{
+  "name": "tippy-frontend",
+  "version": "1.0.0",
+  "description": "Tippy - Unity Scene Editor for Banter VR",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

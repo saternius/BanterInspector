@@ -3,6 +3,8 @@
  * Renders the entity properties section with transforms, name, layer, etc.
  */
 
+import { BanterLayers } from '../../../entity-components/index.js';
+
 export class EntityPropertiesRenderer {
     constructor(propertyInputRenderer, transformHandler, scaleLockHandler, utils, changeManager) {
         this.propertyInputRenderer = propertyInputRenderer;
@@ -150,23 +152,6 @@ export class EntityPropertiesRenderer {
      */
     async createLayerRow(entity) {
         const { EntityPropertyChange } = this.changeManager.changeTypes || {};
-
-        // Get BanterLayers enum
-        let BanterLayers = {};
-        try {
-            // Try to get from entity-components
-            const module = await import(`${window.repoUrl}/entity-components/index.js`);
-            BanterLayers = module.BanterLayers || {};
-        } catch (e) {
-            // Fallback to default layers
-            BanterLayers = {
-                Default: 0,
-                TransparentFX: 1,
-                IgnoreRaycast: 2,
-                Water: 4,
-                UI: 5
-            };
-        }
 
         return this.propertyInputRenderer.createPropertyRow(
             'layer',

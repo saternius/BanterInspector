@@ -3,12 +3,11 @@
  * Handles the scene hierarchy tree display and interactions
  */
 
-// (async () => {
-    const { changeManager } = await import(`${window.repoUrl}/change-manager.js`);
-    const { AddEntityChange, RemoveEntityChange, EntityMoveChange, CloneEntityChange, SaveEntityItemChange } = await import(`${window.repoUrl}/change-types.js`);
-    const { confirm } = await import(`${window.repoUrl}/utils.js`);
+import { changeManager } from '../../change-manager.js';
+import { AddEntityChange, RemoveEntityChange, EntityMoveChange, CloneEntityChange, SaveEntityItemChange } from '../../change-types.js';
+import { confirm } from '../../utils.js';
 
-    export class HierarchyPanel {
+export class HierarchyPanel {
         constructor() {
             this.treeContainer = document.getElementById('hierarchyTree');
             this.searchInput = document.getElementById('searchInput');
@@ -409,10 +408,9 @@
          */
         async handleDropToRoot() {
             if (!this.draggedEntityId) return;
-            
+
             // Queue entity move to root through change manager
             const change = new EntityMoveChange(this.draggedEntityId, null, { source: 'ui' });
             changeManager.applyChange(change);
         }
     }
-// })()

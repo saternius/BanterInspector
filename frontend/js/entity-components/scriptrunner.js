@@ -1,5 +1,5 @@
-const { EntityComponent } = await import(`${window.repoUrl}/entity-components/entity-component.js`); 
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { EntityComponent } from './entity-component.js';
+import { parseBest } from '../utils.js';
 
 export class ScriptRunnerComponent extends EntityComponent {
     constructor(){
@@ -30,7 +30,7 @@ export class ScriptRunnerComponent extends EntityComponent {
     }
 
     async _set(property, value){
-        log("mono", "[MONO] updating property =>", property, value)
+        //log("mono", "[MONO] updating property =>", property, value)
         value = parseBest(value);
         this.properties[property] = value;
 
@@ -91,14 +91,14 @@ export class ScriptRunnerComponent extends EntityComponent {
             if (window.inventory && window.inventory.items[fileName]) {
                 const inventoryItem = window.inventory.items[fileName];
                 if (inventoryItem.itemType === 'script') {
-                    log("mono", `Found "${fileName}" in inventory, loading to scene...`);
+                    //log("mono", `Found "${fileName}" in inventory, loading to scene...`);
                     await window.LoadScript(fileName);
                     return SM.getScriptAsset(fileName);
                 } else {
-                    log("mono", `Item "${fileName}" in inventory is not a script`);
+                    //log("mono", `Item "${fileName}" in inventory is not a script`);
                 }
             } else {
-                log("mono", `Script "${fileName}" not found in inventory either`);
+               // log("mono", `Script "${fileName}" not found in inventory either`);
             }
         }
         return scriptAsset;
@@ -114,7 +114,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         const scriptAsset = await this.getScriptAsset(fileName);
 
         if (!scriptAsset) {
-            log("mono", `ScriptAsset "${fileName}" not found`);
+            //log("mono", `ScriptAsset "${fileName}" not found`);
             return;
         }
 
@@ -123,13 +123,13 @@ export class ScriptRunnerComponent extends EntityComponent {
 
     async _loadScript(fileName, scriptAsset) {
         if (!scriptAsset) {
-            log("mono", `ScriptAsset "${fileName}" not found`);
+            //log("mono", `ScriptAsset "${fileName}" not found`);
             return;
         }
 
         const scriptContent = scriptAsset.properties.data;
         if (!scriptContent) {
-            log("mono", `Script "${fileName}" has no data`);
+            //log("mono", `Script "${fileName}" has no data`);
             return;
         }
 
@@ -148,27 +148,27 @@ export class ScriptRunnerComponent extends EntityComponent {
             const historicalVars = SM.props[`__${this.id}/vars:component`] || {};
             const initializedVars = {};
 
-            log("mono", "ScriptAsset varSpecs:", varSpecs);
-            log("mono", "Historical vars:", historicalVars);
-            log("mono", "Properties vars:", this.properties.vars);
+            //log("mono", "ScriptAsset varSpecs:", varSpecs);
+            //log("mono", "Historical vars:", historicalVars);
+            //log("mono", "Properties vars:", this.properties.vars);
 
             for (const [varName, varSpec] of Object.entries(varSpecs)) {
                 // Priority: 1. Historical values, 2. Current properties, 3. ScriptAsset default
                 if (historicalVars[varName] !== undefined) {
                     // Preserve existing value from space state
                     initializedVars[varName] = historicalVars[varName];
-                    log("mono", `$${varName} =>`, JSON.stringify(historicalVars[varName]), "via historicalVars");
+                    //log("mono", `$${varName} =>`, JSON.stringify(historicalVars[varName]), "via historicalVars");
                 } else if (this.properties.vars?.[varName] !== undefined) {
                     // Use value from properties
                     initializedVars[varName] = this.properties.vars[varName];
-                    log("mono", `$${varName} =>`, JSON.stringify(this.properties.vars[varName]), "via properties");
+                    //log("mono", `$${varName} =>`, JSON.stringify(this.properties.vars[varName]), "via properties");
                 } else {
                     // Use ScriptAsset default
                     initializedVars[varName] = {
                         type: varSpec.type,
                         value: varSpec.value
                     };
-                    log("mono", `$${varName} =>`, JSON.stringify(varSpec.value), "via ScriptAsset default");
+                    //log("mono", `$${varName} =>`, JSON.stringify(varSpec.value), "via ScriptAsset default");
                 }
             }
 
@@ -186,7 +186,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         await lifecycle.registerScriptRunner(this);
         this._start();
 
-        log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name} with ctx.vars:`, this.ctx.vars);
+        //log("mono", `Script "${fileName}" loaded successfully for ${this.properties.name} with ctx.vars:`, this.ctx.vars);
 
         // Update UI if this component is currently selected
         let selEnt = SM.getEntityById(SM.selectedEntity);
@@ -224,7 +224,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         }
 
         inspector.lifecyclePanel.render();
-        log("mono", "started", this.id);
+        //log("mono", "started", this.id);
     }
 
     async _stop(){
@@ -235,7 +235,7 @@ export class ScriptRunnerComponent extends EntityComponent {
         await this.ctx.onDestroy();
 
         inspector.lifecyclePanel.render();
-        log("mono", "stopped", this.id);
+        //log("mono", "stopped", this.id);
     }
 
     async _update(){
@@ -251,11 +251,11 @@ export class ScriptRunnerComponent extends EntityComponent {
 
         const fileName = this.properties.file;
         if (!fileName || fileName.length === 0) {
-            log("mono", "No script file to refresh");
+            //log("mono", "No script file to refresh");
             return;
         }
 
-        log("mono", "refreshing script [", this.ctx._running, "]..");
+        //log("mono", "refreshing script [", this.ctx._running, "]..");
 
         if(this.ctx._running){
             this.ctx._running = false;
@@ -267,26 +267,26 @@ export class ScriptRunnerComponent extends EntityComponent {
         if (scriptAsset) {
             await this._loadScript(fileName, scriptAsset);
         } else {
-            log("mono", `ScriptAsset "${fileName}" not found for refresh`);
+            //log("mono", `ScriptAsset "${fileName}" not found for refresh`);
         }
 
-        log("mono", "refreshed", this.id);
+        //log("mono", "refreshed", this.id);
     }
 
     Start(){
-        log("mono", `Starting ${this.properties.file} on ${this.id}`)
+        //log("mono", `Starting ${this.properties.file} on ${this.id}`)
         const oneShot = 'scriptrunner_start¶' + this.id;
         net.sendOneShot(oneShot);
     }
 
     Stop(){
-        log("mono", `Stopping ${this.properties.file} on ${this.id}`)
+        //log("mono", `Stopping ${this.properties.file} on ${this.id}`)
         const oneShot = 'scriptrunner_stop¶' + this.id;
         net.sendOneShot(oneShot);
     }
 
     Refresh(){
-        log("mono", `Refreshing ${this.properties.file} on ${this.id}`)
+        //log("mono", `Refreshing ${this.properties.file} on ${this.id}`)
         const oneShot = 'scriptrunner_refresh¶' + this.id;
         net.sendOneShot(oneShot);
     }
@@ -330,7 +330,7 @@ export class ScriptRunnerComponent extends EntityComponent {
     }
 
     async _setVar(varName, value) {
-        log("mono", "[MONO] updating var =>", varName, value)
+        //log("mono", "[MONO] updating var =>", varName, value)
         if (!this.ctx || !this.ctx.vars) return;
         let newValue = value;
         if(typeof value !== "object"){

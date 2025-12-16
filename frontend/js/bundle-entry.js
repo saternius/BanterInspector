@@ -1,0 +1,570 @@
+/**
+ * Tippy Bundle Entry Point
+ *
+ * This is the bundled entry point for esbuild.
+ * All imports are static for proper bundling and tree-shaking.
+ */
+
+// Core utilities and logging
+import { logger } from './utils.js';
+
+// Loading screen
+import { loadingScreen } from './pages/world-inspector/loading-screen.js';
+
+// Core modules
+import { sceneManager } from './scene-manager.js';
+import { net } from './networking.js';
+import { changeManager } from './change-manager.js';
+import { lifecycleManager } from './lifecycle-manager.js';
+
+// UI Panels
+import { HierarchyPanel } from './pages/world-inspector/hierarchy-panel.js';
+import { PropertiesPanel } from './pages/world-inspector/properties-panel/index.js';
+import { SpacePropsPanel } from './pages/world-inspector/space-props-panel.js';
+import { ComponentMenu } from './pages/world-inspector/component-menu.js';
+import { LifecyclePanel } from './pages/world-inspector/lifecycle-panel.js';
+
+// Pages
+import { Navigation } from './navigation.js';
+import { Inventory } from './pages/inventory/inventory.js';
+import { ScriptEditor } from './pages/script-editor/script-editor.js';
+import { Feedback } from './pages/feedback/feedback.js';
+
+// Input handling
+import { InputHandler } from './input-handler.js';
+
+// Make loading screen globally accessible
+window.loadingScreen = loadingScreen;
+
+// Global app instance
+class InspectorApp {
+    constructor() {
+        this.navigation = null;
+        this.hierarchyPanel = null;
+        this.propertiesPanel = null;
+        this.spacePropsPanel = null;
+        this.componentMenu = null;
+        this.inventory = null;
+        this.scriptEditors = null;
+        this.lifecyclePanel = null;
+        this.feedback = null;
+        this.initialized = false;
+    }
+
+    /**
+     * Initialize the inspector application
+     */
+    async initialize() {
+        log("init", "File Server: " + window.fileServer);
+        log("init", "Ngrok URL: " + window.ngrokUrl);
+        log("init", "Repo URL: " + window.repoUrl);
+        log("init", "Block Service URL: " + window.blockServiceUrl);
+        document.body.style.height = "100vh";
+
+        if (this.initialized) return;
+
+        log('init', 'Initializing Unity Scene Inspector...');
+        try {
+            // Initialize navigation
+            loadingScreen.updateStage('ui-panels', 10, 'Initializing navigation...');
+            this.navigation = new Navigation();
+
+            // Initialize scene manager
+            loadingScreen.updateStage('scene-connect', 0, 'Connecting to Unity scene...');
+            await SM.initialize();
+
+            // Set up change manager to scene manager integration
+            changeManager.addChangeListener(async (change) => {
+                this.spacePropsPanel.render('changeManager');
+                this.propertiesPanel.render(SM.selectedEntity);
+            });
+
+            // Initialize UI panels
+            this.hierarchyPanel = new HierarchyPanel();
+            this.propertiesPanel = new PropertiesPanel();
+            this.spacePropsPanel = new SpacePropsPanel();
+            this.componentMenu = new ComponentMenu();
+            this.lifecyclePanel = new LifecyclePanel();
+
+            // Initialize inventory
+            this.inventory = new Inventory();
+            // Expose inventory globally for WebSocket toggle utilities
+            window.inventoryInstance = this.inventory;
+
+            // Initialize feedback
+            this.feedback = new Feedback();
+
+            // Initialize script editors map
+            this.scriptEditors = new Map();
+
+            // Set up global references for inline handlers
+            window.spacePropsPanel = this.spacePropsPanel;
+            window.inventory = this.inventory;
+            window.navigation = this.navigation;
+            window.scriptEditors = this.scriptEditors;
+            window.lifecyclePanel = this.lifecyclePanel;
+            window.feedback = this.feedback;
+
+            // Initial render
+            this.hierarchyPanel.render();
+            this.spacePropsPanel.render('initialization');
+            this.lifecyclePanel.render();
+            this.setupGlobalEventHandlers();
+
+            // Setup console toggle buttons
+            const toggleButtons = document.querySelectorAll('.console-toggle');
+            toggleButtons.forEach(btn => {
+                btn.addEventListener('mousedown', () => {
+                    const toggleType = btn.dataset.toggle;
+                    window.logger.include[toggleType] = !window.logger.include[toggleType];
+                    btn.classList.toggle('active', window.logger.include[toggleType]);
+                });
+            });
+
+            // Setup clear shell button (moved to shell header)
+            const clearShellBtn = document.getElementById('clearShellBtn2');
+            if (clearShellBtn) {
+                clearShellBtn.addEventListener('mousedown', () => {
+                    this.lifecyclePanel.clearShell();
+                });
+            }
+
+            const refreshPanelBtn = document.getElementById('refreshPanelBtn');
+            if (refreshPanelBtn) {
+                refreshPanelBtn.addEventListener('mousedown', () => {
+                    this.lifecyclePanel.render();
+                });
+            }
+
+            // Set up history notifications
+            this.setupHistoryNotifications();
+
+            // Handle window resize
+            this.setupResizeHandlers();
+
+            this.loadOldTabs();
+
+            this.initialized = true;
+            log('init', 'Inspector initialized successfully');
+            await SM.executeStartupScripts("onInspectorLoaded");
+
+        } catch (error) {
+            err('init', 'Failed to initialize inspector:', error);
+
+            // Show error in loading screen if it's still visible
+            if (loadingScreen.element) {
+                loadingScreen.setError(error.message || 'Failed to initialize the Scene Inspector');
+            } else {
+                this.showInitError(error);
+            }
+        }
+    }
+
+    /**
+     * Setup history notification handling
+     */
+    setupHistoryNotifications() {
+        // Create notification container
+        let notificationContainer = document.getElementById('historyNotifications');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.id = 'historyNotifications';
+            document.body.appendChild(notificationContainer);
+        }
+
+        // Wire up undo/redo buttons
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+
+        if (undoBtn) {
+            undoBtn.addEventListener('mousedown', () => {
+                if (changeManager) {
+                    changeManager.undo();
+                }
+            });
+        }
+
+        if (redoBtn) {
+            redoBtn.addEventListener('mousedown', () => {
+                if (changeManager) {
+                    changeManager.redo();
+                }
+            });
+        }
+
+        // Wire up save button
+        const saveBtn = document.getElementById('saveBtn');
+        if (saveBtn) {
+            saveBtn.addEventListener('mousedown', () => {
+                SM.saveScene();
+                this.showNotification('Scene saved', 'success');
+                saveBtn.style.opacity = 0.5;
+                saveBtn.style.pointerEvents = "none";
+            });
+        }
+
+        // Listen for history notifications
+        document.addEventListener('historyNotification', (event) => {
+            const { message, type } = event.detail;
+            this.showNotification(message, type);
+        });
+
+        // Listen for history changes to update UI
+        document.addEventListener('historyChangeApplied', (event) => {
+            // Refresh relevant panels
+            const change = event.detail.change;
+            if (change.type === 'spaceProperty') {
+                this.spacePropsPanel.render('historyChangeApplied');
+            } else if (change.type === 'component' || change.type === 'entity' ||
+                      change.type === 'componentAdd' || change.type === 'componentRemove') {
+                this.propertiesPanel.render(SM.selectedEntity);
+            } else if (change.type === 'entityAdd' || change.type === 'entityRemove' ||
+                      change.type === 'entityMove') {
+                this.hierarchyPanel.render();
+                this.propertiesPanel.render(SM.selectedEntity);
+            }
+        });
+    }
+
+    /**
+     * Show notification to user
+     */
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `history-notification ${type}`;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Trigger animation
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        // Remove after delay
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
+    }
+
+    /**
+     * Setup global event handlers
+     */
+    setupGlobalEventHandlers() {
+        log("init", "setting up global event handlers")
+        // Handle hierarchy changes from change manager
+        changeManager.addChangeListener((change) => {
+            // Update hierarchy panel if entity names or active state changed
+            const hierarchyChanges = change.type === 'entity' && (change.property === 'name' || change.property === 'active');
+            if (hierarchyChanges.length > 0) {
+                this.hierarchyPanel.render();
+            }
+        });
+
+        // Handle hierarchy changes (legacy - for compatibility)
+        document.addEventListener('entityPropertiesChanged', () => {
+            this.hierarchyPanel.render();
+        });
+
+        // Handle script editor events
+        window.addEventListener('open-script-editor', (event) => {
+            const scriptData = event.detail;
+            const editorKey = scriptData.name;
+
+            // Check if editor for this script already exists
+            let existingEditor = null;
+            for (const [key, editor] of this.scriptEditors) {
+                if (editor.currentScript.name === scriptData.name) {
+                    existingEditor = editor;
+                    // Switch to existing tab
+                    if(!event.detail.openInBackground){
+                        navigation.switchPage(editor.pageId);
+                    }
+                    return;
+                }
+            }
+
+            // Create new script editor instance
+            const scriptEditor = new ScriptEditor(scriptData);
+            this.scriptEditors.set(editorKey, scriptEditor);
+
+            let saveTabs = ()=>{
+                localStorage.setItem(`openedEditors`, Array.from(this.scriptEditors.keys()).join(","));
+            }
+            saveTabs();
+            scriptEditor.open(event.detail.openInBackground);
+
+            // Clean up when editor is closed
+            const originalClose = scriptEditor.close.bind(scriptEditor);
+            scriptEditor.close = () => {
+                originalClose();
+                this.scriptEditors.delete(editorKey);
+                saveTabs();
+            };
+        });
+
+        // Handle space state changes from Unity
+        if (SM.scene) {
+
+            let onLoad = async ()=>{
+                log("init", "onLoad()");
+                if(window.isLocalHost){
+                    SM.scene.localUser = {
+                        name: "Technocrat",
+                        uid: "abcdefghi",
+                        id: "abcdefghi",
+                        isLocal: true,
+                        color: "#000000"
+                    }
+                    SM.scene.users = {
+                        [SM.scene.localUser.id]: SM.scene.localUser
+                    }
+                }
+                await saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+
+                SM.setup();
+                loadingScreen.updateStage('scene-connect', 100, 'Scene connected');
+                loadingScreen.hide();
+            }
+
+            SM.scene.addEventListener('space-state-changed', (event) => {
+                // Sync external changes through change manager
+            });
+
+            SM.scene.On("loaded", async () => {
+                onLoad();
+            });
+
+            SM.scene.On("one-shot", async (event) => {
+                net.handleOneShot(event);
+                document.dispatchEvent(new CustomEvent('oneshotReceived', {detail: event}));
+            });
+
+            SM.scene.On("user-left", (event) => {
+                log('scene-event', "[USER LEFT] fired", event)
+            })
+
+            SM.scene.On("user-joined", (event) => {
+                SM.handleUserJoined(event);
+            })
+
+            scene.On("button-released", e => {
+                SM.getAllScriptRunners().forEach(m=>{
+                    if(m.ctx.buttonReleased){
+                        m.ctx.buttonReleased(e)
+                    }
+                })
+            })
+
+            scene.On("button-pressed", e => {
+                SM.getAllScriptRunners().forEach(m=>{
+                    if(m.ctx.buttonPressed){
+                        m.ctx.buttonPressed(e)
+                    }
+                })
+            })
+
+            let runWhenUnityLoaded = ()=>{
+                if(SM.scene.unityLoaded){
+                    log('init', "localUser =>", SM.scene.localUser)
+                    if(!SM.scene.localUser){
+                        log('init', "No local user found, loading from localStorage")
+                        loadLocalUserSceneFromLocalStorage(SM.scene);
+                    }
+                    onLoad();
+                }else{
+                    setTimeout(runWhenUnityLoaded, 500);
+                }
+            }
+            runWhenUnityLoaded();
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + F: Focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+
+            // Delete key: Delete selected entity
+            if (e.key === 'Delete' && SM.selectedEntity) {
+                const deleteBtn = document.getElementById('deleteEntityBtn');
+                if (deleteBtn && !e.target.matches('input, textarea')) {
+                    deleteBtn.click();
+                }
+            }
+
+            // Ctrl/Cmd + N: Add new child entity
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                const addBtn = document.getElementById('addChildEntityBtn');
+                if (addBtn) {
+                    addBtn.click();
+                }
+            }
+        });
+    }
+
+    loadOldTabs(){
+        let openedEditors = localStorage.getItem(`openedEditors`);
+        if(openedEditors){
+            openedEditors.split(",").forEach(editor=>{
+                const scriptItem = window.inventory.items[editor];
+                if (scriptItem && scriptItem.itemType === 'script') {
+                    const event = new CustomEvent('open-script-editor', {
+                        detail: {
+                            name: editor,
+                            content: scriptItem.data,
+                            author: scriptItem.author,
+                            created: scriptItem.created,
+                            openInBackground: true
+                        },
+
+                    });
+                    window.dispatchEvent(event);
+                }
+            })
+        }
+    }
+
+    /**
+     * Setup resize handlers
+     */
+    setupResizeHandlers() {
+        // Make panels resizable
+        const hierarchyPanel = document.querySelector('.hierarchy-panel');
+        const propertiesPanel = document.querySelector('.properties-panel');
+        const spacePropsContainer = document.querySelector('.space-props-panel-container');
+
+        if (hierarchyPanel && propertiesPanel) {
+            this.makeResizable(hierarchyPanel, 'right', 200, 500);
+        }
+
+        if (spacePropsContainer && propertiesPanel) {
+            this.makeResizable(spacePropsContainer, 'left', 300, 600);
+        }
+    }
+
+    /**
+     * Make a panel resizable
+     */
+    makeResizable(panel, direction, minSize, maxSize) {
+        const resizer = document.createElement('div');
+        resizer.className = 'panel-resizer';
+        resizer.style.position = 'absolute';
+        resizer.style[direction] = '0';
+        resizer.style.top = '0';
+        resizer.style.bottom = '0';
+        resizer.style.width = '4px';
+        resizer.style.cursor = direction === 'right' ? 'ew-resize' : 'ew-resize';
+        resizer.style.zIndex = '100';
+
+        panel.style.position = 'relative';
+        panel.appendChild(resizer);
+
+        let isResizing = false;
+        let startX = 0;
+        let startWidth = 0;
+
+        resizer.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startWidth = panel.offsetWidth;
+            document.body.style.cursor = direction === 'right' ? 'ew-resize' : 'ew-resize';
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+
+            const diff = direction === 'right' ?
+                e.clientX - startX :
+                startX - e.clientX;
+
+            const newWidth = Math.max(minSize, Math.min(maxSize, startWidth + diff));
+            panel.style.width = newWidth + 'px';
+            panel.style.flexShrink = '0';
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+            }
+        });
+    }
+
+    /**
+     * Show initialization error
+     */
+    showInitError(error) {
+        const container = document.querySelector('.inspector-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="init-error" style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    padding: 40px;
+                    text-align: center;
+                ">
+                    <h2 style="color: #ff6b6b; margin-bottom: 20px;">Initialization Error</h2>
+                    <p style="color: #888; margin-bottom: 10px;">Failed to initialize the Scene Inspector</p>
+                    <p style="color: #666; font-size: 14px; max-width: 600px;">${error.message}</p>
+                    <button onmousedown="location.reload()" style="
+                        margin-top: 30px;
+                        padding: 10px 20px;
+                        background: #2a2a2a;
+                        border: 1px solid #3a3a3a;
+                        border-radius: 4px;
+                        color: #e8e8e8;
+                        cursor: pointer;
+                    ">Reload</button>
+                </div>
+            `;
+        }
+    }
+}
+
+// Create and initialize app instance
+const app = new InspectorApp();
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => app.initialize());
+} else {
+    app.initialize();
+}
+
+// Export app instance for debugging
+window.inspector = app;
+
+// Helper functions for local user persistence
+var loadLocalUserSceneFromLocalStorage = (scene)=>{
+    var luser = JSON.parse(localStorage.getItem("localUser"));
+    if(luser){
+        scene.localUser = luser
+        scene.users = {
+            [luser.uid]: luser
+        }
+    }
+}
+
+var saveLocalUserSceneToLocalStorage = async (luser)=>{
+    if(!luser){
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return await saveLocalUserSceneToLocalStorage(SM.scene.localUser);
+    }
+    localStorage.setItem("localUser", JSON.stringify({
+        "name": luser.name,
+        "uid": luser.uid,
+        "isLocal": luser.isLocal,
+        "color": luser.color
+    }));
+}

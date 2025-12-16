@@ -1,6 +1,6 @@
-const { StatementBlockEditor } = await import(`${window.repoUrl}/pages/feedback/statement-block-editor.js`);
-const { confirm } = await import(`${window.repoUrl}/utils.js`);
-const { FeedbackAPI } = await import(`${window.repoUrl}/pages/feedback/feedback-api.js`);
+import { StatementBlockEditor } from './statement-block-editor.js';
+import { confirm } from '../../utils.js';
+import { FeedbackAPI } from './feedback-api.js';
 
 export class Feedback {
     constructor() {

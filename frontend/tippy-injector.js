@@ -419,7 +419,15 @@ export class TippyInjector {
         // Load the main app module
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = window.repoUrl + '/js/app.js';
+
+        // Dual mode support: bundle (production) vs modules (development)
+        if (this.config.useBundle !== false) {
+            // Production: load minified bundle
+            script.src = window.repoUrl + '/dist/tippy.min.js';
+        } else {
+            // Development: load individual modules
+            script.src = window.repoUrl + '/js/app.js';
+        }
 
         window.repoUrl += '/js';
         document.body.appendChild(script);

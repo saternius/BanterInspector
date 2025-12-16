@@ -1,5 +1,5 @@
-const { TransformComponent } = await import(`${window.repoUrl}/entity-components/transform.js`);
-const { deepClone, parseBest, eulerToQuaternion } = await import(`${window.repoUrl}/utils.js`);
+import { TransformComponent } from './entity-components/transform.js';
+import { deepClone, parseBest, eulerToQuaternion } from './utils.js';
 
 export class Entity{
     async init(entityData, options){
@@ -443,10 +443,12 @@ export class Entity{
             return;
         }
         this.name = newName;
+        this._renameDownwards();
+
         let origRef = this.ref;
+        if(!origRef) return;
         const snapshot = await origRef.once('value');
         let parentRef = net.db.ref(`space/${net.spaceId}/${this.parentId}`);
-        this._renameDownwards();
         let newSnapshot = snapshot.val();
         log('entity', 'renaming', this.id, '=>', newId, 'with snapshot', newSnapshot)
         await parentRef.child(newName).set(newSnapshot);

@@ -1,5 +1,5 @@
-const { appendToShell, parseBest } = await import(`${window.repoUrl}/utils.js`);
-const {attachAuthToDatabase} = await import(`${window.repoUrl}/firebase-auth-helper.js`);
+import { appendToShell, parseBest } from './utils.js';
+import { attachAuthToDatabase } from './firebase-auth-helper.js';
 
 export class Networking {
     constructor(){

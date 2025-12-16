@@ -2,7 +2,8 @@
  * Sync Status Comparator
  * Compares local Unity scene hierarchy with networked state to identify divergences
  */
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+
+import { parseBest } from '../../utils.js';
 
 export class SyncStatusComparator {
     constructor() {

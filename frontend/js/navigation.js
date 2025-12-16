@@ -1,4 +1,4 @@
-const { SaveEntityItemChange } = await import(`${window.repoUrl}/change-types.js`);
+import { SaveEntityItemChange } from './change-types.js';
 
 export class Navigation {
     constructor() {

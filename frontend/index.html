@@ -12,7 +12,7 @@
         let importUrl = 'https://app.tippy.dev'
         const { TippyInjector } = await import(`${importUrl}/tippy-injector.js`);
 
-
+        let useBundle = localStorage.getItem('useBundle') === 'true';
         // Initialize Tippy with custom configuration
         const tippy = new TippyInjector({
             targetElement: document.getElementById('tippyContainer'),
@@ -31,7 +31,8 @@
                     messagingSenderId: "381392930706",
                     appId: "1:381392930706:web:96e0759831dfe9d6a1234b",
                     measurementId: "G-09QVZZFS79"
-                }
+                },
+                useBundle: useBundle
             }
         });
 

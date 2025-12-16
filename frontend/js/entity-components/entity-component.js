@@ -1,4 +1,4 @@
-const { parseBest } = await import(`${window.repoUrl}/utils.js`);
+import { parseBest } from '../utils.js';
 
 export class EntityComponent{
     constructor(){
