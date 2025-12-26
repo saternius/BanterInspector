@@ -6,6 +6,16 @@ export class EntityComponent{
         this._lastUpdate = new Map();
         this._initialized = false;
         this.options = {};
+        this._entityId = null;
+    }
+
+    get _entity(){
+        if(!this._entityId) return null;
+        return SM.getEntityById(this._entityId);
+    }
+
+    set _entity(entity){
+        this._entityId = entity?.id || null;
     }
 
     async init(entity, sceneComponent, properties, options){

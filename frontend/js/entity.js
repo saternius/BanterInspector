@@ -154,7 +154,7 @@ export class Entity{
          this.meta_ref.child("components").on("child_added", async (snapshot)=>{
              let data = snapshot.val();
              let component = SM.getEntityComponentById(snapshot.key, false);
-             log(`Entity[${this.id}]`, `${!component ? "new" : "existing"} component added`, snapshot.key, data)
+             //log(`Entity[${this.id}]`, `${!component ? "new" : "existing"} component added`, snapshot.key, data)
              if(!component){
                 let data = await net.db.ref(`space/${net.spaceId}/components/${snapshot.key}`).once('value');
                 data = data.val();
@@ -164,7 +164,7 @@ export class Entity{
              }
              let hasComponent = this.components.find(c=>c.id === snapshot.key);
              if(!hasComponent){
-                log(`Entity[${this.id}]`, `does not have ${snapshot.key} => adding`)
+                //log(`Entity[${this.id}]`, `does not have ${snapshot.key} => adding`)
                 await this._addComponent(component);
              }
          })
@@ -174,7 +174,7 @@ export class Entity{
              //log("entity", "component removed", snapshot.key, data)
              let component = SM.getEntityComponentById(snapshot.key);
              if(component){
-                log(`Entity[${this.id}]`, "removing component", snapshot.key)
+                //log(`Entity[${this.id}]`, "removing component", snapshot.key)
                 await this._removeComponent(component);
              }
          })
@@ -415,6 +415,10 @@ export class Entity{
         this.id = this.parentId+"/"+this.name;
         SM.entityData.entityMap[this.id] = this;
         this._bs.SetName(this.id);
+        // Update component _entityId references to the new ID
+        this.components.forEach(component=>{
+            component._entityId = this.id;
+        });
         this.children.forEach(child=>{
             child._renameDownwards();
         })
@@ -442,11 +446,15 @@ export class Entity{
             log("RENAMING ENTITY", this.id, "=>", newName, "=> same name, skipping")
             return;
         }
+
+        let origRef = this.ref;
+        if(!origRef){
+            this.ref = net.db.ref(`space/${net.spaceId}/${this.parentId}/${this.name}`);
+        }
+
         this.name = newName;
         this._renameDownwards();
 
-        let origRef = this.ref;
-        if(!origRef) return;
         const snapshot = await origRef.once('value');
         let parentRef = net.db.ref(`space/${net.spaceId}/${this.parentId}`);
         let newSnapshot = snapshot.val();
@@ -481,8 +489,8 @@ export class Entity{
         }
 
         await this._bs.Destroy();
-        
         delete SM.entityData.entityMap[this.id];
+        delete SM.entityData.entityUUIDMap[this.uuid];
         if(this.parentId){
             const parent = SM.getEntityById(this.parentId);
             if (parent) {
@@ -665,11 +673,11 @@ export class Entity{
     }
 
     WatchTransform(properties, callback){
-        log("watch", this.id, "transform", properties)
+        //log("watch", this.id, "transform", properties)
         let bs_props = properties.map(p=>BS.PropertyName[p]);
-        log("watch", this.id, "bs_props", bs_props)
+        //log("watch", this.id, "bs_props", bs_props)
         this._bs.WatchTransform(bs_props, (e)=>{
-            log("WatchTransform")
+            //log("WatchTransform")
             if(SM.selectedEntity === this.id){
                 inspector.propertiesPanel.updateTransform()
             }

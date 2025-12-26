@@ -163,6 +163,15 @@ export class GLTFComponent extends EntityComponent {
         this._gltfComponent = null;
         this._gltfTransform = null;
         this._controls = new GLTFControls(this);
+        this._listeners = new Map();
+    }
+
+    On(event, callback) {
+        this._listeners.set(event, callback);
+    }
+
+    Off(event) {
+        this._listeners.delete(event);
     }
 
     defaultProperties() {
@@ -211,6 +220,26 @@ export class GLTFComponent extends EntityComponent {
 
         log('gltf', 'creating new gltf object..')
         this._gltfComponent = new BS.BanterGLTF(this.properties.url, this.properties.generateMipMaps, this.properties.addColliders, this.properties.nonConvexColliders, this.properties.slippery, this.properties.climbable, this.properties.legacyRotate);
+        this._bs = this._gltfComponent;
+        this._gltfComponent.On('loaded', ()=>{
+            if(this._listeners.has('loaded')){
+                this._listeners.get('loaded')()
+            }
+        })
+
+        this._gltfComponent.On('unity-linked', ()=>{
+            if(this._listeners.has('unity-linked')){
+                this._listeners.get('unity-linked')()   
+            }
+        })
+
+        this._gltfComponent.On('progress', (e)=>{
+            log('gltf', 'progress', e)
+            if(this._listeners.has('progress')){
+                this._listeners.get('progress')(e)   
+            }
+        })
+
         await this._entity._bs.AddComponent(this._gltfComponent);
     }
 

@@ -677,9 +677,24 @@ const _originalLog = console.log;
 const _originalError = console.error;
 
 // Create custom log that shows correct source location
+let ignores = JSON.parse(localStorage.getItem('ignoreLogs')) || [];
+window.ignoreLogs = new Set(ignores);
+window.ignoreLog = (tag)=>{
+    tag = tag.toUpperCase();
+    window.ignoreLogs.add(tag);
+    localStorage.setItem('ignoreLogs', JSON.stringify(Array.from(window.ignoreLogs)));
+}
+
+window.unignoreLog = (tag)=>{
+    tag = tag.toUpperCase();
+    window.ignoreLogs.delete(tag);
+    localStorage.setItem('ignoreLogs', JSON.stringify(Array.from(window.ignoreLogs)));
+}
+
 window.logFrequency = {};
 window.log = function(tag, ...args) {
-    if(!window.logger.active) return;
+    tag = tag.toUpperCase();
+    if(!window.logger.active || window.ignoreLogs.has(tag)) return;
     const color = window.logger.getTagColor(tag);
     if(!window.logFrequency[tag]){
         window.logFrequency[tag] = 0;

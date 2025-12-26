@@ -949,9 +949,13 @@ export class LoadScriptChange extends Change{
             this.itemData.Entity[sanatizedScriptName]["__meta"]["components"][runnerId] = true;
         }
 
+        if(!SM.getEntityById(`Scene/Scripts`, false)){
+            await AddEntity('Scene', 'Scripts')
+        }
+
         await net.db.ref(`space/${net.spaceId}/components`).update(this.itemData.Components);
-        await net.db.ref(`space/${net.spaceId}/Scene`).update(this.itemData.Entity);
-        this.entityId = `Scene/${sanatizedScriptName}`
+        await net.db.ref(`space/${net.spaceId}/Scene/Scripts`).update(this.itemData.Entity);
+        this.entityId = `Scene/Scripts/${sanatizedScriptName}`
         
         
         let everythingLoaded = ()=>{
@@ -1138,16 +1142,17 @@ export class CloneEntityChange extends Change{
                     let isLoaded = everythingLoaded();
                     checks++;
 
-                    if (checks > 200) {
+                    if (checks > 500) {
                         err("CloneEntityChange", "Entity could not be loaded/found =>", this.clonedEntityId);
-                        resolve(null);
+                        resolve(this.clonedEntityId);
                         return;
                     }
 
                     if (isLoaded) {
-                        resolve(SM.getEntityById(this.clonedEntityId));
+                        log("CloneEntityChange", "Entity loaded =>", this.clonedEntityId);
+                        resolve(this.clonedEntityId);
                     } else {
-                        setTimeout(check, 50);
+                        setTimeout(check.bind(this), 50);
                     }
                 };
                 check();

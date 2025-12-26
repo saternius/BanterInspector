@@ -294,6 +294,7 @@ export class ScriptRunnerComponent extends EntityComponent {
 
 
     newScriptContext(){
+        const component = this;
         let newContext =  {
             vars: SM.props[`__${this.id}/vars:component`] || this.properties.vars || {},
             _running: false, // Initialize _running to prevent undefined
@@ -308,11 +309,20 @@ export class ScriptRunnerComponent extends EntityComponent {
             keyUp: ()=>{},
             keyPress: ()=>{},
             log: (...args)=>{ console.log(...args)},
-            _entity: this._entity, // Reference to the entity
             _scene: window.scene, // Reference to the scene
             _BS: window.BS, // Reference to BanterScript library
             _component: this
         }
+
+        // Define _entity as a getter to always resolve the current entity
+        Object.defineProperty(newContext, '_entity', {
+            get: function() {
+                return component._entity;
+            },
+            enumerable: true,
+            configurable: false
+        });
+
         lifecycle.recordContext(newContext);
         return newContext;
     }
